@@ -1,9 +1,13 @@
 import App from './App.svelte'
 
+const queryParams = new URLSearchParams(window.location.search)
+
 const app = new App({
   target: document.body,
   props: {
-    name: 'Flux',
+    apiKey: queryParams.get('apiKey') || '',
+    name: queryParams.get('appName') || 'Flux',
+    intent: queryParams.get('intent') || 'buy',
   },
 })
 
