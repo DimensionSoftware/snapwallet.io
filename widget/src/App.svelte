@@ -58,4 +58,11 @@
     overflow: hidden;
     overflow-y: scroll;
   }
+
+  @media screen and (max-width: 375px) {
+    #modal-body {
+      height: 100%;
+      width: 100%;
+    }
+  }
 </style>
