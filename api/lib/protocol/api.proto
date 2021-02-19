@@ -1,7 +1,9 @@
 syntax = "proto3";
+option go_package = "github.com/khoerling/flux/api/lib/protocol";
+
 
 // Application
-message Application {
+message OrganizationApplication {
   int64 id = 1;
   string name = 2;
 }
@@ -31,7 +33,7 @@ message Organization {
   int64 id = 1;
   string name = 2;
   repeated User users = 3;
-  repeated Application applications = 4;
+  repeated OrganizationApplication applications = 4;
 }
 
 //  An object representing the user's account at a third party API
@@ -41,7 +43,7 @@ message ThirdPartyUserAccount {
   string external_id = 3; // (an identifier for the account in the third party system)
   string credential_id = 4; // (an identifier for the user's third party credentials when available. this maps to KMS?)
   string status = 5;
-  repeated PaymentMethod = 6;
+  repeated PaymentMethod payment_methods = 6;
 }
 
 // A user's residential address which belongs to the profile (they can have many.)
@@ -65,7 +67,12 @@ message PaymentMethod {
 }
 
 
-service SearchService {
-  // assume token will be embedded, hence arguments are not needed
-  rpc UserData() returns (User);
+message UserDataRequest {}
+
+message UserDataResponse {
+  User user = 1;
+}
+
+service API {
+  rpc UserData(UserDataRequest) returns (UserDataResponse);
 }
