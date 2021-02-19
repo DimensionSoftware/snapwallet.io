@@ -34,10 +34,11 @@
     height: 100%;
     width: 100%;
     position: relative;
+    box-sizing: border-box;
   }
 
   .modal {
-    position: fixed;
+    position: absolute;
     z-index: 1;
     left: 0;
     top: 0;
@@ -64,6 +65,7 @@
 
   @media screen and (max-width: 450px) {
     #modal-body {
+      border-radius: 0;
       height: 100%;
       width: 100%;
     }
