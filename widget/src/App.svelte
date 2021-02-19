@@ -1,24 +1,25 @@
 <script lang="ts">
+  import Router from 'svelte-spa-router'
+  import wrap from 'svelte-spa-router/wrap'
   import Toast from './components/Toast.svelte'
+  import Home from './screens/Home.svelte'
+  import NotFound from './screens/NotFound.svelte'
   import { toaster } from './stores/ToastStore'
 
   // Querystring provided props, see main.ts.
-  export let name: string
+  export let appName: string
   export let intent: 'buy' | 'sell'
   export let apiKey: string
+
+  const routes = {
+    '/': wrap({ component: Home as any, props: { appName, intent, apiKey } }),
+    '*': NotFound,
+  }
 </script>
 
 <div class="modal">
   <div id="modal-body">
-    <p>Product name: {name}</p>
-    <p>Intent: {intent}</p>
-    <p>API Key: {apiKey}</p>
-
-    <button
-      on:click={() => {
-        toaster.pop({ msg: 'Success', success: true })
-      }}>Toaster</button
-    >
+    <Router {routes} />
     <Toast />
   </div>
 </div>
@@ -57,9 +58,11 @@
     border-radius: 1rem;
     overflow: hidden;
     overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 450px) {
     #modal-body {
       height: 100%;
       width: 100%;

@@ -6,7 +6,7 @@ const app = new App({
   target: document.body,
   props: {
     apiKey: queryParams.get('apiKey') || '',
-    name: queryParams.get('appName') || 'Flux',
+    appName: queryParams.get('appName') || 'Flux',
     intent: queryParams.get('intent') || 'buy',
   },
 })

@@ -51,7 +51,7 @@
     align-items: center;
     padding: 0 1rem;
     width: 100%;
-    min-height: 50px;
+    min-height: 60px;
     max-height: 100px;
     background-color: $info;
     color: white;
@@ -63,6 +63,12 @@
     }
     &.success {
       background-color: $success;
+    }
+  }
+
+  @media screen and (max-width: 450px) {
+    .toast-wrapper {
+      top: initial;
     }
   }
 </style>
