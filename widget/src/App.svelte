@@ -26,7 +26,7 @@
 <style lang="scss">
   @import './styles/_vars.scss';
 
-  :global(body, html, main, div) {
+  :global(body, html) {
     color: $textColor1;
     margin: 0;
     padding: 0;
@@ -60,6 +60,8 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
+    // Used by toast
+    position: relative;
   }
 
   @media screen and (max-width: 450px) {
