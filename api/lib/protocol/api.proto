@@ -1,11 +1,16 @@
 syntax = "proto3";
+option go_package = "github.com/khoerling/flux/api/lib/protocol";
 
-// Application
-message Application {
+import "google/api/annotations.proto";
+
+// OrganizationApplication
+message OrganizationApplication {
   int64 id = 1;
   string name = 2;
 }
 
+// KYCProfile
+//
 // A user's KYC profile (they should only have one of these)
 message KYCProfile {
   int64 id = 1;
@@ -17,6 +22,8 @@ message KYCProfile {
   repeated ThirdPartyUserAccount third_party_user_accounts = 7;
 }
 
+// User
+//
 // A user which is shared across customer applications
 message User {
   int64 id = 1;
@@ -26,24 +33,30 @@ message User {
   repeated Organization organizations = 5;
 }
 
+// Organization
+//
 // an organization containing users, a user is one to many to organizations
 message Organization {
   int64 id = 1;
   string name = 2;
   repeated User users = 3;
-  repeated Application applications = 4;
+  repeated OrganizationApplication applications = 4;
 }
 
-//  An object representing the user's account at a third party API
+// ThirdPartyUserAccount
+// 
+// An object representing the user's account at a third party API
 message ThirdPartyUserAccount {
   int64 id = 1;
   string partner_id = 2; // (an identifier for the third party API)
   string external_id = 3; // (an identifier for the account in the third party system)
   string credential_id = 4; // (an identifier for the user's third party credentials when available. this maps to KMS?)
   string status = 5;
-  repeated PaymentMethod = 6;
+  repeated PaymentMethod payment_methods = 6;
 }
 
+// Address
+//
 // A user's residential address which belongs to the profile (they can have many.)
 message Address {
   int64 id = 1;
@@ -56,6 +69,8 @@ message Address {
   string country = 8; // (ISO 2)
 }
 
+// PaymentMethod
+//
 //  A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)
 message PaymentMethod {
   int64 id = 1;
@@ -65,7 +80,16 @@ message PaymentMethod {
 }
 
 
-service SearchService {
-  // assume token will be embedded, hence arguments are not needed
-  rpc UserData() returns (User);
+message UserDataRequest {}
+
+message UserDataResponse {
+  User user = 1;
+}
+
+service API {
+  rpc UserData(UserDataRequest) returns (UserDataResponse) {
+    option (google.api.http) = {
+      get: "/user-data"
+    };
+  }
 }
