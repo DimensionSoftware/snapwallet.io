@@ -14,6 +14,10 @@ RUN bin/build
 
 FROM alpine:3.13
 
+RUN apk add --no-cache \
+  bash \
+  tini
+
 WORKDIR /usr/local/flux
 
 COPY --from=0 \
@@ -23,3 +27,6 @@ COPY --from=0 \
 
 COPY lib/swagger lib/swagger
 
+COPY docker-launch.sh docker-launch.sh
+
+ENTRYPOINT ["/sbin/tini", "--", "./docker-launch.sh"]
