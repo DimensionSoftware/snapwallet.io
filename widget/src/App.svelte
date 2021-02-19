@@ -36,6 +36,10 @@
     box-sizing: border-box;
   }
 
+  :global(div) {
+    box-sizing: border-box;
+  }
+
   .modal {
     position: absolute;
     z-index: 1;
