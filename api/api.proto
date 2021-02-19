@@ -63,3 +63,9 @@ message PaymentMethod {
   string type = 3;
   string status = 4;
 }
+
+
+service SearchService {
+  // assume token will be embedded, hence arguments are not needed
+  rpc UserData() returns (User);
+}
