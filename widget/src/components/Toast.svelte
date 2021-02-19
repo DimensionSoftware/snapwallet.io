@@ -65,10 +65,4 @@
       background-color: $success;
     }
   }
-
-  @media screen and (max-width: 450px) {
-    .toast-wrapper {
-      top: initial;
-    }
-  }
 </style>
