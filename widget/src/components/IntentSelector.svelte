@@ -34,11 +34,14 @@
 
   .intent-selector {
     width: 50%;
+    height: 100%;
     display: flex;
     cursor: pointer;
   }
 
   .buy-toggle {
+    height: 100%;
+    width: 100%;
     display: flex;
     color: white;
     background-color: $greyBackground1;
@@ -53,6 +56,8 @@
   }
 
   .sell-toggle {
+    height: 100%;
+    width: 100%;
     display: flex;
     color: white;
     background-color: $greyBackground1;

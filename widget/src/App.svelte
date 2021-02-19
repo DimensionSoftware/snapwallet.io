@@ -26,13 +26,17 @@
 <style lang="scss">
   @import './styles/_vars.scss';
 
-  :global(body, html, main, div) {
+  :global(body, html) {
     color: $textColor1;
     margin: 0;
     padding: 0;
     height: 100%;
     width: 100%;
     position: relative;
+    box-sizing: border-box;
+  }
+
+  :global(div) {
     box-sizing: border-box;
   }
 
@@ -60,6 +64,8 @@
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
+    // Used by toast
+    position: relative;
   }
 
   @media screen and (max-width: 450px) {
