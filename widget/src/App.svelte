@@ -16,7 +16,7 @@
   }
 </script>
 
-<div class="modal">
+<div id="modal">
   <div id="modal-body">
     <Router {routes} />
     <Toast />
@@ -40,7 +40,7 @@
     box-sizing: border-box;
   }
 
-  .modal {
+  #modal {
     position: absolute;
     z-index: 1;
     left: 0;
