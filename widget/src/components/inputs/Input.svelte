@@ -34,6 +34,7 @@
   .input-label {
     font-size: 0.7rem;
     min-height: 20%;
+    font-weight: 600;
   }
 
   input {
