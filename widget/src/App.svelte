@@ -12,7 +12,7 @@
 
   const routes = {
     '/': wrap({ component: Home as any, props: { appName, intent, apiKey } }),
-    '*': NotFound,
+    '*': NotFound as any,
   }
 </script>
 
