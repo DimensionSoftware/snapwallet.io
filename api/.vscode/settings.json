@@ -1,4 +1,9 @@
 {
     "editor.defaultFormatter": "golang.go",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "protoc": {
+    "options": [
+        "-I ${workspaceFolder}/lib/protocol/"
+    ]
+    }
 }

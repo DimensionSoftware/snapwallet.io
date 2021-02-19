@@ -16,6 +16,8 @@ var (
 	// gRPC server endpoint
 	grpcServerEndpoint = flag.String("grpc-server-endpoint", "localhost:50051", "gRPC server endpoint")
 )
+var serveSwaggerJSON = serveFileHandler("lib/swagger/api.swagger.json", "application/json")
+var serveSwaggerUI = serveFileHandler("lib/swagger/swagger-ui.html", "text/html")
 
 func run() error {
 	ctx := context.Background()
@@ -32,23 +34,21 @@ func run() error {
 	}
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
-	mux.HandlePath("GET", "/swagger.json", swaggerJSON())
-	mux.HandlePath("GET", "/swagger", swaggerUI())
+	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
+	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
 	return http.ListenAndServe(":8081", mux)
 }
 
-func swaggerJSON() runtime.HandlerFunc {
+//http.ServeFile(w, r, "")
+
+func serveFileHandler(path string, mimeType string) runtime.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
-		w.Header().Add("content-type", "application/json")
-		http.ServeFile(w, r, "lib/protocol/api.swagger.json")
+		w.Header().Add("content-type", mimeType)
+		http.ServeFile(w, r, path)
 	}
 }
-func swaggerUI() runtime.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
-		w.Header().Add("content-type", "text/html")
-		http.ServeFile(w, r, "lib/protocol/swagger-ui.html")
-	}
-}
+
+//http.ServeFile(w, r, )
 
 func main() {
 	flag.Parse()
