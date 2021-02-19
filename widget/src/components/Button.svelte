@@ -9,7 +9,7 @@
   @import '../styles/_vars.scss';
 
   button {
-    min-height: 40px;
+    min-height: 50px;
     width: 100%;
     background-color: $greyBackground1;
     border-radius: 0.5rem;
