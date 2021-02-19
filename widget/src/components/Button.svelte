@@ -16,5 +16,6 @@
     color: white;
     cursor: pointer;
     text-transform: capitalize;
+    margin: 0;
   }
 </style>
