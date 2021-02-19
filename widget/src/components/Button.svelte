@@ -1,9 +1,10 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
+  export let disabled: boolean
 </script>
 
-<button on:click={() => dispatch('click')}><slot /></button>
+<button {disabled} on:click={() => dispatch('click')}><slot /></button>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
@@ -17,5 +18,9 @@
     cursor: pointer;
     text-transform: capitalize;
     margin: 0;
+    &:disabled {
+      opacity: 0.4;
+      cursor: initial;
+    }
   }
 </style>
