@@ -1,13 +1,16 @@
 syntax = "proto3";
 option go_package = "github.com/khoerling/flux/api/lib/protocol";
 
+import "google/api/annotations.proto";
 
-// Application
+// OrganizationApplication
 message OrganizationApplication {
   int64 id = 1;
   string name = 2;
 }
 
+// KYCProfile
+//
 // A user's KYC profile (they should only have one of these)
 message KYCProfile {
   int64 id = 1;
@@ -19,6 +22,8 @@ message KYCProfile {
   repeated ThirdPartyUserAccount third_party_user_accounts = 7;
 }
 
+// User
+//
 // A user which is shared across customer applications
 message User {
   int64 id = 1;
@@ -28,6 +33,8 @@ message User {
   repeated Organization organizations = 5;
 }
 
+// Organization
+//
 // an organization containing users, a user is one to many to organizations
 message Organization {
   int64 id = 1;
@@ -36,7 +43,9 @@ message Organization {
   repeated OrganizationApplication applications = 4;
 }
 
-//  An object representing the user's account at a third party API
+// ThirdPartyUserAccount
+// 
+// An object representing the user's account at a third party API
 message ThirdPartyUserAccount {
   int64 id = 1;
   string partner_id = 2; // (an identifier for the third party API)
@@ -46,6 +55,8 @@ message ThirdPartyUserAccount {
   repeated PaymentMethod payment_methods = 6;
 }
 
+// Address
+//
 // A user's residential address which belongs to the profile (they can have many.)
 message Address {
   int64 id = 1;
@@ -58,6 +69,8 @@ message Address {
   string country = 8; // (ISO 2)
 }
 
+// PaymentMethod
+//
 //  A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)
 message PaymentMethod {
   int64 id = 1;
@@ -74,5 +87,9 @@ message UserDataResponse {
 }
 
 service API {
-  rpc UserData(UserDataRequest) returns (UserDataResponse);
+  rpc UserData(UserDataRequest) returns (UserDataResponse) {
+    option (google.api.http) = {
+      get: "/user-data"
+    };
+  }
 }

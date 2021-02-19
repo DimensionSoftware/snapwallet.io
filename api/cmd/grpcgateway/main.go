@@ -14,7 +14,7 @@ import (
 var (
 	// command-line options:
 	// gRPC server endpoint
-	grpcServerEndpoint = flag.String("grpc-server-endpoint", "localhost:9090", "gRPC server endpoint")
+	grpcServerEndpoint = flag.String("grpc-server-endpoint", "localhost:50051", "gRPC server endpoint")
 )
 
 func run() error {
@@ -32,7 +32,22 @@ func run() error {
 	}
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
+	mux.HandlePath("GET", "/swagger.json", swaggerJSON())
+	mux.HandlePath("GET", "/swagger", swaggerUI())
 	return http.ListenAndServe(":8081", mux)
+}
+
+func swaggerJSON() runtime.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		w.Header().Add("content-type", "application/json")
+		http.ServeFile(w, r, "lib/protocol/api.swagger.json")
+	}
+}
+func swaggerUI() runtime.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		w.Header().Add("content-type", "text/html")
+		http.ServeFile(w, r, "lib/protocol/swagger-ui.html")
+	}
 }
 
 func main() {
