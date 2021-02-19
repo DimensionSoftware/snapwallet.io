@@ -8,5 +8,6 @@
     flex-direction: column;
     align-items: center;
     height: 10%;
+    justify-content: flex-end;
   }
 </style>
