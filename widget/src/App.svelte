@@ -4,7 +4,6 @@
   import Toast from './components/Toast.svelte'
   import Home from './screens/Home.svelte'
   import NotFound from './screens/NotFound.svelte'
-  import { toaster } from './stores/ToastStore'
 
   // Querystring provided props, see main.ts.
   export let appName: string
