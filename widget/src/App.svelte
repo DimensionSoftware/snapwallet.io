@@ -62,7 +62,7 @@
     flex-direction: column;
   }
 
-  @media screen and (max-width: 375px) {
+  @media screen and (max-width: 450px) {
     #modal-body {
       height: 100%;
       width: 100%;
