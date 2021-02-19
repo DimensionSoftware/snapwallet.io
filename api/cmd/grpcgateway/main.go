@@ -39,16 +39,12 @@ func run() error {
 	return http.ListenAndServe(":8081", mux)
 }
 
-//http.ServeFile(w, r, "")
-
 func serveFileHandler(path string, mimeType string) runtime.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 		w.Header().Add("content-type", mimeType)
 		http.ServeFile(w, r, path)
 	}
 }
-
-//http.ServeFile(w, r, )
 
 func main() {
 	flag.Parse()
