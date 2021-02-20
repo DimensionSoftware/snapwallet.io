@@ -29,6 +29,7 @@
     padding-bottom: 0;
     height: 50px;
     border-bottom: 1px solid $textColor1;
+    margin-bottom: 0.5rem;
   }
 
   .input-label {
