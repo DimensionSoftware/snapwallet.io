@@ -6,10 +6,8 @@
   import { toaster } from '../stores/ToastStore'
   import Button from '../components/Button.svelte'
   import { userStore } from '../stores/UserStore'
-  import Input from '../components/inputs/Input.svelte'
   import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import CryptoCard from '../components/cards/CryptoCard.svelte'
-  import Card from '../components/cards/Card.svelte'
   import { transactionStore } from '../stores/TransactionStore'
 
   let selectorVisible = false
