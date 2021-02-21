@@ -42,8 +42,10 @@
         <div style="display:flex;justify-content:space-between;">
           <Label>Amount</Label>
           <Label>
-            {$transactionStore.sourceCurrency.ticker} / {$transactionStore
-              .destinationCurrency.ticker}
+            <b>{$transactionStore.sourceCurrency.ticker}</b> /
+            <span class="muted"
+              >{$transactionStore.destinationCurrency.ticker}</span
+            >
           </Label>
         </div>
         <Input
@@ -108,5 +110,9 @@
     color: $textColor1;
     font-weight: 500;
     font-size: 0.9rem;
+  }
+
+  .muted {
+    color: lighten($textColor3, 20%);
   }
 </style>
