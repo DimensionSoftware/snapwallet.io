@@ -46,11 +46,19 @@
               .destinationCurrency.ticker}
           </Label>
         </div>
-        <Input forceLabel={true} type="number" placeholder="Amount" />
+        <Input
+          defaultValue={0.0}
+          forceLabel={true}
+          type="number"
+          placeholder="Amount"
+        />
       </div>
       <div class="exchange-rate-container">
         ~ 1 {$transactionStore.destinationCurrency.ticker} @ 55,000 {$transactionStore
           .sourceCurrency.ticker}
+      </div>
+      <div class="total-container">
+        Total ~ 55,000 {$transactionStore.sourceCurrency.ticker}
       </div>
     </div>
 
@@ -89,6 +97,16 @@
   .exchange-rate-container {
     display: flex;
     justify-content: flex-end;
+    font-size: 0.9rem;
     color: lighten($textColor3, 20%);
+  }
+
+  .total-container {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.5rem;
+    color: $textColor2;
+    font-weight: 500;
+    font-size: 0.9rem;
   }
 </style>
