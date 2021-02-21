@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
+    "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "sirv-cli": "^1.0.0",
     "svelte-awesome": "^2.3.0",
     "svelte-cryptoicon": "^0.16.1",
