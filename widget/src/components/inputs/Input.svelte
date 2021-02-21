@@ -6,6 +6,7 @@
   export let placeholder: string
   export let label: string
   export let forceLabel: boolean
+  export let defaultValue: string | number
 
   let isActive: boolean = Boolean(forceLabel)
 </script>
@@ -19,6 +20,8 @@
       isActive = forceLabel || Boolean(e.currentTarget?.value)
       dispatch('change', e)
     }}
+    min={type === 'number' ? 0.0 : null}
+    value={defaultValue}
   />
 </div>
 
