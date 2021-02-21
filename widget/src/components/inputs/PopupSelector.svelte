@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { fade } from 'svelte/transition'
   import { createEventDispatcher } from 'svelte'
   import Icon from 'svelte-awesome'
   import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
@@ -10,7 +9,7 @@
   export let headerTitle: string
 </script>
 
-<div class="popup-selector" class:visible out:fade={{ duration: 500 }}>
+<div class="popup-selector" class:visible>
   <div class="popup-selector-header">
     <div class="placeholder-box" />
     <div class="popup-title">{headerTitle}</div>
