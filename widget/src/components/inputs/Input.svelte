@@ -1,22 +1,22 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
+  import Label from './Label.svelte'
   const dispatch = createEventDispatcher()
   export let type: string
   export let placeholder: string
   export let label: string
+  export let forceLabel: boolean
 
-  let isActive: boolean = false
+  let isActive: boolean = Boolean(forceLabel)
 </script>
 
 <div class="input-container">
-  {#if label}
-    <div class="input-label">{isActive ? label : ''}</div>
-  {/if}
+  <Label hidden={!forceLabel || !isActive || !label}>{label}</Label>
   <input
     {type}
-    {placeholder}
+    placeholder={forceLabel ? '' : placeholder}
     on:input={(e) => {
-      isActive = Boolean(e.currentTarget?.value)
+      isActive = forceLabel || Boolean(e.currentTarget?.value)
       dispatch('change', e)
     }}
   />
@@ -32,12 +32,6 @@
     margin-bottom: 0.5rem;
   }
 
-  .input-label {
-    font-size: 0.7rem;
-    min-height: 20%;
-    font-weight: 600;
-  }
-
   input {
     padding: 0;
     padding-top: 0.5rem;
@@ -46,5 +40,9 @@
     outline: none;
     border: none;
     width: 100%;
+    box-shadow: none;
+    &:required {
+      box-shadow: none;
+    }
   }
 </style>
