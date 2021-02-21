@@ -48,7 +48,7 @@
         </div>
         <Input forceLabel={true} type="number" placeholder="Amount" />
       </div>
-      <div style="display:flex;justify-content:flex-end">
+      <div class="exchange-rate-container">
         ~ 1 {$transactionStore.destinationCurrency.ticker} @ 55,000 {$transactionStore
           .sourceCurrency.ticker}
       </div>
@@ -77,6 +77,8 @@
 </ModalContent>
 
 <style lang="scss">
+  @import '../styles/_vars.scss';
+
   .cryptocurrencies-container {
     height: 100%;
     width: 100%;
@@ -84,5 +86,11 @@
     overflow-y: scroll;
     padding: 0 0.5rem;
     margin-top: 2rem;
+  }
+
+  .exchange-rate-container {
+    display: flex;
+    justify-content: flex-end;
+    color: lighten($textColor3, 20%);
   }
 </style>
