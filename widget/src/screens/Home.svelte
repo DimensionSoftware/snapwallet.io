@@ -9,6 +9,8 @@
   import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import CryptoCard from '../components/cards/CryptoCard.svelte'
   import { transactionStore } from '../stores/TransactionStore'
+  import Input from '../components/inputs/Input.svelte'
+  import Label from '../components/inputs/Label.svelte'
 
   let selectorVisible = false
   const handleNextStep = () => {
@@ -26,21 +28,45 @@
 <ModalContent>
   <ModalBody>
     <IntentSelector />
-    <CryptoCard
-      on:click={() => (selectorVisible = true)}
-      crypto={$transactionStore.destinationCurrency}
-    />
+    <div class="cryptocurrencies-container">
+      <div
+        style="display: flex;flex-direction:column;height:5rem;margin-bottom:1rem"
+      >
+        <Label>Currency</Label>
+        <CryptoCard
+          on:click={() => (selectorVisible = true)}
+          crypto={$transactionStore.destinationCurrency}
+        />
+      </div>
+      <div style="display:flex;flex-direction:column;height:5rem;">
+        <div style="display:flex;justify-content:space-between;">
+          <Label>Amount</Label>
+          <Label
+            >{$transactionStore.sourceCurrency.ticker} / {$transactionStore
+              .destinationCurrency.ticker}</Label
+          >
+        </div>
+        <Input forceLabel={true} type="number" placeholder="Amount" />
+      </div>
+      <div>
+        ~ 1 {$transactionStore.destinationCurrency.ticker} @ 55,000 {$transactionStore
+          .sourceCurrency.ticker}
+      </div>
+    </div>
+
     <PopupSelector
       on:close={() => (selectorVisible = false)}
       visible={selectorVisible}
       headerTitle="Select Cryptocurrency"
     >
-      {#each cryptoCurrencies as cryptoCurrency (cryptoCurrency.ticker)}
-        <CryptoCard
-          on:click={() => (selectorVisible = false)}
-          crypto={cryptoCurrency}
-        />
-      {/each}
+      <div class="cryptocurrencies-container">
+        {#each cryptoCurrencies as cryptoCurrency (cryptoCurrency.ticker)}
+          <CryptoCard
+            on:click={() => (selectorVisible = false)}
+            crypto={cryptoCurrency}
+          />
+        {/each}
+      </div>
     </PopupSelector>
   </ModalBody>
   <ModalFooter>
@@ -49,3 +75,14 @@
     </Button>
   </ModalFooter>
 </ModalContent>
+
+<style lang="scss">
+  .cryptocurrencies-container {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 0 0.5rem;
+    margin-top: 2rem;
+  }
+</style>
