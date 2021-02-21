@@ -70,9 +70,7 @@
     </PopupSelector>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>
-      {$userStore.intent}
-    </Button>
+    <Button on:click={handleNextStep}>Checkout</Button>
   </ModalFooter>
 </ModalContent>
 
