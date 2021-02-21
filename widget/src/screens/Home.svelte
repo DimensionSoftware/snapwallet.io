@@ -105,7 +105,7 @@
     display: flex;
     justify-content: flex-end;
     margin-top: 0.5rem;
-    color: $textColor2;
+    color: $textColor1;
     font-weight: 500;
     font-size: 0.9rem;
   }
