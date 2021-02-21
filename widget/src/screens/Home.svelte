@@ -41,10 +41,10 @@
       <div style="display:flex;flex-direction:column;height:5rem;">
         <div style="display:flex;justify-content:space-between;">
           <Label>Amount</Label>
-          <Label
-            >{$transactionStore.sourceCurrency.ticker} / {$transactionStore
-              .destinationCurrency.ticker}</Label
-          >
+          <Label>
+            {$transactionStore.sourceCurrency.ticker} / {$transactionStore
+              .destinationCurrency.ticker}
+          </Label>
         </div>
         <Input forceLabel={true} type="number" placeholder="Amount" />
       </div>
