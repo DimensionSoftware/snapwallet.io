@@ -9,8 +9,12 @@
 
   import { transactionStore } from '../../stores/TransactionStore'
   import { createEventDispatcher } from 'svelte'
-  const dispatch = createEventDispatcher()
+  import FaIcon from 'svelte-awesome'
+  import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+
   export let crypto
+
+  const dispatch = createEventDispatcher()
 </script>
 
 <div
@@ -22,9 +26,12 @@
 >
   <svelte:component this={tickerIcons[crypto.ticker]} />
   <div class="crypto-name">{crypto.name}</div>
+  <div class="crypto-arrow"><FaIcon data={faChevronRight} /></div>
 </div>
 
 <style lang="scss">
+  @import '../../styles/_vars.scss';
+
   .crypto-card {
     margin: 0.5rem 0;
     padding: 0 1rem;
@@ -40,6 +47,19 @@
   }
 
   .crypto-name {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
     margin-left: 1rem;
+  }
+
+  .crypto-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    margin-left: auto;
+    color: $textColor1;
   }
 </style>
