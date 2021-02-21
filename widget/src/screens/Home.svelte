@@ -48,7 +48,7 @@
         </div>
         <Input forceLabel={true} type="number" placeholder="Amount" />
       </div>
-      <div>
+      <div style="display:flex;justify-content:flex-end">
         ~ 1 {$transactionStore.destinationCurrency.ticker} @ 55,000 {$transactionStore
           .sourceCurrency.ticker}
       </div>
