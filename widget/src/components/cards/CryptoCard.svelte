@@ -7,13 +7,21 @@
     tickerIcons[k.toUpperCase()] = v
   })
 
-  export let name
-  export let ticker
+  import { transactionStore } from '../../stores/TransactionStore'
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
+  export let crypto
 </script>
 
-<div class="crypto-card">
-  <svelte:component this={tickerIcons[ticker]} />
-  <div class="crypto-name">{name}</div>
+<div
+  on:click={() => {
+    transactionStore.setDestinationCurrency(crypto)
+    dispatch('click')
+  }}
+  class="crypto-card"
+>
+  <svelte:component this={tickerIcons[crypto.ticker]} />
+  <div class="crypto-name">{crypto.name}</div>
 </div>
 
 <style lang="scss">
