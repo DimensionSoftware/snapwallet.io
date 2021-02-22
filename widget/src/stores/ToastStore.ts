@@ -9,7 +9,7 @@ function createToast() {
       set({ msg, error, warning, success })
       setTimeout(() => {
         set(null)
-      }, 2500)
+      }, 4000)
     },
   }
 }
