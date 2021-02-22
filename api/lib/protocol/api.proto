@@ -81,9 +81,19 @@ message PaymentMethod {
 
 
 message UserDataRequest {}
-
 message UserDataResponse {
   User user = 1;
+}
+
+message PricingDataRequest {}
+
+message PricingRate {
+  map<string,float> rate = 1;
+}
+
+message PricingDataResponse {
+  // {"AAVEARS":{"ARS":34418.19149999999856,"AAVE":0.00002905440281486027648600}
+  map<string,PricingRate> rates = 1;
 }
 
 service API {
@@ -92,4 +102,11 @@ service API {
       get: "/user-data"
     };
   }
+
+  rpc PricingData(PricingDataRequest) returns (PricingDataResponse) {
+    option (google.api.http) = {
+      get: "/pricing-data"
+    };
+  }
+
 }

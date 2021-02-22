@@ -16,6 +16,28 @@
     "application/json"
   ],
   "paths": {
+    "/pricing-data": {
+      "get": {
+        "operationId": "API_PricingData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PricingDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
     "/user-data": {
       "get": {
         "operationId": "API_UserData",
@@ -165,6 +187,30 @@
       },
       "description": "A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)",
       "title": "PaymentMethod"
+    },
+    "PricingDataResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/PricingRate"
+          },
+          "title": "{\"AAVEARS\":{\"ARS\":34418.19149999999856,\"AAVE\":0.00002905440281486027648600}"
+        }
+      }
+    },
+    "PricingRate": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
     },
     "ThirdPartyUserAccount": {
       "type": "object",
