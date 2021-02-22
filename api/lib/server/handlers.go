@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"math/rand"
+	"strings"
 
 	resty "github.com/go-resty/resty/v2"
 
@@ -57,9 +58,19 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 		Rates: rates,
 	}
 
-	for rateName, rate := range *wyreRates {
-		rates[rateName] = &proto.PricingRate{
-			Rate: rate,
+	for rateMapName, rateMap := range *wyreRates {
+		ratePairAry := []string{}
+		for currencySymbol := range rateMap {
+			if currencySymbol == rateMapName[:len(currencySymbol)] {
+				ratePairAry = append(ratePairAry, currencySymbol)
+				break
+			}
+		}
+		ratePairAry = append(ratePairAry, rateMapName[len(ratePairAry[0]):])
+
+		newRatePairName := strings.Join(ratePairAry, "_")
+		rates[newRatePairName] = &proto.PricingRate{
+			Rate: rateMap,
 		}
 	}
 
