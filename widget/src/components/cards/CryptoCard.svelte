@@ -60,6 +60,6 @@
     align-items: center;
     height: 100%;
     margin-left: auto;
-    color: $textColor1;
+    color: $textColor;
   }
 </style>

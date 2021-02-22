@@ -25,7 +25,7 @@
 
   .popup-selector {
     padding: 1rem;
-    display: none;
+    display: flex;
     flex-direction: column;
     height: 95%;
     width: 100%;
@@ -37,8 +37,11 @@
     right: 0;
     background-color: white;
     box-shadow: 0px -7px 36px -10px $commonShadowColor;
+    transform: translateY(100%);
+    transition: transform .08s $easeInExpo;
     &.visible {
-      display: flex;
+      transform: translateY(0);
+      transition: transform .25s $easeOutExpo;
     }
   }
 

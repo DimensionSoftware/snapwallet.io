@@ -31,7 +31,7 @@
   .input-container {
     padding-bottom: 0;
     height: 50px;
-    border-bottom: 1px solid $textColor1;
+    border-bottom: 1px solid $textColor;
     margin-bottom: 0.5rem;
   }
 
@@ -39,7 +39,7 @@
     padding: 0;
     padding-top: 0.5rem;
     margin: 0;
-    color: $textColor1;
+    color: $textColor;
     outline: none;
     border: none;
     width: 100%;

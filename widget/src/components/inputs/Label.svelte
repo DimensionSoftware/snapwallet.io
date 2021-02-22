@@ -11,7 +11,6 @@
 <style lang="scss">
   .input-label {
     font-size: 0.7rem;
-    height: 25%;
     font-weight: 600;
   }
 </style>

@@ -26,17 +26,7 @@
 <style lang="scss">
   @import './styles/_vars.scss';
 
-  :global(body, html) {
-    color: $textColor1;
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    position: relative;
-    box-sizing: border-box;
-  }
-
-  :global(div) {
+  :global(*) {
     box-sizing: border-box;
   }
 
@@ -48,10 +38,17 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background-color: $modalContainerBackgroundColor;
+    background: $modalContainerBackgroundColor;
     display: flex;
     justify-content: center;
     align-items: center;
+    color: $textColor;
+    font-family: $themeFont;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   #modal-body {
@@ -61,7 +58,6 @@
     padding: 1rem;
     border-radius: 1rem;
     overflow: hidden;
-    overflow-y: scroll;
     display: flex;
     flex-direction: column;
     // Used by toast
