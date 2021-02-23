@@ -9,24 +9,19 @@ import (
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
 
-/*
-func sendEmailMessage(message *mail.SGMailV3) error {
-	client := sendgrid.NewSendClient(os.Getenv("SENDGRID_API_KEY"))
-	_, err := client.Send(message)
-	return err
-}
+// SendAPIKey represents the secret key for sendgrid
+type SendAPIKey string
 
-*/
-type SendgridApiKey string
-
-func ProvideSendClient(key SendgridApiKey) *sendgrid.Client {
+// ProvideSendClient returns a sendgrid client
+func ProvideSendClient(key SendAPIKey) *sendgrid.Client {
 	return sendgrid.NewSendClient(string(key))
 }
 
-func ProvideSendClientApiKey() SendgridApiKey {
+// ProvideSendClientAPIKey returns a sendgrid api key string
+func ProvideSendClientAPIKey() SendAPIKey {
 	sendgridKey := os.Getenv(sendgridKeyEnvVarName)
 	if sendgridKey == "" {
 		panic(fmt.Sprintf("you must set %s", sendgridKeyEnvVarName))
 	}
-	return SendgridApiKey(sendgridKey)
+	return SendAPIKey(sendgridKey)
 }

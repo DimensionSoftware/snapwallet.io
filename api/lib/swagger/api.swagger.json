@@ -46,6 +46,42 @@
         ]
       }
     },
+    "/flux/auth/one-time-passcode-verify": {
+      "get": {
+        "operationId": "API_OneTimePasscodeVerify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/OneTimePasscodeVerifyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "emailOrPhone",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "code",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "API"
+        ]
+      }
+    },
     "/flux/pricing-data": {
       "get": {
         "operationId": "API_PricingData",
@@ -160,6 +196,9 @@
       "title": "KYCProfile"
     },
     "OneTimePasscodeResponse": {
+      "type": "object"
+    },
+    "OneTimePasscodeVerifyResponse": {
       "type": "object"
     },
     "Organization": {

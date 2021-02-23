@@ -14,8 +14,8 @@ import (
 
 // InitializeServer creates the main server container
 func InitializeServer() server.Server {
-	sendgridApiKey := sendgrid.ProvideSendClientApiKey()
-	client := sendgrid.ProvideSendClient(sendgridApiKey)
+	sendAPIKey := sendgrid.ProvideSendClientAPIKey()
+	client := sendgrid.ProvideSendClient(sendAPIKey)
 	serverServer := server.ProvideServer(client)
 	return serverServer
 }

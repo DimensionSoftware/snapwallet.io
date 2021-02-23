@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	resty "github.com/go-resty/resty/v2"
+	"github.com/sendgrid/sendgrid-go/helpers/mail"
 
 	faker "github.com/bxcodec/faker/v3"
 	proto "github.com/khoerling/flux/api/lib/protocol"
@@ -82,5 +83,22 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 
 // OneTimePasscode is an rpc handler
 func (s *Server) OneTimePasscode(ctx context.Context, in *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
+	msg := generateOtpMessage(mail.NewEmail("Matt", "sseses@gmail.com"), "123")
+	if _, err := s.SendgridClient.Send(msg); err != nil {
+		return nil, err
+	}
+	return &proto.OneTimePasscodeResponse{}, nil
+}
+
+// OneTimePasscodeVerify is an rpc handler
+func (s *Server) OneTimePasscodeVerify(ctx context.Context, in *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
 	return nil, nil
+}
+
+func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
+	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
+	subject := "Your one time passcode for flux"
+	plainTextContent := fmt.Sprintf("Your one time passcode is: %s", code)
+	htmlContent := fmt.Sprintf("Your one time passcode is: <strong>%s</strong>", code)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 }

@@ -10,6 +10,6 @@ import (
 
 // InitializeServer creates the main server container
 func InitializeServer() server.Server {
-	wire.Build(server.ProvideServer, sendgrid.ProvideSendClient, sendgrid.ProvideSendClientApiKey)
+	wire.Build(server.ProvideServer, sendgrid.ProvideSendClient, sendgrid.ProvideSendClientAPIKey)
 	return server.Server{}
 }

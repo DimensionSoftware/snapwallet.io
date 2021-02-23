@@ -9,6 +9,7 @@ require (
 	github.com/golang/protobuf v1.4.3
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.2.0
+	github.com/joho/godotenv v1.3.0
 	github.com/sendgrid/rest v2.6.2+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.8.0+incompatible
 	google.golang.org/genproto v0.0.0-20210207032614-bba0dbe2a9ea
