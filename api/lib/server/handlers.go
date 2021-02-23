@@ -2,10 +2,13 @@ package server
 
 import (
 	"context"
+	"crypto/rand"
 	"fmt"
 	"log"
-	"math/rand"
+	"math/big"
+	mrand "math/rand"
 	"strings"
+	"time"
 
 	resty "github.com/go-resty/resty/v2"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -22,12 +25,12 @@ func (s *Server) UserData(ctx context.Context, in *proto.UserDataRequest) (*prot
 
 	httpResp := &proto.UserDataResponse{
 		User: &proto.User{
-			Id:    rand.Int63(),
+			Id:    mrand.Int63(),
 			Email: faker.Email(),
 			Phone: faker.Phonenumber(),
 			Organizations: []*proto.Organization{
 				{
-					Id:   rand.Int63(),
+					Id:   mrand.Int63(),
 					Name: fmt.Sprintf("%s %s Inc.", faker.LastName(), faker.Word()),
 				},
 			},
@@ -82,11 +85,24 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 // 2. otp code entered on page
 
 // OneTimePasscode is an rpc handler
-func (s *Server) OneTimePasscode(ctx context.Context, in *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
-	msg := generateOtpMessage(mail.NewEmail("Matt", "sseses@gmail.com"), "123")
-	if _, err := s.SendgridClient.Send(msg); err != nil {
+func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
+	code := sixRandomDigits()
+	msg := generateOtpMessage(mail.NewEmail("Matt", "sseses@gmail.com"), code)
+
+	_, _, err := s.Firestore.Collection("one-time-passcodes").Add(ctx, map[string]interface{}{
+		"emailOrPhone": req.EmailOrPhone,
+		"code":         code,
+		"createdAt":    time.Now(),
+	})
+	if err != nil {
 		return nil, err
 	}
+
+	_, err = s.SendgridClient.Send(msg)
+	if err != nil {
+		return nil, err
+	}
+
 	return &proto.OneTimePasscodeResponse{}, nil
 }
 
@@ -101,4 +117,13 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	plainTextContent := fmt.Sprintf("Your one time passcode is: %s", code)
 	htmlContent := fmt.Sprintf("Your one time passcode is: <strong>%s</strong>", code)
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+}
+
+func sixRandomDigits() string {
+	max := big.NewInt(999999)
+	n, err := rand.Int(rand.Reader, max)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return fmt.Sprintf("%06d\n", n.Int64())
 }
