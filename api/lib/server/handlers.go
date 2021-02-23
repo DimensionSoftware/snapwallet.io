@@ -77,8 +77,10 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 	return &resp, nil
 }
 
-// sendgrid
 // 1. firestore store otp by email or phone code and send to it
 // 2. otp code entered on page
+
+// OneTimePasscode is an rpc handler
 func (s *Server) OneTimePasscode(ctx context.Context, in *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
+	return nil, nil
 }
