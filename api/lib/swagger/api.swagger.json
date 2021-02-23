@@ -16,7 +16,37 @@
     "application/json"
   ],
   "paths": {
-    "/pricing-data": {
+    "/flux/auth/one-time-passcode": {
+      "get": {
+        "operationId": "API_OneTimePasscode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/OneTimePasscodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "emailOrPhone",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/flux/pricing-data": {
       "get": {
         "operationId": "API_PricingData",
         "responses": {
@@ -38,7 +68,7 @@
         ]
       }
     },
-    "/user-data": {
+    "/flux/user-data": {
       "get": {
         "operationId": "API_UserData",
         "responses": {
@@ -128,6 +158,9 @@
       },
       "description": "A user's KYC profile (they should only have one of these)",
       "title": "KYCProfile"
+    },
+    "OneTimePasscodeResponse": {
+      "type": "object"
     },
     "Organization": {
       "type": "object",

@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion7
 type APIClient interface {
 	UserData(ctx context.Context, in *UserDataRequest, opts ...grpc.CallOption) (*UserDataResponse, error)
 	PricingData(ctx context.Context, in *PricingDataRequest, opts ...grpc.CallOption) (*PricingDataResponse, error)
+	OneTimePasscode(ctx context.Context, in *OneTimePasscodeRequest, opts ...grpc.CallOption) (*OneTimePasscodeResponse, error)
 }
 
 type aPIClient struct {
@@ -48,12 +49,22 @@ func (c *aPIClient) PricingData(ctx context.Context, in *PricingDataRequest, opt
 	return out, nil
 }
 
+func (c *aPIClient) OneTimePasscode(ctx context.Context, in *OneTimePasscodeRequest, opts ...grpc.CallOption) (*OneTimePasscodeResponse, error) {
+	out := new(OneTimePasscodeResponse)
+	err := c.cc.Invoke(ctx, "/API/OneTimePasscode", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // APIServer is the server API for API service.
 // All implementations must embed UnimplementedAPIServer
 // for forward compatibility
 type APIServer interface {
 	UserData(context.Context, *UserDataRequest) (*UserDataResponse, error)
 	PricingData(context.Context, *PricingDataRequest) (*PricingDataResponse, error)
+	OneTimePasscode(context.Context, *OneTimePasscodeRequest) (*OneTimePasscodeResponse, error)
 	mustEmbedUnimplementedAPIServer()
 }
 
@@ -66,6 +77,9 @@ func (UnimplementedAPIServer) UserData(context.Context, *UserDataRequest) (*User
 }
 func (UnimplementedAPIServer) PricingData(context.Context, *PricingDataRequest) (*PricingDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PricingData not implemented")
+}
+func (UnimplementedAPIServer) OneTimePasscode(context.Context, *OneTimePasscodeRequest) (*OneTimePasscodeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method OneTimePasscode not implemented")
 }
 func (UnimplementedAPIServer) mustEmbedUnimplementedAPIServer() {}
 
@@ -116,6 +130,24 @@ func _API_PricingData_Handler(srv interface{}, ctx context.Context, dec func(int
 	return interceptor(ctx, in, info, handler)
 }
 
+func _API_OneTimePasscode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OneTimePasscodeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(APIServer).OneTimePasscode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/API/OneTimePasscode",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).OneTimePasscode(ctx, req.(*OneTimePasscodeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // API_ServiceDesc is the grpc.ServiceDesc for API service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -130,6 +162,10 @@ var API_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PricingData",
 			Handler:    _API_PricingData_Handler,
+		},
+		{
+			MethodName: "OneTimePasscode",
+			Handler:    _API_OneTimePasscode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
