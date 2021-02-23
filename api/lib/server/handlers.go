@@ -92,7 +92,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, in *proto.OneTimePasscodeR
 
 // OneTimePasscodeVerify is an rpc handler
 func (s *Server) OneTimePasscodeVerify(ctx context.Context, in *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
-	return nil, nil
+	return &proto.OneTimePasscodeVerifyResponse{}, nil
 }
 
 func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
