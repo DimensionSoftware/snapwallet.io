@@ -60,7 +60,7 @@
           .sourceCurrency.ticker}
       </div>
       <div class="total-container">
-        Total ~ 55,000 {$transactionStore.sourceCurrency.ticker}
+        ~ 55,000 {$transactionStore.sourceCurrency.ticker}
       </div>
     </div>
 
