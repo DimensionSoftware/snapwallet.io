@@ -4,6 +4,7 @@ import (
 	"net"
 
 	proto "github.com/khoerling/flux/api/lib/protocol"
+	"github.com/sendgrid/sendgrid-go"
 	"google.golang.org/grpc"
 )
 
@@ -11,6 +12,7 @@ import (
 type Server struct {
 	proto.UnimplementedAPIServer
 	grpcServer *grpc.Server
+	*sendgrid.Client
 }
 
 // NewServer instantiates a new grpc server
