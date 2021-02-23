@@ -86,7 +86,11 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 
 // OneTimePasscode is an rpc handler
 func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
-	code := sixRandomDigits()
+	code, err := sixRandomDigits()
+	if err != nil {
+		return nil, err
+	}
+
 	msg := generateOtpMessage(mail.NewEmail("Matt", "sseses@gmail.com"), code)
 
 	_, _, err := s.Firestore.Collection("one-time-passcodes").Add(ctx, map[string]interface{}{
@@ -119,11 +123,11 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 }
 
-func sixRandomDigits() string {
+func sixRandomDigits() (string, error) {
 	max := big.NewInt(999999)
 	n, err := rand.Int(rand.Reader, max)
 	if err != nil {
-		log.Fatal(err)
+		return "", err
 	}
-	return fmt.Sprintf("%06d\n", n.Int64())
+	return fmt.Sprintf("%06d\n", n.Int64()), nil
 }
