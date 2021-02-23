@@ -17,8 +17,8 @@ type Server struct {
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
 
-// NewServer instantiates a new grpc server
-func NewServer(sendgridClient *sendgrid.Client) Server {
+// ProvideServer instantiates a new grpc server
+func ProvideServer(sendgridClient *sendgrid.Client) Server {
 	server := Server{
 		GrpcServer:     grpc.NewServer(),
 		SendgridClient: sendgridClient,

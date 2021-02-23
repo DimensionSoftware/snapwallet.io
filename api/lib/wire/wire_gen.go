@@ -16,6 +16,6 @@ import (
 func InitializeServer() server.Server {
 	sendgridApiKey := sendgrid.ProvideSendClientApiKey()
 	client := sendgrid.ProvideSendClient(sendgridApiKey)
-	serverServer := server.NewServer(client)
+	serverServer := server.ProvideServer(client)
 	return serverServer
 }
