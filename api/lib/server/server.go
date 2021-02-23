@@ -11,16 +11,19 @@ import (
 // Server represents the grpc server and all its handlers attached
 type Server struct {
 	proto.UnimplementedAPIServer
-	grpcServer *grpc.Server
-	*sendgrid.Client
+	GrpcServer     *grpc.Server
+	SendgridClient *sendgrid.Client
 }
 
+const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
+
 // NewServer instantiates a new grpc server
-func NewServer() *Server {
-	server := &Server{
-		grpcServer: grpc.NewServer(),
+func NewServer(sendgridClient *sendgrid.Client) Server {
+	server := Server{
+		GrpcServer:     grpc.NewServer(),
+		SendgridClient: sendgridClient,
 	}
-	proto.RegisterAPIServer(server.grpcServer, server)
+	proto.RegisterAPIServer(server.GrpcServer, &server)
 	return server
 }
 
@@ -31,7 +34,7 @@ func (s *Server) Serve(address string) error {
 		return err
 	}
 
-	err = s.grpcServer.Serve(lis)
+	err = s.GrpcServer.Serve(lis)
 	if err != nil {
 		return err
 	}
