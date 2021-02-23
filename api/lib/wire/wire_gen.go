@@ -6,6 +6,7 @@
 package wire
 
 import (
+	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/server"
 )
@@ -16,6 +17,8 @@ import (
 func InitializeServer() server.Server {
 	sendAPIKey := sendgrid.ProvideSendClientAPIKey()
 	client := sendgrid.ProvideSendClient(sendAPIKey)
-	serverServer := server.ProvideServer(client)
+	fireProjectID := firestore.ProvideFirestoreProjectID()
+	firestoreClient := firestore.ProvideFirestore(fireProjectID)
+	serverServer := server.ProvideServer(client, firestoreClient)
 	return serverServer
 }
