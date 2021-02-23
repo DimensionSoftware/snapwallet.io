@@ -9,7 +9,10 @@ $textColor2: lighten($textColor, 10%);
 $textColor3: lighten($textColor, 20%);
 $textColor4: lighten($textColor, 40%);
 $modalBackgroundColor: white;
-$modalContainerBackgroundColor: linear-gradient(rgba(0, 0, 0, 0.08), rgba(0,0,0,0.1));
+$modalContainerBackgroundColor: linear-gradient(
+  rgba(0, 0, 0, 0.08),
+  rgba(0, 0, 0, 0.1)
+);
 
 $commonShadowColor: rgba(0, 0, 0, 0.15);
 

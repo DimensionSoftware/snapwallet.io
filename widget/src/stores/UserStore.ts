@@ -5,7 +5,7 @@ function createStore() {
 
   return {
     subscribe,
-    setIntent: (intent: string) => update((s) => ({ ...s, intent })),
+    setIntent: (intent: string) => update(s => ({ ...s, intent })),
   }
 }
 

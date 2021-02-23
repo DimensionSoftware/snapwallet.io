@@ -21,7 +21,8 @@
     text-transform: capitalize;
     margin: 0;
     font-weight: bold;
-    &:active, &:focus {
+    &:active,
+    &:focus {
       background-color: lighten($themeColor, 5%);
     }
     &:disabled {

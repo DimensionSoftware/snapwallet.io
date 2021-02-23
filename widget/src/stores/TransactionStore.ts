@@ -13,9 +13,9 @@ const createStore = () => {
   return {
     subscribe,
     setSourceCurrency: (sourceCurrency: IAsset) =>
-      update((s) => ({ ...s, sourceCurrency })),
+      update(s => ({ ...s, sourceCurrency })),
     setDestinationCurrency: (destinationCurrency: IAsset) =>
-      update((s) => ({ ...s, destinationCurrency })),
+      update(s => ({ ...s, destinationCurrency })),
   }
 }
 

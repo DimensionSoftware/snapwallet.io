@@ -16,7 +16,7 @@
   <input
     {type}
     placeholder={forceLabel ? '' : placeholder}
-    on:input={(e) => {
+    on:input={e => {
       isActive = forceLabel || Boolean(e.currentTarget?.value)
       dispatch('change', e)
     }}

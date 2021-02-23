@@ -39,7 +39,8 @@
     cursor: pointer;
   }
 
-  .sell-toggle, .buy-toggle {
+  .sell-toggle,
+  .buy-toggle {
     position: relative;
     height: 100%;
     width: 100%;
@@ -48,33 +49,33 @@
     overflow: hidden;
     align-items: center;
     justify-content: center;
-    background-color: rgba($themeColor, .1);
-    border-bottom: 1px solid rgba($themeColor, .1);
+    background-color: rgba($themeColor, 0.1);
+    border-bottom: 1px solid rgba($themeColor, 0.1);
     font-weight: 500;
     border-top-left-radius: 0.5rem;
     border-bottom-left-radius: 0.5rem;
     opacity: 1;
-    transition: border-bottom .2s ease-out .1s;
+    transition: border-bottom 0.2s ease-out 0.1s;
     &:hover {
-      border-bottom: 1px solid rgba($themeColor, .5);
+      border-bottom: 1px solid rgba($themeColor, 0.5);
       transition: none;
     }
     &.active {
       cursor: default;
       color: white;
       opacity: 0.9;
-      background-color: rgba($themeColor, .8);
+      background-color: rgba($themeColor, 0.8);
       border-bottom: 1px solid darken($themeColor, 30%);
       &:before {
         // background fx
         transform: scale(1) translateY(1px);
-        transition: transform .3s $easeOutExpo;
+        transition: transform 0.3s $easeOutExpo;
       }
     }
     &.sell-toggle {
-        border-radius: 0;
-        border-top-right-radius: 0.5rem;
-        border-bottom-right-radius: 0.5rem;
+      border-radius: 0;
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
       &:before {
         // background fx
         border-radius: 0;
@@ -92,7 +93,7 @@
       z-index: -1;
       background-color: $themeColor;
       transform: scale(0) translateY(90%);
-      transition: transform .1s $easeInExpo;
+      transition: transform 0.1s $easeInExpo;
       border-top-left-radius: 0.5rem;
       border-bottom-left-radius: 0.5rem;
     }
