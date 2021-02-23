@@ -93,7 +93,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 
 	msg := generateOtpMessage(mail.NewEmail("Matt", "sseses@gmail.com"), code)
 
-	_, _, err := s.Firestore.Collection("one-time-passcodes").Add(ctx, map[string]interface{}{
+	_, _, err = s.Firestore.Collection("one-time-passcodes").Add(ctx, map[string]interface{}{
 		"emailOrPhone": req.EmailOrPhone,
 		"code":         code,
 		"createdAt":    time.Now(),
