@@ -14,11 +14,20 @@ import (
 // Injectors from wire.go:
 
 // InitializeServer creates the main server container
-func InitializeServer() server.Server {
-	sendAPIKey := sendgrid.ProvideSendClientAPIKey()
+func InitializeServer() (server.Server, error) {
+	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
+	if err != nil {
+		return server.Server{}, err
+	}
 	client := sendgrid.ProvideSendClient(sendAPIKey)
-	fireProjectID := firestore.ProvideFirestoreProjectID()
-	firestoreClient := firestore.ProvideFirestore(fireProjectID)
+	fireProjectID, err := firestore.ProvideFirestoreProjectID()
+	if err != nil {
+		return server.Server{}, err
+	}
+	firestoreClient, err := firestore.ProvideFirestore(fireProjectID)
+	if err != nil {
+		return server.Server{}, err
+	}
 	serverServer := server.ProvideServer(client, firestoreClient)
-	return serverServer
+	return serverServer, nil
 }

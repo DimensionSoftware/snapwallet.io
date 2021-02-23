@@ -11,6 +11,9 @@ const (
 
 func main() {
 	godotenv.Load()
-	s := wire.InitializeServer()
+	s, err := wire.InitializeServer()
+	if err != nil {
+		panic(err)
+	}
 	s.Serve(defaultAddress)
 }

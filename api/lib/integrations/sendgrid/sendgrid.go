@@ -18,10 +18,10 @@ func ProvideSendClient(key SendAPIKey) *sendgrid.Client {
 }
 
 // ProvideSendClientAPIKey returns a sendgrid api key string
-func ProvideSendClientAPIKey() SendAPIKey {
+func ProvideSendClientAPIKey() (SendAPIKey, error) {
 	sendgridKey := os.Getenv(sendgridKeyEnvVarName)
 	if sendgridKey == "" {
-		panic(fmt.Sprintf("you must set %s", sendgridKeyEnvVarName))
+		return "", fmt.Errorf("you must set %s", sendgridKeyEnvVarName)
 	}
-	return SendAPIKey(sendgridKey)
+	return SendAPIKey(sendgridKey), nil
 }

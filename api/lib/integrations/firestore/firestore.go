@@ -15,28 +15,28 @@ const firestoreProjectEnvVarName = "FIRESTORE_PROJECT"
 type FireProjectID string
 
 // ProvideFirestore returns
-func ProvideFirestore(projectID FireProjectID) *firestore.Client {
+func ProvideFirestore(projectID FireProjectID) (*firestore.Client, error) {
 	ctx := context.Background()
 	conf := &firebase.Config{ProjectID: string(projectID)}
 
 	app, err := firebase.NewApp(ctx, conf)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	client, err := app.Firestore(ctx)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
-	return client
+	return client, nil
 }
 
 // ProvideFirestoreProjectID returns a google cloud project id
-func ProvideFirestoreProjectID() FireProjectID {
+func ProvideFirestoreProjectID() (FireProjectID, error) {
 	projectName := os.Getenv(firestoreProjectEnvVarName)
 	if projectName == "" {
-		panic(fmt.Sprintf("you must set %s", firestoreProjectEnvVarName))
+		return "", fmt.Errorf("you must set %s", firestoreProjectEnvVarName)
 	}
-	return FireProjectID(projectName)
+	return FireProjectID(projectName), nil
 }

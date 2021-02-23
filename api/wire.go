@@ -10,7 +10,7 @@ import (
 // wire.go
 
 // InitializeServer creates the main server container
-func InitializeServer() server.Server {
+func InitializeServer() (server.Server, error) {
 	wire.Build(
 		server.ProvideServer,
 		sendgrid.ProvideSendClientAPIKey,
@@ -18,5 +18,5 @@ func InitializeServer() server.Server {
 		firestore.ProvideFirestoreProjectID,
 		firestore.ProvideFirestore,
 	)
-	return server.Server{}
+	return server.Server{}, nil
 }
