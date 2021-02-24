@@ -125,13 +125,15 @@ service API {
 
   rpc OneTimePasscode(OneTimePasscodeRequest) returns (OneTimePasscodeResponse) {
     option (google.api.http) = {
-      get: "/flux/auth/one-time-passcode"
+      post: "/flux/auth/one-time-passcode"
+      body: "*"
     };
   }
 
   rpc OneTimePasscodeVerify(OneTimePasscodeVerifyRequest) returns (OneTimePasscodeVerifyResponse) {
     option (google.api.http) = {
-      get: "/flux/auth/one-time-passcode-verify"
+      post: "/flux/auth/one-time-passcode-verify"
+      body: "*"
     };
   }
 }

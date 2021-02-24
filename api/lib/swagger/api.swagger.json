@@ -17,7 +17,7 @@
   ],
   "paths": {
     "/flux/auth/one-time-passcode": {
-      "get": {
+      "post": {
         "operationId": "API_OneTimePasscode",
         "responses": {
           "200": {
@@ -35,10 +35,12 @@
         },
         "parameters": [
           {
-            "name": "emailOrPhone",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OneTimePasscodeRequest"
+            }
           }
         ],
         "tags": [
@@ -47,7 +49,7 @@
       }
     },
     "/flux/auth/one-time-passcode-verify": {
-      "get": {
+      "post": {
         "operationId": "API_OneTimePasscodeVerify",
         "responses": {
           "200": {
@@ -65,16 +67,12 @@
         },
         "parameters": [
           {
-            "name": "emailOrPhone",
-            "in": "query",
-            "required": false,
-            "type": "string"
-          },
-          {
-            "name": "code",
-            "in": "query",
-            "required": false,
-            "type": "string"
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OneTimePasscodeVerifyRequest"
+            }
           }
         ],
         "tags": [
@@ -195,8 +193,28 @@
       "description": "A user's KYC profile (they should only have one of these)",
       "title": "KYCProfile"
     },
+    "OneTimePasscodeRequest": {
+      "type": "object",
+      "properties": {
+        "emailOrPhone": {
+          "type": "string"
+        }
+      }
+    },
     "OneTimePasscodeResponse": {
       "type": "object"
+    },
+    "OneTimePasscodeVerifyRequest": {
+      "type": "object",
+      "properties": {
+        "emailOrPhone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      },
+      "title": "good for 10 minutes?\n0-9 code 6 digits"
     },
     "OneTimePasscodeVerifyResponse": {
       "type": "object"
