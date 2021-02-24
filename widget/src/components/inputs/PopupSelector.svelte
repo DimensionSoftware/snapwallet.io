@@ -7,7 +7,23 @@
 
   export let visible: boolean
   export let headerTitle: string
+
+  function handleClose(e: Event) {
+    if (e instanceof KeyboardEvent) {
+      // close on esc
+      if (e.key === 'Escape') dispatch('close')
+    } else if (e instanceof MouseEvent) {
+      // close when bg clicked
+      if (e.target instanceof HTMLDivElement) {
+        if (e.target.id.indexOf('modal-body') >= 0) {
+          dispatch('close')
+        }
+      }
+    }
+  }
 </script>
+
+<svelte:window on:keydown={handleClose} on:click={handleClose} />
 
 <div class="popup-selector" class:visible>
   <div class="popup-selector-header">
