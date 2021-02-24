@@ -8,6 +8,7 @@ package wire
 import (
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
+	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/server"
 )
 
@@ -28,6 +29,7 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	serverServer := server.ProvideServer(client, firestoreClient)
+	wyreClient := wyre.NewClient()
+	serverServer := server.ProvideServer(client, firestoreClient, wyreClient)
 	return serverServer, nil
 }

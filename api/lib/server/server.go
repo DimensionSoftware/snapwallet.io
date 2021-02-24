@@ -4,6 +4,7 @@ import (
 	"net"
 
 	"cloud.google.com/go/firestore"
+	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"github.com/sendgrid/sendgrid-go"
 	"google.golang.org/grpc"
@@ -15,16 +16,18 @@ type Server struct {
 	GrpcServer     *grpc.Server
 	SendgridClient *sendgrid.Client
 	Firestore      *firestore.Client
+	Wyre           wyre.Client
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
 
 // ProvideServer instantiates a new grpc server
-func ProvideServer(sendgridClient *sendgrid.Client, firestore *firestore.Client) Server {
+func ProvideServer(sendgridClient *sendgrid.Client, firestore *firestore.Client, wyre wyre.Client) Server {
 	server := Server{
 		GrpcServer:     grpc.NewServer(),
 		SendgridClient: sendgridClient,
 		Firestore:      firestore,
+		Wyre:           wyre,
 	}
 	proto.RegisterAPIServer(server.GrpcServer, &server)
 	return server
