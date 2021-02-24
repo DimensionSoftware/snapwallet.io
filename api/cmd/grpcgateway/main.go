@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"net/http"
+	"os"
 
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -36,7 +37,16 @@ func run() error {
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
 	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
-	return http.ListenAndServe(":8081", mux)
+	return http.ListenAndServe(apiPort(), mux)
+}
+
+func apiPort() string {
+	apiPort := os.Getenv("PORT")
+	if apiPort == "" {
+		apiPort = "8081"
+	}
+	println("> listening on port " + apiPort)
+	return ":" + apiPort
 }
 
 func serveFileHandler(path string, mimeType string) runtime.HandlerFunc {
