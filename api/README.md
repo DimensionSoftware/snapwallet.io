@@ -14,7 +14,7 @@ java -jar cloud-firestore-emulator-v1.11.7.jar
 ```
 
 ## Full-Feature Emulator (port 8080 & 4000)
-boots an additional gui server on port `4000` which allows you to browser, view, and edit data in the emulation db.
+boots an additional gui server on port `4000` which allows you to brows, view, and edit data in the emulation db.
 ```bash
 firebase login
 firebase emulators:start
