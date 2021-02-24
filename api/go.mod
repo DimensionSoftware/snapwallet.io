@@ -15,6 +15,7 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.2.0
 	github.com/joho/godotenv v1.3.0
 	github.com/nyaruka/phonenumbers v1.0.66
+	github.com/plaid/plaid-go v0.0.0-20210216195344-700b8cfc627d // indirect
 	github.com/rs/xid v1.2.1
 	github.com/sendgrid/rest v2.6.2+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.8.0+incompatible
