@@ -33,7 +33,6 @@
   @import '../../styles/_vars.scss';
 
   .crypto-card {
-    margin: 0.5rem 0;
     padding: 0;
     width: 100%;
     height: 3rem;
