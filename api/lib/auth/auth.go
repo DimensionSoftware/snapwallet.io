@@ -1,4 +1,4 @@
-package auth
+package main
 
 import (
 	"log"
@@ -56,16 +56,15 @@ func (Claims) Valid() error {
 	return nil
 }
 
-func foo() {
+func main() {
 	// Create the token
-	token := jwt.New(jwt.GetSigningMethod("RSA256"))
-	token.Claims = Claims{
+	claims := Claims{
 		Jti: xid.New().String(),
 		Sub: "user_id_stub_fixme",
 		Iat: time.Now(),
 		Exp: time.Now().Add(24 * time.Hour),
 	}
-	// Set some claims
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 	// Sign and get the complete encoded token as a string
 	tokenString, err := token.SignedString("fobar")
 	if err != nil {
