@@ -100,7 +100,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		if err == nil {
 			err = checkmail.ValidateHost(req.EmailOrPhone)
 			if err == nil {
-				normalizedEmailOrPhone = req.EmailOrPhone
+				normalizedEmailOrPhone = strings.TrimSpace(req.EmailOrPhone)
 			} else {
 				return nil, fmt.Errorf("a valid phone number or email is required")
 			}
