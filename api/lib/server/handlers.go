@@ -104,7 +104,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 
 	_, _, err = s.Firestore.Collection("one-time-passcodes").Add(ctx, map[string]interface{}{
 		"emailOrPhone": loginValue,
-		"kind":         loginValue,
+		"kind":         loginKind,
 		"code":         code,
 		"createdAt":    time.Now(),
 	})
