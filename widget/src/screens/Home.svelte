@@ -48,12 +48,7 @@
             >
           </Label>
         </div>
-        <Input
-          defaultValue={0.0}
-          forceLabel={true}
-          type="number"
-          placeholder="Amount"
-        />
+        <Input defaultValue={0.0} type="number" placeholder="Amount" />
       </div>
       <div class="exchange-rate-container">
         ~ 1 {$transactionStore.destinationCurrency.ticker} @ 55,000 {$transactionStore
@@ -71,10 +66,12 @@
     >
       <div class="cryptocurrencies-container">
         {#each cryptoCurrencies as cryptoCurrency (cryptoCurrency.ticker)}
-          <CryptoCard
-            on:click={() => (selectorVisible = false)}
-            crypto={cryptoCurrency}
-          />
+          <div style="margin: 0.5rem 0">
+            <CryptoCard
+              on:click={() => (selectorVisible = false)}
+              crypto={cryptoCurrency}
+            />
+          </div>
         {/each}
       </div>
     </PopupSelector>
