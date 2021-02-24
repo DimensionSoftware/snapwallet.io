@@ -13,10 +13,8 @@ import (
 	resty "github.com/go-resty/resty/v2"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 
-	"github.com/badoux/checkmail"
 	faker "github.com/bxcodec/faker/v3"
 	proto "github.com/khoerling/flux/api/lib/protocol"
-	"github.com/nyaruka/phonenumbers"
 )
 
 // https://api.sendwyre.com/v3/rates?as=priced
@@ -88,25 +86,13 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 
 // OneTimePasscode is an rpc handler
 func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
-	var normalizedEmailOrPhone string
-	var isPhone bool
+	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
+	if err != nil {
+		return nil, err
+	}
 
-	num, err := phonenumbers.Parse(strings.TrimSpace(req.EmailOrPhone), "US")
-	if err == nil {
-		isPhone = true
-		normalizedEmailOrPhone = phonenumbers.Format(num, phonenumbers.E164)
-	} else {
-		err = checkmail.ValidateFormat(req.EmailOrPhone)
-		if err == nil {
-			err = checkmail.ValidateHost(req.EmailOrPhone)
-			if err == nil {
-				normalizedEmailOrPhone = strings.TrimSpace(req.EmailOrPhone)
-			} else {
-				return nil, fmt.Errorf("a valid phone number or email is required")
-			}
-		} else {
-			return nil, fmt.Errorf("a valid phone number or email is required")
-		}
+	if loginKind == LoginKindPhone {
+		return nil, fmt.Errorf("phone is not implemented yet")
 	}
 
 	code, err := sixRandomDigits()
@@ -114,14 +100,11 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return nil, err
 	}
 
-	if isPhone {
-		return nil, fmt.Errorf("phone is not implemented yet")
-	}
-
-	msg := generateOtpMessage(mail.NewEmail("Matt", normalizedEmailOrPhone), code)
+	msg := generateOtpMessage(mail.NewEmail("Matt", loginValue), code)
 
 	_, _, err = s.Firestore.Collection("one-time-passcodes").Add(ctx, map[string]interface{}{
-		"emailOrPhone": normalizedEmailOrPhone,
+		"emailOrPhone": loginValue,
+		"kind":         loginValue,
 		"code":         code,
 		"createdAt":    time.Now(),
 	})
