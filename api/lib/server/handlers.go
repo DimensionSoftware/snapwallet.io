@@ -127,16 +127,20 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 		return nil, err
 	}
 
-	docs := s.Firestore.Collection("one-time-passcodes").
+	passcodes := s.Firestore.Collection("one-time-passcodes").
 		Where("emailOrPhone", "==", loginValue).
 		Where("code", "==", req.Code). // this comparison isn't working?!?
 		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
 		Documents(ctx)
 
 	// if no doc then failure to login (make better later)
-	_, err = docs.Next()
+	passcode, err := passcodes.Next()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("code verification failed")
+	}
+	_, err = passcode.Ref.Delete(ctx)
+	if err != nil {
+		return nil, fmt.Errorf("code verification failed")
 	}
 
 	return &proto.OneTimePasscodeVerifyResponse{}, nil
@@ -156,5 +160,5 @@ func sixRandomDigits() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return fmt.Sprintf("%06d\n", n.Int64()), nil
+	return fmt.Sprintf("%06d", n.Int64()), nil
 }
