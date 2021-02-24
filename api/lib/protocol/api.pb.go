@@ -534,7 +534,7 @@ func (x *Address) GetCountry() string {
 
 // PaymentMethod
 //
-//  A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)
+// A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)
 type PaymentMethod struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -606,6 +606,9 @@ func (x *PaymentMethod) GetStatus() string {
 	return ""
 }
 
+// UserDataRequest
+//
+// request
 type UserDataRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -644,6 +647,9 @@ func (*UserDataRequest) Descriptor() ([]byte, []int) {
 	return file_api_proto_rawDescGZIP(), []int{7}
 }
 
+// UserDataResponse
+//
+// response
 type UserDataResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -691,6 +697,9 @@ func (x *UserDataResponse) GetUser() *User {
 	return nil
 }
 
+// PricingDataRequest
+//
+// request
 type PricingDataRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -729,6 +738,9 @@ func (*PricingDataRequest) Descriptor() ([]byte, []int) {
 	return file_api_proto_rawDescGZIP(), []int{9}
 }
 
+// PricingRate
+//
+// the pricing rate map; the keys are currency symbols and the values are the rates
 type PricingRate struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -776,12 +788,14 @@ func (x *PricingRate) GetRate() map[string]float32 {
 	return nil
 }
 
+// PricingDataResponse
+//
+// response
 type PricingDataResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	// {"AAVEARS":{"ARS":34418.19149999999856,"AAVE":0.00002905440281486027648600}
 	Rates map[string]*PricingRate `protobuf:"bytes,1,rep,name=rates,proto3" json:"rates,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 }
 
@@ -824,6 +838,9 @@ func (x *PricingDataResponse) GetRates() map[string]*PricingRate {
 	return nil
 }
 
+// OneTimePasscodeRequest
+//
+// request
 type OneTimePasscodeRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -871,6 +888,9 @@ func (x *OneTimePasscodeRequest) GetEmailOrPhone() string {
 	return ""
 }
 
+// OneTimePasscodeResponse
+//
+// response
 type OneTimePasscodeResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -909,8 +929,9 @@ func (*OneTimePasscodeResponse) Descriptor() ([]byte, []int) {
 	return file_api_proto_rawDescGZIP(), []int{13}
 }
 
-// good for 10 minutes?
-// 0-9 code 6 digits
+// OneTimePasscodeVerifyRequest
+//
+// request
 type OneTimePasscodeVerifyRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -966,6 +987,9 @@ func (x *OneTimePasscodeVerifyRequest) GetCode() string {
 	return ""
 }
 
+// OneTimePasscodeVerifyResponse
+//
+// response
 type OneTimePasscodeVerifyResponse struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache

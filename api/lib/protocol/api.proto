@@ -71,7 +71,7 @@ message Address {
 
 // PaymentMethod
 //
-//  A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)
+// A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)
 message PaymentMethod {
   int64 id = 1;
   string external_id = 2;
@@ -80,49 +80,86 @@ message PaymentMethod {
 }
 
 
+// UserDataRequest
+//
+// request
 message UserDataRequest {}
+
+// UserDataResponse
+//
+// response
 message UserDataResponse {
   User user = 1;
 }
 
+// PricingDataRequest
+//
+// request
 message PricingDataRequest {}
 
+// PricingRate
+//
+// the pricing rate map; the keys are currency symbols and the values are the rates
 message PricingRate {
   map<string,float> rate = 1;
 }
 
+// PricingDataResponse
+//
+// response
 message PricingDataResponse {
-  // {"AAVEARS":{"ARS":34418.19149999999856,"AAVE":0.00002905440281486027648600}
   map<string,PricingRate> rates = 1;
 }
 
+// OneTimePasscodeRequest
+//
+// request
 message OneTimePasscodeRequest {
   string email_or_phone = 1;
 }
+
+// OneTimePasscodeResponse
+//
+// response
 message OneTimePasscodeResponse {}
 
-// good for 10 minutes?
-// 0-9 code 6 digits
+// OneTimePasscodeVerifyRequest
+//
+// request
 message OneTimePasscodeVerifyRequest {
   string email_or_phone = 1;
   string code = 2;
 }
+
+// OneTimePasscodeVerifyResponse
+//
+// response
 message OneTimePasscodeVerifyResponse {
 }
 
 service API {
+  // Get user data
+  //
+  // Provides user data associated with the access token
   rpc UserData(UserDataRequest) returns (UserDataResponse) {
     option (google.api.http) = {
       get: "/flux/user-data"
     };
   }
 
+  // Get pricing data
+  //
+  // Provides pricing data for all markets with rate maps
   rpc PricingData(PricingDataRequest) returns (PricingDataResponse) {
     option (google.api.http) = {
       get: "/flux/pricing-data"
     };
   }
 
+  // Post email or phone in exchange for a one time passcode
+  //
+  // Will cause your email or phone to receive a one time passcode.
+  // This can be used in the verify step to obtain a token for login
   rpc OneTimePasscode(OneTimePasscodeRequest) returns (OneTimePasscodeResponse) {
     option (google.api.http) = {
       post: "/flux/auth/one-time-passcode"
@@ -130,6 +167,9 @@ service API {
     };
   }
 
+  // Post one time passcode in exchange for an access token
+  //
+  // The passcode received in either email or phone text message should be provided here in order to obtain on access token
   rpc OneTimePasscodeVerify(OneTimePasscodeVerifyRequest) returns (OneTimePasscodeVerifyResponse) {
     option (google.api.http) = {
       post: "/flux/auth/one-time-passcode-verify"

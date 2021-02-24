@@ -18,9 +18,22 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type APIClient interface {
+	// Get user data
+	//
+	// Provides user data associated with the access token
 	UserData(ctx context.Context, in *UserDataRequest, opts ...grpc.CallOption) (*UserDataResponse, error)
+	// Get pricing data
+	//
+	// Provides pricing data for all markets with rate maps
 	PricingData(ctx context.Context, in *PricingDataRequest, opts ...grpc.CallOption) (*PricingDataResponse, error)
+	// Post email or phone in exchange for a one time passcode
+	//
+	// Will cause your email or phone to receive a one time passcode.
+	// This can be used in the verify step to obtain a token for login
 	OneTimePasscode(ctx context.Context, in *OneTimePasscodeRequest, opts ...grpc.CallOption) (*OneTimePasscodeResponse, error)
+	// Post one time passcode in exchange for an access token
+	//
+	// The passcode received in either email or phone text message should be provided here in order to obtain on access token
 	OneTimePasscodeVerify(ctx context.Context, in *OneTimePasscodeVerifyRequest, opts ...grpc.CallOption) (*OneTimePasscodeVerifyResponse, error)
 }
 
@@ -72,9 +85,22 @@ func (c *aPIClient) OneTimePasscodeVerify(ctx context.Context, in *OneTimePassco
 // All implementations must embed UnimplementedAPIServer
 // for forward compatibility
 type APIServer interface {
+	// Get user data
+	//
+	// Provides user data associated with the access token
 	UserData(context.Context, *UserDataRequest) (*UserDataResponse, error)
+	// Get pricing data
+	//
+	// Provides pricing data for all markets with rate maps
 	PricingData(context.Context, *PricingDataRequest) (*PricingDataResponse, error)
+	// Post email or phone in exchange for a one time passcode
+	//
+	// Will cause your email or phone to receive a one time passcode.
+	// This can be used in the verify step to obtain a token for login
 	OneTimePasscode(context.Context, *OneTimePasscodeRequest) (*OneTimePasscodeResponse, error)
+	// Post one time passcode in exchange for an access token
+	//
+	// The passcode received in either email or phone text message should be provided here in order to obtain on access token
 	OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error)
 	mustEmbedUnimplementedAPIServer()
 }
