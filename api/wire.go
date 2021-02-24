@@ -3,9 +3,11 @@ package wire
 import (
 	"github.com/google/wire"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
+	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/server"
+	vendorplaid "github.com/plaid/plaid-go/plaid"
 )
 
 // wire.go
@@ -19,6 +21,8 @@ func InitializeServer() (server.Server, error) {
 		firestore.ProvideFirestoreProjectID,
 		firestore.ProvideFirestore,
 		wyre.NewClient,
+		plaid.ProvideClientOptions,
+		vendorplaid.NewClient,
 	)
 	return server.Server{}, nil
 }

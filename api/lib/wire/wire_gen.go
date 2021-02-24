@@ -7,9 +7,11 @@ package wire
 
 import (
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
+	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/server"
+	plaid2 "github.com/plaid/plaid-go/plaid"
 )
 
 // Injectors from wire.go:
@@ -30,6 +32,14 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	wyreClient := wyre.NewClient()
-	serverServer := server.ProvideServer(client, firestoreClient, wyreClient)
+	clientOptions, err := plaid.ProvideClientOptions()
+	if err != nil {
+		return server.Server{}, err
+	}
+	plaidClient, err := plaid2.NewClient(clientOptions)
+	if err != nil {
+		return server.Server{}, err
+	}
+	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient)
 	return serverServer, nil
 }
