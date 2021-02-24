@@ -118,7 +118,7 @@ req ex:
 type CryptoAddresses = map[string]string
 
 // CryptoAmounts represents crypto amounts; keyed by crypto symbol
-type CryptoAmounts = map[string]string
+type CryptoAmounts = map[string]float64
 
 // Account represents the response object for https://api.sendwyre.com/v3/accounts
 type Account struct {
