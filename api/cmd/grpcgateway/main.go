@@ -16,7 +16,7 @@ var (
 	// gRPC server endpoint
 	grpcServerEndpoint = flag.String("grpc-server-endpoint", "localhost:50051", "gRPC server endpoint")
 )
-var serveSwaggerJSON = serveFileHandler("lib/swagger/api.swagger.json", "application/json")
+var serveSwaggerJSON = serveFileHandler("lib/swagger/swagger.json", "application/json")
 var serveSwaggerUI = serveFileHandler("lib/swagger/swagger-ui.html", "text/html")
 
 func run() error {

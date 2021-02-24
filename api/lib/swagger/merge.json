@@ -1,0 +1,17 @@
+{
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/flux/user-data": {
+      "get": {
+        "security": [{"Bearer": []}]
+      }
+    }
+  }
+}
+

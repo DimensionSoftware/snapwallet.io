@@ -1,0 +1,411 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "api.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "API"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/flux/auth/one-time-passcode": {
+      "post": {
+        "operationId": "API_OneTimePasscode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/OneTimePasscodeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OneTimePasscodeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/flux/auth/one-time-passcode-verify": {
+      "post": {
+        "operationId": "API_OneTimePasscodeVerify",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/OneTimePasscodeVerifyResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OneTimePasscodeVerifyRequest"
+            }
+          }
+        ],
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/flux/pricing-data": {
+      "get": {
+        "operationId": "API_PricingData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PricingDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ]
+      }
+    },
+    "/flux/user-data": {
+      "get": {
+        "operationId": "API_UserData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/UserDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "API"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "isDefault": {
+          "type": "boolean"
+        },
+        "street1": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      },
+      "description": "A user's residential address which belongs to the profile (they can have many.)",
+      "title": "Address"
+    },
+    "KYCProfile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "givenName": {
+          "type": "string"
+        },
+        "familyName": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "type": "string"
+        },
+        "socialSecurityNumber": {
+          "type": "string"
+        },
+        "addresses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Address"
+          }
+        },
+        "thirdPartyUserAccounts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ThirdPartyUserAccount"
+          }
+        }
+      },
+      "description": "A user's KYC profile (they should only have one of these)",
+      "title": "KYCProfile"
+    },
+    "OneTimePasscodeRequest": {
+      "type": "object",
+      "properties": {
+        "emailOrPhone": {
+          "type": "string"
+        }
+      }
+    },
+    "OneTimePasscodeResponse": {
+      "type": "object"
+    },
+    "OneTimePasscodeVerifyRequest": {
+      "type": "object",
+      "properties": {
+        "emailOrPhone": {
+          "type": "string"
+        },
+        "code": {
+          "type": "string"
+        }
+      },
+      "title": "good for 10 minutes?\n0-9 code 6 digits"
+    },
+    "OneTimePasscodeVerifyResponse": {
+      "type": "object"
+    },
+    "Organization": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
+        },
+        "applications": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrganizationApplication"
+          }
+        }
+      },
+      "description": "an organization containing users, a user is one to many to organizations",
+      "title": "Organization"
+    },
+    "OrganizationApplication": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        }
+      },
+      "title": "OrganizationApplication"
+    },
+    "PaymentMethod": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "description": "A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)",
+      "title": "PaymentMethod"
+    },
+    "PricingDataResponse": {
+      "type": "object",
+      "properties": {
+        "rates": {
+          "type": "object",
+          "additionalProperties": {
+            "$ref": "#/definitions/PricingRate"
+          },
+          "title": "{\"AAVEARS\":{\"ARS\":34418.19149999999856,\"AAVE\":0.00002905440281486027648600}"
+        }
+      }
+    },
+    "PricingRate": {
+      "type": "object",
+      "properties": {
+        "rate": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "float"
+          }
+        }
+      }
+    },
+    "ThirdPartyUserAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "partnerId": {
+          "type": "string"
+        },
+        "externalId": {
+          "type": "string"
+        },
+        "credentialId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "paymentMethods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/PaymentMethod"
+          }
+        }
+      },
+      "description": "An object representing the user's account at a third party API",
+      "title": "ThirdPartyUserAccount"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "int64"
+        },
+        "email": {
+          "type": "string"
+        },
+        "phone": {
+          "type": "string"
+        },
+        "kycProfile": {
+          "$ref": "#/definitions/KYCProfile"
+        },
+        "organizations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Organization"
+          }
+        }
+      },
+      "description": "A user which is shared across customer applications",
+      "title": "User"
+    },
+    "UserDataResponse": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/User"
+        }
+      }
+    },
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "typeUrl": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string",
+          "format": "byte"
+        }
+      }
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  }
+}

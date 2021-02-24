@@ -9,3 +9,10 @@ protoc --go_out=lib/protocol --go_opt=paths=source_relative \
     --openapiv2_out lib/swagger \
     -I lib/protocol \
     lib/protocol/api.proto
+
+# merge custom sections to swagger
+jq -s '.[0] * .[1]' -M \
+  lib/swagger/api.swagger.json \
+  lib/swagger/merge.json \
+  > lib/swagger/swagger.json
+
