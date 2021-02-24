@@ -121,7 +121,24 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 }
 
 // OneTimePasscodeVerify is an rpc handler
-func (s *Server) OneTimePasscodeVerify(ctx context.Context, in *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
+func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
+	_, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
+	if err != nil {
+		return nil, err
+	}
+
+	docs := s.Firestore.Collection("one-time-passcodes").
+		Where("emailOrPhone", "==", loginValue).
+		Where("code", "==", req.Code). // this comparison isn't working?!?
+		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
+		Documents(ctx)
+
+	// if no doc then failure to login (make better later)
+	_, err = docs.Next()
+	if err != nil {
+		return nil, err
+	}
+
 	return &proto.OneTimePasscodeVerifyResponse{}, nil
 }
 
