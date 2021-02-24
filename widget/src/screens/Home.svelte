@@ -39,10 +39,11 @@
         />
       </div>
       <div style="display:flex;flex-direction:column;height:5rem;">
-        <div style="display:flex;justify-content:space-between;">
+        <div style="display:flex;justify-content:space-between;cursor:pointer;">
           <Label>Amount</Label>
           <Label>
-            <b>{$transactionStore.sourceCurrency.ticker}</b> /
+            <b>{$transactionStore.sourceCurrency.ticker}</b>
+            /
             <span class="muted"
               >{$transactionStore.destinationCurrency.ticker}</span
             >
