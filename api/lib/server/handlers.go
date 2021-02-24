@@ -129,7 +129,7 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 
 	passcodes := s.Firestore.Collection("one-time-passcodes").
 		Where("emailOrPhone", "==", loginValue).
-		Where("code", "==", req.Code). // this comparison isn't working?!?
+		Where("code", "==", req.Code).
 		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
 		Documents(ctx)
 
