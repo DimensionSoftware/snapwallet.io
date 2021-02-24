@@ -7,7 +7,7 @@ NOTES
 
 grpcserver looks for `.env` and there is an example of this file you can copy `.env.example`
 
-# Firestore Emulator (port 8080)
+## Quick 'N Dirty Firestore Emulator (port 8080)
 ```bash
 curl -O  https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.11.7.jar
 java -jar cloud-firestore-emulator-v1.11.7.jar
