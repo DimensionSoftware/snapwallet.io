@@ -137,6 +137,17 @@ message OneTimePasscodeVerifyRequest {
 message OneTimePasscodeVerifyResponse {
 }
 
+
+// WyreAddBankPaymentMethodRequest
+//
+// request
+message WyreAddBankPaymentMethodRequest {}
+
+// WyreAddBankPaymentMethodResponse
+//
+// response
+message WyreAddBankPaymentMethodResponse {}
+
 service API {
   // Get user data
   //
@@ -173,6 +184,16 @@ service API {
   rpc OneTimePasscodeVerify(OneTimePasscodeVerifyRequest) returns (OneTimePasscodeVerifyResponse) {
     option (google.api.http) = {
       post: "/flux/auth/one-time-passcode-verify"
+      body: "*"
+    };
+  }
+
+  // Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
+  //
+  // requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
+  rpc WyreAddBankPaymentMethod(WyreAddBankPaymentMethodRequest) returns (WyreAddBankPaymentMethodResponse) {
+    option (google.api.http) = {
+      post: "/wyre/add-bank-payment-method"
       body: "*"
     };
   }

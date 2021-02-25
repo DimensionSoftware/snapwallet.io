@@ -131,6 +131,40 @@
           "API"
         ]
       }
+    },
+    "/wyre/add-bank-payment-method": {
+      "post": {
+        "summary": "Post chosen bank info from plaid in order to create a new ACH pyment method in wyre",
+        "description": "requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id",
+        "operationId": "API_WyreAddBankPaymentMethod",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreAddBankPaymentMethodResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreAddBankPaymentMethodRequest"
+            }
+          }
+        ],
+        "tags": [
+          "API"
+        ]
+      }
     }
   },
   "definitions": {
@@ -384,6 +418,16 @@
       },
       "description": "response",
       "title": "UserDataResponse"
+    },
+    "WyreAddBankPaymentMethodRequest": {
+      "type": "object",
+      "description": "request",
+      "title": "WyreAddBankPaymentMethodRequest"
+    },
+    "WyreAddBankPaymentMethodResponse": {
+      "type": "object",
+      "description": "response",
+      "title": "WyreAddBankPaymentMethodResponse"
     },
     "protobufAny": {
       "type": "object",

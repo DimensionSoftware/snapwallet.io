@@ -35,6 +35,10 @@ type APIClient interface {
 	//
 	// The passcode received in either email or phone text message should be provided here in order to obtain on access token
 	OneTimePasscodeVerify(ctx context.Context, in *OneTimePasscodeVerifyRequest, opts ...grpc.CallOption) (*OneTimePasscodeVerifyResponse, error)
+	// Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
+	//
+	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
+	WyreAddBankPaymentMethod(ctx context.Context, in *WyreAddBankPaymentMethodRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodResponse, error)
 }
 
 type aPIClient struct {
@@ -81,6 +85,15 @@ func (c *aPIClient) OneTimePasscodeVerify(ctx context.Context, in *OneTimePassco
 	return out, nil
 }
 
+func (c *aPIClient) WyreAddBankPaymentMethod(ctx context.Context, in *WyreAddBankPaymentMethodRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodResponse, error) {
+	out := new(WyreAddBankPaymentMethodResponse)
+	err := c.cc.Invoke(ctx, "/API/WyreAddBankPaymentMethod", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // APIServer is the server API for API service.
 // All implementations must embed UnimplementedAPIServer
 // for forward compatibility
@@ -102,6 +115,10 @@ type APIServer interface {
 	//
 	// The passcode received in either email or phone text message should be provided here in order to obtain on access token
 	OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error)
+	// Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
+	//
+	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
+	WyreAddBankPaymentMethod(context.Context, *WyreAddBankPaymentMethodRequest) (*WyreAddBankPaymentMethodResponse, error)
 	mustEmbedUnimplementedAPIServer()
 }
 
@@ -120,6 +137,9 @@ func (UnimplementedAPIServer) OneTimePasscode(context.Context, *OneTimePasscodeR
 }
 func (UnimplementedAPIServer) OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OneTimePasscodeVerify not implemented")
+}
+func (UnimplementedAPIServer) WyreAddBankPaymentMethod(context.Context, *WyreAddBankPaymentMethodRequest) (*WyreAddBankPaymentMethodResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreAddBankPaymentMethod not implemented")
 }
 func (UnimplementedAPIServer) mustEmbedUnimplementedAPIServer() {}
 
@@ -206,6 +226,24 @@ func _API_OneTimePasscodeVerify_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _API_WyreAddBankPaymentMethod_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreAddBankPaymentMethodRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(APIServer).WyreAddBankPaymentMethod(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/API/WyreAddBankPaymentMethod",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(APIServer).WyreAddBankPaymentMethod(ctx, req.(*WyreAddBankPaymentMethodRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // API_ServiceDesc is the grpc.ServiceDesc for API service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +266,10 @@ var API_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "OneTimePasscodeVerify",
 			Handler:    _API_OneTimePasscodeVerify_Handler,
+		},
+		{
+			MethodName: "WyreAddBankPaymentMethod",
+			Handler:    _API_WyreAddBankPaymentMethod_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
