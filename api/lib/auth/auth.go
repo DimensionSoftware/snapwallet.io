@@ -62,7 +62,7 @@ func (Claims) Valid() error {
 }
 
 // JwtPrivateKey represents the private key for signing the jwt
-type JwtPrivateKey *rsa.PrivateKey
+type JwtPrivateKey = *rsa.PrivateKey
 
 // JwtSigner manages the signing of our jwt
 type JwtSigner struct {
