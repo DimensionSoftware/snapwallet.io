@@ -1,6 +1,10 @@
 package wyre
 
-import "github.com/go-resty/resty/v2"
+import (
+	"fmt"
+
+	"github.com/go-resty/resty/v2"
+)
 
 // ProfileField represents PII data which is used during the create account process
 type ProfileField struct {
@@ -269,3 +273,25 @@ resp ex:
 */
 
 // CreateAccount https://docs.sendwyre.com/docs/create-account
+
+// PricingRate represents rates keyed by currency symbol for a particular type of exchange
+type PricingRate map[string]float32
+
+// PricingRates represents rates across all markets
+type PricingRates = map[string](PricingRate)
+
+// PricedExchangeRates provides rates across all markets
+// https://docs.sendwyre.com/docs/live-exchange-rates
+// GET https://api.sendwyre.com/v3/rates
+func (c Client) PricedExchangeRates() (*PricingRates, error) {
+	resp, err := c.http.R().
+		SetResult(PricingRates{}).
+		EnableTrace().
+		Get("https://api.sendwyre.com/v2/rates?as=priced")
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println(resp.String())
+
+	return resp.Result().(*PricingRates), nil
+}

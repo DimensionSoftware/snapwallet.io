@@ -10,7 +10,6 @@ import (
 	"strings"
 	"time"
 
-	resty "github.com/go-resty/resty/v2"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/metadata"
 
@@ -60,17 +59,11 @@ type wyrePricingRates = map[string](wyrePricingRate)
 
 // PricingData is an rpc handler
 func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) (*proto.PricingDataResponse, error) {
-	client := resty.New()
-	pricingResp, err := client.R().
-		SetResult(wyrePricingRates{}).
-		EnableTrace().
-		Get("https://api.sendwyre.com/v3/rates?as=priced")
-
+	wyreRates, err := s.Wyre.PricedExchangeRates()
 	if err != nil {
 		return nil, err
 	}
-
-	wyreRates := pricingResp.Result().(*wyrePricingRates)
+	fmt.Println(wyreRates)
 
 	rates := map[string]*proto.PricingRate{}
 	resp := proto.PricingDataResponse{
