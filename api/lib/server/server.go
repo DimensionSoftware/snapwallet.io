@@ -14,7 +14,7 @@ import (
 
 // Server represents the grpc server and all its handlers attached
 type Server struct {
-	proto.UnimplementedAPIServer
+	proto.UnimplementedFluxServer
 	GrpcServer     *grpc.Server
 	SendgridClient *sendgrid.Client
 	Firestore      *firestore.Client
@@ -41,7 +41,7 @@ func ProvideServer(
 		Plaid:          plaid,
 		JwtSigner:      &jwtSigner,
 	}
-	proto.RegisterAPIServer(server.GrpcServer, &server)
+	proto.RegisterFluxServer(server.GrpcServer, &server)
 	return server
 }
 
