@@ -63,7 +63,6 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(wyreRates)
 
 	rates := map[string]*proto.PricingRate{}
 	resp := proto.PricingDataResponse{
