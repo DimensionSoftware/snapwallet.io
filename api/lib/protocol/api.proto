@@ -135,8 +135,8 @@ message OneTimePasscodeVerifyRequest {
 //
 // response
 message OneTimePasscodeVerifyResponse {
+  string jwt = 1;
 }
-
 
 // WyreAddBankPaymentMethodRequest
 //

@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc/metadata"
 
 	faker "github.com/bxcodec/faker/v3"
+	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
@@ -156,8 +157,11 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	if err != nil {
 		return nil, fmt.Errorf("code verification failed")
 	}
+	jwt, err := s.JwtSigner.Sign(auth.NewClaims(loginValue))
 
-	return &proto.OneTimePasscodeVerifyResponse{}, nil
+	return &proto.OneTimePasscodeVerifyResponse{
+		Jwt: jwt,
+	}, nil
 }
 
 // WyreAddBankPaymentMethod is an rpc handler

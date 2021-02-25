@@ -265,6 +265,11 @@
     },
     "OneTimePasscodeVerifyResponse": {
       "type": "object",
+      "properties": {
+        "jwt": {
+          "type": "string"
+        }
+      },
       "description": "response",
       "title": "OneTimePasscodeVerifyResponse"
     },

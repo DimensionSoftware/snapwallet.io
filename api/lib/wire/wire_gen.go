@@ -6,6 +6,7 @@
 package wire
 
 import (
+	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
@@ -40,6 +41,13 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient)
+	jwtPrivateKey, err := auth.ProvideJwtPrivateKey()
+	if err != nil {
+		return server.Server{}, err
+	}
+	jwtSigner := auth.JwtSigner{
+		PrivateKey: jwtPrivateKey,
+	}
+	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient, jwtSigner)
 	return serverServer, nil
 }

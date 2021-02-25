@@ -3,6 +3,7 @@ package auth
 import (
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/pem"
 	"fmt"
 	"os"
@@ -75,17 +76,22 @@ func (signer JwtSigner) Sign(claims Claims) (string, error) {
 	return token.SignedString(signer.PrivateKey)
 }
 
-const jwtPrivateKeyEnvVarName = "FIRESTORE_PROJECT"
+const jwtPrivateKeyEnvVarName = "JWT_PRIVATE_PEM_BASE64"
 
 // ProvideJwtPrivateKey returns a JwtPrivateKey, and an error if not provided by env vars
 func ProvideJwtPrivateKey() (JwtPrivateKey, error) {
-	privatePEM := os.Getenv(jwtPrivateKeyEnvVarName)
+	privatePEMbase64 := os.Getenv(jwtPrivateKeyEnvVarName)
 
-	if privatePEM == "" {
+	if privatePEMbase64 == "" {
 		return nil, fmt.Errorf("you must set %s", jwtPrivateKeyEnvVarName)
 	}
 
-	block, _ := pem.Decode([]byte(privatePEM))
+	privatePEM, err := base64.StdEncoding.DecodeString(privatePEMbase64)
+	if err != nil {
+		return nil, fmt.Errorf("base64 decoding failed from %s", jwtPrivateKeyEnvVarName)
+	}
+
+	block, _ := pem.Decode(privatePEM)
 	if block == nil || block.Type != "RSA PRIVATE KEY" {
 		return nil, fmt.Errorf("failed to decode PEM block containing private key from %s", jwtPrivateKeyEnvVarName)
 	}

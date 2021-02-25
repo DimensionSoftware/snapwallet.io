@@ -4,6 +4,7 @@ import (
 	"net"
 
 	"cloud.google.com/go/firestore"
+	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"github.com/plaid/plaid-go/plaid"
@@ -17,8 +18,9 @@ type Server struct {
 	GrpcServer     *grpc.Server
 	SendgridClient *sendgrid.Client
 	Firestore      *firestore.Client
-	Wyre           wyre.Client
+	Wyre           *wyre.Client
 	Plaid          *plaid.Client
+	JwtSigner      *auth.JwtSigner
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
@@ -29,13 +31,15 @@ func ProvideServer(
 	firestore *firestore.Client,
 	wyre wyre.Client,
 	plaid *plaid.Client,
+	jwtSigner auth.JwtSigner,
 ) Server {
 	server := Server{
 		GrpcServer:     grpc.NewServer(),
 		SendgridClient: sendgridClient,
 		Firestore:      firestore,
-		Wyre:           wyre,
+		Wyre:           &wyre,
 		Plaid:          plaid,
+		JwtSigner:      &jwtSigner,
 	}
 	proto.RegisterAPIServer(server.GrpcServer, &server)
 	return server
