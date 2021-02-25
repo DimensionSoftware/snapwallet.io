@@ -31,7 +31,7 @@ var _ = runtime.String
 var _ = utilities.NewDoubleArray
 var _ = metadata.Join
 
-func request_API_UserData_0(ctx context.Context, marshaler runtime.Marshaler, client APIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Flux_UserData_0(ctx context.Context, marshaler runtime.Marshaler, client FluxClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UserDataRequest
 	var metadata runtime.ServerMetadata
 
@@ -40,7 +40,7 @@ func request_API_UserData_0(ctx context.Context, marshaler runtime.Marshaler, cl
 
 }
 
-func local_request_API_UserData_0(ctx context.Context, marshaler runtime.Marshaler, server APIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Flux_UserData_0(ctx context.Context, marshaler runtime.Marshaler, server FluxServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq UserDataRequest
 	var metadata runtime.ServerMetadata
 
@@ -49,7 +49,7 @@ func local_request_API_UserData_0(ctx context.Context, marshaler runtime.Marshal
 
 }
 
-func request_API_PricingData_0(ctx context.Context, marshaler runtime.Marshaler, client APIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Flux_PricingData_0(ctx context.Context, marshaler runtime.Marshaler, client FluxClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq PricingDataRequest
 	var metadata runtime.ServerMetadata
 
@@ -58,7 +58,7 @@ func request_API_PricingData_0(ctx context.Context, marshaler runtime.Marshaler,
 
 }
 
-func local_request_API_PricingData_0(ctx context.Context, marshaler runtime.Marshaler, server APIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Flux_PricingData_0(ctx context.Context, marshaler runtime.Marshaler, server FluxServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq PricingDataRequest
 	var metadata runtime.ServerMetadata
 
@@ -67,7 +67,7 @@ func local_request_API_PricingData_0(ctx context.Context, marshaler runtime.Mars
 
 }
 
-func request_API_OneTimePasscode_0(ctx context.Context, marshaler runtime.Marshaler, client APIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Flux_OneTimePasscode_0(ctx context.Context, marshaler runtime.Marshaler, client FluxClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq OneTimePasscodeRequest
 	var metadata runtime.ServerMetadata
 
@@ -84,7 +84,7 @@ func request_API_OneTimePasscode_0(ctx context.Context, marshaler runtime.Marsha
 
 }
 
-func local_request_API_OneTimePasscode_0(ctx context.Context, marshaler runtime.Marshaler, server APIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Flux_OneTimePasscode_0(ctx context.Context, marshaler runtime.Marshaler, server FluxServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq OneTimePasscodeRequest
 	var metadata runtime.ServerMetadata
 
@@ -101,7 +101,7 @@ func local_request_API_OneTimePasscode_0(ctx context.Context, marshaler runtime.
 
 }
 
-func request_API_OneTimePasscodeVerify_0(ctx context.Context, marshaler runtime.Marshaler, client APIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Flux_OneTimePasscodeVerify_0(ctx context.Context, marshaler runtime.Marshaler, client FluxClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq OneTimePasscodeVerifyRequest
 	var metadata runtime.ServerMetadata
 
@@ -118,7 +118,7 @@ func request_API_OneTimePasscodeVerify_0(ctx context.Context, marshaler runtime.
 
 }
 
-func local_request_API_OneTimePasscodeVerify_0(ctx context.Context, marshaler runtime.Marshaler, server APIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Flux_OneTimePasscodeVerify_0(ctx context.Context, marshaler runtime.Marshaler, server FluxServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq OneTimePasscodeVerifyRequest
 	var metadata runtime.ServerMetadata
 
@@ -135,7 +135,7 @@ func local_request_API_OneTimePasscodeVerify_0(ctx context.Context, marshaler ru
 
 }
 
-func request_API_WyreAddBankPaymentMethod_0(ctx context.Context, marshaler runtime.Marshaler, client APIClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_Flux_WyreAddBankPaymentMethod_0(ctx context.Context, marshaler runtime.Marshaler, client FluxClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq WyreAddBankPaymentMethodRequest
 	var metadata runtime.ServerMetadata
 
@@ -152,7 +152,7 @@ func request_API_WyreAddBankPaymentMethod_0(ctx context.Context, marshaler runti
 
 }
 
-func local_request_API_WyreAddBankPaymentMethod_0(ctx context.Context, marshaler runtime.Marshaler, server APIServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_Flux_WyreAddBankPaymentMethod_0(ctx context.Context, marshaler runtime.Marshaler, server FluxServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var protoReq WyreAddBankPaymentMethodRequest
 	var metadata runtime.ServerMetadata
 
@@ -169,24 +169,24 @@ func local_request_API_WyreAddBankPaymentMethod_0(ctx context.Context, marshaler
 
 }
 
-// RegisterAPIHandlerServer registers the http handlers for service API to "mux".
-// UnaryRPC     :call APIServer directly.
+// RegisterFluxHandlerServer registers the http handlers for service Flux to "mux".
+// UnaryRPC     :call FluxServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAPIHandlerFromEndpoint instead.
-func RegisterAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server APIServer) error {
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterFluxHandlerFromEndpoint instead.
+func RegisterFluxHandlerServer(ctx context.Context, mux *runtime.ServeMux, server FluxServer) error {
 
-	mux.Handle("GET", pattern_API_UserData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Flux_UserData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.API/UserData")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.Flux/UserData")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_API_UserData_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Flux_UserData_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -194,22 +194,22 @@ func RegisterAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			return
 		}
 
-		forward_API_UserData_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_UserData_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_API_PricingData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Flux_PricingData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.API/PricingData")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.Flux/PricingData")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_API_PricingData_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Flux_PricingData_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -217,22 +217,22 @@ func RegisterAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			return
 		}
 
-		forward_API_PricingData_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_PricingData_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_API_OneTimePasscode_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Flux_OneTimePasscode_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.API/OneTimePasscode")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.Flux/OneTimePasscode")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_API_OneTimePasscode_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Flux_OneTimePasscode_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -240,22 +240,22 @@ func RegisterAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			return
 		}
 
-		forward_API_OneTimePasscode_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_OneTimePasscode_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_API_OneTimePasscodeVerify_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Flux_OneTimePasscodeVerify_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.API/OneTimePasscodeVerify")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.Flux/OneTimePasscodeVerify")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_API_OneTimePasscodeVerify_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Flux_OneTimePasscodeVerify_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -263,22 +263,22 @@ func RegisterAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			return
 		}
 
-		forward_API_OneTimePasscodeVerify_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_OneTimePasscodeVerify_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_API_WyreAddBankPaymentMethod_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Flux_WyreAddBankPaymentMethod_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.API/WyreAddBankPaymentMethod")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.Flux/WyreAddBankPaymentMethod")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_API_WyreAddBankPaymentMethod_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Flux_WyreAddBankPaymentMethod_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -286,16 +286,16 @@ func RegisterAPIHandlerServer(ctx context.Context, mux *runtime.ServeMux, server
 			return
 		}
 
-		forward_API_WyreAddBankPaymentMethod_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_WyreAddBankPaymentMethod_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
 	return nil
 }
 
-// RegisterAPIHandlerFromEndpoint is same as RegisterAPIHandler but
+// RegisterFluxHandlerFromEndpoint is same as RegisterFluxHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterAPIHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterFluxHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.Dial(endpoint, opts...)
 	if err != nil {
 		return err
@@ -315,119 +315,119 @@ func RegisterAPIHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, 
 		}()
 	}()
 
-	return RegisterAPIHandler(ctx, mux, conn)
+	return RegisterFluxHandler(ctx, mux, conn)
 }
 
-// RegisterAPIHandler registers the http handlers for service API to "mux".
+// RegisterFluxHandler registers the http handlers for service Flux to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterAPIHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterAPIHandlerClient(ctx, mux, NewAPIClient(conn))
+func RegisterFluxHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterFluxHandlerClient(ctx, mux, NewFluxClient(conn))
 }
 
-// RegisterAPIHandlerClient registers the http handlers for service API
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "APIClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "APIClient"
+// RegisterFluxHandlerClient registers the http handlers for service Flux
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "FluxClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "FluxClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "APIClient" to call the correct interceptors.
-func RegisterAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, client APIClient) error {
+// "FluxClient" to call the correct interceptors.
+func RegisterFluxHandlerClient(ctx context.Context, mux *runtime.ServeMux, client FluxClient) error {
 
-	mux.Handle("GET", pattern_API_UserData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Flux_UserData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.API/UserData")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.Flux/UserData")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_API_UserData_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Flux_UserData_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_API_UserData_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_UserData_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("GET", pattern_API_PricingData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("GET", pattern_Flux_PricingData_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.API/PricingData")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.Flux/PricingData")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_API_PricingData_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Flux_PricingData_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_API_PricingData_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_PricingData_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_API_OneTimePasscode_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Flux_OneTimePasscode_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.API/OneTimePasscode")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.Flux/OneTimePasscode")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_API_OneTimePasscode_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Flux_OneTimePasscode_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_API_OneTimePasscode_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_OneTimePasscode_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_API_OneTimePasscodeVerify_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Flux_OneTimePasscodeVerify_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.API/OneTimePasscodeVerify")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.Flux/OneTimePasscodeVerify")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_API_OneTimePasscodeVerify_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Flux_OneTimePasscodeVerify_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_API_OneTimePasscodeVerify_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_OneTimePasscodeVerify_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
-	mux.Handle("POST", pattern_API_WyreAddBankPaymentMethod_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Flux_WyreAddBankPaymentMethod_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.API/WyreAddBankPaymentMethod")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.Flux/WyreAddBankPaymentMethod")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_API_WyreAddBankPaymentMethod_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Flux_WyreAddBankPaymentMethod_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_API_WyreAddBankPaymentMethod_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_WyreAddBankPaymentMethod_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -435,25 +435,25 @@ func RegisterAPIHandlerClient(ctx context.Context, mux *runtime.ServeMux, client
 }
 
 var (
-	pattern_API_UserData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"flux", "user-data"}, ""))
+	pattern_Flux_UserData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"flux", "user-data"}, ""))
 
-	pattern_API_PricingData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"flux", "pricing-data"}, ""))
+	pattern_Flux_PricingData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"flux", "pricing-data"}, ""))
 
-	pattern_API_OneTimePasscode_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"flux", "auth", "one-time-passcode"}, ""))
+	pattern_Flux_OneTimePasscode_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"flux", "auth", "one-time-passcode"}, ""))
 
-	pattern_API_OneTimePasscodeVerify_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"flux", "auth", "one-time-passcode-verify"}, ""))
+	pattern_Flux_OneTimePasscodeVerify_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"flux", "auth", "one-time-passcode-verify"}, ""))
 
-	pattern_API_WyreAddBankPaymentMethod_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"wyre", "add-bank-payment-method"}, ""))
+	pattern_Flux_WyreAddBankPaymentMethod_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"wyre", "add-bank-payment-method"}, ""))
 )
 
 var (
-	forward_API_UserData_0 = runtime.ForwardResponseMessage
+	forward_Flux_UserData_0 = runtime.ForwardResponseMessage
 
-	forward_API_PricingData_0 = runtime.ForwardResponseMessage
+	forward_Flux_PricingData_0 = runtime.ForwardResponseMessage
 
-	forward_API_OneTimePasscode_0 = runtime.ForwardResponseMessage
+	forward_Flux_OneTimePasscode_0 = runtime.ForwardResponseMessage
 
-	forward_API_OneTimePasscodeVerify_0 = runtime.ForwardResponseMessage
+	forward_Flux_OneTimePasscodeVerify_0 = runtime.ForwardResponseMessage
 
-	forward_API_WyreAddBankPaymentMethod_0 = runtime.ForwardResponseMessage
+	forward_Flux_WyreAddBankPaymentMethod_0 = runtime.ForwardResponseMessage
 )

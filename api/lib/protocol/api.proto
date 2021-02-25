@@ -150,7 +150,7 @@ message WyreAddBankPaymentMethodRequest {
 // response
 message WyreAddBankPaymentMethodResponse {}
 
-service API {
+service Flux {
   // Get user data
   //
   // Provides user data associated with the access token

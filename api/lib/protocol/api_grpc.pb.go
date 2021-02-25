@@ -14,10 +14,10 @@ import (
 // Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
-// APIClient is the client API for API service.
+// FluxClient is the client API for Flux service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type APIClient interface {
+type FluxClient interface {
 	// Get user data
 	//
 	// Provides user data associated with the access token
@@ -41,63 +41,63 @@ type APIClient interface {
 	WyreAddBankPaymentMethod(ctx context.Context, in *WyreAddBankPaymentMethodRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodResponse, error)
 }
 
-type aPIClient struct {
+type fluxClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewAPIClient(cc grpc.ClientConnInterface) APIClient {
-	return &aPIClient{cc}
+func NewFluxClient(cc grpc.ClientConnInterface) FluxClient {
+	return &fluxClient{cc}
 }
 
-func (c *aPIClient) UserData(ctx context.Context, in *UserDataRequest, opts ...grpc.CallOption) (*UserDataResponse, error) {
+func (c *fluxClient) UserData(ctx context.Context, in *UserDataRequest, opts ...grpc.CallOption) (*UserDataResponse, error) {
 	out := new(UserDataResponse)
-	err := c.cc.Invoke(ctx, "/API/UserData", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Flux/UserData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *aPIClient) PricingData(ctx context.Context, in *PricingDataRequest, opts ...grpc.CallOption) (*PricingDataResponse, error) {
+func (c *fluxClient) PricingData(ctx context.Context, in *PricingDataRequest, opts ...grpc.CallOption) (*PricingDataResponse, error) {
 	out := new(PricingDataResponse)
-	err := c.cc.Invoke(ctx, "/API/PricingData", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Flux/PricingData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *aPIClient) OneTimePasscode(ctx context.Context, in *OneTimePasscodeRequest, opts ...grpc.CallOption) (*OneTimePasscodeResponse, error) {
+func (c *fluxClient) OneTimePasscode(ctx context.Context, in *OneTimePasscodeRequest, opts ...grpc.CallOption) (*OneTimePasscodeResponse, error) {
 	out := new(OneTimePasscodeResponse)
-	err := c.cc.Invoke(ctx, "/API/OneTimePasscode", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Flux/OneTimePasscode", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *aPIClient) OneTimePasscodeVerify(ctx context.Context, in *OneTimePasscodeVerifyRequest, opts ...grpc.CallOption) (*OneTimePasscodeVerifyResponse, error) {
+func (c *fluxClient) OneTimePasscodeVerify(ctx context.Context, in *OneTimePasscodeVerifyRequest, opts ...grpc.CallOption) (*OneTimePasscodeVerifyResponse, error) {
 	out := new(OneTimePasscodeVerifyResponse)
-	err := c.cc.Invoke(ctx, "/API/OneTimePasscodeVerify", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Flux/OneTimePasscodeVerify", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *aPIClient) WyreAddBankPaymentMethod(ctx context.Context, in *WyreAddBankPaymentMethodRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodResponse, error) {
+func (c *fluxClient) WyreAddBankPaymentMethod(ctx context.Context, in *WyreAddBankPaymentMethodRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodResponse, error) {
 	out := new(WyreAddBankPaymentMethodResponse)
-	err := c.cc.Invoke(ctx, "/API/WyreAddBankPaymentMethod", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/Flux/WyreAddBankPaymentMethod", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// APIServer is the server API for API service.
-// All implementations must embed UnimplementedAPIServer
+// FluxServer is the server API for Flux service.
+// All implementations must embed UnimplementedFluxServer
 // for forward compatibility
-type APIServer interface {
+type FluxServer interface {
 	// Get user data
 	//
 	// Provides user data associated with the access token
@@ -119,157 +119,157 @@ type APIServer interface {
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
 	WyreAddBankPaymentMethod(context.Context, *WyreAddBankPaymentMethodRequest) (*WyreAddBankPaymentMethodResponse, error)
-	mustEmbedUnimplementedAPIServer()
+	mustEmbedUnimplementedFluxServer()
 }
 
-// UnimplementedAPIServer must be embedded to have forward compatible implementations.
-type UnimplementedAPIServer struct {
+// UnimplementedFluxServer must be embedded to have forward compatible implementations.
+type UnimplementedFluxServer struct {
 }
 
-func (UnimplementedAPIServer) UserData(context.Context, *UserDataRequest) (*UserDataResponse, error) {
+func (UnimplementedFluxServer) UserData(context.Context, *UserDataRequest) (*UserDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UserData not implemented")
 }
-func (UnimplementedAPIServer) PricingData(context.Context, *PricingDataRequest) (*PricingDataResponse, error) {
+func (UnimplementedFluxServer) PricingData(context.Context, *PricingDataRequest) (*PricingDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PricingData not implemented")
 }
-func (UnimplementedAPIServer) OneTimePasscode(context.Context, *OneTimePasscodeRequest) (*OneTimePasscodeResponse, error) {
+func (UnimplementedFluxServer) OneTimePasscode(context.Context, *OneTimePasscodeRequest) (*OneTimePasscodeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OneTimePasscode not implemented")
 }
-func (UnimplementedAPIServer) OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error) {
+func (UnimplementedFluxServer) OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OneTimePasscodeVerify not implemented")
 }
-func (UnimplementedAPIServer) WyreAddBankPaymentMethod(context.Context, *WyreAddBankPaymentMethodRequest) (*WyreAddBankPaymentMethodResponse, error) {
+func (UnimplementedFluxServer) WyreAddBankPaymentMethod(context.Context, *WyreAddBankPaymentMethodRequest) (*WyreAddBankPaymentMethodResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreAddBankPaymentMethod not implemented")
 }
-func (UnimplementedAPIServer) mustEmbedUnimplementedAPIServer() {}
+func (UnimplementedFluxServer) mustEmbedUnimplementedFluxServer() {}
 
-// UnsafeAPIServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to APIServer will
+// UnsafeFluxServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to FluxServer will
 // result in compilation errors.
-type UnsafeAPIServer interface {
-	mustEmbedUnimplementedAPIServer()
+type UnsafeFluxServer interface {
+	mustEmbedUnimplementedFluxServer()
 }
 
-func RegisterAPIServer(s grpc.ServiceRegistrar, srv APIServer) {
-	s.RegisterService(&API_ServiceDesc, srv)
+func RegisterFluxServer(s grpc.ServiceRegistrar, srv FluxServer) {
+	s.RegisterService(&Flux_ServiceDesc, srv)
 }
 
-func _API_UserData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flux_UserData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UserDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(APIServer).UserData(ctx, in)
+		return srv.(FluxServer).UserData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/API/UserData",
+		FullMethod: "/Flux/UserData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(APIServer).UserData(ctx, req.(*UserDataRequest))
+		return srv.(FluxServer).UserData(ctx, req.(*UserDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _API_PricingData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flux_PricingData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PricingDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(APIServer).PricingData(ctx, in)
+		return srv.(FluxServer).PricingData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/API/PricingData",
+		FullMethod: "/Flux/PricingData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(APIServer).PricingData(ctx, req.(*PricingDataRequest))
+		return srv.(FluxServer).PricingData(ctx, req.(*PricingDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _API_OneTimePasscode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flux_OneTimePasscode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(OneTimePasscodeRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(APIServer).OneTimePasscode(ctx, in)
+		return srv.(FluxServer).OneTimePasscode(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/API/OneTimePasscode",
+		FullMethod: "/Flux/OneTimePasscode",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(APIServer).OneTimePasscode(ctx, req.(*OneTimePasscodeRequest))
+		return srv.(FluxServer).OneTimePasscode(ctx, req.(*OneTimePasscodeRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _API_OneTimePasscodeVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flux_OneTimePasscodeVerify_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(OneTimePasscodeVerifyRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(APIServer).OneTimePasscodeVerify(ctx, in)
+		return srv.(FluxServer).OneTimePasscodeVerify(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/API/OneTimePasscodeVerify",
+		FullMethod: "/Flux/OneTimePasscodeVerify",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(APIServer).OneTimePasscodeVerify(ctx, req.(*OneTimePasscodeVerifyRequest))
+		return srv.(FluxServer).OneTimePasscodeVerify(ctx, req.(*OneTimePasscodeVerifyRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _API_WyreAddBankPaymentMethod_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _Flux_WyreAddBankPaymentMethod_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WyreAddBankPaymentMethodRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(APIServer).WyreAddBankPaymentMethod(ctx, in)
+		return srv.(FluxServer).WyreAddBankPaymentMethod(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/API/WyreAddBankPaymentMethod",
+		FullMethod: "/Flux/WyreAddBankPaymentMethod",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(APIServer).WyreAddBankPaymentMethod(ctx, req.(*WyreAddBankPaymentMethodRequest))
+		return srv.(FluxServer).WyreAddBankPaymentMethod(ctx, req.(*WyreAddBankPaymentMethodRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// API_ServiceDesc is the grpc.ServiceDesc for API service.
+// Flux_ServiceDesc is the grpc.ServiceDesc for Flux service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var API_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "API",
-	HandlerType: (*APIServer)(nil),
+var Flux_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "Flux",
+	HandlerType: (*FluxServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "UserData",
-			Handler:    _API_UserData_Handler,
+			Handler:    _Flux_UserData_Handler,
 		},
 		{
 			MethodName: "PricingData",
-			Handler:    _API_PricingData_Handler,
+			Handler:    _Flux_PricingData_Handler,
 		},
 		{
 			MethodName: "OneTimePasscode",
-			Handler:    _API_OneTimePasscode_Handler,
+			Handler:    _Flux_OneTimePasscode_Handler,
 		},
 		{
 			MethodName: "OneTimePasscodeVerify",
-			Handler:    _API_OneTimePasscodeVerify_Handler,
+			Handler:    _Flux_OneTimePasscodeVerify_Handler,
 		},
 		{
 			MethodName: "WyreAddBankPaymentMethod",
-			Handler:    _API_WyreAddBankPaymentMethod_Handler,
+			Handler:    _Flux_WyreAddBankPaymentMethod_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

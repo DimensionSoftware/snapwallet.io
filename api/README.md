@@ -31,3 +31,16 @@ firebase login
 firebase emulators:start
 ```
 
+
+## Swagger Client Codegen
+
+### Mac setup
+```bash
+npm install @openapitools/openapi-generator-cli -g
+```
+
+### Generate client
+```bash
+openapi-generator-cli generate -g typescript -i lib/swagger/swagger.json -o client
+```
+

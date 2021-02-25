@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "API"
+      "name": "Flux"
     }
   ],
   "consumes": [
@@ -20,7 +20,7 @@
       "post": {
         "summary": "Post email or phone in exchange for a one time passcode",
         "description": "Will cause your email or phone to receive a one time passcode.\nThis can be used in the verify step to obtain a token for login",
-        "operationId": "API_OneTimePasscode",
+        "operationId": "Flux_OneTimePasscode",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -46,7 +46,7 @@
           }
         ],
         "tags": [
-          "API"
+          "Flux"
         ]
       }
     },
@@ -54,7 +54,7 @@
       "post": {
         "summary": "Post one time passcode in exchange for an access token",
         "description": "The passcode received in either email or phone text message should be provided here in order to obtain on access token",
-        "operationId": "API_OneTimePasscodeVerify",
+        "operationId": "Flux_OneTimePasscodeVerify",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -80,7 +80,7 @@
           }
         ],
         "tags": [
-          "API"
+          "Flux"
         ]
       }
     },
@@ -88,7 +88,7 @@
       "get": {
         "summary": "Get pricing data",
         "description": "Provides pricing data for all markets with rate maps",
-        "operationId": "API_PricingData",
+        "operationId": "Flux_PricingData",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -104,7 +104,7 @@
           }
         },
         "tags": [
-          "API"
+          "Flux"
         ]
       }
     },
@@ -112,7 +112,7 @@
       "get": {
         "summary": "Get user data",
         "description": "Provides user data associated with the access token",
-        "operationId": "API_UserData",
+        "operationId": "Flux_UserData",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -128,7 +128,7 @@
           }
         },
         "tags": [
-          "API"
+          "Flux"
         ],
         "security": [
           {
@@ -141,7 +141,7 @@
       "post": {
         "summary": "Post chosen bank info from plaid in order to create a new ACH pyment method in wyre",
         "description": "requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id",
-        "operationId": "API_WyreAddBankPaymentMethod",
+        "operationId": "Flux_WyreAddBankPaymentMethod",
         "responses": {
           "200": {
             "description": "A successful response.",
@@ -167,7 +167,7 @@
           }
         ],
         "tags": [
-          "API"
+          "Flux"
         ]
       }
     }
