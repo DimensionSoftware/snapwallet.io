@@ -41,12 +41,12 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	jwtPrivateKey, err := auth.ProvideJwtPrivateKey()
+	privateKey, err := auth.ProvideJwtPrivateKey()
 	if err != nil {
 		return server.Server{}, err
 	}
 	jwtSigner := auth.JwtSigner{
-		PrivateKey: jwtPrivateKey,
+		PrivateKey: privateKey,
 	}
 	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient, jwtSigner)
 	return serverServer, nil

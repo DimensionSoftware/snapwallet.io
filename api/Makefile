@@ -4,7 +4,7 @@ GO_GENERATED_SWAGGER_FILES := lib/swagger/api.swagger.json lib/swagger/swagger.j
 
 build: grpcserver grpcgateway
 
-test:
+test: ${GO_LIB_FILES}
 	go test -v ./...
 
 run: build
