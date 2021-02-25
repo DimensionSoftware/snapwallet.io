@@ -7,9 +7,10 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
 
+  let animation = "left"
 </script>
 
-<ModalContent>
+<ModalContent {animation}>
   <svg on:click={pop} viewBox="0 0 20 11" fill="none" class="back-arrow"><path fill-rule="evenodd" clip-rule="evenodd" d="M20 5.267L14.343 0l-1.414 1.217 3.243 3.01H0v1.958h16.172L12.929 9.53 14.343 11 20 5.267z" fill="black"></path></svg>
   <ModalBody>
     <h3>Enter Your Email</h3>

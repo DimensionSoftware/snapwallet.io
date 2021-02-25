@@ -62,27 +62,28 @@
       </div>
     </div>
 
-    <PopupSelector
-      on:close={() => (selectorVisible = false)}
-      visible={selectorVisible}
-      headerTitle="Select Cryptocurrency"
-    >
-      <div class="cryptocurrencies-container">
-        {#each cryptoCurrencies as cryptoCurrency (cryptoCurrency.ticker)}
-          <div style="margin: 0.5rem 0">
-            <CryptoCard
-              on:click={() => (selectorVisible = false)}
-              crypto={cryptoCurrency}
-            />
-          </div>
-        {/each}
-      </div>
-    </PopupSelector>
   </ModalBody>
   <ModalFooter>
     <Button on:click={handleNextStep}>Checkout</Button>
   </ModalFooter>
 </ModalContent>
+
+<PopupSelector
+  on:close={() => (selectorVisible = false)}
+  visible={selectorVisible}
+  headerTitle="Select Cryptocurrency"
+>
+  <div class="cryptocurrencies-container">
+    {#each cryptoCurrencies as cryptoCurrency (cryptoCurrency.ticker)}
+      <div style="margin: 0.5rem 0">
+        <CryptoCard
+          on:click={() => (selectorVisible = false)}
+          crypto={cryptoCurrency}
+        />
+      </div>
+    {/each}
+  </div>
+</PopupSelector>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
