@@ -2,7 +2,15 @@
 
 1. install golang
 2. install hivemind: https://github.com/DarthSim/hivemind
-3. make run
+3. `cp .env.example .env`
+4. `make run`
+
+## Run tests
+
+```bash
+make test
+
+```
 
 ## Environment
 
