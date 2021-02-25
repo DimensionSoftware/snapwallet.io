@@ -15,5 +15,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
+
+	println("> listening on port " + defaultAddress[1:])
 	s.Serve(defaultAddress)
 }
