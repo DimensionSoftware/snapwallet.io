@@ -159,6 +159,17 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	return &proto.OneTimePasscodeVerifyResponse{}, nil
 }
 
+// TODO: add account stuff to an rpc:
+/*
+	accessToken := "a-token"
+	accountID := "balderdash"
+	token := s.Plaid.CreateProcessorToken(accessToken, accountID, "wyre")
+
+	s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
+		... (plaid token and acct here )
+	})
+*/
+
 func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
 	subject := "Your one time passcode for flux"

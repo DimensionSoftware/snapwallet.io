@@ -69,6 +69,7 @@ func NewClient() Client {
 }
 
 // CreateAccount creates an an account in the wyre system
+// https://docs.sendwyre.com/docs/create-account
 // POST https://api.sendwyre.com/v3/accounts
 func (c Client) CreateAccount(req CreateAccountRequest) (*Account, error) {
 	resp, err := c.http.R().
@@ -81,6 +82,57 @@ func (c Client) CreateAccount(req CreateAccountRequest) (*Account, error) {
 	}
 
 	return resp.Result().(*Account), nil
+}
+
+// CreatePaymentMethodRequest represents the request object for https://api.sendwyre.com/v2/paymentMethods
+type CreatePaymentMethodRequest struct {
+	PlaidProcessorToken string `json:"plaidProcessorToken"`
+	PaymentMethodType   string `json:"paymentMethodType"`
+	Country             string `json:"country"`
+}
+
+// WithDefaults provides default values for CreatePaymentMethodRequest
+func (CreatePaymentMethodRequest) WithDefaults() CreatePaymentMethodRequest {
+	return CreatePaymentMethodRequest{
+		Country:           "US",             // only supported country currently
+		PaymentMethodType: "LOCAL_TRANSFER", // required value according to documentation
+	}
+}
+
+// PaymentMethod represents the response object for https://api.sendwyre.com/v2/paymentMethods
+type PaymentMethod struct {
+	ID              string `json:"id"`
+	Owner           string `json:"owner"`
+	Name            string `json:"name"`
+	Last4Digits     string `json:"last4Digits"`
+	Status          string `json:"status"`
+	CountryCode     string `json:"countryCode"`
+	DefaultCurrency string `json:"defaultCurrency"`
+	/*
+	  "id": "PA-W7YN28ABCHT",
+	  "owner": "account:AC-XX38VYXUA84",
+	  "name": "Plaid Checking 0000",
+	  "last4Digits": "0000",
+	  "status": "PENDING",
+	  "countryCode": "US",
+	  "defaultCurrency": "USD",
+	*/
+}
+
+// CreatePaymentMethod adds a bank payment method from a plaid token to a wyre account
+// https://docs.sendwyre.com/docs/ach-create-payment-method-processor-token-model
+// POST https://api.sendwyre.com/v2/paymentMethods
+func (c Client) CreatePaymentMethod(req CreatePaymentMethodRequest) (*PaymentMethod, error) {
+	resp, err := c.http.R().
+		SetBody(req).
+		SetResult(PaymentMethod{}).
+		EnableTrace().
+		Post("https://api.sendwyre.com/v2/paymentMethods")
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Result().(*PaymentMethod), nil
 }
 
 /*
