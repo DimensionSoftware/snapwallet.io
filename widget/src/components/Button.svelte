@@ -18,7 +18,9 @@
     border-bottom: 2px solid darken($themeColor, 10%);
     color: white;
     cursor: pointer;
-    text-transform: capitalize;
+    text-transform: uppercase;
+    box-shadow: 0 6px 6px rgba($themeColor, .2);
+    letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
     &:active,

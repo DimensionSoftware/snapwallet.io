@@ -4,7 +4,9 @@
   const dispatch = createEventDispatcher()
   export let type: string
   export let placeholder: string
+  export let inputmode: string
   export let label: string
+  export let autocapitalize: string
   export let defaultValue: string | number
 
   let isActive: boolean = false
@@ -14,13 +16,15 @@
   <Label hidden={!isActive || !label}>{label}</Label>
   <input
     {type}
+    {inputmode}
+    {autocapitalize}
     {placeholder}
     on:input={(e) => {
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e)
     }}
     min={type === 'number' ? 0.0 : null}
-    value={defaultValue}
+    value={defaultValue || ''}
   />
 </div>
 
