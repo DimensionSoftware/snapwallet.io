@@ -87,7 +87,7 @@ func ParseBase64PrivatePEM(privatePEMbase64 string) (*rsa.PrivateKey, error) {
 
 	block, _ := pem.Decode(privatePEM)
 	if block == nil || block.Type != "RSA PRIVATE KEY" {
-		return nil, err
+		return nil, fmt.Errorf("failed to decode PEM block containing private key")
 	}
 
 	return x509.ParsePKCS1PrivateKey(block.Bytes)
