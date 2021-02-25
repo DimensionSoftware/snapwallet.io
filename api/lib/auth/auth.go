@@ -1,9 +1,11 @@
-package main
+package auth
 
 import (
+	"crypto/rsa"
 	"crypto/x509"
 	"encoding/pem"
-	"log"
+	"fmt"
+	"os"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -56,6 +58,44 @@ type Claims struct {
 // Valid checks the claims for validity
 func (Claims) Valid() error {
 	return nil
+}
+
+// JwtPrivateKey represents the private key for signing the jwt
+type JwtPrivateKey *rsa.PrivateKey
+
+// JwtSigner manages the signing of our jwt
+type JwtSigner struct {
+	PrivateKey JwtPrivateKey
+}
+
+// Sign signs claims into a jwt token returned as a string
+func (signer JwtSigner) Sign(claims Claims) (string, error) {
+	// Create the token
+	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
+	return token.SignedString(signer.PrivateKey)
+}
+
+const jwtPrivateKeyEnvVarName = "FIRESTORE_PROJECT"
+
+// ProvideJwtPrivateKey returns a JwtPrivateKey, and an error if not provided by env vars
+func ProvideJwtPrivateKey() (JwtPrivateKey, error) {
+	privatePEM := os.Getenv(jwtPrivateKeyEnvVarName)
+
+	if privatePEM == "" {
+		return nil, fmt.Errorf("you must set %s", jwtPrivateKeyEnvVarName)
+	}
+
+	block, _ := pem.Decode([]byte(privatePEM))
+	if block == nil || block.Type != "RSA PRIVATE KEY" {
+		return nil, fmt.Errorf("failed to decode PEM block containing private key from %s", jwtPrivateKeyEnvVarName)
+	}
+
+	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+
+	return JwtPrivateKey(priv), nil
 }
 
 var key = []byte(`
@@ -112,28 +152,12 @@ tCrFxwzrMVF0YyRmAyewRQyN90fvxBqXnRyysUXBlbDsihbhKV4Wg1V6fA==
 -----END RSA PRIVATE KEY-----
 `)
 
-func main() {
-	// Create the token
-	claims := Claims{
+// NewClaims instantiates the claims object to be signed
+func NewClaims(userID string) Claims {
+	return Claims{
 		Jti: xid.New().String(),
-		Sub: "user_id_stub_fixme",
+		Sub: userID,
 		Iat: time.Now(),
 		Exp: time.Now().Add(24 * time.Hour),
 	}
-	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
-	// Sign and get the complete encoded token as a string
-	block, _ := pem.Decode(key)
-	if block == nil || block.Type != "RSA PRIVATE KEY" {
-		log.Fatal("failed to decode PEM block containing private key")
-	}
-	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	tokenString, err := token.SignedString(priv)
-	if err != nil {
-		panic(err)
-	}
-	log.Println(tokenString)
 }

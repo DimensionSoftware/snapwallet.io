@@ -14,7 +14,7 @@ const firestoreProjectEnvVarName = "FIRESTORE_PROJECT"
 // FireProjectID is the google cloud project where the firestore database is located
 type FireProjectID string
 
-// ProvideFirestore returns
+// ProvideFirestore returns a *firestore.Client
 func ProvideFirestore(projectID FireProjectID) (*firestore.Client, error) {
 	ctx := context.Background()
 	conf := &firebase.Config{ProjectID: string(projectID)}
