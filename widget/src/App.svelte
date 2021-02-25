@@ -3,6 +3,7 @@
   import wrap from 'svelte-spa-router/wrap'
   import Toast from './components/Toast.svelte'
   import Home from './screens/Home.svelte'
+  import Checkout from './screens/Checkout.svelte'
   import NotFound from './screens/NotFound.svelte'
 
   // Querystring provided props, see main.ts.
@@ -12,6 +13,7 @@
 
   const routes = {
     '/': wrap({ component: Home as any, props: { appName, intent, apiKey } }),
+    '/checkout': wrap({ component: Checkout as any, props: { appName, intent, apiKey } }),
     '*': NotFound as any,
   }
 </script>

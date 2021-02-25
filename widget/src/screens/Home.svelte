@@ -1,4 +1,5 @@
 <script lang="ts">
+  import {push} from 'svelte-spa-router'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -14,7 +15,8 @@
 
   let selectorVisible = false
   const handleNextStep = () => {
-    toaster.pop({ msg: 'Success', success: true })
+    // toaster.pop({ msg: 'Success', success: true })
+    push('/checkout')
   }
 
   const cryptoCurrencies = [
