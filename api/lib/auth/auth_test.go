@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -12,4 +13,16 @@ func Test_ParseBase64PrivatePEM(t *testing.T) {
 	a := assert.New(t)
 	_, err := ParseBase64PrivatePEM(base64PrivatePEM)
 	a.NoError(err)
+}
+
+func Test_JwtSigner(t *testing.T) {
+	a := assert.New(t)
+	priv, err := ParseBase64PrivatePEM(base64PrivatePEM)
+	a.NoError(err)
+	signer := JwtSigner{
+		PrivateKey: priv,
+	}
+	jwt, err := signer.Sign(NewClaims("bob@gmail.com"))
+	a.NoError(err)
+	fmt.Println(jwt)
 }
