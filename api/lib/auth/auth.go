@@ -78,14 +78,8 @@ func (signer JwtSigner) Sign(claims Claims) (string, error) {
 
 const jwtPrivateKeyEnvVarName = "JWT_PRIVATE_PEM_BASE64"
 
-// ProvideJwtPrivateKey returns a JwtPrivateKey, and an error if not provided by env vars
-func ProvideJwtPrivateKey() (JwtPrivateKey, error) {
-	privatePEMbase64 := os.Getenv(jwtPrivateKeyEnvVarName)
-
-	if privatePEMbase64 == "" {
-		return nil, fmt.Errorf("you must set %s", jwtPrivateKeyEnvVarName)
-	}
-
+// ParseBase64PrivatePEM converts a base64 pem encoded certificate to DER (binary) rsa format
+func ParseBase64PrivatePEM(privatePEMbase64 string) (*rsa.PrivateKey, error) {
 	privatePEM, err := base64.StdEncoding.DecodeString(privatePEMbase64)
 	if err != nil {
 		return nil, fmt.Errorf("base64 decoding failed from %s", jwtPrivateKeyEnvVarName)
@@ -96,7 +90,18 @@ func ProvideJwtPrivateKey() (JwtPrivateKey, error) {
 		return nil, fmt.Errorf("failed to decode PEM block containing private key from %s", jwtPrivateKeyEnvVarName)
 	}
 
-	priv, err := x509.ParsePKCS1PrivateKey(block.Bytes)
+	return x509.ParsePKCS1PrivateKey(block.Bytes)
+}
+
+// ProvideJwtPrivateKey returns a JwtPrivateKey, and an error if not provided by env vars
+func ProvideJwtPrivateKey() (JwtPrivateKey, error) {
+	privatePEMbase64 := os.Getenv(jwtPrivateKeyEnvVarName)
+
+	if privatePEMbase64 == "" {
+		return nil, fmt.Errorf("you must set %s", jwtPrivateKeyEnvVarName)
+	}
+
+	priv, err := ParseBase64PrivatePEM(privatePEMbase64)
 	if err != nil {
 		return nil, err
 	}
