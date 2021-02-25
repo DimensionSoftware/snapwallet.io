@@ -181,14 +181,6 @@ func (s *Server) WyreAddBankPaymentMethod(ctx context.Context, req *proto.WyreAd
 	return &proto.WyreAddBankPaymentMethodResponse{}, nil
 }
 
-// TODO: add account stuff to an rpc:
-/*
-
-	s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
-		... (plaid token and acct here )
-	})
-*/
-
 func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
 	subject := "Your one time passcode for flux"
