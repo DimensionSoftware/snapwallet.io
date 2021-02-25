@@ -7,7 +7,7 @@ build: grpcserver grpcgateway
 test:
 	go test -v ./...
 
-run: grpcserver grpcgateway
+run: build
 	hivemind
 
 clean:
