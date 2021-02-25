@@ -92,11 +92,15 @@ type CreatePaymentMethodRequest struct {
 }
 
 // WithDefaults provides default values for CreatePaymentMethodRequest
-func (CreatePaymentMethodRequest) WithDefaults() CreatePaymentMethodRequest {
-	return CreatePaymentMethodRequest{
-		Country:           "US",             // only supported country currently
-		PaymentMethodType: "LOCAL_TRANSFER", // required value according to documentation
+func (req CreatePaymentMethodRequest) WithDefaults() CreatePaymentMethodRequest {
+	newReq := req
+	if req.Country == "" {
+		newReq.Country = "US"
 	}
+	if req.PaymentMethodType == "" {
+		newReq.PaymentMethodType = "LOCAL_TRANSFER"
+	}
+	return newReq
 }
 
 // PaymentMethod represents the response object for https://api.sendwyre.com/v2/paymentMethods

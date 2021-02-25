@@ -15,6 +15,7 @@ import (
 	"google.golang.org/grpc/metadata"
 
 	faker "github.com/bxcodec/faker/v3"
+	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
@@ -159,11 +160,28 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	return &proto.OneTimePasscodeVerifyResponse{}, nil
 }
 
-// TODO: add account stuff to an rpc:
-/*
+// WyreAddBankPaymentMethod is an rpc handler
+func (s *Server) WyreAddBankPaymentMethod(ctx context.Context, req *proto.WyreAddBankPaymentMethodRequest) (*proto.WyreAddBankPaymentMethodResponse, error) {
 	accessToken := "a-token"
 	accountID := "balderdash"
-	token := s.Plaid.CreateProcessorToken(accessToken, accountID, "wyre")
+
+	processorTokenResp, err := s.Plaid.CreateProcessorToken(accessToken, accountID, "wyre")
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
+		PlaidProcessorToken: processorTokenResp.ProcessorToken,
+	}.WithDefaults())
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreAddBankPaymentMethodResponse{}, nil
+}
+
+// TODO: add account stuff to an rpc:
+/*
 
 	s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
 		... (plaid token and acct here )
