@@ -19,6 +19,7 @@ require (
 	github.com/rs/xid v1.2.1
 	github.com/sendgrid/rest v2.6.2+incompatible // indirect
 	github.com/sendgrid/sendgrid-go v3.8.0+incompatible
+	github.com/stretchr/testify v1.5.1
 	google.golang.org/genproto v0.0.0-20210207032614-bba0dbe2a9ea
 	google.golang.org/grpc v1.35.0
 	google.golang.org/protobuf v1.25.0

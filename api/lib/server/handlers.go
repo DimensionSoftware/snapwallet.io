@@ -153,6 +153,7 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	if err != nil {
 		return nil, fmt.Errorf("code verification failed")
 	}
+
 	_, err = passcode.Ref.Delete(ctx)
 	if err != nil {
 		return nil, fmt.Errorf("code verification failed")
