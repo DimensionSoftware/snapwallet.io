@@ -1,5 +1,7 @@
 GO_LIB_FILES := $(shell find lib -type f -name "*.go" | sort) go.mod go.sum
 
+build: grpcserver grpcgateway
+
 test:
 	go test -v ./...
 
