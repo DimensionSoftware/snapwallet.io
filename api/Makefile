@@ -1,16 +1,12 @@
-build_gateway: cmd lib go.mod go.sum
-	go build ./cmd/grpcgateway
+GO_LIB_FILES := $(shell find lib -type f -name "*.go" | sort) go.mod go.sum
 
-build_server: cmd lib go.mod go.sum
+grpcserver: ${GO_LIB_FILES} $(shell find cmd/grpcserver -type f -name "*.go" | sort)
 	go build ./cmd/grpcserver
 
-gateway: build_gateway
-	./grpcgateway
+grpcgateway: ${GO_LIB_FILES} $(shell find cmd/grpcgateway -type f -name "*.go" | sort)
+	go build ./cmd/grpcgateway
 
-server: build_server
-	./grpcserver
-
-run: build_gateway build_server
+run: grpcserver grpcgateway
 	hivemind
 
 test:
