@@ -25,7 +25,8 @@
     "svelte-check": "^1.0.0",
     "svelte-preprocess": "^4.0.0",
     "tslib": "^2.0.0",
-    "typescript": "^3.9.3"
+    "typescript": "^3.9.3",
+    "api-client": "file://../api/client"
   },
   "dependencies": {
     "@fortawesome/free-regular-svg-icons": "^5.15.2",
