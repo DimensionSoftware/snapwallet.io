@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"log"
-	mrand "math/rand"
 	"strings"
 	"time"
 
+	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/metadata"
 
@@ -38,12 +38,12 @@ func (s *Server) UserData(ctx context.Context, in *proto.UserDataRequest) (*prot
 
 	httpResp := &proto.UserDataResponse{
 		User: &proto.User{
-			Id:    mrand.Int63(),
+			Id:    xid.New().String(),
 			Email: faker.Email(),
 			Phone: faker.Phonenumber(),
 			Organizations: []*proto.Organization{
 				{
-					Id:   mrand.Int63(),
+					Id:   xid.New().String(),
 					Name: fmt.Sprintf("%s %s Inc.", faker.LastName(), faker.Word()),
 				},
 			},
@@ -146,6 +146,12 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 
 	return &proto.OneTimePasscodeVerifyResponse{
 		Jwt: jwt,
+		User: &proto.User{
+			Id:        u.ID,
+			Email:     u.Email,
+			Phone:     u.Phone,
+			CreatedAt: u.CreatedAt.Unix(),
+		},
 	}, nil
 }
 

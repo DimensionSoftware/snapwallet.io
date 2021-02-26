@@ -172,8 +172,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "isDefault": {
           "type": "boolean"
@@ -204,8 +203,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "givenName": {
           "type": "string"
@@ -268,6 +266,9 @@
       "properties": {
         "jwt": {
           "type": "string"
+        },
+        "user": {
+          "$ref": "#/definitions/User"
         }
       },
       "description": "response",
@@ -277,8 +278,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -303,8 +303,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "name": {
           "type": "string"
@@ -316,8 +315,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "externalId": {
           "type": "string"
@@ -363,8 +361,7 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "partnerId": {
           "type": "string"
@@ -392,14 +389,17 @@
       "type": "object",
       "properties": {
         "id": {
-          "type": "string",
-          "format": "int64"
+          "type": "string"
         },
         "email": {
           "type": "string"
         },
         "phone": {
           "type": "string"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "int64"
         },
         "kycProfile": {
           "$ref": "#/definitions/KYCProfile"

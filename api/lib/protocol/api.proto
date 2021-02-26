@@ -5,7 +5,7 @@ import "google/api/annotations.proto";
 
 // OrganizationApplication
 message OrganizationApplication {
-  int64 id = 1;
+  string id = 1;
   string name = 2;
 }
 
@@ -13,7 +13,7 @@ message OrganizationApplication {
 //
 // A user's KYC profile (they should only have one of these)
 message KYCProfile {
-  int64 id = 1;
+  string id = 1;
   string given_name = 2;
   string family_name = 3;
   string date_of_birth = 4; // (YYYY-MM-DD)
@@ -26,18 +26,19 @@ message KYCProfile {
 //
 // A user which is shared across customer applications
 message User {
-  int64 id = 1;
+  string id = 1;
   string email = 2;
   string phone = 3;
-  KYCProfile kyc_profile = 4;
-  repeated Organization organizations = 5;
+  int64 created_at = 4;
+  KYCProfile kyc_profile = 5;
+  repeated Organization organizations = 6;
 }
 
 // Organization
 //
 // an organization containing users, a user is one to many to organizations
 message Organization {
-  int64 id = 1;
+  string id = 1;
   string name = 2;
   repeated User users = 3;
   repeated OrganizationApplication applications = 4;
@@ -47,7 +48,7 @@ message Organization {
 // 
 // An object representing the user's account at a third party API
 message ThirdPartyUserAccount {
-  int64 id = 1;
+  string id = 1;
   string partner_id = 2; // (an identifier for the third party API)
   string external_id = 3; // (an identifier for the account in the third party system)
   string credential_id = 4; // (an identifier for the user's third party credentials when available. this maps to KMS?)
@@ -59,7 +60,7 @@ message ThirdPartyUserAccount {
 //
 // A user's residential address which belongs to the profile (they can have many.)
 message Address {
-  int64 id = 1;
+  string id = 1;
   bool is_default = 2;
   string street_1 = 3;
   string street_2 = 4;
@@ -73,7 +74,7 @@ message Address {
 //
 // A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)
 message PaymentMethod {
-  int64 id = 1;
+  string id = 1;
   string external_id = 2;
   string type = 3;
   string status = 4;
@@ -136,6 +137,7 @@ message OneTimePasscodeVerifyRequest {
 // response
 message OneTimePasscodeVerifyResponse {
   string jwt = 1;
+  User user = 2;
 }
 
 // WyreAddBankPaymentMethodRequest
