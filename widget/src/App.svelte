@@ -5,6 +5,7 @@
   import Home from './screens/Home.svelte'
   import Checkout from './screens/Checkout.svelte'
   import NotFound from './screens/NotFound.svelte'
+  import Profile from './screens/Profile.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -13,7 +14,11 @@
 
   const routes = {
     '/': wrap({ component: Home as any, props: { appName, intent, apiKey } }),
-    '/checkout': wrap({ component: Checkout as any, props: { appName, intent, apiKey } }),
+    '/checkout': wrap({
+      component: Checkout as any,
+      props: { appName, intent, apiKey },
+    }),
+    '/profile': Profile,
     '*': NotFound as any,
   }
 </script>
