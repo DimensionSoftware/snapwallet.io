@@ -7,6 +7,7 @@ build: grpcserver grpcgateway
 build_client: ${GO_GENERATED_SWAGGER_FILE}
 	rm -rf client
 	openapi-generator-cli generate -g typescript -i ${GO_GENERATED_SWAGGER_FILE} -o client
+	cd client && npm i && cd ..
 
 test: ${GO_LIB_FILES}
 	go test -v ./...
