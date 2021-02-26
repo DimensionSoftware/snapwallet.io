@@ -53,9 +53,6 @@ func (s *Server) UserData(ctx context.Context, in *proto.UserDataRequest) (*prot
 	return httpResp, nil
 }
 
-type wyrePricingRate map[string]float32
-type wyrePricingRates = map[string](wyrePricingRate)
-
 // PricingData is an rpc handler
 func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) (*proto.PricingDataResponse, error) {
 	wyreRates, err := s.Wyre.PricedExchangeRates()
