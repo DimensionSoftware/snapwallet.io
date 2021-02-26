@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { push } from 'svelte-spa-router'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -23,7 +24,7 @@
     />
   </ModalBody>
   <ModalFooter>
-    <Button>Continue</Button>
+    <Button on:click={() => push('#/profile')}>Continue</Button>
   </ModalFooter>
 </ModalContent>
 
