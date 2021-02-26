@@ -8,7 +8,9 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
-	"github.com/khoerling/flux/api/lib/db/models"
+	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
+	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/rs/xid"
 )
 
 // Db represents the application interface for accessing the database
@@ -17,26 +19,47 @@ type Db struct {
 }
 
 // CreateOneTimePasscode stores a record of a one-time-password request for verification later
-func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kind models.OneTimePasscodeLoginKind) (*models.OneTimePasscode, error) {
+func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kind onetimepasscode.LoginKind) (*onetimepasscode.OneTimePasscode, error) {
+	id := xid.New().String()
+
 	code, err := sixRandomDigits()
 	if err != nil {
 		return nil, err
 	}
 
-	otp := models.OneTimePasscode{
+	otp := onetimepasscode.OneTimePasscode{
+		ID:           id,
 		EmailOrPhone: emailOrPhone,
 		Kind:         kind,
 		Code:         code,
 		CreatedAt:    time.Now(),
 	}
 
-	ref, _, err := db.Firestore.Collection("one-time-passcodes").Add(ctx, &otp)
+	_, err = db.Firestore.Collection("one-time-passcodes").Doc(id).Set(ctx, &otp)
 	if err != nil {
 		return nil, err
 	}
-	otp.ID = ref.ID
 
 	return &otp, nil
+}
+
+// CreateUser creates a user object
+func (db Db) CreateUser(ctx context.Context, email string, phone string) (*user.User, error) {
+	id := xid.New().String()
+
+	u := user.User{
+		ID:        id,
+		Email:     email,
+		Phone:     phone,
+		CreatedAt: time.Now(),
+	}
+
+	_, err := db.Firestore.Collection("users").Doc(id).Set(ctx, &u)
+	if err != nil {
+		return nil, err
+	}
+
+	return &u, nil
 }
 
 func sixRandomDigits() (string, error) {
