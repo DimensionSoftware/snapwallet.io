@@ -16,6 +16,7 @@ const (
 
 // OneTimePasscode stores the transient record of a login attempt factor so it can be verified in exchange for a token
 type OneTimePasscode struct {
+	ID           string                   `firestore:"id"`
 	EmailOrPhone string                   `firestore:"emailOrPhone"`
 	Kind         OneTimePasscodeLoginKind `firestore:"kind"`
 	Code         string                   `firestore:"code"`

@@ -30,10 +30,11 @@ func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kin
 		CreatedAt:    time.Now(),
 	}
 
-	_, _, err = db.Firestore.Collection("one-time-passcodes").Add(ctx, &otp)
+	ref, _, err := db.Firestore.Collection("one-time-passcodes").Add(ctx, &otp)
 	if err != nil {
 		return nil, err
 	}
+	otp.ID = ref.ID
 
 	return &otp, nil
 }
