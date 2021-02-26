@@ -5,6 +5,7 @@ import (
 	"flag"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/golang/glog"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -37,7 +38,29 @@ func run() error {
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
 	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
-	return http.ListenAndServe(apiPort(), mux)
+	return http.ListenAndServe(apiPort(), allowCORS(mux))
+}
+
+// https://github.com/rephus/grpc-gateway-example/blob/master/main.go
+func preflightHandler(w http.ResponseWriter, r *http.Request) {
+	headers := []string{"Content-Type", "Accept"}
+	w.Header().Set("Access-Control-Allow-Headers", strings.Join(headers, ","))
+	methods := []string{"GET", "HEAD", "POST", "PUT", "DELETE"}
+	w.Header().Set("Access-Control-Allow-Methods", strings.Join(methods, ","))
+	glog.Infof("preflight request for %s", r.URL.Path)
+	return
+}
+func allowCORS(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if origin := r.Header.Get("Origin"); origin != "" {
+			w.Header().Set("Access-Control-Allow-Origin", origin)
+			if r.Method == "OPTIONS" && r.Header.Get("Access-Control-Request-Method") != "" {
+				preflightHandler(w, r)
+				return
+			}
+		}
+		h.ServeHTTP(w, r)
+	})
 }
 
 func apiPort() string {

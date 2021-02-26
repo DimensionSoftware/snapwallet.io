@@ -8,7 +8,7 @@ async function testyMcAPI(): Promise<void> {
     baseServer:new ServerConfiguration("http://localhost:5100", {}) ,
   }))
 
-  console.table(await api.fluxPricingData())
+  console.log(await api.fluxPricingData()))
 }
 testyMcAPI()
 

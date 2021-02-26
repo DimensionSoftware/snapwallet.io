@@ -1,8 +1,6 @@
 package wyre
 
 import (
-	"fmt"
-
 	"github.com/go-resty/resty/v2"
 )
 
@@ -291,7 +289,6 @@ func (c Client) PricedExchangeRates() (*PricingRates, error) {
 	if err != nil {
 		return nil, err
 	}
-	fmt.Println(resp.String())
 
 	return resp.Result().(*PricingRates), nil
 }
