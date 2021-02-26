@@ -21,7 +21,7 @@
     {placeholder}
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
-      dispatch('change', e)
+      dispatch('change', e.target.value)
     }}
     min={type === 'number' ? 0.0 : null}
     value={defaultValue || ''}
