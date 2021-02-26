@@ -5,6 +5,7 @@
   import Button from '../components/Button.svelte'
   import Input from '../components/inputs/Input.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
+  import { userStore } from '../stores/UserStore'
 
   let animation = 'left'
 </script>
@@ -19,6 +20,9 @@
       autocomplete="on"
       type="text"
       placeholder="First Name"
+      on:change={e => {
+        userStore.setFirstName(e.detail)
+      }}
     />
     <Input
       label="Last Name"
@@ -27,6 +31,9 @@
       autocomplete="on"
       type="text"
       placeholder="Last Name"
+      on:change={e => {
+        userStore.setLastName(e.detail)
+      }}
     />
     <Input
       label="Birthdate"
@@ -35,6 +42,9 @@
       autocomplete="on"
       type="text"
       placeholder="Birthdate"
+      on:change={e => {
+        userStore.setBirthDate(e.detail)
+      }}
     />
     <Input
       label="Social Security Number"
@@ -43,6 +53,9 @@
       autocomplete="on"
       type="text"
       placeholder="Social Security Number"
+      on:change={e => {
+        userStore.setSocialSecurityNumber(e.detail)
+      }}
     />
   </ModalBody>
   <ModalFooter>
