@@ -20,6 +20,7 @@
       autocomplete="on"
       type="text"
       placeholder="First Name"
+      defaultValue={$userStore.firstName}
       on:change={e => {
         userStore.setFirstName(e.detail)
       }}
@@ -31,6 +32,7 @@
       autocomplete="on"
       type="text"
       placeholder="Last Name"
+      defaultValue={$userStore.lastName}
       on:change={e => {
         userStore.setLastName(e.detail)
       }}
@@ -42,6 +44,7 @@
       autocomplete="on"
       type="text"
       placeholder="Birthdate"
+      defaultValue={$userStore.birthDate}
       on:change={e => {
         userStore.setBirthDate(e.detail)
       }}
@@ -53,6 +56,7 @@
       autocomplete="on"
       type="text"
       placeholder="Social Security Number"
+      defaultValue={$userStore.socialSecurityNumber}
       on:change={e => {
         userStore.setSocialSecurityNumber(e.detail)
       }}
