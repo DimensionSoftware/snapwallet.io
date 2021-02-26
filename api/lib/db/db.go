@@ -88,7 +88,7 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrphone string) (*u
 		return &u, nil
 	}
 
-	users, err := db.Firestore.Collection("users").
+	users, err = db.Firestore.Collection("users").
 		Where("phone", "==", emailOrphone).
 		Limit(1).
 		Documents(ctx).
