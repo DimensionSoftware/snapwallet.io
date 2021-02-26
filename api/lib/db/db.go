@@ -62,6 +62,49 @@ func (db Db) CreateUser(ctx context.Context, email string, phone string) (*user.
 	return &u, nil
 }
 
+func userFromSnapshot(snap *firestore.DocumentSnapshot) user.User {
+	data := snap.Data()
+
+	return user.User{
+		ID:        data["id"].(string),
+		Email:     data["email"].(string),
+		Phone:     data["phone"].(string),
+		CreatedAt: data["createdAt"].(time.Time),
+	}
+}
+
+// GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone
+func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrphone string) (*user.User, error) {
+	users, err := db.Firestore.Collection("users").
+		Where("email", "==", emailOrphone).
+		Limit(1).
+		Documents(ctx).
+		GetAll()
+	if err != nil {
+		return nil, err
+	}
+	if len(users) == 1 {
+		u := userFromSnapshot(users[0])
+		return &u, nil
+	}
+
+	users, err := db.Firestore.Collection("users").
+		Where("phone", "==", emailOrphone).
+		Limit(1).
+		Documents(ctx).
+		GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	if len(users) == 1 {
+		u := userFromSnapshot(users[0])
+		return &u, nil
+	}
+
+	return nil, nil
+}
+
 func sixRandomDigits() (string, error) {
 	max := big.NewInt(999999)
 	n, err := rand.Int(rand.Reader, max)
