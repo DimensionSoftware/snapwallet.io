@@ -14,7 +14,7 @@ client: ${GO_GENERATED_SWAGGER_FILE}
 test: ${GO_LIB_FILES}
 	go test -v ./...
 
-run: build
+run: build_servers
 	hivemind
 
 clean:
