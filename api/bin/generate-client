@@ -1,0 +1,10 @@
+#!/bin/bash -xeu
+
+rm -rf client
+
+openapi-generator-cli generate -g typescript -i lib/swagger/swagger.json -o client
+
+pushd client
+npm i
+popd
+
