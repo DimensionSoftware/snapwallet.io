@@ -3,6 +3,7 @@ package wire
 import (
 	"github.com/google/wire"
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
@@ -26,6 +27,7 @@ func InitializeServer() (server.Server, error) {
 		vendorplaid.NewClient,
 		auth.ProvideJwtPrivateKey,
 		wire.Struct(new(auth.JwtSigner), "*"),
+		wire.Struct(new(db.Db), "*"),
 	)
 	return server.Server{}, nil
 }

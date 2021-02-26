@@ -15,6 +15,7 @@ import (
 
 	faker "github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/db/models"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
@@ -98,7 +99,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return nil, err
 	}
 
-	if loginKind == LoginKindPhone {
+	if loginKind == models.OneTimePasscodeLoginKindPhone {
 		return nil, fmt.Errorf("phone is not implemented yet")
 	}
 
@@ -109,12 +110,13 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 
 	msg := generateOtpMessage(mail.NewEmail("Matt", loginValue), code)
 
-	_, _, err = s.Firestore.Collection("one-time-passcodes").Add(ctx, map[string]interface{}{
-		"emailOrPhone": loginValue,
-		"kind":         loginKind,
-		"code":         code,
-		"createdAt":    time.Now(),
+	_, err = s.Db.CreateOneTimePasscode(ctx, models.OneTimePasscode{
+		EmailOrPhone: loginValue,
+		Kind:         loginKind,
+		Code:         code,
+		CreatedAt:    time.Now(),
 	})
+
 	if err != nil {
 		return nil, err
 	}
