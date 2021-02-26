@@ -2,7 +2,11 @@ GO_LIB_FILES := $(shell find lib -type f -name "*.go" | sort) go.mod go.sum
 GO_GENERATED_PROTOCOL_FILES := $(shell find lib/protocol -type f -name "*.go" | sort)
 GO_GENERATED_SWAGGER_FILE := lib/swagger/swagger.json
 
-build: grpcserver grpcgateway client
+build: build_servers build_client
+
+build_client: client
+
+build_servers: grpcserver grpcgateway
 
 client: ${GO_GENERATED_SWAGGER_FILE}
 	bin/generate-client
