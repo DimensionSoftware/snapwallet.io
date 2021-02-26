@@ -112,7 +112,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 
 // OneTimePasscodeVerify is an rpc handler
 func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
-	_, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
+	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
 	if err != nil {
 		return nil, err
 	}
@@ -134,7 +134,12 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 		return nil, fmt.Errorf("code verification failed")
 	}
 
-	jwt, err := s.JwtSigner.Sign(auth.NewClaims(loginValue))
+	u, err := s.Db.GetOrCreateUser(ctx, loginKind, loginValue)
+	if err != nil {
+		return nil, err
+	}
+
+	jwt, err := s.JwtSigner.Sign(auth.NewClaims(u.ID))
 	if err != nil {
 		return nil, err
 	}

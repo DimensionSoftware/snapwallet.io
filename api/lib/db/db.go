@@ -64,7 +64,7 @@ func (db Db) CreateUser(ctx context.Context, email string, phone string) (*user.
 }
 
 // GetOrCreateUser creates a user object
-func (db Db) GetOrCreateUser(ctx context.Context, emailOrPhone string, loginKind onetimepasscode.LoginKind) (*user.User, error) {
+func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.LoginKind, emailOrPhone string) (*user.User, error) {
 	u, err := db.GetUserByEmailOrPhone(ctx, emailOrPhone)
 	if err != nil {
 		return nil, err
@@ -79,13 +79,6 @@ func (db Db) GetOrCreateUser(ctx context.Context, emailOrPhone string, loginKind
 	} else {
 		u, err = db.CreateUser(ctx, emailOrPhone, "")
 	}
-	if err != nil {
-		return nil, err
-	}
-
-	id := xid.New().String()
-
-	_, err = db.Firestore.Collection("users").Doc(id).Set(ctx, &u)
 	if err != nil {
 		return nil, err
 	}
@@ -132,7 +125,6 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 	if err != nil {
 		return nil, err
 	}
-
 	if len(users) == 1 {
 		u := userFromSnapshot(users[0])
 		return &u, nil
