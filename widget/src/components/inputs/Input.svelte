@@ -19,7 +19,7 @@
     {inputmode}
     {autocapitalize}
     {placeholder}
-    on:input={(e) => {
+    on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e)
     }}

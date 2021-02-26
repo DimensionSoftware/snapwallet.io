@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {push} from 'svelte-spa-router'
+  import { push } from 'svelte-spa-router'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -61,7 +61,6 @@
         ~ 55,000 {$transactionStore.sourceCurrency.ticker}
       </div>
     </div>
-
   </ModalBody>
   <ModalFooter>
     <Button on:click={handleNextStep}>Checkout</Button>

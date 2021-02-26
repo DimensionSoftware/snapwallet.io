@@ -13,7 +13,10 @@
 
   const routes = {
     '/': wrap({ component: Home as any, props: { appName, intent, apiKey } }),
-    '/checkout': wrap({ component: Checkout as any, props: { appName, intent, apiKey } }),
+    '/checkout': wrap({
+      component: Checkout as any,
+      props: { appName, intent, apiKey },
+    }),
     '*': NotFound as any,
   }
 </script>

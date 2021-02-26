@@ -19,7 +19,7 @@
     color: white;
     cursor: pointer;
     text-transform: uppercase;
-    box-shadow: 0 6px 6px rgba($themeColor, .2);
+    box-shadow: 0 6px 6px rgba($themeColor, 0.2);
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
