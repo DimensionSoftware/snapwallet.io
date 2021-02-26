@@ -74,9 +74,13 @@ func userFromSnapshot(snap *firestore.DocumentSnapshot) user.User {
 }
 
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone
-func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrphone string) (*user.User, error) {
+func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*user.User, error) {
+	if emailOrPhone == "" {
+		return nil, nil
+	}
+
 	users, err := db.Firestore.Collection("users").
-		Where("email", "==", emailOrphone).
+		Where("email", "==", emailOrPhone).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
@@ -89,7 +93,7 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrphone string) (*u
 	}
 
 	users, err = db.Firestore.Collection("users").
-		Where("phone", "==", emailOrphone).
+		Where("phone", "==", emailOrPhone).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
