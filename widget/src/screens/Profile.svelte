@@ -59,7 +59,7 @@
     />
   </ModalBody>
   <ModalFooter>
-    <Button>Next</Button>
+    <Button>Continue</Button>
   </ModalFooter>
 </ModalContent>
 
