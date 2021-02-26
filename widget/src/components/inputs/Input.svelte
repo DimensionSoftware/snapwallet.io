@@ -12,7 +12,7 @@
   let isActive: boolean = false
 </script>
 
-<div class:label class="input-container">
+<div class:label class:active={isActive} class="input-container">
   <Label hidden={!isActive || !label}>{label}</Label>
   <input
     {type}
@@ -39,6 +39,9 @@
     position: relative;
     &.label {
       height: 3.5rem;
+    }
+    &.active {
+      border-bottom-width: 1.5px;
     }
   }
 
