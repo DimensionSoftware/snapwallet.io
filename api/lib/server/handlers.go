@@ -106,7 +106,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return nil, err
 	}
 
-	msg := generateOtpMessage(mail.NewEmail("Matt", loginValue), otp.Code)
+	msg := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
 
 	_, err = s.SendgridClient.Send(msg)
 	if err != nil {
