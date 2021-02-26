@@ -5,12 +5,12 @@ import (
 	"strings"
 
 	"github.com/badoux/checkmail"
-	"github.com/khoerling/flux/api/lib/db/models"
+	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/nyaruka/phonenumbers"
 )
 
 // ValidateAndNormalizeLogin returns a login kind, normalized version of the login
-func ValidateAndNormalizeLogin(login string) (models.OneTimePasscodeLoginKind, string, error) {
+func ValidateAndNormalizeLogin(login string) (onetimepasscode.LoginKind, string, error) {
 	var normalizedEmailOrPhone string
 	var isPhone bool
 
@@ -25,15 +25,15 @@ func ValidateAndNormalizeLogin(login string) (models.OneTimePasscodeLoginKind, s
 			if err == nil {
 				normalizedEmailOrPhone = strings.TrimSpace(login)
 			} else {
-				return models.OneTimePasscodeLoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
+				return onetimepasscode.LoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
 			}
 		} else {
-			return models.OneTimePasscodeLoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
+			return onetimepasscode.LoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
 		}
 	}
 
 	if isPhone {
-		return models.OneTimePasscodeLoginKindPhone, normalizedEmailOrPhone, nil
+		return onetimepasscode.LoginKindPhone, normalizedEmailOrPhone, nil
 	}
-	return models.OneTimePasscodeLoginKindEmail, normalizedEmailOrPhone, nil
+	return onetimepasscode.LoginKindEmail, normalizedEmailOrPhone, nil
 }

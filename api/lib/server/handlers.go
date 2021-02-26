@@ -13,7 +13,7 @@ import (
 
 	faker "github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/auth"
-	"github.com/khoerling/flux/api/lib/db/models"
+	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
@@ -84,9 +84,6 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 	return &resp, nil
 }
 
-// 1. firestore store otp by email or phone code and send to it
-// 2. otp code entered on page
-
 // OneTimePasscode is an rpc handler
 func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
 	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
@@ -94,7 +91,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return nil, err
 	}
 
-	if loginKind == models.OneTimePasscodeLoginKindPhone {
+	if loginKind == onetimepasscode.LoginKindPhone {
 		return nil, fmt.Errorf("phone is not implemented yet")
 	}
 
