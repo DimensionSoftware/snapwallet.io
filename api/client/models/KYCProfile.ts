@@ -33,7 +33,7 @@ export class KYCProfile {
             "name": "id",
             "baseName": "id",
             "type": "string",
-            "format": "int64"
+            "format": ""
         },
         {
             "name": "givenName",

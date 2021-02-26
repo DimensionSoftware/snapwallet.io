@@ -30,7 +30,7 @@ export class Organization {
             "name": "id",
             "baseName": "id",
             "type": "string",
-            "format": "int64"
+            "format": ""
         },
         {
             "name": "name",

@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { User } from './User';
 import { HttpFile } from '../http/http';
 
 /**
@@ -17,6 +18,7 @@ import { HttpFile } from '../http/http';
 */
 export class OneTimePasscodeVerifyResponse {
     'jwt'?: string;
+    'user'?: User;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -25,6 +27,12 @@ export class OneTimePasscodeVerifyResponse {
             "name": "jwt",
             "baseName": "jwt",
             "type": "string",
+            "format": ""
+        },
+        {
+            "name": "user",
+            "baseName": "user",
+            "type": "User",
             "format": ""
         }    ];
 

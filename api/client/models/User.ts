@@ -21,6 +21,7 @@ export class User {
     'id'?: string;
     'email'?: string;
     'phone'?: string;
+    'createdAt'?: string;
     'kycProfile'?: KYCProfile;
     'organizations'?: Array<Organization>;
 
@@ -31,7 +32,7 @@ export class User {
             "name": "id",
             "baseName": "id",
             "type": "string",
-            "format": "int64"
+            "format": ""
         },
         {
             "name": "email",
@@ -44,6 +45,12 @@ export class User {
             "baseName": "phone",
             "type": "string",
             "format": ""
+        },
+        {
+            "name": "createdAt",
+            "baseName": "createdAt",
+            "type": "string",
+            "format": "int64"
         },
         {
             "name": "kycProfile",

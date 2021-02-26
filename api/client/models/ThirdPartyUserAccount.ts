@@ -31,7 +31,7 @@ export class ThirdPartyUserAccount {
             "name": "id",
             "baseName": "id",
             "type": "string",
-            "format": "int64"
+            "format": ""
         },
         {
             "name": "partnerId",

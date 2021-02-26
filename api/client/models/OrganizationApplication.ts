@@ -23,7 +23,7 @@ export class OrganizationApplication {
             "name": "id",
             "baseName": "id",
             "type": "string",
-            "format": "int64"
+            "format": ""
         },
         {
             "name": "name",
