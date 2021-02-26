@@ -1,5 +1,4 @@
 import { writable } from 'svelte/store'
-import {FluxApi, createConfiguration, ServerConfiguration} from 'api-client'
 
 function createToast() {
   const { subscribe, set } = writable(null)
@@ -16,12 +15,3 @@ function createToast() {
 }
 
 export const toaster = createToast()
-
-async function testyMcAPI(): Promise<any> {
-  const api = new FluxApi(createConfiguration({
-    baseServer:new ServerConfiguration("http://localhost:5100", {}) ,
-  }))
-
-  console.table(await api.fluxPricingData())
-
-}
