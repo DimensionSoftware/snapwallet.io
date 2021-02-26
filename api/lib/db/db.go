@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/rand"
 	"fmt"
+	"log"
 	"math/big"
 	"time"
 
@@ -60,6 +61,37 @@ func (db Db) CreateUser(ctx context.Context, email string, phone string) (*user.
 	}
 
 	return &u, nil
+}
+
+// GetOrCreateUser creates a user object
+func (db Db) GetOrCreateUser(ctx context.Context, emailOrPhone string, loginKind onetimepasscode.LoginKind) (*user.User, error) {
+	u, err := db.GetUserByEmailOrPhone(ctx, emailOrPhone)
+	if err != nil {
+		return nil, err
+	}
+	if u != nil {
+		log.Printf("User found: %v", u)
+		return u, nil
+	}
+
+	if loginKind == onetimepasscode.LoginKindPhone {
+		u, err = db.CreateUser(ctx, "", emailOrPhone)
+	} else {
+		u, err = db.CreateUser(ctx, emailOrPhone, "")
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	id := xid.New().String()
+
+	_, err = db.Firestore.Collection("users").Doc(id).Set(ctx, &u)
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("User not found; created: %v", u)
+	return u, nil
 }
 
 func userFromSnapshot(snap *firestore.DocumentSnapshot) user.User {
