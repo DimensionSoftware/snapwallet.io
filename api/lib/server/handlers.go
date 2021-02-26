@@ -2,10 +2,8 @@ package server
 
 import (
 	"context"
-	"crypto/rand"
 	"fmt"
 	"log"
-	"math/big"
 	mrand "math/rand"
 	"strings"
 	"time"
@@ -103,23 +101,12 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return nil, fmt.Errorf("phone is not implemented yet")
 	}
 
-	code, err := sixRandomDigits()
+	otp, err := s.Db.CreateOneTimePasscode(ctx, loginValue, loginKind)
 	if err != nil {
 		return nil, err
 	}
 
-	msg := generateOtpMessage(mail.NewEmail("Matt", loginValue), code)
-
-	_, err = s.Db.CreateOneTimePasscode(ctx, models.OneTimePasscode{
-		EmailOrPhone: loginValue,
-		Kind:         loginKind,
-		Code:         code,
-		CreatedAt:    time.Now(),
-	})
-
-	if err != nil {
-		return nil, err
-	}
+	msg := generateOtpMessage(mail.NewEmail("Matt", loginValue), otp.Code)
 
 	_, err = s.SendgridClient.Send(msg)
 	if err != nil {
@@ -189,13 +176,4 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	plainTextContent := fmt.Sprintf("Your one time passcode is: %s", code)
 	htmlContent := fmt.Sprintf("Your one time passcode is: <strong>%s</strong>", code)
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-}
-
-func sixRandomDigits() (string, error) {
-	max := big.NewInt(999999)
-	n, err := rand.Int(rand.Reader, max)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%06d", n.Int64()), nil
 }
