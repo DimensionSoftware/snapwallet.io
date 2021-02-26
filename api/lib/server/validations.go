@@ -5,23 +5,12 @@ import (
 	"strings"
 
 	"github.com/badoux/checkmail"
+	"github.com/khoerling/flux/api/lib/db/models"
 	"github.com/nyaruka/phonenumbers"
 )
 
-// LoginKind indicates the type of login which was detected
-type LoginKind string
-
-const (
-	// LoginKindEmail indicates the type of login is an email
-	LoginKindEmail LoginKind = "EMAIL"
-	// LoginKindPhone indicates the type of login is a phone number
-	LoginKindPhone LoginKind = "PHONE"
-	// LoginKindInvalid indicates that the login is malformed or invalid
-	LoginKindInvalid LoginKind = "INVALID"
-)
-
 // ValidateAndNormalizeLogin returns a login kind, normalized version of the login
-func ValidateAndNormalizeLogin(login string) (LoginKind, string, error) {
+func ValidateAndNormalizeLogin(login string) (models.OneTimePasscodeLoginKind, string, error) {
 	var normalizedEmailOrPhone string
 	var isPhone bool
 
@@ -36,15 +25,15 @@ func ValidateAndNormalizeLogin(login string) (LoginKind, string, error) {
 			if err == nil {
 				normalizedEmailOrPhone = strings.TrimSpace(login)
 			} else {
-				return LoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
+				return models.OneTimePasscodeLoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
 			}
 		} else {
-			return LoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
+			return models.OneTimePasscodeLoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
 		}
 	}
 
 	if isPhone {
-		return LoginKindPhone, normalizedEmailOrPhone, nil
+		return models.OneTimePasscodeLoginKindPhone, normalizedEmailOrPhone, nil
 	}
-	return LoginKindEmail, normalizedEmailOrPhone, nil
+	return models.OneTimePasscodeLoginKindEmail, normalizedEmailOrPhone, nil
 }

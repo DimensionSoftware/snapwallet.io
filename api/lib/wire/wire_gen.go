@@ -7,6 +7,7 @@ package wire
 
 import (
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
@@ -48,6 +49,9 @@ func InitializeServer() (server.Server, error) {
 	jwtSigner := auth.JwtSigner{
 		PrivateKey: privateKey,
 	}
-	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient, jwtSigner)
+	dbDb := db.Db{
+		Firestore: firestoreClient,
+	}
+	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient, jwtSigner, dbDb)
 	return serverServer, nil
 }

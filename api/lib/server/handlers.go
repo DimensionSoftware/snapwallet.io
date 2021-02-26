@@ -2,10 +2,8 @@ package server
 
 import (
 	"context"
-	"crypto/rand"
 	"fmt"
 	"log"
-	"math/big"
 	mrand "math/rand"
 	"strings"
 	"time"
@@ -15,6 +13,7 @@ import (
 
 	faker "github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/db/models"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
@@ -53,9 +52,6 @@ func (s *Server) UserData(ctx context.Context, in *proto.UserDataRequest) (*prot
 
 	return httpResp, nil
 }
-
-type wyrePricingRate map[string]float32
-type wyrePricingRates = map[string](wyrePricingRate)
 
 // PricingData is an rpc handler
 func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) (*proto.PricingDataResponse, error) {
@@ -98,26 +94,16 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return nil, err
 	}
 
-	if loginKind == LoginKindPhone {
+	if loginKind == models.OneTimePasscodeLoginKindPhone {
 		return nil, fmt.Errorf("phone is not implemented yet")
 	}
 
-	code, err := sixRandomDigits()
+	otp, err := s.Db.CreateOneTimePasscode(ctx, loginValue, loginKind)
 	if err != nil {
 		return nil, err
 	}
 
-	msg := generateOtpMessage(mail.NewEmail("Matt", loginValue), code)
-
-	_, _, err = s.Firestore.Collection("one-time-passcodes").Add(ctx, map[string]interface{}{
-		"emailOrPhone": loginValue,
-		"kind":         loginKind,
-		"code":         code,
-		"createdAt":    time.Now(),
-	})
-	if err != nil {
-		return nil, err
-	}
+	msg := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
 
 	_, err = s.SendgridClient.Send(msg)
 	if err != nil {
@@ -187,13 +173,4 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	plainTextContent := fmt.Sprintf("Your one time passcode is: %s", code)
 	htmlContent := fmt.Sprintf("Your one time passcode is: <strong>%s</strong>", code)
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
-}
-
-func sixRandomDigits() (string, error) {
-	max := big.NewInt(999999)
-	n, err := rand.Int(rand.Reader, max)
-	if err != nil {
-		return "", err
-	}
-	return fmt.Sprintf("%06d", n.Int64()), nil
 }
