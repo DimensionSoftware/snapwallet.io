@@ -31,6 +31,11 @@
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
   $: selectedSourcePrice =
     selectedPriceMap[$transactionStore.sourceCurrency.ticker]
+  $: destinationAmount = $transactionStore.sourceAmount / selectedSourcePrice
+
+  const isValidNumber = (num: any) => {
+    return Number(num) && !isNaN(num) && num !== Infinity
+  }
 
   onMount(async () => {
     try {
@@ -86,7 +91,7 @@
         {$transactionStore.sourceCurrency.ticker}
       </div>
       <div class="total-container">
-        ~ {($transactionStore.sourceAmount / selectedSourcePrice || 0).toFixed(
+        ~ {(!isValidNumber(destinationAmount) ? 0 : destinationAmount).toFixed(
           8,
         )}
         {$transactionStore.destinationCurrency.ticker}
@@ -96,7 +101,8 @@
   <ModalFooter>
     <Button
       disabled={!$transactionStore.sourceAmount ||
-        isNaN($transactionStore.sourceAmount)}
+        isNaN($transactionStore.sourceAmount) ||
+        !isValidNumber(destinationAmount)}
       on:click={handleNextStep}>Checkout</Button
     >
   </ModalFooter>
