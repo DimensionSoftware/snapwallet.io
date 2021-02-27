@@ -8,6 +8,7 @@
   export let label: string
   export let autocapitalize: string
   export let defaultValue: string | number
+  export let autocomplete: string = 'on'
 
   let isActive: boolean = Boolean(defaultValue)
 </script>
@@ -19,6 +20,7 @@
     {inputmode}
     {autocapitalize}
     {placeholder}
+    {autocomplete}
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e.target.value)
