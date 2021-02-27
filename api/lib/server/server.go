@@ -35,17 +35,17 @@ func ProvideServer(
 	wyre wyre.Client,
 	plaid *plaid.Client,
 	jwtSigner auth.JwtSigner,
-	JwtVerifier auth.JwtVerifier,
+	jwtVerifier auth.JwtVerifier,
 	db db.Db,
 ) Server {
 	server := Server{
-		GrpcServer:     grpc.NewServer(),
+		GrpcServer:     grpc.NewServer(grpc.UnaryInterceptor(jwtVerifier.AuthenticationInterceptor)),
 		SendgridClient: sendgridClient,
 		Firestore:      firestore,
 		Wyre:           &wyre,
 		Plaid:          plaid,
 		JwtSigner:      &jwtSigner,
-		JwtVerifier:    &JwtVerifier,
+		JwtVerifier:    &jwtVerifier,
 		Db:             &db,
 	}
 	proto.RegisterFluxServer(server.GrpcServer, &server)
