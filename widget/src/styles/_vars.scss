@@ -1,5 +1,10 @@
+// NOTE: CSS Vars are set in App.svelte
+// so each import does not redefine the variables
+
 // theme
 $themeColor: #485460;
+$themeColorDarkened: darken($themeColor, 10%);
+$themeColorLightened: lighten($themeColor, 5%);
 $themeFont: 'Helvetica Neue', Arial, sans-serif;
 $headingFont: 'Impact', 'Fira Sans Condensed';
 
@@ -8,6 +13,7 @@ $textColor: #1e272e;
 $textColor2: lighten($textColor, 10%);
 $textColor3: lighten($textColor, 20%);
 $textColor4: lighten($textColor, 40%);
+$textColorMuted: lighten($textColor3, 20%);
 $modalBackgroundColor: white;
 $modalContainerBackgroundColor: linear-gradient(
   rgba(0, 0, 0, 0.08),
@@ -15,6 +21,7 @@ $modalContainerBackgroundColor: linear-gradient(
 );
 
 $commonShadowColor: rgba(0, 0, 0, 0.15);
+$buttonShadowColor: rgba($themeColor, 0.2);
 
 $success: #0be881;
 $error: #ff3f34;
