@@ -14,6 +14,8 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
+  import { isValidNumber } from '../util'
+  import TotalContainer from '../components/TotalContainer.svelte'
 
   let selectorVisible = false
   const handleNextStep = () => {
@@ -29,14 +31,14 @@
 
   $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
-  $: selectedSourcePrice = Math.round(
-    selectedPriceMap[$transactionStore.sourceCurrency.ticker],
-  )
-  $: destinationAmount = $transactionStore.sourceAmount / selectedSourcePrice
+  $: selectedSourcePrice =
+    selectedPriceMap[$transactionStore.sourceCurrency.ticker]
+  $: selectedDestinationPrice =
+    selectedPriceMap[$transactionStore.destinationCurrency.ticker]
+  $: destinationRate = $transactionStore.sourceAmount / selectedSourcePrice
+  $: sourceRate = $transactionStore.destinationAmount / selectedDestinationPrice
 
-  const isValidNumber = (num: any) => {
-    return Number(num) && !isNaN(num) && num !== Infinity
-  }
+  let isEnteringSourceAmount = true
 
   onMount(async () => {
     try {
@@ -68,18 +70,40 @@
         <div style="display:flex;justify-content:space-between;cursor:pointer;">
           <Label>Amount</Label>
           <Label>
-            <b>{$transactionStore.sourceCurrency.ticker}</b>
-            /
-            <span class="muted"
-              >{$transactionStore.destinationCurrency.ticker}</span
+            <span
+              class:bold-pointer={isEnteringSourceAmount}
+              class:muted={!isEnteringSourceAmount}
+              on:click={() => {
+                const sourceAmount = Number(sourceRate.toFixed(2))
+                transactionStore.setSourceAmount(sourceAmount)
+                isEnteringSourceAmount = true
+              }}
             >
+              {$transactionStore.sourceCurrency.ticker}
+            </span>
+            /
+            <span
+              class:bold-pointer={!isEnteringSourceAmount}
+              class:muted={isEnteringSourceAmount}
+              on:click={() => {
+                transactionStore.setDestinationAmount(destinationRate)
+                isEnteringSourceAmount = false
+              }}
+            >
+              {$transactionStore.destinationCurrency.ticker}
+            </span>
           </Label>
         </div>
         <Input
           on:change={e => {
-            transactionStore.setSourceAmount(Number(e.detail))
+            const val = Number(e.detail)
+            isEnteringSourceAmount
+              ? transactionStore.setSourceAmount(val)
+              : transactionStore.setDestinationAmount(val)
           }}
-          defaultValue={$transactionStore.sourceAmount}
+          defaultValue={isEnteringSourceAmount
+            ? $transactionStore.sourceAmount
+            : $transactionStore.destinationAmount}
           type="number"
           inputmode="number"
           placeholder="Amount"
@@ -91,19 +115,17 @@
         )}
         {$transactionStore.sourceCurrency.ticker}
       </div>
-      <div class="total-container">
-        ~ {(!isValidNumber(destinationAmount) ? 0 : destinationAmount).toFixed(
-          8,
-        )}
-        {$transactionStore.destinationCurrency.ticker}
-      </div>
+      <TotalContainer
+        rate={isEnteringSourceAmount ? destinationRate : sourceRate}
+        isDestination={isEnteringSourceAmount}
+      />
     </div>
   </ModalBody>
   <ModalFooter>
     <Button
       disabled={!$transactionStore.sourceAmount ||
         isNaN($transactionStore.sourceAmount) ||
-        !isValidNumber(destinationAmount)}
+        !isValidNumber(destinationRate)}
       on:click={handleNextStep}>Checkout</Button
     >
   </ModalFooter>
@@ -155,5 +177,10 @@
 
   .muted {
     color: var(--theme-text-color-muted);
+  }
+
+  .bold-pointer {
+    font-weight: bold;
+    cursor: pointer;
   }
 </style>
