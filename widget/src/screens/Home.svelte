@@ -12,6 +12,7 @@
   import { transactionStore } from '../stores/TransactionStore'
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
+  import { getContext } from 'svelte'
 
   let selectorVisible = false
   const handleNextStep = () => {
@@ -25,6 +26,9 @@
     { name: 'Tether', ticker: 'USDT' },
     { name: 'USDC', ticker: 'USDC' },
   ]
+
+  // Can use theme in JS
+  const theme = getContext<{ [k: string]: string }>('theme')
 </script>
 
 <ModalContent>
@@ -32,7 +36,7 @@
     <IntentSelector />
     <div class="cryptocurrencies-container">
       <div
-        style="display: flex;flex-direction:column;height:5rem;margin-bottom:1rem"
+        style="display:flex;flex-direction:column;height:5rem;margin-bottom:1rem"
       >
         <Label>Currency</Label>
         <CryptoCard
@@ -100,18 +104,18 @@
     display: flex;
     justify-content: flex-end;
     font-size: 0.9rem;
-    color: lighten($textColor3, 20%);
+    color: var(--theme-text-color-muted);
   }
 
   .total-container {
     display: flex;
     justify-content: flex-end;
-    color: $textColor;
+    color: var(--theme-text-color);
     font-weight: 500;
     font-size: 0.9rem;
   }
 
   .muted {
-    color: lighten($textColor3, 20%);
+    color: var(--theme-text-color-muted);
   }
 </style>
