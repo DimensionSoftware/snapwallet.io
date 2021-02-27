@@ -89,7 +89,11 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Checkout</Button>
+    <Button
+      disabled={!$transactionStore.sourceAmount ||
+        isNaN($transactionStore.sourceAmount)}
+      on:click={handleNextStep}>Checkout</Button
+    >
   </ModalFooter>
 </ModalContent>
 
