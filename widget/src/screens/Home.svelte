@@ -86,7 +86,9 @@
         {$transactionStore.sourceCurrency.ticker}
       </div>
       <div class="total-container">
-        ~ {($transactionStore.sourceAmount / selectedSourcePrice).toFixed(8)}
+        ~ {($transactionStore.sourceAmount / selectedSourcePrice || 0).toFixed(
+          8,
+        )}
         {$transactionStore.destinationCurrency.ticker}
       </div>
     </div>
