@@ -29,7 +29,7 @@
     }
     &:disabled {
       background-color: var(--theme-color);
-      opacity: 0.75;
+      opacity: 0.4;
       cursor: initial;
     }
   }
