@@ -29,8 +29,9 @@
 
   $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
-  $: selectedSourcePrice =
-    selectedPriceMap[$transactionStore.sourceCurrency.ticker]
+  $: selectedSourcePrice = Math.round(
+    selectedPriceMap[$transactionStore.sourceCurrency.ticker],
+  )
   $: destinationAmount = $transactionStore.sourceAmount / selectedSourcePrice
 
   const isValidNumber = (num: any) => {
