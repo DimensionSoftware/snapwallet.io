@@ -59,5 +59,15 @@
     &:required {
       box-shadow: none;
     }
+    // HACK: remove yellow autofill background
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active {
+      box-shadow: 0 0 0px 1000px var(--theme-modal-background-color) inset !important;
+      background-color: var(--theme-modal-background-color) !important;
+      background-clip: content-box !important;
+      -webkit-text-fill-color: var(--theme-text-color) !important;
+    }
   }
 </style>
