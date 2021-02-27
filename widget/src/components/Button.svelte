@@ -28,7 +28,8 @@
       background-color: var(--theme-color-lightened);
     }
     &:disabled {
-      opacity: 0.9;
+      background-color: var(--theme-color);
+      opacity: 0.75;
       cursor: initial;
     }
   }
