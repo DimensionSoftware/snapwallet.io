@@ -75,6 +75,7 @@
           }}
           defaultValue={$transactionStore.sourceAmount}
           type="number"
+          inputmode="number"
           placeholder="Amount"
         />
       </div>
