@@ -49,9 +49,13 @@ func InitializeServer() (server.Server, error) {
 	jwtSigner := auth.JwtSigner{
 		PrivateKey: privateKey,
 	}
+	publicKey := auth.ProvideJwtPublicKey(privateKey)
+	jwtVerifier := auth.JwtVerifier{
+		PublicKey: publicKey,
+	}
 	dbDb := db.Db{
 		Firestore: firestoreClient,
 	}
-	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient, jwtSigner, dbDb)
+	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient, jwtSigner, jwtVerifier, dbDb)
 	return serverServer, nil
 }

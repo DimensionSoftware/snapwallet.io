@@ -23,6 +23,7 @@ type Server struct {
 	Wyre           *wyre.Client
 	Plaid          *plaid.Client
 	JwtSigner      *auth.JwtSigner
+	JwtVerifier    *auth.JwtVerifier
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
@@ -34,6 +35,7 @@ func ProvideServer(
 	wyre wyre.Client,
 	plaid *plaid.Client,
 	jwtSigner auth.JwtSigner,
+	JwtVerifier auth.JwtVerifier,
 	db db.Db,
 ) Server {
 	server := Server{
@@ -43,6 +45,7 @@ func ProvideServer(
 		Wyre:           &wyre,
 		Plaid:          plaid,
 		JwtSigner:      &jwtSigner,
+		JwtVerifier:    &JwtVerifier,
 		Db:             &db,
 	}
 	proto.RegisterFluxServer(server.GrpcServer, &server)
