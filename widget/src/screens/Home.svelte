@@ -10,13 +10,13 @@
   import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import CryptoCard from '../components/cards/CryptoCard.svelte'
   import { transactionStore } from '../stores/TransactionStore'
+  import { priceStore } from '../stores/PriceStore'
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
-  import { getContext } from 'svelte'
+  import { onMount } from 'svelte'
 
   let selectorVisible = false
   const handleNextStep = () => {
-    // toaster.pop({ msg: 'Success', success: true })
     push('/checkout')
   }
 
@@ -27,8 +27,22 @@
     { name: 'USDC', ticker: 'USDC' },
   ]
 
-  // Can use theme in JS
-  const theme = getContext<{ [k: string]: string }>('theme')
+  $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
+  $: selectedPriceMap = $priceStore.prices[selectedDirection]
+  $: selectedSourcePrice =
+    selectedPriceMap[$transactionStore.sourceCurrency.ticker]
+
+  onMount(async () => {
+    try {
+      await priceStore.fetchPrices()
+      priceStore.pollPrices()
+    } catch (e) {
+      toaster.pop({
+        msg: 'Oops, there was a problem refreshing prices.',
+        error: true,
+      })
+    }
+  })
 </script>
 
 <ModalContent>
@@ -55,14 +69,22 @@
             >
           </Label>
         </div>
-        <Input defaultValue={0.0} type="number" placeholder="Amount" />
+        <Input
+          on:change={e => {
+            transactionStore.setSourceAmount(Number(e.detail))
+          }}
+          defaultValue={$transactionStore.sourceAmount}
+          type="number"
+          placeholder="Amount"
+        />
       </div>
       <div class="exchange-rate-container">
-        ~ 1 {$transactionStore.destinationCurrency.ticker} @ 55,000 {$transactionStore
-          .sourceCurrency.ticker}
+        ~ 1 {$transactionStore.destinationCurrency.ticker} @ {selectedSourcePrice}
+        {$transactionStore.sourceCurrency.ticker}
       </div>
       <div class="total-container">
-        ~ 55,000 {$transactionStore.sourceCurrency.ticker}
+        ~ {($transactionStore.sourceAmount / selectedSourcePrice).toFixed(8)}
+        {$transactionStore.destinationCurrency.ticker}
       </div>
     </div>
   </ModalBody>
