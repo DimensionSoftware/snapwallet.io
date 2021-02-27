@@ -9,7 +9,7 @@
   export let autocapitalize: string
   export let defaultValue: string | number
 
-  let isActive: boolean = false
+  let isActive: boolean = Boolean(defaultValue)
 </script>
 
 <div class:label class:active={isActive} class="input-container">

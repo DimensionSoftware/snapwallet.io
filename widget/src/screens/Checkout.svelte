@@ -7,6 +7,8 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
+  import { userStore } from '../stores/UserStore'
+  import vld8 from 'validator'
 
   let animation = 'left'
 </script>
@@ -21,6 +23,8 @@
       autocomplete="on"
       type="email"
       placeholder="your@email.address"
+      defaultValue={$userStore.emailAddress}
+      on:change={e => userStore.setEmailAddress(e.detail)}
     />
   </ModalBody>
   <ModalFooter>
