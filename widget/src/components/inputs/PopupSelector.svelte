@@ -52,12 +52,12 @@
     left: 0;
     right: 0;
     background-color: white;
-    box-shadow: 0px -7px 36px -10px $commonShadowColor;
+    box-shadow: 0px -7px 36px -10px var(--theme-common-shadow-color);
     transform: translateY(100%);
-    transition: transform 0.08s $easeInExpo;
+    transition: transform 0.08s var(--theme-ease-in-expo);
     &.visible {
       transform: translateY(0);
-      transition: transform 0.25s $easeOutExpo;
+      transition: transform 0.25s var(--theme-ease-out-expo);
     }
   }
 
