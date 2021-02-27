@@ -11,7 +11,7 @@
   @import '../../styles/_vars.scss';
 
   .card-container {
-    border: 1px solid $textColor4;
+    border: 1px solid var(--theme-text-color-4);
     min-height: 3rem;
     width: 100%;
     border-radius: 0.5rem;
