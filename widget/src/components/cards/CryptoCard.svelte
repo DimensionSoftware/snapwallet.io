@@ -59,6 +59,6 @@
     align-items: center;
     height: 100%;
     margin-left: auto;
-    color: $textColor;
+    color: var(--theme-text-color);
   }
 </style>
