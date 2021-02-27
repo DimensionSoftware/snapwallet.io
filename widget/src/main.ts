@@ -21,6 +21,12 @@ const app = new App({
     apiKey: queryParams.get('apiKey') || '',
     appName: queryParams.get('appName') || 'Flux',
     intent: queryParams.get('intent') || 'buy',
+    theme: {
+      /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */
+      // color: '#7f8c8d',
+      // colorDarkened: '#2c3e50',
+      // colorLightened: '#95a5a6',
+    },
   },
 })
 
