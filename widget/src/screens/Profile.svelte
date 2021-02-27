@@ -41,7 +41,7 @@
       label="Birthdate"
       inputmode="text"
       autocapitalize="true"
-      autocomplete="on"
+      autocomplete="bday"
       type="text"
       placeholder="Birthdate"
       defaultValue={$userStore.birthDate}
