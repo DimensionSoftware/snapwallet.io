@@ -30,7 +30,16 @@ func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req i
 	if len(values) == 0 {
 		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
-	accessToken := values[0]
+	authorization := values[0]
+
+	expectedPrefix := "Bearer "
+	if len(authorization) <= len(expectedPrefix) {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
+	if authorization[:len(expectedPrefix)] != expectedPrefix {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
+	accessToken := authorization[len(expectedPrefix):]
 
 	claims, err := verifier.ParseAndVerify(accessToken)
 	log.Printf("claims --> %+v", claims)
