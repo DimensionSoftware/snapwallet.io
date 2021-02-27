@@ -6,11 +6,13 @@
   import Checkout from './screens/Checkout.svelte'
   import NotFound from './screens/NotFound.svelte'
   import Profile from './screens/Profile.svelte'
+  import { onMount, setContext } from 'svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
   export let intent: 'buy' | 'sell'
   export let apiKey: string
+  export let theme: object
 
   const routes = {
     '/': wrap({ component: Home as any, props: { appName, intent, apiKey } }),
@@ -21,6 +23,21 @@
     '/profile': Profile,
     '*': NotFound as any,
   }
+
+  // Set theme context so theme can be used in JS also
+  setContext('theme', {
+    ...theme,
+  })
+
+  // Override theme css variables
+  onMount(() => {
+    Object.entries(theme).forEach(([k, v]) => {
+      k = k.replace(/[A-Z]/g, (k, i) =>
+        i === 0 ? k.toLowerCase() : `-${k.toLowerCase()}`,
+      )
+      document.documentElement.style.setProperty(`--theme-${k}`, v, 'important')
+    })
+  })
 </script>
 
 <div id="modal">
@@ -37,6 +54,37 @@
     box-sizing: border-box;
   }
 
+  :root {
+    // theme
+    --theme-color: #{$themeColor};
+    --theme-color-darkened: #{$themeColorDarkened};
+    --theme-color-lightened: #{$themeColorLightened};
+    --theme-font: #{$themeFont};
+    --heading-font: #{$headingFont};
+
+    // colors
+    --theme-text-color: #{$textColor};
+    --theme-text-color-2: #{$textColor2};
+    --theme-text-color-3: #{$textColor3};
+    --theme-text-color-4: #{$textColor4};
+    --theme-text-color-muted: #{$textColorMuted};
+    --theme-modal-background-color: #{$modalBackgroundColor};
+    --theme-modal-container-background-color: #{$modalContainerBackgroundColor};
+    --theme-shadow-color: #{$commonShadowColor};
+    --theme-success-color: #{$success};
+    --theme-error-color: #{$error};
+    --theme-warning-color: #{$warning};
+    --theme-info-color: #{$info};
+    --theme-button-shadow-color: #{$buttonShadowColor};
+
+    // easing
+    --theme-ease-bounce: #{$bounce};
+    --theme-ease-in-back: #{$easeInBack};
+    --theme-ease-out-back: #{$easeOutBack};
+    --theme-ease-in-expo: #{$easeInExpo};
+    --theme-ease-out-expo: #{$easeOutExpo};
+  }
+
   #modal {
     position: absolute;
     z-index: 1;
@@ -45,12 +93,12 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
-    background: $modalContainerBackgroundColor;
+    background: var(--theme-modal-container-background-color);
     display: flex;
     justify-content: center;
     align-items: center;
-    color: $textColor;
-    font-family: $themeFont;
+    color: var(--theme-text-color);
+    font-family: var(--theme-font);
     font-size: 1rem;
     line-height: 1.5rem;
     text-rendering: optimizeLegibility;
@@ -61,7 +109,7 @@
   #modal-body {
     width: 320px;
     height: 540px;
-    background-color: $modalBackgroundColor;
+    background-color: var(--theme-modal-background-color);
     padding: 1rem;
     border-radius: 1rem;
     overflow: hidden;

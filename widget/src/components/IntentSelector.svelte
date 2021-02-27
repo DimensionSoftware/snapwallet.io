@@ -45,7 +45,7 @@
     height: 100%;
     width: 100%;
     display: flex;
-    color: $textColor;
+    color: var(--theme-text-color);
     overflow: hidden;
     align-items: center;
     justify-content: center;
@@ -69,7 +69,7 @@
       &:before {
         // background fx
         transform: scale(1) translateY(1px);
-        transition: transform 0.3s $easeOutExpo;
+        transition: transform 0.3s var(--theme-ease-out-expo);
       }
     }
     &.sell-toggle {
@@ -91,9 +91,9 @@
       right: 0;
       bottom: 0;
       z-index: -1;
-      background-color: $themeColor;
+      background-color: var(--theme-color);
       transform: scale(0) translateY(90%);
-      transition: transform 0.1s $easeInExpo;
+      transition: transform 0.1s var(--theme-ease-in-expo);
       border-top-left-radius: 0.5rem;
       border-bottom-left-radius: 0.5rem;
     }

@@ -30,10 +30,10 @@
     }
   }
   .right {
-    animation: slideInRight 0.23s $easeOutExpo;
+    animation: slideInRight 0.23s var(--theme-ease-out-expo);
   }
   .left {
-    animation: slideInLeft 0.25s $easeOutBack;
+    animation: slideInLeft 0.25s var(--theme-ease-out-back);
   }
   .modal-content {
     position: absolute;
