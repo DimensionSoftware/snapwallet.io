@@ -21,6 +21,7 @@
       inputmode="email"
       autocapitalize="none"
       autocomplete="on"
+      autofocus
       type="email"
       placeholder="your@email.address"
       defaultValue={$userStore.emailAddress}

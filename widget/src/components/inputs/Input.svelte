@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { onMount, createEventDispatcher } from 'svelte'
   import Label from './Label.svelte'
   const dispatch = createEventDispatcher()
   export let type: string = 'text'
@@ -9,8 +9,13 @@
   export let autocapitalize: string = ''
   export let defaultValue: string | number = ''
   export let autocomplete: string = 'on'
+  export let autofocus: boolean
 
   let isActive: boolean = Boolean(defaultValue)
+
+  onMount(function () {
+    setTimeout(() => document.querySelector('input[autofocus]')?.focus(), 500)
+  })
 </script>
 
 <div class:label class:active={isActive} class="input-container">
@@ -21,6 +26,7 @@
     {autocapitalize}
     {placeholder}
     {autocomplete}
+    {autofocus}
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e.target.value)

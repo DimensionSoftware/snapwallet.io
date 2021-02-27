@@ -18,6 +18,7 @@
       inputmode="text"
       autocapitalize="true"
       autocomplete="on"
+      autofocus
       type="text"
       placeholder="First Name"
       defaultValue={$userStore.firstName}

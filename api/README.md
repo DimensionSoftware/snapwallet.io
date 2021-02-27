@@ -2,8 +2,9 @@
 
 1. install golang
 2. install hivemind: https://github.com/DarthSim/hivemind
-3. `cp .env.example .env`
-4. `bin/build && hivemind`
+3. `cd client && npm i && cd ..`
+4. `cp .env.example .env`
+5. `bin/build && hivemind`
 
 ## Run tests
 
