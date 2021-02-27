@@ -9,10 +9,14 @@ const createStore = () => {
     sourceCurrency: { name: 'USD', ticker: 'USD' },
     destinationCurrency: { name: 'Bitcoin', ticker: 'BTC' },
     sourceAmount: 0.0,
+    destinationAmount: 0.0,
   })
 
   return {
     subscribe,
+    setDestinationAmount: (destinationAmount: number) => {
+      update(s => ({ ...s, destinationAmount }))
+    },
     setSourceAmount: (sourceAmount: number) => {
       update(s => ({ ...s, sourceAmount }))
     },
