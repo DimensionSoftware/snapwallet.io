@@ -2,12 +2,12 @@
   import { createEventDispatcher } from 'svelte'
   import Label from './Label.svelte'
   const dispatch = createEventDispatcher()
-  export let type: string
-  export let placeholder: string
-  export let inputmode: string
-  export let label: string
-  export let autocapitalize: string
-  export let defaultValue: string | number
+  export let type: string = 'text'
+  export let placeholder: string = ''
+  export let inputmode: string = 'text'
+  export let label: string = ''
+  export let autocapitalize: string = ''
+  export let defaultValue: string | number = ''
   export let autocomplete: string = 'on'
 
   let isActive: boolean = Boolean(defaultValue)

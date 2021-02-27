@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let hidden: boolean
+  export let hidden: boolean = false
 </script>
 
 <div class="input-label">
