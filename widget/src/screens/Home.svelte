@@ -79,7 +79,9 @@
         />
       </div>
       <div class="exchange-rate-container">
-        ~ 1 {$transactionStore.destinationCurrency.ticker} @ {selectedSourcePrice}
+        ~ 1 {$transactionStore.destinationCurrency.ticker} @ {selectedSourcePrice.toFixed(
+          2,
+        )}
         {$transactionStore.sourceCurrency.ticker}
       </div>
       <div class="total-container">
