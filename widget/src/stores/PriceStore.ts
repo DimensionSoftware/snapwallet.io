@@ -1,6 +1,6 @@
 import { writable } from 'svelte/store'
 import { FluxApi, createConfiguration, ServerConfiguration } from 'api-client'
-import { SERVER_BASE_URL, supportedCurrencyPairs } from '../contants'
+import { SERVER_BASE_URL, supportedCurrencyPairs } from '../constants'
 
 const api = new FluxApi(
   createConfiguration({
