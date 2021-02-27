@@ -10,7 +10,6 @@ import (
 	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
 	faker "github.com/bxcodec/faker/v3"
@@ -24,18 +23,6 @@ import (
 
 // UserData is an rpc handler
 func (s *Server) UserData(ctx context.Context, in *proto.UserDataRequest) (*proto.UserDataResponse, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, fmt.Errorf("no grpc metadata")
-	}
-	auths := md.Get("authorization")
-	if len(auths) < 1 {
-		return nil, fmt.Errorf("grpc authorization empty")
-	}
-	auth := auths[0]
-	log.Printf("Auth: %v", auth)
-
-	in.ProtoMessage()
 	log.Printf("Received: %v", in)
 
 	httpResp := &proto.UserDataResponse{
