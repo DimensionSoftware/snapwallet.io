@@ -11,9 +11,11 @@
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "@rollup/plugin-replace": "^2.4.1",
     "@rollup/plugin-typescript": "^8.2.0",
     "@tsconfig/svelte": "^1.0.10",
     "api-client": "file://../api/client",
+    "dotenv": "^8.2.0",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.1.6",
     "rollup": "^2.40.0",
