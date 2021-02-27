@@ -87,17 +87,6 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 	return u, nil
 }
 
-func userFromSnapshot(snap *firestore.DocumentSnapshot) user.User {
-	data := snap.Data()
-
-	return user.User{
-		ID:        data["id"].(string),
-		Email:     data["email"].(string),
-		Phone:     data["phone"].(string),
-		CreatedAt: data["createdAt"].(time.Time),
-	}
-}
-
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone
 func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*user.User, error) {
 	if emailOrPhone == "" {
@@ -113,7 +102,11 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 		return nil, err
 	}
 	if len(users) == 1 {
-		u := userFromSnapshot(users[0])
+		var u user.User
+		err := users[0].DataTo(&u)
+		if err != nil {
+			return nil, err
+		}
 		return &u, nil
 	}
 
@@ -126,7 +119,11 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 		return nil, err
 	}
 	if len(users) == 1 {
-		u := userFromSnapshot(users[0])
+		var u user.User
+		err := users[0].DataTo(&u)
+		if err != nil {
+			return nil, err
+		}
 		return &u, nil
 	}
 
