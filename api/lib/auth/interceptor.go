@@ -23,12 +23,12 @@ func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req i
 
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return nil, status.Errorf(codes.Unauthenticated, "metadata is not provided")
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 
 	values := md["authorization"]
 	if len(values) == 0 {
-		return nil, status.Errorf(codes.Unauthenticated, "authorization token is not provided")
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 	accessToken := values[0]
 
