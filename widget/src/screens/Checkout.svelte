@@ -28,7 +28,10 @@
     />
   </ModalBody>
   <ModalFooter>
-    <Button on:click={() => push('#/profile')}>Continue</Button>
+    <Button
+      disabled={!vld8.isEmail($userStore.emailAddress)}
+      on:click={() => push('#/profile')}>Continue</Button
+    >
   </ModalFooter>
 </ModalContent>
 
