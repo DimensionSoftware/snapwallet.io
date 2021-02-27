@@ -53,16 +53,16 @@
     width: 100%;
     min-height: 60px;
     max-height: 100px;
-    background-color: $info;
+    background-color: var(--theme-info-color);
     color: white;
     &.error {
-      background-color: $error;
+      background-color: var(--theme-error-color);
     }
     &.warning {
-      background-color: $warning;
+      background-color: var(--theme-warning-color);
     }
     &.success {
-      background-color: $success;
+      background-color: var(--theme-success-color);
     }
   }
 </style>
