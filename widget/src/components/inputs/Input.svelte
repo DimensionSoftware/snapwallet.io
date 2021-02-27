@@ -34,7 +34,7 @@
   .input-container {
     padding-bottom: 0;
     height: 3rem;
-    border-bottom: 1px solid $textColor;
+    border-bottom: 1px solid $themeColor;
     margin-bottom: 0.5rem;
     position: relative;
     &.label {
@@ -50,7 +50,7 @@
     bottom: 0.5rem;
     padding: 0;
     margin: 0;
-    color: $textColor;
+    color: $themeColor;
     outline: none;
     border: none;
     width: 100%;
