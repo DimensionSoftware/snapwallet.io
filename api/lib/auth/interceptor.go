@@ -14,8 +14,7 @@ import (
 func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (response interface{}, err error) {
 	log.Printf("authentication --> %s", info.FullMethod)
 
-	// TODO: whitelist of public endpoint checks goes here
-	if info.FullMethod != "/Flux/WyreAddBankPaymentMethod" {
+	if RPCPublicWhitelist[info.FullMethod] {
 		log.Printf("success ✅ (public route)")
 		return handler(ctx, req)
 	}
