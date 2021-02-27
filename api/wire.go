@@ -26,7 +26,9 @@ func InitializeServer() (server.Server, error) {
 		plaid.ProvideClientOptions,
 		vendorplaid.NewClient,
 		auth.ProvideJwtPrivateKey,
+		auth.ProvideJwtPublicKey,
 		wire.Struct(new(auth.JwtSigner), "*"),
+		wire.Struct(new(auth.JwtVerifier), "*"),
 		wire.Struct(new(db.Db), "*"),
 	)
 	return server.Server{}, nil

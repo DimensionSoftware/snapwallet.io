@@ -26,7 +26,7 @@ type Claims struct {
 	   to prevent the JWT from being replayed.  The "jti" value is a case-
 	   sensitive string.  Use of this claim is OPTIONAL.
 	*/
-	Jti string `json:"jti"`
+	ID string `json:"jti,omitempty"`
 
 	/*
 		The "sub" (subject) claim identifies the principal that is the
@@ -37,7 +37,7 @@ type Claims struct {
 		"sub" value is a case-sensitive string containing a StringOrURI
 		value.  Use of this claim is OPTIONAL.
 	*/
-	Sub string `json:"sub"`
+	Subject string `json:"sub,omitempty"`
 
 	/*
 		The "iat" (issued at) claim identifies the time at which the JWT was
@@ -45,7 +45,7 @@ type Claims struct {
 		value MUST be a number containing a NumericDate value.  Use of this
 		claim is OPTIONAL.
 	*/
-	Iat time.Time `json:"iat"`
+	IssuedAt int64 `json:"iat,omitempty"`
 
 	/*
 		The "exp" (expiration time) claim identifies the expiration time on
@@ -53,7 +53,7 @@ type Claims struct {
 		processing of the "exp" claim requires that the current date/time
 		MUST be before the expiration date/time listed in the "exp" claim.
 	*/
-	Exp time.Time `json:"exp"`
+	ExpiresAt int64 `json:"exp,omitempty"`
 }
 
 // Valid checks the claims for validity
@@ -63,6 +63,9 @@ func (Claims) Valid() error {
 
 // JwtPrivateKey represents the private key for signing the jwt
 type JwtPrivateKey = *rsa.PrivateKey
+
+// JwtPublicKey represents the public key for verifying the jwt
+type JwtPublicKey = *rsa.PublicKey
 
 // JwtSigner manages the signing of our jwt
 type JwtSigner struct {
@@ -109,12 +112,37 @@ func ProvideJwtPrivateKey() (JwtPrivateKey, error) {
 	return JwtPrivateKey(priv), nil
 }
 
+// ProvideJwtPublicKey returns a JwtPublicKey, and an error if not provided by env vars
+func ProvideJwtPublicKey(priv JwtPrivateKey) JwtPublicKey {
+	return &priv.PublicKey
+}
+
 // NewClaims instantiates the claims object to be signed
 func NewClaims(userID string) Claims {
 	return Claims{
-		Jti: xid.New().String(),
-		Sub: userID,
-		Iat: time.Now(),
-		Exp: time.Now().Add(24 * time.Hour),
+		ID:        xid.New().String(),
+		Subject:   userID,
+		IssuedAt:  time.Now().Unix(),
+		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 	}
+}
+
+// JwtVerifier manages the verification of our jwt
+type JwtVerifier struct {
+	PublicKey JwtPublicKey
+}
+
+// ParseAndVerify parses and verifies a raw jwt token and returns the claims if successful
+func (signer JwtVerifier) ParseAndVerify(rawToken string) (jwt.Claims, error) {
+	// Create the token
+	token, err := jwt.Parse(rawToken, func(token *jwt.Token) (interface{}, error) {
+		return signer.PublicKey, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+	if !token.Valid {
+		return nil, fmt.Errorf("token is invalid")
+	}
+	return token.Claims, nil
 }
