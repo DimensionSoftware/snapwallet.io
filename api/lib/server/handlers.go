@@ -9,7 +9,9 @@ import (
 
 	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 
 	faker "github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/auth"
@@ -88,11 +90,11 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
 	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s: %s", codes.InvalidArgument.String(), err))
 	}
 
 	if loginKind == onetimepasscode.LoginKindPhone {
-		return nil, fmt.Errorf("phone is not implemented yet")
+		return nil, status.Errorf(codes.Unimplemented, fmt.Sprintf("%s: phone is not implemented yet", codes.Unimplemented.String()))
 	}
 
 	otp, err := s.Db.CreateOneTimePasscode(ctx, loginValue, loginKind)
@@ -114,7 +116,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
 	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
 	if err != nil {
-		return nil, err
+		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s: %s", codes.InvalidArgument.String(), err))
 	}
 
 	passcodes := s.Firestore.Collection("one-time-passcodes").
@@ -126,12 +128,12 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	// if no doc then failure to login (make better later)
 	passcode, err := passcodes.Next()
 	if err != nil {
-		return nil, fmt.Errorf("code verification failed")
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 
 	_, err = passcode.Ref.Delete(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("code verification failed")
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 
 	u, err := s.Db.GetOrCreateUser(ctx, loginKind, loginValue)
