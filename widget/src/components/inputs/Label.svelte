@@ -12,7 +12,7 @@
   @import '../../styles/_vars.scss';
 
   .input-label {
-    color: $themeColor;
+    color: var(--theme-color);
     font-size: 0.7rem;
     font-weight: 600;
   }
