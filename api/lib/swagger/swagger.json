@@ -168,6 +168,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     }

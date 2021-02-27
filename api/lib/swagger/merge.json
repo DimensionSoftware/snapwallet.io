@@ -11,6 +11,11 @@
       "get": {
         "security": [{"Bearer": []}]
       }
+    },
+    "/wyre/add-bank-payment-method": {
+      "post": {
+        "security": [{"Bearer": []}]
+      }
     }
   }
 }

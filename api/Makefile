@@ -23,7 +23,7 @@ clean:
 lib/wire/wire_gen.go: wire.go
 	bin/generate-wire-code
 
-${GO_GENERATED_PROTOCOL_FILES} ${GO_GENERATED_SWAGGER_FILE}: lib/protocol/api.proto
+${GO_GENERATED_PROTOCOL_FILES} ${GO_GENERATED_SWAGGER_FILE}: lib/protocol/api.proto lib/swagger/merge.json
 	bin/generate-grpc-code
 
 grpcserver: ${GO_LIB_FILES} $(shell find cmd/grpcserver -type f -name "*.go" | sort)
