@@ -6,6 +6,11 @@ import { terser } from 'rollup-plugin-terser'
 import sveltePreprocess from 'svelte-preprocess'
 import typescript from '@rollup/plugin-typescript'
 import css from 'rollup-plugin-css-only'
+import replace from '@rollup/plugin-replace'
+import dotenv from 'dotenv'
+
+// Dotenv will also pick up api .env if path not defined
+dotenv.config({ path: './.env' })
 
 const production = !process.env.ROLLUP_WATCH
 
@@ -43,6 +48,11 @@ export default {
     file: 'public/build/bundle.js',
   },
   plugins: [
+    replace({
+      __ENV: JSON.stringify({
+        API_BASE_URL: process.env.API_BASE_URL,
+      }),
+    }),
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production, sass: true }),
       compilerOptions: {
