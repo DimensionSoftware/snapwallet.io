@@ -51,7 +51,7 @@
     bottom: 0.5rem;
     padding: 0;
     margin: 0;
-    color: var(--theme-color);
+    color: var(--theme-text-color);
     outline: none;
     border: none;
     width: 100%;
