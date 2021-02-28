@@ -11,6 +11,8 @@
 
   let animation = 'left'
 
+  const defaultName = `${$userStore.firstName} ${$userStore.lastName}`
+
   const handleNextStep = () => {
     const { firstName, lastName, birthDate, socialSecurityNumber } = $userStore,
       focus = (ndx: number) =>
@@ -42,7 +44,7 @@
         autofocus
         type="text"
         placeholder="Your Full Name"
-        defaultValue={$userStore.fullName}
+        defaultValue={defaultName}
         on:change={e => {
           userStore.setFullName(e.detail)
         }}

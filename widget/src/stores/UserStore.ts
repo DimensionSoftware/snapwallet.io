@@ -16,7 +16,7 @@ function createStore() {
     setEmailAddress: (emailAddress: string) =>
       update(s => ({ ...s, emailAddress })),
     setFullName: (fullName: string) => {
-      const name = fullName.split(/[\s+]/)
+      const name = fullName.trim().split(/[\s+]/)
       // extract first & last name
       // - could easily add middle, later
       const [firstName, lastName] =
