@@ -33,7 +33,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader>Personal Details</ModalHeader>
+    <ModalHeader hideCloseButton>Personal Details</ModalHeader>
     <Label label="Full Name">
       <Input
         inputmode="text"

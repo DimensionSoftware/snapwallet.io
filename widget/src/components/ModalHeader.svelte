@@ -60,7 +60,7 @@
   }
 
   .hidden {
-    visibility: none;
+    visibility: hidden;
     cursor: initial;
   }
 </style>
