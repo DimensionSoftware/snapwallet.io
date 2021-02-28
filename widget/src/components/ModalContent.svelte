@@ -4,9 +4,7 @@
   export let animation: string = ''
 </script>
 
-<div
-  class="modal-content {animation}"
->
+<div class="modal-content {animation}">
   <slot />
 </div>
 

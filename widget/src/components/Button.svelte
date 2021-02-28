@@ -22,12 +22,11 @@
     color: white;
     cursor: pointer;
     text-transform: uppercase;
-      box-shadow: 0 0 0 0 $themeColor,
-        0 6px 6px var(--theme-button-shadow-color);
+    box-shadow: 0 0 0 0 $themeColor, 0 6px 6px var(--theme-button-shadow-color);
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
-    transition: background .3s ease-in .1s, box-shadow .2s ease-in .123s;
+    transition: background 0.3s ease-in 0.1s, box-shadow 0.2s ease-in 0.123s;
     // gloss fix
     &:before {
       position: absolute;
@@ -45,7 +44,7 @@
       );
       white-space: nowrap;
       border-radius: 0.5em 0.5em 6em 6em/0.1em 0.1em 1em 1em;
-      transition: opacity 0.3s ease-in .1s;
+      transition: opacity 0.3s ease-in 0.1s;
     }
     &:hover {
       box-shadow: 0 0 0 1px $themeColor,
