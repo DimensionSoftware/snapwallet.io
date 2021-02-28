@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import Icon from 'svelte-awesome'
-  import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+  import { faTimes } from '@fortawesome/free-solid-svg-icons'
   import { onKeysPressed } from '../../util'
 
   const dispatch = createEventDispatcher()
@@ -31,7 +31,7 @@
     <div class="placeholder-box" />
     <div class="popup-title">{headerTitle}</div>
     <div on:click={() => dispatch('close')} class="close-icon">
-      <Icon data={faTimesCircle} />
+      <Icon data={faTimes} />
     </div>
   </div>
   <slot />
@@ -53,8 +53,8 @@
     left: 0;
     right: 0;
     background-color: white;
-    box-shadow: 0px -7px 36px -10px var(--theme-common-shadow-color);
-    transform: translateY(100%);
+    box-shadow: 0px -7px 25px 10px var(--theme-shadow-color);
+    transform: translateY(110%);
     transition: transform 0.08s var(--theme-ease-in-expo);
     &.visible {
       transform: translateY(0);

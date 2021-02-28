@@ -1,8 +1,7 @@
 <script lang="ts">
   import { pop } from 'svelte-spa-router'
   import FaIcon from 'svelte-awesome'
-  import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-  import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+  import { faArrowLeft, faTimes } from '@fortawesome/free-solid-svg-icons'
 
   export let hideCloseButton = false
   export let hideBackButton = false
@@ -20,7 +19,7 @@
     <slot />
   </div>
   <div class:hidden={hideCloseButton} class="modal-header-close-button">
-    <FaIcon data={faTimesCircle} />
+    <FaIcon data={faTimes} />
   </div>
 </div>
 
@@ -35,7 +34,8 @@
   }
 
   .modal-header {
-    margin-bottom: 0.6rem;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
     height: 2.75rem;
     width: 100%;
     display: flex;
@@ -46,6 +46,7 @@
       flex: 3;
       justify-content: center;
       font-weight: bold;
+      font-size: 1.2rem;
     }
     & > .modal-header-close-button {
       @include flex-align-center();

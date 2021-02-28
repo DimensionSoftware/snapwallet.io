@@ -36,6 +36,7 @@
 
 <style lang="scss">
   @import '../../styles/_vars.scss';
+  @import '../../styles/animations.scss';
 
   .input-container {
     padding-bottom: 0;
@@ -140,17 +141,6 @@
       background-color: transparent !important;
       background-clip: content-box !important;
       -webkit-text-fill-color: var(--theme-text-color) !important;
-    }
-  }
-  @keyframes focus {
-    0% {
-      transform: scale(1);
-    }
-    50% {
-      transform: scale(1.02);
-    }
-    100% {
-      transform: scale(1);
     }
   }
 </style>

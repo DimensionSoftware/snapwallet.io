@@ -70,7 +70,7 @@
     --theme-text-color-muted: #{$textColorMuted};
     --theme-modal-background: #{$modalBackground};
     --theme-modal-container-background-color: #{$modalContainerBackgroundColor};
-    --theme-shadow-color: #{$commonShadowColor};
+    --theme-shadow-color: #{$shadowColor};
     --theme-success-color: #{$success};
     --theme-error-color: #{$error};
     --theme-warning-color: #{$warning};
