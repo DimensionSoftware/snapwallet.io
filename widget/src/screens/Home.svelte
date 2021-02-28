@@ -118,6 +118,7 @@
             defaultValue={isEnteringSourceAmount
               ? $transactionStore.sourceAmount
               : $transactionStore.destinationAmount}
+            required
             type="number"
             inputmode="number"
             placeholder="0"
@@ -165,12 +166,13 @@
     position: relative;
     height: 100%;
     width: 100%;
-    overflow: hidden;
     padding: 0 0.5rem;
     margin-top: 2rem;
   }
 
   .exchange-rate-container {
+    position: relative;
+    z-index: 2;
     display: flex;
     justify-content: flex-end;
     font-size: 0.9rem;

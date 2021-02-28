@@ -41,6 +41,7 @@
         inputmode="text"
         autocapitalize="true"
         autocomplete="on"
+        required
         autofocus
         type="text"
         placeholder="Your Full Name"
@@ -55,6 +56,7 @@
         inputmode="text"
         autocapitalize="true"
         autocomplete="bday"
+        required
         type="text"
         placeholder="mm/dd/yyyy"
         defaultValue={$userStore.birthDate}
@@ -68,6 +70,7 @@
         inputmode="text"
         autocapitalize="true"
         autocomplete="on"
+        required
         type="text"
         placeholder="xxx-xx-xxxx"
         defaultValue={$userStore.socialSecurityNumber}

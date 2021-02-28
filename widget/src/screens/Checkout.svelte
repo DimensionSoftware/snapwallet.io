@@ -37,6 +37,7 @@
         autocapitalize="none"
         autocomplete="on"
         autofocus
+        required
         type="email"
         placeholder="your@email.address"
         defaultValue={$userStore.emailAddress}
@@ -51,8 +52,4 @@
 
 <style lang="scss">
   @import '../styles/_vars.scss';
-
-  h3 {
-    margin: 25% 0 0.5em;
-  }
 </style>

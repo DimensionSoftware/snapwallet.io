@@ -8,6 +8,7 @@
   export let defaultValue: string | number = ''
   export let autocomplete: string = 'on'
   export let autofocus: boolean
+  export let required: boolean
 
   let isActive: boolean = Boolean(defaultValue)
 
@@ -24,6 +25,7 @@
     {placeholder}
     {autocomplete}
     {autofocus}
+    {required}
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e.target.value)
@@ -32,6 +34,7 @@
     value={defaultValue || ''}
   />
   <span class="fx" />
+  <span class="bg" />
 </div>
 
 <style lang="scss">
@@ -43,6 +46,8 @@
     margin-bottom: 0.75rem;
     position: relative;
     input {
+      position: relative;
+      z-index: 2;
       padding: 0;
       margin: 0;
       color: var(--theme-textColor);
@@ -74,6 +79,27 @@
       transition-duration: 0.3s;
       transition-property: transform;
       transition: color 0.2s ease-out, border 0.3s ease-out 0.1s;
+      &:valid {
+        border-bottom: 1px solid lighten($themeColor, 25%);
+      }
+      ~ .bg {
+        position: absolute;
+        content: '';
+        top: 1px;
+        bottom: -2px;
+        left: -3px;
+        right: -3px;
+        border-radius: 4px;
+        background: linear-gradient(transparent, lighten($themeColor, 61%));
+        opacity: 0.5;
+        transform: scale(0);
+        transition: opacity 0.3s ease-out 0.2s, transform 0.4s ease-in 0.1s;
+      }
+      &:valid ~ .bg {
+        opacity: 1;
+        transform: scale(1);
+        transition: none;
+      }
       &:hover,
       &:focus {
         // background-image: none;
