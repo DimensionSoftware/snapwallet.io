@@ -1,4 +1,5 @@
 <script lang="ts">
+  import vld8 from 'validator'
   import { push } from 'svelte-spa-router'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
@@ -8,7 +9,7 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import vld8 from 'validator'
+  import { onEnterPressed } from '../util'
 
   let animation = 'left'
 
@@ -19,7 +20,13 @@
     // next
     push('#/profile')
   }
+
+  const onKeyDown = (e: Event) => {
+    onEnterPressed(e, handleNextStep)
+  }
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <ModalContent {animation}>
   <ModalBody>

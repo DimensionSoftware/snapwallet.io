@@ -14,7 +14,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
-  import { isValidNumber } from '../util'
+  import { isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
 
   let selectorVisible = false
@@ -45,6 +45,10 @@
     push('/checkout')
   }
 
+  const onKeyDown = (e: Event) => {
+    onEnterPressed(e, handleNextStep)
+  }
+
   onMount(async () => {
     try {
       await priceStore.fetchPrices()
@@ -57,6 +61,8 @@
     }
   })
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <ModalContent>
   <ModalBody>

@@ -7,6 +7,7 @@
   import Input from '../components/inputs/Input.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
+  import { onEnterPressed } from '../util'
 
   let animation = 'left'
 
@@ -22,7 +23,13 @@
 
     // push('/overview')
   }
+
+  const onKeyDown = (e: Event) => {
+    onEnterPressed(e, handleNextStep)
+  }
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <ModalContent {animation}>
   <ModalBody>

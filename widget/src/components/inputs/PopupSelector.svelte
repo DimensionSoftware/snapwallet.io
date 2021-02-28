@@ -2,6 +2,7 @@
   import { createEventDispatcher } from 'svelte'
   import Icon from 'svelte-awesome'
   import { faTimesCircle } from '@fortawesome/free-regular-svg-icons'
+  import { onKeysPressed } from '../../util'
 
   const dispatch = createEventDispatcher()
 
@@ -9,9 +10,9 @@
   export let headerTitle: string
 
   function handleClose(e: Event) {
-    if (e instanceof KeyboardEvent) {
-      // close on esc
-      if (e.key === 'Escape') dispatch('close')
+    if (onKeysPressed(e, ['Escape'])) {
+      // close if esc pressed
+      dispatch('close')
     } else if (e instanceof MouseEvent) {
       // close when bg clicked
       if (e.target instanceof HTMLDivElement) {
