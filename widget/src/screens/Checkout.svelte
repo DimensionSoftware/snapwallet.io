@@ -45,7 +45,7 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Continue</Button>
+    <Button on:click={handleNextStep}>Login <small>or</small> SignUp</Button>
   </ModalFooter>
 </ModalContent>
 

@@ -15,7 +15,7 @@
 </script>
 
 <div class="total-container">
-  ~ {total.toFixed(precision)}
+  {total.toFixed(precision)}
   {ticker}
 </div>
 

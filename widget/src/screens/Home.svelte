@@ -60,6 +60,8 @@
       })
     }
   })
+
+  const srcTicker = $transactionStore.sourceCurrency.ticker
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -71,15 +73,15 @@
       <div
         style="display:flex;flex-direction:column;height:5rem;margin-bottom:1rem"
       >
-        <Label>Currency</Label>
-        <CryptoCard
-          on:click={() => (selectorVisible = true)}
-          crypto={$transactionStore.destinationCurrency}
-        />
+        <Label label="Currency">
+          <CryptoCard
+            on:click={() => (selectorVisible = true)}
+            crypto={$transactionStore.destinationCurrency}
+          />
+        </Label>
       </div>
       <div style="display:flex;flex-direction:column;height:5rem;">
-        <div style="display:flex;justify-content:space-between;cursor:pointer;">
-          <Label>Amount</Label>
+        <div class="dstCurrency">
           <Label>
             <span
               class:bold-pointer={isEnteringSourceAmount}
@@ -90,7 +92,7 @@
                 isEnteringSourceAmount = true
               }}
             >
-              {$transactionStore.sourceCurrency.ticker}
+              {srcTicker}
             </span>
             /
             <span
@@ -105,26 +107,28 @@
             </span>
           </Label>
         </div>
-        <Input
-          on:change={e => {
-            const val = Number(e.detail)
-            isEnteringSourceAmount
-              ? transactionStore.setSourceAmount(val)
-              : transactionStore.setDestinationAmount(val)
-          }}
-          defaultValue={isEnteringSourceAmount
-            ? $transactionStore.sourceAmount
-            : $transactionStore.destinationAmount}
-          type="number"
-          inputmode="number"
-          placeholder="Amount"
-        />
+        <Label label="Amount">
+          <Input
+            on:change={e => {
+              const val = Number(e.detail)
+              isEnteringSourceAmount
+                ? transactionStore.setSourceAmount(val)
+                : transactionStore.setDestinationAmount(val)
+            }}
+            defaultValue={isEnteringSourceAmount
+              ? $transactionStore.sourceAmount
+              : $transactionStore.destinationAmount}
+            type="number"
+            inputmode="number"
+            placeholder="0"
+          />
+        </Label>
       </div>
       <div class="exchange-rate-container">
-        ~ 1 {$transactionStore.destinationCurrency.ticker} @ {selectedSourcePrice.toFixed(
+        1 {$transactionStore.destinationCurrency.ticker} @ {selectedSourcePrice.toFixed(
           2,
         )}
-        {$transactionStore.sourceCurrency.ticker}
+        {srcTicker}
       </div>
       <TotalContainer
         rate={isEnteringSourceAmount ? destinationRate : sourceRate}
@@ -158,10 +162,10 @@
   @import '../styles/_vars.scss';
 
   .cryptocurrencies-container {
+    position: relative;
     height: 100%;
     width: 100%;
     overflow: hidden;
-    overflow-y: scroll;
     padding: 0 0.5rem;
     margin-top: 2rem;
   }
@@ -192,5 +196,13 @@
 
   span {
     width: 35px;
+  }
+
+  .dstCurrency {
+    position: absolute;
+    right: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
   }
 </style>

@@ -12,7 +12,7 @@
   let isActive: boolean = Boolean(defaultValue)
 
   onMount(function () {
-    setTimeout(() => document.querySelector('input[autofocus]')?.focus(), 300)
+    setTimeout(() => document.querySelector('input[autofocus]')?.focus(), 200)
   })
 </script>
 

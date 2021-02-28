@@ -78,7 +78,7 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Continue</Button>
+    <Button on:click={handleNextStep}>Save</Button>
   </ModalFooter>
 </ModalContent>
 

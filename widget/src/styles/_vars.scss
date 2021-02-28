@@ -13,7 +13,7 @@ $textColor: #1e272e;
 $textColor2: lighten($textColor, 10%);
 $textColor3: lighten($textColor, 20%);
 $textColor4: lighten($textColor, 40%);
-$textColorMuted: lighten($textColor3, 20%);
+$textColorMuted: $textColor3;
 $modalBackground: linear-gradient(#f9f9f9, #fefefe);
 $modalContainerBackgroundColor: linear-gradient(
   rgba(0, 0, 0, 0.08),
