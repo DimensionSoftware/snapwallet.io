@@ -49,6 +49,7 @@ export default {
   },
   plugins: [
     replace({
+      preventAssignment: true,
       __ENV: JSON.stringify({
         API_BASE_URL: process.env.API_BASE_URL,
       }),
@@ -58,6 +59,12 @@ export default {
       compilerOptions: {
         // enable run-time checks when not in production
         dev: !production,
+      },
+      onwarn: (warning, handler) => {
+        // don't warn 'A11y: A form label must be associated with a control'
+        if (['a11y-label-has-associated-control', 'a11y-autofocus'].includes(warning.code)) return
+        // let Rollup handle all other warnings normally
+        handler(warning)
       },
     }),
     // we'll extract any component CSS out into
