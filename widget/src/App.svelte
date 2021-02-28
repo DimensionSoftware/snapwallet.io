@@ -68,7 +68,7 @@
     --theme-text-color-3: #{$textColor3};
     --theme-text-color-4: #{$textColor4};
     --theme-text-color-muted: #{$textColorMuted};
-    --theme-modal-background-color: #{$modalBackgroundColor};
+    --theme-modal-background: #{$modalBackground};
     --theme-modal-container-background-color: #{$modalContainerBackgroundColor};
     --theme-shadow-color: #{$commonShadowColor};
     --theme-success-color: #{$success};
@@ -109,7 +109,7 @@
   #modal-body {
     width: 320px;
     height: 540px;
-    background-color: var(--theme-modal-background-color);
+    background: var(--theme-modal-background);
     padding: 1rem;
     border-radius: 1rem;
     overflow: hidden;

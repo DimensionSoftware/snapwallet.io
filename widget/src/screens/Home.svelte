@@ -176,11 +176,15 @@
   }
 
   .muted {
+    cursor: pointer;
     color: var(--theme-text-color-muted);
   }
 
   .bold-pointer {
     font-weight: bold;
-    cursor: pointer;
+  }
+
+  span {
+    width: 35px;
   }
 </style>

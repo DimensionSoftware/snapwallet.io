@@ -6,7 +6,6 @@
 
 <div
   class="modal-content {animation}"
-  out:fly={{ duration: animation ? 250 : 0, x: 10, easing: quintOut }}
 >
   <slot />
 </div>

@@ -16,17 +16,18 @@
 <ModalContent {animation}>
   <ModalBody>
     <ModalHeader />
-    <h3>Enter Your Email</h3>
-    <Input
-      inputmode="email"
-      autocapitalize="none"
-      autocomplete="on"
-      autofocus
-      type="email"
-      placeholder="your@email.address"
-      defaultValue={$userStore.emailAddress}
-      on:change={e => userStore.setEmailAddress(e.detail)}
-    />
+    <Label label="Your Email">
+      <Input
+        inputmode="email"
+        autocapitalize="none"
+        autocomplete="on"
+        autofocus
+        type="email"
+        placeholder="your@email.address"
+        defaultValue={$userStore.emailAddress}
+        on:change={e => userStore.setEmailAddress(e.detail)}
+      />
+    </Label>
   </ModalBody>
   <ModalFooter>
     <Button
@@ -40,6 +41,6 @@
   @import '../styles/_vars.scss';
 
   h3 {
-    margin: 25% 0 0;
+    margin: 25% 0 0.5em;
   }
 </style>

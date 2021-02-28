@@ -1,18 +1,21 @@
 <script lang="ts">
   export let hidden: boolean = false
+  export let label: string = ''
 </script>
 
-<div class="input-label">
-  {#if !hidden}
+{#if !hidden}
+  <label>
+    <span class="input-label">{label}</span>
     <slot />
-  {/if}
-</div>
+  </label>
+{/if}
 
 <style lang="scss">
   @import '../../styles/_vars.scss';
-
   .input-label {
-    color: var(--theme-color);
+    cursor: pointer;
+    color: var(--theme-text-color-3);
+    text-transform: uppercase;
     font-size: 0.7rem;
     font-weight: 600;
   }
