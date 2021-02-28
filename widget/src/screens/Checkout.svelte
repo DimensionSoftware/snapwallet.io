@@ -11,6 +11,14 @@
   import vld8 from 'validator'
 
   let animation = 'left'
+
+  const handleNextStep = () => {
+    // validate
+    if (!vld8.isEmail($userStore.emailAddress))
+      return document.querySelector('input[type="email"]')?.focus()
+    // next
+    push('#/profile')
+  }
 </script>
 
 <ModalContent {animation}>
@@ -30,10 +38,7 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button
-      disabled={!vld8.isEmail($userStore.emailAddress)}
-      on:click={() => push('#/profile')}>Continue</Button
-    >
+    <Button on:click={handleNextStep}>Continue</Button>
   </ModalFooter>
 </ModalContent>
 

@@ -9,6 +9,19 @@
   import { userStore } from '../stores/UserStore'
 
   let animation = 'left'
+
+  const handleNextStep = () => {
+    const { firstName, lastName, birthDate, socialSecurityNumber } = $userStore,
+      focus = (ndx: number) =>
+        document.querySelectorAll('input[type="text"]')[ndx]?.focus()
+
+    // validate inputs
+    if (!firstName || !lastName?.length) return focus(0)
+    if (!birthDate) return focus(1)
+    if (!socialSecurityNumber) return focus(2)
+
+    // push('/overview')
+  }
 </script>
 
 <ModalContent {animation}>
@@ -56,7 +69,7 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button>Continue</Button>
+    <Button on:click={handleNextStep}>Continue</Button>
   </ModalFooter>
 </ModalContent>
 

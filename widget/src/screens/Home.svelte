@@ -18,9 +18,6 @@
   import TotalContainer from '../components/TotalContainer.svelte'
 
   let selectorVisible = false
-  const handleNextStep = () => {
-    push('/checkout')
-  }
 
   const cryptoCurrencies = [
     { name: 'Bitcoin', ticker: 'BTC' },
@@ -39,6 +36,14 @@
   $: sourceRate = $transactionStore.destinationAmount / selectedDestinationPrice
 
   let isEnteringSourceAmount = true
+
+  const handleNextStep = () => {
+    const { sourceAmount } = $transactionStore
+    if (!sourceAmount || isNaN(sourceAmount) || !isValidNumber(destinationRate))
+      // focus input
+      return document.querySelector('input')?.focus()
+    push('/checkout')
+  }
 
   onMount(async () => {
     try {
@@ -122,12 +127,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button
-      disabled={!$transactionStore.sourceAmount ||
-        isNaN($transactionStore.sourceAmount) ||
-        !isValidNumber(destinationRate)}
-      on:click={handleNextStep}>Checkout</Button
-    >
+    <Button on:click={handleNextStep}>Checkout</Button>
   </ModalFooter>
 </ModalContent>
 

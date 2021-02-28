@@ -103,8 +103,8 @@
         text-align: left;
         left: 0;
         right: 0;
-        bottom: 1px;
-        height: 1px;
+        bottom: 0;
+        height: 2px;
         overflow: hidden;
         &:after {
           content: '';
