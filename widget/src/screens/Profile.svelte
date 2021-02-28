@@ -14,59 +14,45 @@
 <ModalContent {animation}>
   <ModalBody>
     <ModalHeader>Personal Details</ModalHeader>
-    <Label label="Name">
+    <Label label="Full Name">
       <Input
         inputmode="text"
         autocapitalize="true"
         autocomplete="on"
         autofocus
         type="text"
-        placeholder="First Name"
-        defaultValue={$userStore.firstName}
+        placeholder="Your Full Name"
+        defaultValue={$userStore.fullName}
         on:change={e => {
-          userStore.setFirstName(e.detail)
+          userStore.setFullName(e.detail)
         }}
       />
     </Label>
-    <Label label="Family Name">
-    <Input
-      inputmode="text"
-      autocapitalize="true"
-      autocomplete="on"
-      type="text"
-      placeholder="Last Name"
-      defaultValue={$userStore.lastName}
-      on:change={e => {
-        userStore.setLastName(e.detail)
-      }}
-    />
-    </Label>
     <Label label="Birthdate">
-    <Input
-      inputmode="text"
-      autocapitalize="true"
-      autocomplete="bday"
-      type="text"
-      placeholder="mm/dd/yyyy"
-      defaultValue={$userStore.birthDate}
-      on:change={e => {
-        userStore.setBirthDate(e.detail)
-      }}
-    />
-
+      <Input
+        inputmode="text"
+        autocapitalize="true"
+        autocomplete="bday"
+        type="text"
+        placeholder="mm/dd/yyyy"
+        defaultValue={$userStore.birthDate}
+        on:change={e => {
+          userStore.setBirthDate(e.detail)
+        }}
+      />
     </Label>
     <Label label="Social Security Number">
-    <Input
-      inputmode="text"
-      autocapitalize="true"
-      autocomplete="on"
-      type="text"
-      placeholder="xxx-xx-xxxx"
-      defaultValue={$userStore.socialSecurityNumber}
-      on:change={e => {
-        userStore.setSocialSecurityNumber(e.detail)
-      }}
-    />
+      <Input
+        inputmode="text"
+        autocapitalize="true"
+        autocomplete="on"
+        type="text"
+        placeholder="xxx-xx-xxxx"
+        defaultValue={$userStore.socialSecurityNumber}
+        on:change={e => {
+          userStore.setSocialSecurityNumber(e.detail)
+        }}
+      />
     </Label>
   </ModalBody>
   <ModalFooter>
