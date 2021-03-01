@@ -1,10 +1,16 @@
-## Quick Start
-
-1. install golang
-2. install hivemind: https://github.com/DarthSim/hivemind
-3. `cd client && npm i && cd ..`
+## Server Quick Start
+1. `cd client`
+2. install golang
+3. install hivemind: https://github.com/DarthSim/hivemind
 4. `cp .env.example .env`
-5. `bin/build && hivemind`
+5. make run
+
+
+# Client Quick start
+1. `cd client`
+2. `cp .env.example .env`
+3. `npm i`
+4. `npm run dev`
 
 ## Run tests
 
@@ -15,7 +21,7 @@ make test
 
 ## Environment
 
-grpcserver & hivemind looks for `.env` and there is an example of this file you can copy `.env.example`
+hivemind looks for `.env` and there is an example of this file you can copy `.env.example`
 
 ## Firestore Emulator
 
