@@ -71,7 +71,8 @@ const (
 
 // Client is the client interface for wyre
 type Client struct {
-	http *resty.Client
+	http   *resty.Client
+	config Config
 }
 
 // Config represents the config needed to start the client
@@ -172,6 +173,23 @@ type PaymentMethod struct {
 	*/
 }
 
+// {"language":"en","compositeType":"","subType":"","errorCode":"accessDenied.invalidSession","exceptionId":"test_TQCJZP","message":"Invalid Session","type":"AccessDeniedException","transient":false}
+
+// APIError represents the error object sent back by the api
+type APIError struct {
+	Language      string `json:"language"`
+	Type          string `json:"type"`
+	CompositeType string `json:"compositeType"`
+	SubType       string `json:"subType"`
+	ErrorCode     string `json:"errorCode"`
+	ExceptionID   string `json:"exceptionId"`
+	Message       string `json:"message"`
+}
+
+func (err APIError) Error() string {
+	return fmt.Sprintf("%#v", err)
+}
+
 // CreatePaymentMethod adds a bank payment method from a plaid token to a wyre account
 // https://docs.sendwyre.com/docs/ach-create-payment-method-processor-token-model
 // POST https://api.sendwyre.com/v2/paymentMethods
@@ -179,10 +197,16 @@ func (c Client) CreatePaymentMethod(req CreatePaymentMethodRequest) (*PaymentMet
 	resp, err := c.http.R().
 		SetBody(req).
 		SetResult(PaymentMethod{}).
+		SetError(APIError{}).
+		SetHeader("Authorization", c.config.WyreSecretKey).
 		EnableTrace().
 		Post("/v2/paymentMethods")
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
 	}
 
 	return resp.Result().(*PaymentMethod), nil
