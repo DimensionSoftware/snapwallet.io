@@ -19,6 +19,7 @@ import { RpcStatus } from '../models/RpcStatus';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { User } from '../models/User';
 import { UserDataResponse } from '../models/UserDataResponse';
+import { WyreAddBankPaymentMethodRequest } from '../models/WyreAddBankPaymentMethodRequest';
 
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
 export class ObservableFluxApi {
@@ -135,7 +136,7 @@ export class ObservableFluxApi {
      * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
      * @param body 
      */
-    public fluxWyreAddBankPaymentMethod(body: any, options?: Configuration): Observable<any> {
+    public fluxWyreAddBankPaymentMethod(body: WyreAddBankPaymentMethodRequest, options?: Configuration): Observable<any> {
     	const requestContextPromise = this.requestFactory.fluxWyreAddBankPaymentMethod(body, options);
 
 		// build promise chain

@@ -17,6 +17,7 @@ import { RpcStatus } from '../models/RpcStatus';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { User } from '../models/User';
 import { UserDataResponse } from '../models/UserDataResponse';
+import { WyreAddBankPaymentMethodRequest } from '../models/WyreAddBankPaymentMethodRequest';
 
 import { ObservableFluxApi } from "./ObservableAPI";
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
@@ -48,10 +49,10 @@ export interface FluxApiFluxUserDataRequest {
 export interface FluxApiFluxWyreAddBankPaymentMethodRequest {
     /**
      * 
-     * @type any
+     * @type WyreAddBankPaymentMethodRequest
      * @memberof FluxApifluxWyreAddBankPaymentMethod
      */
-    body: any
+    body: WyreAddBankPaymentMethodRequest
 }
 
 

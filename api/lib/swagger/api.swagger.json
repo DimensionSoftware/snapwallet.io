@@ -426,6 +426,14 @@
     },
     "WyreAddBankPaymentMethodRequest": {
       "type": "object",
+      "properties": {
+        "accessToken": {
+          "type": "string"
+        },
+        "accountId": {
+          "type": "string"
+        }
+      },
       "description": "request",
       "title": "WyreAddBankPaymentMethodRequest"
     },

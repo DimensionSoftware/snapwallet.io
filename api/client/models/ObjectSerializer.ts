@@ -13,6 +13,7 @@ export * from './RpcStatus';
 export * from './ThirdPartyUserAccount';
 export * from './User';
 export * from './UserDataResponse';
+export * from './WyreAddBankPaymentMethodRequest';
 
 import { Address } from './Address';
 import { KYCProfile } from './KYCProfile';
@@ -29,6 +30,7 @@ import { RpcStatus } from './RpcStatus';
 import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
 import { User } from './User';
 import { UserDataResponse } from './UserDataResponse';
+import { WyreAddBankPaymentMethodRequest } from './WyreAddBankPaymentMethodRequest';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -67,6 +69,7 @@ let typeMap: {[index: string]: any} = {
     "ThirdPartyUserAccount": ThirdPartyUserAccount,
     "User": User,
     "UserDataResponse": UserDataResponse,
+    "WyreAddBankPaymentMethodRequest": WyreAddBankPaymentMethodRequest,
 }
 
 export class ObjectSerializer {

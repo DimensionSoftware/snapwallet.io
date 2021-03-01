@@ -12,6 +12,7 @@ import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyRe
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { RpcStatus } from '../models/RpcStatus';
 import { UserDataResponse } from '../models/UserDataResponse';
+import { WyreAddBankPaymentMethodRequest } from '../models/WyreAddBankPaymentMethodRequest';
 
 /**
  * no description
@@ -172,7 +173,7 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
      * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
      * @param body 
      */
-    public async fluxWyreAddBankPaymentMethod(body: any, options?: Configuration): Promise<RequestContext> {
+    public async fluxWyreAddBankPaymentMethod(body: WyreAddBankPaymentMethodRequest, options?: Configuration): Promise<RequestContext> {
 		let config = options || this.configuration;
 		
         // verify required parameter 'body' is not null or undefined
@@ -201,7 +202,7 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         ]);
         requestContext.setHeaderParam("Content-Type", contentType);
         const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(body, "any", ""),
+            ObjectSerializer.serialize(body, "WyreAddBankPaymentMethodRequest", ""),
             contentType
         );
         requestContext.setBody(serializedBody);

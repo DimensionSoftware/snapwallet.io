@@ -144,7 +144,8 @@ message OneTimePasscodeVerifyResponse {
 //
 // request
 message WyreAddBankPaymentMethodRequest {
-
+  string access_token = 1;
+  string account_id = 2;
 }
 
 // WyreAddBankPaymentMethodResponse
