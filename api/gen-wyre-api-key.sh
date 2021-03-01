@@ -6,4 +6,4 @@ echo "API KEY: $API_KEY"
 curl -XPOST \
   -H "Content-Type: application/json" \
   -d "{\"secretKey\": \"$API_KEY\"}" \
-  https://api.testwyre.com/v2/sessions/auth/key
+  "https://api.testwyre.com/v2/sessions/auth/key?secretKey=$WYRE_SECRET_KEY"

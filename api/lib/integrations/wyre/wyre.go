@@ -14,6 +14,8 @@ const wyreTestAPIEndpoint = "https://api.testwyre.com"
 
 const wyreAPIKeyEnvVarName = "WYRE_API_KEY"
 const wyreSecretKeyEnvVarName = "WYRE_SECRET_KEY"
+const wyreAccountIDEnvVarName = "WYRE_ACCOUNT_ID"
+const wyreTokenEnvVarName = "WYRE_TOKEN"
 
 // ProfileField represents PII data which is used during the create account process
 type ProfileField struct {
@@ -80,6 +82,8 @@ type Config struct {
 	EnableProduction bool
 	WyreAPIKey       string
 	WyreSecretKey    string
+	WyreAccountID    string
+	WyreToken        string
 }
 
 // ProvideWireConfig provides the config necessary to connect to the wyre api
@@ -93,11 +97,21 @@ func ProvideWireConfig() (*Config, error) {
 	if wyreSecretKeyEnvVarName == "" {
 		return nil, fmt.Errorf("you must set %s", wyreAPIKeyEnvVarName)
 	}
+	wyreAccountID := os.Getenv(wyreAccountIDEnvVarName)
+	if wyreSecretKeyEnvVarName == "" {
+		return nil, fmt.Errorf("you must set %s", wyreAccountIDEnvVarName)
+	}
+	wyreToken := os.Getenv(wyreTokenEnvVarName)
+	if wyreSecretKeyEnvVarName == "" {
+		return nil, fmt.Errorf("you must set %s", wyreTokenEnvVarName)
+	}
 
 	return &Config{
 		EnableProduction: false,
 		WyreAPIKey:       wyreAPIKey,
 		WyreSecretKey:    wyreSecretKey,
+		WyreAccountID:    wyreAccountID,
+		WyreToken:        wyreToken,
 	}, nil
 }
 
@@ -114,7 +128,8 @@ func NewClient(config *Config) Client {
 	}
 
 	return Client{
-		http: resty,
+		http:   resty,
+		config: *config,
 	}
 }
 
@@ -195,15 +210,16 @@ func (err APIError) Error() string {
 // POST https://api.sendwyre.com/v2/paymentMethods
 func (c Client) CreatePaymentMethod(req CreatePaymentMethodRequest) (*PaymentMethod, error) {
 	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+c.config.WyreToken).
 		SetBody(req).
 		SetResult(PaymentMethod{}).
 		SetError(APIError{}).
-		SetHeader("Authorization", c.config.WyreSecretKey).
 		EnableTrace().
 		Post("/v2/paymentMethods")
 	if err != nil {
 		return nil, err
 	}
+	log.Printf("%#v", resp.Request)
 
 	if resp.IsError() {
 		return nil, resp.Error().(*APIError)
