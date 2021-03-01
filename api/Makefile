@@ -1,10 +1,7 @@
 GO_LIB_FILES := $(shell find lib -type f -name "*.go" | sort) $(shell find cmd -type f -name "*.go" | sort) go.mod go.sum
 
-run: build_servers
+run: grpcserver  grpcgateway
 	hivemind
-
-build_servers: grpcserver  grpcgateway
-
 
 test:
 	go test -v ./...
