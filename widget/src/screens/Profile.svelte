@@ -45,7 +45,7 @@
         autofocus
         type="text"
         placeholder="Your Full Name"
-        defaultValue={defaultName}
+        defaultValue={defaultName.trim()}
         on:change={e => {
           userStore.setFullName(e.detail)
         }}
