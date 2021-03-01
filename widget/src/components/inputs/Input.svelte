@@ -45,6 +45,9 @@
     padding-bottom: 0;
     margin-bottom: 0.75rem;
     position: relative;
+    input[type="number"] {
+      padding-right: 0.75em;
+    }
     input {
       position: relative;
       z-index: 2;
@@ -59,7 +62,7 @@
       backface-visibility: hidden;
       transform: translateZ(0);
       border-radius: 3px;
-      text-indent: 0.75em;
+      text-indent: 10px;
       text-transform: lowercase;
       overflow: hidden;
       cursor: pointer;
@@ -69,7 +72,7 @@
       padding-left: 0;
       padding-right: 0;
       vertical-align: middle;
-      font-size: 1.1em;
+      font-size: 1.8em;
       color: var(--theme-text-color);
       border: none;
       border-bottom: 1px solid lighten($themeColor, 35%);
@@ -85,19 +88,19 @@
       ~ .bg {
         position: absolute;
         content: '';
-        top: 1px;
-        bottom: -2px;
-        left: -3px;
-        right: -3px;
+        top: -1px;
+        bottom: -1px;
+        left: -1px;
+        right: -1px;
         border-radius: 4px;
-        background: linear-gradient(transparent, lighten($themeColor, 61%));
-        opacity: 0.5;
-        transform: scale(0);
+        background: linear-gradient(transparent, var(--theme-success-color));
+        opacity: 0;
+        transform: opacity(0), scale(0);
         transition: opacity 0.3s ease-out 0.2s, transform 0.4s ease-in 0.1s;
       }
       &:valid ~ .bg {
         opacity: 1;
-        transform: scale(1);
+        transform: opacity(1), scale(1);
         transition: none;
       }
       &:hover,
@@ -142,6 +145,10 @@
           transform: translateX(-500px);
           transition: transform 0.35s $easeInExpo 0.15s;
         }
+      }
+      &:focus ~ .bg {
+        animation: focus 0.225s;
+        animation-timing-function: ease-in;
       }
       &:focus + .fx {
         &:before {

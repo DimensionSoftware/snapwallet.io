@@ -73,7 +73,7 @@
       <div
         style="display:flex;flex-direction:column;height:5rem;margin-bottom:1rem"
       >
-        <Label label="Currency">
+        <Label>
           <CryptoCard
             on:click={() => (selectorVisible = true)}
             crypto={$transactionStore.destinationCurrency}

@@ -14,7 +14,7 @@ $textColor2: lighten($textColor, 10%);
 $textColor3: lighten($textColor, 20%);
 $textColor4: lighten($textColor, 40%);
 $textColorMuted: $textColor3;
-$modalBackground: linear-gradient(#f9f9f9, #fefefe);
+$modalBackground: linear-gradient(#f8f8f8, #fff);
 $modalContainerBackgroundColor: linear-gradient(
   rgba(0, 0, 0, 0.08),
   rgba(0, 0, 0, 0.1)
@@ -23,7 +23,7 @@ $modalContainerBackgroundColor: linear-gradient(
 $shadowColor: rgba(0, 0, 0, 0.123);
 $buttonShadowColor: rgba($themeColor, 0.2);
 
-$success: #0be881;
+$success: rgba(41, 241, 195, 1);
 $error: #ff3f34;
 $warning: #ffd32a;
 $info: #0fbcf9;
