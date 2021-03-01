@@ -42,6 +42,9 @@ func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req i
 	accessToken := authorization[len(expectedPrefix):]
 
 	claims, err := verifier.ParseAndVerify(accessToken)
+	if err != nil {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
 	log.Printf("claims --> %+v", claims)
 
 	log.Printf("authentication success ✅")
