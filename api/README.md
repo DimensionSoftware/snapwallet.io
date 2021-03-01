@@ -44,8 +44,13 @@ firebase emulators:start
 npm install @openapitools/openapi-generator-cli -g
 ```
 
-### Generate client
+### Generate client & protocol
 ```bash
-openapi-generator-cli generate -g typescript -i lib/swagger/swagger.json -o client
+make proto
 ```
 
+### Generate dependency injections
+generates wire_gen.go from the spec in wire.go
+```bash
+make wire
+```
