@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"log"
 	"net/http"
 	"os"
 	"strings"
@@ -68,7 +69,7 @@ func apiPort() string {
 	if apiPort == "" {
 		apiPort = "8081"
 	}
-	println("> listening on port " + apiPort)
+	log.Println("> listening on port " + apiPort)
 	return ":" + apiPort
 }
 

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/khoerling/flux/api/lib/wire"
 )
 
@@ -14,6 +16,6 @@ func main() {
 		panic(err)
 	}
 
-	println("> listening on port " + defaultAddress[1:])
+	log.Println("> listening on port " + defaultAddress[1:])
 	s.Serve(defaultAddress)
 }
