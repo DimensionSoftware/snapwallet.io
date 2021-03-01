@@ -20,6 +20,11 @@
       "post": {
         "security": [{"Bearer": []}]
       }
+    },
+    "/plaid/create-link-token": {
+      "post": {
+        "security": [{"Bearer": []}]
+      }
     }
   }
 }

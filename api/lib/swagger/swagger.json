@@ -167,6 +167,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
