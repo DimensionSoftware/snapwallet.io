@@ -37,20 +37,23 @@ firebase emulators:start
 ```
 
 
-## Swagger Client Codegen
+## Codegen
 
-### Mac setup
+### dependencies (incomplete atm)
+swagger client codegen Mac setup
 ```bash
 npm install @openapitools/openapi-generator-cli -g
 ```
 
 ### Generate client & protocol
+this is required whenever api.proto is updated and/or lib/swagger/merge.json
 ```bash
 make proto
 ```
 
 ### Generate dependency injections
 generates wire_gen.go from the spec in wire.go
+this is required when wiring up new dependencies into our server container
 ```bash
 make wire
 ```
