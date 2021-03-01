@@ -1,12 +1,13 @@
 package server
 
 import (
-	"fmt"
 	"strings"
 
 	"github.com/badoux/checkmail"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/nyaruka/phonenumbers"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // ValidateAndNormalizeLogin returns a login kind, normalized version of the login
@@ -25,10 +26,10 @@ func ValidateAndNormalizeLogin(login string) (onetimepasscode.LoginKind, string,
 			if err == nil {
 				normalizedEmailOrPhone = strings.TrimSpace(login)
 			} else {
-				return onetimepasscode.LoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
+				return onetimepasscode.LoginKindInvalid, "", status.Errorf(codes.InvalidArgument, "a valid phone number or email is required")
 			}
 		} else {
-			return onetimepasscode.LoginKindInvalid, "", fmt.Errorf("a valid phone number or email is required")
+			return onetimepasscode.LoginKindInvalid, "", status.Errorf(codes.InvalidArgument, "a valid phone number or email is required")
 		}
 	}
 
