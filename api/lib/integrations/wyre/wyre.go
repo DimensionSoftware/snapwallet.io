@@ -1,8 +1,18 @@
 package wyre
 
 import (
+	"fmt"
+	"os"
+
 	"github.com/go-resty/resty/v2"
 )
+
+// https://docs.sendwyre.com/docs/productiontest-environments
+const wyreProductionAPIEndpoint = "https://api.sendwyre.com"
+const wyreTestAPIEndpoint = "https://api.testwyre.com"
+
+const wyreAPIKeyEnvVarName = "WYRE_API_KEY"
+const wyreSecretKeyEnvVarName = "WYRE_SECRET_KEY"
 
 // ProfileField represents PII data which is used during the create account process
 type ProfileField struct {
@@ -63,10 +73,44 @@ type Client struct {
 	http *resty.Client
 }
 
+// Config represents the config needed to start the client
+type Config struct {
+	EnableProduction bool
+	WyreAPIKey       string
+	WyreSecretKey    string
+}
+
+// ProvideWireConfig provides the config necessary to connect to the wyre api
+func ProvideWireConfig() (*Config, error) {
+
+	wyreAPIKey := os.Getenv(wyreAPIKeyEnvVarName)
+	if wyreAPIKey == "" {
+		return nil, fmt.Errorf("you must set %s", wyreAPIKeyEnvVarName)
+	}
+	wyreSecretKey := os.Getenv(wyreSecretKeyEnvVarName)
+	if wyreSecretKeyEnvVarName == "" {
+		return nil, fmt.Errorf("you must set %s", wyreAPIKeyEnvVarName)
+	}
+
+	return &Config{
+		EnableProduction: false,
+		WyreAPIKey:       wyreAPIKey,
+		WyreSecretKey:    wyreSecretKey,
+	}, nil
+}
+
 // NewClient instantiates a new Client
-func NewClient() Client {
+func NewClient(config *Config) Client {
+	resty := resty.New()
+
+	if config.EnableProduction {
+		resty.SetHostURL(wyreProductionAPIEndpoint)
+	} else {
+		resty.SetHostURL(wyreTestAPIEndpoint)
+	}
+
 	return Client{
-		http: resty.New(),
+		http: resty,
 	}
 }
 
@@ -78,7 +122,7 @@ func (c Client) CreateAccount(req CreateAccountRequest) (*Account, error) {
 		SetBody(req).
 		SetResult(Account{}).
 		EnableTrace().
-		Post("https://api.sendwyre.com/v3/accounts")
+		Post("/v3/accounts")
 	if err != nil {
 		return nil, err
 	}
@@ -133,7 +177,7 @@ func (c Client) CreatePaymentMethod(req CreatePaymentMethodRequest) (*PaymentMet
 		SetBody(req).
 		SetResult(PaymentMethod{}).
 		EnableTrace().
-		Post("https://api.sendwyre.com/v2/paymentMethods")
+		Post("/v2/paymentMethods")
 	if err != nil {
 		return nil, err
 	}
@@ -285,7 +329,7 @@ func (c Client) PricedExchangeRates() (*PricingRates, error) {
 	resp, err := c.http.R().
 		SetResult(PricingRates{}).
 		EnableTrace().
-		Get("https://api.sendwyre.com/v2/rates?as=priced")
+		Get("/v2/rates?as=priced")
 	if err != nil {
 		return nil, err
 	}

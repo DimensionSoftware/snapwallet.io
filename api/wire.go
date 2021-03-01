@@ -23,6 +23,7 @@ func InitializeServer() (server.Server, error) {
 		firestore.ProvideFirestoreProjectID,
 		firestore.ProvideFirestore,
 		wyre.NewClient,
+		wyre.ProvideWireConfig,
 		plaid.ProvideClientOptions,
 		vendorplaid.NewClient,
 		auth.ProvideJwtPrivateKey,

@@ -33,7 +33,11 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	wyreClient := wyre.NewClient()
+	config, err := wyre.ProvideWireConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	wyreClient := wyre.NewClient(config)
 	clientOptions, err := plaid.ProvideClientOptions()
 	if err != nil {
 		return server.Server{}, err
