@@ -1,16 +1,14 @@
 ## Server Quick Start
-1. `cd client`
+1. `cd api`
 2. install golang
 3. install hivemind: https://github.com/DarthSim/hivemind
 4. `cp .env.example .env`
 5. make run
 
 
-# Client Quick start
-1. `cd client`
-2. `cp .env.example .env`
-3. `npm i`
-4. `npm run dev`
+# API Client Quick start (must be done before running the widget)
+1. `cd api/client`
+2. `npm i`
 
 ## Run tests
 
