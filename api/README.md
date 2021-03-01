@@ -6,7 +6,7 @@
 5. make run
 
 
-# API Client Quick start (must be done before running the widget)
+## API Client Quick start (must be done before running the widget)
 1. `cd api/client`
 2. `npm i`
 
