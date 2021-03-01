@@ -9,3 +9,12 @@
     transform: scale(1);
   }
 }
+
+@keyframes infocus {
+  0% {
+    transform: scale(.975);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

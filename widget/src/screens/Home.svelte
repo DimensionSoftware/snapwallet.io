@@ -107,7 +107,7 @@
             </span>
           </Label>
         </div>
-        <Label label="Amount">
+        <Label label="USD">
           <Input
             on:change={e => {
               const val = Number(e.detail)
@@ -145,15 +145,17 @@
 <PopupSelector
   on:close={() => (selectorVisible = false)}
   visible={selectorVisible}
-  headerTitle="Select Cryptocurrency"
+  headerTitle="Select Asset"
 >
   <div class="cryptocurrencies-container">
     {#each cryptoCurrencies as cryptoCurrency (cryptoCurrency.ticker)}
       <div style="margin: 0.5rem 0">
-        <CryptoCard
-          on:click={() => (selectorVisible = false)}
-          crypto={cryptoCurrency}
-        />
+        <Label>
+          <CryptoCard
+            on:click={() => (selectorVisible = false)}
+            crypto={cryptoCurrency}
+          />
+        </Label>
       </div>
     {/each}
   </div>

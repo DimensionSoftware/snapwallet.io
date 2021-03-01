@@ -30,7 +30,9 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton />
+    <ModalHeader hideCloseButton>
+      Welcome
+    </ModalHeader>
     <Label label="Your Email">
       <Input
         inputmode="email"
