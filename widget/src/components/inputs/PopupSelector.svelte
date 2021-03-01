@@ -1,7 +1,5 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
-  import Icon from 'svelte-awesome'
-  import { faTimes } from '@fortawesome/free-solid-svg-icons'
   import { onKeysPressed } from '../../util'
 
   const dispatch = createEventDispatcher()
@@ -28,10 +26,14 @@
 
 <div class="popup-selector" class:visible>
   <div class="popup-selector-header">
-    <div class="placeholder-box" />
     <div class="popup-title">{headerTitle}</div>
     <div on:click={() => dispatch('close')} class="close-icon">
-      <Icon data={faTimes} />
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+        ><path fill="none" d="M0 0h24v24H0z" /><path
+          fill="currentColor"
+          d="M19.03 6.03l-1.06-1.06L12 10.94 6.03 4.97 4.97 6.03 10.94 12l-5.97 5.97 1.06 1.06L12 13.06l5.97 5.97 1.06-1.06L13.06 12l5.97-5.97z"
+        /></svg
+      >
     </div>
   </div>
   <slot />
@@ -44,7 +46,7 @@
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    height: 95%;
+    height: 97%;
     width: 100%;
     border-radius: 1rem;
     z-index: 1000;
@@ -70,18 +72,15 @@
     align-items: center;
   }
 
-  .placeholder-box {
-    width: 40px;
-    height: 40px;
-  }
-
   .popup-title {
-    font-weight: bold;
+    font-weight: 400;
+    font-size: 1.25em;
+    margin-left: .5rem;
   }
 
   .close-icon {
-    min-width: 40px;
-    min-height: 40px;
+    width: 25px;
+    height: 25px;
     display: flex;
     justify-content: center;
     align-items: center;

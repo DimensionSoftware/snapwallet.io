@@ -35,7 +35,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton>Personal Details</ModalHeader>
+    <ModalHeader hideCloseButton>Tell Us About You</ModalHeader>
     <Label label="Full Name">
       <Input
         inputmode="text"
@@ -45,7 +45,7 @@
         autofocus
         type="text"
         placeholder="Your Full Name"
-        defaultValue={defaultName}
+        defaultValue={defaultName.trim()}
         on:change={e => {
           userStore.setFullName(e.detail)
         }}

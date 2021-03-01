@@ -27,7 +27,7 @@
   .intent-selector-container {
     display: flex;
     width: 100%;
-    height: 40px;
+    height: 55px;
     align-items: center;
     justify-content: center;
   }
@@ -37,6 +37,10 @@
     height: 100%;
     display: flex;
     cursor: pointer;
+    border-radius: 1.5rem;
+    padding: 5px;
+    background: white;
+    box-shadow: 0 0 2px -1px var(--theme-text-color);
   }
 
   .sell-toggle,
@@ -52,8 +56,8 @@
     background-color: rgba($themeColor, 0.1);
     border-bottom: 1px solid rgba($themeColor, 0.1);
     font-weight: 500;
-    border-top-left-radius: 0.5rem;
-    border-bottom-left-radius: 0.5rem;
+    border-top-left-radius: 1.5rem;
+    border-bottom-left-radius: 1.5rem;
     opacity: 1;
     transition: border-bottom 0.2s ease-out 0.1s;
     &:hover {
@@ -74,13 +78,13 @@
     }
     &.sell-toggle {
       border-radius: 0;
-      border-top-right-radius: 0.5rem;
-      border-bottom-right-radius: 0.5rem;
+      border-top-right-radius: 1.5rem;
+      border-bottom-right-radius: 1.5rem;
       &:before {
         // background fx
         border-radius: 0;
-        border-top-right-radius: 0.5rem;
-        border-bottom-right-radius: 0.5rem;
+        border-top-right-radius: 1.5rem;
+        border-bottom-right-radius: 1.5rem;
       }
     }
     &:before {
@@ -94,8 +98,8 @@
       background-color: var(--theme-color);
       transform: scale(0) translateY(90%);
       transition: transform 0.1s var(--theme-ease-in-expo);
-      border-top-left-radius: 0.5rem;
-      border-bottom-left-radius: 0.5rem;
+      border-top-left-radius: 1.5rem;
+      border-bottom-left-radius: 1.5rem;
     }
   }
 </style>

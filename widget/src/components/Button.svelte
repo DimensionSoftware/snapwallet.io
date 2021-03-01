@@ -61,10 +61,10 @@
         0 6px 6px var(--theme-button-shadow-color);
       text-shadow: 0 1px 0 --var(--theme-text-color);
       transition: none;
-      animation: focus 0.15s;
-      animation-timing-function: ease-out;
+      animation: infocus 0.35s;
+      animation-timing-function: $easeOutBack;
       &:before {
-        opacity: 0.1;
+        opacity: 0.08;
         transition: none;
       }
     }

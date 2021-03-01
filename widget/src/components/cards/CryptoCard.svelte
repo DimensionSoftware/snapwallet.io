@@ -24,7 +24,9 @@
   }}
   class="crypto-card"
 >
-  <svelte:component this={tickerIcons[crypto.ticker]} />
+  <div class="crypto-icon">
+    <svelte:component this={tickerIcons[crypto.ticker]} />
+  </div>
   <div class="crypto-name">{crypto.name}</div>
   <div class="crypto-arrow"><FaIcon data={faChevronRight} /></div>
 </div>
@@ -39,10 +41,15 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-    transition: all 0.1s ease-in-out;
-    &:hover {
-      transform: scale(1.01);
+    &:hover .crypto-icon {
+      transform: scale(1.11);
+      transition: none;
     }
+  }
+
+  .crypto-icon {
+    height: 33px;
+    transition: 0.15s $easeOutBack 0.05s;
   }
 
   .crypto-name {
@@ -51,6 +58,8 @@
     align-items: center;
     height: 100%;
     margin-left: 1rem;
+    font-size: 1.5em;
+    color: var(--theme-text-color);
   }
 
   .crypto-arrow {
