@@ -2,6 +2,7 @@ package wyre
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/go-resty/resty/v2"
@@ -104,8 +105,10 @@ func NewClient(config *Config) Client {
 	resty := resty.New()
 
 	if config.EnableProduction {
+		log.Println("🚨 Production Wyre API is activated")
 		resty.SetHostURL(wyreProductionAPIEndpoint)
 	} else {
+		log.Println("🧪 Test Wyre API is activated")
 		resty.SetHostURL(wyreTestAPIEndpoint)
 	}
 
