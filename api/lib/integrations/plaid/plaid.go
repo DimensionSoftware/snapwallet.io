@@ -2,6 +2,7 @@ package plaid
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/plaid/plaid-go/plaid"
@@ -26,6 +27,8 @@ func ProvideClientOptions() (plaid.ClientOptions, error) {
 	if plaidClientSecret == "" {
 		return plaid.ClientOptions{}, fmt.Errorf("you must set %s", plaidClientSecretEnvVarName)
 	}
+
+	log.Println("🧪 Sandbox Plaid API is activated")
 
 	return plaid.ClientOptions{
 		ClientID:    plaidClientID,

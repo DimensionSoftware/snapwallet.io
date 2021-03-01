@@ -3,6 +3,7 @@ package firestore
 import (
 	"context"
 	"fmt"
+	"log"
 	"os"
 
 	"cloud.google.com/go/firestore"
@@ -29,6 +30,12 @@ func ProvideFirestore(projectID FireProjectID) (*firestore.Client, error) {
 		return nil, err
 	}
 
+	if os.Getenv("FIRESTORE_EMULATOR_HOST") == "" {
+		log.Println("🚨 Production Firestore Host (cloud) is activated")
+
+	} else {
+		log.Println("🧪 Emulator Firestore Host is activated")
+	}
 	return client, nil
 }
 

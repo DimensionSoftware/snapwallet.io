@@ -2,6 +2,7 @@ package sendgrid
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/sendgrid/sendgrid-go"
@@ -23,5 +24,8 @@ func ProvideSendClientAPIKey() (SendAPIKey, error) {
 	if sendgridKey == "" {
 		return "", fmt.Errorf("you must set %s", sendgridKeyEnvVarName)
 	}
+
+	log.Println("🚨 Production SendGrid API is activated")
+
 	return SendAPIKey(sendgridKey), nil
 }
