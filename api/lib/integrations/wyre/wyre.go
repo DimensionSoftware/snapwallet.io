@@ -82,8 +82,6 @@ type Config struct {
 	EnableProduction bool
 	WyreAPIKey       string
 	WyreSecretKey    string
-	WyreAccountID    string
-	WyreToken        string
 }
 
 // ProvideWireConfig provides the config necessary to connect to the wyre api
@@ -97,21 +95,11 @@ func ProvideWireConfig() (*Config, error) {
 	if wyreSecretKeyEnvVarName == "" {
 		return nil, fmt.Errorf("you must set %s", wyreAPIKeyEnvVarName)
 	}
-	wyreAccountID := os.Getenv(wyreAccountIDEnvVarName)
-	if wyreSecretKeyEnvVarName == "" {
-		return nil, fmt.Errorf("you must set %s", wyreAccountIDEnvVarName)
-	}
-	wyreToken := os.Getenv(wyreTokenEnvVarName)
-	if wyreSecretKeyEnvVarName == "" {
-		return nil, fmt.Errorf("you must set %s", wyreTokenEnvVarName)
-	}
 
 	return &Config{
 		EnableProduction: false,
 		WyreAPIKey:       wyreAPIKey,
 		WyreSecretKey:    wyreSecretKey,
-		WyreAccountID:    wyreAccountID,
-		WyreToken:        wyreToken,
 	}, nil
 }
 
@@ -210,7 +198,7 @@ func (err APIError) Error() string {
 // POST https://api.sendwyre.com/v2/paymentMethods
 func (c Client) CreatePaymentMethod(req CreatePaymentMethodRequest) (*PaymentMethod, error) {
 	resp, err := c.http.R().
-		SetHeader("Authorization", "Bearer "+c.config.WyreToken).
+		SetHeader("Authorization", "Bearer "+c.config.WyreSecretKey).
 		SetBody(req).
 		SetResult(PaymentMethod{}).
 		SetError(APIError{}).
@@ -219,8 +207,6 @@ func (c Client) CreatePaymentMethod(req CreatePaymentMethodRequest) (*PaymentMet
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("%#v", c.config)
-	log.Printf("%#v", resp.Request)
 
 	if resp.IsError() {
 		return nil, resp.Error().(*APIError)
