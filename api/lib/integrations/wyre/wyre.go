@@ -219,6 +219,7 @@ func (c Client) CreatePaymentMethod(req CreatePaymentMethodRequest) (*PaymentMet
 	if err != nil {
 		return nil, err
 	}
+	log.Printf("%#v", c.config)
 	log.Printf("%#v", resp.Request)
 
 	if resp.IsError() {
