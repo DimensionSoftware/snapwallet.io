@@ -1,8 +1,8 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "api.proto",
-    "version": "version not set"
+    "title": "Flux API",
+    "version": "evergreen"
   },
   "tags": [
     {

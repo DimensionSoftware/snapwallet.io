@@ -1,4 +1,8 @@
 {
+  "info": {
+    "title": "Flux API",
+    "version": "evergreen"
+  },
   "securityDefinitions": {
     "Bearer": {
       "type": "apiKey",
