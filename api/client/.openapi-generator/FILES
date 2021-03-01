@@ -20,6 +20,7 @@ models/OneTimePasscodeVerifyResponse.ts
 models/Organization.ts
 models/OrganizationApplication.ts
 models/PaymentMethod.ts
+models/PlaidCreateLinkTokenResponse.ts
 models/PricingDataResponse.ts
 models/PricingRate.ts
 models/ProtobufAny.ts

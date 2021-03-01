@@ -12,6 +12,7 @@ import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyRe
 import { Organization } from '../models/Organization';
 import { OrganizationApplication } from '../models/OrganizationApplication';
 import { PaymentMethod } from '../models/PaymentMethod';
+import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
 import { ProtobufAny } from '../models/ProtobufAny';
@@ -82,6 +83,29 @@ export class ObservableFluxApi {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
 	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxOneTimePasscodeVerify(rsp)));
+	    	}));
+    }
+	
+    /**
+     * PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
+     * @param body 
+     */
+    public fluxPlaidCreateLinkToken(body: any, options?: Configuration): Observable<PlaidCreateLinkTokenResponse> {
+    	const requestContextPromise = this.requestFactory.fluxPlaidCreateLinkToken(body, options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxPlaidCreateLinkToken(rsp)));
 	    	}));
     }
 	

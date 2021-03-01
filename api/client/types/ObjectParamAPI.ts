@@ -10,6 +10,7 @@ import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyRe
 import { Organization } from '../models/Organization';
 import { OrganizationApplication } from '../models/OrganizationApplication';
 import { PaymentMethod } from '../models/PaymentMethod';
+import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
 import { ProtobufAny } from '../models/ProtobufAny';
@@ -38,6 +39,15 @@ export interface FluxApiFluxOneTimePasscodeVerifyRequest {
      * @memberof FluxApifluxOneTimePasscodeVerify
      */
     body: OneTimePasscodeVerifyRequest
+}
+
+export interface FluxApiFluxPlaidCreateLinkTokenRequest {
+    /**
+     * 
+     * @type any
+     * @memberof FluxApifluxPlaidCreateLinkToken
+     */
+    body: any
 }
 
 export interface FluxApiFluxPricingDataRequest {
@@ -79,6 +89,14 @@ export class ObjectFluxApi {
      */
     public fluxOneTimePasscodeVerify(param: FluxApiFluxOneTimePasscodeVerifyRequest, options?: Configuration): Promise<OneTimePasscodeVerifyResponse> {
         return this.api.fluxOneTimePasscodeVerify(param.body,  options).toPromise();
+    }
+	
+    /**
+     * PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
+     * @param param the request object
+     */
+    public fluxPlaidCreateLinkToken(param: FluxApiFluxPlaidCreateLinkTokenRequest, options?: Configuration): Promise<PlaidCreateLinkTokenResponse> {
+        return this.api.fluxPlaidCreateLinkToken(param.body,  options).toPromise();
     }
 	
     /**

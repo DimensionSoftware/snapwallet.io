@@ -6,6 +6,7 @@ export * from './OneTimePasscodeVerifyResponse';
 export * from './Organization';
 export * from './OrganizationApplication';
 export * from './PaymentMethod';
+export * from './PlaidCreateLinkTokenResponse';
 export * from './PricingDataResponse';
 export * from './PricingRate';
 export * from './ProtobufAny';
@@ -23,6 +24,7 @@ import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
 import { Organization } from './Organization';
 import { OrganizationApplication } from './OrganizationApplication';
 import { PaymentMethod } from './PaymentMethod';
+import { PlaidCreateLinkTokenResponse } from './PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from './PricingDataResponse';
 import { PricingRate } from './PricingRate';
 import { ProtobufAny } from './ProtobufAny';
@@ -62,6 +64,7 @@ let typeMap: {[index: string]: any} = {
     "Organization": Organization,
     "OrganizationApplication": OrganizationApplication,
     "PaymentMethod": PaymentMethod,
+    "PlaidCreateLinkTokenResponse": PlaidCreateLinkTokenResponse,
     "PricingDataResponse": PricingDataResponse,
     "PricingRate": PricingRate,
     "ProtobufAny": ProtobufAny,

@@ -153,6 +153,18 @@ message WyreAddBankPaymentMethodRequest {
 // response
 message WyreAddBankPaymentMethodResponse {}
 
+// PlaidCreateLinkTokenRequest
+//
+// request can be empty since the link token is correlated with the Bearer token passed
+message PlaidCreateLinkTokenRequest {}
+
+// PlaidCreateLinkTokenResponse
+//
+// response
+message PlaidCreateLinkTokenResponse {
+  string link_token = 1;
+}
+
 service Flux {
   // Get user data
   //
@@ -199,6 +211,14 @@ service Flux {
   rpc WyreAddBankPaymentMethod(WyreAddBankPaymentMethodRequest) returns (WyreAddBankPaymentMethodResponse) {
     option (google.api.http) = {
       post: "/wyre/add-bank-payment-method"
+      body: "*"
+    };
+  }
+
+  // PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
+  rpc PlaidCreateLinkToken(PlaidCreateLinkTokenRequest) returns (PlaidCreateLinkTokenResponse) {
+    option (google.api.http) = {
+      post: "/plaid/create-link-token"
       body: "*"
     };
   }

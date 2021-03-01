@@ -137,6 +137,39 @@
         ]
       }
     },
+    "/plaid/create-link-token": {
+      "post": {
+        "summary": "PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/",
+        "operationId": "Flux_PlaidCreateLinkToken",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PlaidCreateLinkTokenResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PlaidCreateLinkTokenRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/wyre/add-bank-payment-method": {
       "post": {
         "summary": "Post chosen bank info from plaid in order to create a new ACH pyment method in wyre",
@@ -339,6 +372,21 @@
       },
       "description": "A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)",
       "title": "PaymentMethod"
+    },
+    "PlaidCreateLinkTokenRequest": {
+      "type": "object",
+      "description": "request can be empty since the link token is correlated with the Bearer token passed",
+      "title": "PlaidCreateLinkTokenRequest"
+    },
+    "PlaidCreateLinkTokenResponse": {
+      "type": "object",
+      "properties": {
+        "linkToken": {
+          "type": "string"
+        }
+      },
+      "description": "response",
+      "title": "PlaidCreateLinkTokenResponse"
     },
     "PricingDataResponse": {
       "type": "object",
