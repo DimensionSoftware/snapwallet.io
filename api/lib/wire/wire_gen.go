@@ -33,7 +33,7 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	config, err := wyre.ProvideWireConfig()
+	config, err := wyre.ProvideWyreConfig()
 	if err != nil {
 		return server.Server{}, err
 	}

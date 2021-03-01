@@ -84,8 +84,8 @@ type Config struct {
 	WyreSecretKey    string
 }
 
-// ProvideWireConfig provides the config necessary to connect to the wyre api
-func ProvideWireConfig() (*Config, error) {
+// ProvideWyreConfig provides the config necessary to connect to the wyre api
+func ProvideWyreConfig() (*Config, error) {
 
 	wyreAPIKey := os.Getenv(wyreAPIKeyEnvVarName)
 	if wyreAPIKey == "" {
