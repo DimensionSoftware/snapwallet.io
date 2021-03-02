@@ -16,7 +16,7 @@
         "security": [{"Bearer": []}]
       }
     },
-    "/wyre/add-bank-payment-method": {
+    "/wyre/add-bank-payment-methods": {
       "post": {
         "security": [{"Bearer": []}]
       }

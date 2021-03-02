@@ -17,7 +17,6 @@ import (
 	faker "github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
-	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
@@ -147,26 +146,28 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 }
 
 // WyreAddBankPaymentMethod is an rpc handler
-func (s *Server) WyreAddBankPaymentMethod(ctx context.Context, req *proto.WyreAddBankPaymentMethodRequest) (*proto.WyreAddBankPaymentMethodResponse, error) {
+func (s *Server) WyreAddBankPaymentMethod(ctx context.Context, req *proto.WyreAddBankPaymentMethodsRequest) (*proto.WyreAddBankPaymentMethodsResponse, error) {
 	err := req.Validate()
 	if err != nil {
 		return nil, err
 	}
 
-	processorTokenResp, err := s.Plaid.CreateProcessorToken(req.AccessToken, req.AccountId, "wyre")
-	if err != nil {
-		return nil, err
-	}
+	/*
+		processorTokenResp, err := s.Plaid.CreateProcessorToken(req.AccessToken, req.AccountId, "wyre")
+		if err != nil {
+			return nil, err
+		}
 
-	resp, err := s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
-		PlaidProcessorToken: processorTokenResp.ProcessorToken,
-	}.WithDefaults())
-	if err != nil {
-		return nil, err
-	}
-	log.Printf("%#v", resp)
+		resp, err := s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
+			PlaidProcessorToken: processorTokenResp.ProcessorToken,
+		}.WithDefaults())
+		if err != nil {
+			return nil, err
+		}
+		log.Printf("%#v", resp)
+	*/
 
-	return &proto.WyreAddBankPaymentMethodResponse{}, nil
+	return &proto.WyreAddBankPaymentMethodsResponse{}, nil
 }
 
 func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {

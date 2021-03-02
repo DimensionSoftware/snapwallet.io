@@ -20,7 +20,7 @@ import { RpcStatus } from '../models/RpcStatus';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { User } from '../models/User';
 import { UserDataResponse } from '../models/UserDataResponse';
-import { WyreAddBankPaymentMethodRequest } from '../models/WyreAddBankPaymentMethodRequest';
+import { WyreAddBankPaymentMethodsRequest } from '../models/WyreAddBankPaymentMethodsRequest';
 
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
 export class ObservableFluxApi {
@@ -160,8 +160,8 @@ export class ObservableFluxApi {
      * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
      * @param body 
      */
-    public fluxWyreAddBankPaymentMethod(body: WyreAddBankPaymentMethodRequest, options?: Configuration): Observable<any> {
-    	const requestContextPromise = this.requestFactory.fluxWyreAddBankPaymentMethod(body, options);
+    public fluxWyreAddBankPaymentMethods(body: WyreAddBankPaymentMethodsRequest, options?: Configuration): Observable<any> {
+    	const requestContextPromise = this.requestFactory.fluxWyreAddBankPaymentMethods(body, options);
 
 		// build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
@@ -175,7 +175,7 @@ export class ObservableFluxApi {
 	    		for (let middleware of this.configuration.middleware) {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
-	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxWyreAddBankPaymentMethod(rsp)));
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxWyreAddBankPaymentMethods(rsp)));
 	    	}));
     }
 	

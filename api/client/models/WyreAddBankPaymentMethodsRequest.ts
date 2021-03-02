@@ -15,28 +15,28 @@ import { HttpFile } from '../http/http';
 /**
 * request
 */
-export class WyreAddBankPaymentMethodRequest {
-    'accessToken'?: string;
-    'accountId'?: string;
+export class WyreAddBankPaymentMethodsRequest {
+    'plaidPublicToken'?: string;
+    'plaidAccountIds'?: Array<string>;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "accessToken",
-            "baseName": "accessToken",
+            "name": "plaidPublicToken",
+            "baseName": "plaidPublicToken",
             "type": "string",
             "format": ""
         },
         {
-            "name": "accountId",
-            "baseName": "accountId",
-            "type": "string",
+            "name": "plaidAccountIds",
+            "baseName": "plaidAccountIds",
+            "type": "Array<string>",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return WyreAddBankPaymentMethodRequest.attributeTypeMap;
+        return WyreAddBankPaymentMethodsRequest.attributeTypeMap;
     }
     
     public constructor() {
