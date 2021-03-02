@@ -35,7 +35,7 @@
   .modal-content {
     position: absolute;
     top: 1em;
-    bottom: 4em;
+    bottom: 4.5em;
     left: 1em;
     right: 1em;
   }

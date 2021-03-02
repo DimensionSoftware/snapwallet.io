@@ -5,6 +5,18 @@
 
   export let hideCloseButton = false
   export let hideBackButton = false
+
+  const handleExit = () => {
+    const event = JSON.stringify({
+      event: '__FLUX_EXIT',
+    })
+    if (window.parent) {
+      window.parent.postMessage(event, '*')
+    }
+    if ((window as any).ReactNativeWebView) {
+      ;(window as any).ReactNativeWebView?.postMessage(event)
+    }
+  }
 </script>
 
 <div class="modal-header">
@@ -18,7 +30,11 @@
   <div class="modal-header-title">
     <slot />
   </div>
-  <div class:hidden={hideCloseButton} class="modal-header-close-button">
+  <div
+    class:hidden={hideCloseButton}
+    on:click={handleExit}
+    class="modal-header-close-button"
+  >
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
       ><path fill="none" d="M0 0h24v24H0z" /><path
         fill="currentColor"
