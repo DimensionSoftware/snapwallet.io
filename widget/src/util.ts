@@ -34,7 +34,8 @@ export const setFluxSession = (jwt?: string): boolean => {
     if (!jwt) return false
     window.localStorage.setItem(JWT_SESSION_KEY, jwt)
     return true
-  } catch {
+  } catch (e) {
+    Logger.error('Error setting flux session', e)
     return false
   }
 }
