@@ -156,7 +156,9 @@ message WyreAddBankPaymentMethodResponse {}
 // PlaidCreateLinkTokenRequest
 //
 // request can be empty since the link token is correlated with the Bearer token passed
-message PlaidCreateLinkTokenRequest {}
+message PlaidCreateLinkTokenRequest {
+
+}
 
 // PlaidCreateLinkTokenResponse
 //

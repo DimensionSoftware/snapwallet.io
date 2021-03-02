@@ -7,9 +7,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/plaid/plaid-go/plaid"
 	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
 	faker "github.com/bxcodec/faker/v3"
@@ -173,4 +175,80 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	plainTextContent := fmt.Sprintf("Your one time passcode is: %s", code)
 	htmlContent := fmt.Sprintf("Your one time passcode is: <strong>%s</strong>", code)
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+}
+
+// PlaidCreateLinkToken is an rpc handler
+func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreateLinkTokenRequest) (*proto.PlaidCreateLinkTokenResponse, error) {
+	/*
+		loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
+		if err != nil {
+			return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s: %s", codes.InvalidArgument.String(), err))
+		}
+
+		if loginKind == onetimepasscode.LoginKindPhone {
+			return nil, status.Errorf(codes.Unimplemented, fmt.Sprintf("%s: phone is not implemented yet", codes.Unimplemented.String()))
+		}
+
+		otp, err := s.Db.CreateOneTimePasscode(ctx, loginValue, loginKind)
+		if err != nil {
+			return nil, err
+		}
+
+		msg := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
+
+		_, err = s.SendgridClient.Send(msg)
+		if err != nil {
+			return nil, err
+		}
+
+		return &proto.PlaidCreateLinkTokenResponse{}, nil
+	*/
+
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Errorf(codes.InvalidArgument, codes.Unauthenticated.String())
+	}
+
+	vals := md.Get("user-id")
+
+	var userID string
+	if len(vals) > 0 {
+		userID = vals[0]
+	} else {
+		return nil, status.Errorf(codes.InvalidArgument, codes.Unauthenticated.String())
+	}
+
+	if userID == "" {
+		return nil, status.Errorf(codes.InvalidArgument, codes.Unauthenticated.String())
+	}
+
+	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
+
+	linkTokenResp, err := s.Plaid.CreateLinkToken(plaid.LinkTokenConfigs{
+		User: &plaid.LinkTokenUser{
+			ClientUserID: userID,
+		},
+		ClientName:   "Flux",
+		Products:     []string{"auth"},
+		CountryCodes: []string{"US"},
+		Language:     "en",
+		/*
+			Products:     []string{"auth", "transactions"},
+				Webhook:               "https://webhook-uri.com",
+				LinkCustomizationName: "default",
+				AccountFilters: &map[string]map[string][]string{
+					"depository": map[string][]string{
+						"account_subtypes": []string{"checking", "savings"},
+					},
+				},
+		*/
+	})
+	if err != nil {
+		return nil, err
+
+	}
+
+	return &proto.PlaidCreateLinkTokenResponse{
+		LinkToken: linkTokenResp.LinkToken,
+	}, nil
 }

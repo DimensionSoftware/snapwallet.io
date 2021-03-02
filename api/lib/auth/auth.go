@@ -133,7 +133,7 @@ type JwtVerifier struct {
 }
 
 // ParseAndVerify parses and verifies a raw jwt token and returns the claims if successful
-func (signer JwtVerifier) ParseAndVerify(rawToken string) (jwt.Claims, error) {
+func (signer JwtVerifier) ParseAndVerify(rawToken string) (*Claims, error) {
 	// Create the token
 	token, err := jwt.Parse(rawToken, func(token *jwt.Token) (interface{}, error) {
 		return signer.PublicKey, nil
@@ -144,5 +144,5 @@ func (signer JwtVerifier) ParseAndVerify(rawToken string) (jwt.Claims, error) {
 	if !token.Valid {
 		return nil, fmt.Errorf("token is invalid")
 	}
-	return token.Claims, nil
+	return token.Claims.(*Claims), nil
 }
