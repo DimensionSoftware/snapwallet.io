@@ -11,6 +11,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
+	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/server"
 	plaid2 "github.com/plaid/plaid-go/plaid"
@@ -25,6 +26,11 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	client := sendgrid.ProvideSendClient(sendAPIKey)
+	config, err := twilio.ProvideTwilioConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	gotwilioTwilio := twilio.ProvideTwilio(config)
 	fireProjectID, err := firestore.ProvideFirestoreProjectID()
 	if err != nil {
 		return server.Server{}, err
@@ -33,11 +39,11 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	config, err := wyre.ProvideWyreConfig()
+	wyreConfig, err := wyre.ProvideWyreConfig()
 	if err != nil {
 		return server.Server{}, err
 	}
-	wyreClient := wyre.NewClient(config)
+	wyreClient := wyre.NewClient(wyreConfig)
 	clientOptions, err := plaid.ProvideClientOptions()
 	if err != nil {
 		return server.Server{}, err
@@ -60,6 +66,6 @@ func InitializeServer() (server.Server, error) {
 	dbDb := db.Db{
 		Firestore: firestoreClient,
 	}
-	serverServer := server.ProvideServer(client, firestoreClient, wyreClient, plaidClient, jwtSigner, jwtVerifier, dbDb)
+	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, wyreClient, plaidClient, jwtSigner, jwtVerifier, dbDb)
 	return serverServer, nil
 }

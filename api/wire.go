@@ -7,6 +7,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
+	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/server"
 	vendorplaid "github.com/plaid/plaid-go/plaid"
@@ -20,6 +21,8 @@ func InitializeServer() (server.Server, error) {
 		server.ProvideServer,
 		sendgrid.ProvideSendClientAPIKey,
 		sendgrid.ProvideSendClient,
+		twilio.ProvideTwilioConfig,
+		twilio.ProvideTwilio,
 		firestore.ProvideFirestoreProjectID,
 		firestore.ProvideFirestore,
 		wyre.NewClient,

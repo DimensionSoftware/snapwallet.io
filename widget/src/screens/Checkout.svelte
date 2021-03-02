@@ -55,7 +55,7 @@
 <ModalContent {animation}>
   <ModalBody>
     <ModalHeader hideCloseButton>Welcome</ModalHeader>
-    <Label label="Your Email">
+    <Label label="Your Email or Phone">
       <Input
         inputmode="email"
         autocapitalize="none"
