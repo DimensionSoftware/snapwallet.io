@@ -6,12 +6,12 @@ import (
 )
 
 // Validate checks for required fields on a WyreAddBankPaymentMethodRequest
-func (req *WyreAddBankPaymentMethodRequest) Validate() error {
-	if req.AccessToken == "" {
-		return status.Errorf(codes.InvalidArgument, "access token must be set")
+func (req *WyreAddBankPaymentMethodsRequest) Validate() error {
+	if req.PlaidPublicToken == "" {
+		return status.Errorf(codes.InvalidArgument, "plaid public token must be set")
 	}
 
-	if req.AccountId == "" {
+	if len(req.PlaidAccountIds) < 1 {
 		return status.Errorf(codes.InvalidArgument, "account id must be set")
 	}
 

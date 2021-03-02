@@ -13,7 +13,7 @@ import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResp
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { RpcStatus } from '../models/RpcStatus';
 import { UserDataResponse } from '../models/UserDataResponse';
-import { WyreAddBankPaymentMethodRequest } from '../models/WyreAddBankPaymentMethodRequest';
+import { WyreAddBankPaymentMethodsRequest } from '../models/WyreAddBankPaymentMethodsRequest';
 
 /**
  * no description
@@ -222,17 +222,17 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
      * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
      * @param body 
      */
-    public async fluxWyreAddBankPaymentMethod(body: WyreAddBankPaymentMethodRequest, options?: Configuration): Promise<RequestContext> {
+    public async fluxWyreAddBankPaymentMethods(body: WyreAddBankPaymentMethodsRequest, options?: Configuration): Promise<RequestContext> {
 		let config = options || this.configuration;
 		
         // verify required parameter 'body' is not null or undefined
         if (body === null || body === undefined) {
-            throw new RequiredError('Required parameter body was null or undefined when calling fluxWyreAddBankPaymentMethod.');
+            throw new RequiredError('Required parameter body was null or undefined when calling fluxWyreAddBankPaymentMethods.');
         }
 
 		
 		// Path Params
-    	const localVarPath = '/wyre/add-bank-payment-method';
+    	const localVarPath = '/wyre/add-bank-payment-methods';
 
 		// Make Request Context
     	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
@@ -251,7 +251,7 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         ]);
         requestContext.setHeaderParam("Content-Type", contentType);
         const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(body, "WyreAddBankPaymentMethodRequest", ""),
+            ObjectSerializer.serialize(body, "WyreAddBankPaymentMethodsRequest", ""),
             contentType
         );
         requestContext.setBody(serializedBody);
@@ -461,10 +461,10 @@ export class FluxApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to fluxWyreAddBankPaymentMethod
+     * @params response Response returned by the server for a request to fluxWyreAddBankPaymentMethods
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async fluxWyreAddBankPaymentMethod(response: ResponseContext): Promise<any > {
+     public async fluxWyreAddBankPaymentMethods(response: ResponseContext): Promise<any > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
             const body: any = ObjectSerializer.deserialize(

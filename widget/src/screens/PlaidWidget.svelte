@@ -9,10 +9,13 @@
     getLinkToken().then(token => {
       const handler = window.Plaid.create({
         token,
-        environment: 'sandbox',
-        onSuccess: (public_token, metadata) => {},
+        onSuccess: (public_token, metadata) => {
+          console.log(public_token, metadata)
+        },
         onLoad: () => {},
-        onExit: (err, metadata) => {},
+        onExit: (err, metadata) => {
+          handler.destroy()
+        },
         onEvent: (eventName, metadata) => {},
         receivedRedirectUri: null,
       })

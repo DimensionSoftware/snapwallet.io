@@ -38,7 +38,7 @@ type FluxClient interface {
 	// Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
-	WyreAddBankPaymentMethod(ctx context.Context, in *WyreAddBankPaymentMethodRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodResponse, error)
+	WyreAddBankPaymentMethods(ctx context.Context, in *WyreAddBankPaymentMethodsRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodsResponse, error)
 	// PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLinkTokenRequest, opts ...grpc.CallOption) (*PlaidCreateLinkTokenResponse, error)
 }
@@ -87,9 +87,9 @@ func (c *fluxClient) OneTimePasscodeVerify(ctx context.Context, in *OneTimePassc
 	return out, nil
 }
 
-func (c *fluxClient) WyreAddBankPaymentMethod(ctx context.Context, in *WyreAddBankPaymentMethodRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodResponse, error) {
-	out := new(WyreAddBankPaymentMethodResponse)
-	err := c.cc.Invoke(ctx, "/Flux/WyreAddBankPaymentMethod", in, out, opts...)
+func (c *fluxClient) WyreAddBankPaymentMethods(ctx context.Context, in *WyreAddBankPaymentMethodsRequest, opts ...grpc.CallOption) (*WyreAddBankPaymentMethodsResponse, error) {
+	out := new(WyreAddBankPaymentMethodsResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreAddBankPaymentMethods", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -129,7 +129,7 @@ type FluxServer interface {
 	// Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
-	WyreAddBankPaymentMethod(context.Context, *WyreAddBankPaymentMethodRequest) (*WyreAddBankPaymentMethodResponse, error)
+	WyreAddBankPaymentMethods(context.Context, *WyreAddBankPaymentMethodsRequest) (*WyreAddBankPaymentMethodsResponse, error)
 	// PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error)
 	mustEmbedUnimplementedFluxServer()
@@ -151,8 +151,8 @@ func (UnimplementedFluxServer) OneTimePasscode(context.Context, *OneTimePasscode
 func (UnimplementedFluxServer) OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OneTimePasscodeVerify not implemented")
 }
-func (UnimplementedFluxServer) WyreAddBankPaymentMethod(context.Context, *WyreAddBankPaymentMethodRequest) (*WyreAddBankPaymentMethodResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WyreAddBankPaymentMethod not implemented")
+func (UnimplementedFluxServer) WyreAddBankPaymentMethods(context.Context, *WyreAddBankPaymentMethodsRequest) (*WyreAddBankPaymentMethodsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreAddBankPaymentMethods not implemented")
 }
 func (UnimplementedFluxServer) PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidCreateLinkToken not implemented")
@@ -242,20 +242,20 @@ func _Flux_OneTimePasscodeVerify_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Flux_WyreAddBankPaymentMethod_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WyreAddBankPaymentMethodRequest)
+func _Flux_WyreAddBankPaymentMethods_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreAddBankPaymentMethodsRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FluxServer).WyreAddBankPaymentMethod(ctx, in)
+		return srv.(FluxServer).WyreAddBankPaymentMethods(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Flux/WyreAddBankPaymentMethod",
+		FullMethod: "/Flux/WyreAddBankPaymentMethods",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FluxServer).WyreAddBankPaymentMethod(ctx, req.(*WyreAddBankPaymentMethodRequest))
+		return srv.(FluxServer).WyreAddBankPaymentMethods(ctx, req.(*WyreAddBankPaymentMethodsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -302,8 +302,8 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Flux_OneTimePasscodeVerify_Handler,
 		},
 		{
-			MethodName: "WyreAddBankPaymentMethod",
-			Handler:    _Flux_WyreAddBankPaymentMethod_Handler,
+			MethodName: "WyreAddBankPaymentMethods",
+			Handler:    _Flux_WyreAddBankPaymentMethods_Handler,
 		},
 		{
 			MethodName: "PlaidCreateLinkToken",

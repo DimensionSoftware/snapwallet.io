@@ -165,16 +165,16 @@
         ]
       }
     },
-    "/wyre/add-bank-payment-method": {
+    "/wyre/add-bank-payment-methods": {
       "post": {
         "summary": "Post chosen bank info from plaid in order to create a new ACH pyment method in wyre",
         "description": "requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id",
-        "operationId": "Flux_WyreAddBankPaymentMethod",
+        "operationId": "Flux_WyreAddBankPaymentMethods",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/WyreAddBankPaymentMethodResponse"
+              "$ref": "#/definitions/WyreAddBankPaymentMethodsResponse"
             }
           },
           "default": {
@@ -190,7 +190,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/WyreAddBankPaymentMethodRequest"
+              "$ref": "#/definitions/WyreAddBankPaymentMethodsRequest"
             }
           }
         ],
@@ -472,23 +472,26 @@
       "description": "response",
       "title": "UserDataResponse"
     },
-    "WyreAddBankPaymentMethodRequest": {
+    "WyreAddBankPaymentMethodsRequest": {
       "type": "object",
       "properties": {
-        "accessToken": {
+        "plaidPublicToken": {
           "type": "string"
         },
-        "accountId": {
-          "type": "string"
+        "plaidAccountIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "description": "request",
-      "title": "WyreAddBankPaymentMethodRequest"
+      "title": "WyreAddBankPaymentMethodsRequest"
     },
-    "WyreAddBankPaymentMethodResponse": {
+    "WyreAddBankPaymentMethodsResponse": {
       "type": "object",
       "description": "response",
-      "title": "WyreAddBankPaymentMethodResponse"
+      "title": "WyreAddBankPaymentMethodsResponse"
     },
     "protobufAny": {
       "type": "object",

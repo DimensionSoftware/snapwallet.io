@@ -28,7 +28,7 @@ models/RpcStatus.ts
 models/ThirdPartyUserAccount.ts
 models/User.ts
 models/UserDataResponse.ts
-models/WyreAddBankPaymentMethodRequest.ts
+models/WyreAddBankPaymentMethodsRequest.ts
 models/all.ts
 package.json
 rxjsStub.ts
