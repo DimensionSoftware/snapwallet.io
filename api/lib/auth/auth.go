@@ -144,5 +144,13 @@ func (signer JwtVerifier) ParseAndVerify(rawToken string) (*Claims, error) {
 	if !token.Valid {
 		return nil, fmt.Errorf("token is invalid")
 	}
-	return token.Claims.(*Claims), nil
+
+	c := token.Claims.(jwt.MapClaims)
+
+	return &Claims{
+		ID:        c["jti"].(string),
+		Subject:   c["sub"].(string),
+		IssuedAt:  int64(c["iat"].(float64)),
+		ExpiresAt: int64(c["exp"].(float64)),
+	}, nil
 }

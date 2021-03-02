@@ -70,7 +70,7 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 		return nil, err
 	}
 	if u != nil {
-		log.Printf("User found: %v", u)
+		log.Printf("User found: %#v", u)
 		return u, nil
 	}
 

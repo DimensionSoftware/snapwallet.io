@@ -52,5 +52,7 @@ func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req i
 	log.Printf("authentication success ✅")
 
 	// Last but super important, execute the handler so that the actualy gRPC request is also performed
+	// send updated md to context
+	ctx = metadata.NewIncomingContext(ctx, md)
 	return handler(ctx, req)
 }

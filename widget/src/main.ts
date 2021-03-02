@@ -45,11 +45,17 @@ function genAPIClient(token?: string): FluxApi {
 }
 
 function getAPIClient(newToken?: string): FluxApi {
-  if (!(window as any).__api || newToken) {
+  if (newToken) {
+    window.sessionStorage.setItem('token', newToken)
     return (window.__api = genAPIClient(newToken))
-  } else {
-    return window.__api
   }
+
+  if (!window.__api) {
+    const existingToken = window.sessionStorage.getItem('token')
+    return (window.__api = genAPIClient(existingToken))
+  }
+
+  return window.__api
 }
 
 window.API = getAPIClient
