@@ -59,9 +59,10 @@ type CipherText []byte
 
 // Encrypt encrypts the cleartext into ciphertext
 func (m *Manager) Encrypt(cleartext []byte) (CipherText, error) {
-	ciphertext := make([]byte, aes.BlockSize+len(cleartext))
-
+	b64 := base64.StdEncoding.EncodeToString(cleartext)
+	ciphertext := make([]byte, aes.BlockSize+len(b64))
 	iv := ciphertext[:aes.BlockSize]
+
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
 		return nil, err
 	}
@@ -83,14 +84,10 @@ func (m *Manager) Decrypt(ciphertext CipherText) ([]byte, error) {
 	ciphertext = ciphertext[aes.BlockSize:]
 
 	cfb := cipher.NewCFBDecrypter(m.Key, iv)
+
 	cfb.XORKeyStream(ciphertext, ciphertext)
 
-	data, err := base64.StdEncoding.DecodeString(string(ciphertext))
-	if err != nil {
-		return nil, err
-	}
-
-	return data, nil
+	return ciphertext, nil
 }
 
 /*

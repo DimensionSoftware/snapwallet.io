@@ -144,7 +144,7 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 	}
 
 	users, err := db.Firestore.Collection("users").
-		Where("email", "==", emailOrPhoneCipherText).
+		Where("encryptedEmail", "==", emailOrPhoneCipherText).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
@@ -167,7 +167,7 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 	}
 
 	users, err = db.Firestore.Collection("users").
-		Where("phone", "==", emailOrPhoneCipherText).
+		Where("encryptedPhone", "==", emailOrPhoneCipherText).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
