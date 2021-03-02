@@ -107,3 +107,4 @@ dist
 /**/public/build/
 
 .DS_Store
+.*.swp

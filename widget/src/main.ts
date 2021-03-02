@@ -26,6 +26,7 @@ const app = new App({
 declare global {
   interface Window {
     __api: FluxApi
+    Plaid: any
     API: (newToken?: string) => FluxApi
   }
 }
@@ -51,7 +52,6 @@ function getAPIClient(newToken?: string): FluxApi {
   }
 }
 
-// for testing, when needed, uncomment :D
 window.API = getAPIClient
 
 export default app

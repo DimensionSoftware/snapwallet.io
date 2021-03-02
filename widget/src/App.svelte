@@ -8,6 +8,7 @@
   import Profile from './screens/Profile.svelte'
   import VerifyOTP from './screens/VerifyOTP.svelte'
   import { onMount, setContext } from 'svelte'
+  import PlaidWidget from './screens/PlaidWidget.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -23,6 +24,7 @@
     }),
     '/profile': Profile,
     '/verify-otp': VerifyOTP,
+    '/link-bank': PlaidWidget,
     '*': NotFound as any,
   }
 
