@@ -8,7 +8,7 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed } from '../util'
+  import { Logger, onEnterPressed, setFluxSession } from '../util'
   import type { OneTimePasscodeVerifyResponse } from 'api-client'
   import { toaster } from '../stores/ToastStore'
 
@@ -75,8 +75,9 @@
     isMakingRequest = true
 
     try {
-      const response = await verifyOTP()
-      Logger.debug('LOGGED IN:', response.user)
+      const { jwt } = await verifyOTP()
+      Logger.debug('Logged in')
+      setFluxSession(jwt)
       setTimeout(() => push('#/profile'), 700)
     } catch (e) {
       Logger.error(e)
