@@ -10,23 +10,35 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { onEnterPressed } from '../util'
-  import type { FluxApi } from 'api-client'
+  import type { FluxApi, OneTimePasscodeRequest, OneTimePasscodeVerifyResponse } from 'api-client'
+import { linear } from 'svelte/easing';
 
   let animation = 'left'
 
   const handleNextStep = () => {
     // validate
     let emailIsValid = vld8.isEmail($userStore.emailAddress)
-    if (!emailIsValid)
-      return (document.querySelector('input[type="email"]') as any)
-        .focus()
-        ((window as any).API() as FluxApi)
-        .fluxOneTimePasscode({
-          emailOrPhone: $userStore.emailAddress,
-        })
-        .then(() => {
-          push('#/profile')
-        })
+    if (!emailIsValid) {
+      ;(document.querySelector('input[type="email"]') as any).focus()
+      return
+    }
+
+    ;((window as any).API() as FluxApi)
+      .fluxOneTimePasscode({
+        emailOrPhone: $userStore.emailAddress,
+      })
+      .then(() => {
+        push('#/profile')
+      })
+      .catch((resp: any) => {
+        // InvalidArgument code 3 (same as http 400)
+        if (resp.body.code === 3) {
+          // FIXME: bubble up to user in a nice way
+          return alert(resp.body.message.match(/desc = (.+)/)[1])
+        }
+        // unhandled error default
+        throw  resp
+      })
   }
 
   const onKeyDown = (e: Event) => {
