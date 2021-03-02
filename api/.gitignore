@@ -1,3 +1,4 @@
 /grpcserver
 /grpcgateway
 /secrets/
+*.jar
