@@ -1,4 +1,5 @@
 import nodeDebug from 'debug'
+import { JWT_SESSION_KEY } from './constants'
 
 // pure fns
 // ---------
@@ -27,3 +28,17 @@ export const Logger = (() => {
     info,
   }
 })()
+
+export const setFluxSession = (jwt?: string): boolean => {
+  try {
+    if (!jwt) return false
+    window.localStorage.setItem(JWT_SESSION_KEY, jwt)
+    return true
+  } catch {
+    return false
+  }
+}
+
+export const getFluxSession = (): string => {
+  return window.localStorage.getItem(JWT_SESSION_KEY) || ''
+}
