@@ -10,11 +10,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { onEnterPressed } from '../util'
-  import type {
-    FluxApi,
-    OneTimePasscodeRequest,
-    OneTimePasscodeVerifyResponse,
-  } from 'api-client'
+  import type { ResponseBody, ResponseContext } from 'api-client'
   import { linear } from 'svelte/easing'
 
   let animation = 'left'
@@ -24,23 +20,27 @@
     let emailIsValid = vld8.isEmail($userStore.emailAddress)
     if (!emailIsValid) {
       ;(document.querySelector('input[type="email"]') as any).focus()
-      return
+      //return
     }
 
-    window.API()
+    window
+      .API()
       .fluxOneTimePasscode({
         emailOrPhone: $userStore.emailAddress,
       })
-      .then((resp: any) => {
+      .then((resp: ResponseContext) => {
         // TODO: instead of profile should go to verify otp screen with keypad numeric only enabled (6 digits)
         push('#/profile')
       })
-      .catch((resp: any) => {
+      .catch((resp: ResponseContext) => {
+        const b = (resp.body as unknown) as { code: number; message: string }
+
         // InvalidArgument code 3 (same as http 400)
-        if (resp.body.code === 3) {
+        if (b.code === 3) {
           // FIXME: bubble up to user in a nice way
-          return alert(resp.body.message.match(/desc = (.+)/)[1])
+          return alert(b.message.match(/desc = (.+)/)[1])
         }
+
         // unhandled error default
         throw resp
       })
