@@ -80,17 +80,11 @@
       setFluxSession(jwt)
       setTimeout(() => push('#/profile'), 700)
     } catch (e) {
-      Logger.error(e)
-      // TODO: move error messages to the server
-      let msg = 'An unknown error occurred. Please try again later.'
-      const code = e.body?.code
-
-      if ([16, 3].includes(code)) {
-        msg = 'The email code provided was not valid. Please try again.'
-      }
+      const err = e as { body: { code: number; message: string } }
+      Logger.error(err)
 
       toaster.pop({
-        msg,
+        msg: err.body.message,
         error: true,
       })
     } finally {

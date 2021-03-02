@@ -10,6 +10,7 @@ import (
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
+	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
@@ -78,11 +79,11 @@ func (s *Server) PricingData(ctx context.Context, in *proto.PricingDataRequest) 
 func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscodeRequest) (*proto.OneTimePasscodeResponse, error) {
 	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
 	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s: %s", codes.InvalidArgument.String(), err))
+		return nil, err
 	}
 
 	if loginKind == onetimepasscode.LoginKindPhone {
-		return nil, status.Errorf(codes.Unimplemented, fmt.Sprintf("%s: phone is not implemented yet", codes.Unimplemented.String()))
+		return nil, status.Errorf(codes.Unimplemented, "Phone login is not implemented yet; please try an email address.")
 	}
 
 	otp, err := s.Db.CreateOneTimePasscode(ctx, loginValue, loginKind)
@@ -104,7 +105,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
 	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
 	if err != nil {
-		return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s: %s", codes.InvalidArgument.String(), err))
+		return nil, err
 	}
 
 	passcodes := s.Firestore.Collection("one-time-passcodes").
@@ -113,25 +114,35 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
 		Documents(ctx)
 
-	// if no doc then failure to login (make better later)
+	invalidMsg := "The email code provided was not valid. Please try again."
+
+	unknownMsg := "An unknown error occurred. Please try again later."
+
 	passcode, err := passcodes.Next()
+	if err == iterator.Done {
+		return nil, status.Errorf(codes.Unauthenticated, invalidMsg)
+	}
 	if err != nil {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
 	_, err = passcode.Ref.Delete(ctx)
 	if err != nil {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
 	u, err := s.Db.GetOrCreateUser(ctx, loginKind, loginValue)
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
 	jwt, err := s.JwtSigner.Sign(auth.NewClaims(u.ID))
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
 	return &proto.OneTimePasscodeVerifyResponse{
