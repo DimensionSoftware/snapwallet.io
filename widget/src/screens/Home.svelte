@@ -16,6 +16,7 @@
   import { onMount } from 'svelte'
   import { isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
+  import { Pulse } from 'svelte-loading-spinners'
 
   let selectorVisible = false
 
@@ -36,6 +37,16 @@
   $: sourceRate = $transactionStore.destinationAmount / selectedDestinationPrice
 
   let isEnteringSourceAmount = true
+  let isLoadingPrices = true
+
+  $: fakePrice = 0
+
+  const animateRandomPrice = () => {
+    window.requestAnimationFrame(_ts => {
+      fakePrice = fakePrice + 213
+      if (isLoadingPrices) animateRandomPrice()
+    })
+  }
 
   const handleNextStep = () => {
     const { sourceAmount } = $transactionStore
@@ -51,6 +62,7 @@
 
   onMount(async () => {
     try {
+      animateRandomPrice()
       await priceStore.fetchPrices()
       priceStore.pollPrices()
     } catch (e) {
@@ -58,6 +70,8 @@
         msg: 'Oops, there was a problem refreshing prices.',
         error: true,
       })
+    } finally {
+      setTimeout(() => (isLoadingPrices = false), 1200)
     }
   })
 
@@ -126,9 +140,10 @@
         </Label>
       </div>
       <div class="exchange-rate-container">
-        1 {$transactionStore.destinationCurrency.ticker} @ {selectedSourcePrice.toFixed(
-          2,
-        )}
+        1 {$transactionStore.destinationCurrency.ticker} @
+        {isLoadingPrices
+          ? fakePrice.toFixed(2)
+          : selectedSourcePrice.toFixed(2)}
         {srcTicker}
       </div>
       <TotalContainer
@@ -173,10 +188,13 @@
   }
 
   .exchange-rate-container {
+    height: 1.5rem;
+    width: 100%;
     position: relative;
     z-index: 2;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     font-size: 0.9rem;
     color: var(--theme-text-color-muted);
   }
