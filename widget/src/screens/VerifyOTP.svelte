@@ -75,8 +75,8 @@
 
     try {
       const { jwt } = await verifyOTP()
+      window.API(jwt)
       Logger.debug('Logged in')
-      setFluxSession(jwt)
       setTimeout(() => push('#/profile'), 700)
     } catch (e) {
       const err = e as { body: { code: number; message: string } }
