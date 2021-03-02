@@ -1,5 +1,4 @@
 <script lang="ts">
-  import vld8 from 'validator'
   import { push } from 'svelte-spa-router'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
@@ -10,27 +9,30 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { onEnterPressed } from '../util'
-  import type { ResponseBody, ResponseContext } from 'api-client'
-  import { linear } from 'svelte/easing'
+  import type {
+    OneTimePasscodeVerifyResponse,
+    ResponseContext,
+  } from 'api-client'
 
   let animation = 'left'
+  let code = ''
 
   const handleNextStep = () => {
-    // validate
-    let emailIsValid = vld8.isEmail($userStore.emailAddress)
-    if (!emailIsValid) {
-      ;(document.querySelector('input[type="email"]') as any).focus()
-      //return
-    }
-
+    const c = code
+    console.log('Verifying using OTP code:', c)
     window
       .API()
-      .fluxOneTimePasscode({
+      .fluxOneTimePasscodeVerify({
         emailOrPhone: $userStore.emailAddress,
+        code: c,
       })
-      .then((resp: {}) => {
-        // TODO: instead of profile should go to verify otp screen with keypad numeric only enabled (6 digits)
-        push('#/verify-otp')
+      .then((resp: OneTimePasscodeVerifyResponse) => {
+        // login (update jwt)
+        window.API(resp.jwt)
+
+        // TODO: use returned user data to update store if necessary
+        console.log('LOGGED IN:', resp.user)
+        push('#/profile')
       })
       .catch((resp: { body: { code: number; message: string } }) => {
         // InvalidArgument code 3 (same as http 400)
@@ -53,23 +55,24 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton>Welcome</ModalHeader>
-    <Label label="Your Email">
+    <ModalHeader hideCloseButton
+      >Check your email for your verification code!</ModalHeader
+    >
+    <Label label="Your OTP Code">
       <Input
-        inputmode="email"
+        inputmode="numeric"
         autocapitalize="none"
-        autocomplete="on"
+        autocomplete="off"
         autofocus
         required
-        type="email"
-        placeholder="your@email.address"
-        defaultValue={$userStore.emailAddress}
-        on:change={e => userStore.setEmailAddress(e.detail)}
+        type="number"
+        placeholder="123456"
+        on:change={e => (code = e.detail)}
       />
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Login <small>or</small> SignUp</Button>
+    <Button on:click={handleNextStep}>Verify and let me in!</Button>
   </ModalFooter>
 </ModalContent>
 

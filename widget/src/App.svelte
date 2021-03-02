@@ -6,6 +6,7 @@
   import Checkout from './screens/Checkout.svelte'
   import NotFound from './screens/NotFound.svelte'
   import Profile from './screens/Profile.svelte'
+  import VerifyOTP from './screens/VerifyOTP.svelte'
   import { onMount, setContext } from 'svelte'
 
   // Querystring provided props, see main.ts.
@@ -21,6 +22,7 @@
       props: { appName, intent, apiKey },
     }),
     '/profile': Profile,
+    '/verify-otp': VerifyOTP,
     '*': NotFound as any,
   }
 
