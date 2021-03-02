@@ -14,8 +14,10 @@
 
   let animation = 'left'
   let code = ''
+  let isMakingRequest = false
 
   const handleNextStep = async () => {
+    isMakingRequest = true
     const c = code
     Logger.debug('Verifying using OTP code:', c)
 
@@ -42,6 +44,8 @@
         msg,
         error: true,
       })
+    } finally {
+      setTimeout(() => (isMakingRequest = false), 500)
     }
   }
 
@@ -64,12 +68,19 @@
         required
         type="number"
         placeholder="123456"
-        on:change={e => (code = e.detail)}
+        on:change={e => {
+          code = e.detail
+          if (code.length >= 6) {
+            handleNextStep()
+          }
+        }}
       />
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Verify and let me in!</Button>
+    <Button disabled={isMakingRequest} on:click={handleNextStep}
+      >Verify Email</Button
+    >
   </ModalFooter>
 </ModalContent>
 
