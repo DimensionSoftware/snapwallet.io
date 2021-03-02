@@ -260,18 +260,13 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 
 	plaidUserDetails := plaid.LinkTokenUser{
 		ClientUserID: userID,
-		EmailAddress: u.Email,
-	}
-
-	if u.Email != "" {
-		plaidUserDetails.EmailAddress = u.Email
-		plaidUserDetails.EmailAddressVerifiedTime = *u.EmailVerifiedAt
 	}
 
 	if u.Phone != "" {
 		plaidUserDetails.PhoneNumber = u.Phone
 		plaidUserDetails.PhoneNumberVerifiedTime = *u.PhoneVerifiedAt
 	}
+	log.Println(plaidUserDetails)
 
 	linkTokenResp, err := s.Plaid.CreateLinkToken(plaid.LinkTokenConfigs{
 		User:         &plaidUserDetails,
