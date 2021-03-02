@@ -96,11 +96,6 @@ func ProvideWyreConfig() (*Config, error) {
 		return nil, fmt.Errorf("you must set %s", wyreAPIKeyEnvVarName)
 	}
 
-	// for when we have the ability to enable prod, can create logic branch for this:
-	//log.Println("🚨 Production Wyre API is activated")
-
-	log.Println("🧪 Test Wyre API is activated")
-
 	return &Config{
 		EnableProduction: false,
 		WyreAPIKey:       wyreAPIKey,
@@ -111,6 +106,14 @@ func ProvideWyreConfig() (*Config, error) {
 // NewClient instantiates a new Client
 func NewClient(config *Config) Client {
 	resty := resty.New()
+
+	if config.EnableProduction {
+		log.Println("🚨 Production Wyre API is activated")
+		resty.SetHostURL(wyreProductionAPIEndpoint)
+	} else {
+		log.Println("🧪 Test Wyre API is activated")
+		resty.SetHostURL(wyreTestAPIEndpoint)
+	}
 
 	return Client{
 		http:   resty,
@@ -357,6 +360,7 @@ func (c Client) PricedExchangeRates() (*PricingRates, error) {
 		SetResult(PricingRates{}).
 		EnableTrace().
 		Get("/v2/rates?as=priced")
+
 	if err != nil {
 		return nil, err
 	}
