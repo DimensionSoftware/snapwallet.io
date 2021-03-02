@@ -18,6 +18,14 @@ const app = new App({
   },
 })
 
+declare global {
+  interface Window {
+    __api: FluxApi
+    API: (newToken?: string) => FluxApi;
+  }
+}
+
+
 function genAPIClient(token?: string): FluxApi {
   return new FluxApi(
     createConfiguration({
@@ -33,13 +41,13 @@ function genAPIClient(token?: string): FluxApi {
 
 function getAPIClient(newToken?: string): FluxApi {
   if (!(window as any).__api || newToken) {
-    return ((window as any).__api = genAPIClient(newToken))
+    return window.__api = genAPIClient(newToken)
   } else {
-    return (window as any).__api
+    return window.__api
   }
 }
 
 // for testing, when needed, uncomment :D
-;(window as any).API = getAPIClient
+window.API = getAPIClient
 
 export default app

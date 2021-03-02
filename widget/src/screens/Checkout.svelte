@@ -27,7 +27,7 @@
       return
     }
 
-    ;((window as any).API() as FluxApi)
+    window.API()
       .fluxOneTimePasscode({
         emailOrPhone: $userStore.emailAddress,
       })
