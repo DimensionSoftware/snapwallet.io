@@ -145,13 +145,17 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}, nil
 }
 
-// WyreAddBankPaymentMethod is an rpc handler
-func (s *Server) WyreAddBankPaymentMethod(ctx context.Context, req *proto.WyreAddBankPaymentMethodsRequest) (*proto.WyreAddBankPaymentMethodsResponse, error) {
+// WyreAddBankPaymentMethods is an rpc handler
+func (s *Server) WyreAddBankPaymentMethods(ctx context.Context, req *proto.WyreAddBankPaymentMethodsRequest) (*proto.WyreAddBankPaymentMethodsResponse, error) {
 	err := req.Validate()
 	if err != nil {
 		return nil, err
 	}
 
+	log.Printf("STUB > process PlaidPublicToken: %s", req.PlaidPublicToken)
+	for _, plaidAccountID := range req.PlaidAccountIds {
+		log.Printf("STUB > process PlaidAccountID: %s", plaidAccountID)
+	}
 	/*
 		processorTokenResp, err := s.Plaid.CreateProcessorToken(req.AccessToken, req.AccountId, "wyre")
 		if err != nil {

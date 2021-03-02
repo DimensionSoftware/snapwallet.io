@@ -5,12 +5,49 @@
     return resp.linkToken
   }
 
+  async function addWyreBankAccount(
+    plaidPublicToken: string,
+    plaidAccountIds: string[],
+  ): Promise<void> {
+    await window.API().fluxWyreAddBankPaymentMethods({
+      plaidPublicToken,
+      plaidAccountIds,
+    })
+  }
+
+  interface PlaidSuccessCallbackMetadataAccount {
+    id: string
+    name: string // 'Plaid Checking'
+    mask: string // '0000'
+    type: string // 'depository'
+    subtype: string // 'checking'
+  }
+
+  interface PlaidSuccessCallbackMetadataInstitution {
+    institution_id: string
+    name: string
+  }
+
+  interface PlaidSuccessCallbackMetadata {
+    institution: PlaidSuccessCallbackMetadataInstitution
+    accounts: PlaidSuccessCallbackMetadataAccount[]
+  }
+
   function initializePlaid() {
     getLinkToken().then(token => {
       const handler = window.Plaid.create({
         token,
-        onSuccess: (public_token, metadata) => {
-          console.log(public_token, metadata)
+        onSuccess: (
+          publicToken: string,
+          metadata: PlaidSuccessCallbackMetadata,
+        ) => {
+          console.log(metadata)
+          addWyreBankAccount(
+            publicToken,
+            metadata.accounts.map(a => a.id),
+          ).then(() => {
+            console.log('STUB > logic for next page goes here')
+          })
         },
         onLoad: () => {},
         onExit: (err, metadata) => {
