@@ -10,8 +10,12 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { onEnterPressed } from '../util'
-  import type { FluxApi, OneTimePasscodeRequest, OneTimePasscodeVerifyResponse } from 'api-client'
-import { linear } from 'svelte/easing';
+  import type {
+    FluxApi,
+    OneTimePasscodeRequest,
+    OneTimePasscodeVerifyResponse,
+  } from 'api-client'
+  import { linear } from 'svelte/easing'
 
   let animation = 'left'
 
@@ -27,7 +31,8 @@ import { linear } from 'svelte/easing';
       .fluxOneTimePasscode({
         emailOrPhone: $userStore.emailAddress,
       })
-      .then(() => {
+      .then((resp: any) => {
+        // TODO: instead of profile should go to verify otp screen with keypad numeric only enabled (6 digits)
         push('#/profile')
       })
       .catch((resp: any) => {
@@ -37,7 +42,7 @@ import { linear } from 'svelte/easing';
           return alert(resp.body.message.match(/desc = (.+)/)[1])
         }
         // unhandled error default
-        throw  resp
+        throw resp
       })
   }
 
