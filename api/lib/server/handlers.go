@@ -206,7 +206,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return nil, status.Errorf(codes.InvalidArgument, codes.Unauthenticated.String())
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 
 	vals := md.Get("user-id")
@@ -215,11 +215,11 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 	if len(vals) > 0 {
 		userID = vals[0]
 	} else {
-		return nil, status.Errorf(codes.InvalidArgument, codes.Unauthenticated.String())
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 
 	if userID == "" {
-		return nil, status.Errorf(codes.InvalidArgument, codes.Unauthenticated.String())
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 
 	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
