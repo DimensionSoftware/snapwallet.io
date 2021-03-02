@@ -9,39 +9,35 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { onEnterPressed } from '../util'
+  import { toaster } from '../stores/ToastStore'
+  import { Logger, onEnterPressed } from '../util'
   import type { ResponseBody, ResponseContext } from 'api-client'
   import { linear } from 'svelte/easing'
 
   let animation = 'left'
 
-  const handleNextStep = () => {
-    // validate
-    let emailIsValid = vld8.isEmail($userStore.emailAddress)
-    if (!emailIsValid) {
-      ;(document.querySelector('input[type="email"]') as any).focus()
-      //return
-    }
+  const handleNextStep = async () => {
+    try {
+      let emailIsValid = vld8.isEmail($userStore.emailAddress)
+      if (!emailIsValid) {
+        ;(document.querySelector('input[type="email"]') as any).focus()
+        // return
+      }
 
-    window
-      .API()
-      .fluxOneTimePasscode({
+      await window.API().fluxOneTimePasscode({
         emailOrPhone: $userStore.emailAddress,
       })
-      .then((resp: {}) => {
-        // TODO: instead of profile should go to verify otp screen with keypad numeric only enabled (6 digits)
-        push('#/verify-otp')
-      })
-      .catch((resp: { body: { code: number; message: string } }) => {
-        // InvalidArgument code 3 (same as http 400)
-        if (resp.body.code === 3) {
-          // FIXME: bubble up to user in a nice way
-          return alert(resp.body.message.match(/desc = (.+)/)[1])
-        }
 
-        // unhandled error default
-        throw resp
-      })
+      push('#/verify-otp')
+    } catch (e) {
+      Logger.error(e)
+      let msg = 'An unknown error occurred. Please try again later.'
+      if ([3].includes(e.body?.code)) {
+        msg = 'Please enter a valid email address.'
+      }
+
+      toaster.pop({ msg, error: true })
+    }
   }
 
   const onKeyDown = (e: Event) => {
