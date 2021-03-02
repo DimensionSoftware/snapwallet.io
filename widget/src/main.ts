@@ -23,6 +23,7 @@ const app = new App({
   },
 })
 
+// TODO: move this to typings/@flux.d.ts
 declare global {
   interface Window {
     __api: FluxApi
