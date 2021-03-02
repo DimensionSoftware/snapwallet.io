@@ -72,13 +72,13 @@
     }
     & > .modal-header-close-button {
       @include flex-align-center();
-      margin-right: 0.25em;
+      margin-right: 0.2em;
       justify-content: flex-end;
       cursor: pointer;
     }
     & > .modal-header-back-button {
       @include flex-align-center();
-      margin-left: 0.25em;
+      margin-left: 0.2em;
       justify-content: flex-start;
       cursor: pointer;
     }
