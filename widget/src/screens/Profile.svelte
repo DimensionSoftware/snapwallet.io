@@ -35,7 +35,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton>Tell Us About You</ModalHeader>
+    <ModalHeader>Tell Us About You</ModalHeader>
     <Label label="Full Name">
       <Input
         inputmode="text"

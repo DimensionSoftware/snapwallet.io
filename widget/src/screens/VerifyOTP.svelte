@@ -100,7 +100,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton>Verify Your Email</ModalHeader>
+    <ModalHeader>Verify Your Email</ModalHeader>
     <Label label="Your Email Code">
       <Input
         inputmode="numeric"
