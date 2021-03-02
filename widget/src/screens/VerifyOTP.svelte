@@ -29,7 +29,7 @@
           code: c,
         })
       Logger.debug('LOGGED IN:', response.user)
-      push('#/profile')
+      setTimeout(() => push('#/profile'), 600)
     } catch (e) {
       Logger.error(e)
       // TODO: move error messages to the server
