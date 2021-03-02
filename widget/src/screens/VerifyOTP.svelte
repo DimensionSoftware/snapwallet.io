@@ -45,7 +45,7 @@
         error: true,
       })
     } finally {
-      setTimeout(() => (isMakingRequest = false), 500)
+      setTimeout(() => (isMakingRequest = false), 700)
     }
   }
 
