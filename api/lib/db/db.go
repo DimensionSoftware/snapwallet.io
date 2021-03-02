@@ -57,11 +57,11 @@ func (db Db) CreateUser(ctx context.Context, email string, phone string, emailVe
 	}
 
 	if emailVerified {
-		u.EmailVerifiedAt = now
+		u.EmailVerifiedAt = &now
 	}
 
 	if phoneVerified {
-		u.PhoneVerifiedAt = now
+		u.PhoneVerifiedAt = &now
 	}
 
 	_, err := db.Firestore.Collection("users").Doc(id).Set(ctx, &u)
