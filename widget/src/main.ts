@@ -1,4 +1,6 @@
+
 import App from './App.svelte'
+import { FluxApi, createConfiguration, ServerConfiguration } from 'api-client'
 
 const queryParams = new URLSearchParams(window.location.search)
 
@@ -16,5 +18,29 @@ const app = new App({
     },
   },
 })
+
+function genAPIClient(token?: string): FluxApi {
+  return new FluxApi(
+    createConfiguration({
+      baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
+      authMethods: token
+        ? {
+          Bearer: `Bearer ${token}`,
+        }
+        : null,
+    }),
+  )
+}
+
+function getAPIClient(newToken?: string): FluxApi {
+  if (!(window as any).__api || newToken) {
+    return (window as any).__api = genAPIClient(newToken)
+  } else {
+    return (window as any).__api
+  }
+}
+
+// for testing, when needed, uncomment :D
+; (window as any).API = getAPIClient
 
 export default app

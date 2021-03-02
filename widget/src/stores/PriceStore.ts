@@ -1,32 +1,5 @@
 import { writable } from 'svelte/store'
-import { FluxApi, createConfiguration, ServerConfiguration } from 'api-client'
 import { supportedCurrencyPairs } from '../constants'
-
-// FIXME: example of how to configure client for bearer, it will automatically send to secure routes while omitting for public routes
-const tokenHere = 'not-the-right-thing'
-function genAPIClient(token?: string): FluxApi {
-  return new FluxApi(
-    createConfiguration({
-      baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
-      authMethods: token
-        ? {
-            Bearer: `Bearer ${token}`,
-          }
-        : null,
-    }),
-  )
-}
-new FluxApi(
-  createConfiguration({
-    baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
-    authMethods: {
-      Bearer: `Bearer ${tokenHere}`,
-    },
-  }),
-)
-
-// for testing, when needed, uncomment :D
-;(window as any).api = genAPIClient()
 
 const stubPrices = () => {
   return supportedCurrencyPairs.wyre.reduce((acc, key) => {
@@ -47,7 +20,7 @@ const createStore = () => {
   const { subscribe, update } = store
 
   const fetchPrices = async () => {
-    const { rates: prices } = await api.fluxPricingData()
+    const { rates: prices } = await (window as any).API().fluxPricingData()
     const result = {}
     await Promise.all(
       supportedCurrencyPairs.wyre.map(s => {
