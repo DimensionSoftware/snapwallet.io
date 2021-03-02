@@ -9,7 +9,6 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { Logger, onEnterPressed, setFluxSession } from '../util'
-  import type { OneTimePasscodeVerifyResponse } from 'api-client'
   import { toaster } from '../stores/ToastStore'
 
   let animation = 'left'
