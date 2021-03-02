@@ -57,14 +57,12 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton
-      >Check your email for your verification code!</ModalHeader
-    >
-    <Label label="Your OTP Code">
+    <ModalHeader hideCloseButton>Verify Your Email</ModalHeader>
+    <Label label="Your Email Code">
       <Input
         inputmode="numeric"
         autocapitalize="none"
-        autocomplete="off"
+        autocomplete="one-time-code"
         autofocus
         required
         type="number"
