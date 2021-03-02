@@ -15,8 +15,11 @@
   import { linear } from 'svelte/easing'
 
   let animation = 'left'
+  let isMakingRequest = false
 
   const handleNextStep = async () => {
+    isMakingRequest = true
+
     try {
       let emailIsValid = vld8.isEmail($userStore.emailAddress)
       if (!emailIsValid) {
@@ -28,7 +31,7 @@
         emailOrPhone: $userStore.emailAddress,
       })
 
-      push('#/verify-otp')
+      setTimeout(() => push('#/verify-otp'), 700)
     } catch (e) {
       Logger.error(e)
       let msg = 'An unknown error occurred. Please try again later.'
@@ -37,6 +40,8 @@
       }
 
       toaster.pop({ msg, error: true })
+    } finally {
+      setTimeout(() => (isMakingRequest = false), 700)
     }
   }
 
@@ -65,7 +70,9 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Login <small>or</small> SignUp</Button>
+    <Button disabled={isMakingRequest} on:click={handleNextStep}
+      >Login <small>or</small> SignUp</Button
+    >
   </ModalFooter>
 </ModalContent>
 
