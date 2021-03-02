@@ -1,4 +1,3 @@
-
 import App from './App.svelte'
 import { FluxApi, createConfiguration, ServerConfiguration } from 'api-client'
 
@@ -25,8 +24,8 @@ function genAPIClient(token?: string): FluxApi {
       baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
       authMethods: token
         ? {
-          Bearer: `Bearer ${token}`,
-        }
+            Bearer: `Bearer ${token}`,
+          }
         : null,
     }),
   )
@@ -34,13 +33,13 @@ function genAPIClient(token?: string): FluxApi {
 
 function getAPIClient(newToken?: string): FluxApi {
   if (!(window as any).__api || newToken) {
-    return (window as any).__api = genAPIClient(newToken)
+    return ((window as any).__api = genAPIClient(newToken))
   } else {
     return (window as any).__api
   }
 }
 
 // for testing, when needed, uncomment :D
-; (window as any).API = getAPIClient
+;(window as any).API = getAPIClient
 
 export default app

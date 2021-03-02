@@ -10,15 +10,23 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { onEnterPressed } from '../util'
+  import type { FluxApi } from 'api-client'
 
   let animation = 'left'
 
   const handleNextStep = () => {
     // validate
-    if (!vld8.isEmail($userStore.emailAddress))
-      return document.querySelector('input[type="email"]')?.focus()
-    // next
-    push('#/profile')
+    let emailIsValid = vld8.isEmail($userStore.emailAddress)
+    if (!emailIsValid)
+      return (document.querySelector('input[type="email"]') as any)
+        .focus()
+        ((window as any).API() as FluxApi)
+        .fluxOneTimePasscode({
+          emailOrPhone: $userStore.emailAddress,
+        })
+        .then(() => {
+          push('#/profile')
+        })
   }
 
   const onKeyDown = (e: Event) => {

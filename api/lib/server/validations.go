@@ -22,12 +22,7 @@ func ValidateAndNormalizeLogin(login string) (onetimepasscode.LoginKind, string,
 	} else {
 		err = checkmail.ValidateFormat(login)
 		if err == nil {
-			err = checkmail.ValidateHost(login)
-			if err == nil {
-				normalizedEmailOrPhone = strings.TrimSpace(login)
-			} else {
-				return onetimepasscode.LoginKindInvalid, "", status.Errorf(codes.InvalidArgument, "a valid phone number or email is required")
-			}
+			normalizedEmailOrPhone = strings.TrimSpace(login)
 		} else {
 			return onetimepasscode.LoginKindInvalid, "", status.Errorf(codes.InvalidArgument, "a valid phone number or email is required")
 		}
