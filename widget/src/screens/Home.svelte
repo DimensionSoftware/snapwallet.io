@@ -16,7 +16,6 @@
   import { onMount } from 'svelte'
   import { isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
-  import { Pulse } from 'svelte-loading-spinners'
 
   let selectorVisible = false
 
@@ -39,7 +38,7 @@
   let isEnteringSourceAmount = true
   let isLoadingPrices = true
 
-  $: fakePrice = 0
+  $: fakePrice = 10_000
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
