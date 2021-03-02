@@ -56,7 +56,6 @@
   }
 
   .modal-header {
-    margin-top: 1rem;
     margin-bottom: 1rem;
     height: 2.75rem;
     width: 100%;
