@@ -82,18 +82,27 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return nil, err
 	}
 
-	if loginKind == onetimepasscode.LoginKindPhone {
-		return nil, status.Errorf(codes.Unimplemented, "Phone login is not implemented yet; please try an email address.")
-	}
-
 	otp, err := s.Db.CreateOneTimePasscode(ctx, loginValue, loginKind)
 	if err != nil {
 		return nil, err
 	}
 
+	if loginKind == onetimepasscode.LoginKindPhone {
+		from := s.TwilioPhoneNumber
+		to := loginValue
+		message := fmt.Sprintf("Your one time passcode for flux is: %s", otp.Code)
+
+		_, _, err := s.Twilio.SendSMS(from, to, message, "", "")
+		if err != nil {
+			return nil, err
+		}
+
+		return &proto.OneTimePasscodeResponse{}, nil
+	}
+
 	msg := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
 
-	_, err = s.SendgridClient.Send(msg)
+	_, err = s.Sendgrid.Send(msg)
 	if err != nil {
 		return nil, err
 	}
