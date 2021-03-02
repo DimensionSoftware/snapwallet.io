@@ -14,7 +14,8 @@ $textColor2: lighten($textColor, 10%);
 $textColor3: lighten($textColor, 20%);
 $textColor4: lighten($textColor, 40%);
 $textColorMuted: $textColor3;
-$modalBackground: linear-gradient(#f8f8f8, #fff);
+// NOTE: avoid linear gradient for react native safeview embedding
+$modalBackground: #f8f8f8;
 $modalContainerBackgroundColor: linear-gradient(
   rgba(0, 0, 0, 0.08),
   rgba(0, 0, 0, 0.1)
