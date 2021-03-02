@@ -42,7 +42,7 @@
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
-      fakePrice = fakePrice + 213
+      fakePrice = fakePrice + 213.02
       if (isLoadingPrices) animateRandomPrice()
     })
   }
