@@ -24,7 +24,7 @@ func ValidateAndNormalizeLogin(login string) (onetimepasscode.LoginKind, string,
 		if err == nil {
 			normalizedEmailOrPhone = strings.TrimSpace(login)
 		} else {
-			return onetimepasscode.LoginKindInvalid, "", status.Errorf(codes.InvalidArgument, "a valid phone number or email is required")
+			return onetimepasscode.LoginKindInvalid, "", status.Errorf(codes.InvalidArgument, "A valid phone number or email is required.")
 		}
 	}
 

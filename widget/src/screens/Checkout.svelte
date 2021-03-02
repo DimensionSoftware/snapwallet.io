@@ -33,13 +33,13 @@
 
       setTimeout(() => push('#/verify-otp'), 700)
     } catch (e) {
-      Logger.error(e)
-      let msg = 'An unknown error occurred. Please try again later.'
-      if ([3].includes(e.body?.code)) {
-        msg = 'Please enter a valid email address.'
-      }
+      const err = e as { body: { code: number; message: string } }
+      Logger.error(err)
 
-      toaster.pop({ msg, error: true })
+      toaster.pop({
+        msg: err.body.message,
+        error: true,
+      })
     } finally {
       setTimeout(() => (isMakingRequest = false), 700)
     }
