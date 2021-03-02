@@ -11,12 +11,14 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/rs/xid"
 )
 
 // Db represents the application interface for accessing the database
 type Db struct {
-	Firestore *firestore.Client
+	Firestore         *firestore.Client
+	EncryptionManager *encryption.Manager
 }
 
 // CreateOneTimePasscode stores a record of a one-time-password request for verification later

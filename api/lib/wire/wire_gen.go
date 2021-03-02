@@ -8,6 +8,7 @@ package wire
 import (
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
@@ -63,8 +64,17 @@ func InitializeServer() (server.Server, error) {
 	jwtVerifier := auth.JwtVerifier{
 		PublicKey: publicKey,
 	}
+	encryptionConfig, err := encryption.ProvideConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	manager, err := encryption.NewManager(encryptionConfig)
+	if err != nil {
+		return server.Server{}, err
+	}
 	dbDb := db.Db{
-		Firestore: firestoreClient,
+		Firestore:         firestoreClient,
+		EncryptionManager: manager,
 	}
 	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, wyreClient, plaidClient, jwtSigner, jwtVerifier, dbDb)
 	return serverServer, nil
