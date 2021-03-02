@@ -66,7 +66,12 @@ func (db Db) CreateUser(ctx context.Context, email string, phone string, emailVe
 		u.PhoneVerifiedAt = &now
 	}
 
-	_, err := db.Firestore.Collection("users").Doc(id).Set(ctx, &u)
+	encryptedUser, err := u.Encrypt(db.EncryptionManager)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = db.Firestore.Collection("users").Doc(id).Set(ctx, encryptedUser)
 	if err != nil {
 		return nil, err
 	}
