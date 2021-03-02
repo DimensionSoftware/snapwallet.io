@@ -35,7 +35,7 @@
         push('#/profile')
       })
       .catch((resp: { body: { code: number; message: string } }) => {
-        // InvalidArgument code 3 (same as http 400), or Unauthenticated (same ass http 401)
+        // InvalidArgument code 3 (same as http 400), or Unauthenticated code 16 (same ass http 401)
         // FIXME: bubble up to user in a nice way
         if (resp.body.code === 3) {
           return alert(resp.body.message.match(/desc = (.+)/)[1])
