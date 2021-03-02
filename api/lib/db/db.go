@@ -45,14 +45,23 @@ func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kin
 }
 
 // CreateUser creates a user object
-func (db Db) CreateUser(ctx context.Context, email string, phone string) (*user.User, error) {
+func (db Db) CreateUser(ctx context.Context, email string, phone string, emailVerified bool, phoneVerified bool) (*user.User, error) {
 	id := xid.New().String()
 
+	now := time.Now()
 	u := user.User{
 		ID:        id,
 		Email:     email,
 		Phone:     phone,
-		CreatedAt: time.Now(),
+		CreatedAt: now,
+	}
+
+	if emailVerified {
+		u.EmailVerifiedAt = now
+	}
+
+	if phoneVerified {
+		u.PhoneVerifiedAt = now
 	}
 
 	_, err := db.Firestore.Collection("users").Doc(id).Set(ctx, &u)
@@ -74,10 +83,11 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 		return u, nil
 	}
 
+	// first time login means that we verified them with otp
 	if loginKind == onetimepasscode.LoginKindPhone {
-		u, err = db.CreateUser(ctx, "", emailOrPhone)
+		u, err = db.CreateUser(ctx, "", emailOrPhone, false, true)
 	} else {
-		u, err = db.CreateUser(ctx, emailOrPhone, "")
+		u, err = db.CreateUser(ctx, emailOrPhone, "", true, false)
 	}
 	if err != nil {
 		return nil, err
@@ -85,6 +95,28 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 
 	log.Printf("User not found; created: %v", u)
 	return u, nil
+}
+
+// GetUserByID gets a user object by id
+func (db Db) GetUserByID(ctx context.Context, id string) (*user.User, error) {
+	if id == "" {
+		return nil, nil
+
+	}
+
+	snap, err := db.Firestore.Collection("users").Doc(id).Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if snap.Exists() {
+		var u user.User
+		snap.DataTo(&u)
+		return &u, nil
+	}
+
+	// no user found (non-error)
+	return nil, nil
 }
 
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone

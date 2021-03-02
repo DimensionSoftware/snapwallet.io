@@ -249,10 +249,32 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 
 	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
 
+	u, err := s.Db.GetUserByID(ctx, userID)
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
+	}
+	if u == nil {
+		return nil, status.Errorf(codes.NotFound, "Your user was not found. Plaid Link token could not be created.")
+	}
+
+	plaidUserDetails := plaid.LinkTokenUser{
+		ClientUserID: userID,
+		EmailAddress: u.Email,
+	}
+
+	if u.Email != "" {
+		plaidUserDetails.EmailAddress = u.Email
+		plaidUserDetails.EmailAddressVerifiedTime = u.EmailVerifiedAt
+	}
+
+	if u.Phone != "" {
+		plaidUserDetails.PhoneNumber = u.Phone
+		plaidUserDetails.PhoneNumberVerifiedTime = u.PhoneVerifiedAt
+	}
+
 	linkTokenResp, err := s.Plaid.CreateLinkToken(plaid.LinkTokenConfigs{
-		User: &plaid.LinkTokenUser{
-			ClientUserID: userID,
-		},
+		User:         &plaidUserDetails,
 		ClientName:   "Flux",
 		Products:     []string{"auth"},
 		CountryCodes: []string{"US"},
