@@ -62,7 +62,12 @@ export default {
       },
       onwarn: (warning, handler) => {
         // don't warn 'A11y: A form label must be associated with a control'
-        if (['a11y-label-has-associated-control', 'a11y-autofocus'].includes(warning.code)) return
+        if (
+          ['a11y-label-has-associated-control', 'a11y-autofocus'].includes(
+            warning.code,
+          )
+        )
+          return
         // let Rollup handle all other warnings normally
         handler(warning)
       },

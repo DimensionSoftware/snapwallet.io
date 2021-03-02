@@ -22,12 +22,12 @@
     margin-bottom: 1.25em;
     span {
       position: absolute;
-      top: .55em;
+      top: 0.55em;
       margin-left: 0.85em;
       z-index: 99;
     }
   }
   :global(label .input-container > input) {
-    padding-top: 1.5em!important;
+    padding-top: 1.5em !important;
   }
 </style>

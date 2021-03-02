@@ -60,7 +60,7 @@
     }
     & > .modal-header-back-button {
       @include flex-align-center();
-      margin-left: .2em;
+      margin-left: 0.2em;
       justify-content: flex-start;
       cursor: pointer;
     }

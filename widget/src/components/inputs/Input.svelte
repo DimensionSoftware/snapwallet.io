@@ -45,7 +45,7 @@
     padding-bottom: 0;
     margin-bottom: 0.75rem;
     position: relative;
-    input[type="number"] {
+    input[type='number'] {
       padding-right: 0.75em;
     }
     input {

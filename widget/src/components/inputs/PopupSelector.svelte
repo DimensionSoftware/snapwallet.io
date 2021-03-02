@@ -75,7 +75,7 @@
   .popup-title {
     font-weight: 400;
     font-size: 1.25em;
-    margin-left: .5rem;
+    margin-left: 0.5rem;
   }
 
   .close-icon {
