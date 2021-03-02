@@ -51,6 +51,7 @@ export default {
     replace({
       preventAssignment: true,
       __ENV: JSON.stringify({
+        DEBUG: process.env.DEBUG,
         API_BASE_URL: process.env.API_BASE_URL,
       }),
     }),
