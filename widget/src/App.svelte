@@ -58,6 +58,11 @@
     box-sizing: border-box;
   }
 
+  :global(a, a:hover, a:active) {
+    cursor: pointer;
+    text-decoration: none;
+  }
+
   :root {
     // theme
     --theme-color: #{$themeColor};
