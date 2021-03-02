@@ -70,9 +70,13 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button disabled={isMakingRequest} on:click={handleNextStep}
-      >Login <small>or</small> SignUp</Button
-    >
+    <Button disabled={isMakingRequest} on:click={handleNextStep}>
+      {#if isMakingRequest}
+        Sending Email...
+      {:else}
+        Login <small>or</small> SignUp
+      {/if}
+    </Button>
   </ModalFooter>
 </ModalContent>
 
