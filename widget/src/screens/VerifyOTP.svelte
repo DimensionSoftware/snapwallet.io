@@ -8,44 +8,45 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { onEnterPressed } from '../util'
-  import type {
-    OneTimePasscodeVerifyResponse,
-    ResponseContext,
-  } from 'api-client'
+  import { Logger, onEnterPressed } from '../util'
+  import type { OneTimePasscodeVerifyResponse } from 'api-client'
+  import { toaster } from '../stores/ToastStore'
 
   let animation = 'left'
   let code = ''
+  let isMakingRequest = false
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
+    isMakingRequest = true
     const c = code
-    console.log('Verifying using OTP code:', c)
-    window
-      .API()
-      .fluxOneTimePasscodeVerify({
-        emailOrPhone: $userStore.emailAddress,
-        code: c,
-      })
-      .then((resp: OneTimePasscodeVerifyResponse) => {
-        // login (update jwt)
-        window.API(resp.jwt)
+    Logger.debug('Verifying using OTP code:', c)
 
-        // TODO: use returned user data to update store if necessary
-        console.log('LOGGED IN:', resp.user)
-        push('#/profile')
-      })
-      .catch((resp: { body: { code: number; message: string } }) => {
-        // InvalidArgument code 3 (same as http 400), or Unauthenticated code 16 (same ass http 401)
-        // FIXME: bubble up to user in a nice way
-        if (resp.body.code === 3) {
-          return alert(resp.body.message.match(/desc = (.+)/)[1])
-        } else if (resp.body.code == 16) {
-          return alert(resp.body.message)
-        }
+    try {
+      const response: OneTimePasscodeVerifyResponse = await window
+        .API()
+        .fluxOneTimePasscodeVerify({
+          emailOrPhone: $userStore.emailAddress,
+          code: c,
+        })
+      Logger.debug('LOGGED IN:', response.user)
+      push('#/profile')
+    } catch (e) {
+      Logger.error(e)
+      // TODO: move error messages to the server
+      let msg = 'An unknown error occurred. Please try again later.'
+      const code = e.body?.code
 
-        // unhandled error default
-        throw resp
+      if ([16, 3].includes(code)) {
+        msg = 'The email code provided was not valid. Please try again.'
+      }
+
+      toaster.pop({
+        msg,
+        error: true,
       })
+    } finally {
+      setTimeout(() => (isMakingRequest = false), 500)
+    }
   }
 
   const onKeyDown = (e: Event) => {
@@ -57,24 +58,29 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton
-      >Check your email for your verification code!</ModalHeader
-    >
-    <Label label="Your OTP Code">
+    <ModalHeader hideCloseButton>Verify Your Email</ModalHeader>
+    <Label label="Your Email Code">
       <Input
         inputmode="numeric"
         autocapitalize="none"
-        autocomplete="off"
+        autocomplete="one-time-code"
         autofocus
         required
         type="number"
         placeholder="123456"
-        on:change={e => (code = e.detail)}
+        on:change={e => {
+          code = e.detail
+          if (code.length >= 6) {
+            handleNextStep()
+          }
+        }}
       />
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Verify and let me in!</Button>
+    <Button disabled={isMakingRequest} on:click={handleNextStep}
+      >Verify Email</Button
+    >
   </ModalFooter>
 </ModalContent>
 
