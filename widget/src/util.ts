@@ -29,14 +29,13 @@ export const Logger = (() => {
   }
 })()
 
-export const setFluxSession = (jwt?: string): boolean => {
+export const setFluxSession = (jwt?: string) => {
   try {
-    if (!jwt) return false
+    if (!jwt) throw new Error('No token provided')
     window.localStorage.setItem(JWT_SESSION_KEY, jwt)
-    return true
   } catch (e) {
-    Logger.error('Error setting flux session', e)
-    return false
+    Logger.error('Error setting flux session:', e)
+    throw e
   }
 }
 
