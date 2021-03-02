@@ -117,9 +117,15 @@ func (db Db) GetUserByID(ctx context.Context, id string) (*user.User, error) {
 	}
 
 	if snap.Exists() {
-		var u user.User
-		snap.DataTo(&u)
-		return &u, nil
+		var encU user.EncryptedUser
+		snap.DataTo(&encU)
+
+		u, err := encU.Decrypt(db.EncryptionManager)
+		if err != nil {
+			return nil, err
+		}
+
+		return u, nil
 	}
 
 	// no user found (non-error)
@@ -132,8 +138,13 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 		return nil, nil
 	}
 
+	emailOrPhoneCipherText, err := db.EncryptionManager.Encrypt([]byte(emailOrPhone))
+	if err != nil {
+		return nil, err
+	}
+
 	users, err := db.Firestore.Collection("users").
-		Where("email", "==", emailOrPhone).
+		Where("email", "==", emailOrPhoneCipherText).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
@@ -141,16 +152,22 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 		return nil, err
 	}
 	if len(users) == 1 {
-		var u user.User
-		err := users[0].DataTo(&u)
+		var encU user.EncryptedUser
+		err := users[0].DataTo(&encU)
 		if err != nil {
 			return nil, err
 		}
-		return &u, nil
+
+		u, err := encU.Decrypt(db.EncryptionManager)
+		if err != nil {
+			return nil, err
+		}
+
+		return u, nil
 	}
 
 	users, err = db.Firestore.Collection("users").
-		Where("phone", "==", emailOrPhone).
+		Where("phone", "==", emailOrPhoneCipherText).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
@@ -158,12 +175,18 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 		return nil, err
 	}
 	if len(users) == 1 {
-		var u user.User
-		err := users[0].DataTo(&u)
+		var encU user.EncryptedUser
+		err := users[0].DataTo(&encU)
 		if err != nil {
 			return nil, err
 		}
-		return &u, nil
+
+		u, err := encU.Decrypt(db.EncryptionManager)
+		if err != nil {
+			return nil, err
+		}
+
+		return u, nil
 	}
 
 	return nil, nil

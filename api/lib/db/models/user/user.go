@@ -27,7 +27,7 @@ type User struct {
 }
 
 // Decrypt decrypts the user
-func (enc *EncryptedUser) Decrypt(m encryption.Manager) (*User, error) {
+func (enc *EncryptedUser) Decrypt(m *encryption.Manager) (*User, error) {
 	email, err := m.Decrypt(enc.EncryptedEmail)
 	if err != nil {
 		return nil, err
