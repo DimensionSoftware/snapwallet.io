@@ -12,7 +12,13 @@ func (req *WyreAddBankPaymentMethodsRequest) Validate() error {
 	}
 
 	if len(req.PlaidAccountIds) < 1 {
-		return status.Errorf(codes.InvalidArgument, "account id must be set")
+		return status.Errorf(codes.InvalidArgument, "plaid account ids must be set")
+	}
+
+	for _, plaidAccountID := range req.PlaidAccountIds {
+		if plaidAccountID == "" {
+			return status.Errorf(codes.InvalidArgument, "plaid account ids must be non-empty strings")
+		}
 	}
 
 	return nil
