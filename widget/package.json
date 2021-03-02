@@ -15,6 +15,7 @@
     "@rollup/plugin-typescript": "^8.2.0",
     "@tsconfig/svelte": "^1.0.10",
     "api-client": "file://../api/client",
+    "debug": "^4.3.1",
     "dotenv": "^8.2.0",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.1.6",
