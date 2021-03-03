@@ -69,11 +69,15 @@
       }
     }
     &:disabled {
+      animation: none;
       background: var(--theme-color);
       cursor: not-allowed;
       text-shadow: none;
       opacity: 0.83;
       box-shadow: none;
+      &:before {
+        display: none;
+      }
     }
   }
 </style>
