@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/base64"
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/google/tink/go/aead"
@@ -94,4 +95,24 @@ func (m *Manager) Decrypt(ciphertext CipherText) (*[]byte, error) {
 	}
 
 	return &cleartext, nil
+}
+
+// NewDEK creates new data encryption key
+func NewDEK() *keyset.Handle {
+	kh, err := keyset.NewHandle(aead.AES256GCMKeyTemplate())
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return kh
+}
+
+// NewEncryptor creates new encryptor
+func NewEncryptor(kh *keyset.Handle) tink.AEAD {
+	encryptor, err := aead.New(kh)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return encryptor
 }

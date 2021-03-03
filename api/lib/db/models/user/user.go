@@ -69,30 +69,38 @@ func (enc *EncryptedUser) Decrypt(m *encryption.Manager) (*User, error) {
 
 // Encrypt encrypts the user
 func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
-	var emailBytes *[]byte
+	dekH := encryption.NewDEK()
+	dek := encryption.NewEncryptor(dekH)
+
+	var encEmailBytes *[]byte
 	var emailHash *[]byte
 	if u.Email != nil {
 		b := []byte(*u.Email)
-		emailBytes = &b
+
 		h := hashing.Hash(b)
 		emailHash = &h
-	}
-	encEmailBytes, err := m.Encrypt(emailBytes)
-	if err != nil {
-		return nil, err
+
+		encrypted, err := dek.Encrypt(b, m.AdditionalData)
+		if err != nil {
+			return nil, err
+		}
+		encEmailBytes = &encrypted
 	}
 
-	var phoneBytes *[]byte
+	var encPhoneBytes *[]byte
 	var phoneHash *[]byte
 	if u.Phone != nil {
 		b := []byte(*u.Phone)
-		phoneBytes = &b
+
 		h := hashing.Hash(b)
 		phoneHash = &h
-	}
-	encPhoneBytes, err := m.Encrypt(phoneBytes)
-	if err != nil {
-		return nil, err
+
+		encrypted, err := dek.Encrypt(b, m.AdditionalData)
+		if err != nil {
+			return nil, err
+		}
+
+		encPhoneBytes = &encrypted
 	}
 
 	return &EncryptedUser{
