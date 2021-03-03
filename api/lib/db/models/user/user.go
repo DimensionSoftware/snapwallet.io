@@ -9,9 +9,9 @@ import (
 // EncryptedUser represents a user registered with our system where PII is encrypted at rest
 type EncryptedUser struct {
 	ID              string     `firestore:"id"`
-	EncryptedEmail  []byte     `firestore:"encryptedEmail"`
+	EncryptedEmail  *[]byte    `firestore:"encryptedEmail,omitempty"`
 	EmailVerifiedAt *time.Time `firestore:"emailVerifiedAt,omitempty"`
-	EncryptedPhone  []byte     `firestore:"encryptedPhone"`
+	EncryptedPhone  *[]byte    `firestore:"encryptedPhone,omitempty"`
 	PhoneVerifiedAt *time.Time `firestore:"phoneVerifiedAt,omitempty"`
 	CreatedAt       time.Time  `firestore:"createdAt"`
 }
@@ -19,43 +19,71 @@ type EncryptedUser struct {
 // User is the decrypted user
 type User struct {
 	ID              string
-	Email           string
+	Email           *string
 	EmailVerifiedAt *time.Time
-	Phone           string
+	Phone           *string
 	PhoneVerifiedAt *time.Time
 	CreatedAt       time.Time
 }
 
 // Decrypt decrypts the user
 func (enc *EncryptedUser) Decrypt(m *encryption.Manager) (*User, error) {
-	email, err := m.Decrypt(enc.EncryptedEmail)
+	emailBytes, err := m.Decrypt(enc.EncryptedEmail)
 	if err != nil {
 		return nil, err
 	}
+	var email string
+	if emailBytes != nil {
+		email = string(*emailBytes)
+	}
 
-	phone, err := m.Decrypt(enc.EncryptedPhone)
+	phoneBytes, err := m.Decrypt(enc.EncryptedPhone)
 	if err != nil {
 		return nil, err
 	}
+	var phone string
+	if phoneBytes != nil {
+		email = string(*phoneBytes)
+	}
 
-	return &User{
+	u := User{
 		ID:              enc.ID,
-		Email:           string(email),
 		EmailVerifiedAt: enc.EmailVerifiedAt,
-		Phone:           string(phone),
 		PhoneVerifiedAt: enc.PhoneVerifiedAt,
 		CreatedAt:       enc.CreatedAt,
-	}, nil
+	}
+
+	if email != "" {
+		u.Email = &email
+	}
+
+	if phone != "" {
+		u.Phone = &phone
+	}
+
+	return &u, nil
 }
 
 // Encrypt encrypts the user
 func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
-	email, err := m.Encrypt([]byte(u.Email))
+	var emailBytes *[]byte
+	if u.Email != nil {
+		b := []byte(*u.Email)
+		emailBytes = &b
+
+	}
+	email, err := m.Encrypt(emailBytes)
 	if err != nil {
 		return nil, err
 	}
 
-	phone, err := m.Encrypt([]byte(u.Phone))
+	var phoneBytes *[]byte
+	if u.Phone != nil {
+		b := []byte(*u.Phone)
+		phoneBytes = &b
+
+	}
+	phone, err := m.Encrypt(phoneBytes)
 	if err != nil {
 		return nil, err
 	}

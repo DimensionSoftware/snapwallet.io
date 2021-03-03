@@ -55,11 +55,15 @@ func NewManager(config *Config) (*Manager, error) {
 }
 
 // CipherText is encrypted data
-type CipherText []byte
+type CipherText = *[]byte
 
 // Encrypt encrypts the cleartext into ciphertext
-func (m *Manager) Encrypt(cleartext []byte) (CipherText, error) {
-	b64 := base64.StdEncoding.EncodeToString(cleartext)
+func (m *Manager) Encrypt(cleartext *[]byte) (CipherText, error) {
+	if cleartext == nil {
+		return nil, nil
+	}
+
+	b64 := base64.StdEncoding.EncodeToString(*cleartext)
 	ciphertext := make([]byte, aes.BlockSize+len(b64))
 	iv := ciphertext[:aes.BlockSize]
 
@@ -68,24 +72,30 @@ func (m *Manager) Encrypt(cleartext []byte) (CipherText, error) {
 	}
 
 	cfb := cipher.NewCFBEncrypter(m.Key, iv)
-	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(cleartext))
+	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(*cleartext))
 
-	return ciphertext, nil
+	return &ciphertext, nil
 
 }
 
 // Decrypt decrypts the ciphertext into cleartext
-func (m *Manager) Decrypt(ciphertext CipherText) ([]byte, error) {
-	if len(ciphertext) < aes.BlockSize {
+func (m *Manager) Decrypt(ciphertext CipherText) (*[]byte, error) {
+	if ciphertext == nil {
+		return nil, nil
+	}
+
+	c := []byte(*ciphertext)
+
+	if len(c) < aes.BlockSize {
 		return nil, errors.New("ciphertext too short")
 	}
 
-	iv := ciphertext[:aes.BlockSize]
-	ciphertext = ciphertext[aes.BlockSize:]
+	iv := c[:aes.BlockSize]
+	c = c[aes.BlockSize:]
 
 	cfb := cipher.NewCFBDecrypter(m.Key, iv)
 
-	cfb.XORKeyStream(ciphertext, ciphertext)
+	cfb.XORKeyStream(c, c)
 
-	return ciphertext, nil
+	return &c, nil
 }

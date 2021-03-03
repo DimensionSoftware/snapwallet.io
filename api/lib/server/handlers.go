@@ -154,14 +154,22 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
+	respUser := &proto.User{
+		Id:        u.ID,
+		CreatedAt: u.CreatedAt.Unix(),
+	}
+
+	if u.Email != nil {
+		respUser.Email = *u.Email
+	}
+
+	if u.Phone != nil {
+		respUser.Phone = *u.Phone
+	}
+
 	return &proto.OneTimePasscodeVerifyResponse{
-		Jwt: jwt,
-		User: &proto.User{
-			Id:        u.ID,
-			Email:     u.Email,
-			Phone:     u.Phone,
-			CreatedAt: u.CreatedAt.Unix(),
-		},
+		Jwt:  jwt,
+		User: respUser,
 	}, nil
 }
 

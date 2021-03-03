@@ -47,7 +47,7 @@ func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kin
 }
 
 // CreateUser creates a user object
-func (db Db) CreateUser(ctx context.Context, email string, phone string, emailVerified bool, phoneVerified bool) (*user.User, error) {
+func (db Db) CreateUser(ctx context.Context, email *string, phone *string, emailVerified bool, phoneVerified bool) (*user.User, error) {
 	id := xid.New().String()
 
 	now := time.Now()
@@ -92,9 +92,9 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 
 	// first time login means that we verified them with otp
 	if loginKind == onetimepasscode.LoginKindPhone {
-		u, err = db.CreateUser(ctx, "", emailOrPhone, false, true)
+		u, err = db.CreateUser(ctx, nil, &emailOrPhone, false, true)
 	} else {
-		u, err = db.CreateUser(ctx, emailOrPhone, "", true, false)
+		u, err = db.CreateUser(ctx, &emailOrPhone, nil, true, false)
 	}
 	if err != nil {
 		return nil, err
@@ -138,7 +138,9 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 		return nil, nil
 	}
 
-	emailOrPhoneCipherText, err := db.EncryptionManager.Encrypt([]byte(emailOrPhone))
+	emailOrPhoneBytes := []byte(emailOrPhone)
+
+	emailOrPhoneCipherText, err := db.EncryptionManager.Encrypt(&emailOrPhoneBytes)
 	if err != nil {
 		return nil, err
 	}
