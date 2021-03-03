@@ -1,22 +1,25 @@
 package user
 
 import (
+	"bytes"
 	"time"
 
+	"github.com/google/tink/go/keyset"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 )
 
 // EncryptedUser represents a user registered with our system where PII is encrypted at rest
 type EncryptedUser struct {
-	ID              string     `firestore:"id"`
-	EmailHash       *[]byte    `firestore:"emailHash,omitempty"`
-	EmailEncrypted  *[]byte    `firestore:"emailEncrypted,omitempty"`
-	EmailVerifiedAt *time.Time `firestore:"emailVerifiedAt,omitempty"`
-	PhoneHash       *[]byte    `firestore:"phoneHash,omitempty"`
-	PhoneEncrypted  *[]byte    `firestore:"phoneEncrypted,omitempty"`
-	PhoneVerifiedAt *time.Time `firestore:"phoneVerifiedAt,omitempty"`
-	CreatedAt       time.Time  `firestore:"createdAt"`
+	ID                string     `firestore:"id"`
+	DataEncryptionKey []byte     `firestore:"DEK"`
+	EmailHash         *[]byte    `firestore:"emailHash,omitempty"`
+	EmailEncrypted    *[]byte    `firestore:"emailEncrypted,omitempty"`
+	EmailVerifiedAt   *time.Time `firestore:"emailVerifiedAt,omitempty"`
+	PhoneHash         *[]byte    `firestore:"phoneHash,omitempty"`
+	PhoneEncrypted    *[]byte    `firestore:"phoneEncrypted,omitempty"`
+	PhoneVerifiedAt   *time.Time `firestore:"phoneVerifiedAt,omitempty"`
+	CreatedAt         time.Time  `firestore:"createdAt"`
 }
 
 // User is the decrypted user
@@ -103,14 +106,21 @@ func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
 		encPhoneBytes = &encrypted
 	}
 
+	var buf bytes.Buffer
+	err := dekH.Write(keyset.NewBinaryWriter(&buf), m.Encryptor)
+	if err != nil {
+		return nil, err
+	}
+
 	return &EncryptedUser{
-		ID:              u.ID,
-		EmailHash:       emailHash,
-		EmailEncrypted:  encEmailBytes,
-		EmailVerifiedAt: u.EmailVerifiedAt,
-		PhoneHash:       phoneHash,
-		PhoneEncrypted:  encPhoneBytes,
-		PhoneVerifiedAt: u.PhoneVerifiedAt,
-		CreatedAt:       u.CreatedAt,
+		ID:                u.ID,
+		DataEncryptionKey: buf.Bytes(),
+		EmailHash:         emailHash,
+		EmailEncrypted:    encEmailBytes,
+		EmailVerifiedAt:   u.EmailVerifiedAt,
+		PhoneHash:         phoneHash,
+		PhoneEncrypted:    encPhoneBytes,
+		PhoneVerifiedAt:   u.PhoneVerifiedAt,
+		CreatedAt:         u.CreatedAt,
 	}, nil
 }
