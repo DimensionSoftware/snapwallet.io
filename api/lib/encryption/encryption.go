@@ -1,14 +1,15 @@
 package encryption
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
-	"crypto/rand"
+	"bytes"
 	"encoding/base64"
-	"errors"
 	"fmt"
-	"io"
 	"os"
+
+	"github.com/google/tink/go/aead"
+	"github.com/google/tink/go/insecurecleartextkeyset"
+	"github.com/google/tink/go/keyset"
+	"github.com/google/tink/go/tink"
 )
 
 const encryptionKeyKeyEnvVarName = "ENCRYPTION_KEY"
@@ -17,13 +18,15 @@ const encryptionKeyKeyEnvVarName = "ENCRYPTION_KEY"
 
 // Config is the input config to instantiate the Manager
 type Config struct {
-	Key string
+	// TODO: don't store this in memory and call out to KMS every time (it then acts as our KEK manager)
+	MasterKey      string
+	AdditionalData []byte
 }
 
-// Manager manages our symmetric at-rest AES-256 encryption
+// Manager manages our symmetric at-rest encryption
 type Manager struct {
-	//  AES Cipher Block generated from 32 bytes for AES-256.
-	Key cipher.Block
+	Encryptor      tink.AEAD
+	AdditionalData []byte
 }
 
 // ProvideConfig provides a Config for instantiating the Manager
@@ -32,25 +35,33 @@ func ProvideConfig() (*Config, error) {
 	if key == "" {
 		return nil, fmt.Errorf("you must set %s", encryptionKeyKeyEnvVarName)
 	}
-
 	return &Config{
-		Key: key,
+		MasterKey: key,
+		// TODO: store this in kms later
+		AdditionalData: []byte("w8Zp8hAYs1jIkuh2Lc8knbCIN[rWDt.o$=rh'y@agi"),
 	}, nil
 }
 
 // NewManager instantiates a new encryption manager
 func NewManager(config *Config) (*Manager, error) {
-	if len(config.Key) != 32 {
-		return nil, fmt.Errorf("encryption key must be 32 bytes in length for AES-256")
+	var buf bytes.Buffer
+	buf.WriteString(config.MasterKey)
+
+	r := keyset.NewBinaryReader(base64.NewDecoder(base64.RawStdEncoding, &buf))
+	// todo: swap out with kms
+	key, err := insecurecleartextkeyset.Read(r)
+	if err != nil {
+		return nil, err
 	}
 
-	keyBlock, err := aes.NewCipher([]byte(config.Key))
+	a, err := aead.New(key)
 	if err != nil {
 		return nil, err
 	}
 
 	return &Manager{
-		Key: keyBlock,
+		Encryptor:      a,
+		AdditionalData: config.AdditionalData,
 	}, nil
 }
 
@@ -63,19 +74,12 @@ func (m *Manager) Encrypt(cleartext *[]byte) (CipherText, error) {
 		return nil, nil
 	}
 
-	b64 := base64.StdEncoding.EncodeToString(*cleartext)
-	ciphertext := make([]byte, aes.BlockSize+len(b64))
-	iv := ciphertext[:aes.BlockSize]
-
-	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
+	ciphertext, err := m.Encryptor.Encrypt(*cleartext, m.AdditionalData)
+	if err != nil {
 		return nil, err
 	}
 
-	cfb := cipher.NewCFBEncrypter(m.Key, iv)
-	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(*cleartext))
-
 	return &ciphertext, nil
-
 }
 
 // Decrypt decrypts the ciphertext into cleartext
@@ -84,18 +88,10 @@ func (m *Manager) Decrypt(ciphertext CipherText) (*[]byte, error) {
 		return nil, nil
 	}
 
-	c := *ciphertext
-
-	if len(c) < aes.BlockSize {
-		return nil, errors.New("ciphertext too short")
+	cleartext, err := m.Encryptor.Decrypt(*ciphertext, m.AdditionalData)
+	if err != nil {
+		return nil, err
 	}
 
-	iv := c[:aes.BlockSize]
-	c = c[aes.BlockSize:]
-
-	cfb := cipher.NewCFBDecrypter(m.Key, iv)
-
-	cfb.XORKeyStream(c, c)
-
-	return &c, nil
+	return &cleartext, nil
 }
