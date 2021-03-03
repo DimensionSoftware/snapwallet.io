@@ -116,3 +116,32 @@ func NewEncryptor(kh *keyset.Handle) tink.AEAD {
 
 	return encryptor
 }
+
+// GetEncryptedKeyBytes .
+func GetEncryptedKeyBytes(kh *keyset.Handle, masterKey tink.AEAD) []byte {
+	var buf bytes.Buffer
+	err := kh.Write(keyset.NewBinaryWriter(&buf), masterKey)
+	if err != nil {
+		// should never fail
+		log.Fatal(err)
+	}
+
+	return buf.Bytes()
+}
+
+// ParseAndDecryptKeyBytes .
+func ParseAndDecryptKeyBytes(ciphertext []byte, masterKey tink.AEAD) (*keyset.Handle, error) {
+	var buf bytes.Buffer
+	_, err := buf.Write(ciphertext)
+	if err != nil {
+		// should never fail
+		log.Fatal(err)
+	}
+
+	kh, err := keyset.Read(keyset.NewBinaryReader(&buf), masterKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return kh, nil
+}

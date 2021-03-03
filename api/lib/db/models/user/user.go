@@ -1,10 +1,8 @@
 package user
 
 import (
-	"bytes"
 	"time"
 
-	"github.com/google/tink/go/keyset"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 )
@@ -34,6 +32,11 @@ type User struct {
 
 // Decrypt decrypts the user
 func (enc *EncryptedUser) Decrypt(m *encryption.Manager) (*User, error) {
+	dek, err := encryption.ParseAndDecryptKeyBytes(enc.DataEncryptionKey, m.Encryptor)
+	if err != nil {
+		return nil, err
+	}
+
 	emailBytes, err := m.Decrypt(enc.EmailEncrypted)
 	if err != nil {
 		return nil, err
@@ -106,15 +109,9 @@ func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
 		encPhoneBytes = &encrypted
 	}
 
-	var buf bytes.Buffer
-	err := dekH.Write(keyset.NewBinaryWriter(&buf), m.Encryptor)
-	if err != nil {
-		return nil, err
-	}
-
 	return &EncryptedUser{
 		ID:                u.ID,
-		DataEncryptionKey: buf.Bytes(),
+		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EmailHash:         emailHash,
 		EmailEncrypted:    encEmailBytes,
 		EmailVerifiedAt:   u.EmailVerifiedAt,
