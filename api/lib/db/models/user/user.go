@@ -32,45 +32,44 @@ type User struct {
 
 // Decrypt decrypts the user
 func (enc *EncryptedUser) Decrypt(m *encryption.Manager) (*User, error) {
-	dek, err := encryption.ParseAndDecryptKeyBytes(enc.DataEncryptionKey, m.Encryptor)
+	dekH, err := encryption.ParseAndDecryptKeyBytes(enc.DataEncryptionKey, m.Encryptor)
 	if err != nil {
 		return nil, err
 	}
+	dek := encryption.NewEncryptor(dekH)
 
-	emailBytes, err := m.Decrypt(enc.EmailEncrypted)
-	if err != nil {
-		return nil, err
-	}
-	var email string
-	if emailBytes != nil {
-		email = string(*emailBytes)
-	}
+	var email *string
+	if enc.EmailEncrypted != nil {
+		b, err := dek.Decrypt(*enc.EmailEncrypted, m.AdditionalData)
+		if err != nil {
+			return nil, err
+		}
 
-	phoneBytes, err := m.Decrypt(enc.PhoneEncrypted)
-	if err != nil {
-		return nil, err
-	}
-	var phone string
-	if phoneBytes != nil {
-		email = string(*phoneBytes)
+		s := string(b)
+
+		email = &s
 	}
 
-	u := User{
+	var phone *string
+	if enc.PhoneEncrypted != nil {
+		b, err := dek.Decrypt(*enc.PhoneEncrypted, m.AdditionalData)
+		if err != nil {
+			return nil, err
+		}
+
+		s := string(b)
+
+		phone = &s
+	}
+
+	return &User{
 		ID:              enc.ID,
+		Email:           email,
 		EmailVerifiedAt: enc.EmailVerifiedAt,
+		Phone:           phone,
 		PhoneVerifiedAt: enc.PhoneVerifiedAt,
 		CreatedAt:       enc.CreatedAt,
-	}
-
-	if email != "" {
-		u.Email = &email
-	}
-
-	if phone != "" {
-		u.Phone = &phone
-	}
-
-	return &u, nil
+	}, nil
 }
 
 // Encrypt encrypts the user
