@@ -36,14 +36,16 @@
   $: sourceRate = $transactionStore.destinationAmount / selectedDestinationPrice
 
   let isEnteringSourceAmount = true
-  let isLoadingPrices = true
+  let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
 
   $: fakePrice = 10_000
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
-      fakePrice = fakePrice + 213.02
-      if (isLoadingPrices) animateRandomPrice()
+      if (isLoadingPrices) {
+        fakePrice = fakePrice + 213.02
+        animateRandomPrice()
+      }
     })
   }
 
