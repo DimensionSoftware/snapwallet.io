@@ -11,27 +11,25 @@
   import { userStore } from '../stores/UserStore'
   import { toaster } from '../stores/ToastStore'
   import { Logger, onEnterPressed } from '../util'
-  import type { ResponseBody, ResponseContext } from 'api-client'
-  import { linear } from 'svelte/easing'
 
   let animation = 'left'
   let isMakingRequest = false
+
+  const timeout = 700
 
   const handleNextStep = async () => {
     isMakingRequest = true
 
     try {
       let emailIsValid = vld8.isEmail($userStore.emailAddress)
-      if (!emailIsValid) {
-        ;(document.querySelector('input[type="email"]') as any).focus()
-        // return
-      }
+      if (!emailIsValid)
+        (document.querySelector('input[type="email"]') as any).focus()
 
       await window.API().fluxOneTimePasscode({
         emailOrPhone: $userStore.emailAddress,
       })
 
-      setTimeout(() => push('#/verify-otp'), 700)
+      setTimeout(() => push('#/verify-otp'), timeout)
     } catch (e) {
       const err = e as { body: { code: number; message: string } }
       Logger.error(err)
@@ -41,7 +39,7 @@
         error: true,
       })
     } finally {
-      setTimeout(() => (isMakingRequest = false), 700)
+      setTimeout(() => (isMakingRequest = false), timeout)
     }
   }
 
