@@ -70,11 +70,12 @@ func (enc *EncryptedUser) Decrypt(m *encryption.Manager) (*User, error) {
 // Encrypt encrypts the user
 func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
 	var emailBytes *[]byte
-	var emailHash []byte
+	var emailHash *[]byte
 	if u.Email != nil {
 		b := []byte(*u.Email)
 		emailBytes = &b
-		emailHash = hashing.Hash(b)
+		h := hashing.Hash(b)
+		emailHash = &h
 	}
 	encEmailBytes, err := m.Encrypt(emailBytes)
 	if err != nil {
@@ -82,11 +83,12 @@ func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
 	}
 
 	var phoneBytes *[]byte
-	var phoneHash []byte
+	var phoneHash *[]byte
 	if u.Phone != nil {
 		b := []byte(*u.Phone)
 		phoneBytes = &b
-		phoneHash = hashing.Hash(b)
+		h := hashing.Hash(b)
+		phoneHash = &h
 	}
 	encPhoneBytes, err := m.Encrypt(phoneBytes)
 	if err != nil {
@@ -95,10 +97,10 @@ func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
 
 	return &EncryptedUser{
 		ID:              u.ID,
-		EmailHash:       &emailHash,
+		EmailHash:       emailHash,
 		EmailEncrypted:  encEmailBytes,
 		EmailVerifiedAt: u.EmailVerifiedAt,
-		PhoneHash:       &phoneHash,
+		PhoneHash:       phoneHash,
 		PhoneEncrypted:  encPhoneBytes,
 		PhoneVerifiedAt: u.PhoneVerifiedAt,
 		CreatedAt:       u.CreatedAt,
