@@ -84,7 +84,7 @@ func (m *Manager) Decrypt(ciphertext CipherText) (*[]byte, error) {
 		return nil, nil
 	}
 
-	c := []byte(*ciphertext)
+	c := *ciphertext
 
 	if len(c) < aes.BlockSize {
 		return nil, errors.New("ciphertext too short")
