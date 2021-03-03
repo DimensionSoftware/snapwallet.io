@@ -72,7 +72,7 @@ func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
 		emailBytes = &b
 
 	}
-	email, err := m.Encrypt(emailBytes)
+	encEmailBytes, err := m.Encrypt(emailBytes)
 	if err != nil {
 		return nil, err
 	}
@@ -83,16 +83,16 @@ func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
 		phoneBytes = &b
 
 	}
-	phone, err := m.Encrypt(phoneBytes)
+	encPhoneBytes, err := m.Encrypt(phoneBytes)
 	if err != nil {
 		return nil, err
 	}
 
 	return &EncryptedUser{
 		ID:              u.ID,
-		EncryptedEmail:  email,
+		EncryptedEmail:  encEmailBytes,
 		EmailVerifiedAt: u.EmailVerifiedAt,
-		EncryptedPhone:  phone,
+		EncryptedPhone:  encPhoneBytes,
 		PhoneVerifiedAt: u.PhoneVerifiedAt,
 		CreatedAt:       u.CreatedAt,
 	}, nil
