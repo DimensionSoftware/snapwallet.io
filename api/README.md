@@ -57,3 +57,16 @@ this is required when wiring up new dependencies into our server container
 ```bash
 make wire
 ```
+
+### LINKS
+https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/always-encrypted-cryptography?view=sql-server-ver15
+
+Deterministic encryption is more effective in concealing patterns, compared to alternatives, such as using a pre-defined IV value.
+
+
+https://tools.ietf.org/html/rfc5297
+
+https://github.com/miscreant/meta/wiki/AES-SIV
+
+
+

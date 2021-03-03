@@ -12,6 +12,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/encryption"
+	"github.com/khoerling/flux/api/lib/hashing"
 	"github.com/rs/xid"
 )
 
@@ -139,14 +140,10 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 	}
 
 	emailOrPhoneBytes := []byte(emailOrPhone)
-
-	emailOrPhoneCipherText, err := db.EncryptionManager.Encrypt(&emailOrPhoneBytes)
-	if err != nil {
-		return nil, err
-	}
+	emailOrPhoneHash := hashing.Hash(emailOrPhoneBytes)
 
 	users, err := db.Firestore.Collection("users").
-		Where("encryptedEmail", "==", emailOrPhoneCipherText).
+		Where("emailHash", "==", emailOrPhoneHash).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
@@ -169,7 +166,7 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 	}
 
 	users, err = db.Firestore.Collection("users").
-		Where("encryptedPhone", "==", emailOrPhoneCipherText).
+		Where("phoneHash", "==", emailOrPhoneHash).
 		Limit(1).
 		Documents(ctx).
 		GetAll()

@@ -20,6 +20,7 @@ require (
 	github.com/sendgrid/sendgrid-go v3.8.0+incompatible
 	github.com/sfreiberg/gotwilio v0.0.0-20201211181435-c426a3710ab5
 	github.com/stretchr/testify v1.5.1
+	golang.org/x/crypto v0.0.0-20200622213623-75b288015ac9
 	google.golang.org/api v0.36.0
 	google.golang.org/genproto v0.0.0-20210207032614-bba0dbe2a9ea
 	google.golang.org/grpc v1.35.0
