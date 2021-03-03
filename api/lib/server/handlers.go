@@ -237,12 +237,6 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 		ClientUserID: userID,
 	}
 
-	if u.Phone != "" {
-		plaidUserDetails.PhoneNumber = u.Phone
-		plaidUserDetails.PhoneNumberVerifiedTime = *u.PhoneVerifiedAt
-	}
-	log.Println(plaidUserDetails)
-
 	linkTokenResp, err := s.Plaid.CreateLinkToken(plaid.LinkTokenConfigs{
 		User:         &plaidUserDetails,
 		ClientName:   "Flux",
