@@ -125,7 +125,7 @@
   <ModalFooter>
     <Button disabled={isMakingRequest} on:click={handleNextStep}>
       {#if isMakingRequest && !isSendingEmail}
-        Verifying Code...
+        Verifying...
       {:else if isMakingRequest && isSendingEmail}
         Resending Email...
       {:else}
@@ -144,7 +144,7 @@
     font-size: 0.8rem;
     margin-top: -1rem;
     & > a {
-      margin-left: 0.5rem;
+      margin-left: 0.2em;
     }
   }
 </style>
