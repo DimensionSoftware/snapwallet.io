@@ -176,19 +176,19 @@ func (s *Server) WyreAddBankPaymentMethods(ctx context.Context, req *proto.WyreA
 	for _, plaidAccountID := range req.PlaidAccountIds {
 		log.Printf("STUB > process PlaidAccountID: %s", plaidAccountID)
 	}
-	/*
-		processorTokenResp, err := s.Plaid.CreateProcessorToken(req.AccessToken, req.AccountId, "wyre")
-		if err != nil {
-			return nil, err
-		}
+	/* TODO: finish me
+	processorTokenResp, err := s.Plaid.CreateProcessorToken(req.AccessToken, req.AccountId, "wyre")
+	if err != nil {
+		return nil, err
+	}
 
-		resp, err := s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
-			PlaidProcessorToken: processorTokenResp.ProcessorToken,
-		}.WithDefaults())
-		if err != nil {
-			return nil, err
-		}
-		log.Printf("%#v", resp)
+	resp, err := s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
+		PlaidProcessorToken: processorTokenResp.ProcessorToken,
+	}.WithDefaults())
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("%#v", resp)
 	*/
 
 	return &proto.WyreAddBankPaymentMethodsResponse{}, nil
@@ -204,31 +204,6 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 
 // PlaidCreateLinkToken is an rpc handler
 func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreateLinkTokenRequest) (*proto.PlaidCreateLinkTokenResponse, error) {
-	/*
-		loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
-		if err != nil {
-			return nil, status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s: %s", codes.InvalidArgument.String(), err))
-		}
-
-		if loginKind == onetimepasscode.LoginKindPhone {
-			return nil, status.Errorf(codes.Unimplemented, fmt.Sprintf("%s: phone is not implemented yet", codes.Unimplemented.String()))
-		}
-
-		otp, err := s.Db.CreateOneTimePasscode(ctx, loginValue, loginKind)
-		if err != nil {
-			return nil, err
-		}
-
-		msg := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
-
-		_, err = s.SendgridClient.Send(msg)
-		if err != nil {
-			return nil, err
-		}
-
-		return &proto.PlaidCreateLinkTokenResponse{}, nil
-	*/
-
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
@@ -274,15 +249,15 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 		Products:     []string{"auth"},
 		CountryCodes: []string{"US"},
 		Language:     "en",
-		/*
-			Products:     []string{"auth", "transactions"},
-				Webhook:               "https://webhook-uri.com",
-				LinkCustomizationName: "default",
-				AccountFilters: &map[string]map[string][]string{
-					"depository": map[string][]string{
-						"account_subtypes": []string{"checking", "savings"},
-					},
+		/* NOTE: may need this?
+		Products:     []string{"auth", "transactions"},
+			Webhook:               "https://webhook-uri.com",
+			LinkCustomizationName: "default",
+			AccountFilters: &map[string]map[string][]string{
+				"depository": map[string][]string{
+					"account_subtypes": []string{"checking", "savings"},
 				},
+			},
 		*/
 	})
 	if err != nil {

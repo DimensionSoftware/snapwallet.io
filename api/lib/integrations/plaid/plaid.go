@@ -34,12 +34,5 @@ func ProvideClientOptions() (plaid.ClientOptions, error) {
 		ClientID:    plaidClientID,
 		Secret:      plaidClientSecret,
 		Environment: plaid.Sandbox,
-
-		/*
-			Client plaidClientID,
-			plaidClientSecret,
-			plaid.Sandbox,  // Available environments are Sandbox, Development, and Production
-			&http.Client{},
-		*/
 	}, nil
 }
