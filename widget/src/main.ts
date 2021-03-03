@@ -5,6 +5,7 @@ import {
   ServerConfiguration,
   ResponseContext,
 } from 'api-client'
+import { getFluxSession, setFluxSession } from './util'
 
 const queryParams = new URLSearchParams(window.location.search)
 
@@ -47,13 +48,12 @@ function genAPIClient(token?: string): FluxApi {
 
 function getAPIClient(newToken?: string): FluxApi {
   if (newToken) {
-    window.sessionStorage.setItem('token', newToken)
+    setFluxSession(newToken)
     return (window.__api = genAPIClient(newToken))
   }
 
   if (!window.__api) {
-    const existingToken = window.sessionStorage.getItem('token')
-    return (window.__api = genAPIClient(existingToken))
+    return (window.__api = genAPIClient(getFluxSession()))
   }
 
   return window.__api

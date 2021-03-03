@@ -11,12 +11,14 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/rs/xid"
 )
 
 // Db represents the application interface for accessing the database
 type Db struct {
-	Firestore *firestore.Client
+	Firestore         *firestore.Client
+	EncryptionManager *encryption.Manager
 }
 
 // CreateOneTimePasscode stores a record of a one-time-password request for verification later
@@ -45,17 +47,31 @@ func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kin
 }
 
 // CreateUser creates a user object
-func (db Db) CreateUser(ctx context.Context, email string, phone string) (*user.User, error) {
+func (db Db) CreateUser(ctx context.Context, email string, phone string, emailVerified bool, phoneVerified bool) (*user.User, error) {
 	id := xid.New().String()
 
+	now := time.Now()
 	u := user.User{
 		ID:        id,
 		Email:     email,
 		Phone:     phone,
-		CreatedAt: time.Now(),
+		CreatedAt: now,
 	}
 
-	_, err := db.Firestore.Collection("users").Doc(id).Set(ctx, &u)
+	if emailVerified {
+		u.EmailVerifiedAt = &now
+	}
+
+	if phoneVerified {
+		u.PhoneVerifiedAt = &now
+	}
+
+	encryptedUser, err := u.Encrypt(db.EncryptionManager)
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = db.Firestore.Collection("users").Doc(id).Set(ctx, encryptedUser)
 	if err != nil {
 		return nil, err
 	}
@@ -74,10 +90,11 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 		return u, nil
 	}
 
+	// first time login means that we verified them with otp
 	if loginKind == onetimepasscode.LoginKindPhone {
-		u, err = db.CreateUser(ctx, "", emailOrPhone)
+		u, err = db.CreateUser(ctx, "", emailOrPhone, false, true)
 	} else {
-		u, err = db.CreateUser(ctx, emailOrPhone, "")
+		u, err = db.CreateUser(ctx, emailOrPhone, "", true, false)
 	}
 	if err != nil {
 		return nil, err
@@ -87,14 +104,47 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 	return u, nil
 }
 
+// GetUserByID gets a user object by id
+func (db Db) GetUserByID(ctx context.Context, id string) (*user.User, error) {
+	if id == "" {
+		return nil, nil
+
+	}
+
+	snap, err := db.Firestore.Collection("users").Doc(id).Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	if snap.Exists() {
+		var encU user.EncryptedUser
+		snap.DataTo(&encU)
+
+		u, err := encU.Decrypt(db.EncryptionManager)
+		if err != nil {
+			return nil, err
+		}
+
+		return u, nil
+	}
+
+	// no user found (non-error)
+	return nil, nil
+}
+
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone
 func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*user.User, error) {
 	if emailOrPhone == "" {
 		return nil, nil
 	}
 
+	emailOrPhoneCipherText, err := db.EncryptionManager.Encrypt([]byte(emailOrPhone))
+	if err != nil {
+		return nil, err
+	}
+
 	users, err := db.Firestore.Collection("users").
-		Where("email", "==", emailOrPhone).
+		Where("encryptedEmail", "==", emailOrPhoneCipherText).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
@@ -102,16 +152,22 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 		return nil, err
 	}
 	if len(users) == 1 {
-		var u user.User
-		err := users[0].DataTo(&u)
+		var encU user.EncryptedUser
+		err := users[0].DataTo(&encU)
 		if err != nil {
 			return nil, err
 		}
-		return &u, nil
+
+		u, err := encU.Decrypt(db.EncryptionManager)
+		if err != nil {
+			return nil, err
+		}
+
+		return u, nil
 	}
 
 	users, err = db.Firestore.Collection("users").
-		Where("phone", "==", emailOrPhone).
+		Where("encryptedPhone", "==", emailOrPhoneCipherText).
 		Limit(1).
 		Documents(ctx).
 		GetAll()
@@ -119,12 +175,18 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 		return nil, err
 	}
 	if len(users) == 1 {
-		var u user.User
-		err := users[0].DataTo(&u)
+		var encU user.EncryptedUser
+		err := users[0].DataTo(&encU)
 		if err != nil {
 			return nil, err
 		}
-		return &u, nil
+
+		u, err := encU.Decrypt(db.EncryptionManager)
+		if err != nil {
+			return nil, err
+		}
+
+		return u, nil
 	}
 
 	return nil, nil
