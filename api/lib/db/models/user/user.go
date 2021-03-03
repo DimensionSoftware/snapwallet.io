@@ -38,28 +38,14 @@ func (enc *EncryptedUser) Decrypt(m *encryption.Manager) (*User, error) {
 	}
 	dek := encryption.NewEncryptor(dekH)
 
-	var email *string
-	if enc.EmailEncrypted != nil {
-		b, err := dek.Decrypt(*enc.EmailEncrypted, m.AdditionalData)
-		if err != nil {
-			return nil, err
-		}
-
-		s := string(b)
-
-		email = &s
+	email, err := encryption.DecryptStringIfNonNil(dek, m.AdditionalData, enc.EmailEncrypted)
+	if err != nil {
+		return nil, err
 	}
 
-	var phone *string
-	if enc.PhoneEncrypted != nil {
-		b, err := dek.Decrypt(*enc.PhoneEncrypted, m.AdditionalData)
-		if err != nil {
-			return nil, err
-		}
-
-		s := string(b)
-
-		phone = &s
+	phone, err := encryption.DecryptStringIfNonNil(dek, m.AdditionalData, enc.PhoneEncrypted)
+	if err != nil {
+		return nil, err
 	}
 
 	return &User{

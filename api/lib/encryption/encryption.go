@@ -145,3 +145,33 @@ func ParseAndDecryptKeyBytes(ciphertext []byte, masterKey tink.AEAD) (*keyset.Ha
 
 	return kh, nil
 }
+
+// DecryptStringIfNonNil ..
+func DecryptStringIfNonNil(encryptor tink.AEAD, additionalData []byte, ciphertext *[]byte) (*string, error) {
+	if ciphertext == nil {
+		return nil, nil
+	}
+
+	decrypted, err := DecryptBytesIfNonNil(encryptor, additionalData, ciphertext)
+	if err != nil {
+		return nil, err
+	}
+
+	s := string(*decrypted)
+
+	return &s, nil
+}
+
+// DecryptBytesIfNonNil ..
+func DecryptBytesIfNonNil(encryptor tink.AEAD, additionalData []byte, ciphertext *[]byte) (*[]byte, error) {
+	if ciphertext == nil {
+		return nil, nil
+	}
+
+	decrypted, err := encryptor.Decrypt(*ciphertext, additionalData)
+	if err != nil {
+		return nil, err
+	}
+
+	return &decrypted, nil
+}
