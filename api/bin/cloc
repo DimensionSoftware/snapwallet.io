@@ -1,0 +1,6 @@
+#!/bin/bash -xeu
+
+cloc . --fullpath \
+  --not-match-d "client/|lib/protocol/google|lib/wire" \
+  --not-match-f "lib/protocol/api\.(.*)pb(.*)\.go|lib/swagger/api.swagger.json|lib/swagger/swagger.json" \
+  --exclude-lang JavaScript,TypeScript
