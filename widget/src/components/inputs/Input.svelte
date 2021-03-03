@@ -93,7 +93,7 @@
         left: -1px;
         right: -1px;
         border-radius: 4px;
-        background: linear-gradient(transparent, var(--theme-success-color));
+        background: linear-gradient(transparent, var(--theme-color));
         opacity: 0;
         transform: opacity(0), scale(0);
         transition: opacity 0.3s ease-out 0.2s, transform 0.4s ease-in 0.1s;
