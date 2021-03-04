@@ -2,6 +2,7 @@ syntax = "proto3";
 option go_package = "github.com/khoerling/flux/api/lib/protocol";
 
 import "google/api/annotations.proto";
+import "google/api/httpbody.proto";
 
 // OrganizationApplication
 message OrganizationApplication {
@@ -249,10 +250,20 @@ service Flux {
       body: "*"
     };
   }
-    // https://plaid.com/docs/link/link-token-migration-guide/
+
+  // https://plaid.com/docs/link/link-token-migration-guide/
   rpc WyreCreateAccount(WyreCreateAccountRequest) returns (WyreCreateAccountResponse) {
     option (google.api.http) = {
       post: "/wyre/create-acount"
+      body: "*"
+    };
+  }
+
+  // https://github.com/googleapis/googleapis/blob/master/google/api/httpbody.proto
+  // https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/httpbody_messages/
+  rpc UploadFile(google.api.HttpBody) returns (google.api.HttpBody) {
+    option (google.api.http) = {
+      post: "/upload"
       body: "*"
     };
   }

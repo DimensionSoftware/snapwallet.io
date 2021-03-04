@@ -1,4 +1,5 @@
 export * from './Address'
+export * from './ApiHttpBody'
 export * from './OneTimePasscodeRequest'
 export * from './OneTimePasscodeVerifyRequest'
 export * from './OneTimePasscodeVerifyResponse'

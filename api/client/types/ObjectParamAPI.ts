@@ -3,6 +3,7 @@ import * as models from '../models/all';
 import { Configuration} from '../configuration'
 
 import { Address } from '../models/Address';
+import { ApiHttpBody } from '../models/ApiHttpBody';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
@@ -57,6 +58,15 @@ export interface FluxApiFluxPlaidCreateLinkTokenRequest {
 }
 
 export interface FluxApiFluxPricingDataRequest {
+}
+
+export interface FluxApiFluxUploadFileRequest {
+    /**
+     * 
+     * @type ApiHttpBody
+     * @memberof FluxApifluxUploadFile
+     */
+    body: ApiHttpBody
 }
 
 export interface FluxApiFluxViewerDataRequest {
@@ -121,6 +131,14 @@ export class ObjectFluxApi {
      */
     public fluxPricingData(param: FluxApiFluxPricingDataRequest, options?: Configuration): Promise<PricingDataResponse> {
         return this.api.fluxPricingData( options).toPromise();
+    }
+	
+    /**
+     * https://github.com/googleapis/googleapis/blob/master/google/api/httpbody.proto
+     * @param param the request object
+     */
+    public fluxUploadFile(param: FluxApiFluxUploadFileRequest, options?: Configuration): Promise<ApiHttpBody> {
+        return this.api.fluxUploadFile(param.body,  options).toPromise();
     }
 	
     /**

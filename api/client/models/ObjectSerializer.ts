@@ -1,4 +1,5 @@
 export * from './Address';
+export * from './ApiHttpBody';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
@@ -14,6 +15,7 @@ export * from './ViewerDataResponse';
 export * from './WyreCreateAccountRequest';
 
 import { Address } from './Address';
+import { ApiHttpBody } from './ApiHttpBody';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
@@ -51,6 +53,7 @@ let enumsMap: Set<string> = new Set<string>([
 
 let typeMap: {[index: string]: any} = {
     "Address": Address,
+    "ApiHttpBody": ApiHttpBody,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,
     "OneTimePasscodeVerifyResponse": OneTimePasscodeVerifyResponse,

@@ -4,6 +4,7 @@ package protocol
 
 import (
 	context "context"
+	httpbody "google.golang.org/genproto/googleapis/api/httpbody"
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
@@ -43,6 +44,8 @@ type FluxClient interface {
 	PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLinkTokenRequest, opts ...grpc.CallOption) (*PlaidCreateLinkTokenResponse, error)
 	// https://plaid.com/docs/link/link-token-migration-guide/
 	WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error)
+	// https://github.com/googleapis/googleapis/blob/master/google/api/httpbody.proto
+	UploadFile(ctx context.Context, in *httpbody.HttpBody, opts ...grpc.CallOption) (*httpbody.HttpBody, error)
 }
 
 type fluxClient struct {
@@ -116,6 +119,15 @@ func (c *fluxClient) WyreCreateAccount(ctx context.Context, in *WyreCreateAccoun
 	return out, nil
 }
 
+func (c *fluxClient) UploadFile(ctx context.Context, in *httpbody.HttpBody, opts ...grpc.CallOption) (*httpbody.HttpBody, error) {
+	out := new(httpbody.HttpBody)
+	err := c.cc.Invoke(ctx, "/Flux/UploadFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FluxServer is the server API for Flux service.
 // All implementations must embed UnimplementedFluxServer
 // for forward compatibility
@@ -145,6 +157,8 @@ type FluxServer interface {
 	PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error)
 	// https://plaid.com/docs/link/link-token-migration-guide/
 	WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error)
+	// https://github.com/googleapis/googleapis/blob/master/google/api/httpbody.proto
+	UploadFile(context.Context, *httpbody.HttpBody) (*httpbody.HttpBody, error)
 	mustEmbedUnimplementedFluxServer()
 }
 
@@ -172,6 +186,9 @@ func (UnimplementedFluxServer) PlaidCreateLinkToken(context.Context, *PlaidCreat
 }
 func (UnimplementedFluxServer) WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateAccount not implemented")
+}
+func (UnimplementedFluxServer) UploadFile(context.Context, *httpbody.HttpBody) (*httpbody.HttpBody, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
 }
 func (UnimplementedFluxServer) mustEmbedUnimplementedFluxServer() {}
 
@@ -312,6 +329,24 @@ func _Flux_WyreCreateAccount_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_UploadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(httpbody.HttpBody)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).UploadFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/UploadFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).UploadFile(ctx, req.(*httpbody.HttpBody))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Flux_ServiceDesc is the grpc.ServiceDesc for Flux service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -346,6 +381,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WyreCreateAccount",
 			Handler:    _Flux_WyreCreateAccount_Handler,
+		},
+		{
+			MethodName: "UploadFile",
+			Handler:    _Flux_UploadFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
