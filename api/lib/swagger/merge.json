@@ -16,7 +16,7 @@
         "security": [{"Bearer": []}]
       }
     },
-    "/wyre/add-bank-payment-methods": {
+    "/plaid/connect-bank-accounts": {
       "post": {
         "security": [{"Bearer": []}]
       }

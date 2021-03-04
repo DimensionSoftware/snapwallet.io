@@ -10,6 +10,7 @@ import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyRe
 import { Organization } from '../models/Organization';
 import { OrganizationApplication } from '../models/OrganizationApplication';
 import { PaymentMethod } from '../models/PaymentMethod';
+import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
@@ -18,7 +19,6 @@ import { RpcStatus } from '../models/RpcStatus';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { User } from '../models/User';
 import { UserDataResponse } from '../models/UserDataResponse';
-import { WyreAddBankPaymentMethodsRequest } from '../models/WyreAddBankPaymentMethodsRequest';
 import { ObservableFluxApi } from './ObservableAPI';
 
 
@@ -55,6 +55,16 @@ export class PromiseFluxApi {
     }
 	
     /**
+     * requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
+     * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
+     * @param body 
+     */
+    public fluxPlaidConnectBankAccounts(body: PlaidConnectBankAccountsRequest, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxPlaidConnectBankAccounts(body, options);
+        return result.toPromise();
+    }
+	
+    /**
      * PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
      * @param body 
      */
@@ -78,16 +88,6 @@ export class PromiseFluxApi {
      */
     public fluxUserData(options?: Configuration): Promise<UserDataResponse> {
     	const result = this.api.fluxUserData(options);
-        return result.toPromise();
-    }
-	
-    /**
-     * requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
-     * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
-     * @param body 
-     */
-    public fluxWyreAddBankPaymentMethods(body: WyreAddBankPaymentMethodsRequest, options?: Configuration): Promise<any> {
-    	const result = this.api.fluxWyreAddBankPaymentMethods(body, options);
         return result.toPromise();
     }
 	

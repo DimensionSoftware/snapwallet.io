@@ -12,6 +12,7 @@ import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyRe
 import { Organization } from '../models/Organization';
 import { OrganizationApplication } from '../models/OrganizationApplication';
 import { PaymentMethod } from '../models/PaymentMethod';
+import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
@@ -20,7 +21,6 @@ import { RpcStatus } from '../models/RpcStatus';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { User } from '../models/User';
 import { UserDataResponse } from '../models/UserDataResponse';
-import { WyreAddBankPaymentMethodsRequest } from '../models/WyreAddBankPaymentMethodsRequest';
 
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
 export class ObservableFluxApi {
@@ -83,6 +83,30 @@ export class ObservableFluxApi {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
 	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxOneTimePasscodeVerify(rsp)));
+	    	}));
+    }
+	
+    /**
+     * requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
+     * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
+     * @param body 
+     */
+    public fluxPlaidConnectBankAccounts(body: PlaidConnectBankAccountsRequest, options?: Configuration): Observable<any> {
+    	const requestContextPromise = this.requestFactory.fluxPlaidConnectBankAccounts(body, options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxPlaidConnectBankAccounts(rsp)));
 	    	}));
     }
 	
@@ -152,30 +176,6 @@ export class ObservableFluxApi {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
 	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxUserData(rsp)));
-	    	}));
-    }
-	
-    /**
-     * requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
-     * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
-     * @param body 
-     */
-    public fluxWyreAddBankPaymentMethods(body: WyreAddBankPaymentMethodsRequest, options?: Configuration): Observable<any> {
-    	const requestContextPromise = this.requestFactory.fluxWyreAddBankPaymentMethods(body, options);
-
-		// build promise chain
-    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    	for (let middleware of this.configuration.middleware) {
-    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
-    	}
-
-    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-	    	pipe(mergeMap((response: ResponseContext) => {
-	    		let middlewarePostObservable = of(response);
-	    		for (let middleware of this.configuration.middleware) {
-	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-	    		}
-	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxWyreAddBankPaymentMethods(rsp)));
 	    	}));
     }
 	

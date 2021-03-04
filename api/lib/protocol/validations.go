@@ -6,7 +6,7 @@ import (
 )
 
 // Validate checks for required fields on a WyreAddBankPaymentMethodRequest
-func (req *WyreAddBankPaymentMethodsRequest) Validate() error {
+func (req *PlaidConnectBankAccountsRequest) Validate() error {
 	if req.PlaidPublicToken == "" {
 		return status.Errorf(codes.InvalidArgument, "plaid public token must be set")
 	}

@@ -137,6 +137,45 @@
         ]
       }
     },
+    "/plaid/connect-bank-accounts": {
+      "post": {
+        "summary": "Post chosen bank info from plaid in order to create a new ACH pyment method in wyre",
+        "description": "requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id",
+        "operationId": "Flux_PlaidConnectBankAccounts",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/PlaidConnectBankAccountsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PlaidConnectBankAccountsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/plaid/create-link-token": {
       "post": {
         "summary": "PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/",
@@ -162,45 +201,6 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/PlaidCreateLinkTokenRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Flux"
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
-    "/wyre/add-bank-payment-methods": {
-      "post": {
-        "summary": "Post chosen bank info from plaid in order to create a new ACH pyment method in wyre",
-        "description": "requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id",
-        "operationId": "Flux_WyreAddBankPaymentMethods",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/WyreAddBankPaymentMethodsResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/WyreAddBankPaymentMethodsRequest"
             }
           }
         ],
@@ -378,6 +378,27 @@
       "description": "A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)",
       "title": "PaymentMethod"
     },
+    "PlaidConnectBankAccountsRequest": {
+      "type": "object",
+      "properties": {
+        "plaidPublicToken": {
+          "type": "string"
+        },
+        "plaidAccountIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "description": "request",
+      "title": "PlaidConnectBankAccountsRequest"
+    },
+    "PlaidConnectBankAccountsResponse": {
+      "type": "object",
+      "description": "response",
+      "title": "PlaidConnectBankAccountsResponse"
+    },
     "PlaidCreateLinkTokenRequest": {
       "type": "object",
       "description": "request can be empty since the link token is correlated with the Bearer token passed",
@@ -486,27 +507,6 @@
       },
       "description": "response",
       "title": "UserDataResponse"
-    },
-    "WyreAddBankPaymentMethodsRequest": {
-      "type": "object",
-      "properties": {
-        "plaidPublicToken": {
-          "type": "string"
-        },
-        "plaidAccountIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
-        }
-      },
-      "description": "request",
-      "title": "WyreAddBankPaymentMethodsRequest"
-    },
-    "WyreAddBankPaymentMethodsResponse": {
-      "type": "object",
-      "description": "response",
-      "title": "WyreAddBankPaymentMethodsResponse"
     },
     "protobufAny": {
       "type": "object",

@@ -174,7 +174,7 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 }
 
 // WyreAddBankPaymentMethods is an rpc handler
-func (s *Server) WyreAddBankPaymentMethods(ctx context.Context, req *proto.WyreAddBankPaymentMethodsRequest) (*proto.WyreAddBankPaymentMethodsResponse, error) {
+func (s *Server) WyreAddBankPaymentMethods(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
 	err := req.Validate()
 	if err != nil {
 		return nil, err
@@ -199,7 +199,7 @@ func (s *Server) WyreAddBankPaymentMethods(ctx context.Context, req *proto.WyreA
 	log.Printf("%#v", resp)
 	*/
 
-	return &proto.WyreAddBankPaymentMethodsResponse{}, nil
+	return &proto.PlaidConnectBankAccountsResponse{}, nil
 }
 
 func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {

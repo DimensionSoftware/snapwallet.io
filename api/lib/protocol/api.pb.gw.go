@@ -135,8 +135,8 @@ func local_request_Flux_OneTimePasscodeVerify_0(ctx context.Context, marshaler r
 
 }
 
-func request_Flux_WyreAddBankPaymentMethods_0(ctx context.Context, marshaler runtime.Marshaler, client FluxClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq WyreAddBankPaymentMethodsRequest
+func request_Flux_PlaidConnectBankAccounts_0(ctx context.Context, marshaler runtime.Marshaler, client FluxClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq PlaidConnectBankAccountsRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -147,13 +147,13 @@ func request_Flux_WyreAddBankPaymentMethods_0(ctx context.Context, marshaler run
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := client.WyreAddBankPaymentMethods(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.PlaidConnectBankAccounts(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 
 }
 
-func local_request_Flux_WyreAddBankPaymentMethods_0(ctx context.Context, marshaler runtime.Marshaler, server FluxServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
-	var protoReq WyreAddBankPaymentMethodsRequest
+func local_request_Flux_PlaidConnectBankAccounts_0(ctx context.Context, marshaler runtime.Marshaler, server FluxServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var protoReq PlaidConnectBankAccountsRequest
 	var metadata runtime.ServerMetadata
 
 	newReader, berr := utilities.IOReaderFactory(req.Body)
@@ -164,7 +164,7 @@ func local_request_Flux_WyreAddBankPaymentMethods_0(ctx context.Context, marshal
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
 
-	msg, err := server.WyreAddBankPaymentMethods(ctx, &protoReq)
+	msg, err := server.PlaidConnectBankAccounts(ctx, &protoReq)
 	return msg, metadata, err
 
 }
@@ -301,18 +301,18 @@ func RegisterFluxHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 
 	})
 
-	mux.Handle("POST", pattern_Flux_WyreAddBankPaymentMethods_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Flux_PlaidConnectBankAccounts_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.Flux/WyreAddBankPaymentMethods")
+		rctx, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/.Flux/PlaidConnectBankAccounts")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_Flux_WyreAddBankPaymentMethods_0(rctx, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_Flux_PlaidConnectBankAccounts_0(rctx, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
@@ -320,7 +320,7 @@ func RegisterFluxHandlerServer(ctx context.Context, mux *runtime.ServeMux, serve
 			return
 		}
 
-		forward_Flux_WyreAddBankPaymentMethods_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_PlaidConnectBankAccounts_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -468,23 +468,23 @@ func RegisterFluxHandlerClient(ctx context.Context, mux *runtime.ServeMux, clien
 
 	})
 
-	mux.Handle("POST", pattern_Flux_WyreAddBankPaymentMethods_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+	mux.Handle("POST", pattern_Flux_PlaidConnectBankAccounts_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.Flux/WyreAddBankPaymentMethods")
+		rctx, err := runtime.AnnotateContext(ctx, mux, req, "/.Flux/PlaidConnectBankAccounts")
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_Flux_WyreAddBankPaymentMethods_0(rctx, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_Flux_PlaidConnectBankAccounts_0(rctx, inboundMarshaler, client, req, pathParams)
 		ctx = runtime.NewServerMetadataContext(ctx, md)
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
 
-		forward_Flux_WyreAddBankPaymentMethods_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_Flux_PlaidConnectBankAccounts_0(ctx, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 
 	})
 
@@ -520,7 +520,7 @@ var (
 
 	pattern_Flux_OneTimePasscodeVerify_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1, 2, 2}, []string{"flux", "auth", "one-time-passcode-verify"}, ""))
 
-	pattern_Flux_WyreAddBankPaymentMethods_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"wyre", "add-bank-payment-methods"}, ""))
+	pattern_Flux_PlaidConnectBankAccounts_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"plaid", "connect-bank-accounts"}, ""))
 
 	pattern_Flux_PlaidCreateLinkToken_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"plaid", "create-link-token"}, ""))
 )
@@ -534,7 +534,7 @@ var (
 
 	forward_Flux_OneTimePasscodeVerify_0 = runtime.ForwardResponseMessage
 
-	forward_Flux_WyreAddBankPaymentMethods_0 = runtime.ForwardResponseMessage
+	forward_Flux_PlaidConnectBankAccounts_0 = runtime.ForwardResponseMessage
 
 	forward_Flux_PlaidCreateLinkToken_0 = runtime.ForwardResponseMessage
 )

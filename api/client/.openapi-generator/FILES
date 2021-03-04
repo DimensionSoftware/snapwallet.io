@@ -20,6 +20,7 @@ models/OneTimePasscodeVerifyResponse.ts
 models/Organization.ts
 models/OrganizationApplication.ts
 models/PaymentMethod.ts
+models/PlaidConnectBankAccountsRequest.ts
 models/PlaidCreateLinkTokenResponse.ts
 models/PricingDataResponse.ts
 models/PricingRate.ts
@@ -28,7 +29,6 @@ models/RpcStatus.ts
 models/ThirdPartyUserAccount.ts
 models/User.ts
 models/UserDataResponse.ts
-models/WyreAddBankPaymentMethodsRequest.ts
 models/all.ts
 package.json
 rxjsStub.ts

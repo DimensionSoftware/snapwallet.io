@@ -140,18 +140,19 @@ message OneTimePasscodeVerifyResponse {
   User user = 2;
 }
 
-// WyreAddBankPaymentMethodsRequest
+// PlaidConnectBankAccountsRequest
 //
 // request
-message WyreAddBankPaymentMethodsRequest {
+message PlaidConnectBankAccountsRequest {
   string plaid_public_token = 1;
   repeated string plaid_account_ids = 2;
 }
 
-// WyreAddBankPaymentMethodsResponse
+// PlaidConnectBankAccountsResponse
 //
 // response
-message WyreAddBankPaymentMethodsResponse {}
+message PlaidConnectBankAccountsResponse {
+}
 
 // PlaidCreateLinkTokenRequest
 //
@@ -210,9 +211,9 @@ service Flux {
   // Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
   //
   // requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
-  rpc WyreAddBankPaymentMethods(WyreAddBankPaymentMethodsRequest) returns (WyreAddBankPaymentMethodsResponse) {
+  rpc PlaidConnectBankAccounts(PlaidConnectBankAccountsRequest) returns (PlaidConnectBankAccountsResponse) {
     option (google.api.http) = {
-      post: "/wyre/add-bank-payment-methods"
+      post: "/plaid/connect-bank-accounts"
       body: "*"
     };
   }

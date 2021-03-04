@@ -10,6 +10,7 @@ import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyRe
 import { Organization } from '../models/Organization';
 import { OrganizationApplication } from '../models/OrganizationApplication';
 import { PaymentMethod } from '../models/PaymentMethod';
+import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
@@ -18,7 +19,6 @@ import { RpcStatus } from '../models/RpcStatus';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { User } from '../models/User';
 import { UserDataResponse } from '../models/UserDataResponse';
-import { WyreAddBankPaymentMethodsRequest } from '../models/WyreAddBankPaymentMethodsRequest';
 
 import { ObservableFluxApi } from "./ObservableAPI";
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
@@ -41,6 +41,15 @@ export interface FluxApiFluxOneTimePasscodeVerifyRequest {
     body: OneTimePasscodeVerifyRequest
 }
 
+export interface FluxApiFluxPlaidConnectBankAccountsRequest {
+    /**
+     * 
+     * @type PlaidConnectBankAccountsRequest
+     * @memberof FluxApifluxPlaidConnectBankAccounts
+     */
+    body: PlaidConnectBankAccountsRequest
+}
+
 export interface FluxApiFluxPlaidCreateLinkTokenRequest {
     /**
      * 
@@ -54,15 +63,6 @@ export interface FluxApiFluxPricingDataRequest {
 }
 
 export interface FluxApiFluxUserDataRequest {
-}
-
-export interface FluxApiFluxWyreAddBankPaymentMethodsRequest {
-    /**
-     * 
-     * @type WyreAddBankPaymentMethodsRequest
-     * @memberof FluxApifluxWyreAddBankPaymentMethods
-     */
-    body: WyreAddBankPaymentMethodsRequest
 }
 
 
@@ -92,6 +92,15 @@ export class ObjectFluxApi {
     }
 	
     /**
+     * requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
+     * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
+     * @param param the request object
+     */
+    public fluxPlaidConnectBankAccounts(param: FluxApiFluxPlaidConnectBankAccountsRequest, options?: Configuration): Promise<any> {
+        return this.api.fluxPlaidConnectBankAccounts(param.body,  options).toPromise();
+    }
+	
+    /**
      * PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
      * @param param the request object
      */
@@ -115,15 +124,6 @@ export class ObjectFluxApi {
      */
     public fluxUserData(param: FluxApiFluxUserDataRequest, options?: Configuration): Promise<UserDataResponse> {
         return this.api.fluxUserData( options).toPromise();
-    }
-	
-    /**
-     * requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
-     * Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
-     * @param param the request object
-     */
-    public fluxWyreAddBankPaymentMethods(param: FluxApiFluxWyreAddBankPaymentMethodsRequest, options?: Configuration): Promise<any> {
-        return this.api.fluxWyreAddBankPaymentMethods(param.body,  options).toPromise();
     }
 	
 

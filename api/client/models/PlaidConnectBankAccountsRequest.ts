@@ -15,7 +15,7 @@ import { HttpFile } from '../http/http';
 /**
 * request
 */
-export class WyreAddBankPaymentMethodsRequest {
+export class PlaidConnectBankAccountsRequest {
     'plaidPublicToken'?: string;
     'plaidAccountIds'?: Array<string>;
 
@@ -36,7 +36,7 @@ export class WyreAddBankPaymentMethodsRequest {
         }    ];
 
     static getAttributeTypeMap() {
-        return WyreAddBankPaymentMethodsRequest.attributeTypeMap;
+        return PlaidConnectBankAccountsRequest.attributeTypeMap;
     }
     
     public constructor() {
