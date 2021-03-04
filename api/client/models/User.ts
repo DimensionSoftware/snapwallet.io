@@ -10,8 +10,6 @@
  * Do not edit the class manually.
  */
 
-import { KYCProfile } from './KYCProfile';
-import { Organization } from './Organization';
 import { HttpFile } from '../http/http';
 
 /**
@@ -22,8 +20,6 @@ export class User {
     'email'?: string;
     'phone'?: string;
     'createdAt'?: string;
-    'kycProfile'?: KYCProfile;
-    'organizations'?: Array<Organization>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -51,18 +47,6 @@ export class User {
             "baseName": "createdAt",
             "type": "string",
             "format": "int64"
-        },
-        {
-            "name": "kycProfile",
-            "baseName": "kycProfile",
-            "type": "KYCProfile",
-            "format": ""
-        },
-        {
-            "name": "organizations",
-            "baseName": "organizations",
-            "type": "Array<Organization>",
-            "format": ""
         }    ];
 
     static getAttributeTypeMap() {

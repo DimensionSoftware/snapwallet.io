@@ -13,44 +13,37 @@
 import { HttpFile } from '../http/http';
 
 /**
-* A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)
+* hints for the ui
 */
-export class PaymentMethod {
-    'id'?: string;
-    'externalId'?: string;
-    'type'?: string;
-    'status'?: string;
+export class UserFlags {
+    'hasPlaidItems'?: boolean;
+    'hasWyreAccount'?: boolean;
+    'hasWyrePaymentMethods'?: boolean;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "id",
-            "baseName": "id",
-            "type": "string",
+            "name": "hasPlaidItems",
+            "baseName": "hasPlaidItems",
+            "type": "boolean",
             "format": ""
         },
         {
-            "name": "externalId",
-            "baseName": "externalId",
-            "type": "string",
+            "name": "hasWyreAccount",
+            "baseName": "hasWyreAccount",
+            "type": "boolean",
             "format": ""
         },
         {
-            "name": "type",
-            "baseName": "type",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "status",
-            "baseName": "status",
-            "type": "string",
+            "name": "hasWyrePaymentMethods",
+            "baseName": "hasWyrePaymentMethods",
+            "type": "boolean",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return PaymentMethod.attributeTypeMap;
+        return UserFlags.attributeTypeMap;
     }
     
     public constructor() {

@@ -108,30 +108,6 @@
         ]
       }
     },
-    "/flux/user-data": {
-      "get": {
-        "summary": "Get user data",
-        "description": "Provides user data associated with the access token",
-        "operationId": "Flux_UserData",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/UserDataResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "tags": [
-          "Flux"
-        ]
-      }
-    },
     "/plaid/connect-bank-accounts": {
       "post": {
         "summary": "Post chosen bank info from plaid in order to create a new ACH pyment method in wyre",
@@ -198,74 +174,33 @@
           "Flux"
         ]
       }
+    },
+    "/viewer": {
+      "get": {
+        "summary": "Get viewer data",
+        "description": "Provides user (viewer) data associated with the access token",
+        "operationId": "Flux_ViewerData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ViewerDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Flux"
+        ]
+      }
     }
   },
   "definitions": {
-    "Address": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "isDefault": {
-          "type": "boolean"
-        },
-        "street1": {
-          "type": "string"
-        },
-        "street2": {
-          "type": "string"
-        },
-        "city": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        },
-        "postalCode": {
-          "type": "string"
-        },
-        "country": {
-          "type": "string"
-        }
-      },
-      "description": "A user's residential address which belongs to the profile (they can have many.)",
-      "title": "Address"
-    },
-    "KYCProfile": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "givenName": {
-          "type": "string"
-        },
-        "familyName": {
-          "type": "string"
-        },
-        "dateOfBirth": {
-          "type": "string"
-        },
-        "socialSecurityNumber": {
-          "type": "string"
-        },
-        "addresses": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Address"
-          }
-        },
-        "thirdPartyUserAccounts": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/ThirdPartyUserAccount"
-          }
-        }
-      },
-      "description": "A user's KYC profile (they should only have one of these)",
-      "title": "KYCProfile"
-    },
     "OneTimePasscodeRequest": {
       "type": "object",
       "properties": {
@@ -306,62 +241,6 @@
       },
       "description": "response",
       "title": "OneTimePasscodeVerifyResponse"
-    },
-    "Organization": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "users": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/User"
-          }
-        },
-        "applications": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/OrganizationApplication"
-          }
-        }
-      },
-      "description": "an organization containing users, a user is one to many to organizations",
-      "title": "Organization"
-    },
-    "OrganizationApplication": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      },
-      "title": "OrganizationApplication"
-    },
-    "PaymentMethod": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "externalId": {
-          "type": "string"
-        },
-        "type": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        }
-      },
-      "description": "A third party user account payment method (ACH, SEPA, Debit Card, Credit Card, etc.)",
-      "title": "PaymentMethod"
     },
     "PlaidConnectBankAccountsRequest": {
       "type": "object",
@@ -426,34 +305,6 @@
       "description": "the pricing rate map; the keys are currency symbols and the values are the rates",
       "title": "PricingRate"
     },
-    "ThirdPartyUserAccount": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "partnerId": {
-          "type": "string"
-        },
-        "externalId": {
-          "type": "string"
-        },
-        "credentialId": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "paymentMethods": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/PaymentMethod"
-          }
-        }
-      },
-      "description": "An object representing the user's account at a third party API",
-      "title": "ThirdPartyUserAccount"
-    },
     "User": {
       "type": "object",
       "properties": {
@@ -469,29 +320,39 @@
         "createdAt": {
           "type": "string",
           "format": "int64"
-        },
-        "kycProfile": {
-          "$ref": "#/definitions/KYCProfile"
-        },
-        "organizations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/Organization"
-          }
         }
       },
       "description": "A user which is shared across customer applications",
       "title": "User"
     },
-    "UserDataResponse": {
+    "UserFlags": {
+      "type": "object",
+      "properties": {
+        "hasPlaidItems": {
+          "type": "boolean"
+        },
+        "hasWyreAccount": {
+          "type": "boolean"
+        },
+        "hasWyrePaymentMethods": {
+          "type": "boolean"
+        }
+      },
+      "description": "hints for the ui",
+      "title": "UserFlags"
+    },
+    "ViewerDataResponse": {
       "type": "object",
       "properties": {
         "user": {
           "$ref": "#/definitions/User"
+        },
+        "flags": {
+          "$ref": "#/definitions/UserFlags"
         }
       },
       "description": "response",
-      "title": "UserDataResponse"
+      "title": "ViewerDataResponse"
     },
     "protobufAny": {
       "type": "object",

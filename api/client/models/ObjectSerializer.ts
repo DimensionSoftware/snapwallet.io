@@ -1,38 +1,28 @@
-export * from './Address';
-export * from './KYCProfile';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
-export * from './Organization';
-export * from './OrganizationApplication';
-export * from './PaymentMethod';
 export * from './PlaidConnectBankAccountsRequest';
 export * from './PlaidCreateLinkTokenResponse';
 export * from './PricingDataResponse';
 export * from './PricingRate';
 export * from './ProtobufAny';
 export * from './RpcStatus';
-export * from './ThirdPartyUserAccount';
 export * from './User';
-export * from './UserDataResponse';
+export * from './UserFlags';
+export * from './ViewerDataResponse';
 
-import { Address } from './Address';
-import { KYCProfile } from './KYCProfile';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
-import { Organization } from './Organization';
-import { OrganizationApplication } from './OrganizationApplication';
-import { PaymentMethod } from './PaymentMethod';
 import { PlaidConnectBankAccountsRequest } from './PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from './PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from './PricingDataResponse';
 import { PricingRate } from './PricingRate';
 import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
-import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
 import { User } from './User';
-import { UserDataResponse } from './UserDataResponse';
+import { UserFlags } from './UserFlags';
+import { ViewerDataResponse } from './ViewerDataResponse';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -56,23 +46,18 @@ let enumsMap: Set<string> = new Set<string>([
 ]);
 
 let typeMap: {[index: string]: any} = {
-    "Address": Address,
-    "KYCProfile": KYCProfile,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,
     "OneTimePasscodeVerifyResponse": OneTimePasscodeVerifyResponse,
-    "Organization": Organization,
-    "OrganizationApplication": OrganizationApplication,
-    "PaymentMethod": PaymentMethod,
     "PlaidConnectBankAccountsRequest": PlaidConnectBankAccountsRequest,
     "PlaidCreateLinkTokenResponse": PlaidCreateLinkTokenResponse,
     "PricingDataResponse": PricingDataResponse,
     "PricingRate": PricingRate,
     "ProtobufAny": ProtobufAny,
     "RpcStatus": RpcStatus,
-    "ThirdPartyUserAccount": ThirdPartyUserAccount,
     "User": User,
-    "UserDataResponse": UserDataResponse,
+    "UserFlags": UserFlags,
+    "ViewerDataResponse": ViewerDataResponse,
 }
 
 export class ObjectSerializer {

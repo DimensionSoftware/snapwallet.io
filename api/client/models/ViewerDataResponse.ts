@@ -10,30 +10,35 @@
  * Do not edit the class manually.
  */
 
+import { User } from './User';
+import { UserFlags } from './UserFlags';
 import { HttpFile } from '../http/http';
 
-export class OrganizationApplication {
-    'id'?: string;
-    'name'?: string;
+/**
+* response
+*/
+export class ViewerDataResponse {
+    'user'?: User;
+    'flags'?: UserFlags;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "id",
-            "baseName": "id",
-            "type": "string",
+            "name": "user",
+            "baseName": "user",
+            "type": "User",
             "format": ""
         },
         {
-            "name": "name",
-            "baseName": "name",
-            "type": "string",
+            "name": "flags",
+            "baseName": "flags",
+            "type": "UserFlags",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return OrganizationApplication.attributeTypeMap;
+        return ViewerDataResponse.attributeTypeMap;
     }
     
     public constructor() {

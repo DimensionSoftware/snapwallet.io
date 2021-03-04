@@ -30,8 +30,15 @@ message User {
   string email = 2;
   string phone = 3;
   int64 created_at = 4;
-  KYCProfile kyc_profile = 5;
-  repeated Organization organizations = 6;
+}
+
+// UserFlags
+//
+// hints for the ui
+message UserFlags {
+  bool has_plaid_items = 1;
+  bool has_wyre_account = 2;
+  bool has_wyre_payment_methods = 3;
 }
 
 // Organization
@@ -81,16 +88,17 @@ message PaymentMethod {
 }
 
 
-// UserDataRequest
+// ViewerDataRequest
 //
 // request
-message UserDataRequest {}
+message ViewerDataRequest {}
 
-// UserDataResponse
+// ViewerDataResponse
 //
 // response
-message UserDataResponse {
+message ViewerDataResponse {
   User user = 1;
+  UserFlags flags = 2;
 }
 
 // PricingDataRequest
@@ -169,12 +177,12 @@ message PlaidCreateLinkTokenResponse {
 }
 
 service Flux {
-  // Get user data
+  // Get viewer data
   //
-  // Provides user data associated with the access token
-  rpc UserData(UserDataRequest) returns (UserDataResponse) {
+  // Provides user (viewer) data associated with the access token
+  rpc ViewerData(ViewerDataRequest) returns (ViewerDataResponse) {
     option (google.api.http) = {
-      get: "/flux/user-data"
+      get: "/viewer"
     };
   }
 

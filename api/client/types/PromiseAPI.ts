@@ -2,23 +2,18 @@ import { ResponseContext, RequestContext, HttpFile } from '../http/http';
 import * as models from '../models/all';
 import { Configuration} from '../configuration'
 
-import { Address } from '../models/Address';
-import { KYCProfile } from '../models/KYCProfile';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
-import { Organization } from '../models/Organization';
-import { OrganizationApplication } from '../models/OrganizationApplication';
-import { PaymentMethod } from '../models/PaymentMethod';
 import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
-import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { User } from '../models/User';
-import { UserDataResponse } from '../models/UserDataResponse';
+import { UserFlags } from '../models/UserFlags';
+import { ViewerDataResponse } from '../models/ViewerDataResponse';
 import { ObservableFluxApi } from './ObservableAPI';
 
 
@@ -83,11 +78,11 @@ export class PromiseFluxApi {
     }
 	
     /**
-     * Provides user data associated with the access token
-     * Get user data
+     * Provides user (viewer) data associated with the access token
+     * Get viewer data
      */
-    public fluxUserData(options?: Configuration): Promise<UserDataResponse> {
-    	const result = this.api.fluxUserData(options);
+    public fluxViewerData(options?: Configuration): Promise<ViewerDataResponse> {
+    	const result = this.api.fluxViewerData(options);
         return result.toPromise();
     }
 	

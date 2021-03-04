@@ -107,13 +107,13 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 }
 
 // GetUserByID gets a user object by id
-func (db Db) GetUserByID(ctx context.Context, id string) (*user.User, error) {
+func (db Db) GetUserByID(ctx context.Context, id user.ID) (*user.User, error) {
 	if id == "" {
 		return nil, nil
 
 	}
 
-	snap, err := db.Firestore.Collection("users").Doc(id).Get(ctx)
+	snap, err := db.Firestore.Collection("users").Doc(string(id)).Get(ctx)
 	if err != nil {
 		return nil, err
 	}

@@ -18,10 +18,10 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type FluxClient interface {
-	// Get user data
+	// Get viewer data
 	//
-	// Provides user data associated with the access token
-	UserData(ctx context.Context, in *UserDataRequest, opts ...grpc.CallOption) (*UserDataResponse, error)
+	// Provides user (viewer) data associated with the access token
+	ViewerData(ctx context.Context, in *ViewerDataRequest, opts ...grpc.CallOption) (*ViewerDataResponse, error)
 	// Get pricing data
 	//
 	// Provides pricing data for all markets with rate maps
@@ -51,9 +51,9 @@ func NewFluxClient(cc grpc.ClientConnInterface) FluxClient {
 	return &fluxClient{cc}
 }
 
-func (c *fluxClient) UserData(ctx context.Context, in *UserDataRequest, opts ...grpc.CallOption) (*UserDataResponse, error) {
-	out := new(UserDataResponse)
-	err := c.cc.Invoke(ctx, "/Flux/UserData", in, out, opts...)
+func (c *fluxClient) ViewerData(ctx context.Context, in *ViewerDataRequest, opts ...grpc.CallOption) (*ViewerDataResponse, error) {
+	out := new(ViewerDataResponse)
+	err := c.cc.Invoke(ctx, "/Flux/ViewerData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -109,10 +109,10 @@ func (c *fluxClient) PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLi
 // All implementations must embed UnimplementedFluxServer
 // for forward compatibility
 type FluxServer interface {
-	// Get user data
+	// Get viewer data
 	//
-	// Provides user data associated with the access token
-	UserData(context.Context, *UserDataRequest) (*UserDataResponse, error)
+	// Provides user (viewer) data associated with the access token
+	ViewerData(context.Context, *ViewerDataRequest) (*ViewerDataResponse, error)
 	// Get pricing data
 	//
 	// Provides pricing data for all markets with rate maps
@@ -139,8 +139,8 @@ type FluxServer interface {
 type UnimplementedFluxServer struct {
 }
 
-func (UnimplementedFluxServer) UserData(context.Context, *UserDataRequest) (*UserDataResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserData not implemented")
+func (UnimplementedFluxServer) ViewerData(context.Context, *ViewerDataRequest) (*ViewerDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ViewerData not implemented")
 }
 func (UnimplementedFluxServer) PricingData(context.Context, *PricingDataRequest) (*PricingDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PricingData not implemented")
@@ -170,20 +170,20 @@ func RegisterFluxServer(s grpc.ServiceRegistrar, srv FluxServer) {
 	s.RegisterService(&Flux_ServiceDesc, srv)
 }
 
-func _Flux_UserData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(UserDataRequest)
+func _Flux_ViewerData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ViewerDataRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FluxServer).UserData(ctx, in)
+		return srv.(FluxServer).ViewerData(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Flux/UserData",
+		FullMethod: "/Flux/ViewerData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FluxServer).UserData(ctx, req.(*UserDataRequest))
+		return srv.(FluxServer).ViewerData(ctx, req.(*ViewerDataRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -286,8 +286,8 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*FluxServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UserData",
-			Handler:    _Flux_UserData_Handler,
+			MethodName: "ViewerData",
+			Handler:    _Flux_ViewerData_Handler,
 		},
 		{
 			MethodName: "PricingData",

@@ -4,23 +4,18 @@ import { Configuration} from '../configuration'
 import { Observable, of, from } from '../rxjsStub';
 import {mergeMap, map} from  '../rxjsStub';
 
-import { Address } from '../models/Address';
-import { KYCProfile } from '../models/KYCProfile';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
-import { Organization } from '../models/Organization';
-import { OrganizationApplication } from '../models/OrganizationApplication';
-import { PaymentMethod } from '../models/PaymentMethod';
 import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
-import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { User } from '../models/User';
-import { UserDataResponse } from '../models/UserDataResponse';
+import { UserFlags } from '../models/UserFlags';
+import { ViewerDataResponse } from '../models/ViewerDataResponse';
 
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
 export class ObservableFluxApi {
@@ -157,11 +152,11 @@ export class ObservableFluxApi {
     }
 	
     /**
-     * Provides user data associated with the access token
-     * Get user data
+     * Provides user (viewer) data associated with the access token
+     * Get viewer data
      */
-    public fluxUserData(options?: Configuration): Observable<UserDataResponse> {
-    	const requestContextPromise = this.requestFactory.fluxUserData(options);
+    public fluxViewerData(options?: Configuration): Observable<ViewerDataResponse> {
+    	const requestContextPromise = this.requestFactory.fluxViewerData(options);
 
 		// build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);
@@ -175,7 +170,7 @@ export class ObservableFluxApi {
 	    		for (let middleware of this.configuration.middleware) {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
-	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxUserData(rsp)));
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxViewerData(rsp)));
 	    	}));
     }
 	

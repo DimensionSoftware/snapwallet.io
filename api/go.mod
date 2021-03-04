@@ -6,7 +6,6 @@ require (
 	cloud.google.com/go/firestore v1.4.0
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/badoux/checkmail v1.2.1
-	github.com/bxcodec/faker/v3 v3.6.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/go-resty/resty/v2 v2.5.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b

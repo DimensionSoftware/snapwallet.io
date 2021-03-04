@@ -13,7 +13,7 @@ import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccou
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { RpcStatus } from '../models/RpcStatus';
-import { UserDataResponse } from '../models/UserDataResponse';
+import { ViewerDataResponse } from '../models/ViewerDataResponse';
 
 /**
  * no description
@@ -234,14 +234,14 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * Provides user data associated with the access token
-     * Get user data
+     * Provides user (viewer) data associated with the access token
+     * Get viewer data
      */
-    public async fluxUserData(options?: Configuration): Promise<RequestContext> {
+    public async fluxViewerData(options?: Configuration): Promise<RequestContext> {
 		let config = options || this.configuration;
 		
 		// Path Params
-    	const localVarPath = '/flux/user-data';
+    	const localVarPath = '/viewer';
 
 		// Make Request Context
     	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
@@ -461,16 +461,16 @@ export class FluxApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to fluxUserData
+     * @params response Response returned by the server for a request to fluxViewerData
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async fluxUserData(response: ResponseContext): Promise<UserDataResponse > {
+     public async fluxViewerData(response: ResponseContext): Promise<ViewerDataResponse > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: UserDataResponse = ObjectSerializer.deserialize(
+            const body: ViewerDataResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "UserDataResponse", ""
-            ) as UserDataResponse;
+                "ViewerDataResponse", ""
+            ) as ViewerDataResponse;
             return body;
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
@@ -483,10 +483,10 @@ export class FluxApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: UserDataResponse = ObjectSerializer.deserialize(
+            const body: ViewerDataResponse = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "UserDataResponse", ""
-            ) as UserDataResponse;
+                "ViewerDataResponse", ""
+            ) as ViewerDataResponse;
             return body;
         }
 

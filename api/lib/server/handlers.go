@@ -8,14 +8,12 @@ import (
 	"time"
 
 	"github.com/plaid/plaid-go/plaid"
-	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
-	faker "github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -25,25 +23,70 @@ import (
 
 // https://api.sendwyre.com/v3/rates?as=priced
 
-// UserData is an rpc handler
-func (s *Server) UserData(ctx context.Context, in *proto.UserDataRequest) (*proto.UserDataResponse, error) {
-	log.Printf("Received: %v", in)
-
-	httpResp := &proto.UserDataResponse{
-		User: &proto.User{
-			Id:    xid.New().String(),
-			Email: faker.Email(),
-			Phone: faker.Phonenumber(),
-			Organizations: []*proto.Organization{
-				{
-					Id:   xid.New().String(),
-					Name: fmt.Sprintf("%s %s Inc.", faker.LastName(), faker.Word()),
-				},
-			},
-		},
+// ViewerData is an rpc handler
+func (s *Server) ViewerData(ctx context.Context, in *proto.ViewerDataRequest) (*proto.ViewerDataResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 
-	return httpResp, nil
+	vals := md.Get("user-id")
+
+	var userID user.ID
+	if len(vals) > 0 {
+		userID = user.ID(vals[0])
+	} else {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
+
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
+
+	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
+	if err != nil || u == nil {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
+
+	user := proto.User{
+		Id:        string(u.ID),
+		CreatedAt: u.CreatedAt.Unix(),
+	}
+	if u.Email != nil {
+		user.Email = *u.Email
+	}
+	if u.Phone != nil {
+		user.Phone = *u.Phone
+	}
+
+	// todo: factor this out into separate module (db)
+	plaidItems := s.Db.Firestore.
+		Collection("users").
+		Doc(user.Id).Collection("plaidItems").
+		Limit(1).Documents(ctx)
+
+	var hasPlaidItems bool
+
+	_, err = plaidItems.Next()
+	if err == iterator.Done {
+		hasPlaidItems = false
+	} else if err != nil {
+		return nil, err
+	} else {
+		hasPlaidItems = true
+	}
+
+	flags := proto.UserFlags{
+		HasPlaidItems: hasPlaidItems,
+		// todo: implement first
+		//HasWyreAccount:        false,
+		//HasWyrePaymentMethods: false,
+	}
+
+	return &proto.ViewerDataResponse{
+		User:  &user,
+		Flags: &flags,
+	}, nil
 }
 
 // PricingData is an rpc handler
@@ -249,7 +292,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 
 	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
 
-	u, err := s.Db.GetUserByID(ctx, userID)
+	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
