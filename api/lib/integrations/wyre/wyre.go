@@ -44,10 +44,18 @@ type ProfileFieldAddress struct {
 
 // CreateAccountRequest represents the request object for https://api.sendwyre.com/v3/accounts
 type CreateAccountRequest struct {
-	Country       string         `json:"country"`
-	SubAccount    bool           `json:"subaccount"`
-	Type          string         `json:"type"`
+	// The type of account, currently INDIVIDUAL is the only supported value
+	Type string `json:"type"`
+	// The country of the account holder. For individuals this is the country of residence. (Currently we only support US accounts)
+	Country string `json:"country"`
+	// An array of the Fields submitted at the time of Account creation. You can submit as many or as few fields as you need at the time of Account creation
 	ProfileFields []ProfileField `json:"profileFields"`
+	// Supply your own Account ID when creating noncustodial accounts. This field is used to track which account referred the new account into our system
+	ReferrerAccountID string `json:"referrerAccountId,omitempty"`
+	// When true, the newly created account will be a custodial subaccount owner by the caller. Otherwise, the account will be a standalone non-custodial account.
+	SubAccount bool `json:"subaccount,omitempty"`
+	// If true prevents all outbound emails to the account.
+	DisableEmail bool `json:"disableEmail,omitempty"`
 }
 
 // WithDefaults provides default values for CreateAccountRequest
