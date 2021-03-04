@@ -149,7 +149,7 @@
     },
     "/plaid/create-link-token": {
       "post": {
-        "summary": "PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/",
+        "summary": "https://plaid.com/docs/link/link-token-migration-guide/",
         "operationId": "Flux_PlaidCreateLinkToken",
         "responses": {
           "200": {
@@ -213,9 +213,70 @@
           }
         ]
       }
+    },
+    "/wyre/create-acount": {
+      "post": {
+        "summary": "https://plaid.com/docs/link/link-token-migration-guide/",
+        "operationId": "Flux_WyreCreateAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreCreateAccountResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreCreateAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
     }
   },
   "definitions": {
+    "Address": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "street1": {
+          "type": "string"
+        },
+        "street2": {
+          "type": "string"
+        },
+        "city": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        },
+        "postalCode": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        }
+      },
+      "description": "A user's residential address which belongs to the profile (they can have many.)",
+      "title": "Address"
+    },
     "OneTimePasscodeRequest": {
       "type": "object",
       "properties": {
@@ -368,6 +429,24 @@
       },
       "description": "response",
       "title": "ViewerDataResponse"
+    },
+    "WyreCreateAccountRequest": {
+      "type": "object",
+      "properties": {
+        "individualLegalName": {
+          "type": "string"
+        },
+        "individualResidenceAddress": {
+          "$ref": "#/definitions/Address"
+        }
+      },
+      "description": "response",
+      "title": "WyreCreateAccountRequest"
+    },
+    "WyreCreateAccountResponse": {
+      "type": "object",
+      "description": "response",
+      "title": "WyreCreateAccountResponse"
     },
     "protobufAny": {
       "type": "object",

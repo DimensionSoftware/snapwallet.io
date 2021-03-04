@@ -19,8 +19,8 @@ const wyreTokenEnvVarName = "WYRE_TOKEN"
 
 // ProfileField represents PII data which is used during the create account process
 type ProfileField struct {
-	FieldID string      `json:"fieldId"`
-	Value   interface{} `json:"value"`
+	FieldID ProfileFieldID `json:"fieldId"`
+	Value   interface{}    `json:"value"`
 }
 
 // ProfileData represents PII data which is stored after the account create process
@@ -51,20 +51,26 @@ type CreateAccountRequest struct {
 	// An array of the Fields submitted at the time of Account creation. You can submit as many or as few fields as you need at the time of Account creation
 	ProfileFields []ProfileField `json:"profileFields"`
 	// Supply your own Account ID when creating noncustodial accounts. This field is used to track which account referred the new account into our system
-	ReferrerAccountID string `json:"referrerAccountId,omitempty"`
+	ReferrerAccountID *string `json:"referrerAccountId,omitempty"`
 	// When true, the newly created account will be a custodial subaccount owner by the caller. Otherwise, the account will be a standalone non-custodial account.
-	SubAccount bool `json:"subaccount,omitempty"`
+	SubAccount *bool `json:"subaccount,omitempty"`
 	// If true prevents all outbound emails to the account.
-	DisableEmail bool `json:"disableEmail,omitempty"`
+	DisableEmail *bool `json:"disableEmail,omitempty"`
 }
 
 // WithDefaults provides default values for CreateAccountRequest
-func (CreateAccountRequest) WithDefaults() CreateAccountRequest {
-	return CreateAccountRequest{
-		Country:    "US",         // only supported country currently
-		Type:       "INDIVIDUAL", // only supported type currently
-		SubAccount: true,         // figure all accounts will be created as a sub account
+func (req CreateAccountRequest) WithDefaults() CreateAccountRequest {
+	newReq := req
+
+	if req.Country == "" {
+		newReq.Country = "US" // only supported country currently
 	}
+
+	if req.Type == "" {
+		newReq.Type = "INDIVIDUAL" // only supported type currently
+	}
+
+	return newReq
 }
 
 // ProfileFieldID field ID for create account request

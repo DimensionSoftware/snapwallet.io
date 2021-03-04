@@ -1,3 +1,4 @@
+export * from './Address';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
@@ -10,7 +11,9 @@ export * from './RpcStatus';
 export * from './User';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
+export * from './WyreCreateAccountRequest';
 
+import { Address } from './Address';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
@@ -23,6 +26,7 @@ import { RpcStatus } from './RpcStatus';
 import { User } from './User';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
+import { WyreCreateAccountRequest } from './WyreCreateAccountRequest';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -46,6 +50,7 @@ let enumsMap: Set<string> = new Set<string>([
 ]);
 
 let typeMap: {[index: string]: any} = {
+    "Address": Address,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,
     "OneTimePasscodeVerifyResponse": OneTimePasscodeVerifyResponse,
@@ -58,6 +63,7 @@ let typeMap: {[index: string]: any} = {
     "User": User,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
+    "WyreCreateAccountRequest": WyreCreateAccountRequest,
 }
 
 export class ObjectSerializer {

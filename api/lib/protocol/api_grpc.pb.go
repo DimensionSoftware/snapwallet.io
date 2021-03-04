@@ -39,8 +39,10 @@ type FluxClient interface {
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
 	PlaidConnectBankAccounts(ctx context.Context, in *PlaidConnectBankAccountsRequest, opts ...grpc.CallOption) (*PlaidConnectBankAccountsResponse, error)
-	// PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
+	// https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLinkTokenRequest, opts ...grpc.CallOption) (*PlaidCreateLinkTokenResponse, error)
+	// https://plaid.com/docs/link/link-token-migration-guide/
+	WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error)
 }
 
 type fluxClient struct {
@@ -105,6 +107,15 @@ func (c *fluxClient) PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLi
 	return out, nil
 }
 
+func (c *fluxClient) WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error) {
+	out := new(WyreCreateAccountResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreCreateAccount", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FluxServer is the server API for Flux service.
 // All implementations must embed UnimplementedFluxServer
 // for forward compatibility
@@ -130,8 +141,10 @@ type FluxServer interface {
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
 	PlaidConnectBankAccounts(context.Context, *PlaidConnectBankAccountsRequest) (*PlaidConnectBankAccountsResponse, error)
-	// PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
+	// https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error)
+	// https://plaid.com/docs/link/link-token-migration-guide/
+	WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error)
 	mustEmbedUnimplementedFluxServer()
 }
 
@@ -156,6 +169,9 @@ func (UnimplementedFluxServer) PlaidConnectBankAccounts(context.Context, *PlaidC
 }
 func (UnimplementedFluxServer) PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidCreateLinkToken not implemented")
+}
+func (UnimplementedFluxServer) WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateAccount not implemented")
 }
 func (UnimplementedFluxServer) mustEmbedUnimplementedFluxServer() {}
 
@@ -278,6 +294,24 @@ func _Flux_PlaidCreateLinkToken_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_WyreCreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreCreateAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreCreateAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreCreateAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreCreateAccount(ctx, req.(*WyreCreateAccountRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Flux_ServiceDesc is the grpc.ServiceDesc for Flux service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -308,6 +342,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PlaidCreateLinkToken",
 			Handler:    _Flux_PlaidCreateLinkToken_Handler,
+		},
+		{
+			MethodName: "WyreCreateAccount",
+			Handler:    _Flux_WyreCreateAccount_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -2,6 +2,7 @@ import { ResponseContext, RequestContext, HttpFile } from '../http/http';
 import * as models from '../models/all';
 import { Configuration} from '../configuration'
 
+import { Address } from '../models/Address';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
@@ -14,6 +15,7 @@ import { RpcStatus } from '../models/RpcStatus';
 import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WyreCreateAccountRequest } from '../models/WyreCreateAccountRequest';
 import { ObservableFluxApi } from './ObservableAPI';
 
 
@@ -60,7 +62,7 @@ export class PromiseFluxApi {
     }
 	
     /**
-     * PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
+     * https://plaid.com/docs/link/link-token-migration-guide/
      * @param body 
      */
     public fluxPlaidCreateLinkToken(body: any, options?: Configuration): Promise<PlaidCreateLinkTokenResponse> {
@@ -83,6 +85,15 @@ export class PromiseFluxApi {
      */
     public fluxViewerData(options?: Configuration): Promise<ViewerDataResponse> {
     	const result = this.api.fluxViewerData(options);
+        return result.toPromise();
+    }
+	
+    /**
+     * https://plaid.com/docs/link/link-token-migration-guide/
+     * @param body 
+     */
+    public fluxWyreCreateAccount(body: WyreCreateAccountRequest, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxWyreCreateAccount(body, options);
         return result.toPromise();
     }
 	

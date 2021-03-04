@@ -11,6 +11,7 @@ http/http.ts
 http/isomorphic-fetch.ts
 index.ts
 middleware.ts
+models/Address.ts
 models/ObjectSerializer.ts
 models/OneTimePasscodeRequest.ts
 models/OneTimePasscodeVerifyRequest.ts
@@ -24,6 +25,7 @@ models/RpcStatus.ts
 models/User.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
+models/WyreCreateAccountRequest.ts
 models/all.ts
 package.json
 rxjsStub.ts

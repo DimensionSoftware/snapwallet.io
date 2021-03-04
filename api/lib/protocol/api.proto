@@ -68,13 +68,12 @@ message ThirdPartyUserAccount {
 // A user's residential address which belongs to the profile (they can have many.)
 message Address {
   string id = 1;
-  bool is_default = 2;
-  string street_1 = 3;
-  string street_2 = 4;
-  string city = 5;
-  string state = 6; // (ISO 3166-1 - Alpha 2)
-  string postal_code = 7;
-  string country = 8; // (ISO 2)
+  string street_1 = 2;
+  string street_2 = 3;
+  string city = 4;
+  string state = 5; // (ISO 3166-1 - Alpha 2)
+  string postal_code = 6;
+  string country = 7; // (ISO 2)
 }
 
 // PaymentMethod
@@ -176,6 +175,21 @@ message PlaidCreateLinkTokenResponse {
   string link_token = 1;
 }
 
+// WyreCreateAccountRequest
+//
+// response
+message WyreCreateAccountRequest {
+  string individual_legal_name = 1;
+  Address individual_residence_address = 2;
+}
+
+// WyreCreateAccountResponse
+//
+// response
+message WyreCreateAccountResponse {
+
+}
+
 service Flux {
   // Get viewer data
   //
@@ -226,10 +240,19 @@ service Flux {
     };
   }
 
-  // PlaidCreateLinkToken implements this flow: https://plaid.com/docs/link/link-token-migration-guide/
+  // PlaidCreateLinkToken implements the link flow
+ 
+  // https://plaid.com/docs/link/link-token-migration-guide/
   rpc PlaidCreateLinkToken(PlaidCreateLinkTokenRequest) returns (PlaidCreateLinkTokenResponse) {
     option (google.api.http) = {
       post: "/plaid/create-link-token"
+      body: "*"
+    };
+  }
+    // https://plaid.com/docs/link/link-token-migration-guide/
+  rpc WyreCreateAccount(WyreCreateAccountRequest) returns (WyreCreateAccountResponse) {
+    option (google.api.http) = {
+      post: "/wyre/create-acount"
       body: "*"
     };
   }
