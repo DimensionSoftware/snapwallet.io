@@ -12,5 +12,5 @@ func genMsgUnauthenticatedOTP(login onetimepasscode.LoginKind) string {
 }
 
 func genMsgUnauthenticatedGeneric() string {
-	return "Could not authenticate"
+	return "Could not authenticate."
 }
