@@ -6,11 +6,11 @@
     return resp.linkToken
   }
 
-  async function addWyreBankAccount(
+  async function connectAccounts(
     plaidPublicToken: string,
     plaidAccountIds: string[],
   ): Promise<void> {
-    await window.API().fluxWyreAddBankPaymentMethods({
+    await window.API().fluxPlaidConnectBankAccounts({
       plaidPublicToken,
       plaidAccountIds,
     })
@@ -43,7 +43,7 @@
           metadata: PlaidSuccessCallbackMetadata,
         ) => {
           console.log(metadata)
-          addWyreBankAccount(
+          connectAccounts(
             publicToken,
             metadata.accounts.map(a => a.id),
           ).then(() => {
