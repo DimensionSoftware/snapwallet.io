@@ -18,12 +18,10 @@ func GetUserIDFromIncomingContext(ctx context.Context) (user.ID, error) {
 
 	vals := md.Get("user-id")
 
-	var userID user.ID
-	if len(vals) > 0 {
-		userID = user.ID(vals[0])
-	} else {
+	if len(vals) == 0 {
 		return "", status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
+	userID := user.ID(vals[0])
 
 	if userID == "" {
 		return "", status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
