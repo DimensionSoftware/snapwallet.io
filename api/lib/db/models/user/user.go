@@ -63,45 +63,40 @@ func (u *User) Encrypt(m *encryption.Manager) (*EncryptedUser, error) {
 	dekH := encryption.NewDEK()
 	dek := encryption.NewEncryptor(dekH)
 
-	var encEmailBytes *[]byte
+	emailEncrypted, err := encryption.EncryptStringIfNonNil(dek, m.AdditionalData, u.Email)
+	if err != nil {
+		return nil, err
+	}
+
+	phoneEncrypted, err := encryption.EncryptStringIfNonNil(dek, m.AdditionalData, u.Phone)
+	if err != nil {
+		return nil, err
+	}
+
 	var emailHash *[]byte
-	if u.Email != nil {
+	if emailEncrypted != nil {
 		b := []byte(*u.Email)
 
 		h := hashing.Hash(b)
 		emailHash = &h
-
-		encrypted, err := dek.Encrypt(b, m.AdditionalData)
-		if err != nil {
-			return nil, err
-		}
-		encEmailBytes = &encrypted
 	}
 
-	var encPhoneBytes *[]byte
 	var phoneHash *[]byte
-	if u.Phone != nil {
+	if phoneEncrypted != nil {
 		b := []byte(*u.Phone)
 
 		h := hashing.Hash(b)
 		phoneHash = &h
-
-		encrypted, err := dek.Encrypt(b, m.AdditionalData)
-		if err != nil {
-			return nil, err
-		}
-
-		encPhoneBytes = &encrypted
 	}
 
 	return &EncryptedUser{
 		ID:                u.ID,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EmailHash:         emailHash,
-		EmailEncrypted:    encEmailBytes,
+		EmailEncrypted:    emailEncrypted,
 		EmailVerifiedAt:   u.EmailVerifiedAt,
 		PhoneHash:         phoneHash,
-		PhoneEncrypted:    encPhoneBytes,
+		PhoneEncrypted:    phoneEncrypted,
 		PhoneVerifiedAt:   u.PhoneVerifiedAt,
 		CreatedAt:         u.CreatedAt,
 	}, nil

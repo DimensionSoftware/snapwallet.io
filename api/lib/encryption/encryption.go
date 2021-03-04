@@ -175,3 +175,33 @@ func DecryptBytesIfNonNil(encryptor tink.AEAD, additionalData []byte, ciphertext
 
 	return &decrypted, nil
 }
+
+// EncryptStringIfNonNil ..
+func EncryptStringIfNonNil(encryptor tink.AEAD, additionalData []byte, cleartext *string) (*[]byte, error) {
+	if cleartext == nil {
+		return nil, nil
+	}
+
+	b := []byte(*cleartext)
+
+	encrypted, err := EncryptBytesIfNonNil(encryptor, additionalData, &b)
+	if err != nil {
+		return nil, err
+	}
+
+	return encrypted, nil
+}
+
+// EncryptBytesIfNonNil ..
+func EncryptBytesIfNonNil(encryptor tink.AEAD, additionalData []byte, cleartext *[]byte) (*[]byte, error) {
+	if cleartext == nil {
+		return nil, nil
+	}
+
+	encrypted, err := encryptor.Encrypt(*cleartext, additionalData)
+	if err != nil {
+		return nil, err
+	}
+
+	return &encrypted, nil
+}
