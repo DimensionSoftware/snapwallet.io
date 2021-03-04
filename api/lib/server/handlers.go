@@ -10,7 +10,6 @@ import (
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/api/iterator"
-	"google.golang.org/genproto/googleapis/api/httpbody"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
@@ -354,8 +353,14 @@ func (s *Server) WyreCreateAccount(ctx context.Context, req *proto.WyreCreateAcc
 }
 
 // UploadFile ..
+/*
 func (s *Server) UploadFile(ctx context.Context, req *httpbody.HttpBody) (*httpbody.HttpBody, error) {
 	log.Println("UploadFile")
 	log.Printf("received %d bytes of data from the upload", len(req.Data))
-	return &httpbody.HttpBody{}, nil
+	return &httpbody.HttpBody{
+		ContentType: "application/json",
+		Data:        []byte("OK"),
+	}, nil
 }
+
+*/
