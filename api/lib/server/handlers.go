@@ -154,13 +154,11 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
 		Documents(ctx)
 
-	invalidMsg := "The email code provided was not valid. Please try again."
-
 	unknownMsg := "An unknown error occurred. Please try again later."
 
 	passcode, err := passcodes.Next()
 	if err == iterator.Done {
-		return nil, status.Errorf(codes.Unauthenticated, invalidMsg)
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(loginKind))
 	}
 	if err != nil {
 		log.Println(err)
