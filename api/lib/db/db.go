@@ -11,6 +11,7 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"github.com/rs/xid"
@@ -49,7 +50,7 @@ func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kin
 
 // CreateUser creates a user object
 func (db Db) CreateUser(ctx context.Context, email *string, phone *string, emailVerified bool, phoneVerified bool) (*user.User, error) {
-	id := xid.New().String()
+	id := user.ID(xid.New().String())
 
 	now := time.Now()
 	u := user.User{
@@ -72,7 +73,7 @@ func (db Db) CreateUser(ctx context.Context, email *string, phone *string, email
 		return nil, err
 	}
 
-	_, err = db.Firestore.Collection("users").Doc(id).Set(ctx, encryptedUser)
+	_, err = db.Firestore.Collection("users").Doc(string(id)).Set(ctx, encryptedUser)
 	if err != nil {
 		return nil, err
 	}
@@ -131,6 +132,29 @@ func (db Db) GetUserByID(ctx context.Context, id string) (*user.User, error) {
 
 	// no user found (non-error)
 	return nil, nil
+}
+
+// SavePlaidItem ...
+func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, accessToken string) (*item.Item, error) {
+	item := item.Item{
+		ID:          itemID,
+		AccessToken: accessToken,
+		CreatedAt:   time.Now(),
+	}
+
+	encryptedItem, err := item.Encrypt(db.EncryptionManager)
+	if err != nil {
+		return nil, err
+	}
+
+	path := fmt.Sprintf("users/%s/plaidItems", userID)
+
+	_, err = db.Firestore.Collection(path).Doc(string(itemID)).Set(ctx, encryptedItem)
+	if err != nil {
+		return nil, err
+	}
+
+	return &item, nil
 }
 
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone

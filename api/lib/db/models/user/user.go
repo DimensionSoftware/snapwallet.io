@@ -7,9 +7,12 @@ import (
 	"github.com/khoerling/flux/api/lib/hashing"
 )
 
+// ID ...
+type ID string
+
 // EncryptedUser represents a user registered with our system where PII is encrypted at rest
 type EncryptedUser struct {
-	ID                string     `firestore:"id"`
+	ID                ID         `firestore:"id"`
 	DataEncryptionKey []byte     `firestore:"DEK"`
 	EmailHash         *[]byte    `firestore:"emailHash,omitempty"`
 	EmailEncrypted    *[]byte    `firestore:"emailEncrypted,omitempty"`
@@ -22,7 +25,7 @@ type EncryptedUser struct {
 
 // User is the decrypted user
 type User struct {
-	ID              string
+	ID              ID
 	Email           *string
 	EmailVerifiedAt *time.Time
 	Phone           *string

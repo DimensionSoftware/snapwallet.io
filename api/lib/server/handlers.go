@@ -18,6 +18,8 @@ import (
 	faker "github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
+	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
@@ -155,7 +157,7 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}
 
 	respUser := &proto.User{
-		Id:        u.ID,
+		Id:        string(u.ID),
 		CreatedAt: u.CreatedAt.Unix(),
 	}
 
@@ -175,6 +177,24 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 
 // PlaidConnectBankAccounts is an rpc handler
 func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
+
+	vals := md.Get("user-id")
+
+	var userID user.ID
+	if len(vals) > 0 {
+		userID = user.ID(vals[0])
+	} else {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
+
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	}
+
 	err := req.Validate()
 	if err != nil {
 		return nil, err
@@ -184,26 +204,17 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	if err != nil {
 		return nil, err
 	}
-	log.Printf("STUB > process ExchangePublicToken resp: %#v", resp)
+	log.Printf("Plaid Public Token successfuly exchanged")
+
+	_, err = s.Db.SavePlaidItem(ctx, userID, item.ID(resp.ItemID), resp.AccessToken)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("Plaid ItemID %s saved", resp.ItemID)
 
 	for _, plaidAccountID := range req.PlaidAccountIds {
 		log.Printf("STUB > process PlaidAccountID: %s", plaidAccountID)
 	}
-
-	/* TODO: finish me
-	processorTokenResp, err := s.Plaid.CreateProcessorToken(req.AccessToken, req.AccountId, "wyre")
-	if err != nil {
-		return nil, err
-	}
-
-	resp, err := s.Wyre.CreatePaymentMethod(wyre.CreatePaymentMethodRequest{
-		PlaidProcessorToken: processorTokenResp.ProcessorToken,
-	}.WithDefaults())
-	if err != nil {
-		return nil, err
-	}
-	log.Printf("%#v", resp)
-	*/
 
 	return &proto.PlaidConnectBankAccountsResponse{}, nil
 }

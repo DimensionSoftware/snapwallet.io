@@ -10,6 +10,7 @@ import (
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/rs/xid"
 )
 
@@ -118,10 +119,10 @@ func ProvideJwtPublicKey(priv JwtPrivateKey) JwtPublicKey {
 }
 
 // NewClaims instantiates the claims object to be signed
-func NewClaims(userID string) Claims {
+func NewClaims(userID user.ID) Claims {
 	return Claims{
 		ID:        xid.New().String(),
-		Subject:   userID,
+		Subject:   string(userID),
 		IssuedAt:  time.Now().Unix(),
 		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
 	}

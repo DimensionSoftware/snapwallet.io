@@ -1,4 +1,4 @@
-package plaid
+package item
 
 import (
 	"time"
@@ -6,9 +6,12 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 )
 
+// ID ...
+type ID string
+
 // EncryptedItem ...
 type EncryptedItem struct {
-	ID                   string    `firestore:"id"`
+	ID                   ID        `firestore:"id"`
 	DataEncryptionKey    []byte    `firestore:"DEK"`
 	AccessTokenEncrypted []byte    `firestore:"accessTokenEncrypted"`
 	CreatedAt            time.Time `firestore:"createdAt"`
@@ -17,7 +20,7 @@ type EncryptedItem struct {
 // Item storage ...
 // https://plaid.com/docs/api/items/#item-get-response-item
 type Item struct {
-	ID          string
+	ID          ID
 	AccessToken string
 	CreatedAt   time.Time
 }
