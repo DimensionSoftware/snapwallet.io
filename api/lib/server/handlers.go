@@ -11,7 +11,6 @@ import (
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
 	"github.com/khoerling/flux/api/lib/auth"
@@ -25,22 +24,9 @@ import (
 
 // ViewerData is an rpc handler
 func (s *Server) ViewerData(ctx context.Context, in *proto.ViewerDataRequest) (*proto.ViewerDataResponse, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
-	}
-
-	vals := md.Get("user-id")
-
-	var userID user.ID
-	if len(vals) > 0 {
-		userID = user.ID(vals[0])
-	} else {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
-	}
-
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	userID, err := GetUserIDFromIncomingContext(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
@@ -220,25 +206,12 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 
 // PlaidConnectBankAccounts is an rpc handler
 func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	userID, err := GetUserIDFromIncomingContext(ctx)
+	if err != nil {
+		return nil, err
 	}
 
-	vals := md.Get("user-id")
-
-	var userID user.ID
-	if len(vals) > 0 {
-		userID = user.ID(vals[0])
-	} else {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
-	}
-
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
-	}
-
-	err := req.Validate()
+	err = req.Validate()
 	if err != nil {
 		return nil, err
 	}
@@ -272,22 +245,9 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 
 // PlaidCreateLinkToken is an rpc handler
 func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreateLinkTokenRequest) (*proto.PlaidCreateLinkTokenResponse, error) {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
-	}
-
-	vals := md.Get("user-id")
-
-	var userID string
-	if len(vals) > 0 {
-		userID = vals[0]
-	} else {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
-	}
-
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+	userID, err := GetUserIDFromIncomingContext(ctx)
+	if err != nil {
+		return nil, err
 	}
 
 	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
@@ -302,7 +262,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 	}
 
 	plaidUserDetails := plaid.LinkTokenUser{
-		ClientUserID: userID,
+		ClientUserID: string(userID),
 	}
 
 	linkTokenResp, err := s.Plaid.CreateLinkToken(plaid.LinkTokenConfigs{

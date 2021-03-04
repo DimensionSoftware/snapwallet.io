@@ -10,8 +10,8 @@ const (
 	LoginKindPhone LoginKind = "PHONE"
 	// LoginKindEmail represents an email-based login
 	LoginKindEmail LoginKind = "EMAIL"
-	// LoginKindInvalid indicates that the login is malformed or invalid
-	LoginKindInvalid LoginKind = "INVALID"
+	// LoginKindUnknown indicates that the login is malformed or invalid
+	LoginKindUnknown LoginKind = "UNKNOWN"
 )
 
 // OneTimePasscode stores the transient record of a login attempt factor so it can be verified in exchange for a token
