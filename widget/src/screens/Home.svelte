@@ -61,11 +61,10 @@
     onEnterPressed(e, handleNextStep)
   }
 
-  onMount(async () => {
+  const getInitialPrices = async () => {
     try {
       animateRandomPrice()
       await priceStore.fetchPrices()
-      priceStore.pollPrices()
     } catch (e) {
       toaster.pop({
         msg: 'Oops, there was a problem refreshing prices.',
@@ -74,6 +73,12 @@
     } finally {
       setTimeout(() => (isLoadingPrices = false), 1200)
     }
+  }
+
+  onMount(() => {
+    getInitialPrices()
+    const priceInterval = priceStore.pollPrices()
+    return () => clearInterval(priceInterval)
   })
 
   const srcTicker = $transactionStore.sourceCurrency.ticker
