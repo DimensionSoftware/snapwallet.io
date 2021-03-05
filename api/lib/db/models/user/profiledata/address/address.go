@@ -8,13 +8,13 @@ import (
 
 // ProfileDataAddress an address for a user
 type ProfileDataAddress struct {
-	ID         profiledata.ID `json:"id"`
-	Street1    string         `json:"street1"`
-	Street2    string         `json:"street2"`
-	City       string         `json:"city"`
-	State      string         `json:"state"`
-	PostalCode string         `json:"postalCode"`
-	Country    string         `json:"country"`
+	ID         profiledata.ID `firestore:"id"`
+	Street1    string         `firestore:"street1"`
+	Street2    string         `firestore:"street2"`
+	City       string         `firestore:"city"`
+	State      string         `firestore:"state"`
+	PostalCode string         `firestore:"postalCode"`
+	Country    string         `firestore:"country"`
 	CreatedAt  time.Time      `firestore:"createdAt"`
 	SealedAt   *time.Time     `firestore:"sealedAt"`
 }

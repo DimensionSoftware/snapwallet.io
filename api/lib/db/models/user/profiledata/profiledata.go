@@ -21,5 +21,24 @@ const (
 type Kind string
 
 const (
+	// KindLegalName signifies an individuals' legal name in a ProfileDataLegalName object
+	KindLegalName Kind = "LEGAL_NAME"
+	// KindPhone signifies an individuals' phone number in a ProfileDataPhone object
+	KindPhone Kind = "PHONE"
+	// KindEmail signifies an individuals' email address in a ProfileDataEmail object
+	KindEmail Kind = "EMAIL"
+	// KindAddress signifies a physical address in a ProfileDataEmail object
 	KindAddress Kind = "ADDRESS"
+	// KindDateOfBirth signifies an individuals' date of birth in a ProfileDataDateOfBirth object
+	KindDateOfBirth Kind = "DATE_OF_BIRTH"
+	// KindSSN signifies an individuals' U.S. social security number in a ProfileDataSSN object
+	KindSSN Kind = "SSN"
 )
+
+// EncryptedProfileData is a generic container store encrypted ProfileData
+type EncryptedProfileData struct {
+	ID                ID     `firestore:"id"`
+	Kind              Kind   `firestore:"kind"`
+	DataEncryptionKey []byte `firestore:"DEK"`
+	Status            Status `firestore:"status"`
+}
