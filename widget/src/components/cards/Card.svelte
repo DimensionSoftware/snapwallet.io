@@ -3,7 +3,7 @@
   const dispatch = createEventDispatcher()
 </script>
 
-<div class="card-container">
+<div on:click={() => dispatch('click')} class="card-container">
   <slot />
 </div>
 
@@ -16,5 +16,6 @@
     width: 100%;
     border-radius: 0.5rem;
     padding: 0.2rem;
+    cursor: pointer;
   }
 </style>
