@@ -35,13 +35,24 @@
     on:click={handleExit}
     class="modal-header-close-button"
   >
-    <FaIcon data={faTimes} />
-    <!-- <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-  ><path fill="none" d="M0 0h24v24H0z" /><path
-    fill="currentColor"
-    d="M19.03 6.03l-1.06-1.06L12 10.94 6.03 4.97 4.97 6.03 10.94 12l-5.97 5.97 1.06 1.06L12 13.06l5.97 5.97 1.06-1.06L13.06 12l5.97-5.97z"
-  /></svg
-> -->
+    <svg
+      class="text-main"
+      fill="none"
+      height="24"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+      width="24"
+      xmlns="http://www.w3.org/2000/svg"
+      ><line x1="18" y1="6" x2="6" y2="18" /><line
+        x1="6"
+        y1="6"
+        x2="18"
+        y2="18"
+      /></svg
+    >
   </div>
 </div>
 
