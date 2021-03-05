@@ -9,6 +9,7 @@
   import VerifyOTP from './screens/VerifyOTP.svelte'
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
+  import SelectPayment from './screens/SelectPayment.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -18,6 +19,7 @@
 
   const routes = {
     '/': wrap({ component: Home as any, props: { appName, intent, apiKey } }),
+    '/select-payment': SelectPayment,
     '/checkout': wrap({
       component: Checkout as any,
       props: { appName, intent, apiKey },
