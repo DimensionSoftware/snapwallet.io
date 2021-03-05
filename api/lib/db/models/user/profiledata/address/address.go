@@ -15,6 +15,6 @@ type ProfileDataAddress struct {
 	State      string         `json:"state"`
 	PostalCode string         `json:"postalCode"`
 	Country    string         `json:"country"`
-	CreatedAt  time.Time
-	SealedAt   *time.Time `firestore:"sealedAt"`
+	CreatedAt  time.Time      `firestore:"createdAt"`
+	SealedAt   *time.Time     `firestore:"sealedAt"`
 }
