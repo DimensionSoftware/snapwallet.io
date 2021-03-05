@@ -39,6 +39,7 @@ func run() error {
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
 	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
+	//mux.HandlePath("GET", "/upload", uploadFileHandler())
 	return http.ListenAndServe(apiPort(), allowCORS(mux))
 }
 
@@ -78,6 +79,24 @@ func serveFileHandler(path string, mimeType string) runtime.HandlerFunc {
 		w.Header().Add("content-type", mimeType)
 		http.ServeFile(w, r, path)
 	}
+}
+
+func uploadFileHandler(flux proto.FluxClient) runtime.HandlerFunc {
+	/*
+			c, err := proto.NewFluxClient(grpcServerEndpoint)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			c.sendfile...
+		flux.UploadFile()
+	*/
+	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		w.Header().Add("content-type", "application/json")
+		//http.ServeFile(w, r, path)
+		w.Write([]byte("OK"))
+	}
+
 }
 
 func main() {

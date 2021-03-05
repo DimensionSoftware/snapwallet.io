@@ -3,7 +3,6 @@ import * as models from '../models/all';
 import { Configuration} from '../configuration'
 
 import { Address } from '../models/Address';
-import { ApiHttpBody } from '../models/ApiHttpBody';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
@@ -77,15 +76,6 @@ export class PromiseFluxApi {
      */
     public fluxPricingData(options?: Configuration): Promise<PricingDataResponse> {
     	const result = this.api.fluxPricingData(options);
-        return result.toPromise();
-    }
-	
-    /**
-     * https://github.com/googleapis/googleapis/blob/master/google/api/httpbody.proto
-     * @param body 
-     */
-    public fluxUploadFile(body: ApiHttpBody, options?: Configuration): Promise<ApiHttpBody> {
-    	const result = this.api.fluxUploadFile(body, options);
         return result.toPromise();
     }
 	

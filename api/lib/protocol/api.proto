@@ -258,13 +258,4 @@ service Flux {
       body: "*"
     };
   }
-
-  // https://github.com/googleapis/googleapis/blob/master/google/api/httpbody.proto
-  // https://grpc-ecosystem.github.io/grpc-gateway/docs/mapping/httpbody_messages/
-  rpc UploadFile(google.api.HttpBody) returns (google.api.HttpBody) {
-    option (google.api.http) = {
-      post: "/upload"
-      body: "*"
-    };
-  }
 }
