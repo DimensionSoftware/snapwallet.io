@@ -54,7 +54,7 @@
     if (!sourceAmount || isNaN(sourceAmount) || !isValidNumber(destinationRate))
       // focus input
       return document.querySelector('input')?.focus()
-    push('/checkout')
+    push('/select-payment')
   }
 
   const onKeyDown = (e: Event) => {
