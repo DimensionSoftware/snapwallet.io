@@ -1,7 +1,5 @@
 <script lang="ts">
-  import { quintOut } from 'svelte/easing'
-  import { fly } from 'svelte/transition'
-  export let animation: string = ''
+  export let animation: string = 'left'
 </script>
 
 <div class="modal-content {animation}">

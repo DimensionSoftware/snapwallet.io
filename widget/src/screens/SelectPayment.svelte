@@ -7,11 +7,9 @@
   import FaIcon from 'svelte-awesome'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
   import PaymentCard from '../components/cards/PaymentCard.svelte'
-
-  let animation = 'left'
 </script>
 
-<ModalContent {animation}>
+<ModalContent>
   <ModalBody>
     <ModalHeader>Payment Method</ModalHeader>
     <PaymentCard on:click={() => push('#/checkout')} label="Bank Account">
