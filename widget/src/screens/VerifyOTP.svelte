@@ -100,7 +100,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader>Verify Your Email</ModalHeader>
+    <ModalHeader>Enter Your Code</ModalHeader>
     <Label label="Your Email Code">
       <Input
         inputmode="numeric"
@@ -125,11 +125,11 @@
   <ModalFooter>
     <Button disabled={isMakingRequest} on:click={handleNextStep}>
       {#if isMakingRequest && !isSendingEmail}
-        Verifying...
+        Confirming Code...
       {:else if isMakingRequest && isSendingEmail}
         Resending Email...
       {:else}
-        Verify Email
+        Confirm Code
       {/if}
     </Button>
   </ModalFooter>
