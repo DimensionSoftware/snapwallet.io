@@ -68,6 +68,7 @@
   :root {
     // theme
     --theme-color: #{$themeColor};
+    --theme-color-inverse: #{$themeColorInverse};
     --theme-color-darkened: #{$themeColorDarkened};
     --theme-color-lightened: #{$themeColorLightened};
     --theme-font: #{$themeFont};

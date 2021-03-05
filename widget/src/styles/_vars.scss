@@ -3,6 +3,7 @@
 
 // theme
 $themeColor: #485460;
+$themeColorInverse: white;
 $themeColorDarkened: darken($themeColor, 10%);
 $themeColorLightened: lighten($themeColor, 5%);
 $themeFont: 'Helvetica Neue', Arial, sans-serif;
