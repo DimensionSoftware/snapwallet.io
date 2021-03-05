@@ -52,8 +52,8 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader>Welcome</ModalHeader>
-    <Label label="Your Email or Phone">
+    <ModalHeader>Get Email Code</ModalHeader>
+    <Label label="Your Email">
       <Input
         inputmode="email"
         autocapitalize="none"
@@ -70,9 +70,9 @@
   <ModalFooter>
     <Button disabled={isMakingRequest} on:click={handleNextStep}>
       {#if isMakingRequest}
-        Sending Email...
+        Getting Code...
       {:else}
-        Login <small>or</small> SignUp
+        Get Code
       {/if}
     </Button>
   </ModalFooter>
