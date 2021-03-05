@@ -27,7 +27,7 @@
   <div class="crypto-icon">
     <svelte:component this={tickerIcons[crypto.ticker]} />
   </div>
-  <div class="crypto-name">{crypto.name}</div>
+  <div class="crypto-name">{crypto.ticker} &nbsp;<small>{crypto.name}</small></div>
   <div class="crypto-arrow"><FaIcon data={faChevronRight} /></div>
 </div>
 
@@ -60,6 +60,9 @@
     margin-left: 1rem;
     font-size: 1.5em;
     color: var(--theme-text-color);
+    small {
+      font-weight: 500;
+    }
   }
 
   .crypto-arrow {
