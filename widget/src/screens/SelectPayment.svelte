@@ -15,9 +15,9 @@
   <ModalBody>
     <ModalHeader>Payment Method</ModalHeader>
     <PaymentCard on:click={() => push('#/checkout')} label="Bank Account">
-      <span slot="icon">
+      <div class="icon-slot-container" slot="icon">
         <FaIcon data={faUniversity} />
-      </span>
+      </div>
     </PaymentCard>
   </ModalBody>
   <ModalFooter />
@@ -25,4 +25,9 @@
 
 <style lang="scss">
   @import '../styles/_vars.scss';
+  .icon-slot-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 </style>
