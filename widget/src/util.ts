@@ -42,3 +42,6 @@ export const setFluxSession = (jwt?: string) => {
 export const getFluxSession = (): string => {
   return window.localStorage.getItem(JWT_SESSION_KEY) || ''
 }
+
+export const numberWithCommas = (s: string) =>
+  s.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')

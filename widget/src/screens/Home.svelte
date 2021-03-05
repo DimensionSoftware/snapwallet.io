@@ -14,7 +14,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
-  import { isValidNumber, onEnterPressed } from '../util'
+  import { numberWithCommas, isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
 
   let selectorVisible = false
@@ -148,8 +148,8 @@
       <div class="exchange-rate-container">
         1 {$transactionStore.destinationCurrency.ticker} @
         {isLoadingPrices
-          ? fakePrice.toFixed(2)
-          : selectedSourcePrice.toFixed(2)}
+          ? numberWithCommas(fakePrice.toFixed(2))
+          : numberWithCommas(selectedSourcePrice.toFixed(2))}
         {srcTicker}
       </div>
       <TotalContainer
