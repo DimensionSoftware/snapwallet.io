@@ -1,5 +1,12 @@
 package profiledata
 
+import (
+	"time"
+
+	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/encryption"
+)
+
 // ID the id of a db stored ProfileData item
 type ID string
 
@@ -37,8 +44,52 @@ const (
 
 // EncryptedProfileData is a generic container store encrypted ProfileData
 type EncryptedProfileData struct {
-	ID                ID     `firestore:"id"`
-	Kind              Kind   `firestore:"kind"`
-	DataEncryptionKey []byte `firestore:"DEK"`
-	Status            Status `firestore:"status"`
+	ID                ID         `firestore:"id"`
+	Kind              Kind       `firestore:"kind"`
+	Status            Status     `firestore:"status"`
+	CreatedAt         time.Time  `firestore:"createdAt"`
+	DataEncryptionKey []byte     `firestore:"DEK"`
+	EncryptedData     []byte     `firestore:"encryptedData"`
+	SealedAt          *time.Time `firestore:"sealedAt,omitempty"`
+}
+
+// Decrypt decrypts a type
+func (encryptedProfileData EncryptedProfileData) Decrypt(m *encryption.Manager, userID user.ID) ([]byte, error) {
+	dekH, err := encryption.ParseAndDecryptKeyBytes(encryptedProfileData.DataEncryptionKey, m.Encryptor)
+	if err != nil {
+		return nil, err
+	}
+
+	dek := encryption.NewEncryptor(dekH)
+	decrypted, err := dek.Decrypt(encryptedProfileData.EncryptedData, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	return decrypted, nil
+
+}
+
+// DecryptAndUnmarshal ...
+func (encryptedProfileData EncryptedProfileData) DecryptAndUnmarshal(m *encryption.Manager, userID user.ID) (interface{}, error) {
+	/*
+		switch encryptedProfileData.Kind {
+			case KindAddress:
+				decrypted, err := dek.Decrypt(encryptedProfileData.EncryptedData, []byte(userID))
+				if err != nil {
+					return nil, err
+				}
+
+				var out address.ProfileDataAddressPIIData
+				err = json.Unmarshal(decrypted, &out)
+				if err != nil {
+					return nil, err
+				}
+			default:
+				panic("fuck")
+
+			}
+	*/
+
+	return nil, nil
 }
