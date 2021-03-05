@@ -127,7 +127,7 @@
             </span>
           </Label>
         </div>
-        <Label label="USD">
+        <Label label="Amount">
           <Input
             on:change={e => {
               const val = Number(e.detail)

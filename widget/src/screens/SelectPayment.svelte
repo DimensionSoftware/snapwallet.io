@@ -11,7 +11,7 @@
 
 <ModalContent>
   <ModalBody>
-    <ModalHeader>Payment Method</ModalHeader>
+    <ModalHeader hideCloseButton>Payment Method</ModalHeader>
     <PaymentCard on:click={() => push('#/checkout')} label="Bank Account">
       <div class="icon-slot-container" slot="icon">
         <FaIcon data={faUniversity} />

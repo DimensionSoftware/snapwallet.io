@@ -56,10 +56,10 @@
     background-color: var(--theme-info-color);
     color: white;
     &.error {
-      background-color: var(--theme-error-color);
+      background-color: var(--theme-color);
     }
     &.warning {
-      background-color: var(--theme-warning-color);
+      background-color: var(--theme-color);
     }
     &.success {
       background-color: var(--theme-success-color);
