@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Router, { push } from 'svelte-spa-router'
+  import Router, { push, location } from 'svelte-spa-router'
   import wrap from 'svelte-spa-router/wrap'
   import Toast from './components/Toast.svelte'
   import Home from './screens/Home.svelte'
@@ -12,6 +12,7 @@
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes } from './constants'
   import { authedRouteOptions, Logger } from './util'
+  import { userStore } from './stores/UserStore'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -22,6 +23,9 @@
   // Handler for routing condition failure
   const routeConditionsFailed = (event: any) => {
     Logger.debug('route conditions failed', event.detail)
+    // Sets the last known route for redirect
+    // upon successful auth/reauth.
+    userStore.updateLastKnownRoute($location as Routes)
     push(Routes.SEND_OTP)
   }
 
