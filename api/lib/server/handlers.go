@@ -236,6 +236,12 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 		log.Printf("STUB > process PlaidAccountID: %s", plaidAccountID)
 	}
 
+	processorTokenResp, err := s.Plaid.CreateProcessorToken(resp.AccessToken, req.PlaidAccountIds[0], "wyre")
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("processor token: %s", processorTokenResp.ProcessorToken)
+
 	return &proto.PlaidConnectBankAccountsResponse{}, nil
 }
 
