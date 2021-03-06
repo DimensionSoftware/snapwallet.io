@@ -16,14 +16,20 @@
   import { onMount } from 'svelte'
   import { numberWithCommas, isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
+  import { Routes } from '../constants'
 
   let selectorVisible = false
 
   const cryptoCurrencies = [
     { name: 'Bitcoin', ticker: 'BTC' },
     { name: 'Ethereum', ticker: 'ETH' },
-    { name: 'Tether', ticker: 'USDT' },
     { name: 'USDC', ticker: 'USDC' },
+    { name: 'Tether', ticker: 'USDT' },
+    { name: 'DAI', ticker: 'DAI' },
+    { name: 'MakerDAO', ticker: 'MKR' },
+    { name: 'Gemini Dollar', ticker: 'GUSD' },
+    { name: 'Paxos Standard', ticker: 'PAX' },
+    { name: 'Link', ticker: 'LINK' },
   ]
 
   $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
@@ -54,7 +60,7 @@
     if (!sourceAmount || isNaN(sourceAmount) || !isValidNumber(destinationRate))
       // focus input
       return document.querySelector('input')?.focus()
-    push('/select-payment')
+    push(Routes.SELECT_PAYMENT)
   }
 
   const onKeyDown = (e: Event) => {
@@ -90,9 +96,7 @@
   <ModalBody>
     <IntentSelector />
     <div class="cryptocurrencies-container">
-      <div
-        style="display:flex;flex-direction:column;height:5rem;margin-bottom:1rem"
-      >
+      <div class="dst-container">
         <Label>
           <CryptoCard
             on:click={() => (selectorVisible = true)}
@@ -190,7 +194,8 @@
     height: 100%;
     width: 100%;
     padding: 0 0.5rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
+    overflow-y: scroll;
   }
 
   .exchange-rate-container {
@@ -226,6 +231,13 @@
     width: 35px;
   }
 
+  .dst-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
+    margin-bottom: 1rem;
+  }
   .dstCurrency {
     position: absolute;
     right: 0.5rem;

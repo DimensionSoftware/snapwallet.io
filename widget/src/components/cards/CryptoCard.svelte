@@ -38,21 +38,48 @@
   @import '../../styles/animations.scss';
 
   .crypto-card {
+    position: relative;
     padding: 0;
     width: 100%;
     height: 3rem;
     display: flex;
     align-items: center;
     cursor: pointer;
-    &:hover .crypto-icon {
-      transform: scale(1.05);
-      transition: none;
+    &:before {
+      // background fx
+      content: '';
+      position: absolute;
+      z-index: 0;
+      top: 0;
+      right: -2px;
+      left: -2px;
+      bottom: 0;
+      border-radius: 0.5rem;
+      background: linear-gradient(
+        to right,
+        rgba($themeColor, 0.01),
+        rgba($themeColor, 0.1),
+        rgba($themeColor, 0.01)
+      );
+      transform: scale(0);
+      transition: transform 0.2s $easeOutExpo;
+    }
+    &:hover {
       &:before {
-        animation: currency 0.3s $easeOutBack;
-        top: -1px;
-        right: -1px;
-        left: -1px;
-        bottom: -1px;
+        transform: scale(1);
+        transition: none;
+      }
+      .crypto-icon {
+        transform: scale(1.05);
+        transition: none;
+        &:before {
+          background: $themeColor;
+          animation: currency 0.3s $easeOutBack, background 0s ease-out 0.3s;
+          top: 0;
+          right: -1px;
+          left: -1px;
+          bottom: 0;
+        }
       }
     }
   }
@@ -79,6 +106,7 @@
   }
 
   .crypto-name {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -92,6 +120,7 @@
   }
 
   .crypto-arrow {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: center;

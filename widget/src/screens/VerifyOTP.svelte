@@ -10,6 +10,7 @@
   import { userStore } from '../stores/UserStore'
   import { Logger, onEnterPressed, setFluxSession } from '../util'
   import { toaster } from '../stores/ToastStore'
+  import { Routes } from '../constants'
 
   let animation = 'left'
   let code = ''
@@ -60,7 +61,7 @@
         error: true,
       })
       setTimeout(() => {
-        push('#/checkout')
+        push(Routes.SEND_OTP)
       }, 1700)
     } finally {
       setTimeout(() => {
@@ -77,7 +78,7 @@
       const { jwt } = await verifyOTP()
       window.API(jwt)
       Logger.debug('Logged in')
-      setTimeout(() => push('#/link-bank'), 700)
+      setTimeout(() => push($userStore.lastKnownRoute), 700)
     } catch (e) {
       const err = e as { body: { code: number; message: string } }
       Logger.error(err)

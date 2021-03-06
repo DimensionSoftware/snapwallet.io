@@ -2,6 +2,7 @@
 // so each import does not redefine the variables
 
 // theme
+$themeColor: #ffc600;
 $themeColor: #485460;
 $themeColorInverse: white;
 $themeColorDarkened: darken($themeColor, 10%);
@@ -10,11 +11,11 @@ $themeFont: 'Helvetica Neue', Arial, sans-serif;
 $headingFont: 'Impact', 'Fira Sans Condensed';
 
 // colors
-$textColor: #1e272e;
+$textColor: #333;
 $textColor2: lighten($textColor, 10%);
 $textColor3: lighten($textColor, 20%);
 $textColor4: lighten($textColor, 40%);
-$textColorMuted: $textColor3;
+$textColorMuted: $textColor2;
 // NOTE: avoid linear gradient for react native safeview embedding
 $modalBackground: #f8f8f8;
 $modalContainerBackgroundColor: linear-gradient(

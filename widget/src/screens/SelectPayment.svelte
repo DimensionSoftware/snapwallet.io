@@ -7,12 +7,18 @@
   import FaIcon from 'svelte-awesome'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
   import PaymentCard from '../components/cards/PaymentCard.svelte'
+  import { Routes } from '../constants'
 </script>
 
 <ModalContent>
   <ModalBody>
     <ModalHeader hideCloseButton>Payment Method</ModalHeader>
-    <PaymentCard on:click={() => push('#/checkout')} label="Bank Account">
+    <PaymentCard
+      on:click={() => {
+        push(Routes.PLAID_LINK)
+      }}
+      label="Bank Account"
+    >
       <div class="icon-slot-container" slot="icon">
         <FaIcon data={faUniversity} />
       </div>

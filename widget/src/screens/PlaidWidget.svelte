@@ -1,5 +1,6 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
+  import { Routes } from '../constants'
   async function getLinkToken(): Promise<string> {
     const resp = await window.API().fluxPlaidCreateLinkToken({})
 
@@ -47,12 +48,13 @@
             publicToken,
             metadata.accounts.map(a => a.id),
           ).then(() => {
-            setTimeout(() => push('#/profile'), 700)
+            setTimeout(() => push(Routes.PROFILE), 700)
           })
         },
         onLoad: () => {},
         onExit: (err, metadata) => {
           handler.destroy()
+          push('/')
         },
         onEvent: (eventName, metadata) => {},
         receivedRedirectUri: null,
