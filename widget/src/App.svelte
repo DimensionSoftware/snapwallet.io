@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Router from 'svelte-spa-router'
+  import Router, { push } from 'svelte-spa-router'
   import wrap from 'svelte-spa-router/wrap'
   import Toast from './components/Toast.svelte'
   import Home from './screens/Home.svelte'
@@ -10,6 +10,8 @@
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
+  import { Routes } from './constants'
+  import { authedRouteOptions, Logger } from './util'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -17,16 +19,32 @@
   export let apiKey: string
   export let theme: object
 
+  // Handler for routing condition failure
+  const routeConditionsFailed = (event: any) => {
+    Logger.debug('route conditions failed', event.detail)
+    push(Routes.SEND_OTP)
+  }
+
   const routes = {
-    '/': wrap({ component: Home as any, props: { appName, intent, apiKey } }),
-    '/select-payment': SelectPayment,
-    '/checkout': wrap({
+    [Routes.SEND_OTP]: wrap({
       component: Checkout as any,
       props: { appName, intent, apiKey },
     }),
-    '/profile': Profile,
-    '/verify-otp': VerifyOTP,
-    '/link-bank': PlaidWidget,
+    [Routes.ROOT]: wrap({
+      component: Home as any,
+      props: { appName, intent, apiKey },
+    }),
+    [Routes.SELECT_PAYMENT]: wrap({
+      component: SelectPayment as any,
+    }),
+    [Routes.VERIFY_OTP]: VerifyOTP,
+    // Authenticated
+    [Routes.PROFILE]: wrap({
+      ...authedRouteOptions(Profile),
+    }),
+    [Routes.PLAID_LINK]: wrap({
+      ...authedRouteOptions(PlaidWidget),
+    }),
     '*': NotFound as any,
   }
 
@@ -48,7 +66,7 @@
 
 <div id="modal">
   <div id="modal-body">
-    <Router {routes} />
+    <Router on:conditionsFailed={routeConditionsFailed} {routes} />
     <Toast />
   </div>
 </div>
