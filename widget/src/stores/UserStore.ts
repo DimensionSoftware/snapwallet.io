@@ -1,4 +1,5 @@
 import { writable } from 'svelte/store'
+import { Routes } from '../constants'
 
 function createStore() {
   const { subscribe, update } = writable({
@@ -8,6 +9,9 @@ function createStore() {
     lastName: '',
     socialSecurityNumber: '',
     birthDate: '',
+    // Used for routing to last position
+    // when auth kicks in.
+    lastKnownRoute: Routes.ROOT,
   })
 
   return {
@@ -34,6 +38,8 @@ function createStore() {
     setSocialSecurityNumber: (socialSecurityNumber: string) =>
       update(s => ({ ...s, socialSecurityNumber })),
     setBirthDate: (birthDate: string) => update(s => ({ ...s, birthDate })),
+    updateLastKnownRoute: (lastKnownRoute: Routes) =>
+      update(s => ({ ...s, lastKnownRoute })),
   }
 }
 
