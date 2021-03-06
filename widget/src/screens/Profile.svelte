@@ -32,7 +32,12 @@
 
     window
       .API()
-      .fluxSaveProfileData({ ssn: '1234' })
+      .fluxSaveProfileData({
+        ssn: socialSecurityNumber,
+        dateOfBirth: birthDate,
+        // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
+        legalName: `${firstName} ${lastName}`
+      })
       .then(() => {
         push('/overview')
       })
