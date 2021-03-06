@@ -1,4 +1,4 @@
-package ssn
+package phone
 
 import (
 	"time"

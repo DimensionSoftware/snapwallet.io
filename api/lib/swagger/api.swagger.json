@@ -233,7 +233,7 @@
         ]
       }
     },
-    "/wyre/create-acount": {
+    "/wyre/create-account": {
       "post": {
         "summary": "WyreCreateAccount creates an account with Wyre",
         "description": "...",

@@ -7,7 +7,10 @@
   import Input from '../components/inputs/Input.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { onEnterPressed } from '../util'
+  import { Logger, onEnterPressed } from '../util'
+  import { toaster } from '../stores/ToastStore'
+
+  import { push } from 'svelte-spa-router'
 
   let animation = 'left'
 
@@ -15,15 +18,38 @@
 
   const handleNextStep = () => {
     const { firstName, lastName, birthDate, socialSecurityNumber } = $userStore,
-      focus = (ndx: number) =>
-        document.querySelectorAll('input[type="text"]')[ndx]?.focus()
+      focus = (ndx: number) => {
+        const thingie = document.querySelectorAll('input[type="text"]')[
+          ndx
+        ] as any
+        thingie.focus()
+      }
 
     // validate inputs
     if (!firstName || !lastName?.length) return focus(0)
     if (!birthDate) return focus(1)
     if (!socialSecurityNumber) return focus(2)
 
-    // push('/overview')
+    window
+      .API()
+      .fluxSaveProfileData({
+        ssn: socialSecurityNumber,
+        dateOfBirth: birthDate,
+        // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
+        legalName: `${firstName} ${lastName}`
+      })
+      .then(() => {
+        push('/overview')
+      })
+      .catch(e => {
+        const err = e as { body: { code: number; message: string } }
+        Logger.error(err)
+
+        toaster.pop({
+          msg: err.body.message,
+          error: true,
+        })
+      })
   }
 
   const onKeyDown = (e: Event) => {

@@ -11,17 +11,27 @@
     }
   },
   "paths": {
-    "/viewer": {
-      "get": {
-        "security": [{"Bearer": []}]
-      }
-    },
     "/plaid/connect-bank-accounts": {
       "post": {
         "security": [{"Bearer": []}]
       }
     },
     "/plaid/create-link-token": {
+      "post": {
+        "security": [{"Bearer": []}]
+      }
+    },
+    "/viewer": {
+      "get": {
+        "security": [{"Bearer": []}]
+      }
+    },
+    "/viewer/profile": {
+      "patch": {
+        "security": [{"Bearer": []}]
+      }
+    },
+    "/wyre/create-account": {
       "post": {
         "security": [{"Bearer": []}]
       }
