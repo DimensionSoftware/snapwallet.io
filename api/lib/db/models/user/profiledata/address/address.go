@@ -5,14 +5,15 @@ import (
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
-	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+
 	"github.com/khoerling/flux/api/lib/encryption"
 )
 
 // ProfileDataAddress an address for a user
 type ProfileDataAddress struct {
-	ID         profiledata.ID
-	Status     profiledata.Status
+	ID         common.ProfileDataID
+	Status     common.ProfileDataStatus
 	Street1    string
 	Street2    string
 	City       string
@@ -34,7 +35,7 @@ type ProfileDataAddressPIIData struct {
 }
 
 // Encrypt ...
-func (pdata ProfileDataAddress) Encrypt(m *encryption.Manager, userID user.ID) (*profiledata.EncryptedProfileData, error) {
+func (pdata ProfileDataAddress) Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error) {
 	dekH := encryption.NewDEK()
 	dek := encryption.NewEncryptor(dekH)
 
@@ -57,13 +58,24 @@ func (pdata ProfileDataAddress) Encrypt(m *encryption.Manager, userID user.ID) (
 		return nil, err
 	}
 
-	return &profiledata.EncryptedProfileData{
+	return &common.EncryptedProfileData{
 		ID:                pdata.ID,
-		Kind:              profiledata.KindAddress,
+		Kind:              common.KindAddress,
 		Status:            pdata.Status,
 		CreatedAt:         pdata.CreatedAt,
 		SealedAt:          pdata.SealedAt,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EncryptedData:     encryptedData,
 	}, nil
+}
+
+// UnmarshalPIIData ...
+func UnmarshalPIIData(data []byte, userID user.ID) (*ProfileDataAddressPIIData, error) {
+	var out ProfileDataAddressPIIData
+	err := json.Unmarshal(data, &out)
+	if err != nil {
+		return nil, err
+	}
+
+	return &out, nil
 }
