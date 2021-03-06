@@ -23,8 +23,13 @@
   const cryptoCurrencies = [
     { name: 'Bitcoin', ticker: 'BTC' },
     { name: 'Ethereum', ticker: 'ETH' },
-    { name: 'Tether', ticker: 'USDT' },
     { name: 'USDC', ticker: 'USDC' },
+    { name: 'Tether', ticker: 'USDT' },
+    { name: 'DAI', ticker: 'DAI' },
+    { name: 'MakerDAO', ticker: 'MKR' },
+    { name: 'Gemini Dollar', ticker: 'GUSD' },
+    { name: 'Paxos Standard', ticker: 'PAX' },
+    { name: 'Link', ticker: 'LINK' },
   ]
 
   $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
@@ -191,7 +196,8 @@
     height: 100%;
     width: 100%;
     padding: 0 0.5rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
+    overflow-y: scroll;
   }
 
   .exchange-rate-container {
