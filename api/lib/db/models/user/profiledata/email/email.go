@@ -1,4 +1,4 @@
-package ssn
+package email
 
 import (
 	"time"

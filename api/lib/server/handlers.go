@@ -20,7 +20,9 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/dateofbirth"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
@@ -313,6 +315,45 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
+	if req.LegalName != "" {
+		legalNameData := &legalname.ProfileDataLegalName{
+			ID:        common.ProfileDataID(xid.New().String()),
+			Status:    common.StatusReceived,
+			LegalName: req.LegalName,
+			CreatedAt: time.Now(),
+		}
+		_, err := s.Db.SaveProfileData(ctx, userID, legalNameData)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if req.DateOfBirth != "" {
+		dobData := &dateofbirth.ProfileDataDateOfBirth{
+			ID:          common.ProfileDataID(xid.New().String()),
+			Status:      common.StatusReceived,
+			DateOfBirth: req.DateOfBirth,
+			CreatedAt:   time.Now(),
+		}
+		_, err := s.Db.SaveProfileData(ctx, userID, dobData)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if req.Ssn != "" {
+		ssnData := &ssn.ProfileDataSSN{
+			ID:        common.ProfileDataID(xid.New().String()),
+			Status:    common.StatusReceived,
+			SSN:       req.Ssn,
+			CreatedAt: time.Now(),
+		}
+		_, err := s.Db.SaveProfileData(ctx, userID, ssnData)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	if req.Address != nil {
 		addressData := &address.ProfileDataAddress{
 			ID:         common.ProfileDataID(xid.New().String()),
@@ -326,19 +367,6 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			CreatedAt:  time.Now(),
 		}
 		_, err := s.Db.SaveProfileData(ctx, userID, addressData)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if req.LegalName != "" {
-		legalNameData := &legalname.ProfileDataLegalName{
-			ID:        common.ProfileDataID(xid.New().String()),
-			Status:    common.StatusReceived,
-			LegalName: req.LegalName,
-			CreatedAt: time.Now(),
-		}
-		_, err := s.Db.SaveProfileData(ctx, userID, legalNameData)
 		if err != nil {
 			return nil, err
 		}
