@@ -1,0 +1,30 @@
+{
+  "name": "flux-init",
+  "version": "0.0.1",
+  "description": "Flux web iframe launcher",
+  "author": "Dimension Software",
+  "keywords": [
+    "fetch",
+    "typescript",
+    "cryptocurrency",
+    "crypto",
+    "bitcoin",
+    "etherum",
+    "api",
+    "flux",
+    "axios"
+  ],
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
+  "scripts": {
+    "build": "./node_modules/.bin/rollup -c rollup.config.js",
+    "prepare": "npm run build"
+  },
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.2.0",
+    "rollup": "^2.40.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "tslib": "^2.1.0",
+    "typescript": "^3.9.3"
+  }
+}
