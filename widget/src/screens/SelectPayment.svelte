@@ -13,7 +13,12 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader hideCloseButton>Payment Method</ModalHeader>
-    <PaymentCard on:click={() => push(Routes.SEND_OTP)} label="Bank Account">
+    <PaymentCard
+      on:click={() => {
+        push(Routes.PLAID_LINK)
+      }}
+      label="Bank Account"
+    >
       <div class="icon-slot-container" slot="icon">
         <FaIcon data={faUniversity} />
       </div>
