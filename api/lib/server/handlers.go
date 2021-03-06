@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/plaid/plaid-go/plaid"
+	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
@@ -18,6 +19,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
@@ -306,10 +308,20 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	}
 
 	// TODO: validate
-	// TODO: upsert?
+
 	if req.Address != nil {
-		address := &address.ProfileDataAddress{}
-		_, err := s.Db.SaveProfileData(ctx, userID, address)
+		addressData := &address.ProfileDataAddress{
+			ID:         common.ProfileDataID(xid.New().String()),
+			Status:     common.StatusReceived,
+			Street1:    req.Address.Street_1,
+			Street2:    req.Address.Street_2,
+			City:       req.Address.City,
+			State:      req.Address.State,
+			PostalCode: req.Address.PostalCode,
+			Country:    req.Address.Country,
+			CreatedAt:  time.Now(),
+		}
+		_, err := s.Db.SaveProfileData(ctx, userID, addressData)
 		if err != nil {
 			return nil, err
 		}
