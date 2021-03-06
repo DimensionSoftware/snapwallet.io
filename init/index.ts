@@ -3,10 +3,10 @@ class Flux {
   events = {
     EXIT: '__FLUX_EXIT',
   }
-  onExit = (e: any) => {}
+  onMessage = (e: any) => {}
 
-  constructor(args: { onExit?: (e: any) => any }) {
-    this.onExit = args.onExit || this.onExit
+  constructor(args: { onMessage?: (e: any) => any }) {
+    this.onMessage = args.onMessage || this.onMessage
   }
 
   openWeb = () => {
@@ -27,15 +27,7 @@ class Flux {
     iframe.style.zIndex = '1000000000'
     iframe.style.boxSizing = 'border-box'
     iframe.allow = 'camera:*;microphone:*;'
-    window.addEventListener(
-      'message',
-      (event) => {
-        const { data = '{}' } = event
-        const msg = JSON.parse(data)
-        this.onExit && this.onExit(msg)
-      },
-      false
-    )
+    window.addEventListener('message', this.handleMessage, false)
     document.body.appendChild(iframe)
   }
 
@@ -47,6 +39,12 @@ class Flux {
 
   openNative = () => {
     // TODO: add RN WV launch logic
+  }
+
+  private handleMessage = (event: any) => {
+    const { data = '{}' } = event
+    const msg = JSON.parse(data)
+    this.onMessage && this.onMessage(msg)
   }
 }
 
