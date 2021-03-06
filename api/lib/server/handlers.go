@@ -17,6 +17,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
@@ -292,6 +293,20 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 
 // SaveProfileData is an rpc handler
 func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileDataRequest) (*proto.SaveProfileDataResponse, error) {
+	userID, err := GetUserIDFromIncomingContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	// TODO: validate
+	// TODO: upsert?
+	if req.Address != nil {
+		address := &address.ProfileDataAddress{}
+		_, err := s.Db.SaveProfileData(ctx, userID, address)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	return &proto.SaveProfileDataResponse{}, nil
 }
