@@ -12,10 +12,10 @@ import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
+import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
 import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
-import { WyreCreateAccountRequest } from '../models/WyreCreateAccountRequest';
 
 import { ObservableFluxApi } from "./ObservableAPI";
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
@@ -59,16 +59,25 @@ export interface FluxApiFluxPlaidCreateLinkTokenRequest {
 export interface FluxApiFluxPricingDataRequest {
 }
 
+export interface FluxApiFluxSaveProfileDataRequest {
+    /**
+     * 
+     * @type SaveProfileDataRequest
+     * @memberof FluxApifluxSaveProfileData
+     */
+    body: SaveProfileDataRequest
+}
+
 export interface FluxApiFluxViewerDataRequest {
 }
 
 export interface FluxApiFluxWyreCreateAccountRequest {
     /**
      * 
-     * @type WyreCreateAccountRequest
+     * @type any
      * @memberof FluxApifluxWyreCreateAccount
      */
-    body: WyreCreateAccountRequest
+    body: any
 }
 
 
@@ -124,6 +133,15 @@ export class ObjectFluxApi {
     }
 	
     /**
+     * ...
+     * SaveProfileData saves profile data items for the user
+     * @param param the request object
+     */
+    public fluxSaveProfileData(param: FluxApiFluxSaveProfileDataRequest, options?: Configuration): Promise<any> {
+        return this.api.fluxSaveProfileData(param.body,  options).toPromise();
+    }
+	
+    /**
      * Provides user (viewer) data associated with the access token
      * Get viewer data
      * @param param the request object
@@ -133,7 +151,8 @@ export class ObjectFluxApi {
     }
 	
     /**
-     * https://plaid.com/docs/link/link-token-migration-guide/
+     * ...
+     * WyreCreateAccount creates an account with Wyre
      * @param param the request object
      */
     public fluxWyreCreateAccount(param: FluxApiFluxWyreCreateAccountRequest, options?: Configuration): Promise<any> {

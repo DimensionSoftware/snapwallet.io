@@ -8,10 +8,10 @@ export * from './PricingDataResponse';
 export * from './PricingRate';
 export * from './ProtobufAny';
 export * from './RpcStatus';
+export * from './SaveProfileDataRequest';
 export * from './User';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
-export * from './WyreCreateAccountRequest';
 
 import { Address } from './Address';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
@@ -23,10 +23,10 @@ import { PricingDataResponse } from './PricingDataResponse';
 import { PricingRate } from './PricingRate';
 import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
+import { SaveProfileDataRequest } from './SaveProfileDataRequest';
 import { User } from './User';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
-import { WyreCreateAccountRequest } from './WyreCreateAccountRequest';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -60,10 +60,10 @@ let typeMap: {[index: string]: any} = {
     "PricingRate": PricingRate,
     "ProtobufAny": ProtobufAny,
     "RpcStatus": RpcStatus,
+    "SaveProfileDataRequest": SaveProfileDataRequest,
     "User": User,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
-    "WyreCreateAccountRequest": WyreCreateAccountRequest,
 }
 
 export class ObjectSerializer {

@@ -214,9 +214,44 @@
         ]
       }
     },
+    "/viewer/profile": {
+      "patch": {
+        "summary": "SaveProfileData saves profile data items for the user",
+        "description": "...",
+        "operationId": "Flux_SaveProfileData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/SaveProfileDataResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SaveProfileDataRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/wyre/create-acount": {
       "post": {
-        "summary": "https://plaid.com/docs/link/link-token-migration-guide/",
+        "summary": "WyreCreateAccount creates an account with Wyre",
+        "description": "...",
         "operationId": "Flux_WyreCreateAccount",
         "responses": {
           "200": {
@@ -381,6 +416,30 @@
       "description": "the pricing rate map; the keys are currency symbols and the values are the rates",
       "title": "PricingRate"
     },
+    "SaveProfileDataRequest": {
+      "type": "object",
+      "properties": {
+        "legalName": {
+          "type": "string"
+        },
+        "dateOfBirth": {
+          "type": "string"
+        },
+        "ssn": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/Address"
+        }
+      },
+      "description": "request",
+      "title": "SaveProfileDataRequest"
+    },
+    "SaveProfileDataResponse": {
+      "type": "object",
+      "description": "response",
+      "title": "SaveProfileDataResponse"
+    },
     "User": {
       "type": "object",
       "properties": {
@@ -432,15 +491,7 @@
     },
     "WyreCreateAccountRequest": {
       "type": "object",
-      "properties": {
-        "individualLegalName": {
-          "type": "string"
-        },
-        "individualResidenceAddress": {
-          "$ref": "#/definitions/Address"
-        }
-      },
-      "description": "response",
+      "description": "request",
       "title": "WyreCreateAccountRequest"
     },
     "WyreCreateAccountResponse": {

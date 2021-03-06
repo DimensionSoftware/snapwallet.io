@@ -12,10 +12,10 @@ import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
+import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
 import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
-import { WyreCreateAccountRequest } from '../models/WyreCreateAccountRequest';
 import { ObservableFluxApi } from './ObservableAPI';
 
 
@@ -80,6 +80,16 @@ export class PromiseFluxApi {
     }
 	
     /**
+     * ...
+     * SaveProfileData saves profile data items for the user
+     * @param body 
+     */
+    public fluxSaveProfileData(body: SaveProfileDataRequest, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxSaveProfileData(body, options);
+        return result.toPromise();
+    }
+	
+    /**
      * Provides user (viewer) data associated with the access token
      * Get viewer data
      */
@@ -89,10 +99,11 @@ export class PromiseFluxApi {
     }
 	
     /**
-     * https://plaid.com/docs/link/link-token-migration-guide/
+     * ...
+     * WyreCreateAccount creates an account with Wyre
      * @param body 
      */
-    public fluxWyreCreateAccount(body: WyreCreateAccountRequest, options?: Configuration): Promise<any> {
+    public fluxWyreCreateAccount(body: any, options?: Configuration): Promise<any> {
     	const result = this.api.fluxWyreCreateAccount(body, options);
         return result.toPromise();
     }

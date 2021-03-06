@@ -14,30 +14,44 @@ import { Address } from './Address';
 import { HttpFile } from '../http/http';
 
 /**
-* response
+* request
 */
-export class WyreCreateAccountRequest {
-    'individualLegalName'?: string;
-    'individualResidenceAddress'?: Address;
+export class SaveProfileDataRequest {
+    'legalName'?: string;
+    'dateOfBirth'?: string;
+    'ssn'?: string;
+    'address'?: Address;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "individualLegalName",
-            "baseName": "individualLegalName",
+            "name": "legalName",
+            "baseName": "legalName",
             "type": "string",
             "format": ""
         },
         {
-            "name": "individualResidenceAddress",
-            "baseName": "individualResidenceAddress",
+            "name": "dateOfBirth",
+            "baseName": "dateOfBirth",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "ssn",
+            "baseName": "ssn",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "address",
+            "baseName": "address",
             "type": "Address",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return WyreCreateAccountRequest.attributeTypeMap;
+        return SaveProfileDataRequest.attributeTypeMap;
     }
     
     public constructor() {

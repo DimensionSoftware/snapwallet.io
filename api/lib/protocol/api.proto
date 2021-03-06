@@ -178,10 +178,8 @@ message PlaidCreateLinkTokenResponse {
 
 // WyreCreateAccountRequest
 //
-// response
+// request
 message WyreCreateAccountRequest {
-  string individual_legal_name = 1;
-  Address individual_residence_address = 2;
 }
 
 // WyreCreateAccountResponse
@@ -189,6 +187,22 @@ message WyreCreateAccountRequest {
 // response
 message WyreCreateAccountResponse {
 
+}
+
+// SaveProfileDataRequest
+//
+// request
+message SaveProfileDataRequest {
+  string legal_name = 1;
+  string date_of_birth = 2;
+  string ssn = 3;
+  Address address = 4;
+}
+
+// SaveProfileDataResponse
+//
+// response
+message SaveProfileDataResponse {
 }
 
 service Flux {
@@ -251,7 +265,19 @@ service Flux {
     };
   }
 
-  // https://plaid.com/docs/link/link-token-migration-guide/
+  // SaveProfileData saves profile data items for the user
+  //
+  // ...
+  rpc SaveProfileData(SaveProfileDataRequest) returns (SaveProfileDataResponse) {
+    option (google.api.http) = {
+      patch: "/viewer/profile"
+      body: "*"
+    };
+  }
+
+  // WyreCreateAccount creates an account with Wyre
+  //
+  // ...
   rpc WyreCreateAccount(WyreCreateAccountRequest) returns (WyreCreateAccountResponse) {
     option (google.api.http) = {
       post: "/wyre/create-acount"

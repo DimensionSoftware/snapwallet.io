@@ -14,10 +14,10 @@ import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
+import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
 import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
-import { WyreCreateAccountRequest } from '../models/WyreCreateAccountRequest';
 
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
 export class ObservableFluxApi {
@@ -154,6 +154,30 @@ export class ObservableFluxApi {
     }
 	
     /**
+     * ...
+     * SaveProfileData saves profile data items for the user
+     * @param body 
+     */
+    public fluxSaveProfileData(body: SaveProfileDataRequest, options?: Configuration): Observable<any> {
+    	const requestContextPromise = this.requestFactory.fluxSaveProfileData(body, options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxSaveProfileData(rsp)));
+	    	}));
+    }
+	
+    /**
      * Provides user (viewer) data associated with the access token
      * Get viewer data
      */
@@ -177,10 +201,11 @@ export class ObservableFluxApi {
     }
 	
     /**
-     * https://plaid.com/docs/link/link-token-migration-guide/
+     * ...
+     * WyreCreateAccount creates an account with Wyre
      * @param body 
      */
-    public fluxWyreCreateAccount(body: WyreCreateAccountRequest, options?: Configuration): Observable<any> {
+    public fluxWyreCreateAccount(body: any, options?: Configuration): Observable<any> {
     	const requestContextPromise = this.requestFactory.fluxWyreCreateAccount(body, options);
 
 		// build promise chain

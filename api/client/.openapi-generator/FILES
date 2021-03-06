@@ -22,10 +22,10 @@ models/PricingDataResponse.ts
 models/PricingRate.ts
 models/ProtobufAny.ts
 models/RpcStatus.ts
+models/SaveProfileDataRequest.ts
 models/User.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
-models/WyreCreateAccountRequest.ts
 models/all.ts
 package.json
 rxjsStub.ts

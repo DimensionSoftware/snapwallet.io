@@ -41,7 +41,13 @@ type FluxClient interface {
 	PlaidConnectBankAccounts(ctx context.Context, in *PlaidConnectBankAccountsRequest, opts ...grpc.CallOption) (*PlaidConnectBankAccountsResponse, error)
 	// https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLinkTokenRequest, opts ...grpc.CallOption) (*PlaidCreateLinkTokenResponse, error)
-	// https://plaid.com/docs/link/link-token-migration-guide/
+	// SaveProfileData saves profile data items for the user
+	//
+	// ...
+	SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*SaveProfileDataResponse, error)
+	// WyreCreateAccount creates an account with Wyre
+	//
+	// ...
 	WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error)
 }
 
@@ -107,6 +113,15 @@ func (c *fluxClient) PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLi
 	return out, nil
 }
 
+func (c *fluxClient) SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*SaveProfileDataResponse, error) {
+	out := new(SaveProfileDataResponse)
+	err := c.cc.Invoke(ctx, "/Flux/SaveProfileData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fluxClient) WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error) {
 	out := new(WyreCreateAccountResponse)
 	err := c.cc.Invoke(ctx, "/Flux/WyreCreateAccount", in, out, opts...)
@@ -143,7 +158,13 @@ type FluxServer interface {
 	PlaidConnectBankAccounts(context.Context, *PlaidConnectBankAccountsRequest) (*PlaidConnectBankAccountsResponse, error)
 	// https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error)
-	// https://plaid.com/docs/link/link-token-migration-guide/
+	// SaveProfileData saves profile data items for the user
+	//
+	// ...
+	SaveProfileData(context.Context, *SaveProfileDataRequest) (*SaveProfileDataResponse, error)
+	// WyreCreateAccount creates an account with Wyre
+	//
+	// ...
 	WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error)
 	mustEmbedUnimplementedFluxServer()
 }
@@ -169,6 +190,9 @@ func (UnimplementedFluxServer) PlaidConnectBankAccounts(context.Context, *PlaidC
 }
 func (UnimplementedFluxServer) PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidCreateLinkToken not implemented")
+}
+func (UnimplementedFluxServer) SaveProfileData(context.Context, *SaveProfileDataRequest) (*SaveProfileDataResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SaveProfileData not implemented")
 }
 func (UnimplementedFluxServer) WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateAccount not implemented")
@@ -294,6 +318,24 @@ func _Flux_PlaidCreateLinkToken_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_SaveProfileData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveProfileDataRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).SaveProfileData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/SaveProfileData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).SaveProfileData(ctx, req.(*SaveProfileDataRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Flux_WyreCreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WyreCreateAccountRequest)
 	if err := dec(in); err != nil {
@@ -342,6 +384,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PlaidCreateLinkToken",
 			Handler:    _Flux_PlaidCreateLinkToken_Handler,
+		},
+		{
+			MethodName: "SaveProfileData",
+			Handler:    _Flux_SaveProfileData_Handler,
 		},
 		{
 			MethodName: "WyreCreateAccount",

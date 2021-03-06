@@ -17,7 +17,6 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
-	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
@@ -306,50 +305,53 @@ func (s *Server) WyreCreateAccount(ctx context.Context, req *proto.WyreCreateAcc
 	if u.Email == nil || *u.Email == "" {
 		return nil, status.Errorf(codes.FailedPrecondition, "Sorry! We cannot create an account with Wyre; an email must be set for your user")
 	}
-	email := *u.Email
+	//email := *u.Email
 
+	return nil, nil
 	// TODO: serverside validation on this request
 	// TODO: store address info and name info for future kyc use
-	name := req.IndividualLegalName
-	address := req.IndividualResidenceAddress
-	truth := true
+	/*
+		name := "bob"
+		address := "fixme"
+		truth := true
 
-	profileFields := []wyre.ProfileField{
-		{
-			FieldID: wyre.ProfileFieldIDIndividualLegalName,
-			Value:   name,
-		},
-		{
-			FieldID: wyre.ProfileFieldIDIndividualEmail,
-			Value:   email,
-		},
-		{
-			FieldID: wyre.ProfileFieldIDIndividualResidenceAddress,
-			Value: wyre.ProfileFieldAddress{
-				Street1:    address.Street_1,
-				Street2:    address.Street_2,
-				City:       address.City,
-				State:      address.State,
-				PostalCode: address.PostalCode,
-				Country:    address.Country,
+		profileFields := []wyre.ProfileField{
+			{
+				FieldID: wyre.ProfileFieldIDIndividualLegalName,
+				Value:   name,
 			},
-		},
-	}
+			{
+				FieldID: wyre.ProfileFieldIDIndividualEmail,
+				Value:   email,
+			},
+			{
+				FieldID: wyre.ProfileFieldIDIndividualResidenceAddress,
+				Value: wyre.ProfileFieldAddress{
+					Street1:    address.Street_1,
+					Street2:    address.Street_2,
+					City:       address.City,
+					State:      address.State,
+					PostalCode: address.PostalCode,
+					Country:    address.Country,
+				},
+			},
+		}
 
-	wyreReq := wyre.CreateAccountRequest{
-		SubAccount:    &truth,
-		DisableEmail:  &truth,
-		ProfileFields: profileFields,
-	}.WithDefaults()
+		wyreReq := wyre.CreateAccountRequest{
+			SubAccount:    &truth,
+			DisableEmail:  &truth,
+			ProfileFields: profileFields,
+		}.WithDefaults()
 
-	wyreAccount, err := s.Wyre.CreateAccount(wyreReq)
-	if err != nil {
-		return nil, err
-	}
+		wyreAccount, err := s.Wyre.CreateAccount(wyreReq)
+		if err != nil {
+			return nil, err
+		}
 
-	log.Printf("wyre account created: %#v", wyreAccount)
+		log.Printf("wyre account created: %#v", wyreAccount)
 
-	return &proto.WyreCreateAccountResponse{}, nil
+		return &proto.WyreCreateAccountResponse{}, nil
+	*/
 }
 
 // UploadFile ..
