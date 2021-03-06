@@ -30,12 +30,12 @@
   }
 
   const routes = {
-    [Routes.SEND_OTP]: wrap({
-      component: Checkout as any,
-      props: { appName, intent, apiKey },
-    }),
     [Routes.ROOT]: wrap({
       component: Home as any,
+      props: { appName, intent, apiKey },
+    }),
+    [Routes.SEND_OTP]: wrap({
+      component: Checkout as any,
       props: { appName, intent, apiKey },
     }),
     [Routes.SELECT_PAYMENT]: wrap({
