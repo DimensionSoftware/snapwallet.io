@@ -6,12 +6,15 @@ import (
 	"fmt"
 	"log"
 	"math/big"
+	"reflect"
 	"time"
 
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"github.com/rs/xid"
@@ -222,4 +225,37 @@ func sixRandomDigits() (string, error) {
 		return "", err
 	}
 	return fmt.Sprintf("%06d", n.Int64()), nil
+}
+
+// SaveProfileData ...
+func (db Db) SaveProfileData(ctx context.Context, userID user.ID, pdata interface{}) (common.ProfileDataID, error) {
+	profile := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
+
+	var out *common.EncryptedProfileData
+	switch obj := pdata.(type) {
+	/*
+		case legalname.ProfileDataLegalName:
+			encrypted, err := obj.Encrypt(db.EncryptionManager, userID)
+			if err != nil {
+				return "", err
+			}
+			out = encrypted
+	*/
+	case address.ProfileDataAddress:
+		encrypted, err := obj.Encrypt(db.EncryptionManager, userID)
+		if err != nil {
+			return "", err
+		}
+		out = encrypted
+	default:
+		typeName := reflect.TypeOf(obj).String()
+		return "", fmt.Errorf("cannot save profile data of unknown type: %s", typeName)
+	}
+
+	_, err := profile.Doc(string(out.ID)).Set(ctx, out)
+	if err != nil {
+		return "", err
+	}
+
+	return out.ID, nil
 }

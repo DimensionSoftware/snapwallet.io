@@ -1,4 +1,4 @@
-package unmarshal
+package profiledata
 
 import (
 	"encoding/json"

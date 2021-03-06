@@ -34,7 +34,7 @@ const (
 	KindPhone ProfileDataKind = "PHONE"
 	// KindEmail signifies an individuals' email address in a ProfileDataEmail object
 	KindEmail ProfileDataKind = "EMAIL"
-	// KindAddress signifies a physical address in a ProfileDataEmail object
+	// KindAddress signifies a physical address in a ProfileDataAddress object
 	KindAddress ProfileDataKind = "ADDRESS"
 	// KindDateOfBirth signifies an individuals' date of birth in a ProfileDataDateOfBirth object
 	KindDateOfBirth ProfileDataKind = "DATE_OF_BIRTH"

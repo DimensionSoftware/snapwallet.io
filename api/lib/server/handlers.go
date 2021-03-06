@@ -290,6 +290,12 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 	}, nil
 }
 
+// SaveProfileData is an rpc handler
+func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileDataRequest) (*proto.SaveProfileDataResponse, error) {
+
+	return &proto.SaveProfileDataResponse{}, nil
+}
+
 // WyreCreateAccount is an rpc handler
 func (s *Server) WyreCreateAccount(ctx context.Context, req *proto.WyreCreateAccountRequest) (*proto.WyreCreateAccountResponse, error) {
 	userID, err := GetUserIDFromIncomingContext(ctx)
