@@ -5,7 +5,14 @@
     <button id="buy-button">Buy Crypto</button>
     <script src="./dist/index.js"></script>
     <script>
-      const flux = new Flux()
+      const onMessage = (msg) => {
+        if (msg.event === flux.events.EXIT) flux.closeWeb()
+      }
+
+      const flux = new Flux({
+        onMessage,
+      })
+
       const btn = document.getElementById('buy-button')
       btn.onclick = flux.openWeb
     </script>
