@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Router, { push, location } from 'svelte-spa-router'
+  import Router, { push, location, pop } from 'svelte-spa-router'
   import wrap from 'svelte-spa-router/wrap'
   import Toast from './components/Toast.svelte'
   import Home from './screens/Home.svelte'
@@ -11,7 +11,7 @@
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes } from './constants'
-  import { authedRouteOptions, Logger } from './util'
+  import { authedRouteOptions, isJWTValid, Logger } from './util'
   import { userStore } from './stores/UserStore'
 
   // Querystring provided props, see main.ts.
@@ -23,6 +23,13 @@
   // Handler for routing condition failure
   const routeConditionsFailed = (event: any) => {
     Logger.debug('route conditions failed', event.detail)
+    const isAccessingAuthRoutes = [Routes.SEND_OTP, Routes.VERIFY_OTP].includes(
+      event.detail.location,
+    )
+    if (isAccessingAuthRoutes) {
+      pop()
+      return false
+    }
     // Sets the last known route for redirect
     // upon successful auth/reauth.
     userStore.updateLastKnownRoute($location as Routes)
@@ -34,14 +41,18 @@
       component: Home as any,
       props: { appName, intent, apiKey },
     }),
-    [Routes.SEND_OTP]: wrap({
-      component: Checkout as any,
-      props: { appName, intent, apiKey },
-    }),
     [Routes.SELECT_PAYMENT]: wrap({
       component: SelectPayment as any,
     }),
-    [Routes.VERIFY_OTP]: VerifyOTP,
+    [Routes.SEND_OTP]: wrap({
+      component: Checkout as any,
+      props: { appName, intent, apiKey },
+      conditions: [() => !isJWTValid()],
+    }),
+    [Routes.VERIFY_OTP]: wrap({
+      component: VerifyOTP as any,
+      conditions: [() => !isJWTValid()],
+    }),
     // Authenticated
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),
