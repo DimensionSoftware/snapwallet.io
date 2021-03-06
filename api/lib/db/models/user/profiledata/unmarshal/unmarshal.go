@@ -5,13 +5,14 @@ import (
 	"fmt"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/encryption"
 )
 
 // Unmarshal ...
-func Unmarshal(kind common.ProfileDataKind, data []byte) (interface{}, error) {
+func Unmarshal(kind common.ProfileDataKind, data []byte) (profiledata.ProfileData, error) {
 	switch kind {
 	case common.KindAddress:
 		var out address.ProfileDataAddress
@@ -20,14 +21,14 @@ func Unmarshal(kind common.ProfileDataKind, data []byte) (interface{}, error) {
 			return nil, err
 		}
 
-		return out, nil
+		return &out, nil
 	}
 
 	return nil, fmt.Errorf("ProfileDataKind: %s is not implemented yet", kind)
 }
 
 // DecryptAndUnmarshal ...
-func DecryptAndUnmarshal(m *encryption.Manager, userID user.ID, data common.EncryptedProfileData) (*interface{}, error) {
+func DecryptAndUnmarshal(m *encryption.Manager, userID user.ID, data common.EncryptedProfileData) (*profiledata.ProfileData, error) {
 	raw, err := data.Decrypt(m, userID)
 	if err != nil {
 		return nil, err

@@ -14,6 +14,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/unmarshal"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"github.com/rs/xid"
@@ -241,4 +242,31 @@ func (db Db) SaveProfileData(ctx context.Context, userID user.ID, pdata profiled
 	}
 
 	return out.ID, nil
+}
+
+// GetAllProfileData ...
+func (db Db) GetAllProfileData(ctx context.Context, userID user.ID) ([]profiledata.ProfileData, error) {
+	profile := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
+
+	docs, err := profile.Documents(ctx).GetAll()
+	if err != nil {
+		return []profiledata.ProfileData{}, err
+	}
+
+	var out []profiledata.ProfileData
+	for _, snap := range docs {
+		var pdata common.EncryptedProfileData
+		err := snap.DataTo(&pdata)
+		if err != nil {
+			return []profiledata.ProfileData{}, err
+		}
+
+		decrypted, err := unmarshal.DecryptAndUnmarshal(db.EncryptionManager, userID, pdata)
+		if err != nil {
+			return []profiledata.ProfileData{}, err
+		}
+		out = append(out, *decrypted)
+	}
+
+	return out, nil
 }

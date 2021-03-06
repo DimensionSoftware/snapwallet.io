@@ -260,6 +260,13 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 		return nil, status.Errorf(codes.NotFound, "Your user was not found. Plaid Link token could not be created.")
 	}
 
+	// TODO: remove me, for testing only
+	pdata, err := s.Db.GetAllProfileData(ctx, userID)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("%#v", pdata)
+
 	plaidUserDetails := plaid.LinkTokenUser{
 		ClientUserID: string(userID),
 	}
