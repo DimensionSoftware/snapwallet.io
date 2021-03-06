@@ -11,6 +11,7 @@
   import { userStore } from '../stores/UserStore'
   import { toaster } from '../stores/ToastStore'
   import { Logger, onEnterPressed } from '../util'
+  import { Routes } from '../constants'
 
   let animation = 'left'
   let isMakingRequest = false
@@ -29,7 +30,7 @@
         emailOrPhone: $userStore.emailAddress,
       })
 
-      setTimeout(() => push('#/verify-otp'), timeout)
+      setTimeout(() => push(Routes.VERIFY_OTP), timeout)
     } catch (e) {
       const err = e as { body: { code: number; message: string } }
       Logger.error(err)

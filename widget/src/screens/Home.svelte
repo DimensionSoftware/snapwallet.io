@@ -16,6 +16,7 @@
   import { onMount } from 'svelte'
   import { numberWithCommas, isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
+  import { Routes } from '../constants'
 
   let selectorVisible = false
 
@@ -54,7 +55,7 @@
     if (!sourceAmount || isNaN(sourceAmount) || !isValidNumber(destinationRate))
       // focus input
       return document.querySelector('input')?.focus()
-    push('/select-payment')
+    push(Routes.SELECT_PAYMENT)
   }
 
   const onKeyDown = (e: Event) => {
