@@ -1,4 +1,4 @@
-package profiledata
+package common
 
 import (
 	"time"
@@ -7,50 +7,50 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 )
 
-// ID the id of a db stored ProfileData item
-type ID string
+// ProfileDataID the id of a db stored ProfileData item
+type ProfileDataID string
 
-// Status the status of a db stored ProfileData item
-type Status string
+// ProfileDataStatus the status of a db stored ProfileData item
+type ProfileDataStatus string
 
 const (
 	// StatusReceived the information was received by the user; this is the initial state; the user is allowed to modify this information up until submission
-	StatusReceived Status = "RECEIVED"
+	StatusReceived ProfileDataStatus = "RECEIVED"
 	// StatusPending the information is awaiting approval from a partner; when in this status the data is sealed
-	StatusPending Status = "PENDING"
+	StatusPending ProfileDataStatus = "PENDING"
 	// StatusInvalid the information is invalid. This data item should be converted into a remediation; when in this status the data is sealed
-	StatusInvalid Status = "INVALID"
+	StatusInvalid ProfileDataStatus = "INVALID"
 	// StatusApproved the information is approved by at least on partner; when in this status the data is sealed
-	StatusApproved Status = "APPROVED"
+	StatusApproved ProfileDataStatus = "APPROVED"
 )
 
-// Kind the kind of ProfileData
-type Kind string
+// ProfileDataKind the kind of ProfileData
+type ProfileDataKind string
 
 const (
 	// KindLegalName signifies an individuals' legal name in a ProfileDataLegalName object
-	KindLegalName Kind = "LEGAL_NAME"
+	KindLegalName ProfileDataKind = "LEGAL_NAME"
 	// KindPhone signifies an individuals' phone number in a ProfileDataPhone object
-	KindPhone Kind = "PHONE"
+	KindPhone ProfileDataKind = "PHONE"
 	// KindEmail signifies an individuals' email address in a ProfileDataEmail object
-	KindEmail Kind = "EMAIL"
+	KindEmail ProfileDataKind = "EMAIL"
 	// KindAddress signifies a physical address in a ProfileDataEmail object
-	KindAddress Kind = "ADDRESS"
+	KindAddress ProfileDataKind = "ADDRESS"
 	// KindDateOfBirth signifies an individuals' date of birth in a ProfileDataDateOfBirth object
-	KindDateOfBirth Kind = "DATE_OF_BIRTH"
+	KindDateOfBirth ProfileDataKind = "DATE_OF_BIRTH"
 	// KindSSN signifies an individuals' U.S. social security number in a ProfileDataSSN object
-	KindSSN Kind = "SSN"
+	KindSSN ProfileDataKind = "SSN"
 )
 
 // EncryptedProfileData is a generic container store encrypted ProfileData
 type EncryptedProfileData struct {
-	ID                ID         `firestore:"id"`
-	Kind              Kind       `firestore:"kind"`
-	Status            Status     `firestore:"status"`
-	CreatedAt         time.Time  `firestore:"createdAt"`
-	DataEncryptionKey []byte     `firestore:"DEK"`
-	EncryptedData     []byte     `firestore:"encryptedData"`
-	SealedAt          *time.Time `firestore:"sealedAt,omitempty"`
+	ID                ProfileDataID     `firestore:"id"`
+	Kind              ProfileDataKind   `firestore:"kind"`
+	Status            ProfileDataStatus `firestore:"status"`
+	CreatedAt         time.Time         `firestore:"createdAt"`
+	DataEncryptionKey []byte            `firestore:"DEK"`
+	EncryptedData     []byte            `firestore:"encryptedData"`
+	SealedAt          *time.Time        `firestore:"sealedAt,omitempty"`
 }
 
 // Decrypt decrypts a type
@@ -68,28 +68,4 @@ func (encryptedProfileData EncryptedProfileData) Decrypt(m *encryption.Manager, 
 
 	return decrypted, nil
 
-}
-
-// DecryptAndUnmarshal ...
-func (encryptedProfileData EncryptedProfileData) DecryptAndUnmarshal(m *encryption.Manager, userID user.ID) (interface{}, error) {
-	/*
-		switch encryptedProfileData.Kind {
-			case KindAddress:
-				decrypted, err := dek.Decrypt(encryptedProfileData.EncryptedData, []byte(userID))
-				if err != nil {
-					return nil, err
-				}
-
-				var out address.ProfileDataAddressPIIData
-				err = json.Unmarshal(decrypted, &out)
-				if err != nil {
-					return nil, err
-				}
-			default:
-				panic("fuck")
-
-			}
-	*/
-
-	return nil, nil
 }
