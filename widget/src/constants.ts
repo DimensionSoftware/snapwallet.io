@@ -3,3 +3,12 @@ export const supportedCurrencyPairs = {
 }
 
 export const JWT_SESSION_KEY = '__FLUX_SESSION'
+
+export enum Routes {
+  ROOT = '/',
+  SELECT_PAYMENT = '/select-payment',
+  SEND_OTP = '/checkout',
+  PROFILE = '/profile',
+  VERIFY_OTP = '/verify-otp',
+  PLAID_LINK = '/link-bank',
+}
