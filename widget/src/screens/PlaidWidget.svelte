@@ -54,6 +54,7 @@
         onLoad: () => {},
         onExit: (err, metadata) => {
           handler.destroy()
+          push('/')
         },
         onEvent: (eventName, metadata) => {},
         receivedRedirectUri: null,
