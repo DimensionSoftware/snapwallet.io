@@ -22,8 +22,8 @@
     margin-bottom: 1.25em;
     span {
       position: absolute;
-      top: 0.55em;
-      margin-left: 0.85em;
+      top: 12px;
+      margin-left: 15px;
       z-index: 99;
     }
   }

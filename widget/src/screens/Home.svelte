@@ -96,9 +96,7 @@
   <ModalBody>
     <IntentSelector />
     <div class="cryptocurrencies-container">
-      <div
-        style="display:flex;flex-direction:column;height:5rem;margin-bottom:1rem"
-      >
+      <div class="dst-container">
         <Label>
           <CryptoCard
             on:click={() => (selectorVisible = true)}
@@ -233,6 +231,13 @@
     width: 35px;
   }
 
+  .dst-container {
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
+    margin-bottom: 1rem;
+  }
   .dstCurrency {
     position: absolute;
     right: 0.5rem;

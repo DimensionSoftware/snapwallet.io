@@ -51,7 +51,6 @@
     input {
       position: relative;
       z-index: 2;
-      padding: 0;
       margin: 0;
       color: var(--theme-textColor);
       background-color: #fff;
@@ -68,9 +67,7 @@
       cursor: pointer;
       text-overflow: ellipsis;
       outline: none;
-      padding: 15px;
-      padding-left: 0;
-      padding-right: 0;
+      padding: 35px 5px 15px 5px !important;
       vertical-align: middle;
       font-size: 1.8em;
       color: var(--theme-text-color);
@@ -88,7 +85,7 @@
       ~ .bg {
         position: absolute;
         content: '';
-        top: -1px;
+        top: 92%;
         bottom: -1px;
         left: -1px;
         right: -1px;
