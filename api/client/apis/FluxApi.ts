@@ -273,7 +273,12 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         );
         requestContext.setBody(serializedBody);
 
+        let authMethod = null;
         // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
 
         return requestContext;
     }
@@ -326,7 +331,7 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
 
 		
 		// Path Params
-    	const localVarPath = '/wyre/create-acount';
+    	const localVarPath = '/wyre/create-account';
 
 		// Make Request Context
     	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
@@ -350,7 +355,12 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         );
         requestContext.setBody(serializedBody);
 
+        let authMethod = null;
         // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
 
         return requestContext;
     }

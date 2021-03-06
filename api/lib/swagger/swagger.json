@@ -245,10 +245,15 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
-    "/wyre/create-acount": {
+    "/wyre/create-account": {
       "post": {
         "summary": "WyreCreateAccount creates an account with Wyre",
         "description": "...",
@@ -279,6 +284,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     }

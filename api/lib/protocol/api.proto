@@ -280,7 +280,7 @@ service Flux {
   // ...
   rpc WyreCreateAccount(WyreCreateAccountRequest) returns (WyreCreateAccountResponse) {
     option (google.api.http) = {
-      post: "/wyre/create-acount"
+      post: "/wyre/create-account"
       body: "*"
     };
   }

@@ -680,7 +680,7 @@ var (
 
 	pattern_Flux_SaveProfileData_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"viewer", "profile"}, ""))
 
-	pattern_Flux_WyreCreateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"wyre", "create-acount"}, ""))
+	pattern_Flux_WyreCreateAccount_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"wyre", "create-account"}, ""))
 )
 
 var (
