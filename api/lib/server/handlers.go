@@ -307,7 +307,10 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
-	// TODO: validate
+	err = req.Validate()
+	if err != nil {
+		return nil, err
+	}
 
 	if req.Address != nil {
 		addressData := &address.ProfileDataAddress{
