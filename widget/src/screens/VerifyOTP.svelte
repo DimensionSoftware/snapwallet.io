@@ -78,7 +78,7 @@
       const { jwt } = await verifyOTP()
       window.API(jwt)
       Logger.debug('Logged in')
-      setTimeout(() => push(Routes.PLAID_LINK), 700)
+      setTimeout(() => push($userStore.lastKnownRoute), 700)
     } catch (e) {
       const err = e as { body: { code: number; message: string } }
       Logger.error(err)
