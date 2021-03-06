@@ -16,6 +16,7 @@ export const isValidNumber = (num: any) => {
   return Number(num) && !isNaN(num) && num !== Infinity
 }
 
+// Application logger module
 export const Logger = (() => {
   window.localStorage.debug = __ENV.DEBUG
   const error = nodeDebug('flux:error')
@@ -29,6 +30,7 @@ export const Logger = (() => {
   }
 })()
 
+// Set a JWT in local storage.
 export const setFluxSession = (jwt?: string) => {
   try {
     if (!jwt) throw new Error('No token provided')
@@ -39,9 +41,33 @@ export const setFluxSession = (jwt?: string) => {
   }
 }
 
+// Get a JWT from local storage.
 export const getFluxSession = (): string => {
   return window.localStorage.getItem(JWT_SESSION_KEY) || ''
 }
 
 export const numberWithCommas = (s: string) =>
   s.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+
+// Parse a JWT's data
+export const parseJwt = token => {
+  try {
+    return JSON.parse(atob(token.split('.')[1]))
+  } catch (e) {
+    return null
+  }
+}
+
+// Test for JWT expiration and existence.
+export const isJWTValid = () => {
+  const jwt = getFluxSession()
+  const userData = parseJwt(jwt)
+  if (!userData) return false
+  return userData.exp < Date.now()
+}
+
+// Authenticated route common configuration
+export const authedRouteOptions = (component: any) => ({
+  conditions: [isJWTValid],
+  component,
+})
