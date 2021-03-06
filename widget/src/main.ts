@@ -1,10 +1,5 @@
 import App from './App.svelte'
-import {
-  FluxApi,
-  createConfiguration,
-  ServerConfiguration,
-  ResponseContext,
-} from 'api-client'
+import { FluxApi, createConfiguration, ServerConfiguration } from 'api-client'
 import { getFluxSession, setFluxSession } from './util'
 
 const queryParams = new URLSearchParams(window.location.search)
