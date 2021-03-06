@@ -21,7 +21,7 @@
   export let theme: object
 
   // Handler for routing condition failure
-  const routeConditionsFailed = (event: any) => {
+  const routeConditionsFailed = (event: any): boolean => {
     Logger.debug('route conditions failed', event.detail)
     const isAccessingAuthRoutes = [Routes.SEND_OTP, Routes.VERIFY_OTP].includes(
       event.detail.location,
@@ -34,6 +34,7 @@
     // upon successful auth/reauth.
     userStore.updateLastKnownRoute($location as Routes)
     push(Routes.SEND_OTP)
+    return false
   }
 
   const routes = {
