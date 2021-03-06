@@ -1,0 +1,13 @@
+<!DOCTYPE html5>
+<html>
+  <head> </head>
+  <body>
+    <button id="buy-button">Buy Crypto</button>
+    <script src="./dist/index.js"></script>
+    <script>
+      const flux = new Flux()
+      const btn = document.getElementById('buy-button')
+      btn.onclick = flux.openWeb
+    </script>
+  </body>
+</html>
