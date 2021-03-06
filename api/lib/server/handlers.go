@@ -20,6 +20,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
@@ -330,20 +331,18 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		}
 	}
 
-	/*
-		if req.LegalName != "" {
-			legalNameData := &legalname.ProfileDataLegalName{
-				ID:        common.ProfileDataID(xid.New().String()),
-				Status:    common.StatusReceived,
-				LegalName: req.LegalName,
-				CreatedAt: time.Now(),
-			}
-			_, err := s.Db.SaveProfileData(ctx, userID, legalNameData)
-			if err != nil {
-				return nil, err
-			}
+	if req.LegalName != "" {
+		legalNameData := &legalname.ProfileDataLegalName{
+			ID:        common.ProfileDataID(xid.New().String()),
+			Status:    common.StatusReceived,
+			LegalName: req.LegalName,
+			CreatedAt: time.Now(),
 		}
-	*/
+		_, err := s.Db.SaveProfileData(ctx, userID, legalNameData)
+		if err != nil {
+			return nil, err
+		}
+	}
 
 	return &proto.SaveProfileDataResponse{}, nil
 }
