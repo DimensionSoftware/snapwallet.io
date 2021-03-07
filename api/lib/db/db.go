@@ -54,7 +54,7 @@ func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kin
 }
 
 // CreateUser creates a user object
-func (db Db) CreateUser(ctx context.Context, email *string, phone *string, emailVerified bool, phoneVerified bool) (*user.User, error) {
+func (db Db) CreateUser(ctx context.Context, tx *firestore.Transaction, email *string, phone *string, emailVerified bool, phoneVerified bool) (*user.User, error) {
 	id := user.ID(xid.New().String())
 
 	now := time.Now()
@@ -88,26 +88,38 @@ func (db Db) CreateUser(ctx context.Context, email *string, phone *string, email
 
 // GetOrCreateUser creates a user object
 func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.LoginKind, emailOrPhone string) (*user.User, error) {
-	u, err := db.GetUserByEmailOrPhone(ctx, emailOrPhone)
+	var u *user.User
+
+	err := db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		var err error
+
+		u, err = db.GetUserByEmailOrPhone(ctx, tx, emailOrPhone)
+		if err != nil {
+			return err
+		}
+		if u != nil {
+			log.Printf("User found: %#v", u)
+			return nil
+		}
+
+		// first time login means that we verified them with otp
+		if loginKind == onetimepasscode.LoginKindPhone {
+			u, err = db.CreateUser(ctx, tx, nil, &emailOrPhone, false, true)
+		} else {
+			u, err = db.CreateUser(ctx, tx, &emailOrPhone, nil, true, false)
+		}
+		if err != nil {
+			return err
+		}
+		log.Printf("User not found; created: %v", u)
+
+		return nil
+	})
+
 	if err != nil {
 		return nil, err
 	}
-	if u != nil {
-		log.Printf("User found: %#v", u)
-		return u, nil
-	}
 
-	// first time login means that we verified them with otp
-	if loginKind == onetimepasscode.LoginKindPhone {
-		u, err = db.CreateUser(ctx, nil, &emailOrPhone, false, true)
-	} else {
-		u, err = db.CreateUser(ctx, &emailOrPhone, nil, true, false)
-	}
-	if err != nil {
-		return nil, err
-	}
-
-	log.Printf("User not found; created: %v", u)
 	return u, nil
 }
 
@@ -159,7 +171,7 @@ func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, 
 }
 
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone
-func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*user.User, error) {
+func (db Db) GetUserByEmailOrPhone(ctx context.Context, tx *firestore.Transaction, emailOrPhone string) (*user.User, error) {
 	if emailOrPhone == "" {
 		return nil, nil
 	}
@@ -226,15 +238,16 @@ func sixRandomDigits() (string, error) {
 }
 
 // SaveProfileData ...
-func (db Db) SaveProfileData(ctx context.Context, userID user.ID, pdata profiledata.ProfileData) (common.ProfileDataID, error) {
+func (db Db) SaveProfileData(ctx context.Context, tx *firestore.Transaction, userID user.ID, pdata profiledata.ProfileData) (common.ProfileDataID, error) {
 	profile := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
 
 	out, err := pdata.Encrypt(db.EncryptionManager, userID)
 	if err != nil {
 		return "", err
 	}
+	ref := profile.Doc(string(out.ID))
 
-	_, err = profile.Doc(string(out.ID)).Set(ctx, out)
+	err = tx.Set(ref, out)
 	if err != nil {
 		return "", err
 	}
@@ -243,10 +256,10 @@ func (db Db) SaveProfileData(ctx context.Context, userID user.ID, pdata profiled
 }
 
 // GetAllProfileData ...
-func (db Db) GetAllProfileData(ctx context.Context, userID user.ID) (profiledata.ProfileDatas, error) {
+func (db Db) GetAllProfileData(ctx context.Context, tx *firestore.Transaction, userID user.ID) (profiledata.ProfileDatas, error) {
 	profile := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
 
-	docs, err := profile.Documents(ctx).GetAll()
+	docs, err := tx.Documents(profile).GetAll()
 	if err != nil {
 		return []profiledata.ProfileData{}, err
 	}

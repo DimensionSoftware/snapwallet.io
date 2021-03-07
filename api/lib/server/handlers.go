@@ -7,6 +7,7 @@ import (
 	"strings"
 	"time"
 
+	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -273,11 +274,11 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 	}
 
 	// TODO: remove me, for testing only
-	pdata, err := s.Db.GetAllProfileData(ctx, userID)
-	if err != nil {
-		return nil, err
-	}
-	log.Printf("%#v", pdata)
+	//pdata, err := s.Db.GetAllProfileData(ctx, userID)
+	//if err != nil {
+	//	return nil, err
+	//}
+	//log.Printf("%#v", pdata)
 
 	plaidUserDetails := plaid.LinkTokenUser{
 		ClientUserID: string(userID),
@@ -327,110 +328,122 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
-	profile, err := s.Db.GetAllProfileData(ctx, u.ID)
-	if err != nil {
-		return nil, err
-	}
-
 	var legalNameData *legalname.ProfileDataLegalName
-	{
-		existingProfileData := profile.FilterKind(common.KindLegalName).First()
-		if existingProfileData != nil {
-			legalNameData = (*existingProfileData).(*legalname.ProfileDataLegalName)
-		}
-	}
 	var dobData *dateofbirth.ProfileDataDateOfBirth
-	{
-		existingProfileData := profile.FilterKind(common.KindDateOfBirth).First()
-		if existingProfileData != nil {
-			dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
-		}
-	}
 	var ssnData *ssn.ProfileDataSSN
-	{
-		existingProfileData := profile.FilterKind(common.KindSSN).First()
-		if existingProfileData != nil {
-			ssnData = (*existingProfileData).(*ssn.ProfileDataSSN)
-		}
-	}
+	var addressData *address.ProfileDataAddress
 
-	if req.LegalName != "" {
-		if legalNameData == nil {
-			legalNameData = &legalname.ProfileDataLegalName{
-				ID:        common.ProfileDataID(xid.New().String()),
-				Status:    common.StatusReceived,
-				LegalName: req.LegalName,
-				CreatedAt: time.Now(),
+	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		profile, err := s.Db.GetAllProfileData(ctx, tx, u.ID)
+		if err != nil {
+			return err
+		}
+
+		{
+			existingProfileData := profile.FilterKind(common.KindLegalName).First()
+			if existingProfileData != nil {
+				legalNameData = (*existingProfileData).(*legalname.ProfileDataLegalName)
 			}
-		} else {
-			legalNameData.LegalName = req.LegalName
-			now := time.Now()
-			legalNameData.UpdatedAt = &now
 		}
-
-		_, err := s.Db.SaveProfileData(ctx, userID, *legalNameData)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if req.DateOfBirth != "" {
-		if dobData == nil {
-			dobData = &dateofbirth.ProfileDataDateOfBirth{
-				ID:          common.ProfileDataID(xid.New().String()),
-				Status:      common.StatusReceived,
-				DateOfBirth: req.DateOfBirth,
-				CreatedAt:   time.Now(),
+		{
+			existingProfileData := profile.FilterKind(common.KindDateOfBirth).First()
+			if existingProfileData != nil {
+				dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
 			}
-		} else {
-			dobData.DateOfBirth = req.DateOfBirth
-			now := time.Now()
-			dobData.UpdatedAt = &now
 		}
-
-		_, err := s.Db.SaveProfileData(ctx, userID, *dobData)
-		if err != nil {
-			return nil, err
-		}
-	}
-
-	if req.Ssn != "" {
-		if ssnData == nil {
-			ssnData = &ssn.ProfileDataSSN{
-				ID:        common.ProfileDataID(xid.New().String()),
-				Status:    common.StatusReceived,
-				SSN:       req.Ssn,
-				CreatedAt: time.Now(),
+		{
+			existingProfileData := profile.FilterKind(common.KindSSN).First()
+			if existingProfileData != nil {
+				ssnData = (*existingProfileData).(*ssn.ProfileDataSSN)
 			}
-		} else {
-			ssnData.SSN = req.Ssn
-			now := time.Now()
-			ssnData.UpdatedAt = &now
+		}
+		{
+			existingProfileData := profile.FilterKind(common.KindAddress).First()
+			if existingProfileData != nil {
+				addressData = (*existingProfileData).(*address.ProfileDataAddress)
+			}
 		}
 
-		_, err := s.Db.SaveProfileData(ctx, userID, *dobData)
-		if err != nil {
-			return nil, err
-		}
-	}
+		if req.LegalName != "" {
+			if legalNameData == nil {
+				legalNameData = &legalname.ProfileDataLegalName{
+					ID:        common.ProfileDataID(xid.New().String()),
+					Status:    common.StatusReceived,
+					LegalName: req.LegalName,
+					CreatedAt: time.Now(),
+				}
+			} else {
+				legalNameData.LegalName = req.LegalName
+				now := time.Now()
+				legalNameData.UpdatedAt = &now
+			}
 
-	if req.Address != nil {
-		addressData := &address.ProfileDataAddress{
-			ID:         common.ProfileDataID(xid.New().String()),
-			Status:     common.StatusReceived,
-			Street1:    req.Address.Street_1,
-			Street2:    req.Address.Street_2,
-			City:       req.Address.City,
-			State:      req.Address.State,
-			PostalCode: req.Address.PostalCode,
-			Country:    req.Address.Country,
-			CreatedAt:  time.Now(),
+			_, err := s.Db.SaveProfileData(ctx, tx, userID, *legalNameData)
+			if err != nil {
+				return err
+			}
 		}
-		_, err := s.Db.SaveProfileData(ctx, userID, addressData)
-		if err != nil {
-			return nil, err
+
+		if req.DateOfBirth != "" {
+			if dobData == nil {
+				dobData = &dateofbirth.ProfileDataDateOfBirth{
+					ID:          common.ProfileDataID(xid.New().String()),
+					Status:      common.StatusReceived,
+					DateOfBirth: req.DateOfBirth,
+					CreatedAt:   time.Now(),
+				}
+			} else {
+				dobData.DateOfBirth = req.DateOfBirth
+				now := time.Now()
+				dobData.UpdatedAt = &now
+			}
+
+			_, err := s.Db.SaveProfileData(ctx, tx, userID, *dobData)
+			if err != nil {
+				return err
+			}
 		}
-	}
+
+		if req.Ssn != "" {
+			if ssnData == nil {
+				ssnData = &ssn.ProfileDataSSN{
+					ID:        common.ProfileDataID(xid.New().String()),
+					Status:    common.StatusReceived,
+					SSN:       req.Ssn,
+					CreatedAt: time.Now(),
+				}
+			} else {
+				ssnData.SSN = req.Ssn
+				now := time.Now()
+				ssnData.UpdatedAt = &now
+			}
+
+			_, err := s.Db.SaveProfileData(ctx, tx, userID, *dobData)
+			if err != nil {
+				return err
+			}
+		}
+
+		if req.Address != nil {
+			addressData := &address.ProfileDataAddress{
+				ID:         common.ProfileDataID(xid.New().String()),
+				Status:     common.StatusReceived,
+				Street1:    req.Address.Street_1,
+				Street2:    req.Address.Street_2,
+				City:       req.Address.City,
+				State:      req.Address.State,
+				PostalCode: req.Address.PostalCode,
+				Country:    req.Address.Country,
+				CreatedAt:  time.Now(),
+			}
+			_, err := s.Db.SaveProfileData(ctx, tx, userID, addressData)
+			if err != nil {
+				return err
+			}
+		}
+
+		return nil
+	})
 
 	var legalNameInfo *proto.ProfileDataItemInfo
 	if legalNameData != nil {
@@ -445,6 +458,11 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	var ssnInfo *proto.ProfileDataItemInfo
 	if ssnData != nil {
 		ssnInfo = ssnData.GetProfileDataItemInfo()
+	}
+
+	var addressInfo *proto.ProfileDataItemInfo
+	if addressData != nil {
+		addressInfo = addressData.GetProfileDataItemInfo()
 	}
 
 	var email *proto.ProfileDataItemInfo
@@ -473,11 +491,9 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		LegalName:   legalNameInfo,
 		DateOfBirth: dobInfo,
 		Ssn:         ssnInfo,
-		/*
-			Address:     &proto.ProfileDataItemInfo{},
-		*/
-		Email: email,
-		Phone: phone,
+		Address:     addressInfo,
+		Email:       email,
+		Phone:       phone,
 	}, nil
 }
 
