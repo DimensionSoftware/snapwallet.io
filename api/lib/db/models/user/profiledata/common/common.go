@@ -5,6 +5,7 @@ import (
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/encryption"
+	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
 // ProfileDataID the id of a db stored ProfileData item
@@ -12,6 +13,22 @@ type ProfileDataID string
 
 // ProfileDataStatus the status of a db stored ProfileData item
 type ProfileDataStatus string
+
+// ToProfileDataItemStatus converts the profile data status to a protocol.ProfileDataItemStatus
+func (s ProfileDataStatus) ToProfileDataItemStatus() proto.ProfileDataItemStatus {
+	switch s {
+	case StatusReceived:
+		return proto.ProfileDataItemStatus_S_RECEIVED
+	case StatusPending:
+		return proto.ProfileDataItemStatus_S_PENDING
+	case StatusInvalid:
+		return proto.ProfileDataItemStatus_S_INVALID
+	case StatusApproved:
+		return proto.ProfileDataItemStatus_S_APPROVED
+	}
+
+	return proto.ProfileDataItemStatus_S_UNKNOWN
+}
 
 const (
 	// StatusReceived the information was received by the user; this is the initial state; the user is allowed to modify this information up until submission
@@ -26,6 +43,26 @@ const (
 
 // ProfileDataKind the kind of ProfileData
 type ProfileDataKind string
+
+// ToProfileDataItemKind converts the profile data kind to a protocol.ProfileDataItemKind
+func (k ProfileDataKind) ToProfileDataItemKind() proto.ProfileDataItemKind {
+	switch k {
+	case KindLegalName:
+		return proto.ProfileDataItemKind_K_LEGAL_NAME
+	case KindPhone:
+		return proto.ProfileDataItemKind_K_PHONE
+	case KindEmail:
+		return proto.ProfileDataItemKind_K_EMAIL
+	case KindAddress:
+		return proto.ProfileDataItemKind_K_ADDRESS
+	case KindDateOfBirth:
+		return proto.ProfileDataItemKind_K_DATE_OF_BIRTH
+	case KindSSN:
+		return proto.ProfileDataItemKind_K_SSN
+	}
+
+	return proto.ProfileDataItemKind_K_UNKNOWN
+}
 
 const (
 	// KindLegalName signifies an individuals' legal name in a ProfileDataLegalName object

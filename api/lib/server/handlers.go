@@ -339,6 +339,21 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			legalNameData = (*existingProfileData).(*legalname.ProfileDataLegalName)
 		}
 	}
+	var dobData *dateofbirth.ProfileDataDateOfBirth
+	{
+		existingProfileData := profile.FilterKind(common.KindDateOfBirth).First()
+		if existingProfileData != nil {
+			dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
+		}
+	}
+	var ssnData *ssn.ProfileDataSSN
+	{
+		existingProfileData := profile.FilterKind(common.KindSSN).First()
+		if existingProfileData != nil {
+			ssnData = (*existingProfileData).(*ssn.ProfileDataSSN)
+		}
+	}
+
 	if req.LegalName != "" {
 		if legalNameData == nil {
 			legalNameData = &legalname.ProfileDataLegalName{
@@ -359,13 +374,6 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		}
 	}
 
-	var dobData *dateofbirth.ProfileDataDateOfBirth
-	{
-		existingProfileData := profile.FilterKind(common.KindDateOfBirth).First()
-		if existingProfileData != nil {
-			dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
-		}
-	}
 	if req.DateOfBirth != "" {
 		if dobData == nil {
 			dobData = &dateofbirth.ProfileDataDateOfBirth{
@@ -387,13 +395,20 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	}
 
 	if req.Ssn != "" {
-		ssnData := &ssn.ProfileDataSSN{
-			ID:        common.ProfileDataID(xid.New().String()),
-			Status:    common.StatusReceived,
-			SSN:       req.Ssn,
-			CreatedAt: time.Now(),
+		if ssnData == nil {
+			ssnData = &ssn.ProfileDataSSN{
+				ID:        common.ProfileDataID(xid.New().String()),
+				Status:    common.StatusReceived,
+				SSN:       req.Ssn,
+				CreatedAt: time.Now(),
+			}
+		} else {
+			ssnData.SSN = req.Ssn
+			now := time.Now()
+			ssnData.UpdatedAt = &now
 		}
-		_, err := s.Db.SaveProfileData(ctx, userID, ssnData)
+
+		_, err := s.Db.SaveProfileData(ctx, userID, *dobData)
 		if err != nil {
 			return nil, err
 		}
@@ -451,6 +466,23 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		}
 	}
 
+	var ssnInfo *proto.ProfileDataItemInfo
+	if ssnData != nil {
+		ssnInfo = &proto.ProfileDataItemInfo{
+			Id:        string(u.ID),
+			Kind:      proto.ProfileDataItemKind_K_SSN,
+			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
+			Length:    int32(len(ssnData.SSN)),
+			CreatedAt: dobData.CreatedAt.Format(time.RFC3339),
+		}
+		if ssnData.UpdatedAt != nil {
+			ssnInfo.UpdatedAt = ssnData.UpdatedAt.Format(time.RFC3339)
+		}
+		if ssnData.SealedAt != nil {
+			ssnInfo.SealedAt = ssnData.SealedAt.Format(time.RFC3339)
+		}
+	}
+
 	var email *proto.ProfileDataItemInfo
 	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
 		email = &proto.ProfileDataItemInfo{
@@ -474,16 +506,14 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	}
 
 	return &proto.ProfileDataInfo{
+		LegalName:   legalNameInfo,
+		DateOfBirth: dobInfo,
+		Ssn:         ssnInfo,
 		/*
-			LegalName:   &proto.ProfileDataItemInfo{},
-			Ssn:         &proto.ProfileDataItemInfo{},
-			DateOfBirth: &proto.ProfileDataItemInfo{},
 			Address:     &proto.ProfileDataItemInfo{},
 		*/
-		DateOfBirth: dobInfo,
-		LegalName:   legalNameInfo,
-		Email:       email,
-		Phone:       phone,
+		Email: email,
+		Phone: phone,
 	}, nil
 }
 

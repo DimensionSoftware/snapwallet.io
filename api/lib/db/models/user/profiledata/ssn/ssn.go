@@ -6,6 +6,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/encryption"
+	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
 // ProfileDataSSN the social security number of a user
@@ -14,6 +15,7 @@ type ProfileDataSSN struct {
 	Status    common.ProfileDataStatus
 	SSN       string
 	CreatedAt time.Time
+	UpdatedAt *time.Time
 	SealedAt  *time.Time
 }
 
@@ -25,6 +27,25 @@ func (pdata ProfileDataSSN) Kind() common.ProfileDataKind {
 // GetStatus get the status of the profile data
 func (pdata ProfileDataSSN) GetStatus() common.ProfileDataStatus {
 	return pdata.Status
+}
+
+// GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
+func (pdata ProfileDataSSN) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
+	info := proto.ProfileDataItemInfo{
+		Id:        string(pdata.ID),
+		Kind:      pdata.Kind().ToProfileDataItemKind(),
+		Status:    pdata.Status.ToProfileDataItemStatus(),
+		CreatedAt: pdata.CreatedAt.Format(time.RFC3339),
+		Length:    int32(len(pdata.SSN)),
+	}
+	if pdata.UpdatedAt != nil {
+		info.UpdatedAt = pdata.UpdatedAt.Format(time.RFC3339)
+	}
+	if pdata.SealedAt != nil {
+		info.SealedAt = pdata.SealedAt.Format(time.RFC3339)
+	}
+
+	return &info
 }
 
 // Encrypt ...

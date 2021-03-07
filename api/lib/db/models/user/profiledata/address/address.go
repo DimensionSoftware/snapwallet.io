@@ -6,6 +6,7 @@ import (
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+	proto "github.com/khoerling/flux/api/lib/protocol"
 
 	"github.com/khoerling/flux/api/lib/encryption"
 )
@@ -21,6 +22,7 @@ type ProfileDataAddress struct {
 	PostalCode string
 	Country    string
 	CreatedAt  time.Time
+	UpdatedAt  *time.Time
 	SealedAt   *time.Time
 }
 
@@ -32,6 +34,33 @@ func (pdata ProfileDataAddress) Kind() common.ProfileDataKind {
 // GetStatus get the status of the profile data
 func (pdata ProfileDataAddress) GetStatus() common.ProfileDataStatus {
 	return pdata.Status
+}
+
+// GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
+func (pdata ProfileDataAddress) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
+	length := 0 +
+		len(pdata.Street1) +
+		len(pdata.Street2) +
+		len(pdata.City) +
+		len(pdata.State) +
+		len(pdata.PostalCode) +
+		len(pdata.Country)
+
+	info := proto.ProfileDataItemInfo{
+		Id:        string(pdata.ID),
+		Kind:      pdata.Kind().ToProfileDataItemKind(),
+		Status:    pdata.Status.ToProfileDataItemStatus(),
+		CreatedAt: pdata.CreatedAt.Format(time.RFC3339),
+		Length:    int32(length),
+	}
+	if pdata.UpdatedAt != nil {
+		info.UpdatedAt = pdata.UpdatedAt.Format(time.RFC3339)
+	}
+	if pdata.SealedAt != nil {
+		info.SealedAt = pdata.SealedAt.Format(time.RFC3339)
+	}
+
+	return &info
 }
 
 // ProfileDataAddressPIIData ...

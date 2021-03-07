@@ -6,6 +6,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/encryption"
+	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
 // ProfileDataDateOfBirth thkke date of birth for a user
@@ -27,6 +28,25 @@ func (pdata ProfileDataDateOfBirth) Kind() common.ProfileDataKind {
 // GetStatus get the status of the profile data
 func (pdata ProfileDataDateOfBirth) GetStatus() common.ProfileDataStatus {
 	return pdata.Status
+}
+
+// GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
+func (pdata ProfileDataDateOfBirth) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
+	info := proto.ProfileDataItemInfo{
+		Id:        string(pdata.ID),
+		Kind:      pdata.Kind().ToProfileDataItemKind(),
+		Status:    pdata.Status.ToProfileDataItemStatus(),
+		CreatedAt: pdata.CreatedAt.Format(time.RFC3339),
+		Length:    int32(len(pdata.DateOfBirth)),
+	}
+	if pdata.UpdatedAt != nil {
+		info.UpdatedAt = pdata.UpdatedAt.Format(time.RFC3339)
+	}
+	if pdata.SealedAt != nil {
+		info.SealedAt = pdata.SealedAt.Format(time.RFC3339)
+	}
+
+	return &info
 }
 
 // Encrypt ...

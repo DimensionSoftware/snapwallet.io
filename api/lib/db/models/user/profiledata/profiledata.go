@@ -4,12 +4,14 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/encryption"
+	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
 // ProfileData interface which profile datas need to implement in order to save
 type ProfileData interface {
 	Kind() common.ProfileDataKind
 	GetStatus() common.ProfileDataStatus
+	GetProfileDataItemInfo() *proto.ProfileDataItemInfo
 	Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error)
 }
 

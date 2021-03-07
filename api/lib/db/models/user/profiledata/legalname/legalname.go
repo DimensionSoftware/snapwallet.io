@@ -6,6 +6,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/encryption"
+	proto "github.com/khoerling/flux/api/lib/protocol"
 )
 
 // ProfileDataLegalName the legal name of a user
@@ -26,6 +27,25 @@ func (pdata ProfileDataLegalName) Kind() common.ProfileDataKind {
 // GetStatus get the status of the profile data
 func (pdata ProfileDataLegalName) GetStatus() common.ProfileDataStatus {
 	return pdata.Status
+}
+
+// GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
+func (pdata ProfileDataLegalName) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
+	info := proto.ProfileDataItemInfo{
+		Id:        string(pdata.ID),
+		Kind:      pdata.Kind().ToProfileDataItemKind(),
+		Status:    pdata.Status.ToProfileDataItemStatus(),
+		CreatedAt: pdata.CreatedAt.Format(time.RFC3339),
+		Length:    int32(len(pdata.LegalName)),
+	}
+	if pdata.UpdatedAt != nil {
+		info.UpdatedAt = pdata.UpdatedAt.Format(time.RFC3339)
+	}
+	if pdata.SealedAt != nil {
+		info.SealedAt = pdata.SealedAt.Format(time.RFC3339)
+	}
+
+	return &info
 }
 
 // Encrypt ...
