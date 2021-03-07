@@ -34,7 +34,6 @@
     // upon successful auth/reauth.
     userStore.updateLastKnownRoute($location as Routes)
     push(Routes.SEND_OTP)
-    return false
   }
 
   const routes = {
