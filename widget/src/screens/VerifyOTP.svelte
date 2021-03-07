@@ -101,7 +101,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader>Enter Your Code</ModalHeader>
+    <ModalHeader hideCloseButton>Enter Your Code</ModalHeader>
     <Label label="Your Email Code">
       <Input
         inputmode="numeric"
@@ -119,7 +119,7 @@
         }}
       />
     </Label>
-    <div class="resend">
+    <div class="resend" title="Check your SPAM folder!">
       Didn't get an email? <a on:click={handleResend}>Resend Code</a>
     </div>
   </ModalBody>
@@ -145,7 +145,7 @@
     font-size: 0.8rem;
     margin-top: -1rem;
     & > a {
-      margin-left: 0.2em;
+      margin-left: 0.75em;
     }
   }
 </style>
