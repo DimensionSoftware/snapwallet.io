@@ -33,7 +33,7 @@ type FluxClient interface {
 	ChangeViewerEmail(ctx context.Context, in *ChangeViewerEmailRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Change users phone (viewer based on jwt)
 	//
-	// requires an otp code and the desired phone address change
+	// requires an otp code and the desired phone change
 	ChangeViewerPhone(ctx context.Context, in *ChangeViewerPhoneRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Get pricing data
 	//
@@ -189,7 +189,7 @@ type FluxServer interface {
 	ChangeViewerEmail(context.Context, *ChangeViewerEmailRequest) (*emptypb.Empty, error)
 	// Change users phone (viewer based on jwt)
 	//
-	// requires an otp code and the desired phone address change
+	// requires an otp code and the desired phone change
 	ChangeViewerPhone(context.Context, *ChangeViewerPhoneRequest) (*emptypb.Empty, error)
 	// Get pricing data
 	//

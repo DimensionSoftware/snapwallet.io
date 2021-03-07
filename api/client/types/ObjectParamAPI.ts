@@ -125,7 +125,7 @@ export class ObjectFluxApi {
     }
 	
     /**
-     * requires an otp code and the desired phone address change
+     * requires an otp code and the desired phone change
      * Change users phone (viewer based on jwt)
      * @param param the request object
      */

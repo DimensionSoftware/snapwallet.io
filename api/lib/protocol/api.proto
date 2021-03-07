@@ -258,7 +258,7 @@ service Flux {
 
   // Change users phone (viewer based on jwt)
   //
-  // requires an otp code and the desired phone address change
+  // requires an otp code and the desired phone change
   rpc ChangeViewerPhone(ChangeViewerPhoneRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       put: "/viewer/phone"

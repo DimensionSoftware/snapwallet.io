@@ -236,7 +236,7 @@
     "/viewer/phone": {
       "put": {
         "summary": "Change users phone (viewer based on jwt)",
-        "description": "requires an otp code and the desired phone address change",
+        "description": "requires an otp code and the desired phone change",
         "operationId": "Flux_ChangeViewerPhone",
         "responses": {
           "200": {
