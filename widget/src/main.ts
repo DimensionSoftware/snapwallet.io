@@ -51,6 +51,13 @@ function getAPIClient(newToken?: string): FluxApi {
     return (window.__api = genAPIClient(getFluxSession()))
   }
 
+  // Remove token when invalid
+  try {
+    window.__api.fluxViewerData()
+  } catch (e) {
+    setFluxSession('')
+  }
+
   return window.__api
 }
 
