@@ -591,9 +591,39 @@ func (s *Server) UploadFile(ctx context.Context, req *httpbody.HttpBody) (*httpb
 
 // ChangeViewerEmail is an rpc handler
 func (s *Server) ChangeViewerEmail(ctx context.Context, req *proto.ChangeViewerEmailRequest) (*emptypb.Empty, error) {
-	userID := GetUserIDFromIncomingContext(ctx)
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	valueKind, newEmailValue, err := ValidateAndNormalizeLogin(req.Email)
+	if err != nil {
+		return nil, err
+	}
+	if valueKind != onetimepasscode.LoginKindEmail {
+		return nil, status.Errorf(codes.InvalidArgument, "a valid email address must be provided")
+	}
+
+	passcode, err := s.Db.AckOneTimePasscode(ctx, newEmailValue, req.Code)
+	if err != nil {
+		return nil, err
+	}
+	if passcode == nil {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(valueKind))
+	}
+	if passcode.EmailOrPhone != newEmailValue {
+		return nil, status.Errorf(codes.InvalidArgument, "The code provided does not correlate with the desired email")
+	}
+
+	// everything checks out; modify the user and save with the new email address value
+	now := time.Now()
+	u.Email = &newEmailValue
+	u.EmailVerifiedAt = &now
+
+	err = s.Db.SaveUser(ctx, nil, u)
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
 	}
 
 	return &emptypb.Empty{}, nil
@@ -619,7 +649,7 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 		return nil, err
 	}
 	if passcode == nil {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(onetimepasscode.LoginKindPhone))
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(valueKind))
 	}
 	if passcode.EmailOrPhone != newPhoneValue {
 		return nil, status.Errorf(codes.InvalidArgument, "The code provided does not correlate with the desired phone")
