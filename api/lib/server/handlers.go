@@ -418,25 +418,38 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				ssnData.UpdatedAt = &now
 			}
 
-			_, err := s.Db.SaveProfileData(ctx, tx, userID, *dobData)
+			_, err := s.Db.SaveProfileData(ctx, tx, userID, *ssnData)
 			if err != nil {
 				return err
 			}
 		}
 
 		if req.Address != nil {
-			addressData := &address.ProfileDataAddress{
-				ID:         common.ProfileDataID(xid.New().String()),
-				Status:     common.StatusReceived,
-				Street1:    req.Address.Street_1,
-				Street2:    req.Address.Street_2,
-				City:       req.Address.City,
-				State:      req.Address.State,
-				PostalCode: req.Address.PostalCode,
-				Country:    req.Address.Country,
-				CreatedAt:  time.Now(),
+			if addressData == nil {
+				addressData = &address.ProfileDataAddress{
+					ID:         common.ProfileDataID(xid.New().String()),
+					Status:     common.StatusReceived,
+					Street1:    req.Address.Street_1,
+					Street2:    req.Address.Street_2,
+					City:       req.Address.City,
+					State:      req.Address.State,
+					PostalCode: req.Address.PostalCode,
+					Country:    req.Address.Country,
+					CreatedAt:  time.Now(),
+				}
+			} else {
+				addressData.Street1 = req.Address.Street_1
+				addressData.Street2 = req.Address.Street_2
+				addressData.City = req.Address.City
+				addressData.State = req.Address.State
+				addressData.PostalCode = req.Address.PostalCode
+				addressData.Country = req.Address.Country
+
+				now := time.Now()
+				addressData.UpdatedAt = &now
 			}
-			_, err := s.Db.SaveProfileData(ctx, tx, userID, addressData)
+
+			_, err := s.Db.SaveProfileData(ctx, tx, userID, *addressData)
 			if err != nil {
 				return err
 			}
