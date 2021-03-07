@@ -268,7 +268,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
 	}
 	if u == nil {
-		return nil, status.Errorf(codes.NotFound, "Your user was not found. Plaid Link token could not be created.")
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
 	// TODO: remove me, for testing only

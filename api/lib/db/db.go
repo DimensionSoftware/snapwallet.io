@@ -18,6 +18,8 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"github.com/rs/xid"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 )
 
 // Db represents the application interface for accessing the database
@@ -117,24 +119,22 @@ func (db Db) GetUserByID(ctx context.Context, userID user.ID) (*user.User, error
 	}
 
 	snap, err := db.Firestore.Collection("users").Doc(string(userID)).Get(ctx)
+	if status.Code(err) == codes.NotFound {
+		return nil, nil
+	}
 	if err != nil {
 		return nil, err
 	}
 
-	if snap.Exists() {
-		var encU user.EncryptedUser
-		snap.DataTo(&encU)
+	var encU user.EncryptedUser
+	snap.DataTo(&encU)
 
-		u, err := encU.Decrypt(db.EncryptionManager, userID)
-		if err != nil {
-			return nil, err
-		}
-
-		return u, nil
+	u, err := encU.Decrypt(db.EncryptionManager, userID)
+	if err != nil {
+		return nil, err
 	}
 
-	// no user found (non-error)
-	return nil, nil
+	return u, nil
 }
 
 // SavePlaidItem ...
