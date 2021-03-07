@@ -627,8 +627,7 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 
 	// everything checks out; modify the user and save with the new phone value
 	now := time.Now()
-	phone := user.Phone(newPhoneValue)
-	u.Phone = &phone
+	u.Phone = &newPhoneValue
 	u.PhoneVerifiedAt = &now
 
 	err = s.Db.SaveUser(ctx, nil, u)

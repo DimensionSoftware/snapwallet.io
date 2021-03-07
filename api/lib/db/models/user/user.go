@@ -3,7 +3,6 @@ package user
 import (
 	"time"
 
-	"github.com/google/tink/go/tink"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"github.com/rs/xid"
@@ -15,37 +14,6 @@ type PhoneEncrypted []byte
 // Phone represents cleartext phone number
 type Phone string
 
-// Decrypt ...
-func (enc *PhoneEncrypted) Decrypt(dek tink.AEAD, userID ID) (*Phone, error) {
-	if enc == nil || len(*enc) == 0 {
-		return nil, nil
-	}
-
-	cleartext, err := encryption.DecryptStringIfNonNil(dek, []byte(userID), (*[]byte)(enc))
-	if err != nil {
-		return nil, err
-	}
-
-	return (*Phone)(cleartext), nil
-}
-
-// Decrypt ...
-func (enc *EmailEncrypted) Decrypt(dek tink.AEAD, userID ID) (*Email, error) {
-	if enc == nil || len(*enc) == 0 {
-		return nil, nil
-	}
-
-	cleartext, err := encryption.DecryptStringIfNonNil(dek, []byte(userID), (*[]byte)(enc))
-	if err != nil {
-		return nil, err
-	}
-
-	return (*Email)(cleartext), nil
-}
-
-// EmailEncrypted represents encrypted email
-type EmailEncrypted []byte
-
 // Email represents cleartext email
 type Email string
 
@@ -54,23 +22,23 @@ type ID string
 
 // EncryptedUser represents a user registered with our system where PII is encrypted at rest
 type EncryptedUser struct {
-	ID                ID              `firestore:"id"`
-	DataEncryptionKey []byte          `firestore:"DEK"`
-	EmailHash         *[]byte         `firestore:"emailHash,omitempty"`
-	EmailEncrypted    *EmailEncrypted `firestore:"emailEncrypted,omitempty"`
-	EmailVerifiedAt   *time.Time      `firestore:"emailVerifiedAt,omitempty"`
-	PhoneHash         *[]byte         `firestore:"phoneHash,omitempty"`
-	PhoneEncrypted    *PhoneEncrypted `firestore:"phoneEncrypted,omitempty"`
-	PhoneVerifiedAt   *time.Time      `firestore:"phoneVerifiedAt,omitempty"`
-	CreatedAt         time.Time       `firestore:"createdAt"`
+	ID                ID         `firestore:"id"`
+	DataEncryptionKey []byte     `firestore:"DEK"`
+	EmailHash         *[]byte    `firestore:"emailHash,omitempty"`
+	EmailEncrypted    *[]byte    `firestore:"emailEncrypted,omitempty"`
+	EmailVerifiedAt   *time.Time `firestore:"emailVerifiedAt,omitempty"`
+	PhoneHash         *[]byte    `firestore:"phoneHash,omitempty"`
+	PhoneEncrypted    *[]byte    `firestore:"phoneEncrypted,omitempty"`
+	PhoneVerifiedAt   *time.Time `firestore:"phoneVerifiedAt,omitempty"`
+	CreatedAt         time.Time  `firestore:"createdAt"`
 }
 
 // User is the decrypted user
 type User struct {
 	ID              ID
-	Email           *Email
+	Email           *string
 	EmailVerifiedAt *time.Time
-	Phone           *Phone
+	Phone           *string
 	PhoneVerifiedAt *time.Time
 	CreatedAt       time.Time
 }
@@ -97,12 +65,12 @@ func (enc *EncryptedUser) Decrypt(m *encryption.Manager, userID ID) (*User, erro
 	}
 	dek := encryption.NewEncryptor(dekH)
 
-	email, err := enc.EmailEncrypted.Decrypt(dek, userID)
+	email, err := encryption.DecryptStringIfNonNil(dek, []byte(userID), enc.EmailEncrypted)
 	if err != nil {
 		return nil, err
 	}
 
-	phone, err := enc.PhoneEncrypted.Decrypt(dek, userID)
+	phone, err := encryption.DecryptStringIfNonNil(dek, []byte(userID), enc.PhoneEncrypted)
 	if err != nil {
 		return nil, err
 	}
@@ -152,10 +120,10 @@ func (u *User) Encrypt(m *encryption.Manager, userID ID) (*EncryptedUser, error)
 		ID:                u.ID,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EmailHash:         emailHash,
-		EmailEncrypted:    (*EmailEncrypted)(emailEncrypted),
+		EmailEncrypted:    emailEncrypted,
 		EmailVerifiedAt:   u.EmailVerifiedAt,
 		PhoneHash:         phoneHash,
-		PhoneEncrypted:    (*PhoneEncrypted)(phoneEncrypted),
+		PhoneEncrypted:    phoneEncrypted,
 		PhoneVerifiedAt:   u.PhoneVerifiedAt,
 		CreatedAt:         u.CreatedAt,
 	}, nil

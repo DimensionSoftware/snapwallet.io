@@ -92,15 +92,13 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 		now := time.Now()
 		// first time login means that we verified them with otp
 		if loginKind == onetimepasscode.LoginKindPhone {
-			phone := user.Phone(emailOrPhone)
 			u = user.User{
-				Phone:           &phone,
+				Phone:           &emailOrPhone,
 				PhoneVerifiedAt: &now,
 			}.WithDefaults(now)
 		} else {
-			email := user.Email(emailOrPhone)
 			u = user.User{
-				Email:           &email,
+				Email:           &emailOrPhone,
 				EmailVerifiedAt: &now,
 			}.WithDefaults(now)
 		}
