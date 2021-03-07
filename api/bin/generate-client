@@ -3,6 +3,7 @@
 rm -rf client
 
 openapi-generator-cli generate -g typescript -i lib/swagger/swagger.json -o client
+cp client-tsconfig.json client/tsconfig.json
 
 pushd client
 npm i
