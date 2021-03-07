@@ -151,32 +151,19 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 
 // OneTimePasscodeVerify is an rpc handler
 func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
+	const unknownMsg = "An unknown error occurred. Please try again later."
+
 	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.EmailOrPhone)
 	if err != nil {
 		return nil, err
 	}
 
-	passcodes := s.Firestore.Collection("one-time-passcodes").
-		Where("emailOrPhone", "==", loginValue).
-		Where("code", "==", req.Code).
-		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
-		Documents(ctx)
-
-	unknownMsg := "An unknown error occurred. Please try again later."
-
-	passcode, err := passcodes.Next()
-	if err == iterator.Done {
+	passcode, err := s.Db.AckOneTimePasscode(ctx, loginValue, req.Code)
+	if err != nil {
+		return nil, err
+	}
+	if passcode == nil {
 		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(loginKind))
-	}
-	if err != nil {
-		log.Println(err)
-		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
-	}
-
-	_, err = passcode.Ref.Delete(ctx)
-	if err != nil {
-		log.Println(err)
-		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
 	u, err := s.Db.GetOrCreateUser(ctx, loginKind, loginValue)
@@ -619,49 +606,28 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 		return nil, err
 	}
 
-	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.Phone)
+	valueKind, newPhoneValue, err := ValidateAndNormalizeLogin(req.Phone)
 	if err != nil {
-		log.Println(err)
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+		return nil, err
 	}
-	if loginKind != onetimepasscode.LoginKindPhone {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	if valueKind != onetimepasscode.LoginKindPhone {
+		return nil, status.Errorf(codes.InvalidArgument, "a valid phone must be provided")
 	}
 
-	passcodes := s.Firestore.Collection("one-time-passcodes").
-		Where("emailOrPhone", "==", loginValue).
-		Where("code", "==", req.Code).
-		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
-		Documents(ctx)
-
-	snap, err := passcodes.Next()
-	if err == iterator.Done {
+	passcode, err := s.Db.AckOneTimePasscode(ctx, newPhoneValue, req.Code)
+	if err != nil {
+		return nil, err
+	}
+	if passcode == nil {
 		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(onetimepasscode.LoginKindPhone))
 	}
-	if err != nil {
-		log.Println(err)
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	if passcode.EmailOrPhone != newPhoneValue {
+		return nil, status.Errorf(codes.InvalidArgument, "The code provided does not correlate with the desired phone")
 	}
 
-	var passcode onetimepasscode.OneTimePasscode
-	err = snap.DataTo(&passcode)
-	if err != nil {
-		log.Println(err)
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
-	}
-
-	_, err = snap.Ref.Delete(ctx)
-	if err != nil {
-		log.Println(err)
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
-	}
-
-	if passcode.EmailOrPhone != loginValue {
-		return nil, status.Errorf(codes.InvalidArgument, "the code provided does not correlate with the desired phone")
-	}
-
+	// everything checks out; modify the user and save with the new phone value
 	now := time.Now()
-	phone := user.Phone(loginValue)
+	phone := user.Phone(newPhoneValue)
 	u.Phone = &phone
 	u.PhoneVerifiedAt = &now
 

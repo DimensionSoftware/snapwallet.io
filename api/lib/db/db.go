@@ -18,6 +18,7 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"github.com/rs/xid"
+	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -286,3 +287,72 @@ func (db Db) GetAllProfileData(ctx context.Context, tx *firestore.Transaction, u
 
 	return out, nil
 }
+
+// AckOneTimePasscode tries to find the OneTimePasscode object matching the loginValue and code
+//   If it is found then the ack is successful and the passcode is destroyed in the database
+//   after being destroyed the original passcode object will be returned.
+//
+//   If it is not found then (nil, nil) will be returned so the caller can decide the error handling strategy
+//   for not found (invalid) codes (Not Acked)
+//
+//   If there is another type of error then (nil, error) will be returned.
+func (db Db) AckOneTimePasscode(ctx context.Context, loginValue string, code string) (*onetimepasscode.OneTimePasscode, error) {
+	if loginValue == "" {
+		// no matching otp found
+		return nil, nil
+	}
+
+	if code == "" {
+		// no matching otp found
+		return nil, nil
+	}
+
+	passcodes := db.Firestore.Collection("one-time-passcodes").
+		Where("emailOrPhone", "==", loginValue).
+		Where("code", "==", code).
+		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
+		Documents(ctx)
+
+	snap, err := passcodes.Next()
+	if err == iterator.Done {
+		// no matching otp found
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	// can only be used 'once'
+	_, err = snap.Ref.Delete(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var passcode onetimepasscode.OneTimePasscode
+	err = snap.DataTo(&passcode)
+	if err != nil {
+		return nil, err
+	}
+
+	// match found & unmarshalled
+	return &passcode, nil
+}
+
+/*
+
+snap, err := passcodes.Next()
+if err == iterator.Done {
+return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(onetimepasscode.LoginKindPhone))
+}
+if err != nil {
+log.Println(err)
+return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+}
+
+var passcode onetimepasscode.OneTimePasscode
+err = snap.DataTo(&passcode)
+if err != nil {
+log.Println(err)
+return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+}
+*/
