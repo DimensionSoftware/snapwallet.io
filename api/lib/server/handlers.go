@@ -327,27 +327,60 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
-	if req.LegalName != "" {
-		legalNameData := &legalname.ProfileDataLegalName{
-			ID:        common.ProfileDataID(xid.New().String()),
-			Status:    common.StatusReceived,
-			LegalName: req.LegalName,
-			CreatedAt: time.Now(),
+	profile, err := s.Db.GetAllProfileData(ctx, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	var legalNameData *legalname.ProfileDataLegalName
+	{
+		existingProfileData := profile.FilterKind(common.KindLegalName).First()
+		if existingProfileData != nil {
+			legalNameData = (*existingProfileData).(*legalname.ProfileDataLegalName)
 		}
-		_, err := s.Db.SaveProfileData(ctx, userID, legalNameData)
+	}
+	if req.LegalName != "" {
+		if legalNameData == nil {
+			legalNameData = &legalname.ProfileDataLegalName{
+				ID:        common.ProfileDataID(xid.New().String()),
+				Status:    common.StatusReceived,
+				LegalName: req.LegalName,
+				CreatedAt: time.Now(),
+			}
+		} else {
+			legalNameData.LegalName = req.LegalName
+			now := time.Now()
+			legalNameData.UpdatedAt = &now
+		}
+
+		_, err := s.Db.SaveProfileData(ctx, userID, *legalNameData)
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	if req.DateOfBirth != "" {
-		dobData := &dateofbirth.ProfileDataDateOfBirth{
-			ID:          common.ProfileDataID(xid.New().String()),
-			Status:      common.StatusReceived,
-			DateOfBirth: req.DateOfBirth,
-			CreatedAt:   time.Now(),
+	var dobData *dateofbirth.ProfileDataDateOfBirth
+	{
+		existingProfileData := profile.FilterKind(common.KindDateOfBirth).First()
+		if existingProfileData != nil {
+			dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
 		}
-		_, err := s.Db.SaveProfileData(ctx, userID, dobData)
+	}
+	if req.DateOfBirth != "" {
+		if dobData == nil {
+			dobData = &dateofbirth.ProfileDataDateOfBirth{
+				ID:          common.ProfileDataID(xid.New().String()),
+				Status:      common.StatusReceived,
+				DateOfBirth: req.DateOfBirth,
+				CreatedAt:   time.Now(),
+			}
+		} else {
+			dobData.DateOfBirth = req.DateOfBirth
+			now := time.Now()
+			dobData.UpdatedAt = &now
+		}
+
+		_, err := s.Db.SaveProfileData(ctx, userID, *dobData)
 		if err != nil {
 			return nil, err
 		}
@@ -384,6 +417,40 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		}
 	}
 
+	var legalNameInfo *proto.ProfileDataItemInfo
+	if legalNameData != nil {
+		legalNameInfo = &proto.ProfileDataItemInfo{
+			Id:        string(u.ID),
+			Kind:      proto.ProfileDataItemKind_K_LEGAL_NAME,
+			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
+			Length:    int32(len(legalNameData.LegalName)),
+			CreatedAt: legalNameData.CreatedAt.Format(time.RFC3339),
+		}
+		if legalNameData.UpdatedAt != nil {
+			legalNameInfo.UpdatedAt = legalNameData.UpdatedAt.Format(time.RFC3339)
+		}
+		if legalNameData.SealedAt != nil {
+			legalNameInfo.SealedAt = legalNameData.SealedAt.Format(time.RFC3339)
+		}
+	}
+
+	var dobInfo *proto.ProfileDataItemInfo
+	if dobData != nil {
+		dobInfo = &proto.ProfileDataItemInfo{
+			Id:        string(u.ID),
+			Kind:      proto.ProfileDataItemKind_K_DATE_OF_BIRTH,
+			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
+			Length:    int32(len(dobData.DateOfBirth)),
+			CreatedAt: dobData.CreatedAt.Format(time.RFC3339),
+		}
+		if dobData.UpdatedAt != nil {
+			dobInfo.UpdatedAt = dobData.UpdatedAt.Format(time.RFC3339)
+		}
+		if dobData.SealedAt != nil {
+			dobInfo.SealedAt = dobData.SealedAt.Format(time.RFC3339)
+		}
+	}
+
 	var email *proto.ProfileDataItemInfo
 	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
 		email = &proto.ProfileDataItemInfo{
@@ -394,6 +461,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			CreatedAt: u.EmailVerifiedAt.Format(time.RFC3339),
 		}
 	}
+
 	var phone *proto.ProfileDataItemInfo
 	if (u.Phone != nil && *u.Phone != "" && u.PhoneVerifiedAt != nil && *u.PhoneVerifiedAt != time.Time{}) {
 		phone = &proto.ProfileDataItemInfo{
@@ -412,8 +480,10 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			DateOfBirth: &proto.ProfileDataItemInfo{},
 			Address:     &proto.ProfileDataItemInfo{},
 		*/
-		Email: email,
-		Phone: phone,
+		DateOfBirth: dobInfo,
+		LegalName:   legalNameInfo,
+		Email:       email,
+		Phone:       phone,
 	}, nil
 }
 

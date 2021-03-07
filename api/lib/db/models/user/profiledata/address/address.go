@@ -24,6 +24,16 @@ type ProfileDataAddress struct {
 	SealedAt   *time.Time
 }
 
+// Kind the kind of profile data
+func (pdata ProfileDataAddress) Kind() common.ProfileDataKind {
+	return common.KindAddress
+}
+
+// GetStatus get the status of the profile data
+func (pdata ProfileDataAddress) GetStatus() common.ProfileDataStatus {
+	return pdata.Status
+}
+
 // ProfileDataAddressPIIData ...
 type ProfileDataAddressPIIData struct {
 	Street1    string `json:"street1"`

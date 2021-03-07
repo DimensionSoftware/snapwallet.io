@@ -221,7 +221,8 @@ message ProfileDataItemInfo {
   ProfileDataItemStatus status = 3;
   int32                 length = 4;
   string                created_at = 5;
-  string                sealed_at = 6;
+  string                updated_at = 6;
+  string                sealed_at = 7;
 }
 
 enum ProfileDataItemKind {

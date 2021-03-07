@@ -47,9 +47,10 @@ type EncryptedProfileData struct {
 	ID                ProfileDataID     `firestore:"id"`
 	Kind              ProfileDataKind   `firestore:"kind"`
 	Status            ProfileDataStatus `firestore:"status"`
-	CreatedAt         time.Time         `firestore:"createdAt"`
 	DataEncryptionKey []byte            `firestore:"DEK"`
 	EncryptedData     []byte            `firestore:"encryptedData"`
+	CreatedAt         time.Time         `firestore:"createdAt"`
+	UpdatedAt         *time.Time        `firestore:"updatedAt,omitempty"`
 	SealedAt          *time.Time        `firestore:"sealedAt,omitempty"`
 }
 

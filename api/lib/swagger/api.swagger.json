@@ -467,6 +467,9 @@
         "createdAt": {
           "type": "string"
         },
+        "updatedAt": {
+          "type": "string"
+        },
         "sealedAt": {
           "type": "string"
         }

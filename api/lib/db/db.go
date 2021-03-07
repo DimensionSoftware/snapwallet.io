@@ -243,7 +243,7 @@ func (db Db) SaveProfileData(ctx context.Context, userID user.ID, pdata profiled
 }
 
 // GetAllProfileData ...
-func (db Db) GetAllProfileData(ctx context.Context, userID user.ID) ([]profiledata.ProfileData, error) {
+func (db Db) GetAllProfileData(ctx context.Context, userID user.ID) (profiledata.ProfileDatas, error) {
 	profile := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
 
 	docs, err := profile.Documents(ctx).GetAll()

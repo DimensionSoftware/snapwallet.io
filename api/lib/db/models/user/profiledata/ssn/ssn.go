@@ -17,6 +17,16 @@ type ProfileDataSSN struct {
 	SealedAt  *time.Time
 }
 
+// Kind the kind of profile data
+func (pdata ProfileDataSSN) Kind() common.ProfileDataKind {
+	return common.KindSSN
+}
+
+// GetStatus get the status of the profile data
+func (pdata ProfileDataSSN) GetStatus() common.ProfileDataStatus {
+	return pdata.Status
+}
+
 // Encrypt ...
 func (pdata ProfileDataSSN) Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error) {
 	dekH := encryption.NewDEK()
@@ -31,7 +41,7 @@ func (pdata ProfileDataSSN) Encrypt(m *encryption.Manager, userID user.ID) (*com
 
 	return &common.EncryptedProfileData{
 		ID:                pdata.ID,
-		Kind:              common.KindSSN,
+		Kind:              pdata.Kind(),
 		Status:            pdata.Status,
 		CreatedAt:         pdata.CreatedAt,
 		SealedAt:          pdata.SealedAt,

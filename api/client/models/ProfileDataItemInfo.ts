@@ -23,6 +23,7 @@ export class ProfileDataItemInfo {
     'status'?: ProfileDataItemStatus;
     'length'?: number;
     'createdAt'?: string;
+    'updatedAt'?: string;
     'sealedAt'?: string;
 
     static readonly discriminator: string | undefined = undefined;
@@ -55,6 +56,12 @@ export class ProfileDataItemInfo {
         {
             "name": "createdAt",
             "baseName": "createdAt",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "updatedAt",
+            "baseName": "updatedAt",
             "type": "string",
             "format": ""
         },

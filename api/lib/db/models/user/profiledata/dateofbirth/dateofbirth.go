@@ -15,7 +15,18 @@ type ProfileDataDateOfBirth struct {
 	// indicates an individuals date of birth which is a string of the format YYYY-MM-DD
 	DateOfBirth string
 	CreatedAt   time.Time
+	UpdatedAt   *time.Time
 	SealedAt    *time.Time
+}
+
+// Kind the kind of profile data
+func (pdata ProfileDataDateOfBirth) Kind() common.ProfileDataKind {
+	return common.KindDateOfBirth
+}
+
+// GetStatus get the status of the profile data
+func (pdata ProfileDataDateOfBirth) GetStatus() common.ProfileDataStatus {
+	return pdata.Status
 }
 
 // Encrypt ...
@@ -32,7 +43,7 @@ func (pdata ProfileDataDateOfBirth) Encrypt(m *encryption.Manager, userID user.I
 
 	return &common.EncryptedProfileData{
 		ID:                pdata.ID,
-		Kind:              common.KindDateOfBirth,
+		Kind:              pdata.Kind(),
 		Status:            pdata.Status,
 		CreatedAt:         pdata.CreatedAt,
 		SealedAt:          pdata.SealedAt,

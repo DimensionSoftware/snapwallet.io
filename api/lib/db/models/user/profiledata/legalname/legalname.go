@@ -14,7 +14,18 @@ type ProfileDataLegalName struct {
 	Status    common.ProfileDataStatus
 	LegalName string
 	CreatedAt time.Time
+	UpdatedAt *time.Time
 	SealedAt  *time.Time
+}
+
+// Kind the kind of profile data
+func (pdata ProfileDataLegalName) Kind() common.ProfileDataKind {
+	return common.KindLegalName
+}
+
+// GetStatus get the status of the profile data
+func (pdata ProfileDataLegalName) GetStatus() common.ProfileDataStatus {
+	return pdata.Status
 }
 
 // Encrypt ...
@@ -31,9 +42,10 @@ func (pdata ProfileDataLegalName) Encrypt(m *encryption.Manager, userID user.ID)
 
 	return &common.EncryptedProfileData{
 		ID:                pdata.ID,
-		Kind:              common.KindLegalName,
+		Kind:              pdata.Kind(),
 		Status:            pdata.Status,
 		CreatedAt:         pdata.CreatedAt,
+		UpdatedAt:         pdata.UpdatedAt,
 		SealedAt:          pdata.SealedAt,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EncryptedData:     encryptedData,
