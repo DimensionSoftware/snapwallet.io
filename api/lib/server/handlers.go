@@ -434,53 +434,17 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 	var legalNameInfo *proto.ProfileDataItemInfo
 	if legalNameData != nil {
-		legalNameInfo = &proto.ProfileDataItemInfo{
-			Id:        string(u.ID),
-			Kind:      proto.ProfileDataItemKind_K_LEGAL_NAME,
-			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
-			Length:    int32(len(legalNameData.LegalName)),
-			CreatedAt: legalNameData.CreatedAt.Format(time.RFC3339),
-		}
-		if legalNameData.UpdatedAt != nil {
-			legalNameInfo.UpdatedAt = legalNameData.UpdatedAt.Format(time.RFC3339)
-		}
-		if legalNameData.SealedAt != nil {
-			legalNameInfo.SealedAt = legalNameData.SealedAt.Format(time.RFC3339)
-		}
+		legalNameInfo = legalNameData.GetProfileDataItemInfo()
 	}
 
 	var dobInfo *proto.ProfileDataItemInfo
 	if dobData != nil {
-		dobInfo = &proto.ProfileDataItemInfo{
-			Id:        string(u.ID),
-			Kind:      proto.ProfileDataItemKind_K_DATE_OF_BIRTH,
-			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
-			Length:    int32(len(dobData.DateOfBirth)),
-			CreatedAt: dobData.CreatedAt.Format(time.RFC3339),
-		}
-		if dobData.UpdatedAt != nil {
-			dobInfo.UpdatedAt = dobData.UpdatedAt.Format(time.RFC3339)
-		}
-		if dobData.SealedAt != nil {
-			dobInfo.SealedAt = dobData.SealedAt.Format(time.RFC3339)
-		}
+		dobInfo = dobData.GetProfileDataItemInfo()
 	}
 
 	var ssnInfo *proto.ProfileDataItemInfo
 	if ssnData != nil {
-		ssnInfo = &proto.ProfileDataItemInfo{
-			Id:        string(u.ID),
-			Kind:      proto.ProfileDataItemKind_K_SSN,
-			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
-			Length:    int32(len(ssnData.SSN)),
-			CreatedAt: dobData.CreatedAt.Format(time.RFC3339),
-		}
-		if ssnData.UpdatedAt != nil {
-			ssnInfo.UpdatedAt = ssnData.UpdatedAt.Format(time.RFC3339)
-		}
-		if ssnData.SealedAt != nil {
-			ssnInfo.SealedAt = ssnData.SealedAt.Format(time.RFC3339)
-		}
+		ssnInfo = ssnData.GetProfileDataItemInfo()
 	}
 
 	var email *proto.ProfileDataItemInfo
