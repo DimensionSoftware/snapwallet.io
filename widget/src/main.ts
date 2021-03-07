@@ -50,8 +50,7 @@ function getAPIClient(newToken?: string): FluxApi {
     window.__api = genAPIClient(getFluxSession())
   }
 
-  // Remove token when invalid
-  console.log('S', getFluxSession())
+  // Remove token when invalid, only try if token non-empty
   if (getFluxSession() !== '') {
     window.__api
       .fluxViewerData()
@@ -59,7 +58,13 @@ function getAPIClient(newToken?: string): FluxApi {
         console.log('resp', resp)
       })
       .catch(e => {
-        setFluxSession('')
+        const err = e as { body: { code: number; message: string } }
+        if (err.body?.code === 16) {
+          // only wipe session if its because of non-authenticated (token)
+          setFluxSession('')
+        } else {
+          throw err
+        }
       })
   }
 
