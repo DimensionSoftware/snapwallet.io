@@ -63,7 +63,9 @@ export const isJWTValid = () => {
   const jwt = getFluxSession()
   const userData = parseJwt(jwt)
   if (!userData) return false
-  return userData.exp > Math.floor(Date.now() / 1000)
+  const isTimeLeft = userData.exp > Math.floor(Date.now() / 1000)
+  if (!isTimeLeft) setFluxSession('')
+  return isTimeLeft
 }
 
 // Authenticated route common configuration
