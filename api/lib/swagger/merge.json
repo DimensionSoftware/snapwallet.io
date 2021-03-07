@@ -26,6 +26,16 @@
         "security": [{"Bearer": []}]
       }
     },
+    "/viewer/email": {
+      "put": {
+        "security": [{"Bearer": []}]
+      }
+    },
+    "/viewer/phone": {
+      "put": {
+        "security": [{"Bearer": []}]
+      }
+    },
     "/viewer/profile": {
       "get": {
         "security": [{"Bearer": []}]

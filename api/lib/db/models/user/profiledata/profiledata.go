@@ -1,6 +1,8 @@
 package profiledata
 
 import (
+	"time"
+
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
@@ -58,7 +60,7 @@ func (profile ProfileDatas) First() *ProfileData {
 }
 
 // GetProfileDataInfo ...
-func (profile ProfileDatas) GetProfileDataInfo() *proto.ProfileDataInfo {
+func (profile ProfileDatas) GetProfileDataInfo(u *user.User) *proto.ProfileDataInfo {
 	var legalNameData *legalname.ProfileDataLegalName
 	var dobData *dateofbirth.ProfileDataDateOfBirth
 	var ssnData *ssn.ProfileDataSSN
@@ -108,13 +110,35 @@ func (profile ProfileDatas) GetProfileDataInfo() *proto.ProfileDataInfo {
 		addressInfo = addressData.GetProfileDataItemInfo()
 	}
 
+	// TODO: store phone/emailInfo data on create account submission into concrete profile data with ids and timestamps -- then it becomes immutable for record purposes
+	// if there is no concrete record then their user emailInfo/phone become the main mutable source of truth
+	//
+	// this means we also need to do lookup logic changes, check concrete records first, then account details for phone/emailInfo
+	var emailInfo *proto.ProfileDataItemInfo
+	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
+		emailInfo = &proto.ProfileDataItemInfo{
+			Kind:   proto.ProfileDataItemKind_K_EMAIL,
+			Status: proto.ProfileDataItemStatus_S_RECEIVED,
+			Length: int32(len(*u.Email)),
+		}
+	}
+
+	var phoneInfo *proto.ProfileDataItemInfo
+	if (u.Phone != nil && *u.Phone != "" && u.PhoneVerifiedAt != nil && *u.PhoneVerifiedAt != time.Time{}) {
+		phoneInfo = &proto.ProfileDataItemInfo{
+			Kind:   proto.ProfileDataItemKind_K_PHONE,
+			Status: proto.ProfileDataItemStatus_S_RECEIVED,
+			Length: int32(len(*u.Phone)),
+		}
+	}
+
 	return &proto.ProfileDataInfo{
 		LegalName:   legalNameInfo,
 		DateOfBirth: dobInfo,
 		Ssn:         ssnInfo,
 		Address:     addressInfo,
-		//Email:       email,
-		//Phone:       phone,
+		Email:       emailInfo,
+		Phone:       phoneInfo,
 	}
 
 }

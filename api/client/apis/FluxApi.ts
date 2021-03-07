@@ -63,7 +63,12 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         );
         requestContext.setBody(serializedBody);
 
+        let authMethod = null;
         // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
 
         return requestContext;
     }
@@ -107,7 +112,12 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         );
         requestContext.setBody(serializedBody);
 
+        let authMethod = null;
         // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
 
         return requestContext;
     }

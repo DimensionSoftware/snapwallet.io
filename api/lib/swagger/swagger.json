@@ -245,6 +245,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -279,6 +284,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },

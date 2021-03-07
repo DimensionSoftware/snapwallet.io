@@ -468,22 +468,18 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	var email *proto.ProfileDataItemInfo
 	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
 		email = &proto.ProfileDataItemInfo{
-			Id:        string(u.ID),
-			Kind:      proto.ProfileDataItemKind_K_EMAIL,
-			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
-			Length:    int32(len(*u.Email)),
-			CreatedAt: u.EmailVerifiedAt.Format(time.RFC3339),
+			Kind:   proto.ProfileDataItemKind_K_EMAIL,
+			Status: proto.ProfileDataItemStatus_S_RECEIVED,
+			Length: int32(len(*u.Email)),
 		}
 	}
 
 	var phone *proto.ProfileDataItemInfo
 	if (u.Phone != nil && *u.Phone != "" && u.PhoneVerifiedAt != nil && *u.PhoneVerifiedAt != time.Time{}) {
 		phone = &proto.ProfileDataItemInfo{
-			Id:        string(u.ID),
-			Kind:      proto.ProfileDataItemKind_K_PHONE,
-			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
-			Length:    int32(len(*u.Phone)),
-			CreatedAt: u.PhoneVerifiedAt.Format(time.RFC3339),
+			Kind:   proto.ProfileDataItemKind_K_PHONE,
+			Status: proto.ProfileDataItemStatus_S_RECEIVED,
+			Length: int32(len(*u.Phone)),
 		}
 	}
 
@@ -499,17 +495,17 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 // ViewerProfileData is an rpc handler
 func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*proto.ProfileDataInfo, error) {
-	userID := GetUserIDFromIncomingContext(ctx)
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
-	}
-
-	profile, err := s.Db.GetAllProfileData(ctx, nil, userID)
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
 		return nil, err
 	}
 
-	return profile.GetProfileDataInfo(), nil
+	profile, err := s.Db.GetAllProfileData(ctx, nil, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return profile.GetProfileDataInfo(u), nil
 }
 
 // WyreCreateAccount is an rpc handler
