@@ -150,9 +150,7 @@ func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, 
 		return nil, err
 	}
 
-	path := fmt.Sprintf("users/%s/plaidItems", userID)
-
-	_, err = db.Firestore.Collection(path).Doc(string(itemID)).Set(ctx, encryptedItem)
+	_, err = db.Firestore.Collection("users").Doc(string(userID)).Collection("plaidItems").Doc(string(itemID)).Set(ctx, encryptedItem)
 	if err != nil {
 		return nil, err
 	}
