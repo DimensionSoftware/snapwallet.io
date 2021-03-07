@@ -21,8 +21,8 @@
   let selectorVisible = false
 
   const cryptoCurrencies = [
-    { name: 'Bitcoin', ticker: 'BTC' },
-    { name: 'Ethereum', ticker: 'ETH' },
+    { name: 'Bitcoin', ticker: 'BTC', popular: true },
+    { name: 'Ethereum', ticker: 'ETH', popular: true },
     { name: 'USDC', ticker: 'USDC' },
     { name: 'Tether', ticker: 'USDT' },
     { name: 'DAI', ticker: 'DAI' },
@@ -170,10 +170,22 @@
 <PopupSelector
   on:close={() => (selectorVisible = false)}
   visible={selectorVisible}
-  headerTitle="Select Asset"
+  headerTitle="Select Currency"
 >
   <div class="scroll cryptocurrencies-container">
-    {#each cryptoCurrencies as cryptoCurrency (cryptoCurrency.ticker)}
+    <h5>Popular</h5>
+    {#each cryptoCurrencies.filter(c => c.popular) as cryptoCurrency (cryptoCurrency.ticker)}
+      <div style="margin: 0.5rem 0">
+        <Label>
+          <CryptoCard
+            on:click={() => (selectorVisible = false)}
+            crypto={cryptoCurrency}
+          />
+        </Label>
+      </div>
+    {/each}
+    <h5 style="margin-top: 1.25rem">All</h5>
+    {#each cryptoCurrencies.filter(c => !c.popular) as cryptoCurrency (cryptoCurrency.ticker)}
       <div style="margin: 0.5rem 0">
         <Label>
           <CryptoCard
