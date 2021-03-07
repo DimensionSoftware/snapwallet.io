@@ -13,6 +13,7 @@ import (
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
@@ -29,7 +30,7 @@ import (
 // https://api.sendwyre.com/v3/rates?as=priced
 
 // ViewerData is an rpc handler
-func (s *Server) ViewerData(ctx context.Context, in *proto.ViewerDataRequest) (*proto.ViewerDataResponse, error) {
+func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.ViewerDataResponse, error) {
 	userID, err := GetUserIDFromIncomingContext(ctx)
 	if err != nil {
 		return nil, err
@@ -310,7 +311,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 }
 
 // SaveProfileData is an rpc handler
-func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileDataRequest) (*proto.SaveProfileDataResponse, error) {
+func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileDataRequest) (*proto.ProfileDataInfo, error) {
 	userID, err := GetUserIDFromIncomingContext(ctx)
 	if err != nil {
 		return nil, err
@@ -378,7 +379,14 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		}
 	}
 
-	return &proto.SaveProfileDataResponse{}, nil
+	return &proto.ProfileDataInfo{
+		LegalName:   &proto.ProfileDataItemInfo{},
+		Ssn:         &proto.ProfileDataItemInfo{},
+		DateOfBirth: &proto.ProfileDataItemInfo{},
+		Address:     &proto.ProfileDataItemInfo{},
+		Email:       &proto.ProfileDataItemInfo{},
+		Phone:       &proto.ProfileDataItemInfo{},
+	}, nil
 }
 
 // WyreCreateAccount is an rpc handler
