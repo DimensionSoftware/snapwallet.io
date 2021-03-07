@@ -317,6 +317,11 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
+	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
+	if err != nil || u == nil {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	}
+
 	err = req.Validate()
 	if err != nil {
 		return nil, err
@@ -379,13 +384,34 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		}
 	}
 
+	var email *proto.ProfileDataItemInfo
+	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
+		email = &proto.ProfileDataItemInfo{
+			Id:        string(u.ID),
+			Kind:      proto.ProfileDataItemKind_K_EMAIL,
+			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
+			Length:    int32(len(*u.Email)),
+			CreatedAt: u.EmailVerifiedAt.Format(time.RFC3339),
+		}
+	}
+	var phone *proto.ProfileDataItemInfo
+	if (u.Phone != nil && *u.Phone != "" && u.PhoneVerifiedAt != nil && *u.PhoneVerifiedAt != time.Time{}) {
+		phone = &proto.ProfileDataItemInfo{
+			Id:        string(u.ID),
+			Kind:      proto.ProfileDataItemKind_K_PHONE,
+			Status:    proto.ProfileDataItemStatus_S_RECEIVED,
+			Length:    int32(len(*u.Phone)),
+			CreatedAt: u.PhoneVerifiedAt.Format(time.RFC3339),
+		}
+	}
+
 	return &proto.ProfileDataInfo{
 		LegalName:   &proto.ProfileDataItemInfo{},
 		Ssn:         &proto.ProfileDataItemInfo{},
 		DateOfBirth: &proto.ProfileDataItemInfo{},
 		Address:     &proto.ProfileDataItemInfo{},
-		Email:       &proto.ProfileDataItemInfo{},
-		Phone:       &proto.ProfileDataItemInfo{},
+		Email:       email,
+		Phone:       phone,
 	}, nil
 }
 
