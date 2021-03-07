@@ -20,6 +20,10 @@ models/PlaidConnectBankAccountsRequest.ts
 models/PlaidCreateLinkTokenResponse.ts
 models/PricingDataResponse.ts
 models/PricingRate.ts
+models/ProfileDataInfo.ts
+models/ProfileDataItemInfo.ts
+models/ProfileDataItemKind.ts
+models/ProfileDataItemStatus.ts
 models/ProtobufAny.ts
 models/RpcStatus.ts
 models/SaveProfileDataRequest.ts

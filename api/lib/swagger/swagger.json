@@ -215,6 +215,28 @@
       }
     },
     "/viewer/profile": {
+      "get": {
+        "summary": "Get viewer profile data",
+        "description": "Provides user (viewer) data associated with the access token",
+        "operationId": "Flux_ViewerProfileData",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/ProfileDataInfo"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Flux"
+        ]
+      },
       "patch": {
         "summary": "SaveProfileData saves profile data items for the user",
         "description": "...",
@@ -223,7 +245,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/SaveProfileDataResponse"
+              "$ref": "#/definitions/ProfileDataInfo"
             }
           },
           "default": {
@@ -426,6 +448,81 @@
       "description": "the pricing rate map; the keys are currency symbols and the values are the rates",
       "title": "PricingRate"
     },
+    "ProfileDataInfo": {
+      "type": "object",
+      "properties": {
+        "legalName": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
+        },
+        "dateOfBirth": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
+        },
+        "ssn": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
+        },
+        "address": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
+        },
+        "email": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
+        },
+        "phone": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
+        }
+      },
+      "description": "represents all profile data for a user",
+      "title": "ProfileData"
+    },
+    "ProfileDataItemInfo": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "kind": {
+          "$ref": "#/definitions/ProfileDataItemKind"
+        },
+        "status": {
+          "$ref": "#/definitions/ProfileDataItemStatus"
+        },
+        "length": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "sealedAt": {
+          "type": "string"
+        }
+      },
+      "description": "represents a saved profile data fields' status",
+      "title": "ProfileDataInfo"
+    },
+    "ProfileDataItemKind": {
+      "type": "string",
+      "enum": [
+        "K_UNKNOWN",
+        "K_LEGAL_NAME",
+        "K_PHONE",
+        "K_EMAIL",
+        "K_ADDRESS",
+        "K_DATE_OF_BIRTH",
+        "K_SSN"
+      ],
+      "default": "K_UNKNOWN"
+    },
+    "ProfileDataItemStatus": {
+      "type": "string",
+      "enum": [
+        "S_UNKNOWN",
+        "S_RECEIVED",
+        "S_PENDING",
+        "S_INVALID",
+        "S_APPROVED"
+      ],
+      "default": "S_UNKNOWN"
+    },
     "SaveProfileDataRequest": {
       "type": "object",
       "properties": {
@@ -444,11 +541,6 @@
       },
       "description": "request",
       "title": "SaveProfileDataRequest"
-    },
-    "SaveProfileDataResponse": {
-      "type": "object",
-      "description": "response",
-      "title": "SaveProfileDataResponse"
     },
     "User": {
       "type": "object",

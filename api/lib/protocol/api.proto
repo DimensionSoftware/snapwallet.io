@@ -3,6 +3,7 @@ option go_package = "github.com/khoerling/flux/api/lib/protocol";
 
 import "google/api/annotations.proto";
 import "google/api/httpbody.proto";
+import "google/protobuf/empty.proto";
 
 // OrganizationApplication
 message OrganizationApplication {
@@ -199,19 +200,64 @@ message SaveProfileDataRequest {
   Address address = 4;
 }
 
-// SaveProfileDataResponse
+// ProfileData
 //
-// response
-message SaveProfileDataResponse {
+// represents all profile data for a user
+message ProfileDataInfo {
+  ProfileDataItemInfo legal_name = 1;
+  ProfileDataItemInfo date_of_birth = 2;
+  ProfileDataItemInfo ssn = 3;
+  ProfileDataItemInfo address = 4;
+  ProfileDataItemInfo email = 5;
+  ProfileDataItemInfo phone = 6;
+}
+
+// ProfileDataInfo
+//
+// represents a saved profile data fields' status
+message ProfileDataItemInfo {
+  string                id = 1;
+  ProfileDataItemKind   kind = 2;
+  ProfileDataItemStatus status = 3;
+  int32                 length = 4;
+  string                created_at = 5;
+  string                sealed_at = 6;
+}
+
+enum ProfileDataItemKind {
+  K_UNKNOWN = 0;
+  K_LEGAL_NAME = 1;
+  K_PHONE = 2;
+  K_EMAIL = 3;
+  K_ADDRESS = 4;
+  K_DATE_OF_BIRTH = 5;
+  K_SSN = 6;
+}
+
+enum ProfileDataItemStatus {
+  S_UNKNOWN = 0;
+  S_RECEIVED = 1;
+  S_PENDING = 2;
+  S_INVALID = 3;
+  S_APPROVED = 4;
 }
 
 service Flux {
   // Get viewer data
   //
   // Provides user (viewer) data associated with the access token
-  rpc ViewerData(ViewerDataRequest) returns (ViewerDataResponse) {
+  rpc ViewerData(google.protobuf.Empty) returns (ViewerDataResponse) {
     option (google.api.http) = {
       get: "/viewer"
+    };
+  }
+
+  // Get viewer profile data
+  //
+  // Provides user (viewer) data associated with the access token
+  rpc ViewerProfileData(google.protobuf.Empty) returns (ProfileDataInfo) {
+    option (google.api.http) = {
+      get: "/viewer/profile"
     };
   }
 
@@ -268,7 +314,7 @@ service Flux {
   // SaveProfileData saves profile data items for the user
   //
   // ...
-  rpc SaveProfileData(SaveProfileDataRequest) returns (SaveProfileDataResponse) {
+  rpc SaveProfileData(SaveProfileDataRequest) returns (ProfileDataInfo) {
     option (google.api.http) = {
       patch: "/viewer/profile"
       body: "*"

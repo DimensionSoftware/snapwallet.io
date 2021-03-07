@@ -10,6 +10,10 @@ import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccou
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
+import { ProfileDataInfo } from '../models/ProfileDataInfo';
+import { ProfileDataItemInfo } from '../models/ProfileDataItemInfo';
+import { ProfileDataItemKind } from '../models/ProfileDataItemKind';
+import { ProfileDataItemStatus } from '../models/ProfileDataItemStatus';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
 import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
@@ -84,7 +88,7 @@ export class PromiseFluxApi {
      * SaveProfileData saves profile data items for the user
      * @param body 
      */
-    public fluxSaveProfileData(body: SaveProfileDataRequest, options?: Configuration): Promise<any> {
+    public fluxSaveProfileData(body: SaveProfileDataRequest, options?: Configuration): Promise<ProfileDataInfo> {
     	const result = this.api.fluxSaveProfileData(body, options);
         return result.toPromise();
     }
@@ -95,6 +99,15 @@ export class PromiseFluxApi {
      */
     public fluxViewerData(options?: Configuration): Promise<ViewerDataResponse> {
     	const result = this.api.fluxViewerData(options);
+        return result.toPromise();
+    }
+	
+    /**
+     * Provides user (viewer) data associated with the access token
+     * Get viewer profile data
+     */
+    public fluxViewerProfileData(options?: Configuration): Promise<ProfileDataInfo> {
+    	const result = this.api.fluxViewerProfileData(options);
         return result.toPromise();
     }
 	

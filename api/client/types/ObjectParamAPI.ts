@@ -10,6 +10,10 @@ import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccou
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
+import { ProfileDataInfo } from '../models/ProfileDataInfo';
+import { ProfileDataItemInfo } from '../models/ProfileDataItemInfo';
+import { ProfileDataItemKind } from '../models/ProfileDataItemKind';
+import { ProfileDataItemStatus } from '../models/ProfileDataItemStatus';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
 import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
@@ -69,6 +73,9 @@ export interface FluxApiFluxSaveProfileDataRequest {
 }
 
 export interface FluxApiFluxViewerDataRequest {
+}
+
+export interface FluxApiFluxViewerProfileDataRequest {
 }
 
 export interface FluxApiFluxWyreCreateAccountRequest {
@@ -137,7 +144,7 @@ export class ObjectFluxApi {
      * SaveProfileData saves profile data items for the user
      * @param param the request object
      */
-    public fluxSaveProfileData(param: FluxApiFluxSaveProfileDataRequest, options?: Configuration): Promise<any> {
+    public fluxSaveProfileData(param: FluxApiFluxSaveProfileDataRequest, options?: Configuration): Promise<ProfileDataInfo> {
         return this.api.fluxSaveProfileData(param.body,  options).toPromise();
     }
 	
@@ -148,6 +155,15 @@ export class ObjectFluxApi {
      */
     public fluxViewerData(param: FluxApiFluxViewerDataRequest, options?: Configuration): Promise<ViewerDataResponse> {
         return this.api.fluxViewerData( options).toPromise();
+    }
+	
+    /**
+     * Provides user (viewer) data associated with the access token
+     * Get viewer profile data
+     * @param param the request object
+     */
+    public fluxViewerProfileData(param: FluxApiFluxViewerProfileDataRequest, options?: Configuration): Promise<ProfileDataInfo> {
+        return this.api.fluxViewerProfileData( options).toPromise();
     }
 	
     /**

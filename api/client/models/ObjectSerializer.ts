@@ -6,6 +6,10 @@ export * from './PlaidConnectBankAccountsRequest';
 export * from './PlaidCreateLinkTokenResponse';
 export * from './PricingDataResponse';
 export * from './PricingRate';
+export * from './ProfileDataInfo';
+export * from './ProfileDataItemInfo';
+export * from './ProfileDataItemKind';
+export * from './ProfileDataItemStatus';
 export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
@@ -21,6 +25,10 @@ import { PlaidConnectBankAccountsRequest } from './PlaidConnectBankAccountsReque
 import { PlaidCreateLinkTokenResponse } from './PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from './PricingDataResponse';
 import { PricingRate } from './PricingRate';
+import { ProfileDataInfo } from './ProfileDataInfo';
+import { ProfileDataItemInfo } from './ProfileDataItemInfo';
+import { ProfileDataItemKind } from './ProfileDataItemKind';
+import { ProfileDataItemStatus } from './ProfileDataItemStatus';
 import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
@@ -47,6 +55,8 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
 
                  
 let enumsMap: Set<string> = new Set<string>([
+    "ProfileDataItemKind",
+    "ProfileDataItemStatus",
 ]);
 
 let typeMap: {[index: string]: any} = {
@@ -58,6 +68,8 @@ let typeMap: {[index: string]: any} = {
     "PlaidCreateLinkTokenResponse": PlaidCreateLinkTokenResponse,
     "PricingDataResponse": PricingDataResponse,
     "PricingRate": PricingRate,
+    "ProfileDataInfo": ProfileDataInfo,
+    "ProfileDataItemInfo": ProfileDataItemInfo,
     "ProtobufAny": ProtobufAny,
     "RpcStatus": RpcStatus,
     "SaveProfileDataRequest": SaveProfileDataRequest,

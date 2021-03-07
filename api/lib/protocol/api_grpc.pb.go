@@ -7,6 +7,7 @@ import (
 	grpc "google.golang.org/grpc"
 	codes "google.golang.org/grpc/codes"
 	status "google.golang.org/grpc/status"
+	emptypb "google.golang.org/protobuf/types/known/emptypb"
 )
 
 // This is a compile-time assertion to ensure that this generated file
@@ -21,7 +22,11 @@ type FluxClient interface {
 	// Get viewer data
 	//
 	// Provides user (viewer) data associated with the access token
-	ViewerData(ctx context.Context, in *ViewerDataRequest, opts ...grpc.CallOption) (*ViewerDataResponse, error)
+	ViewerData(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ViewerDataResponse, error)
+	// Get viewer profile data
+	//
+	// Provides user (viewer) data associated with the access token
+	ViewerProfileData(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ProfileDataInfo, error)
 	// Get pricing data
 	//
 	// Provides pricing data for all markets with rate maps
@@ -44,7 +49,7 @@ type FluxClient interface {
 	// SaveProfileData saves profile data items for the user
 	//
 	// ...
-	SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*SaveProfileDataResponse, error)
+	SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*ProfileDataInfo, error)
 	// WyreCreateAccount creates an account with Wyre
 	//
 	// ...
@@ -59,9 +64,18 @@ func NewFluxClient(cc grpc.ClientConnInterface) FluxClient {
 	return &fluxClient{cc}
 }
 
-func (c *fluxClient) ViewerData(ctx context.Context, in *ViewerDataRequest, opts ...grpc.CallOption) (*ViewerDataResponse, error) {
+func (c *fluxClient) ViewerData(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ViewerDataResponse, error) {
 	out := new(ViewerDataResponse)
 	err := c.cc.Invoke(ctx, "/Flux/ViewerData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) ViewerProfileData(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ProfileDataInfo, error) {
+	out := new(ProfileDataInfo)
+	err := c.cc.Invoke(ctx, "/Flux/ViewerProfileData", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,8 +127,8 @@ func (c *fluxClient) PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLi
 	return out, nil
 }
 
-func (c *fluxClient) SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*SaveProfileDataResponse, error) {
-	out := new(SaveProfileDataResponse)
+func (c *fluxClient) SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*ProfileDataInfo, error) {
+	out := new(ProfileDataInfo)
 	err := c.cc.Invoke(ctx, "/Flux/SaveProfileData", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -138,7 +152,11 @@ type FluxServer interface {
 	// Get viewer data
 	//
 	// Provides user (viewer) data associated with the access token
-	ViewerData(context.Context, *ViewerDataRequest) (*ViewerDataResponse, error)
+	ViewerData(context.Context, *emptypb.Empty) (*ViewerDataResponse, error)
+	// Get viewer profile data
+	//
+	// Provides user (viewer) data associated with the access token
+	ViewerProfileData(context.Context, *emptypb.Empty) (*ProfileDataInfo, error)
 	// Get pricing data
 	//
 	// Provides pricing data for all markets with rate maps
@@ -161,7 +179,7 @@ type FluxServer interface {
 	// SaveProfileData saves profile data items for the user
 	//
 	// ...
-	SaveProfileData(context.Context, *SaveProfileDataRequest) (*SaveProfileDataResponse, error)
+	SaveProfileData(context.Context, *SaveProfileDataRequest) (*ProfileDataInfo, error)
 	// WyreCreateAccount creates an account with Wyre
 	//
 	// ...
@@ -173,8 +191,11 @@ type FluxServer interface {
 type UnimplementedFluxServer struct {
 }
 
-func (UnimplementedFluxServer) ViewerData(context.Context, *ViewerDataRequest) (*ViewerDataResponse, error) {
+func (UnimplementedFluxServer) ViewerData(context.Context, *emptypb.Empty) (*ViewerDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ViewerData not implemented")
+}
+func (UnimplementedFluxServer) ViewerProfileData(context.Context, *emptypb.Empty) (*ProfileDataInfo, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ViewerProfileData not implemented")
 }
 func (UnimplementedFluxServer) PricingData(context.Context, *PricingDataRequest) (*PricingDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PricingData not implemented")
@@ -191,7 +212,7 @@ func (UnimplementedFluxServer) PlaidConnectBankAccounts(context.Context, *PlaidC
 func (UnimplementedFluxServer) PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidCreateLinkToken not implemented")
 }
-func (UnimplementedFluxServer) SaveProfileData(context.Context, *SaveProfileDataRequest) (*SaveProfileDataResponse, error) {
+func (UnimplementedFluxServer) SaveProfileData(context.Context, *SaveProfileDataRequest) (*ProfileDataInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveProfileData not implemented")
 }
 func (UnimplementedFluxServer) WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error) {
@@ -211,7 +232,7 @@ func RegisterFluxServer(s grpc.ServiceRegistrar, srv FluxServer) {
 }
 
 func _Flux_ViewerData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ViewerDataRequest)
+	in := new(emptypb.Empty)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -223,7 +244,25 @@ func _Flux_ViewerData_Handler(srv interface{}, ctx context.Context, dec func(int
 		FullMethod: "/Flux/ViewerData",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FluxServer).ViewerData(ctx, req.(*ViewerDataRequest))
+		return srv.(FluxServer).ViewerData(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_ViewerProfileData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).ViewerProfileData(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/ViewerProfileData",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).ViewerProfileData(ctx, req.(*emptypb.Empty))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -364,6 +403,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ViewerData",
 			Handler:    _Flux_ViewerData_Handler,
+		},
+		{
+			MethodName: "ViewerProfileData",
+			Handler:    _Flux_ViewerProfileData_Handler,
 		},
 		{
 			MethodName: "PricingData",

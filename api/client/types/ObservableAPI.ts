@@ -12,6 +12,10 @@ import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccou
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
+import { ProfileDataInfo } from '../models/ProfileDataInfo';
+import { ProfileDataItemInfo } from '../models/ProfileDataItemInfo';
+import { ProfileDataItemKind } from '../models/ProfileDataItemKind';
+import { ProfileDataItemStatus } from '../models/ProfileDataItemStatus';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
 import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
@@ -158,7 +162,7 @@ export class ObservableFluxApi {
      * SaveProfileData saves profile data items for the user
      * @param body 
      */
-    public fluxSaveProfileData(body: SaveProfileDataRequest, options?: Configuration): Observable<any> {
+    public fluxSaveProfileData(body: SaveProfileDataRequest, options?: Configuration): Observable<ProfileDataInfo> {
     	const requestContextPromise = this.requestFactory.fluxSaveProfileData(body, options);
 
 		// build promise chain
@@ -197,6 +201,29 @@ export class ObservableFluxApi {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
 	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxViewerData(rsp)));
+	    	}));
+    }
+	
+    /**
+     * Provides user (viewer) data associated with the access token
+     * Get viewer profile data
+     */
+    public fluxViewerProfileData(options?: Configuration): Observable<ProfileDataInfo> {
+    	const requestContextPromise = this.requestFactory.fluxViewerProfileData(options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxViewerProfileData(rsp)));
 	    	}));
     }
 	
