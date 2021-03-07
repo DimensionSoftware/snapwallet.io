@@ -58,8 +58,8 @@ func (db Db) CreateUser(ctx context.Context, email *string, phone *string, email
 	now := time.Now()
 	u := user.User{
 		ID:        id,
-		Email:     email,
-		Phone:     phone,
+		Email:     (*user.Email)(email),
+		Phone:     (*user.Phone)(phone),
 		CreatedAt: now,
 	}
 
@@ -71,7 +71,7 @@ func (db Db) CreateUser(ctx context.Context, email *string, phone *string, email
 		u.PhoneVerifiedAt = &now
 	}
 
-	encryptedUser, err := u.Encrypt(db.EncryptionManager)
+	encryptedUser, err := u.Encrypt(db.EncryptionManager, u.ID)
 	if err != nil {
 		return nil, err
 	}
@@ -110,13 +110,13 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 }
 
 // GetUserByID gets a user object by id
-func (db Db) GetUserByID(ctx context.Context, id user.ID) (*user.User, error) {
-	if id == "" {
+func (db Db) GetUserByID(ctx context.Context, userID user.ID) (*user.User, error) {
+	if userID == "" {
 		return nil, nil
 
 	}
 
-	snap, err := db.Firestore.Collection("users").Doc(string(id)).Get(ctx)
+	snap, err := db.Firestore.Collection("users").Doc(string(userID)).Get(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -125,7 +125,7 @@ func (db Db) GetUserByID(ctx context.Context, id user.ID) (*user.User, error) {
 		var encU user.EncryptedUser
 		snap.DataTo(&encU)
 
-		u, err := encU.Decrypt(db.EncryptionManager)
+		u, err := encU.Decrypt(db.EncryptionManager, userID)
 		if err != nil {
 			return nil, err
 		}
@@ -145,7 +145,7 @@ func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, 
 		CreatedAt:   time.Now(),
 	}
 
-	encryptedItem, err := item.Encrypt(db.EncryptionManager)
+	encryptedItem, err := item.Encrypt(db.EncryptionManager, userID)
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +184,7 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 			return nil, err
 		}
 
-		u, err := encU.Decrypt(db.EncryptionManager)
+		u, err := encU.Decrypt(db.EncryptionManager, encU.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -207,7 +207,7 @@ func (db Db) GetUserByEmailOrPhone(ctx context.Context, emailOrPhone string) (*u
 			return nil, err
 		}
 
-		u, err := encU.Decrypt(db.EncryptionManager)
+		u, err := encU.Decrypt(db.EncryptionManager, encU.ID)
 		if err != nil {
 			return nil, err
 		}

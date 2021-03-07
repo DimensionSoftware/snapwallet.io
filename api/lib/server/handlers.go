@@ -45,10 +45,10 @@ func (s *Server) ViewerData(ctx context.Context, in *proto.ViewerDataRequest) (*
 		CreatedAt: u.CreatedAt.Unix(),
 	}
 	if u.Email != nil {
-		user.Email = *u.Email
+		user.Email = string(*u.Email)
 	}
 	if u.Phone != nil {
-		user.Phone = *u.Phone
+		user.Phone = string(*u.Phone)
 	}
 
 	// todo: factor this out into separate module (db)
@@ -195,11 +195,11 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}
 
 	if u.Email != nil {
-		respUser.Email = *u.Email
+		respUser.Email = string(*u.Email)
 	}
 
 	if u.Phone != nil {
-		respUser.Phone = *u.Phone
+		respUser.Phone = string(*u.Phone)
 	}
 
 	return &proto.OneTimePasscodeVerifyResponse{

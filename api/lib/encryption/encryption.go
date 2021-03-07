@@ -26,8 +26,7 @@ type Config struct {
 
 // Manager manages our symmetric at-rest encryption
 type Manager struct {
-	Encryptor      tink.AEAD
-	AdditionalData []byte
+	Encryptor tink.AEAD
 }
 
 // ProvideConfig provides a Config for instantiating the Manager
@@ -61,8 +60,7 @@ func NewManager(config *Config) (*Manager, error) {
 	}
 
 	return &Manager{
-		Encryptor:      a,
-		AdditionalData: config.AdditionalData,
+		Encryptor: a,
 	}, nil
 }
 
@@ -70,12 +68,12 @@ func NewManager(config *Config) (*Manager, error) {
 type CipherText = *[]byte
 
 // Encrypt encrypts the cleartext into ciphertext
-func (m *Manager) Encrypt(cleartext *[]byte) (CipherText, error) {
+func (m *Manager) Encrypt(cleartext *[]byte, userID string) (CipherText, error) {
 	if cleartext == nil {
 		return nil, nil
 	}
 
-	ciphertext, err := m.Encryptor.Encrypt(*cleartext, m.AdditionalData)
+	ciphertext, err := m.Encryptor.Encrypt(*cleartext, []byte(userID))
 	if err != nil {
 		return nil, err
 	}
@@ -84,12 +82,12 @@ func (m *Manager) Encrypt(cleartext *[]byte) (CipherText, error) {
 }
 
 // Decrypt decrypts the ciphertext into cleartext
-func (m *Manager) Decrypt(ciphertext CipherText) (*[]byte, error) {
+func (m *Manager) Decrypt(ciphertext CipherText, userID string) (*[]byte, error) {
 	if ciphertext == nil {
 		return nil, nil
 	}
 
-	cleartext, err := m.Encryptor.Decrypt(*ciphertext, m.AdditionalData)
+	cleartext, err := m.Encryptor.Decrypt(*ciphertext, []byte(userID))
 	if err != nil {
 		return nil, err
 	}

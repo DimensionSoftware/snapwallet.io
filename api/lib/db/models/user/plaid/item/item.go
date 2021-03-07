@@ -3,6 +3,7 @@ package item
 import (
 	"time"
 
+	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/encryption"
 )
 
@@ -26,14 +27,14 @@ type Item struct {
 }
 
 // Decrypt ...
-func (enc *EncryptedItem) Decrypt(m *encryption.Manager) (*Item, error) {
+func (enc *EncryptedItem) Decrypt(m *encryption.Manager, userID user.ID) (*Item, error) {
 	dekH, err := encryption.ParseAndDecryptKeyBytes(enc.DataEncryptionKey, m.Encryptor)
 	if err != nil {
 		return nil, err
 	}
 	dek := encryption.NewEncryptor(dekH)
 
-	accessToken, err := encryption.DecryptStringIfNonNil(dek, m.AdditionalData, &enc.AccessTokenEncrypted)
+	accessToken, err := encryption.DecryptStringIfNonNil(dek, []byte(userID), &enc.AccessTokenEncrypted)
 	if err != nil {
 		return nil, err
 	}
@@ -46,11 +47,11 @@ func (enc *EncryptedItem) Decrypt(m *encryption.Manager) (*Item, error) {
 }
 
 // Encrypt ...
-func (u *Item) Encrypt(m *encryption.Manager) (*EncryptedItem, error) {
+func (u *Item) Encrypt(m *encryption.Manager, userID user.ID) (*EncryptedItem, error) {
 	dekH := encryption.NewDEK()
 	dek := encryption.NewEncryptor(dekH)
 
-	accessTokenEncrypted, err := encryption.EncryptStringIfNonNil(dek, m.AdditionalData, &u.AccessToken)
+	accessTokenEncrypted, err := encryption.EncryptStringIfNonNil(dek, []byte(userID), &u.AccessToken)
 	if err != nil {
 		return nil, err
 	}
