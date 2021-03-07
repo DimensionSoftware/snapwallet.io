@@ -95,13 +95,13 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			u = user.User{
 				Phone:           &phone,
 				PhoneVerifiedAt: &now,
-			}.WithDefaults()
+			}.WithDefaults(now)
 		} else {
 			email := user.Email(emailOrPhone)
 			u = user.User{
 				Email:           &email,
 				EmailVerifiedAt: &now,
-			}.WithDefaults()
+			}.WithDefaults(now)
 		}
 
 		err = db.SaveUser(ctx, nil, &u)

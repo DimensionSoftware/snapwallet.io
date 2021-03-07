@@ -76,14 +76,14 @@ type User struct {
 }
 
 // WithDefaults provides defaults for User
-func (u User) WithDefaults() User {
+func (u User) WithDefaults(now time.Time) User {
 	newU := u
 	if u.ID == "" {
 		newU.ID = ID(xid.New().String())
 	}
 
 	if (u.CreatedAt == time.Time{}) {
-		newU.CreatedAt = time.Now()
+		newU.CreatedAt = now
 	}
 
 	return newU
