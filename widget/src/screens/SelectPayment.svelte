@@ -7,6 +7,7 @@
   import FaIcon from 'svelte-awesome'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
   import PaymentCard from '../components/cards/PaymentCard.svelte'
+  import PlaidBanner from '../components/PlaidBanner.svelte'
   import { Routes } from '../constants'
 </script>
 
@@ -23,6 +24,7 @@
         <FaIcon data={faUniversity} />
       </div>
     </PaymentCard>
+    <PlaidBanner />
   </ModalBody>
   <ModalFooter />
 </ModalContent>

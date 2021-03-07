@@ -32,6 +32,7 @@ java -jar cloud-firestore-emulator-v1.11.7.jar
 ### Full-Feature Emulator (port 8080 & 4000)
 boots an additional gui server on port `4000` which allows you to brows, view, and edit data in the emulation db.
 ```bash
+curl -sL https://firebase.tools | bash
 firebase login
 firebase emulators:start
 ```
@@ -57,6 +58,8 @@ this is required when wiring up new dependencies into our server container
 ```bash
 make wire
 ```
+### Swagger Documents
+http://localhost:5100/swagger
 
 ### LINKS
 https://docs.microsoft.com/en-us/sql/relational-databases/security/encryption/always-encrypted-cryptography?view=sql-server-ver15

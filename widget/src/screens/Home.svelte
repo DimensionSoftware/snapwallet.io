@@ -172,7 +172,7 @@
   visible={selectorVisible}
   headerTitle="Select Asset"
 >
-  <div class="cryptocurrencies-container">
+  <div class="scroll cryptocurrencies-container">
     {#each cryptoCurrencies as cryptoCurrency (cryptoCurrency.ticker)}
       <div style="margin: 0.5rem 0">
         <Label>
@@ -189,13 +189,15 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
 
+  .scroll {
+    overflow-y: scroll;
+  }
   .cryptocurrencies-container {
     position: relative;
     height: 100%;
     width: 100%;
     padding: 0 0.5rem;
     margin-top: 1rem;
-    overflow-y: scroll;
   }
 
   .exchange-rate-container {

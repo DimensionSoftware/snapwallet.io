@@ -153,8 +153,8 @@
   }
 
   #modal-body {
-    width: 320px;
-    height: 540px;
+    width: 360px;
+    height: 608px;
     background: var(--theme-modal-background);
     padding: 1rem;
     border-radius: 1rem;
