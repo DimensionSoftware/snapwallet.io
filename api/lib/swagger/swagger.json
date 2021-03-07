@@ -235,6 +235,11 @@
         },
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       },
       "patch": {

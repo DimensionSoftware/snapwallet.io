@@ -259,7 +259,15 @@ func (db Db) SaveProfileData(ctx context.Context, tx *firestore.Transaction, use
 func (db Db) GetAllProfileData(ctx context.Context, tx *firestore.Transaction, userID user.ID) (profiledata.ProfileDatas, error) {
 	profile := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
 
-	docs, err := tx.Documents(profile).GetAll()
+	var (
+		docs []*firestore.DocumentSnapshot
+		err  error
+	)
+	if tx == nil {
+		docs, err = profile.Documents(ctx).GetAll()
+	} else {
+		docs, err = tx.Documents(profile).GetAll()
+	}
 	if err != nil {
 		return []profiledata.ProfileData{}, err
 	}

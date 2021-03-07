@@ -510,6 +510,21 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	}, nil
 }
 
+// ViewerProfileData is an rpc handler
+func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*proto.ProfileDataInfo, error) {
+	userID, err := GetUserIDFromIncomingContext(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	profile, err := s.Db.GetAllProfileData(ctx, nil, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	return profile.GetProfileDataInfo(), nil
+}
+
 // WyreCreateAccount is an rpc handler
 func (s *Server) WyreCreateAccount(ctx context.Context, req *proto.WyreCreateAccountRequest) (*proto.WyreCreateAccountResponse, error) {
 	userID, err := GetUserIDFromIncomingContext(ctx)

@@ -340,7 +340,12 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
 
 		// Body Params
 
+        let authMethod = null;
         // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
 
         return requestContext;
     }
