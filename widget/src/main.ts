@@ -47,15 +47,19 @@ function getAPIClient(newToken?: string): FluxApi {
     return (window.__api = genAPIClient(newToken))
   }
 
+  const token = getFluxSession()
+
   if (!window.__api) {
-    return (window.__api = genAPIClient(getFluxSession()))
+    return (window.__api = genAPIClient(token))
   }
 
   // Remove token when invalid
-  try {
-    window.__api.fluxViewerData()
-  } catch (e) {
-    setFluxSession('')
+  if (getFluxSession() !== '') {
+    try {
+      window.__api.fluxViewerData()
+    } catch (e) {
+      setFluxSession('')
+    }
   }
 
   return window.__api

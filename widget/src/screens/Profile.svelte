@@ -36,7 +36,7 @@
         ssn: socialSecurityNumber,
         dateOfBirth: birthDate,
         // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
-        legalName: `${firstName} ${lastName}`
+        legalName: `${firstName} ${lastName}`,
       })
       .then(() => {
         push('/overview')
