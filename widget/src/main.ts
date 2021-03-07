@@ -44,22 +44,23 @@ function genAPIClient(token?: string): FluxApi {
 function getAPIClient(newToken?: string): FluxApi {
   if (newToken) {
     setFluxSession(newToken)
-    return (window.__api = genAPIClient(newToken))
   }
 
-  const token = getFluxSession()
-
-  if (!window.__api) {
-    return (window.__api = genAPIClient(token))
+  if (newToken || !window.__api) {
+    window.__api = genAPIClient(newToken)
   }
 
   // Remove token when invalid
+  console.log('S', getFluxSession())
   if (getFluxSession() !== '') {
-    try {
-      window.__api.fluxViewerData()
-    } catch (e) {
-      setFluxSession('')
-    }
+    window.__api
+      .fluxViewerData()
+      .then(resp => {
+        console.log('resp', resp)
+      })
+      .catch(e => {
+        setFluxSession('')
+      })
   }
 
   return window.__api
