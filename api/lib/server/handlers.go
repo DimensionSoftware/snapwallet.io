@@ -614,14 +614,9 @@ func (s *Server) ChangeViewerEmail(ctx context.Context, req *proto.ChangeViewerE
 
 // ChangeViewerPhone is an rpc handler
 func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerPhoneRequest) (*emptypb.Empty, error) {
-	userID := GetUserIDFromIncomingContext(ctx)
-	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
-		log.Println(err)
-		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
-	}
-	if u == nil {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+		return nil, err
 	}
 
 	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.Phone)
