@@ -55,12 +55,12 @@
     top: 2em;
     small {
       display: inline-block;
-      margin-bottom: .8em;
+      margin-bottom: 0.8em;
       padding: 0 0.5em;
     }
     .social-proof-logo {
       border-radius: 1.25em;
-      padding: 4px 0 0 12px;
+      padding: 4px 0 0 25px;
       background: #555;
       display: flex;
       flex-direction: row;
