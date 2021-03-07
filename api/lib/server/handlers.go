@@ -32,14 +32,14 @@ import (
 
 // ViewerData is an rpc handler
 func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.ViewerDataResponse, error) {
-	userID, err := GetUserIDFromIncomingContext(ctx)
-	if err != nil {
-		return nil, err
+	userID := GetUserIDFromIncomingContext(ctx)
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
 	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
 	if err != nil || u == nil {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
 	user := proto.User{
@@ -212,12 +212,12 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 
 // PlaidConnectBankAccounts is an rpc handler
 func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
-	userID, err := GetUserIDFromIncomingContext(ctx)
-	if err != nil {
-		return nil, err
+	userID := GetUserIDFromIncomingContext(ctx)
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
-	err = req.Validate()
+	err := req.Validate()
 	if err != nil {
 		return nil, err
 	}
@@ -257,9 +257,9 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 
 // PlaidCreateLinkToken is an rpc handler
 func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreateLinkTokenRequest) (*proto.PlaidCreateLinkTokenResponse, error) {
-	userID, err := GetUserIDFromIncomingContext(ctx)
-	if err != nil {
-		return nil, err
+	userID := GetUserIDFromIncomingContext(ctx)
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
 	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
@@ -313,9 +313,9 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 
 // SaveProfileData is an rpc handler
 func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileDataRequest) (*proto.ProfileDataInfo, error) {
-	userID, err := GetUserIDFromIncomingContext(ctx)
-	if err != nil {
-		return nil, err
+	userID := GetUserIDFromIncomingContext(ctx)
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
 	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
@@ -512,9 +512,9 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 // ViewerProfileData is an rpc handler
 func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*proto.ProfileDataInfo, error) {
-	userID, err := GetUserIDFromIncomingContext(ctx)
-	if err != nil {
-		return nil, err
+	userID := GetUserIDFromIncomingContext(ctx)
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
 	profile, err := s.Db.GetAllProfileData(ctx, nil, userID)
@@ -527,9 +527,9 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 
 // WyreCreateAccount is an rpc handler
 func (s *Server) WyreCreateAccount(ctx context.Context, req *proto.WyreCreateAccountRequest) (*proto.WyreCreateAccountResponse, error) {
-	userID, err := GetUserIDFromIncomingContext(ctx)
-	if err != nil {
-		return nil, err
+	userID := GetUserIDFromIncomingContext(ctx)
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
 	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
