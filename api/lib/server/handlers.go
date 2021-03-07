@@ -406,12 +406,14 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	}
 
 	return &proto.ProfileDataInfo{
-		LegalName:   &proto.ProfileDataItemInfo{},
-		Ssn:         &proto.ProfileDataItemInfo{},
-		DateOfBirth: &proto.ProfileDataItemInfo{},
-		Address:     &proto.ProfileDataItemInfo{},
-		Email:       email,
-		Phone:       phone,
+		/*
+			LegalName:   &proto.ProfileDataItemInfo{},
+			Ssn:         &proto.ProfileDataItemInfo{},
+			DateOfBirth: &proto.ProfileDataItemInfo{},
+			Address:     &proto.ProfileDataItemInfo{},
+		*/
+		Email: email,
+		Phone: phone,
 	}, nil
 }
 
