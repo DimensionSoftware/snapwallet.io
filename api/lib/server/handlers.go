@@ -615,7 +615,12 @@ func (s *Server) ChangeViewerEmail(ctx context.Context, req *proto.ChangeViewerE
 // ChangeViewerPhone is an rpc handler
 func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerPhoneRequest) (*emptypb.Empty, error) {
 	userID := GetUserIDFromIncomingContext(ctx)
-	if userID == "" {
+	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
+	}
+	if u == nil {
 		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
@@ -656,10 +661,20 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
-	if passcode.EmailOrPhone != req.Phone {
+	if passcode.EmailOrPhone != loginValue {
 		return nil, status.Errorf(codes.InvalidArgument, "the code provided does not correlate with the desired phone")
 	}
 
-	// TODO actually update user
+	now := time.Now()
+	phone := user.Phone(loginValue)
+	u.Phone = &phone
+	u.PhoneVerifiedAt = &now
+
+	err = s.Db.SaveUser(ctx, nil, u)
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
+	}
+
 	return &emptypb.Empty{}, nil
 }

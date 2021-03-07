@@ -53,61 +53,58 @@ func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kin
 	return &otp, nil
 }
 
-// CreateUser creates a user object
-func (db Db) CreateUser(ctx context.Context, tx *firestore.Transaction, email *string, phone *string, emailVerified bool, phoneVerified bool) (*user.User, error) {
-	id := user.ID(xid.New().String())
-
-	now := time.Now()
-	u := user.User{
-		ID:        id,
-		Email:     (*user.Email)(email),
-		Phone:     (*user.Phone)(phone),
-		CreatedAt: now,
-	}
-
-	if emailVerified {
-		u.EmailVerifiedAt = &now
-	}
-
-	if phoneVerified {
-		u.PhoneVerifiedAt = &now
-	}
-
+// SaveUser saves a user object (upsert/put semantics)
+func (db Db) SaveUser(ctx context.Context, tx *firestore.Transaction, u *user.User) error {
 	encryptedUser, err := u.Encrypt(db.EncryptionManager, u.ID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	_, err = db.Firestore.Collection("users").Doc(string(id)).Set(ctx, encryptedUser)
-	if err != nil {
-		return nil, err
+	ref := db.Firestore.Collection("users").Doc(string(u.ID))
+	if tx == nil {
+		_, err = ref.Set(ctx, encryptedUser)
+	} else {
+		err = tx.Set(ref, encryptedUser)
 	}
 
-	return &u, nil
+	return err
 }
 
 // GetOrCreateUser creates a user object
 func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.LoginKind, emailOrPhone string) (*user.User, error) {
-	var u *user.User
+	var u user.User
 
 	err := db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		var err error
 
-		u, err = db.GetUserByEmailOrPhone(ctx, tx, emailOrPhone)
+		uptr, err := db.GetUserByEmailOrPhone(ctx, tx, emailOrPhone)
 		if err != nil {
 			return err
 		}
-		if u != nil {
+		if uptr != nil {
+			u = *uptr
 			log.Printf("User found: %#v", u)
+
 			return nil
 		}
 
+		now := time.Now()
 		// first time login means that we verified them with otp
 		if loginKind == onetimepasscode.LoginKindPhone {
-			u, err = db.CreateUser(ctx, tx, nil, &emailOrPhone, false, true)
+			phone := user.Phone(emailOrPhone)
+			u = user.User{
+				Phone:           &phone,
+				PhoneVerifiedAt: &now,
+			}.WithDefaults()
 		} else {
-			u, err = db.CreateUser(ctx, tx, &emailOrPhone, nil, true, false)
+			email := user.Email(emailOrPhone)
+			u = user.User{
+				Email:           &email,
+				EmailVerifiedAt: &now,
+			}.WithDefaults()
 		}
+
+		err = db.SaveUser(ctx, nil, &u)
 		if err != nil {
 			return err
 		}
@@ -120,7 +117,7 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 		return nil, err
 	}
 
-	return u, nil
+	return &u, nil
 }
 
 // GetUserByID gets a user object by id

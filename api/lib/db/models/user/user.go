@@ -6,6 +6,7 @@ import (
 	"github.com/google/tink/go/tink"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
+	"github.com/rs/xid"
 )
 
 // PhoneEncrypted represents encrypted phone number
@@ -72,6 +73,20 @@ type User struct {
 	Phone           *Phone
 	PhoneVerifiedAt *time.Time
 	CreatedAt       time.Time
+}
+
+// WithDefaults provides defaults for User
+func (u User) WithDefaults() User {
+	newU := u
+	if u.ID == "" {
+		newU.ID = ID(xid.New().String())
+	}
+
+	if (u.CreatedAt == time.Time{}) {
+		newU.CreatedAt = time.Now()
+	}
+
+	return newU
 }
 
 // Decrypt decrypts the user
