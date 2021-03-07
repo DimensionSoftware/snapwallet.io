@@ -404,7 +404,7 @@
         "code": {
           "type": "string"
         },
-        "email": {
+        "phone": {
           "type": "string"
         }
       }

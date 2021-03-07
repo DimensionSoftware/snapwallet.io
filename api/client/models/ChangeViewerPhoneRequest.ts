@@ -14,7 +14,7 @@ import { HttpFile } from '../http/http';
 
 export class ChangeViewerPhoneRequest {
     'code'?: string;
-    'email'?: string;
+    'phone'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -26,8 +26,8 @@ export class ChangeViewerPhoneRequest {
             "format": ""
         },
         {
-            "name": "email",
-            "baseName": "email",
+            "name": "phone",
+            "baseName": "phone",
             "type": "string",
             "format": ""
         }    ];

@@ -601,3 +601,65 @@ func (s *Server) UploadFile(ctx context.Context, req *httpbody.HttpBody) (*httpb
 }
 
 */
+
+// ChangeViewerEmail is an rpc handler
+func (s *Server) ChangeViewerEmail(ctx context.Context, req *proto.ChangeViewerEmailRequest) (*emptypb.Empty, error) {
+	userID := GetUserIDFromIncomingContext(ctx)
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
+// ChangeViewerPhone is an rpc handler
+func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerPhoneRequest) (*emptypb.Empty, error) {
+	userID := GetUserIDFromIncomingContext(ctx)
+	if userID == "" {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	}
+
+	loginKind, loginValue, err := ValidateAndNormalizeLogin(req.Phone)
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	}
+	if loginKind != onetimepasscode.LoginKindPhone {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	}
+
+	passcodes := s.Firestore.Collection("one-time-passcodes").
+		Where("emailOrPhone", "==", loginValue).
+		Where("code", "==", req.Code).
+		Where("createdAt", ">", time.Now().Add(-10*time.Minute)).
+		Documents(ctx)
+
+	snap, err := passcodes.Next()
+	if err == iterator.Done {
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(onetimepasscode.LoginKindPhone))
+	}
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	}
+
+	var passcode onetimepasscode.OneTimePasscode
+	err = snap.DataTo(&passcode)
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	}
+
+	_, err = snap.Ref.Delete(ctx)
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	}
+
+	if passcode.EmailOrPhone != req.Phone {
+		return nil, status.Errorf(codes.InvalidArgument, "the code provided does not correlate with the desired phone")
+	}
+
+	// TODO actually update user
+	return &emptypb.Empty{}, nil
+}

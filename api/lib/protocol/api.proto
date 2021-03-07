@@ -224,7 +224,7 @@ message ChangeViewerEmailRequest {
 
 message ChangeViewerPhoneRequest {
   string code = 1;
-  string email = 2;
+  string phone = 2;
 }
 
 service Flux {
