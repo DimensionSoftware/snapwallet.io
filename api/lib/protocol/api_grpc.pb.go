@@ -27,6 +27,14 @@ type FluxClient interface {
 	//
 	// Provides user (viewer) data associated with the access token
 	ViewerProfileData(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ProfileDataInfo, error)
+	// Change users email (viewer based on jwt)
+	//
+	// requires an otp code and the desired email address change
+	ChangeViewerEmail(ctx context.Context, in *ChangeViewerEmailRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	// Change users phone (viewer based on jwt)
+	//
+	// requires an otp code and the desired phone address change
+	ChangeViewerPhone(ctx context.Context, in *ChangeViewerPhoneRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// Get pricing data
 	//
 	// Provides pricing data for all markets with rate maps
@@ -76,6 +84,24 @@ func (c *fluxClient) ViewerData(ctx context.Context, in *emptypb.Empty, opts ...
 func (c *fluxClient) ViewerProfileData(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*ProfileDataInfo, error) {
 	out := new(ProfileDataInfo)
 	err := c.cc.Invoke(ctx, "/Flux/ViewerProfileData", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) ChangeViewerEmail(ctx context.Context, in *ChangeViewerEmailRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/Flux/ChangeViewerEmail", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) ChangeViewerPhone(ctx context.Context, in *ChangeViewerPhoneRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/Flux/ChangeViewerPhone", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -157,6 +183,14 @@ type FluxServer interface {
 	//
 	// Provides user (viewer) data associated with the access token
 	ViewerProfileData(context.Context, *emptypb.Empty) (*ProfileDataInfo, error)
+	// Change users email (viewer based on jwt)
+	//
+	// requires an otp code and the desired email address change
+	ChangeViewerEmail(context.Context, *ChangeViewerEmailRequest) (*emptypb.Empty, error)
+	// Change users phone (viewer based on jwt)
+	//
+	// requires an otp code and the desired phone address change
+	ChangeViewerPhone(context.Context, *ChangeViewerPhoneRequest) (*emptypb.Empty, error)
 	// Get pricing data
 	//
 	// Provides pricing data for all markets with rate maps
@@ -196,6 +230,12 @@ func (UnimplementedFluxServer) ViewerData(context.Context, *emptypb.Empty) (*Vie
 }
 func (UnimplementedFluxServer) ViewerProfileData(context.Context, *emptypb.Empty) (*ProfileDataInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ViewerProfileData not implemented")
+}
+func (UnimplementedFluxServer) ChangeViewerEmail(context.Context, *ChangeViewerEmailRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeViewerEmail not implemented")
+}
+func (UnimplementedFluxServer) ChangeViewerPhone(context.Context, *ChangeViewerPhoneRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeViewerPhone not implemented")
 }
 func (UnimplementedFluxServer) PricingData(context.Context, *PricingDataRequest) (*PricingDataResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PricingData not implemented")
@@ -263,6 +303,42 @@ func _Flux_ViewerProfileData_Handler(srv interface{}, ctx context.Context, dec f
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FluxServer).ViewerProfileData(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_ChangeViewerEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeViewerEmailRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).ChangeViewerEmail(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/ChangeViewerEmail",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).ChangeViewerEmail(ctx, req.(*ChangeViewerEmailRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_ChangeViewerPhone_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeViewerPhoneRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).ChangeViewerPhone(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/ChangeViewerPhone",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).ChangeViewerPhone(ctx, req.(*ChangeViewerPhoneRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -407,6 +483,14 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ViewerProfileData",
 			Handler:    _Flux_ViewerProfileData_Handler,
+		},
+		{
+			MethodName: "ChangeViewerEmail",
+			Handler:    _Flux_ChangeViewerEmail_Handler,
+		},
+		{
+			MethodName: "ChangeViewerPhone",
+			Handler:    _Flux_ChangeViewerPhone_Handler,
 		},
 		{
 			MethodName: "PricingData",

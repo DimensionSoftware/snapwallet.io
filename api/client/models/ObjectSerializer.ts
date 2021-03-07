@@ -1,4 +1,6 @@
 export * from './Address';
+export * from './ChangeViewerEmailRequest';
+export * from './ChangeViewerPhoneRequest';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
@@ -18,6 +20,8 @@ export * from './UserFlags';
 export * from './ViewerDataResponse';
 
 import { Address } from './Address';
+import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
+import { ChangeViewerPhoneRequest } from './ChangeViewerPhoneRequest';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
@@ -61,6 +65,8 @@ let enumsMap: Set<string> = new Set<string>([
 
 let typeMap: {[index: string]: any} = {
     "Address": Address,
+    "ChangeViewerEmailRequest": ChangeViewerEmailRequest,
+    "ChangeViewerPhoneRequest": ChangeViewerPhoneRequest,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,
     "OneTimePasscodeVerifyResponse": OneTimePasscodeVerifyResponse,

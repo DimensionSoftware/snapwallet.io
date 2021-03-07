@@ -12,6 +12,8 @@ http/isomorphic-fetch.ts
 index.ts
 middleware.ts
 models/Address.ts
+models/ChangeViewerEmailRequest.ts
+models/ChangeViewerPhoneRequest.ts
 models/ObjectSerializer.ts
 models/OneTimePasscodeRequest.ts
 models/OneTimePasscodeVerifyRequest.ts

@@ -6,6 +6,8 @@ import {ObjectSerializer} from '../models/ObjectSerializer';
 import {ApiException} from './exception';
 import {isCodeInRange} from '../util';
 
+import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
+import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
@@ -22,6 +24,94 @@ import { ViewerDataResponse } from '../models/ViewerDataResponse';
  */
 export class FluxApiRequestFactory extends BaseAPIRequestFactory {
 	
+    /**
+     * requires an otp code and the desired email address change
+     * Change users email (viewer based on jwt)
+     * @param body 
+     */
+    public async fluxChangeViewerEmail(body: ChangeViewerEmailRequest, options?: Configuration): Promise<RequestContext> {
+		let config = options || this.configuration;
+		
+        // verify required parameter 'body' is not null or undefined
+        if (body === null || body === undefined) {
+            throw new RequiredError('Required parameter body was null or undefined when calling fluxChangeViewerEmail.');
+        }
+
+		
+		// Path Params
+    	const localVarPath = '/viewer/email';
+
+		// Make Request Context
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.PUT);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+        // Query Params
+	
+		// Header Params
+	
+		// Form Params
+
+
+		// Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(body, "ChangeViewerEmailRequest", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
+
+        // Apply auth methods
+
+        return requestContext;
+    }
+
+    /**
+     * requires an otp code and the desired phone address change
+     * Change users phone (viewer based on jwt)
+     * @param body 
+     */
+    public async fluxChangeViewerPhone(body: ChangeViewerPhoneRequest, options?: Configuration): Promise<RequestContext> {
+		let config = options || this.configuration;
+		
+        // verify required parameter 'body' is not null or undefined
+        if (body === null || body === undefined) {
+            throw new RequiredError('Required parameter body was null or undefined when calling fluxChangeViewerPhone.');
+        }
+
+		
+		// Path Params
+    	const localVarPath = '/viewer/phone';
+
+		// Make Request Context
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.PUT);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+        // Query Params
+	
+		// Header Params
+	
+		// Form Params
+
+
+		// Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(body, "ChangeViewerPhoneRequest", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
+
+        // Apply auth methods
+
+        return requestContext;
+    }
+
     /**
      * Will cause your email or phone to receive a one time passcode. This can be used in the verify step to obtain a token for login
      * Post email or phone in exchange for a one time passcode
@@ -405,6 +495,80 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
 
 export class FluxApiResponseProcessor {
 
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to fluxChangeViewerEmail
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async fluxChangeViewerEmail(response: ResponseContext): Promise<any > {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "any", ""
+            ) as any;
+            return body;
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: RpcStatus = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "RpcStatus", ""
+            ) as RpcStatus;
+            throw new ApiException<RpcStatus>(0, body);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "any", ""
+            ) as any;
+            return body;
+        }
+
+        let body = response.body || "";
+    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
+    }
+			
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to fluxChangeViewerPhone
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async fluxChangeViewerPhone(response: ResponseContext): Promise<any > {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "any", ""
+            ) as any;
+            return body;
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: RpcStatus = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "RpcStatus", ""
+            ) as RpcStatus;
+            throw new ApiException<RpcStatus>(0, body);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "any", ""
+            ) as any;
+            return body;
+        }
+
+        let body = response.body || "";
+    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
+    }
+			
     /**
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects

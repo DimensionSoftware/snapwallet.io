@@ -3,6 +3,8 @@ import * as models from '../models/all';
 import { Configuration} from '../configuration'
 
 import { Address } from '../models/Address';
+import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
+import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
@@ -35,6 +37,26 @@ export class PromiseFluxApi {
         this.api = new ObservableFluxApi(configuration, requestFactory, responseProcessor);
     }
 
+    /**
+     * requires an otp code and the desired email address change
+     * Change users email (viewer based on jwt)
+     * @param body 
+     */
+    public fluxChangeViewerEmail(body: ChangeViewerEmailRequest, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxChangeViewerEmail(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * requires an otp code and the desired phone address change
+     * Change users phone (viewer based on jwt)
+     * @param body 
+     */
+    public fluxChangeViewerPhone(body: ChangeViewerPhoneRequest, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxChangeViewerPhone(body, options);
+        return result.toPromise();
+    }
+	
     /**
      * Will cause your email or phone to receive a one time passcode. This can be used in the verify step to obtain a token for login
      * Post email or phone in exchange for a one time passcode

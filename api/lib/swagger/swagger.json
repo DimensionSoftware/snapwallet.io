@@ -214,6 +214,74 @@
         ]
       }
     },
+    "/viewer/email": {
+      "put": {
+        "summary": "Change users email (viewer based on jwt)",
+        "description": "requires an otp code and the desired email address change",
+        "operationId": "Flux_ChangeViewerEmail",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChangeViewerEmailRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/viewer/phone": {
+      "put": {
+        "summary": "Change users phone (viewer based on jwt)",
+        "description": "requires an otp code and the desired phone address change",
+        "operationId": "Flux_ChangeViewerPhone",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ChangeViewerPhoneRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/viewer/profile": {
       "get": {
         "summary": "Get viewer profile data",
@@ -348,6 +416,28 @@
       },
       "description": "A user's residential address which belongs to the profile (they can have many.)",
       "title": "Address"
+    },
+    "ChangeViewerEmailRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
+    "ChangeViewerPhoneRequest": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
     },
     "OneTimePasscodeRequest": {
       "type": "object",

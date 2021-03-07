@@ -11,19 +11,6 @@ message OrganizationApplication {
   string name = 2;
 }
 
-// KYCProfile
-//
-// A user's KYC profile (they should only have one of these)
-message KYCProfile {
-  string id = 1;
-  string given_name = 2;
-  string family_name = 3;
-  string date_of_birth = 4; // (YYYY-MM-DD)
-  string social_security_number = 5;  // (XXX-XX-XXX for US users only)
-  repeated Address addresses = 6;
-  repeated ThirdPartyUserAccount third_party_user_accounts = 7;
-}
-
 // User
 //
 // A user which is shared across customer applications
@@ -53,18 +40,6 @@ message Organization {
   repeated OrganizationApplication applications = 4;
 }
 
-// ThirdPartyUserAccount
-// 
-// An object representing the user's account at a third party API
-message ThirdPartyUserAccount {
-  string id = 1;
-  string partner_id = 2; // (an identifier for the third party API)
-  string external_id = 3; // (an identifier for the account in the third party system)
-  string credential_id = 4; // (an identifier for the user's third party credentials when available. this maps to KMS?)
-  string status = 5;
-  repeated PaymentMethod payment_methods = 6;
-}
-
 // Address
 //
 // A user's residential address which belongs to the profile (they can have many.)
@@ -87,7 +62,6 @@ message PaymentMethod {
   string type = 3;
   string status = 4;
 }
-
 
 // ViewerDataRequest
 //
@@ -243,6 +217,16 @@ enum ProfileDataItemStatus {
   S_APPROVED = 4;
 }
 
+message ChangeViewerEmailRequest {
+  string code = 1;
+  string email = 2;
+}
+
+message ChangeViewerPhoneRequest {
+  string code = 1;
+  string email = 2;
+}
+
 service Flux {
   // Get viewer data
   //
@@ -259,6 +243,26 @@ service Flux {
   rpc ViewerProfileData(google.protobuf.Empty) returns (ProfileDataInfo) {
     option (google.api.http) = {
       get: "/viewer/profile"
+    };
+  }
+
+  // Change users email (viewer based on jwt)
+  //
+  // requires an otp code and the desired email address change
+  rpc ChangeViewerEmail(ChangeViewerEmailRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/viewer/email"
+      body: "*"
+    };
+  }
+
+  // Change users phone (viewer based on jwt)
+  //
+  // requires an otp code and the desired phone address change
+  rpc ChangeViewerPhone(ChangeViewerPhoneRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      put: "/viewer/phone"
+      body: "*"
     };
   }
 

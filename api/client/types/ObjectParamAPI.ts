@@ -3,6 +3,8 @@ import * as models from '../models/all';
 import { Configuration} from '../configuration'
 
 import { Address } from '../models/Address';
+import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
+import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
@@ -23,6 +25,24 @@ import { ViewerDataResponse } from '../models/ViewerDataResponse';
 
 import { ObservableFluxApi } from "./ObservableAPI";
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
+
+export interface FluxApiFluxChangeViewerEmailRequest {
+    /**
+     * 
+     * @type ChangeViewerEmailRequest
+     * @memberof FluxApifluxChangeViewerEmail
+     */
+    body: ChangeViewerEmailRequest
+}
+
+export interface FluxApiFluxChangeViewerPhoneRequest {
+    /**
+     * 
+     * @type ChangeViewerPhoneRequest
+     * @memberof FluxApifluxChangeViewerPhone
+     */
+    body: ChangeViewerPhoneRequest
+}
 
 export interface FluxApiFluxOneTimePasscodeRequest {
     /**
@@ -95,6 +115,24 @@ export class ObjectFluxApi {
         this.api = new ObservableFluxApi(configuration, requestFactory, responseProcessor);
 	}
 
+    /**
+     * requires an otp code and the desired email address change
+     * Change users email (viewer based on jwt)
+     * @param param the request object
+     */
+    public fluxChangeViewerEmail(param: FluxApiFluxChangeViewerEmailRequest, options?: Configuration): Promise<any> {
+        return this.api.fluxChangeViewerEmail(param.body,  options).toPromise();
+    }
+	
+    /**
+     * requires an otp code and the desired phone address change
+     * Change users phone (viewer based on jwt)
+     * @param param the request object
+     */
+    public fluxChangeViewerPhone(param: FluxApiFluxChangeViewerPhoneRequest, options?: Configuration): Promise<any> {
+        return this.api.fluxChangeViewerPhone(param.body,  options).toPromise();
+    }
+	
     /**
      * Will cause your email or phone to receive a one time passcode. This can be used in the verify step to obtain a token for login
      * Post email or phone in exchange for a one time passcode

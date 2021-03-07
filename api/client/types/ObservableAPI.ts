@@ -5,6 +5,8 @@ import { Observable, of, from } from '../rxjsStub';
 import {mergeMap, map} from  '../rxjsStub';
 
 import { Address } from '../models/Address';
+import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
+import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
@@ -39,6 +41,54 @@ export class ObservableFluxApi {
         this.responseProcessor = responseProcessor || new FluxApiResponseProcessor();
     }
 
+    /**
+     * requires an otp code and the desired email address change
+     * Change users email (viewer based on jwt)
+     * @param body 
+     */
+    public fluxChangeViewerEmail(body: ChangeViewerEmailRequest, options?: Configuration): Observable<any> {
+    	const requestContextPromise = this.requestFactory.fluxChangeViewerEmail(body, options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxChangeViewerEmail(rsp)));
+	    	}));
+    }
+	
+    /**
+     * requires an otp code and the desired phone address change
+     * Change users phone (viewer based on jwt)
+     * @param body 
+     */
+    public fluxChangeViewerPhone(body: ChangeViewerPhoneRequest, options?: Configuration): Observable<any> {
+    	const requestContextPromise = this.requestFactory.fluxChangeViewerPhone(body, options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxChangeViewerPhone(rsp)));
+	    	}));
+    }
+	
     /**
      * Will cause your email or phone to receive a one time passcode. This can be used in the verify step to obtain a token for login
      * Post email or phone in exchange for a one time passcode
