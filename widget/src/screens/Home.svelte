@@ -201,7 +201,11 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
 
+  h5 {
+    margin: 0;
+  }
   .scroll {
+
     overflow-y: scroll;
   }
   .cryptocurrencies-container {

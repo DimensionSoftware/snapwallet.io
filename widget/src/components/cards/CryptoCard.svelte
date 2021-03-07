@@ -81,6 +81,10 @@
           bottom: 0;
         }
       }
+      .crypto-arrow {
+        transform: translateX(2px);
+        transition: transform cubic-bezier(0.23, 1.2, 0.32, 1) 0.4s;
+      }
     }
   }
 

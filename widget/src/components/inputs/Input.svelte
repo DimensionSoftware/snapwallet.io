@@ -85,7 +85,7 @@
       ~ .bg {
         position: absolute;
         content: '';
-        top: 92%;
+        top: 80%;
         bottom: -1px;
         left: -1px;
         right: -1px;
@@ -96,7 +96,7 @@
         transition: opacity 0.3s ease-out 0.2s, transform 0.4s ease-in 0.1s;
       }
       &:valid ~ .bg {
-        opacity: 1;
+        opacity: .5;
         transform: opacity(1), scale(1);
         transition: none;
       }
