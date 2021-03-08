@@ -241,9 +241,14 @@ func (db Db) SaveProfileData(ctx context.Context, tx *firestore.Transaction, use
 	if err != nil {
 		return "", err
 	}
+
 	ref := profile.Doc(string(out.ID))
 
-	err = tx.Set(ref, out)
+	if tx == nil {
+		_, err = ref.Set(ctx, out)
+	} else {
+		err = tx.Set(ref, out)
+	}
 	if err != nil {
 		return "", err
 	}
