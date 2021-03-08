@@ -4,7 +4,10 @@ run: grpcserver  grpcgateway
 	hivemind
 
 test:
-	go test -v ./...
+	go test -coverprofile cover.out -v ./...
+
+coverage: test
+	go tool cover -html cover.out
 
 wire:
 	bin/generate-wire-code
