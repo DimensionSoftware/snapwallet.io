@@ -101,7 +101,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton>Enter Your Code</ModalHeader>
+    <ModalHeader>Enter Your Code</ModalHeader>
     <Label label="Your Email Code">
       <Input
         inputmode="numeric"
