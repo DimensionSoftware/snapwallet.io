@@ -651,3 +651,15 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 
 	return &emptypb.Empty{}, nil
 }
+
+// UploadFile is an rpc handler
+func (s *Server) UploadFile(ctx context.Context, req *proto.UploadFileRequest) (*proto.UploadFileResponse, error) {
+	log.Println(req.Filename)
+	log.Println("      mime type:", req.Mimetype)
+	log.Println("size (reported):", req.Size)
+	log.Println("size (verified):", len(req.Body))
+
+	return &proto.UploadFileResponse{
+		FileId: "STUB",
+	}, nil
+}

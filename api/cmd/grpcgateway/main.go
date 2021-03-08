@@ -23,6 +23,9 @@ var (
 var serveSwaggerJSON = serveFileHandler("lib/swagger/swagger.json", "application/json")
 var serveSwaggerUI = serveFileHandler("lib/swagger/swagger-ui.html", "text/html")
 
+// Maximum upload of 25 MB
+const maxUploadSizeBytes = 1024 * 1024 * 25
+
 func run() error {
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
@@ -41,7 +44,7 @@ func run() error {
 	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
 	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
 
-	conn, err := grpc.Dial(*grpcServerEndpoint, grpc.WithInsecure())
+	conn, err := grpc.Dial(*grpcServerEndpoint, grpc.WithInsecure(), grpc.WithMaxMsgSize(maxUploadSizeBytes))
 	if err != nil {
 		return err
 	}
@@ -50,7 +53,7 @@ func run() error {
 	client := proto.NewFluxClient(conn)
 
 	// Upload translator for grpc (accept multipart on frontend)
-	mux.HandlePath("POST", "/upload", uploadFileHandler(client))
+	mux.HandlePath("POST", "/upload", uploadFileHandler(ctx, client))
 
 	return http.ListenAndServe(apiPort(), allowCORS(mux))
 }
@@ -93,21 +96,8 @@ func serveFileHandler(path string, mimeType string) runtime.HandlerFunc {
 	}
 }
 
-func uploadFileHandler(flux proto.FluxClient) runtime.HandlerFunc {
-
-	/*
-			c, err := proto.NewFluxClient(grpcServerEndpoint)
-			if err != nil {
-				log.Fatal(err)
-			}
-
-			c.sendfile...
-		flux.UploadFile()
-	*/
+func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
-
-		// Maximum upload of 25 MB
-		maxUploadSizeBytes := int64(1024 * 1024 * 25)
 
 		r.ParseMultipartForm(maxUploadSizeBytes)
 
@@ -132,6 +122,19 @@ func uploadFileHandler(flux proto.FluxClient) runtime.HandlerFunc {
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
+
+		resp, err := flux.UploadFile(ctx, &proto.UploadFileRequest{
+			Filename: handler.Filename,
+			Mimetype: handler.Header.Get("content-type"),
+			Size:     int32(n),
+			Body:     blob[:n],
+		})
+		if err != nil {
+			log.Println(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+		log.Println("resp: ", resp)
 
 		w.Header().Add("content-type", "application/json")
 		w.Write([]byte(fmt.Sprintf("\"OK %s (%s) : %d bytes\"", handler.Filename, handler.Header, n)))

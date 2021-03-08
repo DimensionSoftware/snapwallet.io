@@ -32,6 +32,9 @@ type Server struct {
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
 
+// Maximum upload of 25 MB
+const maxMsgSizeBytes = 1024 * 1024 * 25
+
 // ProvideServer instantiates a new grpc server
 func ProvideServer(
 	sendgridClient *sendgrid.Client,
