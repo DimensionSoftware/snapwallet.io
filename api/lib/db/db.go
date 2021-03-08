@@ -345,6 +345,24 @@ func (db Db) AckOneTimePasscode(ctx context.Context, loginValue string, code str
 	return &passcode, nil
 }
 
+// HasPlaidItems returns true if the user has plaid items
+func (db Db) HasPlaidItems(ctx context.Context, userID user.ID) (bool, error) {
+	plaidItems := db.Firestore.
+		Collection("users").
+		Doc(string(userID)).Collection("plaidItems").
+		Limit(1).Documents(ctx)
+
+	_, err := plaidItems.Next()
+	if err == iterator.Done {
+		return false, nil
+	}
+	if err != nil {
+		return false, err
+	}
+
+	return true, nil
+}
+
 // CleanAgedPasscodes cleanup aged passcodes; there is no security risk to not running this but it saves on db storage bills
 // returns num of passcodes deleted which were old, or an error if shit goes bad
 func (db Db) CleanAgedPasscodes(ctx context.Context) (int, error) {

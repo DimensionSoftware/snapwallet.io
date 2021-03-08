@@ -11,7 +11,6 @@ import (
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
-	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
@@ -54,20 +53,9 @@ func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.Viewe
 	}
 
 	// todo: factor this out into separate module (db)
-	plaidItems := s.Db.Firestore.
-		Collection("users").
-		Doc(user.Id).Collection("plaidItems").
-		Limit(1).Documents(ctx)
-
-	var hasPlaidItems bool
-
-	_, err = plaidItems.Next()
-	if err == iterator.Done {
-		hasPlaidItems = false
-	} else if err != nil {
+	hasPlaidItems, err := s.Db.HasPlaidItems(ctx, u.ID)
+	if err != nil {
 		return nil, err
-	} else {
-		hasPlaidItems = true
 	}
 
 	flags := proto.UserFlags{
