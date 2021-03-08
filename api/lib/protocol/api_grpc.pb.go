@@ -62,6 +62,10 @@ type FluxClient interface {
 	//
 	// ...
 	WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error)
+	// UploadFile uploads a file and returns a file id
+	//
+	// ...
+	UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileResponse, error)
 }
 
 type fluxClient struct {
@@ -171,6 +175,15 @@ func (c *fluxClient) WyreCreateAccount(ctx context.Context, in *WyreCreateAccoun
 	return out, nil
 }
 
+func (c *fluxClient) UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileResponse, error) {
+	out := new(UploadFileResponse)
+	err := c.cc.Invoke(ctx, "/Flux/UploadFile", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FluxServer is the server API for Flux service.
 // All implementations must embed UnimplementedFluxServer
 // for forward compatibility
@@ -218,6 +231,10 @@ type FluxServer interface {
 	//
 	// ...
 	WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error)
+	// UploadFile uploads a file and returns a file id
+	//
+	// ...
+	UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error)
 	mustEmbedUnimplementedFluxServer()
 }
 
@@ -257,6 +274,9 @@ func (UnimplementedFluxServer) SaveProfileData(context.Context, *SaveProfileData
 }
 func (UnimplementedFluxServer) WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateAccount not implemented")
+}
+func (UnimplementedFluxServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
 }
 func (UnimplementedFluxServer) mustEmbedUnimplementedFluxServer() {}
 
@@ -469,6 +489,24 @@ func _Flux_WyreCreateAccount_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_UploadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UploadFileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).UploadFile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/UploadFile",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).UploadFile(ctx, req.(*UploadFileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // Flux_ServiceDesc is the grpc.ServiceDesc for Flux service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -519,6 +557,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WyreCreateAccount",
 			Handler:    _Flux_WyreCreateAccount_Handler,
+		},
+		{
+			MethodName: "UploadFile",
+			Handler:    _Flux_UploadFile_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
