@@ -332,8 +332,45 @@ func (db Db) AckOneTimePasscode(ctx context.Context, loginValue string, code str
 		return nil, err
 	}
 
+	// put this here for now ;)
+	cleaned, err := db.CleanAgedPasscodes(ctx)
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("Cleaned %d passcodes", cleaned)
+
 	// match found & unmarshalled
 	return &passcode, nil
+}
+
+// CleanAgedPasscodes cleanup aged passcodes; there is no security risk to not running this but it saves on db storage bills
+// returns num of passcodes deleted which were old, or an error if shit goes bad
+func (db Db) CleanAgedPasscodes(ctx context.Context) (int, error) {
+	passcodes := db.Firestore.Collection("one-time-passcodes").
+		Where("createdAt", "<", time.Now().Add(-10*time.Minute)).
+		Documents(ctx)
+
+	batch := db.Firestore.Batch()
+	numDeleted := 0
+	for {
+		doc, err := passcodes.Next()
+		if err == iterator.Done {
+			break
+		}
+		if err != nil {
+			return 0, err
+		}
+
+		batch.Delete(doc.Ref)
+		numDeleted++
+	}
+
+	_, err := batch.Commit(ctx)
+	if err != nil {
+		return 0, err
+	}
+
+	return numDeleted, nil
 }
 
 /*
