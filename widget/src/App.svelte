@@ -3,10 +3,11 @@
   import wrap from 'svelte-spa-router/wrap'
   import Toast from './components/Toast.svelte'
   import Home from './screens/Home.svelte'
-  import Checkout from './screens/Checkout.svelte'
+  import SendOTP from './screens/SendOTP.svelte'
   import NotFound from './screens/NotFound.svelte'
   import Profile from './screens/Profile.svelte'
   import VerifyOTP from './screens/VerifyOTP.svelte'
+  import Overview from './screens/Overview.svelte'
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
@@ -45,7 +46,7 @@
       component: SelectPayment as any,
     }),
     [Routes.SEND_OTP]: wrap({
-      component: Checkout as any,
+      component: SendOTP as any,
       props: { appName, intent, apiKey },
       conditions: [() => !isJWTValid()],
     }),
@@ -59,6 +60,9 @@
     }),
     [Routes.PLAID_LINK]: wrap({
       ...authedRouteOptions(PlaidWidget),
+    }),
+    [Routes.CHECKOUT_OVERVIEW]: wrap({
+      ...authedRouteOptions(Overview)
     }),
     '*': NotFound as any,
   }
