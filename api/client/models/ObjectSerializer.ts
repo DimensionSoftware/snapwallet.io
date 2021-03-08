@@ -15,6 +15,7 @@ export * from './ProfileDataItemStatus';
 export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
+export * from './UploadFileResponse';
 export * from './User';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
@@ -36,6 +37,7 @@ import { ProfileDataItemStatus } from './ProfileDataItemStatus';
 import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
+import { UploadFileResponse } from './UploadFileResponse';
 import { User } from './User';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
@@ -79,6 +81,7 @@ let typeMap: {[index: string]: any} = {
     "ProtobufAny": ProtobufAny,
     "RpcStatus": RpcStatus,
     "SaveProfileDataRequest": SaveProfileDataRequest,
+    "UploadFileResponse": UploadFileResponse,
     "User": User,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,

@@ -227,6 +227,18 @@ message ChangeViewerPhoneRequest {
   string phone = 2;
 }
 
+message UploadFileRequest {
+  string filename = 1;
+  string mimetype = 2;
+  int32 size = 3;
+  bytes body = 4;
+}
+
+message UploadFileResponse {
+  string file_id = 1;
+}
+
+
 service Flux {
   // Get viewer data
   //
@@ -335,4 +347,9 @@ service Flux {
       body: "*"
     };
   }
+
+  // UploadFile uploads a file and returns a file id
+  //
+  // ...
+  rpc UploadFile(UploadFileRequest) returns (UploadFileResponse) {}
 }

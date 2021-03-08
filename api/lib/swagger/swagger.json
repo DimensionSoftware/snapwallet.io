@@ -650,6 +650,14 @@
       "description": "request",
       "title": "SaveProfileDataRequest"
     },
+    "UploadFileResponse": {
+      "type": "object",
+      "properties": {
+        "fileId": {
+          "type": "string"
+        }
+      }
+    },
     "User": {
       "type": "object",
       "properties": {

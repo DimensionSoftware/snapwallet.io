@@ -29,6 +29,7 @@ models/ProfileDataItemStatus.ts
 models/ProtobufAny.ts
 models/RpcStatus.ts
 models/SaveProfileDataRequest.ts
+models/UploadFileResponse.ts
 models/User.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
