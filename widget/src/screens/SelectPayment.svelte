@@ -9,17 +9,31 @@
   import PaymentCard from '../components/cards/PaymentCard.svelte'
   import PlaidBanner from '../components/PlaidBanner.svelte'
   import { Routes } from '../constants'
+  import { toaster } from '../stores/ToastStore'
+
+  const onACHClicked = async () => {
+    try {
+      const { flags = {} } = await window.API().fluxViewerData()
+      const { hasPlaidItems, hasWyreAccount } = flags
+      let nextRoute = Routes.PLAID_LINK
+
+      if (hasPlaidItems && hasWyreAccount) nextRoute = Routes.CHECKOUT_OVERVIEW
+      else if (hasPlaidItems) nextRoute = Routes.PROFILE
+
+      push(nextRoute)
+    } catch (e) {
+      toaster.pop({
+        msg: 'Oops',
+        error: true,
+      })
+    }
+  }
 </script>
 
 <ModalContent>
   <ModalBody>
     <ModalHeader hideCloseButton>Payment Method</ModalHeader>
-    <PaymentCard
-      on:click={() => {
-        push(Routes.PLAID_LINK)
-      }}
-      label="Bank Account"
-    >
+    <PaymentCard on:click={onACHClicked} label="Bank Account">
       <div class="icon-slot-container" slot="icon">
         <FaIcon data={faUniversity} />
       </div>

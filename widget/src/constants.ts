@@ -17,8 +17,9 @@ export const JWT_SESSION_KEY = '__FLUX_SESSION'
 export enum Routes {
   ROOT = '/',
   SELECT_PAYMENT = '/select-payment',
-  SEND_OTP = '/checkout',
   PROFILE = '/profile',
+  SEND_OTP = '/send-otp',
   VERIFY_OTP = '/verify-otp',
   PLAID_LINK = '/link-bank',
+  CHECKOUT_OVERVIEW = '/checkout-overview',
 }
