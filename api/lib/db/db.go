@@ -365,12 +365,17 @@ func (db Db) CleanAgedPasscodes(ctx context.Context) (int, error) {
 		numDeleted++
 	}
 
+	if numDeleted == 0 {
+		return 0, nil
+	}
+
 	_, err := batch.Commit(ctx)
 	if err != nil {
 		return 0, err
 	}
 
 	return numDeleted, nil
+
 }
 
 /*
