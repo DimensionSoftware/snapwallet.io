@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 	"os"
@@ -39,7 +40,7 @@ func run() error {
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
 	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
-	//mux.HandlePath("GET", "/upload", uploadFileHandler())
+	mux.HandlePath("POST", "/upload", uploadFileHandler(nil))
 	return http.ListenAndServe(apiPort(), allowCORS(mux))
 }
 
@@ -81,7 +82,8 @@ func serveFileHandler(path string, mimeType string) runtime.HandlerFunc {
 	}
 }
 
-func uploadFileHandler(flux proto.FluxClient) runtime.HandlerFunc {
+func uploadFileHandler(flux *proto.FluxClient) runtime.HandlerFunc {
+
 	/*
 			c, err := proto.NewFluxClient(grpcServerEndpoint)
 			if err != nil {
@@ -92,9 +94,36 @@ func uploadFileHandler(flux proto.FluxClient) runtime.HandlerFunc {
 		flux.UploadFile()
 	*/
 	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+
+		// Maximum upload of 25 MB
+		maxUploadSizeBytes := int64(1024 * 1024 * 25)
+
+		r.ParseMultipartForm(maxUploadSizeBytes)
+
+		// Get handler for filename, size and headers
+		file, handler, err := r.FormFile("file")
+		if err != nil {
+			fmt.Println("Error Retrieving the File")
+			fmt.Println(err)
+			return
+		}
+		defer file.Close()
+		if err != nil {
+			log.Println(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		blob := make([]byte, maxUploadSizeBytes)
+		n, err := file.Read(blob)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
 		w.Header().Add("content-type", "application/json")
-		//http.ServeFile(w, r, path)
-		w.Write([]byte("OK"))
+		w.Write([]byte(fmt.Sprintf("\"OK %s (%s) : %d bytes\"", handler.Filename, handler.Header, n)))
 	}
 
 }
