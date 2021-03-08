@@ -52,7 +52,6 @@ func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.Viewe
 		user.Phone = string(*u.Phone)
 	}
 
-	// todo: factor this out into separate module (db)
 	hasPlaidItems, err := s.Db.HasPlaidItems(ctx, u.ID)
 	if err != nil {
 		return nil, err
