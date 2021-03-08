@@ -205,7 +205,6 @@
     margin: 0;
   }
   .scroll {
-
     overflow-y: scroll;
   }
   .cryptocurrencies-container {

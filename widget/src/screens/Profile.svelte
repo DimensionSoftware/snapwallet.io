@@ -9,7 +9,7 @@
   import { userStore } from '../stores/UserStore'
   import { Logger, onEnterPressed } from '../util'
   import { toaster } from '../stores/ToastStore'
-  import {Routes} from '../constants'
+  import { Routes } from '../constants'
 
   import { push } from 'svelte-spa-router'
 

@@ -62,7 +62,7 @@
       ...authedRouteOptions(PlaidWidget),
     }),
     [Routes.CHECKOUT_OVERVIEW]: wrap({
-      ...authedRouteOptions(Overview)
+      ...authedRouteOptions(Overview),
     }),
     '*': NotFound as any,
   }

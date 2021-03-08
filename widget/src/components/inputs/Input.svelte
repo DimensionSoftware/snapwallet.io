@@ -96,7 +96,7 @@
         transition: opacity 0.3s ease-out 0.2s, transform 0.4s ease-in 0.1s;
       }
       &:valid ~ .bg {
-        opacity: .5;
+        opacity: 0.5;
         transform: opacity(1), scale(1);
         transition: none;
       }
