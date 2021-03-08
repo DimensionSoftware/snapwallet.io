@@ -9,6 +9,7 @@
   import { userStore } from '../stores/UserStore'
   import { Logger, onEnterPressed } from '../util'
   import { toaster } from '../stores/ToastStore'
+  import {Routes} from '../constants'
 
   import { push } from 'svelte-spa-router'
 
@@ -39,7 +40,7 @@
         legalName: `${firstName} ${lastName}`,
       })
       .then(() => {
-        push('/overview')
+        push(Routes.CHECKOUT_OVERVIEW)
       })
       .catch(e => {
         const err = e as { body: { code: number; message: string } }
