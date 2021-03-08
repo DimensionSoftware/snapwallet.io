@@ -3,3 +3,4 @@
 /secrets/
 /*.jar
 /cover.out
+/coverage.html
