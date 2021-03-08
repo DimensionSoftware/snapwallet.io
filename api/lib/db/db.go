@@ -338,7 +338,7 @@ func (db Db) AckOneTimePasscode(ctx context.Context, loginValue string, code str
 		return nil, err
 	}
 	if cleaned != 0 {
-		log.Printf("Cleaned %d passcodes", cleaned)
+		log.Printf("Cleaned %d aged passcodes", cleaned)
 	}
 
 	// match found & unmarshalled
