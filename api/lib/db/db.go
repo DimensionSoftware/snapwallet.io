@@ -320,14 +320,14 @@ func (db Db) AckOneTimePasscode(ctx context.Context, loginValue string, code str
 		return nil, err
 	}
 
-	// can only be used 'once'
-	_, err = snap.Ref.Delete(ctx)
+	var passcode onetimepasscode.OneTimePasscode
+	err = snap.DataTo(&passcode)
 	if err != nil {
 		return nil, err
 	}
 
-	var passcode onetimepasscode.OneTimePasscode
-	err = snap.DataTo(&passcode)
+	// can only be used 'once'
+	_, err = snap.Ref.Delete(ctx)
 	if err != nil {
 		return nil, err
 	}
