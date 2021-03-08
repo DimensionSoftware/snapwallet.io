@@ -53,7 +53,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideCloseButton>Login or Sign Up</ModalHeader>
+    <ModalHeader hideBackButton>Login or Sign Up</ModalHeader>
     <Label label="Your Email">
       <Input
         inputmode="email"
