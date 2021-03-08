@@ -40,7 +40,18 @@ func run() error {
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
 	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
 	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
-	mux.HandlePath("POST", "/upload", uploadFileHandler(nil))
+
+	conn, err := grpc.Dial(*grpcServerEndpoint, grpc.WithInsecure())
+	if err != nil {
+		return err
+	}
+	defer conn.Close()
+
+	client := proto.NewFluxClient(conn)
+
+	// Upload translator for grpc (accept multipart on frontend)
+	mux.HandlePath("POST", "/upload", uploadFileHandler(client))
+
 	return http.ListenAndServe(apiPort(), allowCORS(mux))
 }
 
@@ -82,7 +93,7 @@ func serveFileHandler(path string, mimeType string) runtime.HandlerFunc {
 	}
 }
 
-func uploadFileHandler(flux *proto.FluxClient) runtime.HandlerFunc {
+func uploadFileHandler(flux proto.FluxClient) runtime.HandlerFunc {
 
 	/*
 			c, err := proto.NewFluxClient(grpcServerEndpoint)
@@ -107,12 +118,12 @@ func uploadFileHandler(flux *proto.FluxClient) runtime.HandlerFunc {
 			fmt.Println(err)
 			return
 		}
-		defer file.Close()
 		if err != nil {
 			log.Println(err)
 			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			return
 		}
+		defer file.Close()
 
 		blob := make([]byte, maxUploadSizeBytes)
 		n, err := file.Read(blob)
