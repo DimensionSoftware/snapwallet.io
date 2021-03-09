@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
@@ -141,9 +142,18 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 		log.Println("resp: ", resp)
 
 		w.Header().Add("content-type", "application/json")
-		w.Write([]byte(fmt.Sprintf("\"%s\"", resp.FileId)))
-	}
 
+		out, err := json.Marshal(map[string]string{
+			"fileId": resp.FileId,
+		})
+		if err != nil {
+			log.Println(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		w.Write(out)
+	}
 }
 
 func main() {
