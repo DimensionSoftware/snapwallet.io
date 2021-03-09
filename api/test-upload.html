@@ -1,5 +1,32 @@
-<h1>FileZZZ</h1>
-<form enctype="multipart/form-data" method="post" action="http://localhost:5100/upload">
-   <input name="file" type="file" />
-   <input type="submit" value="Upload" />
-</form>
+
+<body>
+   <h1>FileZZZ</h1>
+   <form id="form" enctype="multipart/form-data">
+      <input name="file" type="file" />
+   </form>
+    <button id="button">Upload</button>
+
+   <script>
+      const el = document.getElementById('form');
+      const button = document.getElementById('button');
+
+      button.onclick=() => {
+         console.log('UPLOADING FILE...');
+         const formData = new FormData(el);
+
+         fetch('http://localhost:5100/upload', {
+            method: 'POST',
+            headers: {
+               Authorization: "Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJjMTNnMTd0bmY0cTQ0aWh0aTZuMCIsInN1YiI6ImMxM2cxN3RuZjRxNDRpaHRpNm1nIiwiaWF0IjoxNjE1MjY1OTUxLCJleHAiOjE2MTUzNTIzNTF9.pM5YTwxVpzfxuhlawUJDkAVgCdSUfalarrI2XVqJvXnjwWo9NMr_Z4JHD7s28SINX-syni8Ax6Rs83Or_8cELbx-6W37DFSE0deQ1th8f7WlRprh_rvpCcNPo0-c-2jUCTN6TWd8pKD3zLQNidYDakEumK2n6FwbUky_WQc5NY4ZV9I6-aB8g-F639qQY37kVcE1iIeg45ylfMzV7qn6Rl_xiY7AecgW67qQLSv_jOV-YUv-7nooh3SNXOmAKSOl7al4A_OqVzRj7pnAgx_BT2EQskxwNGwb02dSdTNRMbGtJJmCAkSSVAnAcl7QGcxtIEjLQ5Q0EZBALtvi2lGyBnAW0UC7rWVz7HSKOOIGLFlDMa7NXSs7ESzhX-2lEaNtfPe4sSztg7ulPRf5tP4SAl7AYstG2HXAAlMKFBg31poNXjt9EkHlhD1pxNcmAuYpyR5ui98kMRCrtIjy4tGxKkzHpt04DhFEqT3A73dfrZ8AIPKiH_Ba7TLYa1T_GBPTssAxA6UDZBgva3IaOaFF75l65T9eqZz4idzXU_JPpW0SNFnJHdQdjfkIA9EymDDjKnF8Rk67Oigdz4tzG9f1qeSYt93VxSBSuu0AXwV7988DGJRCt3y8fbJwPhPYr5odTNetDUdizetyGq1MOpmoc0pOypXRaHQL7EIfIQ6Jjw8",
+            },
+            body: formData,
+         })
+         .then(r => r.json())
+         .then(data => {
+         console.log(data)
+         });
+
+         return false;
+      };
+   </script>
+</body>

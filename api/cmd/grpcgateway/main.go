@@ -127,8 +127,8 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 			return
 		}
 
-		ctx := metadata.NewIncomingContext(ctx, metadata.MD{
-			"authorization": []string{handler.Header.Get("authorization")},
+		ctx := metadata.NewOutgoingContext(ctx, metadata.MD{
+			"authorization": []string{r.Header.Get("authorization")},
 		})
 		resp, err := flux.UploadFile(ctx, &proto.UploadFileRequest{
 			Filename: handler.Filename,

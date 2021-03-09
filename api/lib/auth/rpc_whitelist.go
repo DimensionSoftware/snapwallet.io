@@ -5,6 +5,4 @@ var RPCPublicWhitelist = map[string]bool{
 	"/Flux/PricingData":           true,
 	"/Flux/OneTimePasscode":       true,
 	"/Flux/OneTimePasscodeVerify": true,
-	// here during testing then will remove
-	"/Flux/UploadFile": true,
 }
