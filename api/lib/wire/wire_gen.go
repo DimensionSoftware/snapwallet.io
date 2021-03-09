@@ -9,6 +9,7 @@ import (
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
+	"github.com/khoerling/flux/api/lib/filemanager"
 	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
@@ -45,6 +46,23 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
+	encryptionConfig, err := encryption.ProvideConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	manager, err := encryption.NewManager(encryptionConfig)
+	if err != nil {
+		return server.Server{}, err
+	}
+	dbDb := &db.Db{
+		Firestore:         firestoreClient,
+		EncryptionManager: manager,
+	}
+	filemanagerManager := &filemanager.Manager{
+		BucketHandle:      bucketHandle,
+		Db:                dbDb,
+		EncryptionManager: manager,
+	}
 	wyreConfig, err := wyre.ProvideWyreConfig()
 	if err != nil {
 		return server.Server{}, err
@@ -69,18 +87,10 @@ func InitializeServer() (server.Server, error) {
 	jwtVerifier := auth.JwtVerifier{
 		PublicKey: publicKey,
 	}
-	encryptionConfig, err := encryption.ProvideConfig()
-	if err != nil {
-		return server.Server{}, err
-	}
-	manager, err := encryption.NewManager(encryptionConfig)
-	if err != nil {
-		return server.Server{}, err
-	}
-	dbDb := db.Db{
+	db2 := db.Db{
 		Firestore:         firestoreClient,
 		EncryptionManager: manager,
 	}
-	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, bucketHandle, wyreClient, plaidClient, jwtSigner, jwtVerifier, dbDb)
+	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, filemanagerManager, wyreClient, plaidClient, jwtSigner, jwtVerifier, db2)
 	return serverServer, nil
 }

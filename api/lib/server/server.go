@@ -4,9 +4,9 @@ import (
 	"net"
 
 	"cloud.google.com/go/firestore"
-	"cloud.google.com/go/storage"
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/filemanager"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
@@ -24,7 +24,7 @@ type Server struct {
 	Twilio            *gotwilio.Twilio
 	TwilioPhoneNumber string
 	Firestore         *firestore.Client
-	CloudStorage      *storage.BucketHandle
+	FileManager       *filemanager.Manager
 	Db                *db.Db
 	Wyre              *wyre.Client
 	Plaid             *plaid.Client
@@ -43,7 +43,7 @@ func ProvideServer(
 	twilio *gotwilio.Twilio,
 	twilioConfig *twilio.Config,
 	firestore *firestore.Client,
-	cloudstorage *storage.BucketHandle,
+	filemanager *filemanager.Manager,
 	wyre wyre.Client,
 	plaid *plaid.Client,
 	jwtSigner auth.JwtSigner,
@@ -55,7 +55,7 @@ func ProvideServer(
 		Sendgrid:          sendgridClient,
 		Twilio:            twilio,
 		TwilioPhoneNumber: twilioConfig.PhoneNumber,
-		CloudStorage:      cloudstorage,
+		FileManager:       filemanager,
 		Firestore:         firestore,
 		Wyre:              &wyre,
 		Plaid:             plaid,

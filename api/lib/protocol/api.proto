@@ -229,7 +229,7 @@ message ChangeViewerPhoneRequest {
 
 message UploadFileRequest {
   string filename = 1;
-  string mimetype = 2;
+  string mime_type = 2;
   int32 size = 3;
   bytes body = 4;
 }

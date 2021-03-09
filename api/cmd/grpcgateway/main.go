@@ -125,7 +125,7 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 
 		resp, err := flux.UploadFile(ctx, &proto.UploadFileRequest{
 			Filename: handler.Filename,
-			Mimetype: handler.Header.Get("content-type"),
+			MimeType: handler.Header.Get("content-type"),
 			Size:     int32(n),
 			Body:     blob[:n],
 		})
@@ -137,7 +137,7 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 		log.Println("resp: ", resp)
 
 		w.Header().Add("content-type", "application/json")
-		w.Write([]byte(fmt.Sprintf("\"OK %s (%s) : %d bytes\"", handler.Filename, handler.Header, n)))
+		w.Write([]byte(fmt.Sprintf("\"%s\"", resp.FileId)))
 	}
 
 }

@@ -74,7 +74,7 @@ func (db Db) SaveUser(ctx context.Context, tx *firestore.Transaction, u *user.Us
 
 // SaveFileMetadata saves a user object (upsert/put semantics)
 func (db Db) SaveFileMetadata(ctx context.Context, userID user.ID, md *file.Metadata) error {
-	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("files").Doc(md.ID)
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("files").Doc(string(md.ID))
 	_, err := ref.Set(ctx, md)
 
 	return err
