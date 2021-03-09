@@ -95,7 +95,7 @@
       }
 
       toaster.pop({
-        msg: body?.message || msg,
+        msg: reason?.body?.message || body?.message || msg,
         error: true
       })
     }
