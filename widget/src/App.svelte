@@ -94,7 +94,6 @@
         return
       }
 
-      // TODO: make this a screen instead
       toaster.pop({
         msg: body?.message || msg,
         error: true
