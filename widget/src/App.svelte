@@ -85,7 +85,8 @@
     // Centralized error handler
     window.onunhandledrejection = (e) => {
       Logger.error(e)
-      const {reason} = e
+      let msg = "Oops, an unexpected error occurred. Please try again later."
+      const {reason, body} = e
 
       if (reason?.body?.code === APIErrors.UNAUTHORIZED) {
         setFluxSession('')
@@ -95,7 +96,7 @@
 
       // TODO: make this a screen instead
       toaster.pop({
-        msg: "Oops, an unexpected error occurred. Please try again later.", 
+        msg: body?.message || msg,
         error: true
       })
     }
