@@ -1,7 +1,7 @@
 import App from './App.svelte'
-import { genAPIClient, getFluxSession } from './util'
+import { genAPIClient } from './util'
 
-window.API = genAPIClient(getFluxSession())
+window.API = genAPIClient()
 
 const queryParams = new URLSearchParams(window.location.search)
 

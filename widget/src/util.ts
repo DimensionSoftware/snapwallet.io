@@ -1,6 +1,6 @@
 import nodeDebug from 'debug'
 import { JWT_SESSION_KEY } from './constants'
-import { FluxApi, createConfiguration, ServerConfiguration } from 'api-client'
+import { FluxApi, createConfiguration, ServerConfiguration, SecurityAuthentication, RequestContext } from 'api-client'
 
 // pure fns
 // ---------
@@ -78,16 +78,28 @@ export const authedRouteOptions = (component: any) => ({
   component,
 })
 
-export const genAPIClient = (token?: string): FluxApi => {
-  setFluxSession(token)
-  return new FluxApi(
-    createConfiguration({
-      baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
-      authMethods: token
-        ? {
-            Bearer: `Bearer ${token}`,
-          }
-        : null,
-    }),
-  )
+export const genAPIClient = (): FluxApi => {
+  const config = createConfiguration({
+    baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
+  })
+  config.authMethods.Bearer = new FluxBearerAuthentication()
+
+  return new FluxApi(config)
+}
+
+class FluxBearerAuthentication implements SecurityAuthentication {
+
+  public constructor() {}
+
+  public getName(): string {
+      return "Bearer";
+  }
+
+  public applySecurityAuthentication(context: RequestContext) {
+    const token = getFluxSession()
+
+    if (token) {
+      context.setHeaderParam("Authorization", `Bearer ${token}`);
+    }
+  }
 }

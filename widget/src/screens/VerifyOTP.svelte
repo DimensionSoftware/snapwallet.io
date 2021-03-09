@@ -76,7 +76,7 @@
 
     try {
       const { jwt } = await verifyOTP()
-      window.API = genAPIClient(jwt)
+      setFluxSession(jwt)
       Logger.debug('Logged in')
       setTimeout(() => push($userStore.lastKnownRoute), 700)
     } finally {
