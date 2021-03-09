@@ -15,6 +15,7 @@ import (
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 )
 
 var (
@@ -135,8 +136,14 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 			Body:     blob[:n],
 		})
 		if err != nil {
-			log.Println(err)
-			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			status, ok := status.FromError(err)
+			if !ok {
+				log.Println(err)
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+
+			http.Error(w, status.Message(), runtime.HTTPStatusFromCode(status.Code()))
 			return
 		}
 		log.Println("resp: ", resp)
