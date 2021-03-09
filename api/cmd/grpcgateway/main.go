@@ -48,7 +48,7 @@ func run() error {
 	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
 	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
 
-	conn, err := grpc.Dial(*grpcServerEndpoint, grpc.WithInsecure(), grpc.WithMaxMsgSize(maxUploadSizeBytes))
+	conn, err := grpc.Dial(*grpcServerEndpoint, grpc.WithInsecure(), grpc.WithDefaultCallOptions(grpc.MaxCallSendMsgSize(maxUploadSizeBytes)))
 	if err != nil {
 		return err
 	}
