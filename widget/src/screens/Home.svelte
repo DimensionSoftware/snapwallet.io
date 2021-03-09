@@ -71,11 +71,6 @@
     try {
       animateRandomPrice()
       await priceStore.fetchPrices()
-    } catch (e) {
-      toaster.pop({
-        msg: 'Oops, there was a problem refreshing prices.',
-        error: true,
-      })
     } finally {
       setTimeout(() => (isLoadingPrices = false), 1200)
     }

@@ -8,7 +8,7 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed, setFluxSession } from '../util'
+  import { Logger, onEnterPressed, setFluxSession, genAPIClient } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
 
@@ -20,14 +20,14 @@
   const resendEmail = async () => {
     Logger.debug('Resending email')
     isSendingEmail = true
-    return await window.API().fluxOneTimePasscode({
+    return await window.API.fluxOneTimePasscode({
       emailOrPhone: $userStore.emailAddress,
     })
   }
 
   const verifyOTP = async () => {
     Logger.debug('Verifying using OTP code:', code)
-    return await window.API().fluxOneTimePasscodeVerify({
+    return await window.API.fluxOneTimePasscodeVerify({
       code,
       emailOrPhone: $userStore.emailAddress,
     })
@@ -76,17 +76,9 @@
 
     try {
       const { jwt } = await verifyOTP()
-      window.API(jwt)
+      window.API = genAPIClient(jwt)
       Logger.debug('Logged in')
       setTimeout(() => push($userStore.lastKnownRoute), 700)
-    } catch (e) {
-      const err = e as { body: { code: number; message: string } }
-      Logger.error(err)
-
-      toaster.pop({
-        msg: err.body.message,
-        error: true,
-      })
     } finally {
       setTimeout(() => (isMakingRequest = false), 700)
     }

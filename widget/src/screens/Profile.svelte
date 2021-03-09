@@ -32,7 +32,7 @@
     if (!socialSecurityNumber) return focus(2)
 
     window
-      .API()
+      .API
       .fluxSaveProfileData({
         ssn: socialSecurityNumber,
         dateOfBirth: birthDate,
