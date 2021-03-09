@@ -5,6 +5,7 @@ import { Configuration} from '../configuration'
 import { Address } from '../models/Address';
 import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
+import { InlineResponse200 } from '../models/InlineResponse200';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
@@ -113,6 +114,15 @@ export class PromiseFluxApi {
      */
     public fluxSaveProfileData(body: SaveProfileDataRequest, options?: Configuration): Promise<ProfileDataInfo> {
     	const result = this.api.fluxSaveProfileData(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * Uploads a file and returns a fileId.
+     * @param file The file to upload.
+     */
+    public fluxUploadFile(file?: HttpFile, options?: Configuration): Promise<InlineResponse200> {
+    	const result = this.api.fluxUploadFile(file, options);
         return result.toPromise();
     }
 	

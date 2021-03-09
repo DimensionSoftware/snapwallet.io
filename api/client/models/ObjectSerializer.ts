@@ -1,6 +1,7 @@
 export * from './Address';
 export * from './ChangeViewerEmailRequest';
 export * from './ChangeViewerPhoneRequest';
+export * from './InlineResponse200';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
@@ -23,6 +24,7 @@ export * from './ViewerDataResponse';
 import { Address } from './Address';
 import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from './ChangeViewerPhoneRequest';
+import { InlineResponse200 } from './InlineResponse200';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
@@ -69,6 +71,7 @@ let typeMap: {[index: string]: any} = {
     "Address": Address,
     "ChangeViewerEmailRequest": ChangeViewerEmailRequest,
     "ChangeViewerPhoneRequest": ChangeViewerPhoneRequest,
+    "InlineResponse200": InlineResponse200,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,
     "OneTimePasscodeVerifyResponse": OneTimePasscodeVerifyResponse,

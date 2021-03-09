@@ -48,6 +48,54 @@
       "post": {
         "security": [{"Bearer": []}]
       }
+    },
+    "/upload": {
+      "post": {
+        "summary": "Uploads a file and returns a fileId.",
+        "operationId": "Flux_UploadFile",
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
+        "consumes": [
+            "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+            {
+               "in": "formData",
+               "name": "file",
+               "type": "file",
+               "description": "The file to upload."
+            }
+         ],
+         "responses": {
+           "200": {
+             "description": "A file upload response object.",
+             "schema": {
+                "type": "object",
+                "properties": {
+                   "fileId": {
+                      "type": "string",
+                      "description": "The file id"
+                   }
+                }
+             }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+       }
+      }
     }
   }
 }
