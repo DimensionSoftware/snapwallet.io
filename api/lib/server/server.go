@@ -51,7 +51,7 @@ func ProvideServer(
 	db db.Db,
 ) Server {
 	server := Server{
-		GrpcServer:        grpc.NewServer(grpc.UnaryInterceptor(jwtVerifier.AuthenticationInterceptor)),
+		GrpcServer:        grpc.NewServer(grpc.UnaryInterceptor(jwtVerifier.AuthenticationInterceptor), grpc.MaxRecvMsgSize(maxMsgSizeBytes)),
 		Sendgrid:          sendgridClient,
 		Twilio:            twilio,
 		TwilioPhoneNumber: twilioConfig.PhoneNumber,
