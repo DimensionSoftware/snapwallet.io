@@ -14,6 +14,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
@@ -136,14 +137,26 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 			Body:     blob[:n],
 		})
 		if err != nil {
+			resp := map[string]interface{}{}
+
 			status, ok := status.FromError(err)
-			if !ok {
+			if ok {
+				resp["code"] = status.Code()
+				resp["message"] = status.Message()
+			} else {
+				log.Println(err)
+				resp["code"] = codes.Unknown
+				resp["message"] = "An unknown error occurred."
+			}
+
+			out, err := json.Marshal(&resp)
+			if err != nil {
 				log.Println(err)
 				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 				return
 			}
 
-			http.Error(w, status.Message(), runtime.HTTPStatusFromCode(status.Code()))
+			http.Error(w, string(out), runtime.HTTPStatusFromCode(resp["code"].(codes.Code)))
 			return
 		}
 		log.Println("resp: ", resp)
