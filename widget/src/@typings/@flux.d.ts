@@ -8,6 +8,7 @@ declare var __ENV: {
 
 declare global {
   interface Window {
-    API: (newToken?: string) => PromiseFluxApi
+    Plaid: any
+    API: (newToken?: string) => FluxApi
   }
 }

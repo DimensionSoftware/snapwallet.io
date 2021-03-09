@@ -11,9 +11,10 @@
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
-  import { Routes } from './constants'
-  import { authedRouteOptions, isJWTValid, Logger } from './util'
+  import { Routes, APIErrors } from './constants'
+  import { authedRouteOptions, isJWTValid, Logger, setFluxSession } from './util'
   import { userStore } from './stores/UserStore'
+  import { toaster } from './stores/ToastStore'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -80,6 +81,24 @@
       )
       document.documentElement.style.setProperty(`--theme-${k}`, v, 'important')
     })
+
+    // Centralized error handler
+    window.onunhandledrejection = (e) => {
+      Logger.error(e)
+      const msg = "Oops, an unexpected error occurred. Please try again later."
+      const {reason, body} = e
+
+      if (reason?.body?.code === APIErrors.UNAUTHORIZED) {
+        setFluxSession('')
+        push(Routes.SEND_OTP)
+        return
+      }
+
+      toaster.pop({
+        msg: reason?.body?.message || body?.message || msg,
+        error: true
+      })
+    }
   })
 </script>
 

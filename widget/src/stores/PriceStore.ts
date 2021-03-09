@@ -20,7 +20,7 @@ const createStore = () => {
   const { subscribe, update } = store
 
   const fetchPrices = async () => {
-    const { rates: prices } = await window.API().fluxPricingData()
+    const { rates: prices } = await window.API.fluxPricingData()
     const result = {}
     await Promise.all(
       supportedCurrencyPairs.wyre.map(s => {

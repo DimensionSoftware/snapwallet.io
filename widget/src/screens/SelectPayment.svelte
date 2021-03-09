@@ -12,28 +12,21 @@
   import { toaster } from '../stores/ToastStore'
 
   const onACHClicked = async () => {
-    try {
-      const { flags = {} } = await window.API().fluxViewerData()
-      const { hasPlaidItems, hasWyreAccount } = flags
-      let nextRoute = Routes.PLAID_LINK
+    const { flags = {} } = await window.API.fluxViewerData()
+    const { hasPlaidItems, hasWyreAccount } = flags
+    let nextRoute = Routes.PLAID_LINK
 
-      if (hasPlaidItems && hasWyreAccount) nextRoute = Routes.CHECKOUT_OVERVIEW
-      else if (hasPlaidItems) nextRoute = Routes.PROFILE
+    if (hasPlaidItems && hasWyreAccount) nextRoute = Routes.CHECKOUT_OVERVIEW
+    else if (hasPlaidItems) nextRoute = Routes.PROFILE
 
-      push(nextRoute)
-    } catch (e) {
-      toaster.pop({
-        msg: 'Oops',
-        error: true,
-      })
-    }
+    push(nextRoute)
   }
 </script>
 
 <ModalContent>
   <ModalBody>
     <ModalHeader hideCloseButton>Payment Method</ModalHeader>
-    <PaymentCard on:click={onACHClicked} label="Bank Account">
+    <PaymentCard on:click|once={onACHClicked} label="Bank Account">
       <div class="icon-slot-container" slot="icon">
         <FaIcon data={faUniversity} />
       </div>

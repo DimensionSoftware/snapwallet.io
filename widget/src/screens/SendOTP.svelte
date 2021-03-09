@@ -26,7 +26,7 @@
       if (!emailIsValid)
         (document.querySelector('input[type="email"]') as any).focus()
 
-      await window.API().fluxOneTimePasscode({
+      await window.API.fluxOneTimePasscode({
         emailOrPhone: $userStore.emailAddress,
       })
 

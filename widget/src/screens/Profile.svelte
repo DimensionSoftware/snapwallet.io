@@ -32,7 +32,7 @@
     if (!socialSecurityNumber) return focus(2)
 
     window
-      .API()
+      .API
       .fluxSaveProfileData({
         ssn: socialSecurityNumber,
         dateOfBirth: birthDate,
@@ -41,15 +41,6 @@
       })
       .then(() => {
         push(Routes.CHECKOUT_OVERVIEW)
-      })
-      .catch(e => {
-        const err = e as { body: { code: number; message: string } }
-        Logger.error(err)
-
-        toaster.pop({
-          msg: err.body.message,
-          error: true,
-        })
       })
   }
 
@@ -85,7 +76,7 @@
         autocomplete="bday"
         required
         type="text"
-        placeholder="mm/dd/yyyy"
+        placeholder="yyyy-mm-dd"
         defaultValue={$userStore.birthDate}
         on:change={e => {
           userStore.setBirthDate(e.detail)
