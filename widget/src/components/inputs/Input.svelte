@@ -60,7 +60,7 @@
       appearance: none;
       backface-visibility: hidden;
       transform: translateZ(0);
-      border-radius: 3px;
+      border-radius: 0.5em;
       text-indent: 10px;
       text-transform: lowercase;
       overflow: hidden;
@@ -85,11 +85,11 @@
       ~ .bg {
         position: absolute;
         content: '';
-        top: 80%;
+        top: 0;
         bottom: -1px;
         left: -1px;
         right: -1px;
-        border-radius: 4px;
+        border-radius: 0.5em;
         background: linear-gradient(transparent, var(--theme-color));
         opacity: 0;
         transform: opacity(0), scale(0);
@@ -98,14 +98,13 @@
       &:valid ~ .bg {
         opacity: 0.5;
         transform: opacity(1), scale(1);
+        border-radius: .6rem;
         transition: none;
       }
       &:hover,
       &:focus {
         // background-image: none;
         transition: none;
-      }
-      &:hover {
         z-index: 1;
         border-bottom: 1px solid var(--theme-color);
         transition: none;
@@ -127,37 +126,31 @@
       }
       & + .fx {
         position: absolute;
-        text-align: left;
         left: 0;
         right: 0;
         bottom: 0;
-        height: 2px;
+        height: 1px;
         overflow: hidden;
         &:after {
           content: '';
           position: absolute;
           width: 100%;
-          height: 1px;
-          background-color: $themeColor;
-          transform: translateX(-500px);
-          transition: transform 0.35s $easeInExpo 0.15s;
+          left: 0;
+          right: 0;
+          height: 2px;
+          z-index: 9;
+          background: linear-gradient(to right, transparent, $themeColor, transparent);
+          transform: scale(0);
+          transition: transform 0.5s $easeInExpo 0.15s;
         }
       }
       &:focus ~ .bg {
-        animation: focus 0.225s;
+        animation: focus 0.18s;
         animation-timing-function: ease-in;
       }
-      &:focus + .fx {
-        &:before {
-          position: absolute;
-          content: '';
-          height: 2px;
-          z-index: 1;
-          background-color: $themeColor;
-        }
+      &:hover + .fx, &:focus + .fx {
         &:after {
-          width: 100%;
-          transform: translateX(0);
+          transform: scale(1);
           transition: none;
         }
       }
