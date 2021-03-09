@@ -42,15 +42,6 @@
       .then(() => {
         push(Routes.CHECKOUT_OVERVIEW)
       })
-      .catch(e => {
-        const err = e as { body: { code: number; message: string } }
-        Logger.error(err)
-
-        toaster.pop({
-          msg: err.body.message,
-          error: true,
-        })
-      })
   }
 
   const onKeyDown = (e: Event) => {
