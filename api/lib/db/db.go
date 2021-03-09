@@ -11,6 +11,7 @@ import (
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/file"
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
@@ -67,6 +68,14 @@ func (db Db) SaveUser(ctx context.Context, tx *firestore.Transaction, u *user.Us
 	} else {
 		err = tx.Set(ref, encryptedUser)
 	}
+
+	return err
+}
+
+// SaveFileMetadata saves a user object (upsert/put semantics)
+func (db Db) SaveFileMetadata(ctx context.Context, userID user.ID, md *file.Metadata) error {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("files").Doc(md.ID)
+	_, err := ref.Set(ctx, md)
 
 	return err
 }
