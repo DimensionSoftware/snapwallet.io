@@ -85,7 +85,7 @@
     // Centralized error handler
     window.onunhandledrejection = (e) => {
       Logger.error(e)
-      let msg = "Oops, an unexpected error occurred. Please try again later."
+      const msg = "Oops, an unexpected error occurred. Please try again later."
       const {reason, body} = e
 
       if (reason?.body?.code === APIErrors.UNAUTHORIZED) {
