@@ -76,7 +76,7 @@
         autocomplete="bday"
         required
         type="text"
-        placeholder="yyyy/mm/dd"
+        placeholder="yyyy-mm-dd"
         defaultValue={$userStore.birthDate}
         on:change={e => {
           userStore.setBirthDate(e.detail)
