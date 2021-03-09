@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	cloud.google.com/go/firestore v1.4.0
+	cloud.google.com/go/storage v1.10.0
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/Boostport/address v0.6.2
 	github.com/badoux/checkmail v1.2.1

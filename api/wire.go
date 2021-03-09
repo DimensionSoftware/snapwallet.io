@@ -5,6 +5,7 @@ import (
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
+	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
@@ -26,6 +27,7 @@ func InitializeServer() (server.Server, error) {
 		twilio.ProvideTwilio,
 		firestore.ProvideFirestoreProjectID,
 		firestore.ProvideFirestore,
+		cloudstorage.ProvideBucket,
 		wyre.NewClient,
 		wyre.ProvideWyreConfig,
 		plaid.ProvideClientOptions,

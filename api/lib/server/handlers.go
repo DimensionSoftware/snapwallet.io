@@ -655,11 +655,27 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 // UploadFile is an rpc handler
 func (s *Server) UploadFile(ctx context.Context, req *proto.UploadFileRequest) (*proto.UploadFileResponse, error) {
 	log.Println(req.Filename)
-	log.Println("      mime type:", req.Mimetype)
-	log.Println("size (reported):", req.Size)
-	log.Println("size (verified):", len(req.Body))
+	log.Println("       mime type:", req.Mimetype)
+	log.Println(" size (reported):", req.Size)
+	log.Println(" size (verified):", len(req.Body))
+
+	fileID := xid.New().String()
+	obj := s.CloudStorage.Object(fileID)
+	out := obj.NewWriter(ctx)
+	out.ContentType = "application/octet-stream"
+
+	n, err := out.Write(req.Body)
+	if err != nil {
+		return nil, err
+	}
+	log.Println("bytes out to gcs:", n)
+
+	err = out.Close()
+	if err != nil {
+		return nil, err
+	}
 
 	return &proto.UploadFileResponse{
-		FileId: "STUB",
+		FileId: fileID,
 	}, nil
 }

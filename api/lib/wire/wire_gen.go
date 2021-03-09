@@ -9,6 +9,7 @@ import (
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
+	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
@@ -37,6 +38,10 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	firestoreClient, err := firestore.ProvideFirestore(fireProjectID)
+	if err != nil {
+		return server.Server{}, err
+	}
+	bucketHandle, err := cloudstorage.ProvideBucket()
 	if err != nil {
 		return server.Server{}, err
 	}
@@ -76,6 +81,6 @@ func InitializeServer() (server.Server, error) {
 		Firestore:         firestoreClient,
 		EncryptionManager: manager,
 	}
-	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, wyreClient, plaidClient, jwtSigner, jwtVerifier, dbDb)
+	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, bucketHandle, wyreClient, plaidClient, jwtSigner, jwtVerifier, dbDb)
 	return serverServer, nil
 }
