@@ -1,6 +1,7 @@
 import App from './App.svelte'
-import { FluxApi, createConfiguration, ServerConfiguration } from 'api-client'
-import { getFluxSession, setFluxSession } from './util'
+import { genAPIClient, getFluxSession } from './util'
+
+window.API = genAPIClient(getFluxSession())
 
 const queryParams = new URLSearchParams(window.location.search)
 
@@ -18,59 +19,5 @@ const app = new App({
     },
   },
 })
-
-// TODO: move this to typings/@flux.d.ts
-declare global {
-  interface Window {
-    __api: FluxApi
-    Plaid: any
-    API: (newToken?: string) => FluxApi
-  }
-}
-
-function genAPIClient(token?: string): FluxApi {
-  return new FluxApi(
-    createConfiguration({
-      baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
-      authMethods: token
-        ? {
-            Bearer: `Bearer ${token}`,
-          }
-        : null,
-    }),
-  )
-}
-
-function getAPIClient(newToken?: string): FluxApi {
-  if (newToken) {
-    setFluxSession(newToken)
-  }
-
-  if (newToken || !window.__api) {
-    window.__api = genAPIClient(getFluxSession())
-  }
-
-  // Remove token when invalid, only try if token non-empty
-  if (getFluxSession() !== '') {
-    window.__api
-      .fluxViewerData()
-      .then(resp => {
-        console.log('resp', resp)
-      })
-      .catch(e => {
-        const err = e as { body: { code: number; message: string } }
-        if (err.body?.code === 16) {
-          // only wipe session if its because of non-authenticated (token)
-          setFluxSession('')
-        } else {
-          throw err
-        }
-      })
-  }
-
-  return window.__api
-}
-
-window.API = getAPIClient
 
 export default app
