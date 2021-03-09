@@ -654,12 +654,17 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 
 // UploadFile is an rpc handler
 func (s *Server) UploadFile(ctx context.Context, req *proto.UploadFileRequest) (*proto.UploadFileResponse, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
 	log.Println(req.Filename)
 	log.Println("       mime type:", req.MimeType)
 	log.Println(" size (reported):", req.Size)
 	log.Println(" size (verified):", len(req.Body))
 
-	fileID, err := s.FileManager.UploadEncryptedFile(ctx, "bob_id", req)
+	fileID, err := s.FileManager.UploadEncryptedFile(ctx, u.ID, req)
 	if err != nil {
 		return nil, err
 	}

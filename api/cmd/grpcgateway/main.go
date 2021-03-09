@@ -13,6 +13,7 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 var (
@@ -123,6 +124,9 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 			return
 		}
 
+		ctx := metadata.NewIncomingContext(ctx, metadata.MD{
+			"authorization": []string{handler.Header.Get("authorization")},
+		})
 		resp, err := flux.UploadFile(ctx, &proto.UploadFileRequest{
 			Filename: handler.Filename,
 			MimeType: handler.Header.Get("content-type"),
