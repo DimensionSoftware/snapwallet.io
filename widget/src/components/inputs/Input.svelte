@@ -89,7 +89,7 @@
         bottom: -1px;
         left: -1px;
         right: -1px;
-        border-radius: 0.5em;
+        border-radius: 0.8em;
         background: linear-gradient(transparent, var(--theme-color));
         opacity: 0;
         transform: opacity(0), scale(0);
@@ -98,7 +98,6 @@
       &:valid ~ .bg {
         opacity: 0.5;
         transform: opacity(1), scale(1);
-        border-radius: .6rem;
         transition: none;
       }
       &:hover,
@@ -139,16 +138,22 @@
           right: 0;
           height: 2px;
           z-index: 9;
-          background: linear-gradient(to right, transparent, $themeColor, transparent);
+          background: linear-gradient(
+            to right,
+            transparent,
+            $themeColor,
+            transparent
+          );
           transform: scale(0);
-          transition: transform 0.5s $easeInExpo 0.15s;
+          transition: transform 0.5s $easeOutExpo 0.15s;
         }
       }
       &:focus ~ .bg {
         animation: focus 0.18s;
         animation-timing-function: ease-in;
       }
-      &:hover + .fx, &:focus + .fx {
+      &:hover + .fx,
+      &:focus + .fx {
         &:after {
           transform: scale(1);
           transition: none;
