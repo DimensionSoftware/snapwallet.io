@@ -21,8 +21,6 @@
 
 <style lang="scss">
   .total-container {
-    display: flex;
-    justify-content: flex-end;
     color: var(--theme-text-color);
     font-weight: 500;
     font-size: 0.9rem;

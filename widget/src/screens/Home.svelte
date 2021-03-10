@@ -144,17 +144,21 @@
           />
         </Label>
       </div>
-      <div class="exchange-rate-container">
-        1 {$transactionStore.destinationCurrency.ticker} @
-        {isLoadingPrices
-          ? numberWithCommas(fakePrice.toFixed(2))
-          : numberWithCommas(selectedSourcePrice.toFixed(2))}
-        {srcTicker}
-      </div>
-      <TotalContainer
-        rate={isEnteringSourceAmount ? destinationRate : sourceRate}
-        isDestination={isEnteringSourceAmount}
-      />
+      <ul class="vertical-stepper">
+        <li class="exchange-rate-container">
+          1 {$transactionStore.destinationCurrency.ticker} =
+          {isLoadingPrices
+            ? numberWithCommas(fakePrice.toFixed(2))
+            : numberWithCommas(selectedSourcePrice.toFixed(2))}
+          {srcTicker}
+        </li>
+        <li>
+          <TotalContainer
+            rate={isEnteringSourceAmount ? destinationRate : sourceRate}
+            isDestination={isEnteringSourceAmount}
+          />
+        </li>
+      </ul>
     </div>
   </ModalBody>
   <ModalFooter>
@@ -212,22 +216,10 @@
 
   .exchange-rate-container {
     height: 1.5rem;
-    width: 100%;
     position: relative;
     z-index: 2;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
     font-size: 0.9rem;
-    color: var(--theme-text-color-muted);
-  }
-
-  .total-container {
-    display: flex;
-    justify-content: flex-end;
     color: var(--theme-text-color);
-    font-weight: 500;
-    font-size: 0.9rem;
   }
 
   .muted {
@@ -256,5 +248,46 @@
     display: flex;
     justify-content: space-between;
     cursor: pointer;
+  }
+
+  .vertical-stepper {
+    list-style: none;
+    padding: 0;
+    li {
+      position: relative;
+      padding-left: 1.25rem;
+      margin-left: 1rem;
+      margin-top: 0.25rem;
+      // marker
+      &:before {
+        content: '';
+        border: 4px solid $textColor4;
+        border-radius: 100%;
+        position: absolute;
+        height: 0;
+        width: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: 8px;
+        z-index: 1;
+      }
+      // line
+      &:after {
+        position: absolute;
+        width: 1px;
+        left: 4px;
+        top: -1.25rem;
+        opacity: 0.3;
+        height: 110%;
+        content: '';
+        background-color: $textColor4;
+        background-position: 0 0;
+        background-size: 200% 200%;
+        border-color: inherit;
+        border-width: 0;
+        outline: 0;
+      }
+    }
   }
 </style>
