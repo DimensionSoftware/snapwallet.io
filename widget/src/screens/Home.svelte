@@ -24,7 +24,7 @@
     { name: 'Bitcoin', ticker: 'BTC', popular: true },
     { name: 'Ethereum', ticker: 'ETH', popular: true },
     { name: 'USDC', ticker: 'USDC' },
-    { name: 'Tether', ticker: 'USDT' },
+    { name: 'Tether', ticker: 'USDT', popular: true },
     { name: 'DAI', ticker: 'DAI' },
     { name: 'MakerDAO', ticker: 'MKR' },
     { name: 'Gemini Dollar', ticker: 'GUSD' },
