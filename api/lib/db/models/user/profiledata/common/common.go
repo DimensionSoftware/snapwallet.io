@@ -91,7 +91,7 @@ type EncryptedProfileData struct {
 	CreatedAt         time.Time         `firestore:"createdAt"`
 	DataEncryptionKey *[]byte           `firestore:"DEK,omitempty"`
 	EncryptedData     *[]byte           `firestore:"encryptedData,omitempty"`
-	Files             *[]file.ID        `firestore:"files,omitempty"`
+	FileIDs           *[]file.ID        `firestore:"fileIds,omitempty"`
 	UpdatedAt         *time.Time        `firestore:"updatedAt,omitempty"`
 	SealedAt          *time.Time        `firestore:"sealedAt,omitempty"`
 }

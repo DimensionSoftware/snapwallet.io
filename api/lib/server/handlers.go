@@ -25,6 +25,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/dateofbirth"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/governmentid"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	proto "github.com/khoerling/flux/api/lib/protocol"
@@ -290,14 +291,9 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 
 // SaveProfileData is an rpc handler
 func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileDataRequest) (*proto.ProfileDataInfo, error) {
-	userID := GetUserIDFromIncomingContext(ctx)
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
-	}
-
-	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
-	if err != nil || u == nil {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
 	}
 
 	err = req.Validate()
@@ -309,6 +305,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	var dobData *dateofbirth.ProfileDataDateOfBirth
 	var ssnData *ssn.ProfileDataSSN
 	var addressData *address.ProfileDataAddress
+	var governmentIDData *governmentid.ProfileDataGovernmentID
 
 	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		profile, err := s.Db.GetAllProfileData(ctx, tx, u.ID)
@@ -340,6 +337,12 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				addressData = (*existingProfileData).(*address.ProfileDataAddress)
 			}
 		}
+		{
+			existingProfileData := profile.FilterKind(common.KindGovernmentID).First()
+			if existingProfileData != nil {
+				governmentIDData = (*existingProfileData).(*governmentid.ProfileDataGovernmentID)
+			}
+		}
 
 		if req.LegalName != "" {
 			if legalNameData == nil {
@@ -355,7 +358,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				legalNameData.UpdatedAt = &now
 			}
 
-			_, err := s.Db.SaveProfileData(ctx, tx, userID, *legalNameData)
+			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *legalNameData)
 			if err != nil {
 				return err
 			}
@@ -375,7 +378,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				dobData.UpdatedAt = &now
 			}
 
-			_, err := s.Db.SaveProfileData(ctx, tx, userID, *dobData)
+			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *dobData)
 			if err != nil {
 				return err
 			}
@@ -395,7 +398,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				ssnData.UpdatedAt = &now
 			}
 
-			_, err := s.Db.SaveProfileData(ctx, tx, userID, *ssnData)
+			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *ssnData)
 			if err != nil {
 				return err
 			}
@@ -426,7 +429,54 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				addressData.UpdatedAt = &now
 			}
 
-			_, err := s.Db.SaveProfileData(ctx, tx, userID, *addressData)
+			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *addressData)
+			if err != nil {
+				return err
+			}
+		}
+
+		if req.GovernmentIdDoc != nil {
+			//req.GovernmentIdDoc.Kind
+			for _, fileID := range req.GovernmentIdDoc.FileIds {
+				meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
+				if err != nil {
+					return err
+				}
+				if meta == nil {
+					return status.Errorf(codes.InvalidArgument, "one or more file ids is invalid")
+				}
+			}
+
+			if req.GovernmentIdDoc.Kind == proto.GovernmentIdDocumentInputKind_GI_UNKNOWN {
+				return status.Errorf(codes.InvalidArgument, "government id document kind needs to be specified ")
+			}
+			kind := governmentid.KindFromGovernmentIdDocKind(req.GovernmentIdDoc.Kind)
+
+			if len(req.GovernmentIdDoc.FileIds) != kind.FilesRequired() {
+				return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
+			}
+
+			if governmentIDData == nil {
+				governmentIDData = &governmentid.ProfileDataGovernmentID{
+					ID:               common.ProfileDataID(xid.New().String()),
+					Status:           common.StatusReceived,
+					GovernmentIDKind: kind,
+					FileIDs:          []file.ID{},
+					CreatedAt:        time.Now(),
+				}
+			} else {
+				fileIDs := []file.ID{}
+				for _, id := range req.GovernmentIdDoc.FileIds {
+					fileIDs = append(fileIDs, file.ID(id))
+				}
+
+				governmentIDData.GovernmentIDKind = governmentid.Kind(req.GovernmentIdDoc.Kind)
+				governmentIDData.FileIDs = fileIDs
+
+				now := time.Now()
+				governmentIDData.UpdatedAt = &now
+			}
+			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *governmentIDData)
 			if err != nil {
 				return err
 			}
@@ -434,6 +484,9 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 		return nil
 	})
+	if err != nil {
+		return nil, err
+	}
 
 	var legalNameInfo *proto.ProfileDataItemInfo
 	if legalNameData != nil {
