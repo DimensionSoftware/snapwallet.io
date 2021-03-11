@@ -1,6 +1,7 @@
 package filemanager
 
 import (
+	"bytes"
 	"context"
 	"log"
 	"time"
@@ -64,4 +65,49 @@ func (m Manager) UploadEncryptedFile(ctx context.Context, userID user.ID, req *p
 	}
 
 	return fileID, nil
+}
+
+// GetFile decrypts and returns the file
+func (m Manager) GetFile(ctx context.Context, userID user.ID, fileID file.ID) (*file.File, error) {
+	md, err := m.Db.GetFileMetadata(ctx, userID, fileID)
+	if err != nil {
+		return nil, err
+	}
+
+	dekH, err := encryption.ParseAndDecryptKeyBytes(md.DataEncryptionKey, m.EncryptionManager.Encryptor)
+	if err != nil {
+		return nil, err
+	}
+	dek := encryption.NewEncryptor(dekH)
+
+	obj := m.BucketHandle.Object(string(fileID))
+
+	in, err := obj.NewReader(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var buf bytes.Buffer
+	_, err = buf.ReadFrom(in)
+	if err != nil {
+		return nil, err
+	}
+
+	err = in.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	body, err := dek.Decrypt(buf.Bytes(), []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	return &file.File{
+		ID:        fileID,
+		MimeType:  md.MimeType,
+		Size:      md.Size,
+		CreatedAt: md.CreatedAt,
+		Body:      &body,
+	}, nil
 }

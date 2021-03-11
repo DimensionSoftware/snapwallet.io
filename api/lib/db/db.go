@@ -72,12 +72,34 @@ func (db Db) SaveUser(ctx context.Context, tx *firestore.Transaction, u *user.Us
 	return err
 }
 
-// SaveFileMetadata saves a user object (upsert/put semantics)
+// SaveFileMetadata saves file metadata
 func (db Db) SaveFileMetadata(ctx context.Context, userID user.ID, md *file.Metadata) error {
 	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("files").Doc(string(md.ID))
+
 	_, err := ref.Set(ctx, md)
 
 	return err
+}
+
+// GetFileMetadata gets file metadata
+func (db Db) GetFileMetadata(ctx context.Context, userID user.ID, fileID file.ID) (*file.Metadata, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("files").Doc(string(fileID))
+
+	snap, err := ref.Get(ctx)
+	if status.Code(err) == codes.NotFound {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var md file.Metadata
+	err = snap.DataTo(&md)
+	if err != nil {
+		return nil, err
+	}
+
+	return &md, nil
 }
 
 // GetOrCreateUser creates a user object

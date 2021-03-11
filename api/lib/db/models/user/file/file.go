@@ -13,3 +13,12 @@ type Metadata struct {
 	Size              int32     `firestore:"size"`
 	CreatedAt         time.Time `firestore:"createdAt"`
 }
+
+// File represents the returned clear file
+type File struct {
+	ID        ID
+	MimeType  string
+	Size      int32
+	CreatedAt time.Time
+	Body      *[]byte
+}
