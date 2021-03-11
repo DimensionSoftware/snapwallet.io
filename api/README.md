@@ -73,3 +73,15 @@ https://github.com/miscreant/meta/wiki/AES-SIV
 
 
 
+```
+import (
+	"github.com/disintegration/imaging"
+)
+
+func ProvideFoo() {
+	// Resize srcImage to size = 128x128px using the Lanczos filter.
+	dstImage128 := imaging.Resize(srcImage, 128, 128, imaging.Lanczos)
+
+}
+
+```
