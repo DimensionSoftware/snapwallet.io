@@ -238,6 +238,27 @@ message UploadFileResponse {
   string file_id = 1;
 }
 
+enum ImageProcessingMode {
+  IP_FIT = 0;
+  IP_RESIZE = 1;
+}
+
+message GetImageRequest {
+  string file_id = 1;
+  ImageProcessingMode processingMode = 2;
+  int32 width = 3;
+  int32 height = 4;
+}
+
+message GetImageResponse {
+  string filename = 1;
+  string mime_type = 2;
+  int32 size = 3;
+  bytes body = 4;
+  int32 width = 5;
+  int32 height = 6;
+}
+
 
 service Flux {
   // Get viewer data
@@ -352,4 +373,11 @@ service Flux {
   //
   // ...
   rpc UploadFile(UploadFileRequest) returns (UploadFileResponse) {}
+
+  // GetImage returns an image with optionally specified resize proportions
+  //
+  // The image is reference via a file ID; the blob data will be returned as well as the mimetype and size.
+  //
+  // If the file is not of an image mime type, you will get an InvalidArguments error
+  rpc GetImage(GetImageRequest) returns (GetImageResponse) {}
 }

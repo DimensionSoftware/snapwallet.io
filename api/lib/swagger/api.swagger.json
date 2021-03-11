@@ -409,6 +409,41 @@
         }
       }
     },
+    "GetImageResponse": {
+      "type": "object",
+      "properties": {
+        "filename": {
+          "type": "string"
+        },
+        "mimeType": {
+          "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "body": {
+          "type": "string",
+          "format": "byte"
+        },
+        "width": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "height": {
+          "type": "integer",
+          "format": "int32"
+        }
+      }
+    },
+    "ImageProcessingMode": {
+      "type": "string",
+      "enum": [
+        "IP_FIT",
+        "IP_RESIZE"
+      ],
+      "default": "IP_FIT"
+    },
     "OneTimePasscodeRequest": {
       "type": "object",
       "properties": {
