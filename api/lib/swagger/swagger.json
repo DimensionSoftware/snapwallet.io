@@ -656,6 +656,15 @@
         },
         "phone": {
           "$ref": "#/definitions/ProfileDataItemInfo"
+        },
+        "governmentIdDoc": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
+        },
+        "proofOfAddressDoc": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
+        },
+        "achAuthorizationFormDoc": {
+          "$ref": "#/definitions/ProfileDataItemInfo"
         }
       },
       "description": "represents all profile data for a user",
@@ -667,8 +676,17 @@
         "id": {
           "type": "string"
         },
+        "fileIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
         "kind": {
           "$ref": "#/definitions/ProfileDataItemKind"
+        },
+        "subKind": {
+          "type": "string"
         },
         "status": {
           "$ref": "#/definitions/ProfileDataItemStatus"
@@ -699,7 +717,10 @@
         "K_EMAIL",
         "K_ADDRESS",
         "K_DATE_OF_BIRTH",
-        "K_SSN"
+        "K_SSN",
+        "K_GOVERNMENT_ID_DOC",
+        "K_PROOF_OF_ADDRESS_DOC",
+        "K_ACH_AUTHORIZATION_FORM_DOC"
       ],
       "default": "K_UNKNOWN"
     },
@@ -728,6 +749,24 @@
         },
         "address": {
           "$ref": "#/definitions/Address"
+        },
+        "governmentIdDocFileIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "proofOfAddressDocFileIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "achAuthorizationFormDocFileIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "description": "request",

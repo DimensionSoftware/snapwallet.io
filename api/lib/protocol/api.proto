@@ -172,6 +172,9 @@ message SaveProfileDataRequest {
   string date_of_birth = 2;
   string ssn = 3;
   Address address = 4;
+  repeated string government_id_doc_file_ids = 5;
+  repeated string proof_of_address_doc_file_ids = 6;
+  repeated string ach_authorization_form_doc_file_ids = 7;
 }
 
 // ProfileData
@@ -184,6 +187,9 @@ message ProfileDataInfo {
   ProfileDataItemInfo address = 4;
   ProfileDataItemInfo email = 5;
   ProfileDataItemInfo phone = 6;
+  ProfileDataItemInfo government_id_doc = 7;
+  ProfileDataItemInfo proof_of_address_doc = 8;
+  ProfileDataItemInfo ach_authorization_form_doc = 9;
 }
 
 // ProfileDataInfo
@@ -191,12 +197,14 @@ message ProfileDataInfo {
 // represents a saved profile data fields' status
 message ProfileDataItemInfo {
   string                id = 1;
-  ProfileDataItemKind   kind = 2;
-  ProfileDataItemStatus status = 3;
-  int32                 length = 4;
-  string                created_at = 5;
-  string                updated_at = 6;
-  string                sealed_at = 7;
+  repeated string       file_ids = 2;
+  ProfileDataItemKind   kind = 3;
+  string                sub_kind = 4;
+  ProfileDataItemStatus status = 5;
+  int32                 length = 6;
+  string                created_at = 7;
+  string                updated_at = 8;
+  string                sealed_at = 9;
 }
 
 enum ProfileDataItemKind {
@@ -207,6 +215,9 @@ enum ProfileDataItemKind {
   K_ADDRESS = 4;
   K_DATE_OF_BIRTH = 5;
   K_SSN = 6;
+  K_GOVERNMENT_ID_DOC = 7;
+  K_PROOF_OF_ADDRESS_DOC = 8;
+  K_ACH_AUTHORIZATION_FORM_DOC = 9;
 }
 
 enum ProfileDataItemStatus {

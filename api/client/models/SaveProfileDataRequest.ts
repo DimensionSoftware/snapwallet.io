@@ -21,6 +21,9 @@ export class SaveProfileDataRequest {
     'dateOfBirth'?: string;
     'ssn'?: string;
     'address'?: Address;
+    'governmentIdDocFileIds'?: Array<string>;
+    'proofOfAddressDocFileIds'?: Array<string>;
+    'achAuthorizationFormDocFileIds'?: Array<string>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -47,6 +50,24 @@ export class SaveProfileDataRequest {
             "name": "address",
             "baseName": "address",
             "type": "Address",
+            "format": ""
+        },
+        {
+            "name": "governmentIdDocFileIds",
+            "baseName": "governmentIdDocFileIds",
+            "type": "Array<string>",
+            "format": ""
+        },
+        {
+            "name": "proofOfAddressDocFileIds",
+            "baseName": "proofOfAddressDocFileIds",
+            "type": "Array<string>",
+            "format": ""
+        },
+        {
+            "name": "achAuthorizationFormDocFileIds",
+            "baseName": "achAuthorizationFormDocFileIds",
+            "type": "Array<string>",
             "format": ""
         }    ];
 

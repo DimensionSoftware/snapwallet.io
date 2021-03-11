@@ -23,6 +23,9 @@ export class ProfileDataInfo {
     'address'?: ProfileDataItemInfo;
     'email'?: ProfileDataItemInfo;
     'phone'?: ProfileDataItemInfo;
+    'governmentIdDoc'?: ProfileDataItemInfo;
+    'proofOfAddressDoc'?: ProfileDataItemInfo;
+    'achAuthorizationFormDoc'?: ProfileDataItemInfo;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -60,6 +63,24 @@ export class ProfileDataInfo {
         {
             "name": "phone",
             "baseName": "phone",
+            "type": "ProfileDataItemInfo",
+            "format": ""
+        },
+        {
+            "name": "governmentIdDoc",
+            "baseName": "governmentIdDoc",
+            "type": "ProfileDataItemInfo",
+            "format": ""
+        },
+        {
+            "name": "proofOfAddressDoc",
+            "baseName": "proofOfAddressDoc",
+            "type": "ProfileDataItemInfo",
+            "format": ""
+        },
+        {
+            "name": "achAuthorizationFormDoc",
+            "baseName": "achAuthorizationFormDoc",
             "type": "ProfileDataItemInfo",
             "format": ""
         }    ];

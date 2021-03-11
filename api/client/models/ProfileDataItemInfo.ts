@@ -19,7 +19,9 @@ import { HttpFile } from '../http/http';
 */
 export class ProfileDataItemInfo {
     'id'?: string;
+    'fileIds'?: Array<string>;
     'kind'?: ProfileDataItemKind;
+    'subKind'?: string;
     'status'?: ProfileDataItemStatus;
     'length'?: number;
     'createdAt'?: string;
@@ -36,9 +38,21 @@ export class ProfileDataItemInfo {
             "format": ""
         },
         {
+            "name": "fileIds",
+            "baseName": "fileIds",
+            "type": "Array<string>",
+            "format": ""
+        },
+        {
             "name": "kind",
             "baseName": "kind",
             "type": "ProfileDataItemKind",
+            "format": ""
+        },
+        {
+            "name": "subKind",
+            "baseName": "subKind",
+            "type": "string",
             "format": ""
         },
         {
