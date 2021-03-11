@@ -43,7 +43,7 @@
       dispatch('change', e.target.value)
     }}
     min={type === 'number' ? 0.0 : null}
-    value={value || defaultValue || ''}
+    value={defaultValue || ''}
   />
   <span class="fx" />
   <span class="bg" />
