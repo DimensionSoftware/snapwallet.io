@@ -436,7 +436,15 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		}
 
 		if req.GovernmentIdDoc != nil {
-			//req.GovernmentIdDoc.Kind
+			if req.GovernmentIdDoc.Kind == proto.GovernmentIdDocumentInputKind_GI_UNKNOWN {
+				return status.Errorf(codes.InvalidArgument, "government id document kind needs to be specified ")
+			}
+			kind := governmentid.KindFromGovernmentIdDocKind(req.GovernmentIdDoc.Kind)
+
+			if len(req.GovernmentIdDoc.FileIds) != kind.FilesRequired() {
+				return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
+			}
+
 			for _, fileID := range req.GovernmentIdDoc.FileIds {
 				meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
 				if err != nil {
@@ -445,15 +453,6 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				if meta == nil {
 					return status.Errorf(codes.InvalidArgument, "one or more file ids is invalid")
 				}
-			}
-
-			if req.GovernmentIdDoc.Kind == proto.GovernmentIdDocumentInputKind_GI_UNKNOWN {
-				return status.Errorf(codes.InvalidArgument, "government id document kind needs to be specified ")
-			}
-			kind := governmentid.KindFromGovernmentIdDocKind(req.GovernmentIdDoc.Kind)
-
-			if len(req.GovernmentIdDoc.FileIds) != kind.FilesRequired() {
-				return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
 			}
 
 			if governmentIDData == nil {
