@@ -697,6 +697,7 @@ func (s *Server) GetImage(ctx context.Context, req *proto.GetImageRequest) (*pro
 			return nil, status.Errorf(codes.InvalidArgument, "in fit mode you must provide width and height")
 		}
 
+		log.Println("FUCK", len(*f.Body))
 		img, err := imaging.Decode(bytes.NewReader(*f.Body))
 		if err != nil {
 			return nil, err
