@@ -50,6 +50,7 @@ type ProfileDataGovernmentID struct {
 	Kind      Kind
 	FileIDs   []file.ID
 	CreatedAt time.Time
+	UpdatedAt *time.Time
 	SealedAt  *time.Time
 }
 
@@ -59,8 +60,11 @@ func (pdata ProfileDataGovernmentID) Encrypt(m *encryption.Manager, userID user.
 	return &common.EncryptedProfileData{
 		ID:        pdata.ID,
 		Kind:      common.KindGovernmentID,
+		SubKind:   (*string)(&pdata.Kind),
 		Status:    pdata.Status,
+		Files:     &pdata.FileIDs,
 		CreatedAt: pdata.CreatedAt,
+		UpdatedAt: pdata.UpdatedAt,
 		SealedAt:  pdata.SealedAt,
 	}, nil
 }
