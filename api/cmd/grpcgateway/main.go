@@ -8,6 +8,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 	"strings"
 
 	"github.com/golang/glog"
@@ -58,6 +59,8 @@ func run() error {
 
 	// Upload translator for grpc (accept multipart on frontend)
 	mux.HandlePath("POST", "/upload", uploadFileHandler(ctx, client))
+	// GetImage thumbnailer translator for grpc (accept multipart on frontend)
+	mux.HandlePath("GET", "/viewer/images/{fileID}/{mode}/{width}/{height}", getImageHandler(ctx, client))
 
 	return http.ListenAndServe(apiPort(), allowCORS(mux))
 }
@@ -173,6 +176,74 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 		}
 
 		w.Write(out)
+	}
+}
+
+func getImageHandler(ctx context.Context, flux proto.FluxClient) runtime.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		fileID := pathParams["fileID"]
+		if fileID == "" {
+			http.Error(w, "file id cannot be blank", http.StatusBadRequest)
+			return
+		}
+
+		var mode proto.ImageProcessingMode
+		if pathParams["mode"] == "fit" {
+			mode = proto.ImageProcessingMode_IP_FIT
+		} else if pathParams["mode"] == "resize" {
+			mode = proto.ImageProcessingMode_IP_RESIZE
+		} else {
+			http.Error(w, "valid modes are 'fit' or 'resize'", http.StatusBadRequest)
+			return
+		}
+
+		width, err := strconv.Atoi(pathParams["width"])
+		if err != nil {
+			http.Error(w, "width must be an integer", http.StatusBadRequest)
+			return
+		}
+
+		height, err := strconv.Atoi(pathParams["height"])
+		if err != nil {
+			http.Error(w, "height must be an integer", http.StatusBadRequest)
+			return
+		}
+
+		ctx := metadata.NewOutgoingContext(ctx, metadata.MD{
+			"authorization": []string{"Bearer " + r.URL.Query().Get("jwt")},
+		})
+		resp, err := flux.GetImage(ctx, &proto.GetImageRequest{
+			FileId:         fileID,
+			ProcessingMode: mode,
+			Width:          int32(width),
+			Height:         int32(height),
+		})
+		if err != nil {
+			resp := map[string]interface{}{}
+
+			status, ok := status.FromError(err)
+			if ok {
+				resp["code"] = status.Code()
+				resp["message"] = status.Message()
+			} else {
+				log.Println(err)
+				resp["code"] = codes.Unknown
+				resp["message"] = "An unknown error occurred."
+			}
+
+			out, err := json.Marshal(&resp)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+
+			http.Error(w, string(out), runtime.HTTPStatusFromCode(resp["code"].(codes.Code)))
+			return
+		}
+
+		w.Header().Add("content-type", resp.MimeType)
+		w.Write(resp.Body)
 	}
 }
 
