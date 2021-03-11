@@ -172,9 +172,18 @@ message SaveProfileDataRequest {
   string date_of_birth = 2;
   string ssn = 3;
   Address address = 4;
-  repeated string government_id_doc_file_ids = 5;
-  repeated string proof_of_address_doc_file_ids = 6;
-  repeated string ach_authorization_form_doc_file_ids = 7;
+  GovernmentIdDocumentInput government_id_doc = 5;
+  DocumentInput proof_of_address_doc = 6;
+  DocumentInput ach_authorization_form_doc = 7;
+}
+
+message DocumentInput {
+  repeated string file_ids = 1;
+}
+
+message GovernmentIdDocumentInput {
+  GovernmentIdDocumentInputKind kind = 1;
+  repeated string               file_ids = 2;
 }
 
 // ProfileData
@@ -226,6 +235,14 @@ enum ProfileDataItemStatus {
   S_PENDING = 2;
   S_INVALID = 3;
   S_APPROVED = 4;
+}
+
+enum GovernmentIdDocumentInputKind {
+  GI_UNKNOWN = 0;
+  GI_US_DRIVING_LICENSE = 1;
+  GI_US_PASSPORT_CARD = 2;
+  GI_US_GOVERNMENT_ID = 3;
+  GI_US_PASSPORT = 4;
 }
 
 message ChangeViewerEmailRequest {

@@ -5,7 +5,10 @@ import { Configuration} from '../configuration'
 import { Address } from '../models/Address';
 import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
+import { DocumentInput } from '../models/DocumentInput';
 import { GetImageResponse } from '../models/GetImageResponse';
+import { GovernmentIdDocumentInput } from '../models/GovernmentIdDocumentInput';
+import { GovernmentIdDocumentInputKind } from '../models/GovernmentIdDocumentInputKind';
 import { ImageProcessingMode } from '../models/ImageProcessingMode';
 import { InlineResponse200 } from '../models/InlineResponse200';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';

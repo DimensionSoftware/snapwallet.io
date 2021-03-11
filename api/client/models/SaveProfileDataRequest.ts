@@ -11,6 +11,8 @@
  */
 
 import { Address } from './Address';
+import { DocumentInput } from './DocumentInput';
+import { GovernmentIdDocumentInput } from './GovernmentIdDocumentInput';
 import { HttpFile } from '../http/http';
 
 /**
@@ -21,9 +23,9 @@ export class SaveProfileDataRequest {
     'dateOfBirth'?: string;
     'ssn'?: string;
     'address'?: Address;
-    'governmentIdDocFileIds'?: Array<string>;
-    'proofOfAddressDocFileIds'?: Array<string>;
-    'achAuthorizationFormDocFileIds'?: Array<string>;
+    'governmentIdDoc'?: GovernmentIdDocumentInput;
+    'proofOfAddressDoc'?: DocumentInput;
+    'achAuthorizationFormDoc'?: DocumentInput;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -53,21 +55,21 @@ export class SaveProfileDataRequest {
             "format": ""
         },
         {
-            "name": "governmentIdDocFileIds",
-            "baseName": "governmentIdDocFileIds",
-            "type": "Array<string>",
+            "name": "governmentIdDoc",
+            "baseName": "governmentIdDoc",
+            "type": "GovernmentIdDocumentInput",
             "format": ""
         },
         {
-            "name": "proofOfAddressDocFileIds",
-            "baseName": "proofOfAddressDocFileIds",
-            "type": "Array<string>",
+            "name": "proofOfAddressDoc",
+            "baseName": "proofOfAddressDoc",
+            "type": "DocumentInput",
             "format": ""
         },
         {
-            "name": "achAuthorizationFormDocFileIds",
-            "baseName": "achAuthorizationFormDocFileIds",
-            "type": "Array<string>",
+            "name": "achAuthorizationFormDoc",
+            "baseName": "achAuthorizationFormDoc",
+            "type": "DocumentInput",
             "format": ""
         }    ];
 

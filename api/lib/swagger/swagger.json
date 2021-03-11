@@ -497,6 +497,17 @@
         }
       }
     },
+    "DocumentInput": {
+      "type": "object",
+      "properties": {
+        "fileIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
     "GetImageResponse": {
       "type": "object",
       "properties": {
@@ -523,6 +534,31 @@
           "format": "int32"
         }
       }
+    },
+    "GovernmentIdDocumentInput": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "$ref": "#/definitions/GovernmentIdDocumentInputKind"
+        },
+        "fileIds": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "GovernmentIdDocumentInputKind": {
+      "type": "string",
+      "enum": [
+        "GI_UNKNOWN",
+        "GI_US_DRIVING_LICENSE",
+        "GI_US_PASSPORT_CARD",
+        "GI_US_GOVERNMENT_ID",
+        "GI_US_PASSPORT"
+      ],
+      "default": "GI_UNKNOWN"
     },
     "ImageProcessingMode": {
       "type": "string",
@@ -750,23 +786,14 @@
         "address": {
           "$ref": "#/definitions/Address"
         },
-        "governmentIdDocFileIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "governmentIdDoc": {
+          "$ref": "#/definitions/GovernmentIdDocumentInput"
         },
-        "proofOfAddressDocFileIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "proofOfAddressDoc": {
+          "$ref": "#/definitions/DocumentInput"
         },
-        "achAuthorizationFormDocFileIds": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          }
+        "achAuthorizationFormDoc": {
+          "$ref": "#/definitions/DocumentInput"
         }
       },
       "description": "request",

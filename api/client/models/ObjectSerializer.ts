@@ -1,7 +1,10 @@
 export * from './Address';
 export * from './ChangeViewerEmailRequest';
 export * from './ChangeViewerPhoneRequest';
+export * from './DocumentInput';
 export * from './GetImageResponse';
+export * from './GovernmentIdDocumentInput';
+export * from './GovernmentIdDocumentInputKind';
 export * from './ImageProcessingMode';
 export * from './InlineResponse200';
 export * from './OneTimePasscodeRequest';
@@ -26,7 +29,10 @@ export * from './ViewerDataResponse';
 import { Address } from './Address';
 import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from './ChangeViewerPhoneRequest';
+import { DocumentInput } from './DocumentInput';
 import { GetImageResponse } from './GetImageResponse';
+import { GovernmentIdDocumentInput } from './GovernmentIdDocumentInput';
+import { GovernmentIdDocumentInputKind } from './GovernmentIdDocumentInputKind';
 import { ImageProcessingMode } from './ImageProcessingMode';
 import { InlineResponse200 } from './InlineResponse200';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
@@ -67,6 +73,7 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
 
                  
 let enumsMap: Set<string> = new Set<string>([
+    "GovernmentIdDocumentInputKind",
     "ImageProcessingMode",
     "ProfileDataItemKind",
     "ProfileDataItemStatus",
@@ -76,7 +83,9 @@ let typeMap: {[index: string]: any} = {
     "Address": Address,
     "ChangeViewerEmailRequest": ChangeViewerEmailRequest,
     "ChangeViewerPhoneRequest": ChangeViewerPhoneRequest,
+    "DocumentInput": DocumentInput,
     "GetImageResponse": GetImageResponse,
+    "GovernmentIdDocumentInput": GovernmentIdDocumentInput,
     "InlineResponse200": InlineResponse200,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,

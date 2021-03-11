@@ -14,7 +14,10 @@ middleware.ts
 models/Address.ts
 models/ChangeViewerEmailRequest.ts
 models/ChangeViewerPhoneRequest.ts
+models/DocumentInput.ts
 models/GetImageResponse.ts
+models/GovernmentIdDocumentInput.ts
+models/GovernmentIdDocumentInputKind.ts
 models/ImageProcessingMode.ts
 models/InlineResponse200.ts
 models/ObjectSerializer.ts
