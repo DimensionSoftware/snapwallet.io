@@ -1,4 +1,6 @@
 <script lang="ts">
+  //@ts-ignore
+  import human from 'humanparser'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -15,7 +17,8 @@
 
   let animation = 'left'
 
-  const defaultName = `${$userStore.firstName} ${$userStore.lastName}`
+  $: fullName = `${$userStore.firstName} ${$userStore.lastName}`.trim()
+  const defaultName = `${$userStore.firstName} ${$userStore.lastName}`.trim()
 
   const handleNextStep = () => {
     const { firstName, lastName, birthDate, socialSecurityNumber } = $userStore,
@@ -31,17 +34,14 @@
     if (!birthDate) return focus(1)
     if (!socialSecurityNumber) return focus(2)
 
-    window
-      .API
-      .fluxSaveProfileData({
-        ssn: socialSecurityNumber,
-        dateOfBirth: birthDate,
-        // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
-        legalName: `${firstName} ${lastName}`,
-      })
-      .then(() => {
-        push(Routes.CHECKOUT_OVERVIEW)
-      })
+    window.API.fluxSaveProfileData({
+      ssn: socialSecurityNumber,
+      dateOfBirth: birthDate,
+      // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
+      legalName: `${firstName} ${lastName}`,
+    }).then(() => {
+      push(Routes.CHECKOUT_OVERVIEW)
+    })
   }
 
   const onKeyDown = (e: Event) => {
@@ -54,7 +54,7 @@
 <ModalContent {animation}>
   <ModalBody>
     <ModalHeader>Tell Us About You</ModalHeader>
-    <Label label="Full Name">
+    <Label label={fullName || 'Full Name'}>
       <Input
         inputmode="text"
         autocapitalize="true"
@@ -63,9 +63,12 @@
         autofocus
         type="text"
         placeholder="Your Full Name"
-        defaultValue={defaultName.trim()}
+        defaultValue={defaultName}
+        pattern={`[\\w]+\\s`}
         on:change={e => {
-          userStore.setFullName(e.detail)
+          const {firstName, lastName} = human.parseName(e.detail)
+          userStore.setFirstName(firstName ?? '')
+          userStore.setLastName(lastName ?? '')
         }}
       />
     </Label>
@@ -77,7 +80,10 @@
         required
         type="text"
         placeholder="yyyy-mm-dd"
+        pattern={`[\\d]{4}-[\\d]{2}-[\\d]{2}`}
+        maskChar="[\d-]"
         defaultValue={$userStore.birthDate}
+        value={$userStore.birthDate}
         on:change={e => {
           userStore.setBirthDate(e.detail)
         }}
@@ -91,7 +97,10 @@
         required
         type="text"
         placeholder="xxx-xx-xxxx"
+        maskChar="[\d-]"
+        pattern={`[\\d]{3}-[\\d]{2}-[\\d]{4}`}
         defaultValue={$userStore.socialSecurityNumber}
+        value={$userStore.socialSecurityNumber}
         on:change={e => {
           userStore.setSocialSecurityNumber(e.detail)
         }}
