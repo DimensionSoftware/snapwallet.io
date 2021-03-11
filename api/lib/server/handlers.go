@@ -1,6 +1,7 @@
 package server
 
 import (
+	"bytes"
 	"context"
 	"fmt"
 	"log"
@@ -15,9 +16,11 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
+	"github.com/disintegration/imaging"
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/file"
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
@@ -676,22 +679,51 @@ func (s *Server) UploadFile(ctx context.Context, req *proto.UploadFileRequest) (
 
 // GetImage is an rpc handler
 func (s *Server) GetImage(ctx context.Context, req *proto.GetImageRequest) (*proto.GetImageResponse, error) {
-	/*
-		u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	f, err := s.FileManager.GetFile(ctx, u.ID, file.ID(req.FileId))
+	if err != nil {
+		return nil, err
+	}
+
+	var out []byte
+	var width, height int32
+
+	if req.ProcessingMode == proto.ImageProcessingMode_IP_FIT {
+		if req.Width == 0 || req.Height == 0 {
+			return nil, status.Errorf(codes.InvalidArgument, "in fit mode you must provide width and height")
+		}
+
+		img, err := imaging.Decode(bytes.NewReader(*f.Body))
 		if err != nil {
 			return nil, err
 		}
 
-			log.Println(req.Filename)
-			log.Println("       mime type:", req.MimeType)
-			log.Println(" size (reported):", req.Size)
-			log.Println(" size (verified):", len(req.Body))
+		fitted := imaging.Fit(img, int(req.Width), int(req.Height), imaging.CatmullRom)
+		width = int32(fitted.Rect.Dx())
+		height = int32(fitted.Rect.Dy())
 
-			fileID, err := s.FileManager.UploadEncryptedFile(ctx, u.ID, req)
-			if err != nil {
-				return nil, err
-			}
-	*/
+		var buf bytes.Buffer
+		err = imaging.Encode(&buf, fitted, imaging.JPEG)
+		if err != nil {
+			return nil, err
+		}
 
-	return &proto.GetImageResponse{}, nil
+		out = buf.Bytes()
+	}
+
+	if req.ProcessingMode == proto.ImageProcessingMode_IP_RESIZE {
+		return nil, status.Errorf(codes.Unimplemented, "resize mode is not implemented yet")
+	}
+
+	return &proto.GetImageResponse{
+		MimeType: "image/jpeg",
+		Size:     int32(len(out)),
+		Body:     out,
+		Width:    width,
+		Height:   height,
+	}, nil
 }
