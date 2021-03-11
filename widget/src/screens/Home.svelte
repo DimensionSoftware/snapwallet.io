@@ -128,6 +128,8 @@
         </div>
         <Label label="Amount">
           <Input
+            pattern={`[\\d,\\.]*`}
+            maskChar="[\d,\.]"
             on:change={e => {
               const val = Number(e.detail)
               isEnteringSourceAmount
