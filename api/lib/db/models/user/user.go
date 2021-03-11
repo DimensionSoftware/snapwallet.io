@@ -118,7 +118,7 @@ func (u *User) Encrypt(m *encryption.Manager, userID ID) (*EncryptedUser, error)
 
 	return &EncryptedUser{
 		ID:                u.ID,
-		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
+		DataEncryptionKey: *encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EmailHash:         emailHash,
 		EmailEncrypted:    emailEncrypted,
 		EmailVerifiedAt:   u.EmailVerifiedAt,

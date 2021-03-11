@@ -73,7 +73,11 @@ func DecryptAndUnmarshal(m *encryption.Manager, userID user.ID, data common.Encr
 		return nil, err
 	}
 
-	out, err := Unmarshal(&data, clear)
+	if clear == nil {
+		return nil, nil
+	}
+
+	out, err := Unmarshal(&data, *clear)
 	if err != nil {
 		return nil, err
 	}

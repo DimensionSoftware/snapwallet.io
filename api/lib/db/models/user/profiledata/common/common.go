@@ -4,6 +4,7 @@ import (
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/file"
 	"github.com/khoerling/flux/api/lib/encryption"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
@@ -77,33 +78,45 @@ const (
 	KindDateOfBirth ProfileDataKind = "DATE_OF_BIRTH"
 	// KindSSN signifies an individuals' U.S. social security number in a ProfileDataSSN object
 	KindSSN ProfileDataKind = "SSN"
+	// KindGovernmentID signifies an individuals' government id in a ProfileDataGovernmentID object
+	KindGovernmentID ProfileDataKind = "GOVERNMENT_ID"
 )
 
 // EncryptedProfileData is a generic container store encrypted ProfileData
 type EncryptedProfileData struct {
 	ID                ProfileDataID     `firestore:"id"`
 	Kind              ProfileDataKind   `firestore:"kind"`
+	SubKind           *string           `firestore:"subKind,omitempty"`
 	Status            ProfileDataStatus `firestore:"status"`
-	DataEncryptionKey []byte            `firestore:"DEK"`
-	EncryptedData     []byte            `firestore:"encryptedData"`
 	CreatedAt         time.Time         `firestore:"createdAt"`
+	DataEncryptionKey *[]byte           `firestore:"DEK,omitempty"`
+	EncryptedData     *[]byte           `firestore:"encryptedData,omitempty"`
+	Files             *[]file.ID        `firestore:"files,omitempty"`
 	UpdatedAt         *time.Time        `firestore:"updatedAt,omitempty"`
 	SealedAt          *time.Time        `firestore:"sealedAt,omitempty"`
 }
 
 // Decrypt decrypts a type
-func (encryptedProfileData EncryptedProfileData) Decrypt(m *encryption.Manager, userID user.ID) ([]byte, error) {
-	dekH, err := encryption.ParseAndDecryptKeyBytes(encryptedProfileData.DataEncryptionKey, m.Encryptor)
+func (encryptedProfileData EncryptedProfileData) Decrypt(m *encryption.Manager, userID user.ID) (*[]byte, error) {
+	if encryptedProfileData.DataEncryptionKey == nil {
+		return nil, nil
+	}
+
+	if encryptedProfileData.EncryptedData == nil {
+		return nil, nil
+	}
+
+	dekH, err := encryption.ParseAndDecryptKeyBytes(*encryptedProfileData.DataEncryptionKey, m.Encryptor)
 	if err != nil {
 		return nil, err
 	}
-
 	dek := encryption.NewEncryptor(dekH)
-	decrypted, err := dek.Decrypt(encryptedProfileData.EncryptedData, []byte(userID))
+
+	decrypted, err := dek.Decrypt(*encryptedProfileData.EncryptedData, []byte(userID))
 	if err != nil {
 		return nil, err
 	}
 
-	return decrypted, nil
+	return &decrypted, nil
 
 }

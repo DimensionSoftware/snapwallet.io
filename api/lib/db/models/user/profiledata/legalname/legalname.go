@@ -68,6 +68,6 @@ func (pdata ProfileDataLegalName) Encrypt(m *encryption.Manager, userID user.ID)
 		UpdatedAt:         pdata.UpdatedAt,
 		SealedAt:          pdata.SealedAt,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
-		EncryptedData:     encryptedData,
+		EncryptedData:     &encryptedData,
 	}, nil
 }

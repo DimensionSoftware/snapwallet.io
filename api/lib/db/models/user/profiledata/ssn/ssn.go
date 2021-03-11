@@ -67,6 +67,6 @@ func (pdata ProfileDataSSN) Encrypt(m *encryption.Manager, userID user.ID) (*com
 		CreatedAt:         pdata.CreatedAt,
 		SealedAt:          pdata.SealedAt,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
-		EncryptedData:     encryptedData,
+		EncryptedData:     &encryptedData,
 	}, nil
 }

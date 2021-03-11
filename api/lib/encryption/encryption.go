@@ -116,7 +116,7 @@ func NewEncryptor(kh *keyset.Handle) tink.AEAD {
 }
 
 // GetEncryptedKeyBytes .
-func GetEncryptedKeyBytes(kh *keyset.Handle, masterKey tink.AEAD) []byte {
+func GetEncryptedKeyBytes(kh *keyset.Handle, masterKey tink.AEAD) *[]byte {
 	var buf bytes.Buffer
 	err := kh.Write(keyset.NewBinaryWriter(&buf), masterKey)
 	if err != nil {
@@ -124,7 +124,8 @@ func GetEncryptedKeyBytes(kh *keyset.Handle, masterKey tink.AEAD) []byte {
 		log.Fatal(err)
 	}
 
-	return buf.Bytes()
+	bytes := buf.Bytes()
+	return &bytes
 }
 
 // ParseAndDecryptKeyBytes .

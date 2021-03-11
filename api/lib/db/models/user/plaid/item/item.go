@@ -58,7 +58,7 @@ func (u *Item) Encrypt(m *encryption.Manager, userID user.ID) (*EncryptedItem, e
 
 	return &EncryptedItem{
 		ID:                   u.ID,
-		DataEncryptionKey:    encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
+		DataEncryptionKey:    *encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		AccessTokenEncrypted: *accessTokenEncrypted,
 		CreatedAt:            u.CreatedAt,
 	}, nil

@@ -52,7 +52,7 @@ func (m Manager) UploadEncryptedFile(ctx context.Context, userID user.ID, req *p
 
 	md := file.Metadata{
 		ID:                fileID,
-		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.EncryptionManager.Encryptor),
+		DataEncryptionKey: *encryption.GetEncryptedKeyBytes(dekH, m.EncryptionManager.Encryptor),
 		MimeType:          req.MimeType,
 		Size:              req.Size,
 		CreatedAt:         now,
