@@ -64,6 +64,7 @@
         type="text"
         placeholder="Your Full Name"
         defaultValue={defaultName}
+        pattern={`[\\w]+\\s`}
         on:change={e => {
           const {firstName, lastName} = human.parseName(e.detail)
           userStore.setFirstName(firstName ?? '')
@@ -79,7 +80,10 @@
         required
         type="text"
         placeholder="yyyy-mm-dd"
+        pattern={`[\\d]{4}-[\\d]{2}-[\\d]{2}`}
+        maskChar="[\d-]"
         defaultValue={$userStore.birthDate}
+        value={$userStore.birthDate}
         on:change={e => {
           userStore.setBirthDate(e.detail)
         }}
@@ -93,7 +97,10 @@
         required
         type="text"
         placeholder="xxx-xx-xxxx"
+        maskChar="[\d-]"
+        pattern={`[\\d]{3}-[\\d]{2}-[\\d]{4}`}
         defaultValue={$userStore.socialSecurityNumber}
+        value={$userStore.socialSecurityNumber}
         on:change={e => {
           userStore.setSocialSecurityNumber(e.detail)
         }}
