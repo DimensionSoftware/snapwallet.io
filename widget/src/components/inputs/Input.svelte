@@ -6,9 +6,12 @@
   export let inputmode: string = 'text'
   export let autocapitalize: string = ''
   export let defaultValue: string | number = ''
+  export let value: string | number = ''
   export let autocomplete: string = 'on'
   export let autofocus: boolean
   export let required: boolean
+  export let pattern: string = ''
+  export let maskChar: string = ''
 
   let isActive: boolean = Boolean(defaultValue)
 
@@ -25,13 +28,22 @@
     {placeholder}
     {autocomplete}
     {autofocus}
+    {pattern}
     {required}
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
+    }}
+    on:keydown={e => {
+      const invalidPress = maskChar && e.keyCode > 64 && !e.key.match(maskChar)
+      if (invalidPress) {
+        // is relevant key press and mask doesn't match, so-- cancel key
+        e.preventDefault()
+        return false
+      }
       dispatch('change', e.target.value)
     }}
     min={type === 'number' ? 0.0 : null}
-    value={defaultValue || ''}
+    value={value || defaultValue || ''}
   />
   <span class="fx" />
   <span class="bg" />
