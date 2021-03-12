@@ -60,6 +60,8 @@ func (k ProfileDataKind) ToProfileDataItemKind() proto.ProfileDataItemKind {
 		return proto.ProfileDataItemKind_K_DATE_OF_BIRTH
 	case KindSSN:
 		return proto.ProfileDataItemKind_K_SSN
+	case KindGovernmentID:
+		return proto.ProfileDataItemKind_K_GOVERNMENT_ID_DOC
 	}
 
 	return proto.ProfileDataItemKind_K_UNKNOWN
@@ -81,6 +83,19 @@ const (
 	// KindGovernmentID signifies an individuals' government id in a ProfileDataGovernmentID object
 	KindGovernmentID ProfileDataKind = "GOVERNMENT_ID"
 )
+
+var ProfileDataKinds = []ProfileDataKind{
+	KindLegalName,
+	KindPhone,
+	KindEmail,
+	KindAddress,
+	KindDateOfBirth,
+	KindSSN,
+	KindGovernmentID,
+}
+
+// in the future it will be a subset of profiledatakinds
+var ProfileDataRequiredForWyre = ProfileDataKinds
 
 // EncryptedProfileData is a generic container store encrypted ProfileData
 type EncryptedProfileData struct {

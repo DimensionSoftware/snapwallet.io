@@ -36,6 +36,7 @@
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e.target.value)
     }}
+    on:keyup={e => dispatch('change', e.target.value)}
     min={type === 'number' ? 0.0 : null}
     value={withMaskOnInput(value, maskType)}
   />

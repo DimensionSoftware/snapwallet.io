@@ -81,8 +81,20 @@ const (
 	ProfileFieldIDIndividualLegalName ProfileFieldID = "individualLegalName"
 	// ProfileFieldIDIndividualEmail indicates the value is an email string
 	ProfileFieldIDIndividualEmail ProfileFieldID = "individualEmail"
+	// ProfileFieldIDIndividualCellphoneNumber indicates the value is a phone string
+	ProfileFieldIDIndividualCellphoneNumber ProfileFieldID = "individualCellphoneNumber"
+	// ProfileFieldIDIndividualDateOfBirth indiciates the value is a date of birth string
+	ProfileFieldIDIndividualDateOfBirth ProfileFieldID = "individualDateOfBirth"
+	// ProfileFieldIDIndividualSSN indicates the value is an ssn string
+	ProfileFieldIDIndividualSSN ProfileFieldID = "individualSsn"
 	// ProfileFieldIDIndividualResidenceAddress indicates the value is a ProfileFieldAddress object
 	ProfileFieldIDIndividualResidenceAddress ProfileFieldID = "individualResidenceAddress"
+	// ProfileFieldIDIndividualGovernmentID indicates the value is an uploaded document
+	ProfileFieldIDIndividualGovernmentID ProfileFieldID = "individualGovernmentId"
+	// ProfileFieldIDIndividualProofOfAddress indicates the value is an uploaded document
+	ProfileFieldIDIndividualProofOfAddress ProfileFieldID = "individualProofOfAddress"
+	// ProfileFieldIDIndividualACHAuthorizationForm indicates the value is an uploaded document
+	ProfileFieldIDIndividualACHAuthorizationForm ProfileFieldID = "individualAchAuthorizationForm"
 )
 
 // Client is the client interface for wyre

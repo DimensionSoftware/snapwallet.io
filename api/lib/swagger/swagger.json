@@ -812,6 +812,9 @@
         "hasPlaidItems": {
           "type": "boolean"
         },
+        "hasWyreAccountPrerequisitesMet": {
+          "type": "boolean"
+        },
         "hasWyreAccount": {
           "type": "boolean"
         },
