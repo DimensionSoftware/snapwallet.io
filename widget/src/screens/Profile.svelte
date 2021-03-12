@@ -12,7 +12,7 @@
   import { Logger, onEnterPressed } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
-  import { MaskTypes } from '../types'
+  import { Masks } from '../types'
 
   import { push } from 'svelte-spa-router'
 
@@ -82,7 +82,7 @@
         type="text"
         placeholder="yyyy-mm-dd"
         pattern={`[\\d]{4}-[\\d]{2}-[\\d]{2}`}
-        maskType={MaskTypes.INTL_DATE}
+        maskType={Masks.INTL_DATE}
         defaultValue={$userStore.birthDate}
         value={$userStore.birthDate}
         on:change={e => {
@@ -100,7 +100,7 @@
         placeholder="xxx-xx-xxxx"
         maskChar="[\d-]"
         pattern={`[\\d]{3}-[\\d]{2}-[\\d]{4}`}
-        maskType={MaskTypes.SSN}
+        maskType={Masks.SSN}
         defaultValue={$userStore.socialSecurityNumber}
         value={$userStore.socialSecurityNumber}
         on:change={e => {
