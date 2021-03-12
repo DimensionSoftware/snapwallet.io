@@ -50,8 +50,7 @@ const maskOnType = (val: string, mask: Masks) => {
 
 /**
  * Displays a mask for any string value.
- * The difference between this and withMaskOnType
- * is that the entire mask will always be displayed.
+ * The entire mask will always be visible.
  *
  * @param val The value to be masked.
  * @param maskType The mask type to use for the given value.
