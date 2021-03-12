@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, afterUpdate, createEventDispatcher } from 'svelte'
-  import { MaskTypes } from '../../types'
+  import { Masks } from '../../types'
   import { withMaskOnInput } from '../../masks'
 
   const dispatch = createEventDispatcher()
@@ -9,12 +9,12 @@
   export let inputmode: string = 'text'
   export let autocapitalize: string = ''
   export let value: string | number = ''
+  export let defaultValue: string | number = ''
   export let autocomplete: string = 'on'
   export let autofocus: boolean
   export let required: boolean
   export let pattern: string = ''
-  export let maskType: MaskTypes
-  export let defaultValue: string = ''
+  export let maskType: Masks
 
   let isActive: boolean = Boolean(defaultValue)
 
@@ -39,7 +39,7 @@
     }}
     on:keyup={e => dispatch('change', e.target.value)}
     min={type === 'number' ? 0.0 : null}
-    value={withMaskOnInput(value, maskType)}
+    value={withMaskOnInput(value || defaultValue, maskType)}
   />
   <span class="fx" />
   <span class="bg" />
