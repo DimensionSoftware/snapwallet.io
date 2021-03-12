@@ -12,7 +12,12 @@
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes, APIErrors } from './constants'
-  import { authedRouteOptions, isJWTValid, Logger, setFluxSession } from './util'
+  import {
+    authedRouteOptions,
+    isJWTValid,
+    Logger,
+    setFluxSession,
+  } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
 
@@ -83,10 +88,10 @@
     })
 
     // Centralized error handler
-    window.onunhandledrejection = (e) => {
+    window.onunhandledrejection = e => {
       Logger.error(e)
-      const msg = "Oops, an unexpected error occurred. Please try again later."
-      const {reason, body} = e
+      const msg = 'Oops, an unexpected error occurred. Please try again later.'
+      const { reason, body } = e
 
       if (reason?.body?.code === APIErrors.UNAUTHORIZED) {
         setFluxSession('')
@@ -96,7 +101,7 @@
 
       toaster.pop({
         msg: reason?.body?.message || body?.message || msg,
-        error: true
+        error: true,
       })
     }
   })
