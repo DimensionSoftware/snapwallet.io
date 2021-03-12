@@ -8,8 +8,8 @@ export interface IAsset {
   ticker: string
 }
 
-export enum MaskTypes {
-  PHONE = 'phone_number',
-  INTL_DATE = 'intl_date',
-  SSN = 'ssn',
+export enum Masks {
+  PHONE = '+x (xxx) xxx-xxxx',
+  SSN = 'xxx-xx-xxxx',
+  INTL_DATE = 'xxxx-xx-xx',
 }
