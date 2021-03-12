@@ -82,7 +82,7 @@
         type="text"
         placeholder="yyyy-mm-dd"
         pattern={`[\\d]{4}-[\\d]{2}-[\\d]{2}`}
-        maskType={Masks.INTL_DATE}
+        mask={Masks.INTL_DATE}
         defaultValue={$userStore.birthDate}
         value={$userStore.birthDate}
         on:change={e => {
@@ -100,7 +100,7 @@
         placeholder="xxx-xx-xxxx"
         maskChar="[\d-]"
         pattern={`[\\d]{3}-[\\d]{2}-[\\d]{4}`}
-        maskType={Masks.SSN}
+        mask={Masks.SSN}
         defaultValue={$userStore.socialSecurityNumber}
         value={$userStore.socialSecurityNumber}
         on:change={e => {
