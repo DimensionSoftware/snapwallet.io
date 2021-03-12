@@ -1,15 +1,18 @@
-import { MaskTypes } from './types'
-
-enum Masks {
-  PHONE = '+x (xxx) xxx-xxxx',
-  SSN = 'xxx-xx-xxxx',
-  INTL_DATE = 'xxxx-xx-xx',
-}
+import type { Masks } from './types'
 
 /**
- * Masks any string value.
+ * Displays a mask for any string value.
+ * The entire mask will always be visible.
+ *
+ * @param val The value to be masked.
+ * @param maskType The mask type to use for the given value.
+ * @param maskChar The character to use for masking.
  */
-const maskValue = (val: string, mask: Masks, maskChar: string): string => {
+export const maskValue = (
+  val: string,
+  mask: Masks,
+  maskChar: string,
+): string => {
   const minChars = mask.match(/x/g).length
   const splitVal = val.split('')
   const filledChars = splitVal.length
@@ -20,11 +23,13 @@ const maskValue = (val: string, mask: Masks, maskChar: string): string => {
 }
 
 /**
+ * Unmask a previously masked value.
  *
- * Unmasks a previously masked value.
- *
+ * @param val The value to be unmasked.
+ * @param maskType The mask to use for unmasking the given value.
  */
-const unMaskValue = (val: string, mask: Masks): string => {
+export const unMaskValue = (val: string, mask: Masks): string => {
+  if (!val || !mask) return val
   const minChars = mask.match(/x/g).length
   const splitVal = val.split('')
   return [...new Array(minChars)].reduce((acc, v, index) => {
@@ -35,9 +40,15 @@ const unMaskValue = (val: string, mask: Masks): string => {
 }
 
 /**
- * Handles masking values on the fly.
+ * Mask any string value while typing.
+ * Only the entered values and masking up
+ * to that point will be visible.
+ *
+ * @param val The value to be masked.
+ * @param maskType The mask type to use for the given value.
  */
-const maskOnType = (val: string, mask: Masks) => {
+export const withMaskOnInput = (val?: string, mask?: Masks) => {
+  if (!mask || !val) return val
   val = unMaskValue(val, mask)
   const splitVal = val.split('')
   return splitVal
@@ -46,47 +57,4 @@ const maskOnType = (val: string, mask: Masks) => {
     }, mask)
     .split('x')[0]
     .trim()
-}
-
-/**
- * Displays a mask for any string value.
- * The entire mask will always be visible.
- *
- * @param val The value to be masked.
- * @param maskType The mask type to use for the given value.
- */
-export const withMask = (val: string = '', maskType: MaskTypes) => {
-  if (maskType === MaskTypes.INTL_DATE)
-    return maskValue(val, Masks.INTL_DATE, ' ')
-  if (maskType === MaskTypes.PHONE) return maskValue(val, Masks.PHONE, ' ')
-  if (maskType === MaskTypes.SSN) return maskValue(val, Masks.SSN, ' ')
-  return val
-}
-
-/**
- * Mask any string value.
- *
- * @param val The value to be masked.
- * @param maskType The mask type to use for the given value.
- */
-export const stripMask = (val: string = '', maskType: MaskTypes) => {
-  if (maskType === MaskTypes.INTL_DATE) return unMaskValue(val, Masks.INTL_DATE)
-  if (maskType === MaskTypes.PHONE) return unMaskValue(val, Masks.PHONE)
-  if (maskType === MaskTypes.SSN) return unMaskValue(val, Masks.SSN)
-  return val
-}
-
-/**
- * Mask any string value while typing.
- * Only the entered values and masking up
- * to that point will be visible.
- *
- * @param val The value to be masked.
- * @param maskType The mask type to use for the given value.
- */
-export const withMaskOnInput = (val: string = '', maskType: MaskTypes) => {
-  if (maskType === MaskTypes.INTL_DATE) return maskOnType(val, Masks.INTL_DATE)
-  if (maskType === MaskTypes.PHONE) return maskOnType(val, Masks.PHONE)
-  if (maskType === MaskTypes.SSN) return maskOnType(val, Masks.SSN)
-  return val
 }
