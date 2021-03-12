@@ -14,7 +14,7 @@
   export let autofocus: boolean
   export let required: boolean
   export let pattern: string = ''
-  export let maskType: Masks
+  export let mask: Masks
 
   let isActive: boolean = Boolean(defaultValue)
 
@@ -33,13 +33,19 @@
     {autofocus}
     {pattern}
     {required}
+    on:keydown={e => {
+      if (mask && e.target.value.length >= mask.length) {
+        e.preventDefault()
+        return false
+      }
+    }}
     on:input={e => {
+      console.log('here')
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e.target.value)
     }}
-    on:keyup={e => dispatch('change', e.target.value)}
     min={type === 'number' ? 0.0 : null}
-    value={withMaskOnInput(value || defaultValue, maskType)}
+    value={withMaskOnInput(value || defaultValue, mask)}
   />
   <span class="fx" />
   <span class="bg" />
