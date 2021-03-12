@@ -35,8 +35,8 @@
     {required}
     on:keydown={e => {
       const isValLongerThanMask = e.target.value.length >= mask.length
-      const isDeleting = [8, 46].includes(e.keyCode)
-      if (mask && isValLongerThanMask && !isDeleting) {
+      const isTabOrDelete = [8, 46, 9].includes(e.keyCode)
+      if (mask && isValLongerThanMask && !isTabOrDelete) {
         e.preventDefault()
         return false
       }
