@@ -302,233 +302,197 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
-	var legalNameData *legalname.ProfileDataLegalName
-	var dobData *dateofbirth.ProfileDataDateOfBirth
-	var ssnData *ssn.ProfileDataSSN
-	var addressData *address.ProfileDataAddress
-	var governmentIDData *governmentid.ProfileDataGovernmentID
-
 	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		profile, err := s.Db.GetAllProfileData(ctx, tx, u.ID)
 		if err != nil {
 			return err
 		}
 
-		{
-			existingProfileData := profile.FilterKind(common.KindLegalName).First()
-			if existingProfileData != nil {
-				legalNameData = (*existingProfileData).(*legalname.ProfileDataLegalName)
-			}
-		}
-		{
-			existingProfileData := profile.FilterKind(common.KindDateOfBirth).First()
-			if existingProfileData != nil {
-				dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
-			}
-		}
-		{
-			existingProfileData := profile.FilterKind(common.KindSSN).First()
-			if existingProfileData != nil {
-				ssnData = (*existingProfileData).(*ssn.ProfileDataSSN)
-			}
-		}
-		{
-			existingProfileData := profile.FilterKind(common.KindAddress).First()
-			if existingProfileData != nil {
-				addressData = (*existingProfileData).(*address.ProfileDataAddress)
-			}
-		}
-		{
-			existingProfileData := profile.FilterKind(common.KindGovernmentID).First()
-			if existingProfileData != nil {
-				governmentIDData = (*existingProfileData).(*governmentid.ProfileDataGovernmentID)
-			}
-		}
+		for _, kind := range common.ProfileDataKinds {
+			existingProfileData := profile.FilterKind(kind).First()
 
-		if req.LegalName != "" {
-			if legalNameData == nil {
-				legalNameData = &legalname.ProfileDataLegalName{
-					ID:        common.ProfileDataID(shortuuid.New()),
-					Status:    common.StatusReceived,
-					LegalName: req.LegalName,
-					CreatedAt: time.Now(),
+			switch kind {
+			case common.KindLegalName:
+				var legalNameData *legalname.ProfileDataLegalName
+
+				if req.LegalName != "" {
+					if existingProfileData == nil {
+						legalNameData = &legalname.ProfileDataLegalName{
+							ID:        common.ProfileDataID(shortuuid.New()),
+							Status:    common.StatusReceived,
+							LegalName: req.LegalName,
+							CreatedAt: time.Now(),
+						}
+					} else {
+						legalNameData = (*existingProfileData).(*legalname.ProfileDataLegalName)
+
+						now := time.Now()
+
+						legalNameData.LegalName = req.LegalName
+						legalNameData.UpdatedAt = &now
+					}
+
+					_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *legalNameData)
+					if err != nil {
+						return err
+					}
 				}
-			} else {
-				legalNameData.LegalName = req.LegalName
-				now := time.Now()
-				legalNameData.UpdatedAt = &now
-			}
+			case common.KindDateOfBirth:
+				var dobData *dateofbirth.ProfileDataDateOfBirth
 
-			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *legalNameData)
-			if err != nil {
-				return err
+				if req.DateOfBirth != "" {
+					if existingProfileData == nil {
+						dobData = &dateofbirth.ProfileDataDateOfBirth{
+							ID:          common.ProfileDataID(shortuuid.New()),
+							Status:      common.StatusReceived,
+							DateOfBirth: req.DateOfBirth,
+							CreatedAt:   time.Now(),
+						}
+					} else {
+						dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
+
+						now := time.Now()
+
+						dobData.DateOfBirth = req.DateOfBirth
+						dobData.UpdatedAt = &now
+					}
+
+					_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *dobData)
+					if err != nil {
+						return err
+					}
+				}
+			case common.KindSSN:
+				var ssnData *ssn.ProfileDataSSN
+
+				if req.Ssn != "" {
+					if existingProfileData == nil {
+						ssnData = &ssn.ProfileDataSSN{
+							ID:        common.ProfileDataID(shortuuid.New()),
+							Status:    common.StatusReceived,
+							SSN:       req.Ssn,
+							CreatedAt: time.Now(),
+						}
+					} else {
+						ssnData = (*existingProfileData).(*ssn.ProfileDataSSN)
+
+						now := time.Now()
+
+						ssnData.SSN = req.Ssn
+						ssnData.UpdatedAt = &now
+					}
+
+					_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *ssnData)
+					if err != nil {
+						return err
+					}
+				}
+			case common.KindAddress:
+				var addressData *address.ProfileDataAddress
+
+				if req.Address != nil {
+					if existingProfileData == nil {
+						addressData = &address.ProfileDataAddress{
+							ID:         common.ProfileDataID(shortuuid.New()),
+							Status:     common.StatusReceived,
+							Street1:    req.Address.Street_1,
+							Street2:    req.Address.Street_2,
+							City:       req.Address.City,
+							State:      req.Address.State,
+							PostalCode: req.Address.PostalCode,
+							Country:    req.Address.Country,
+							CreatedAt:  time.Now(),
+						}
+					} else {
+						addressData = (*existingProfileData).(*address.ProfileDataAddress)
+
+						now := time.Now()
+
+						addressData.Street1 = req.Address.Street_1
+						addressData.Street2 = req.Address.Street_2
+						addressData.City = req.Address.City
+						addressData.State = req.Address.State
+						addressData.PostalCode = req.Address.PostalCode
+						addressData.Country = req.Address.Country
+
+						addressData.UpdatedAt = &now
+					}
+
+					_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *addressData)
+					if err != nil {
+						return err
+					}
+				}
+			case common.KindGovernmentID:
+				var governmentIDData *governmentid.ProfileDataGovernmentID
+
+				if req.GovernmentIdDoc != nil {
+					if req.GovernmentIdDoc.Kind == proto.GovernmentIdDocumentInputKind_GI_UNKNOWN {
+						return status.Errorf(codes.InvalidArgument, "government id document kind needs to be specified ")
+					}
+					kind := governmentid.KindFromGovernmentIdDocKind(req.GovernmentIdDoc.Kind)
+
+					if len(req.GovernmentIdDoc.FileIds) != kind.FilesRequired() {
+						return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
+					}
+
+					for _, fileID := range req.GovernmentIdDoc.FileIds {
+						meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
+						if err != nil {
+							return err
+						}
+						if meta == nil {
+							return status.Errorf(codes.InvalidArgument, "one or more file ids is invalid")
+						}
+					}
+
+					if existingProfileData == nil {
+						governmentIDData = &governmentid.ProfileDataGovernmentID{
+							ID:               common.ProfileDataID(shortuuid.New()),
+							Status:           common.StatusReceived,
+							GovernmentIDKind: kind,
+							FileIDs:          []file.ID{},
+							CreatedAt:        time.Now(),
+						}
+					} else {
+						governmentIDData = (*existingProfileData).(*governmentid.ProfileDataGovernmentID)
+
+						now := time.Now()
+
+						fileIDs := []file.ID{}
+						for _, id := range req.GovernmentIdDoc.FileIds {
+							fileIDs = append(fileIDs, file.ID(id))
+						}
+
+						governmentIDData.GovernmentIDKind = governmentid.Kind(req.GovernmentIdDoc.Kind)
+						governmentIDData.FileIDs = fileIDs
+						governmentIDData.UpdatedAt = &now
+					}
+					_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *governmentIDData)
+					if err != nil {
+						return err
+					}
+				}
+			case common.KindPhone:
+				// do nothing we don't accept input from here (we get it from our user record, and stamp it out from there because its verified)
+			case common.KindEmail:
+				// do nothing we don't accept input from here (we get it from our user record, and stamp it out from there because its verified)
+			default:
+				panic(fmt.Sprintf("handlers.SaveProfileData: unhandled profile data kind: %s", kind))
 			}
 		}
-
-		if req.DateOfBirth != "" {
-			if dobData == nil {
-				dobData = &dateofbirth.ProfileDataDateOfBirth{
-					ID:          common.ProfileDataID(shortuuid.New()),
-					Status:      common.StatusReceived,
-					DateOfBirth: req.DateOfBirth,
-					CreatedAt:   time.Now(),
-				}
-			} else {
-				dobData.DateOfBirth = req.DateOfBirth
-				now := time.Now()
-				dobData.UpdatedAt = &now
-			}
-
-			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *dobData)
-			if err != nil {
-				return err
-			}
-		}
-
-		if req.Ssn != "" {
-			if ssnData == nil {
-				ssnData = &ssn.ProfileDataSSN{
-					ID:        common.ProfileDataID(shortuuid.New()),
-					Status:    common.StatusReceived,
-					SSN:       req.Ssn,
-					CreatedAt: time.Now(),
-				}
-			} else {
-				ssnData.SSN = req.Ssn
-				now := time.Now()
-				ssnData.UpdatedAt = &now
-			}
-
-			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *ssnData)
-			if err != nil {
-				return err
-			}
-		}
-
-		if req.Address != nil {
-			if addressData == nil {
-				addressData = &address.ProfileDataAddress{
-					ID:         common.ProfileDataID(shortuuid.New()),
-					Status:     common.StatusReceived,
-					Street1:    req.Address.Street_1,
-					Street2:    req.Address.Street_2,
-					City:       req.Address.City,
-					State:      req.Address.State,
-					PostalCode: req.Address.PostalCode,
-					Country:    req.Address.Country,
-					CreatedAt:  time.Now(),
-				}
-			} else {
-				addressData.Street1 = req.Address.Street_1
-				addressData.Street2 = req.Address.Street_2
-				addressData.City = req.Address.City
-				addressData.State = req.Address.State
-				addressData.PostalCode = req.Address.PostalCode
-				addressData.Country = req.Address.Country
-
-				now := time.Now()
-				addressData.UpdatedAt = &now
-			}
-
-			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *addressData)
-			if err != nil {
-				return err
-			}
-		}
-
-		if req.GovernmentIdDoc != nil {
-			if req.GovernmentIdDoc.Kind == proto.GovernmentIdDocumentInputKind_GI_UNKNOWN {
-				return status.Errorf(codes.InvalidArgument, "government id document kind needs to be specified ")
-			}
-			kind := governmentid.KindFromGovernmentIdDocKind(req.GovernmentIdDoc.Kind)
-
-			if len(req.GovernmentIdDoc.FileIds) != kind.FilesRequired() {
-				return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
-			}
-
-			for _, fileID := range req.GovernmentIdDoc.FileIds {
-				meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
-				if err != nil {
-					return err
-				}
-				if meta == nil {
-					return status.Errorf(codes.InvalidArgument, "one or more file ids is invalid")
-				}
-			}
-
-			if governmentIDData == nil {
-				governmentIDData = &governmentid.ProfileDataGovernmentID{
-					ID:               common.ProfileDataID(shortuuid.New()),
-					Status:           common.StatusReceived,
-					GovernmentIDKind: kind,
-					FileIDs:          []file.ID{},
-					CreatedAt:        time.Now(),
-				}
-			} else {
-				fileIDs := []file.ID{}
-				for _, id := range req.GovernmentIdDoc.FileIds {
-					fileIDs = append(fileIDs, file.ID(id))
-				}
-
-				governmentIDData.GovernmentIDKind = governmentid.Kind(req.GovernmentIdDoc.Kind)
-				governmentIDData.FileIDs = fileIDs
-
-				now := time.Now()
-				governmentIDData.UpdatedAt = &now
-			}
-			_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *governmentIDData)
-			if err != nil {
-				return err
-			}
-		}
-
 		return nil
 	})
 	if err != nil {
 		return nil, err
 	}
 
-	profile := []*proto.ProfileDataItemInfo{}
-
-	if legalNameData != nil {
-		profile = append(profile, legalNameData.GetProfileDataItemInfo())
+	profile, err := s.Db.GetAllProfileData(ctx, nil, u.ID)
+	if err != nil {
+		return nil, err
 	}
 
-	if dobData != nil {
-		profile = append(profile, dobData.GetProfileDataItemInfo())
-	}
-
-	if ssnData != nil {
-		profile = append(profile, ssnData.GetProfileDataItemInfo())
-	}
-
-	if addressData != nil {
-		profile = append(profile, addressData.GetProfileDataItemInfo())
-	}
-
-	if governmentIDData != nil {
-		profile = append(profile, governmentIDData.GetProfileDataItemInfo())
-	}
-
-	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
-		profile = append(profile, &proto.ProfileDataItemInfo{
-			Kind:   proto.ProfileDataItemKind_K_EMAIL,
-			Status: proto.ProfileDataItemStatus_S_RECEIVED,
-			Length: int32(len(*u.Email)),
-		})
-	}
-
-	if (u.Phone != nil && *u.Phone != "" && u.PhoneVerifiedAt != nil && *u.PhoneVerifiedAt != time.Time{}) {
-		profile = append(profile, &proto.ProfileDataItemInfo{
-			Kind:   proto.ProfileDataItemKind_K_PHONE,
-			Status: proto.ProfileDataItemStatus_S_RECEIVED,
-			Length: int32(len(*u.Phone)),
-		})
-	}
-
-	return &proto.ProfileDataInfo{
-		Profile: profile,
-	}, nil
+	return profile.GetProfileDataInfo(u), nil
 }
 
 // ViewerProfileData is an rpc handler
