@@ -36,9 +36,9 @@
     on:keydown={e => {
       if (mask) {
         const isValLongerThanMask = e.target.value.length >= mask.length
-        const isAlpaNumeric = e.keyCode <= 48 && e.keyCode <= 90
+        const isAlphaNumeric = e.keyCode <= 48 && e.keyCode <= 90
 
-        if (isValLongerThanMask && !e.metaKey && !isAlpaNumeric) {
+        if (isValLongerThanMask && !e.metaKey && !isAlphaNumeric) {
           e.preventDefault()
           return false
         }
