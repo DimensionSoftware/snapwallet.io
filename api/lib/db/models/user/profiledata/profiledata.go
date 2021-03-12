@@ -4,7 +4,11 @@ import (
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/dateofbirth"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/encryption"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
@@ -38,6 +42,50 @@ func (profile ProfileDatas) FilterKind(kind common.ProfileDataKind) ProfileDatas
 		if pdata.Kind() == kind {
 			out = append(out, pdata)
 		}
+	}
+
+	return out
+}
+
+// FilterKindLegalName ...
+func (profile ProfileDatas) FilterKindLegalName() []legalname.ProfileDataLegalName {
+	out := []legalname.ProfileDataLegalName{}
+
+	for _, pdata := range profile.FilterKind(common.KindLegalName) {
+		out = append(out, pdata.(legalname.ProfileDataLegalName))
+	}
+
+	return out
+}
+
+// FilterKindDateOfBirth ...
+func (profile ProfileDatas) FilterKindDateOfBirth() []dateofbirth.ProfileDataDateOfBirth {
+	out := []dateofbirth.ProfileDataDateOfBirth{}
+
+	for _, pdata := range profile.FilterKind(common.KindDateOfBirth) {
+		out = append(out, pdata.(dateofbirth.ProfileDataDateOfBirth))
+	}
+
+	return out
+}
+
+// FilterKindSSN ...
+func (profile ProfileDatas) FilterKindSSN() []ssn.ProfileDataSSN {
+	out := []ssn.ProfileDataSSN{}
+
+	for _, pdata := range profile.FilterKind(common.KindSSN) {
+		out = append(out, pdata.(ssn.ProfileDataSSN))
+	}
+
+	return out
+}
+
+// FilterKindAddress ...
+func (profile ProfileDatas) FilterKindAddress() []address.ProfileDataAddress {
+	out := []address.ProfileDataAddress{}
+
+	for _, pdata := range profile.FilterKind(common.KindAddress) {
+		out = append(out, pdata.(address.ProfileDataAddress))
 	}
 
 	return out
