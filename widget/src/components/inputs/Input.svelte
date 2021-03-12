@@ -42,7 +42,6 @@
       }
     }}
     on:input={e => {
-      console.log('here')
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e.target.value)
     }}

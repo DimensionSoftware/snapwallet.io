@@ -1,6 +1,8 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
+  import { Logger } from '../util'
+
   async function getLinkToken(): Promise<string> {
     const resp = await window.API.fluxPlaidCreateLinkToken({})
 
@@ -43,7 +45,7 @@
           publicToken: string,
           metadata: PlaidSuccessCallbackMetadata,
         ) => {
-          console.log(metadata)
+          Logger.debug(metadata)
           connectAccounts(
             publicToken,
             metadata.accounts.map(a => a.id),
