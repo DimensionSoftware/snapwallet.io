@@ -487,59 +487,46 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
-	var legalNameInfo *proto.ProfileDataItemInfo
+	profile := []*proto.ProfileDataItemInfo{}
+
 	if legalNameData != nil {
-		legalNameInfo = legalNameData.GetProfileDataItemInfo()
+		profile = append(profile, legalNameData.GetProfileDataItemInfo())
 	}
 
-	var dobInfo *proto.ProfileDataItemInfo
 	if dobData != nil {
-		dobInfo = dobData.GetProfileDataItemInfo()
+		profile = append(profile, dobData.GetProfileDataItemInfo())
 	}
 
-	var ssnInfo *proto.ProfileDataItemInfo
 	if ssnData != nil {
-		ssnInfo = ssnData.GetProfileDataItemInfo()
+		profile = append(profile, ssnData.GetProfileDataItemInfo())
 	}
 
-	var addressInfo *proto.ProfileDataItemInfo
 	if addressData != nil {
-		addressInfo = addressData.GetProfileDataItemInfo()
+		profile = append(profile, addressData.GetProfileDataItemInfo())
 	}
 
-	var governmentIDInfo *proto.ProfileDataItemInfo
 	if governmentIDData != nil {
-		governmentIDInfo = governmentIDData.GetProfileDataItemInfo()
+		profile = append(profile, governmentIDData.GetProfileDataItemInfo())
 	}
 
-	var email *proto.ProfileDataItemInfo
 	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
-		email = &proto.ProfileDataItemInfo{
+		profile = append(profile, &proto.ProfileDataItemInfo{
 			Kind:   proto.ProfileDataItemKind_K_EMAIL,
 			Status: proto.ProfileDataItemStatus_S_RECEIVED,
 			Length: int32(len(*u.Email)),
-		}
+		})
 	}
 
-	var phone *proto.ProfileDataItemInfo
 	if (u.Phone != nil && *u.Phone != "" && u.PhoneVerifiedAt != nil && *u.PhoneVerifiedAt != time.Time{}) {
-		phone = &proto.ProfileDataItemInfo{
+		profile = append(profile, &proto.ProfileDataItemInfo{
 			Kind:   proto.ProfileDataItemKind_K_PHONE,
 			Status: proto.ProfileDataItemStatus_S_RECEIVED,
 			Length: int32(len(*u.Phone)),
-		}
+		})
 	}
 
 	return &proto.ProfileDataInfo{
-		Profile: []*proto.ProfileDataItemInfo{
-			legalNameInfo,
-			dobInfo,
-			ssnInfo,
-			addressInfo,
-			governmentIDInfo,
-			email,
-			phone,
-		},
+		Profile: profile,
 	}, nil
 }
 
