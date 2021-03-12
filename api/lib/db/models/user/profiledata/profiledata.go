@@ -133,12 +133,14 @@ func (profile ProfileDatas) GetProfileDataInfo(u *user.User) *proto.ProfileDataI
 	}
 
 	return &proto.ProfileDataInfo{
-		LegalName:   legalNameInfo,
-		DateOfBirth: dobInfo,
-		Ssn:         ssnInfo,
-		Address:     addressInfo,
-		Email:       emailInfo,
-		Phone:       phoneInfo,
+		Profile: []*proto.ProfileDataItemInfo{
+			legalNameInfo,
+			dobInfo,
+			ssnInfo,
+			addressInfo,
+			emailInfo,
+			phoneInfo,
+		},
 	}
 
 }

@@ -675,32 +675,11 @@
     "ProfileDataInfo": {
       "type": "object",
       "properties": {
-        "legalName": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
-        },
-        "dateOfBirth": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
-        },
-        "ssn": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
-        },
-        "address": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
-        },
-        "email": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
-        },
-        "phone": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
-        },
-        "governmentIdDoc": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
-        },
-        "proofOfAddressDoc": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
-        },
-        "achAuthorizationFormDoc": {
-          "$ref": "#/definitions/ProfileDataItemInfo"
+        "profile": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProfileDataItemInfo"
+          }
         }
       },
       "description": "represents all profile data for a user",

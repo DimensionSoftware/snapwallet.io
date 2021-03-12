@@ -507,6 +507,11 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		addressInfo = addressData.GetProfileDataItemInfo()
 	}
 
+	var governmentIDInfo *proto.ProfileDataItemInfo
+	if governmentIDData != nil {
+		governmentIDInfo = governmentIDData.GetProfileDataItemInfo()
+	}
+
 	var email *proto.ProfileDataItemInfo
 	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
 		email = &proto.ProfileDataItemInfo{
@@ -526,12 +531,15 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	}
 
 	return &proto.ProfileDataInfo{
-		LegalName:   legalNameInfo,
-		DateOfBirth: dobInfo,
-		Ssn:         ssnInfo,
-		Address:     addressInfo,
-		Email:       email,
-		Phone:       phone,
+		Profile: []*proto.ProfileDataItemInfo{
+			legalNameInfo,
+			dobInfo,
+			ssnInfo,
+			addressInfo,
+			governmentIDInfo,
+			email,
+			phone,
+		},
 	}, nil
 }
 

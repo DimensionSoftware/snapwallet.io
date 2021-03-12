@@ -190,15 +190,7 @@ message GovernmentIdDocumentInput {
 //
 // represents all profile data for a user
 message ProfileDataInfo {
-  ProfileDataItemInfo legal_name = 1;
-  ProfileDataItemInfo date_of_birth = 2;
-  ProfileDataItemInfo ssn = 3;
-  ProfileDataItemInfo address = 4;
-  ProfileDataItemInfo email = 5;
-  ProfileDataItemInfo phone = 6;
-  ProfileDataItemInfo government_id_doc = 7;
-  ProfileDataItemInfo proof_of_address_doc = 8;
-  ProfileDataItemInfo ach_authorization_form_doc = 9;
+  repeated ProfileDataItemInfo profile = 1;
 }
 
 // ProfileDataInfo
