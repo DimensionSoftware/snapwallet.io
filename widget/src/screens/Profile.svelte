@@ -64,7 +64,7 @@
         type="text"
         placeholder="Your Full Name"
         defaultValue={defaultName}
-        pattern={`[\\w]+\\s`}
+        pattern={`[\\w\\s]+`}
         on:change={e => {
           const {firstName, lastName} = human.parseName(e.detail)
           userStore.setFirstName(firstName ?? '')
