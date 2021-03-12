@@ -8,8 +8,8 @@
   export let placeholder: string = ''
   export let inputmode: string = 'text'
   export let autocapitalize: string = ''
-  export let value: string | number = ''
   export let defaultValue: string | number = ''
+  export let value: string | number = ''
   export let autocomplete: string = 'on'
   export let autofocus: boolean
   export let required: boolean
