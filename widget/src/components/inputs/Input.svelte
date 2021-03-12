@@ -34,14 +34,13 @@
       isActive = Boolean(e.currentTarget?.value)
     }}
     on:keydown={e => {
-      const invalidPress = maskChar && !e.metaKey && e.keyCode > 64 && !e.key.match(maskChar)
-      if (invalidPress) {
-        // is relevant key press and mask doesn't match, so-- cancel key
-        e.preventDefault()
-        return false
-      }
-      dispatch('change', e.target.value)
+      const invalidPress =
+        maskChar && !e.metaKey && e.keyCode > 64 && !e.key.match(maskChar)
+      // is relevant key press and mask doesn't match, so-- cancel key
+      if (invalidPress) return e.preventDefault()
+      return true
     }}
+    on:keyup={e => dispatch('change', e.target.value)}
     min={type === 'number' ? 0.0 : null}
     value={defaultValue || ''}
   />
