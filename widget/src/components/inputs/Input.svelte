@@ -34,7 +34,8 @@
     {pattern}
     {required}
     on:keydown={e => {
-      if (mask && e.target.value.length >= mask.length) {
+      console.log(e.keyCode)
+      if (![8, 46].includes(e.keyCode) && mask && e.target.value.length >= mask.length) {
         e.preventDefault()
         return false
       }
