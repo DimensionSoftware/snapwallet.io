@@ -14,6 +14,7 @@
   export let required: boolean
   export let pattern: string = ''
   export let maskType: MaskTypes
+  export let defaultValue: string = ''
 
   let isActive: boolean = Boolean(defaultValue)
 
