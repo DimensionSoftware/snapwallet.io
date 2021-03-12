@@ -49,9 +49,8 @@ export const unMaskValue = (val: string, mask: Masks): string => {
  */
 export const withMaskOnInput = (val?: string, mask?: Masks) => {
   if (!mask || !val) return val
-  val = unMaskValue(val, mask)
-  const splitVal = val.split('')
-  return splitVal
+  return unMaskValue(val, mask)
+    .split('')
     .reduce((acc, v) => {
       return acc.replace(/x/, v)
     }, mask)
