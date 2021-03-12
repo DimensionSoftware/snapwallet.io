@@ -94,6 +94,9 @@ var ProfileDataKinds = []ProfileDataKind{
 	KindGovernmentID,
 }
 
+// in the future it will be a subset of profiledatakinds
+var ProfileDataRequiredForWyre = ProfileDataKinds
+
 // EncryptedProfileData is a generic container store encrypted ProfileData
 type EncryptedProfileData struct {
 	ID                ProfileDataID     `firestore:"id"`

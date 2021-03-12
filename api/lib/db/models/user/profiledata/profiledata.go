@@ -20,6 +20,16 @@ type ProfileData interface {
 // ProfileDatas all the profile data for a user (array)
 type ProfileDatas []ProfileData
 
+// WyreAccountPreconditionsMet ...
+func (profile ProfileDatas) WyreAccountPreconditionsMet() bool {
+	for _, kind := range common.ProfileDataRequiredForWyre {
+		if profile.FilterKind(kind).First() == nil {
+			return false
+		}
+	}
+	return true
+}
+
 // FilterKind ...
 func (profile ProfileDatas) FilterKind(kind common.ProfileDataKind) ProfileDatas {
 	out := []ProfileData{}
