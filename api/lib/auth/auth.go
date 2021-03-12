@@ -9,9 +9,10 @@ import (
 	"os"
 	"time"
 
+	"github.com/lithammer/shortuuid/v3"
+
 	"github.com/dgrijalva/jwt-go"
 	"github.com/khoerling/flux/api/lib/db/models/user"
-	"github.com/rs/xid"
 )
 
 // Claims represents the data we want to put on the jwt
@@ -121,7 +122,7 @@ func ProvideJwtPublicKey(priv JwtPrivateKey) JwtPublicKey {
 // NewClaims instantiates the claims object to be signed
 func NewClaims(userID user.ID) Claims {
 	return Claims{
-		ID:        xid.New().String(),
+		ID:        shortuuid.New(),
 		Subject:   string(userID),
 		IssuedAt:  time.Now().Unix(),
 		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),

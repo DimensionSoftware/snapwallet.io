@@ -5,7 +5,8 @@ import (
 
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
-	"github.com/rs/xid"
+
+	"github.com/lithammer/shortuuid/v3"
 )
 
 // PhoneEncrypted represents encrypted phone number
@@ -47,7 +48,7 @@ type User struct {
 func (u User) WithDefaults(now time.Time) User {
 	newU := u
 	if u.ID == "" {
-		newU.ID = ID(xid.New().String())
+		newU.ID = ID(shortuuid.New())
 	}
 
 	if (u.CreatedAt == time.Time{}) {

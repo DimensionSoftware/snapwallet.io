@@ -9,9 +9,9 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
 	"github.com/khoerling/flux/api/lib/wire"
-	"github.com/rs/xid"
 	"syreclabs.com/go/faker"
 
+	"github.com/lithammer/shortuuid/v3"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -29,7 +29,7 @@ func Test_Profile_Lifecycle(t *testing.T) {
 	a.NoError(err)
 
 	pdata := legalname.ProfileDataLegalName{
-		ID:        common.ProfileDataID(xid.New().String()),
+		ID:        common.ProfileDataID(shortuuid.New()),
 		Status:    common.StatusReceived,
 		LegalName: "Bob Jones",
 		CreatedAt: time.Now(),

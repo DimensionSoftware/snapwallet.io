@@ -12,7 +12,8 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/file"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/protocol"
-	"github.com/rs/xid"
+
+	"github.com/lithammer/shortuuid/v3"
 )
 
 // Manager manages files
@@ -29,7 +30,7 @@ func (m Manager) UploadEncryptedFile(ctx context.Context, userID user.ID, req *p
 	dek := encryption.NewEncryptor(dekH)
 
 	now := time.Now()
-	fileID := file.ID(xid.New().String())
+	fileID := file.ID(shortuuid.New())
 
 	obj := m.BucketHandle.Object(string(fileID))
 	out := obj.NewWriter(ctx)

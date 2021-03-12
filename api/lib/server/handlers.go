@@ -10,7 +10,6 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
-	"github.com/rs/xid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -29,6 +28,8 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	proto "github.com/khoerling/flux/api/lib/protocol"
+
+	"github.com/lithammer/shortuuid/v3"
 )
 
 // https://api.sendwyre.com/v3/rates?as=priced
@@ -347,7 +348,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		if req.LegalName != "" {
 			if legalNameData == nil {
 				legalNameData = &legalname.ProfileDataLegalName{
-					ID:        common.ProfileDataID(xid.New().String()),
+					ID:        common.ProfileDataID(shortuuid.New()),
 					Status:    common.StatusReceived,
 					LegalName: req.LegalName,
 					CreatedAt: time.Now(),
@@ -367,7 +368,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		if req.DateOfBirth != "" {
 			if dobData == nil {
 				dobData = &dateofbirth.ProfileDataDateOfBirth{
-					ID:          common.ProfileDataID(xid.New().String()),
+					ID:          common.ProfileDataID(shortuuid.New()),
 					Status:      common.StatusReceived,
 					DateOfBirth: req.DateOfBirth,
 					CreatedAt:   time.Now(),
@@ -387,7 +388,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		if req.Ssn != "" {
 			if ssnData == nil {
 				ssnData = &ssn.ProfileDataSSN{
-					ID:        common.ProfileDataID(xid.New().String()),
+					ID:        common.ProfileDataID(shortuuid.New()),
 					Status:    common.StatusReceived,
 					SSN:       req.Ssn,
 					CreatedAt: time.Now(),
@@ -407,7 +408,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		if req.Address != nil {
 			if addressData == nil {
 				addressData = &address.ProfileDataAddress{
-					ID:         common.ProfileDataID(xid.New().String()),
+					ID:         common.ProfileDataID(shortuuid.New()),
 					Status:     common.StatusReceived,
 					Street1:    req.Address.Street_1,
 					Street2:    req.Address.Street_2,
@@ -457,7 +458,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 			if governmentIDData == nil {
 				governmentIDData = &governmentid.ProfileDataGovernmentID{
-					ID:               common.ProfileDataID(xid.New().String()),
+					ID:               common.ProfileDataID(shortuuid.New()),
 					Status:           common.StatusReceived,
 					GovernmentIDKind: kind,
 					FileIDs:          []file.ID{},

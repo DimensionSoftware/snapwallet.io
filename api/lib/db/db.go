@@ -2,11 +2,14 @@ package db
 
 import (
 	"context"
+
 	"crypto/rand"
 	"fmt"
 	"log"
 	"math/big"
 	"time"
+
+	"github.com/lithammer/shortuuid/v3"
 
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
@@ -18,7 +21,6 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/unmarshal"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
-	"github.com/rs/xid"
 	"google.golang.org/api/iterator"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -32,7 +34,7 @@ type Db struct {
 
 // CreateOneTimePasscode stores a record of a one-time-password request for verification later
 func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kind onetimepasscode.LoginKind) (*onetimepasscode.OneTimePasscode, error) {
-	id := xid.New().String()
+	id := shortuuid.New()
 
 	code, err := sixRandomDigits()
 	if err != nil {
