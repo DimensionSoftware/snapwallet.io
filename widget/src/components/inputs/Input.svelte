@@ -34,11 +34,14 @@
     {pattern}
     {required}
     on:keydown={e => {
-      const isValLongerThanMask = e.target.value.length >= mask.length
-      const isTabOrDelete = [8, 46, 9].includes(e.keyCode)
-      if (mask && isValLongerThanMask && !isTabOrDelete) {
-        e.preventDefault()
-        return false
+      if (mask) {
+        const isValLongerThanMask = e.target.value.length >= mask.length
+        const isAlpaNumeric = e.keyCode <= 48 && e.keyCode <= 90
+
+        if (isValLongerThanMask && !e.metaKey && !isAlpaNumeric) {
+          e.preventDefault()
+          return false
+        }
       }
     }}
     on:input={e => {
