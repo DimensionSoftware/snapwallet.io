@@ -21,7 +21,7 @@ type ProfileData interface {
 type ProfileDatas []ProfileData
 
 // WyreAccountPreconditionsMet ...
-func (profile ProfileDatas) WyreAccountPreconditionsMet() bool {
+func (profile ProfileDatas) HasWyreAccountPreconditionsMet() bool {
 	for _, kind := range common.ProfileDataRequiredForWyre {
 		if profile.FilterKind(kind).First() == nil {
 			return false

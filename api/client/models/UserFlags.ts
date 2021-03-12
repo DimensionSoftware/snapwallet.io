@@ -17,6 +17,7 @@ import { HttpFile } from '../http/http';
 */
 export class UserFlags {
     'hasPlaidItems'?: boolean;
+    'hasWyreAccountPrerequisitesMet'?: boolean;
     'hasWyreAccount'?: boolean;
     'hasWyrePaymentMethods'?: boolean;
 
@@ -26,6 +27,12 @@ export class UserFlags {
         {
             "name": "hasPlaidItems",
             "baseName": "hasPlaidItems",
+            "type": "boolean",
+            "format": ""
+        },
+        {
+            "name": "hasWyreAccountPrerequisitesMet",
+            "baseName": "hasWyreAccountPrerequisitesMet",
             "type": "boolean",
             "format": ""
         },

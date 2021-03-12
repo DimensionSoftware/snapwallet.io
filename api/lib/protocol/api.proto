@@ -26,8 +26,9 @@ message User {
 // hints for the ui
 message UserFlags {
   bool has_plaid_items = 1;
-  bool has_wyre_account = 2;
-  bool has_wyre_payment_methods = 3;
+  bool has_wyre_account_prerequisites_met = 2;
+  bool has_wyre_account = 3;
+  bool has_wyre_payment_methods = 4;
 }
 
 // Organization
