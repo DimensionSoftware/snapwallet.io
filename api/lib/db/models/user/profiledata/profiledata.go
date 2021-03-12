@@ -4,11 +4,7 @@ import (
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
-	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
-	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/dateofbirth"
-	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
-	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/encryption"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
@@ -61,86 +57,35 @@ func (profile ProfileDatas) First() *ProfileData {
 
 // GetProfileDataInfo ...
 func (profile ProfileDatas) GetProfileDataInfo(u *user.User) *proto.ProfileDataInfo {
-	var legalNameData *legalname.ProfileDataLegalName
-	var dobData *dateofbirth.ProfileDataDateOfBirth
-	var ssnData *ssn.ProfileDataSSN
-	var addressData *address.ProfileDataAddress
-	{
-		existingProfileData := profile.FilterKind(common.KindLegalName).First()
-		if existingProfileData != nil {
-			legalNameData = (*existingProfileData).(*legalname.ProfileDataLegalName)
-		}
-	}
-	{
-		existingProfileData := profile.FilterKind(common.KindDateOfBirth).First()
-		if existingProfileData != nil {
-			dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
-		}
-	}
-	{
-		existingProfileData := profile.FilterKind(common.KindSSN).First()
-		if existingProfileData != nil {
-			ssnData = (*existingProfileData).(*ssn.ProfileDataSSN)
-		}
-	}
-	{
-		existingProfileData := profile.FilterKind(common.KindAddress).First()
-		if existingProfileData != nil {
-			addressData = (*existingProfileData).(*address.ProfileDataAddress)
-		}
-	}
-
-	var legalNameInfo *proto.ProfileDataItemInfo
-	if legalNameData != nil {
-		legalNameInfo = legalNameData.GetProfileDataItemInfo()
-	}
-
-	var dobInfo *proto.ProfileDataItemInfo
-	if dobData != nil {
-		dobInfo = dobData.GetProfileDataItemInfo()
-	}
-
-	var ssnInfo *proto.ProfileDataItemInfo
-	if ssnData != nil {
-		ssnInfo = ssnData.GetProfileDataItemInfo()
-	}
-
-	var addressInfo *proto.ProfileDataItemInfo
-	if addressData != nil {
-		addressInfo = addressData.GetProfileDataItemInfo()
-	}
-
 	// TODO: store phone/emailInfo data on create account submission into concrete profile data with ids and timestamps -- then it becomes immutable for record purposes
 	// if there is no concrete record then their user emailInfo/phone become the main mutable source of truth
 	//
 	// this means we also need to do lookup logic changes, check concrete records first, then account details for phone/emailInfo
-	var emailInfo *proto.ProfileDataItemInfo
+
+	out := []*proto.ProfileDataItemInfo{}
+
 	if (u.Email != nil && *u.Email != "" && u.EmailVerifiedAt != nil && *u.EmailVerifiedAt != time.Time{}) {
-		emailInfo = &proto.ProfileDataItemInfo{
+		out = append(out, &proto.ProfileDataItemInfo{
 			Kind:   proto.ProfileDataItemKind_K_EMAIL,
 			Status: proto.ProfileDataItemStatus_S_RECEIVED,
 			Length: int32(len(*u.Email)),
-		}
+		})
 	}
 
-	var phoneInfo *proto.ProfileDataItemInfo
 	if (u.Phone != nil && *u.Phone != "" && u.PhoneVerifiedAt != nil && *u.PhoneVerifiedAt != time.Time{}) {
-		phoneInfo = &proto.ProfileDataItemInfo{
+		out = append(out, &proto.ProfileDataItemInfo{
 			Kind:   proto.ProfileDataItemKind_K_PHONE,
 			Status: proto.ProfileDataItemStatus_S_RECEIVED,
 			Length: int32(len(*u.Phone)),
-		}
+		})
+	}
+
+	for _, item := range profile {
+		out = append(out, item.GetProfileDataItemInfo())
 	}
 
 	return &proto.ProfileDataInfo{
-		Profile: []*proto.ProfileDataItemInfo{
-			legalNameInfo,
-			dobInfo,
-			ssnInfo,
-			addressInfo,
-			emailInfo,
-			phoneInfo,
-		},
+		Profile: out,
 	}
 
 }
