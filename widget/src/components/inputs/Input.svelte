@@ -9,7 +9,6 @@
   export let inputmode: string = 'text'
   export let autocapitalize: string = ''
   export let defaultValue: string | number = ''
-  export let value: string | number = ''
   export let autocomplete: string = 'on'
   export let autofocus: boolean
   export let required: boolean
@@ -49,7 +48,7 @@
       dispatch('change', e.target.value)
     }}
     min={type === 'number' ? 0.0 : null}
-    value={withMaskOnInput(value || defaultValue, mask)}
+    value={withMaskOnInput(defaultValue, mask)}
   />
   <span class="fx" />
   <span class="bg" />
