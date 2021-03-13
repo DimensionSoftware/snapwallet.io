@@ -35,12 +35,17 @@
     on:keydown={e => {
       if (mask) {
         const isValLongerThanMask = e.target.value.length >= mask.length
-        const isAlphaNumeric = e.keyCode <= 48 && e.keyCode <= 90
+        // Uses codes from the following table https://keycode.info/
+        const isAltering = [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(
+          e.keyCode,
+        ) || e.metaKey
 
-        if (isValLongerThanMask && !e.metaKey && !isAlphaNumeric) {
+        if (isValLongerThanMask && !isAltering) {
           e.preventDefault()
           return false
         }
+
+        return true
       }
     }}
     on:input={e => {
