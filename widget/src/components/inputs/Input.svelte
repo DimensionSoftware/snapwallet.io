@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, afterUpdate, createEventDispatcher } from 'svelte'
   import { Masks } from '../../types'
-  import { withMaskOnInput } from '../../masks'
+  import { withMaskOnInput, isValidMaskInput } from '../../masks'
 
   const dispatch = createEventDispatcher()
   export let type: string = 'text'
@@ -36,16 +36,18 @@
       if (mask) {
         const isValLongerThanMask = e.target.value.length >= mask.length
         // Uses codes from the following table https://keycode.info/
-        const isAltering = [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(
-          e.keyCode,
-        ) || e.metaKey
+        const isAltering =
+          [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(e.keyCode) ||
+          e.metaKey
 
-        if (isValLongerThanMask && !isAltering) {
+        const newVal = defaultValue + String.fromCharCode(e.keyCode)
+        const isInputValid =
+          isValidMaskInput(newVal, mask) && !isValLongerThanMask
+
+        if (!isInputValid && !isAltering) {
           e.preventDefault()
           return false
         }
-
-        return true
       }
     }}
     on:input={e => {
