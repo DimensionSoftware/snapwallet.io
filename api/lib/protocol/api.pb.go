@@ -1632,6 +1632,7 @@ type ProfileDataInfo struct {
 	unknownFields protoimpl.UnknownFields
 
 	Profile []*ProfileDataItemInfo `protobuf:"bytes,1,rep,name=profile,proto3" json:"profile,omitempty"`
+	Wyre    *ThirdPartyUserAccount `protobuf:"bytes,2,opt,name=wyre,proto3" json:"wyre,omitempty"`
 }
 
 func (x *ProfileDataInfo) Reset() {
@@ -1673,6 +1674,130 @@ func (x *ProfileDataInfo) GetProfile() []*ProfileDataItemInfo {
 	return nil
 }
 
+func (x *ProfileDataInfo) GetWyre() *ThirdPartyUserAccount {
+	if x != nil {
+		return x.Wyre
+	}
+	return nil
+}
+
+// WyreUserAccount
+//
+// Represents the wyre user account status
+type ThirdPartyUserAccount struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Status       string                    `protobuf:"bytes,1,opt,name=status,proto3" json:"status,omitempty"`
+	Remediations []*UserAccountRemediation `protobuf:"bytes,2,rep,name=remediations,proto3" json:"remediations,omitempty"`
+}
+
+func (x *ThirdPartyUserAccount) Reset() {
+	*x = ThirdPartyUserAccount{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_proto_msgTypes[25]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ThirdPartyUserAccount) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ThirdPartyUserAccount) ProtoMessage() {}
+
+func (x *ThirdPartyUserAccount) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[25]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ThirdPartyUserAccount.ProtoReflect.Descriptor instead.
+func (*ThirdPartyUserAccount) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{25}
+}
+
+func (x *ThirdPartyUserAccount) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *ThirdPartyUserAccount) GetRemediations() []*UserAccountRemediation {
+	if x != nil {
+		return x.Remediations
+	}
+	return nil
+}
+
+// UserAccountRemediation
+//
+// Represents an action that the client
+// must take in order to resolve a condition.
+type UserAccountRemediation struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	Kind        ProfileDataItemKind `protobuf:"varint,1,opt,name=kind,proto3,enum=ProfileDataItemKind" json:"kind,omitempty"`
+	Description string              `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+}
+
+func (x *UserAccountRemediation) Reset() {
+	*x = UserAccountRemediation{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_api_proto_msgTypes[26]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *UserAccountRemediation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UserAccountRemediation) ProtoMessage() {}
+
+func (x *UserAccountRemediation) ProtoReflect() protoreflect.Message {
+	mi := &file_api_proto_msgTypes[26]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UserAccountRemediation.ProtoReflect.Descriptor instead.
+func (*UserAccountRemediation) Descriptor() ([]byte, []int) {
+	return file_api_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *UserAccountRemediation) GetKind() ProfileDataItemKind {
+	if x != nil {
+		return x.Kind
+	}
+	return ProfileDataItemKind_K_UNKNOWN
+}
+
+func (x *UserAccountRemediation) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
 // ProfileDataInfo
 //
 // represents a saved profile data fields' status
@@ -1695,7 +1820,7 @@ type ProfileDataItemInfo struct {
 func (x *ProfileDataItemInfo) Reset() {
 	*x = ProfileDataItemInfo{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_proto_msgTypes[25]
+		mi := &file_api_proto_msgTypes[27]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1708,7 +1833,7 @@ func (x *ProfileDataItemInfo) String() string {
 func (*ProfileDataItemInfo) ProtoMessage() {}
 
 func (x *ProfileDataItemInfo) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[25]
+	mi := &file_api_proto_msgTypes[27]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1721,7 +1846,7 @@ func (x *ProfileDataItemInfo) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProfileDataItemInfo.ProtoReflect.Descriptor instead.
 func (*ProfileDataItemInfo) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{25}
+	return file_api_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *ProfileDataItemInfo) GetId() string {
@@ -1799,7 +1924,7 @@ type ChangeViewerEmailRequest struct {
 func (x *ChangeViewerEmailRequest) Reset() {
 	*x = ChangeViewerEmailRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_proto_msgTypes[26]
+		mi := &file_api_proto_msgTypes[28]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1812,7 +1937,7 @@ func (x *ChangeViewerEmailRequest) String() string {
 func (*ChangeViewerEmailRequest) ProtoMessage() {}
 
 func (x *ChangeViewerEmailRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[26]
+	mi := &file_api_proto_msgTypes[28]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1825,7 +1950,7 @@ func (x *ChangeViewerEmailRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeViewerEmailRequest.ProtoReflect.Descriptor instead.
 func (*ChangeViewerEmailRequest) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{26}
+	return file_api_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *ChangeViewerEmailRequest) GetCode() string {
@@ -1854,7 +1979,7 @@ type ChangeViewerPhoneRequest struct {
 func (x *ChangeViewerPhoneRequest) Reset() {
 	*x = ChangeViewerPhoneRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_proto_msgTypes[27]
+		mi := &file_api_proto_msgTypes[29]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1867,7 +1992,7 @@ func (x *ChangeViewerPhoneRequest) String() string {
 func (*ChangeViewerPhoneRequest) ProtoMessage() {}
 
 func (x *ChangeViewerPhoneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[27]
+	mi := &file_api_proto_msgTypes[29]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1880,7 +2005,7 @@ func (x *ChangeViewerPhoneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChangeViewerPhoneRequest.ProtoReflect.Descriptor instead.
 func (*ChangeViewerPhoneRequest) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{27}
+	return file_api_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *ChangeViewerPhoneRequest) GetCode() string {
@@ -1911,7 +2036,7 @@ type UploadFileRequest struct {
 func (x *UploadFileRequest) Reset() {
 	*x = UploadFileRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_proto_msgTypes[28]
+		mi := &file_api_proto_msgTypes[30]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1924,7 +2049,7 @@ func (x *UploadFileRequest) String() string {
 func (*UploadFileRequest) ProtoMessage() {}
 
 func (x *UploadFileRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[28]
+	mi := &file_api_proto_msgTypes[30]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1937,7 +2062,7 @@ func (x *UploadFileRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadFileRequest.ProtoReflect.Descriptor instead.
 func (*UploadFileRequest) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{28}
+	return file_api_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *UploadFileRequest) GetFilename() string {
@@ -1979,7 +2104,7 @@ type UploadFileResponse struct {
 func (x *UploadFileResponse) Reset() {
 	*x = UploadFileResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_proto_msgTypes[29]
+		mi := &file_api_proto_msgTypes[31]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -1992,7 +2117,7 @@ func (x *UploadFileResponse) String() string {
 func (*UploadFileResponse) ProtoMessage() {}
 
 func (x *UploadFileResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[29]
+	mi := &file_api_proto_msgTypes[31]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2005,7 +2130,7 @@ func (x *UploadFileResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UploadFileResponse.ProtoReflect.Descriptor instead.
 func (*UploadFileResponse) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{29}
+	return file_api_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *UploadFileResponse) GetFileId() string {
@@ -2029,7 +2154,7 @@ type GetImageRequest struct {
 func (x *GetImageRequest) Reset() {
 	*x = GetImageRequest{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_proto_msgTypes[30]
+		mi := &file_api_proto_msgTypes[32]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2042,7 +2167,7 @@ func (x *GetImageRequest) String() string {
 func (*GetImageRequest) ProtoMessage() {}
 
 func (x *GetImageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[30]
+	mi := &file_api_proto_msgTypes[32]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2055,7 +2180,7 @@ func (x *GetImageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetImageRequest.ProtoReflect.Descriptor instead.
 func (*GetImageRequest) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{30}
+	return file_api_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *GetImageRequest) GetFileId() string {
@@ -2102,7 +2227,7 @@ type GetImageResponse struct {
 func (x *GetImageResponse) Reset() {
 	*x = GetImageResponse{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_api_proto_msgTypes[31]
+		mi := &file_api_proto_msgTypes[33]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -2115,7 +2240,7 @@ func (x *GetImageResponse) String() string {
 func (*GetImageResponse) ProtoMessage() {}
 
 func (x *GetImageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_proto_msgTypes[31]
+	mi := &file_api_proto_msgTypes[33]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2128,7 +2253,7 @@ func (x *GetImageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetImageResponse.ProtoReflect.Descriptor instead.
 func (*GetImageResponse) Descriptor() ([]byte, []int) {
-	return file_api_proto_rawDescGZIP(), []int{31}
+	return file_api_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *GetImageResponse) GetFilename() string {
@@ -2326,12 +2451,28 @@ var file_api_proto_rawDesc = []byte{
 	0x47, 0x6f, 0x76, 0x65, 0x72, 0x6e, 0x6d, 0x65, 0x6e, 0x74, 0x49, 0x64, 0x44, 0x6f, 0x63, 0x75,
 	0x6d, 0x65, 0x6e, 0x74, 0x49, 0x6e, 0x70, 0x75, 0x74, 0x4b, 0x69, 0x6e, 0x64, 0x52, 0x04, 0x6b,
 	0x69, 0x6e, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x66, 0x69, 0x6c, 0x65, 0x5f, 0x69, 0x64, 0x73, 0x18,
-	0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x66, 0x69, 0x6c, 0x65, 0x49, 0x64, 0x73, 0x22, 0x41,
+	0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x66, 0x69, 0x6c, 0x65, 0x49, 0x64, 0x73, 0x22, 0x6d,
 	0x0a, 0x0f, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x44, 0x61, 0x74, 0x61, 0x49, 0x6e, 0x66,
 	0x6f, 0x12, 0x2e, 0x0a, 0x07, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x18, 0x01, 0x20, 0x03,
 	0x28, 0x0b, 0x32, 0x14, 0x2e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x44, 0x61, 0x74, 0x61,
 	0x49, 0x74, 0x65, 0x6d, 0x49, 0x6e, 0x66, 0x6f, 0x52, 0x07, 0x70, 0x72, 0x6f, 0x66, 0x69, 0x6c,
-	0x65, 0x22, 0xa8, 0x02, 0x0a, 0x13, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x44, 0x61, 0x74,
+	0x65, 0x12, 0x2a, 0x0a, 0x04, 0x77, 0x79, 0x72, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x16, 0x2e, 0x54, 0x68, 0x69, 0x72, 0x64, 0x50, 0x61, 0x72, 0x74, 0x79, 0x55, 0x73, 0x65, 0x72,
+	0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x04, 0x77, 0x79, 0x72, 0x65, 0x22, 0x6c, 0x0a,
+	0x15, 0x54, 0x68, 0x69, 0x72, 0x64, 0x50, 0x61, 0x72, 0x74, 0x79, 0x55, 0x73, 0x65, 0x72, 0x41,
+	0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x12, 0x16, 0x0a, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73,
+	0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x73, 0x74, 0x61, 0x74, 0x75, 0x73, 0x12, 0x3b,
+	0x0a, 0x0c, 0x72, 0x65, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x18, 0x02,
+	0x20, 0x03, 0x28, 0x0b, 0x32, 0x17, 0x2e, 0x55, 0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75,
+	0x6e, 0x74, 0x52, 0x65, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x52, 0x0c, 0x72,
+	0x65, 0x6d, 0x65, 0x64, 0x69, 0x61, 0x74, 0x69, 0x6f, 0x6e, 0x73, 0x22, 0x64, 0x0a, 0x16, 0x55,
+	0x73, 0x65, 0x72, 0x41, 0x63, 0x63, 0x6f, 0x75, 0x6e, 0x74, 0x52, 0x65, 0x6d, 0x65, 0x64, 0x69,
+	0x61, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x28, 0x0a, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0e, 0x32, 0x14, 0x2e, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x44, 0x61, 0x74,
+	0x61, 0x49, 0x74, 0x65, 0x6d, 0x4b, 0x69, 0x6e, 0x64, 0x52, 0x04, 0x6b, 0x69, 0x6e, 0x64, 0x12,
+	0x20, 0x0a, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x0b, 0x64, 0x65, 0x73, 0x63, 0x72, 0x69, 0x70, 0x74, 0x69, 0x6f,
+	0x6e, 0x22, 0xa8, 0x02, 0x0a, 0x13, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x44, 0x61, 0x74,
 	0x61, 0x49, 0x74, 0x65, 0x6d, 0x49, 0x6e, 0x66, 0x6f, 0x12, 0x0e, 0x0a, 0x02, 0x69, 0x64, 0x18,
 	0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x02, 0x69, 0x64, 0x12, 0x19, 0x0a, 0x08, 0x66, 0x69, 0x6c,
 	0x65, 0x5f, 0x69, 0x64, 0x73, 0x18, 0x02, 0x20, 0x03, 0x28, 0x09, 0x52, 0x07, 0x66, 0x69, 0x6c,
@@ -2519,7 +2660,7 @@ func file_api_proto_rawDescGZIP() []byte {
 }
 
 var file_api_proto_enumTypes = make([]protoimpl.EnumInfo, 4)
-var file_api_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
+var file_api_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
 var file_api_proto_goTypes = []interface{}{
 	(ProfileDataItemKind)(0),                 // 0: ProfileDataItemKind
 	(ProfileDataItemStatus)(0),               // 1: ProfileDataItemStatus
@@ -2550,66 +2691,71 @@ var file_api_proto_goTypes = []interface{}{
 	(*DocumentInput)(nil),                    // 26: DocumentInput
 	(*UsGovernmentIdDocumentInput)(nil),      // 27: UsGovernmentIdDocumentInput
 	(*ProfileDataInfo)(nil),                  // 28: ProfileDataInfo
-	(*ProfileDataItemInfo)(nil),              // 29: ProfileDataItemInfo
-	(*ChangeViewerEmailRequest)(nil),         // 30: ChangeViewerEmailRequest
-	(*ChangeViewerPhoneRequest)(nil),         // 31: ChangeViewerPhoneRequest
-	(*UploadFileRequest)(nil),                // 32: UploadFileRequest
-	(*UploadFileResponse)(nil),               // 33: UploadFileResponse
-	(*GetImageRequest)(nil),                  // 34: GetImageRequest
-	(*GetImageResponse)(nil),                 // 35: GetImageResponse
-	nil,                                      // 36: PricingRate.RateEntry
-	nil,                                      // 37: PricingDataResponse.RatesEntry
-	(*emptypb.Empty)(nil),                    // 38: google.protobuf.Empty
+	(*ThirdPartyUserAccount)(nil),            // 29: ThirdPartyUserAccount
+	(*UserAccountRemediation)(nil),           // 30: UserAccountRemediation
+	(*ProfileDataItemInfo)(nil),              // 31: ProfileDataItemInfo
+	(*ChangeViewerEmailRequest)(nil),         // 32: ChangeViewerEmailRequest
+	(*ChangeViewerPhoneRequest)(nil),         // 33: ChangeViewerPhoneRequest
+	(*UploadFileRequest)(nil),                // 34: UploadFileRequest
+	(*UploadFileResponse)(nil),               // 35: UploadFileResponse
+	(*GetImageRequest)(nil),                  // 36: GetImageRequest
+	(*GetImageResponse)(nil),                 // 37: GetImageResponse
+	nil,                                      // 38: PricingRate.RateEntry
+	nil,                                      // 39: PricingDataResponse.RatesEntry
+	(*emptypb.Empty)(nil),                    // 40: google.protobuf.Empty
 }
 var file_api_proto_depIdxs = []int32{
 	5,  // 0: Organization.users:type_name -> User
 	4,  // 1: Organization.applications:type_name -> OrganizationApplication
 	5,  // 2: ViewerDataResponse.user:type_name -> User
 	6,  // 3: ViewerDataResponse.flags:type_name -> UserFlags
-	36, // 4: PricingRate.rate:type_name -> PricingRate.RateEntry
-	37, // 5: PricingDataResponse.rates:type_name -> PricingDataResponse.RatesEntry
+	38, // 4: PricingRate.rate:type_name -> PricingRate.RateEntry
+	39, // 5: PricingDataResponse.rates:type_name -> PricingDataResponse.RatesEntry
 	5,  // 6: OneTimePasscodeVerifyResponse.user:type_name -> User
 	8,  // 7: SaveProfileDataRequest.address:type_name -> Address
 	27, // 8: SaveProfileDataRequest.us_government_id_doc:type_name -> UsGovernmentIdDocumentInput
 	26, // 9: SaveProfileDataRequest.proof_of_address_doc:type_name -> DocumentInput
 	26, // 10: SaveProfileDataRequest.ach_authorization_form_doc:type_name -> DocumentInput
 	2,  // 11: UsGovernmentIdDocumentInput.kind:type_name -> UsGovernmentIdDocumentInputKind
-	29, // 12: ProfileDataInfo.profile:type_name -> ProfileDataItemInfo
-	0,  // 13: ProfileDataItemInfo.kind:type_name -> ProfileDataItemKind
-	1,  // 14: ProfileDataItemInfo.status:type_name -> ProfileDataItemStatus
-	3,  // 15: GetImageRequest.processingMode:type_name -> ImageProcessingMode
-	13, // 16: PricingDataResponse.RatesEntry.value:type_name -> PricingRate
-	38, // 17: Flux.ViewerData:input_type -> google.protobuf.Empty
-	38, // 18: Flux.ViewerProfileData:input_type -> google.protobuf.Empty
-	30, // 19: Flux.ChangeViewerEmail:input_type -> ChangeViewerEmailRequest
-	31, // 20: Flux.ChangeViewerPhone:input_type -> ChangeViewerPhoneRequest
-	12, // 21: Flux.PricingData:input_type -> PricingDataRequest
-	15, // 22: Flux.OneTimePasscode:input_type -> OneTimePasscodeRequest
-	17, // 23: Flux.OneTimePasscodeVerify:input_type -> OneTimePasscodeVerifyRequest
-	19, // 24: Flux.PlaidConnectBankAccounts:input_type -> PlaidConnectBankAccountsRequest
-	21, // 25: Flux.PlaidCreateLinkToken:input_type -> PlaidCreateLinkTokenRequest
-	25, // 26: Flux.SaveProfileData:input_type -> SaveProfileDataRequest
-	23, // 27: Flux.WyreCreateAccount:input_type -> WyreCreateAccountRequest
-	32, // 28: Flux.UploadFile:input_type -> UploadFileRequest
-	34, // 29: Flux.GetImage:input_type -> GetImageRequest
-	11, // 30: Flux.ViewerData:output_type -> ViewerDataResponse
-	28, // 31: Flux.ViewerProfileData:output_type -> ProfileDataInfo
-	38, // 32: Flux.ChangeViewerEmail:output_type -> google.protobuf.Empty
-	38, // 33: Flux.ChangeViewerPhone:output_type -> google.protobuf.Empty
-	14, // 34: Flux.PricingData:output_type -> PricingDataResponse
-	16, // 35: Flux.OneTimePasscode:output_type -> OneTimePasscodeResponse
-	18, // 36: Flux.OneTimePasscodeVerify:output_type -> OneTimePasscodeVerifyResponse
-	20, // 37: Flux.PlaidConnectBankAccounts:output_type -> PlaidConnectBankAccountsResponse
-	22, // 38: Flux.PlaidCreateLinkToken:output_type -> PlaidCreateLinkTokenResponse
-	28, // 39: Flux.SaveProfileData:output_type -> ProfileDataInfo
-	24, // 40: Flux.WyreCreateAccount:output_type -> WyreCreateAccountResponse
-	33, // 41: Flux.UploadFile:output_type -> UploadFileResponse
-	35, // 42: Flux.GetImage:output_type -> GetImageResponse
-	30, // [30:43] is the sub-list for method output_type
-	17, // [17:30] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	31, // 12: ProfileDataInfo.profile:type_name -> ProfileDataItemInfo
+	29, // 13: ProfileDataInfo.wyre:type_name -> ThirdPartyUserAccount
+	30, // 14: ThirdPartyUserAccount.remediations:type_name -> UserAccountRemediation
+	0,  // 15: UserAccountRemediation.kind:type_name -> ProfileDataItemKind
+	0,  // 16: ProfileDataItemInfo.kind:type_name -> ProfileDataItemKind
+	1,  // 17: ProfileDataItemInfo.status:type_name -> ProfileDataItemStatus
+	3,  // 18: GetImageRequest.processingMode:type_name -> ImageProcessingMode
+	13, // 19: PricingDataResponse.RatesEntry.value:type_name -> PricingRate
+	40, // 20: Flux.ViewerData:input_type -> google.protobuf.Empty
+	40, // 21: Flux.ViewerProfileData:input_type -> google.protobuf.Empty
+	32, // 22: Flux.ChangeViewerEmail:input_type -> ChangeViewerEmailRequest
+	33, // 23: Flux.ChangeViewerPhone:input_type -> ChangeViewerPhoneRequest
+	12, // 24: Flux.PricingData:input_type -> PricingDataRequest
+	15, // 25: Flux.OneTimePasscode:input_type -> OneTimePasscodeRequest
+	17, // 26: Flux.OneTimePasscodeVerify:input_type -> OneTimePasscodeVerifyRequest
+	19, // 27: Flux.PlaidConnectBankAccounts:input_type -> PlaidConnectBankAccountsRequest
+	21, // 28: Flux.PlaidCreateLinkToken:input_type -> PlaidCreateLinkTokenRequest
+	25, // 29: Flux.SaveProfileData:input_type -> SaveProfileDataRequest
+	23, // 30: Flux.WyreCreateAccount:input_type -> WyreCreateAccountRequest
+	34, // 31: Flux.UploadFile:input_type -> UploadFileRequest
+	36, // 32: Flux.GetImage:input_type -> GetImageRequest
+	11, // 33: Flux.ViewerData:output_type -> ViewerDataResponse
+	28, // 34: Flux.ViewerProfileData:output_type -> ProfileDataInfo
+	40, // 35: Flux.ChangeViewerEmail:output_type -> google.protobuf.Empty
+	40, // 36: Flux.ChangeViewerPhone:output_type -> google.protobuf.Empty
+	14, // 37: Flux.PricingData:output_type -> PricingDataResponse
+	16, // 38: Flux.OneTimePasscode:output_type -> OneTimePasscodeResponse
+	18, // 39: Flux.OneTimePasscodeVerify:output_type -> OneTimePasscodeVerifyResponse
+	20, // 40: Flux.PlaidConnectBankAccounts:output_type -> PlaidConnectBankAccountsResponse
+	22, // 41: Flux.PlaidCreateLinkToken:output_type -> PlaidCreateLinkTokenResponse
+	28, // 42: Flux.SaveProfileData:output_type -> ProfileDataInfo
+	24, // 43: Flux.WyreCreateAccount:output_type -> WyreCreateAccountResponse
+	35, // 44: Flux.UploadFile:output_type -> UploadFileResponse
+	37, // 45: Flux.GetImage:output_type -> GetImageResponse
+	33, // [33:46] is the sub-list for method output_type
+	20, // [20:33] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_api_proto_init() }
@@ -2919,7 +3065,7 @@ func file_api_proto_init() {
 			}
 		}
 		file_api_proto_msgTypes[25].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProfileDataItemInfo); i {
+			switch v := v.(*ThirdPartyUserAccount); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2931,7 +3077,7 @@ func file_api_proto_init() {
 			}
 		}
 		file_api_proto_msgTypes[26].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ChangeViewerEmailRequest); i {
+			switch v := v.(*UserAccountRemediation); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2943,7 +3089,7 @@ func file_api_proto_init() {
 			}
 		}
 		file_api_proto_msgTypes[27].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ChangeViewerPhoneRequest); i {
+			switch v := v.(*ProfileDataItemInfo); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2955,7 +3101,7 @@ func file_api_proto_init() {
 			}
 		}
 		file_api_proto_msgTypes[28].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UploadFileRequest); i {
+			switch v := v.(*ChangeViewerEmailRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2967,7 +3113,7 @@ func file_api_proto_init() {
 			}
 		}
 		file_api_proto_msgTypes[29].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*UploadFileResponse); i {
+			switch v := v.(*ChangeViewerPhoneRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2979,7 +3125,7 @@ func file_api_proto_init() {
 			}
 		}
 		file_api_proto_msgTypes[30].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*GetImageRequest); i {
+			switch v := v.(*UploadFileRequest); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -2991,6 +3137,30 @@ func file_api_proto_init() {
 			}
 		}
 		file_api_proto_msgTypes[31].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*UploadFileResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_proto_msgTypes[32].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*GetImageRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_api_proto_msgTypes[33].Exporter = func(v interface{}, i int) interface{} {
 			switch v := v.(*GetImageResponse); i {
 			case 0:
 				return &v.state
@@ -3009,7 +3179,7 @@ func file_api_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_api_proto_rawDesc,
 			NumEnums:      4,
-			NumMessages:   34,
+			NumMessages:   36,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

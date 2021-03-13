@@ -720,7 +720,7 @@ func (s *Server) GetImage(ctx context.Context, req *proto.GetImageRequest) (*pro
 			return nil, err
 		}
 
-		fitted := imaging.Fit(img, int(req.Width), int(req.Height), imaging.CatmullRom)
+		fitted := imaging.Fit(img, int(req.Width), int(req.Height), imaging.MitchellNetravali)
 		width = int32(fitted.Rect.Dx())
 		height = int32(fitted.Rect.Dy())
 

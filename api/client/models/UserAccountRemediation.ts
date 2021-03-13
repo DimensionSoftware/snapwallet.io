@@ -10,35 +10,34 @@
  * Do not edit the class manually.
  */
 
-import { ProfileDataItemInfo } from './ProfileDataItemInfo';
-import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
+import { ProfileDataItemKind } from './ProfileDataItemKind';
 import { HttpFile } from '../http/http';
 
 /**
-* represents all profile data for a user
+* Represents an action that the client  must take in order to resolve a condition.
 */
-export class ProfileDataInfo {
-    'profile'?: Array<ProfileDataItemInfo>;
-    'wyre'?: ThirdPartyUserAccount;
+export class UserAccountRemediation {
+    'kind'?: ProfileDataItemKind;
+    'description'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "profile",
-            "baseName": "profile",
-            "type": "Array<ProfileDataItemInfo>",
+            "name": "kind",
+            "baseName": "kind",
+            "type": "ProfileDataItemKind",
             "format": ""
         },
         {
-            "name": "wyre",
-            "baseName": "wyre",
-            "type": "ThirdPartyUserAccount",
+            "name": "description",
+            "baseName": "description",
+            "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return ProfileDataInfo.attributeTypeMap;
+        return UserAccountRemediation.attributeTypeMap;
     }
     
     public constructor() {

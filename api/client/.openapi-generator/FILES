@@ -33,10 +33,12 @@ models/ProfileDataItemStatus.ts
 models/ProtobufAny.ts
 models/RpcStatus.ts
 models/SaveProfileDataRequest.ts
+models/ThirdPartyUserAccount.ts
 models/UploadFileResponse.ts
 models/UsGovernmentIdDocumentInput.ts
 models/UsGovernmentIdDocumentInputKind.ts
 models/User.ts
+models/UserAccountRemediation.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
 models/all.ts

@@ -184,7 +184,7 @@ message DocumentInput {
 
 message UsGovernmentIdDocumentInput {
   UsGovernmentIdDocumentInputKind kind = 1;
-  repeated string               file_ids = 2;
+  repeated string                 file_ids = 2;
 }
 
 // ProfileData
@@ -192,6 +192,25 @@ message UsGovernmentIdDocumentInput {
 // represents all profile data for a user
 message ProfileDataInfo {
   repeated ProfileDataItemInfo profile = 1;
+  ThirdPartyUserAccount wyre = 2;
+}
+
+// WyreUserAccount
+//
+// Represents the wyre user account status
+message ThirdPartyUserAccount {
+  // TODO: create enum? SUBMITTED -> APPROVED -> PENDING -> REJECTED
+  string status = 1;
+  repeated UserAccountRemediation remediations = 2;
+}
+
+// UserAccountRemediation
+//
+// Represents an action that the client 
+// must take in order to resolve a condition.
+message UserAccountRemediation {
+  ProfileDataItemKind kind = 1;
+  string description = 2;
 }
 
 // ProfileDataInfo

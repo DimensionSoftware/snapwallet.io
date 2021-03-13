@@ -1,17 +1,19 @@
 <script lang="ts">
-  import { onMount, createEventDispatcher } from 'svelte'
+  import { onMount, afterUpdate, createEventDispatcher } from 'svelte'
+  import { Masks } from '../../types'
+  import { withMaskOnInput, isValidMaskInput } from '../../masks'
+
   const dispatch = createEventDispatcher()
   export let type: string = 'text'
   export let placeholder: string = ''
   export let inputmode: string = 'text'
   export let autocapitalize: string = ''
   export let defaultValue: string | number = ''
-  export let value: string | number = ''
   export let autocomplete: string = 'on'
   export let autofocus: boolean
   export let required: boolean
   export let pattern: string = ''
-  export let maskChar: string = ''
+  export let mask: Masks
 
   let isActive: boolean = Boolean(defaultValue)
 
@@ -30,19 +32,30 @@
     {autofocus}
     {pattern}
     {required}
+    on:keydown={e => {
+      if (mask) {
+        const newVal = defaultValue + String.fromCharCode(e.keyCode)
+        const isValLongerThanMask = newVal.length > mask.length
+        // Uses codes from the following table https://keycode.info/
+        const isAltering =
+          [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(e.keyCode) ||
+          e.metaKey
+
+        const isInputValid =
+          isValidMaskInput(newVal, mask) && !isValLongerThanMask
+
+        if (!isInputValid && !isAltering) {
+          e.preventDefault()
+          return false
+        }
+      }
+    }}
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
+      dispatch('change', e.target.value)
     }}
-    on:keydown={e => {
-      const invalidPress =
-        maskChar && !e.metaKey && e.keyCode > 64 && !e.key.match(maskChar)
-      // is relevant key press and mask doesn't match, so-- cancel key
-      if (invalidPress) return e.preventDefault()
-      return true
-    }}
-    on:keyup={e => dispatch('change', e.target.value)}
     min={type === 'number' ? 0.0 : null}
-    value={defaultValue || ''}
+    value={withMaskOnInput(defaultValue, mask)}
   />
   <span class="fx" />
   <span class="bg" />
