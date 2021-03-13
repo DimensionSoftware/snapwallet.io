@@ -18,6 +18,7 @@ type ProfileData interface {
 	Kind() common.ProfileDataKind
 	GetStatus() common.ProfileDataStatus
 	GetProfileDataItemInfo() *proto.ProfileDataItemInfo
+	SetStatus(common.ProfileDataStatus)
 	Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error)
 }
 
@@ -99,6 +100,18 @@ func (profile ProfileDatas) FilterStatus(status common.ProfileDataStatus) Profil
 		if pdata.GetStatus() == status {
 			out = append(out, pdata)
 		}
+	}
+
+	return out
+}
+
+// SetStatuses ...
+func (profile ProfileDatas) SetStatuses(newStatus common.ProfileDataStatus) ProfileDatas {
+	out := []ProfileData{}
+
+	for _, pdata := range profile {
+		pdata.SetStatus(newStatus)
+		out = append(out, pdata)
 	}
 
 	return out

@@ -1,8 +1,10 @@
 package wyre
 
 import (
+	"context"
 	"fmt"
 
+	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
@@ -10,9 +12,10 @@ import (
 
 type Manager struct {
 	Wyre *Client
+	Db   *db.Db
 }
 
-func (m Manager) CreateAccount(u *user.User, profile profiledata.ProfileDatas) error {
+func (m Manager) CreateAccount(ctx context.Context, u *user.User, profile profiledata.ProfileDatas) error {
 	t := true
 	f := false
 
@@ -70,7 +73,13 @@ func (m Manager) CreateAccount(u *user.User, profile profiledata.ProfileDatas) e
 	if err != nil {
 		return err
 	}
-	// TODO: upload docs too, all passed profile items must be uploaded
+
+	modifiedProfile := profile.SetStatuses(common.StatusPending)
+
+	_, err = m.Db.SaveProfileDatas(ctx, nil, u.ID, modifiedProfile)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }

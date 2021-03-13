@@ -29,6 +29,11 @@ func (pdata ProfileDataLegalName) GetStatus() common.ProfileDataStatus {
 	return pdata.Status
 }
 
+// SetStatus set the status of the profile data
+func (pdata ProfileDataLegalName) SetStatus(newStatus common.ProfileDataStatus) {
+	pdata.Status = newStatus
+}
+
 // GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
 func (pdata ProfileDataLegalName) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
 	info := proto.ProfileDataItemInfo{
