@@ -86,7 +86,7 @@
       </div>
       <div class="line dashed" /> 
       <div class="line-item muted">
-        <div>Deliver To</div>
+        <div>Wallet</div>
         <div>3x2kdkdj...k34w</div>  
       </div> 
     </div>
