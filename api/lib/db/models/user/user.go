@@ -15,9 +15,6 @@ type PhoneEncrypted []byte
 // Phone represents cleartext phone number
 type Phone string
 
-// Email represents cleartext email
-type Email string
-
 // ID ...
 type ID string
 

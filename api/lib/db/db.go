@@ -18,6 +18,8 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/email"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/phone"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/unmarshal"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
@@ -106,8 +108,9 @@ func (db Db) GetFileMetadata(ctx context.Context, userID user.ID, fileID file.ID
 
 // GetOrCreateUser creates a user object
 func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.LoginKind, emailOrPhone string) (*user.User, error) {
-	var u user.User
+	now := time.Now()
 
+	var u user.User
 	err := db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		var err error
 
@@ -119,40 +122,62 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			u = *uptr
 			log.Printf("User found: %#v", u)
 
-			return nil
-		}
-
-		now := time.Now()
-		// first time login means that we verified them with otp
-		if loginKind == onetimepasscode.LoginKindPhone {
-			u = user.User{
-				Phone:           &emailOrPhone,
-				PhoneVerifiedAt: &now,
-			}.WithDefaults(now)
 		} else {
-			u = user.User{
-				Email:           &emailOrPhone,
-				EmailVerifiedAt: &now,
-			}.WithDefaults(now)
-		}
 
-		err = db.SaveUser(ctx, tx, &u)
-		if err != nil {
-			return err
+			// first time login means that we verified them with otp
+			if loginKind == onetimepasscode.LoginKindPhone {
+				u = user.User{
+					Phone:           &emailOrPhone,
+					PhoneVerifiedAt: &now,
+				}.WithDefaults(now)
+			} else {
+				u = user.User{
+					Email:           &emailOrPhone,
+					EmailVerifiedAt: &now,
+				}.WithDefaults(now)
+			}
+
+			err = db.SaveUser(ctx, tx, &u)
+			if err != nil {
+				return err
+			}
+			log.Printf("User not found; created: %v", u)
 		}
-		log.Printf("User not found; created: %v", u)
 
 		pdatas, err := db.GetAllProfileData(ctx, tx, u.ID)
 		if err != nil {
 			return err
+
 		}
-		// todo add or create profile data records for email/phone
-		pdatas.
-			_, err = db.SaveProfileDatas(ctx, tx, u.ID, pdatas)
+
+		if loginKind == onetimepasscode.LoginKindPhone {
+			existingPdata := pdatas.FilterKindPhone().FindByPhone(emailOrPhone)
+
+			if existingPdata == nil {
+				pdatas = append(pdatas, phone.ProfileDataPhone{
+					ID:        common.ProfileDataID(shortuuid.New()),
+					Status:    common.StatusReceived,
+					Phone:     emailOrPhone,
+					CreatedAt: now,
+				})
+			}
+		} else {
+			existingPdata := pdatas.FilterKindEmail().FindByEmail(emailOrPhone)
+
+			if existingPdata == nil {
+				pdatas = append(pdatas, email.ProfileDataEmail{
+					ID:        common.ProfileDataID(shortuuid.New()),
+					Status:    common.StatusReceived,
+					Email:     emailOrPhone,
+					CreatedAt: now,
+				})
+			}
+		}
+
+		_, err = db.SaveProfileDatas(ctx, tx, u.ID, pdatas)
 		if err != nil {
 			return err
 		}
-
 		return nil
 	})
 
