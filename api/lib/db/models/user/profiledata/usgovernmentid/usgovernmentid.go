@@ -1,4 +1,4 @@
-package governmentid
+package usgovernmentid
 
 import (
 	"time"
@@ -61,7 +61,7 @@ func (govtIDKind Kind) FilesRequired() int {
 }
 
 // ProfileDataGovernmentID represents a government ID for a user
-type ProfileDataGovernmentID struct {
+type ProfileDataUSGovernmentID struct {
 	ID               common.ProfileDataID
 	Status           common.ProfileDataStatus
 	GovernmentIDKind Kind
@@ -72,7 +72,7 @@ type ProfileDataGovernmentID struct {
 }
 
 // Encrypt ...
-func (pdata ProfileDataGovernmentID) Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error) {
+func (pdata ProfileDataUSGovernmentID) Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error) {
 
 	return &common.EncryptedProfileData{
 		ID:        pdata.ID,
@@ -87,22 +87,22 @@ func (pdata ProfileDataGovernmentID) Encrypt(m *encryption.Manager, userID user.
 }
 
 // Kind the kind of profile data
-func (pdata ProfileDataGovernmentID) Kind() common.ProfileDataKind {
+func (pdata ProfileDataUSGovernmentID) Kind() common.ProfileDataKind {
 	return common.KindLegalName
 }
 
 // GetStatus get the status of the profile data
-func (pdata ProfileDataGovernmentID) GetStatus() common.ProfileDataStatus {
+func (pdata ProfileDataUSGovernmentID) GetStatus() common.ProfileDataStatus {
 	return pdata.Status
 }
 
 // SetStatus set the status of the profile data
-func (pdata ProfileDataGovernmentID) SetStatus(newStatus common.ProfileDataStatus) {
+func (pdata ProfileDataUSGovernmentID) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus
 }
 
 // GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
-func (pdata ProfileDataGovernmentID) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
+func (pdata ProfileDataUSGovernmentID) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
 	info := proto.ProfileDataItemInfo{
 		Id:        string(pdata.ID),
 		Kind:      pdata.Kind().ToProfileDataItemKind(),

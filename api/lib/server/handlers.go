@@ -24,9 +24,9 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/dateofbirth"
-	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/governmentid"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
 	"github.com/lithammer/shortuuid/v3"
@@ -430,13 +430,13 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 					}
 				}
 			case common.KindGovernmentID:
-				var governmentIDData *governmentid.ProfileDataGovernmentID
+				var governmentIDData *usgovernmentid.ProfileDataUSGovernmentID
 
 				if req.UsGovernmentIdDoc != nil {
 					if req.UsGovernmentIdDoc.Kind == proto.UsGovernmentIdDocumentInputKind_GI_UNKNOWN {
 						return status.Errorf(codes.InvalidArgument, "government id document kind needs to be specified ")
 					}
-					kind := governmentid.KindFromGovernmentIdDocKind(req.UsGovernmentIdDoc.Kind)
+					kind := usgovernmentid.KindFromGovernmentIdDocKind(req.UsGovernmentIdDoc.Kind)
 
 					if len(req.UsGovernmentIdDoc.FileIds) != kind.FilesRequired() {
 						return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
@@ -453,7 +453,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 					}
 
 					if existingProfileData == nil {
-						governmentIDData = &governmentid.ProfileDataGovernmentID{
+						governmentIDData = &usgovernmentid.ProfileDataUSGovernmentID{
 							ID:               common.ProfileDataID(shortuuid.New()),
 							Status:           common.StatusReceived,
 							GovernmentIDKind: kind,
@@ -461,7 +461,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 							CreatedAt:        time.Now(),
 						}
 					} else {
-						governmentIDData = (*existingProfileData).(*governmentid.ProfileDataGovernmentID)
+						governmentIDData = (*existingProfileData).(*usgovernmentid.ProfileDataUSGovernmentID)
 
 						now := time.Now()
 
@@ -470,7 +470,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 							fileIDs = append(fileIDs, file.ID(id))
 						}
 
-						governmentIDData.GovernmentIDKind = governmentid.Kind(req.UsGovernmentIdDoc.Kind)
+						governmentIDData.GovernmentIDKind = usgovernmentid.Kind(req.UsGovernmentIdDoc.Kind)
 						governmentIDData.FileIDs = fileIDs
 						governmentIDData.UpdatedAt = &now
 					}
