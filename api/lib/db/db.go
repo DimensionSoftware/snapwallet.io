@@ -289,6 +289,34 @@ func (db Db) SaveProfileData(ctx context.Context, tx *firestore.Transaction, use
 	return out.ID, nil
 }
 
+// SaveProfileDatas ...
+func (db Db) SaveProfileDatas(ctx context.Context, passedTx *firestore.Transaction, userID user.ID, pdatas profiledata.ProfileDatas) ([]common.ProfileDataID, error) {
+	ids := []common.ProfileDataID{}
+
+	save := func(ctx context.Context, tx *firestore.Transaction) error {
+		for _, pdata := range pdatas {
+			id, err := db.SaveProfileData(ctx, tx, userID, pdata)
+			if err != nil {
+				return err
+			}
+			ids = append(ids, id)
+		}
+		return nil
+	}
+
+	var err error
+	if passedTx == nil {
+		err = db.Firestore.RunTransaction(ctx, save)
+	} else {
+		err = save(ctx, passedTx)
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return ids, nil
+}
+
 // GetAllProfileData ...
 func (db Db) GetAllProfileData(ctx context.Context, tx *firestore.Transaction, userID user.ID) (profiledata.ProfileDatas, error) {
 	profile := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")

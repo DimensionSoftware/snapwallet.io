@@ -5,6 +5,7 @@ import (
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 )
 
 type Manager struct {
@@ -17,6 +18,14 @@ func (m Manager) CreateAccount(u *user.User, profile profiledata.ProfileDatas) e
 
 	if !profile.HasWyreAccountPreconditionsMet() {
 		return fmt.Errorf("Profile data is not complete enough to submit to Wyre")
+	}
+
+	if len(profile) != len(common.ProfileDataRequiredForWyre) {
+		return fmt.Errorf(
+			"Number of profile data items necessary for wyre is supposed to be %d but received %d",
+			len(common.ProfileDataRequiredForWyre),
+			len(profile),
+		)
 	}
 
 	address := profile.FilterKindAddress()[0]
@@ -61,7 +70,7 @@ func (m Manager) CreateAccount(u *user.User, profile profiledata.ProfileDatas) e
 	if err != nil {
 		return err
 	}
-	// TODO: update statuses of profile data once submitted
+	// TODO: upload docs too, all passed profile items must be uploaded
 
 	return nil
 }
