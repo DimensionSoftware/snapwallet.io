@@ -43,8 +43,10 @@
 
   let isEnteringSourceAmount = true
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
+  let isGettingUserView = false
 
   $: fakePrice = 10_000
+  $: nextRoute = Routes.PLAID_LINK
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
@@ -55,12 +57,22 @@
     })
   }
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     const { sourceAmount } = $transactionStore
     if (!sourceAmount || isNaN(sourceAmount) || !isValidNumber(destinationRate))
       // focus input
       return document.querySelector('input')?.focus()
-    push(Routes.SELECT_PAYMENT)
+
+    push(nextRoute)
+  }
+
+  // Find the next path based on user data
+  const getNextPath = async () => {
+    const { flags = {} } = await window.API.fluxViewerData()
+    const { hasPlaidItems, hasWyreAccount } = flags
+
+    if (hasPlaidItems && hasWyreAccount) nextRoute = Routes.CHECKOUT_OVERVIEW
+    else if (hasPlaidItems) nextRoute = Routes.PROFILE
   }
 
   const onKeyDown = (e: Event) => {
@@ -78,6 +90,7 @@
 
   onMount(() => {
     getInitialPrices()
+    getNextPath()
     const priceInterval = priceStore.pollPrices()
     return () => clearInterval(priceInterval)
   })
