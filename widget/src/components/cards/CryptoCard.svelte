@@ -1,12 +1,5 @@
 <script lang="ts">
-  // HACK: this lib. does not offer a good
-  // way to import icons dynamically.
-  import * as ICONS from 'svelte-cryptoicon'
-  let tickerIcons = {}
-  Object.entries(ICONS).forEach(([k, v]) => {
-    tickerIcons[k.toUpperCase()] = v
-  })
-
+  import { CryptoIcons } from '../../util'
   import { transactionStore } from '../../stores/TransactionStore'
   import { createEventDispatcher } from 'svelte'
   import FaIcon from 'svelte-awesome'
@@ -25,7 +18,7 @@
   class="crypto-card"
 >
   <div class="crypto-icon">
-    <svelte:component this={tickerIcons[crypto.ticker]} />
+    <svelte:component this={CryptoIcons[crypto.ticker]} />
   </div>
   <div class="crypto-name">
     {crypto.ticker} &nbsp;<small>{crypto.name}</small>
