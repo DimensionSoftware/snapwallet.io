@@ -64,7 +64,7 @@
         autofocus
         type="text"
         placeholder="Your Full Name"
-        defaultValue={defaultName}
+        defaultValue={fullName}
         pattern={`[\\w\\s]+`}
         on:change={e => {
           const { firstName, lastName } = human.parseName(e.detail)
@@ -84,7 +84,6 @@
         pattern={`[\\d]{4}-[\\d]{2}-[\\d]{2}`}
         mask={Masks.INTL_DATE}
         defaultValue={$userStore.birthDate}
-        value={$userStore.birthDate}
         on:change={e => {
           userStore.setBirthDate(e.detail)
         }}
@@ -102,7 +101,6 @@
         pattern={`[\\d]{3}-[\\d]{2}-[\\d]{4}`}
         mask={Masks.SSN}
         defaultValue={$userStore.socialSecurityNumber}
-        value={$userStore.socialSecurityNumber}
         on:change={e => {
           userStore.setSocialSecurityNumber(e.detail)
         }}
