@@ -147,7 +147,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 	return &proto.OneTimePasscodeResponse{}, nil
 }
 
-// OneTimePasscodeVerify is an rpc handler
+// OneTimePasscodeVerify is an rpc handler -- should maybe be renamed to login?
 func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePasscodeVerifyRequest) (*proto.OneTimePasscodeVerifyResponse, error) {
 	const unknownMsg = "An unknown error occurred. Please try again later."
 

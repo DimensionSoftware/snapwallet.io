@@ -136,11 +136,22 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			}.WithDefaults(now)
 		}
 
-		err = db.SaveUser(ctx, nil, &u)
+		err = db.SaveUser(ctx, tx, &u)
 		if err != nil {
 			return err
 		}
 		log.Printf("User not found; created: %v", u)
+
+		pdatas, err := db.GetAllProfileData(ctx, tx, u.ID)
+		if err != nil {
+			return err
+		}
+		// todo add or create profile data records for email/phone
+		pdatas.
+			_, err = db.SaveProfileDatas(ctx, tx, u.ID, pdatas)
+		if err != nil {
+			return err
+		}
 
 		return nil
 	})

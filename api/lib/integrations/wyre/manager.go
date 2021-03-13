@@ -76,6 +76,7 @@ func (m Manager) CreateAccount(ctx context.Context, u *user.User, profile profil
 
 	modifiedProfile := profile.SetStatuses(common.StatusPending)
 
+	//TODO:  upload 2 docs proof of address, govt id
 	_, err = m.Db.SaveProfileDatas(ctx, nil, u.ID, modifiedProfile)
 	if err != nil {
 		return err

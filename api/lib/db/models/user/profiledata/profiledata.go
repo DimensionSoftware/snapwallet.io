@@ -7,6 +7,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/dateofbirth"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/email"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/encryption"
@@ -87,6 +88,17 @@ func (profile ProfileDatas) FilterKindAddress() []address.ProfileDataAddress {
 
 	for _, pdata := range profile.FilterKind(common.KindAddress) {
 		out = append(out, pdata.(address.ProfileDataAddress))
+	}
+
+	return out
+}
+
+// FilterKindEmail ...
+func (profile ProfileDatas) FilterKindEmail() []email.ProfileDataEmail {
+	out := []email.ProfileDataEmail{}
+
+	for _, pdata := range profile.FilterKind(common.KindEmail) {
+		out = append(out, pdata.(email.ProfileDataEmail))
 	}
 
 	return out
