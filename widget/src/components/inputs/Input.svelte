@@ -34,13 +34,13 @@
     {required}
     on:keydown={e => {
       if (mask) {
-        const isValLongerThanMask = e.target.value.length >= mask.length
+        const newVal = defaultValue + String.fromCharCode(e.keyCode)
+        const isValLongerThanMask = newVal.length > mask.length
         // Uses codes from the following table https://keycode.info/
         const isAltering =
           [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(e.keyCode) ||
           e.metaKey
 
-        const newVal = defaultValue + String.fromCharCode(e.keyCode)
         const isInputValid =
           isValidMaskInput(newVal, mask) && !isValLongerThanMask
 
