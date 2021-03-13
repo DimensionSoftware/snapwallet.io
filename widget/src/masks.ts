@@ -30,7 +30,7 @@ export const maskValue = (
  */
 export const unMaskValue = (val: string, mask: Masks): string => {
   if (!val || !mask) return val
-  const minChars = mask.match(/x/g).length
+  const minChars = mask.length
   const splitVal = val.split('')
   return [...new Array(minChars)].reduce((acc, v, index) => {
     if (mask[index] === 'x' && splitVal[index])
