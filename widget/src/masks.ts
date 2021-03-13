@@ -1,4 +1,4 @@
-import type { Masks } from './types'
+import { Masks } from './types'
 
 /**
  * Displays a mask for any string value.
@@ -56,4 +56,15 @@ export const withMaskOnInput = (val?: string, mask?: Masks) => {
     }, mask)
     .split('x')[0]
     .trim()
+}
+
+/**
+ * Validate any string value for a given mask.
+ *
+ * @param val Any string value.
+ * @param mask The mask to validate input for.
+ */
+export const isValidMaskInput = (val = '', mask) => {
+  if ([Masks.INTL_DATE, Masks.SSN].includes(mask)) return /\d(-\d)?/.test(val)
+  return true
 }
