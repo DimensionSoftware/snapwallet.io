@@ -53,7 +53,7 @@
     <div class="line-items">
       <h4>Overview</h4>
       <div class="line-item muted">
-        <div>Network Fee</div>
+        <div>Crypto Fee</div>
         <div>
           {(0).toFixed(8)}
           {$transactionStore.destinationCurrency.ticker}
