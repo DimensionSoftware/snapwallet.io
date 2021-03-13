@@ -1,6 +1,12 @@
 import nodeDebug from 'debug'
 import { JWT_SESSION_KEY } from './constants'
-import { FluxApi, createConfiguration, ServerConfiguration, SecurityAuthentication, RequestContext } from 'api-client'
+import {
+  FluxApi,
+  createConfiguration,
+  ServerConfiguration,
+  SecurityAuthentication,
+  RequestContext,
+} from 'api-client'
 
 // pure fns
 // ---------
@@ -88,18 +94,17 @@ export const genAPIClient = (): FluxApi => {
 }
 
 class FluxBearerAuthentication implements SecurityAuthentication {
-
   public constructor() {}
 
   public getName(): string {
-      return "Bearer";
+    return 'Bearer'
   }
 
   public applySecurityAuthentication(context: RequestContext) {
     const token = getFluxSession()
 
     if (token) {
-      context.setHeaderParam("Authorization", `Bearer ${token}`);
+      context.setHeaderParam('Authorization', `Bearer ${token}`)
     }
   }
 }

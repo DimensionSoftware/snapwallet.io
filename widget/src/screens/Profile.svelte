@@ -12,6 +12,7 @@
   import { Logger, onEnterPressed } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
+  import { Masks } from '../types'
 
   import { push } from 'svelte-spa-router'
 
@@ -63,10 +64,10 @@
         autofocus
         type="text"
         placeholder="Your Full Name"
-        defaultValue={defaultName}
+        defaultValue={fullName}
         pattern={`[\\w\\s]+`}
         on:change={e => {
-          const {firstName, lastName} = human.parseName(e.detail)
+          const { firstName, lastName } = human.parseName(e.detail)
           userStore.setFirstName(firstName ?? '')
           userStore.setLastName(lastName ?? '')
         }}
@@ -81,9 +82,8 @@
         type="text"
         placeholder="yyyy-mm-dd"
         pattern={`[\\d]{4}-[\\d]{2}-[\\d]{2}`}
-        maskChar="[\d-]"
+        mask={Masks.INTL_DATE}
         defaultValue={$userStore.birthDate}
-        value={$userStore.birthDate}
         on:change={e => {
           userStore.setBirthDate(e.detail)
         }}
@@ -99,8 +99,8 @@
         placeholder="xxx-xx-xxxx"
         maskChar="[\d-]"
         pattern={`[\\d]{3}-[\\d]{2}-[\\d]{4}`}
+        mask={Masks.SSN}
         defaultValue={$userStore.socialSecurityNumber}
-        value={$userStore.socialSecurityNumber}
         on:change={e => {
           userStore.setSocialSecurityNumber(e.detail)
         }}
