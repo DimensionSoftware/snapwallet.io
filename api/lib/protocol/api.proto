@@ -192,13 +192,13 @@ message UsGovernmentIdDocumentInput {
 // represents all profile data for a user
 message ProfileDataInfo {
   repeated ProfileDataItemInfo profile = 1;
-  WyreUserAccount wyre = 2;
+  ThirdPartyUserAccount wyre = 2;
 }
 
 // WyreUserAccount
 //
 // Represents the wyre user account status
-message WyreUserAccount {
+message ThirdPartyUserAccount {
   string status = 1;
   repeated UserAccountRemediation remediations = 2;
 }

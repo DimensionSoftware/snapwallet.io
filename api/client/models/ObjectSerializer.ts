@@ -19,6 +19,7 @@ export * from './ProfileDataItemStatus';
 export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
+export * from './ThirdPartyUserAccount';
 export * from './UploadFileResponse';
 export * from './UsGovernmentIdDocumentInput';
 export * from './UsGovernmentIdDocumentInputKind';
@@ -26,7 +27,6 @@ export * from './User';
 export * from './UserAccountRemediation';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
-export * from './WyreUserAccount';
 
 import { Address } from './Address';
 import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
@@ -49,6 +49,7 @@ import { ProfileDataItemStatus } from './ProfileDataItemStatus';
 import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
+import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
 import { UploadFileResponse } from './UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from './UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKind';
@@ -56,7 +57,6 @@ import { User } from './User';
 import { UserAccountRemediation } from './UserAccountRemediation';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
-import { WyreUserAccount } from './WyreUserAccount';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -102,13 +102,13 @@ let typeMap: {[index: string]: any} = {
     "ProtobufAny": ProtobufAny,
     "RpcStatus": RpcStatus,
     "SaveProfileDataRequest": SaveProfileDataRequest,
+    "ThirdPartyUserAccount": ThirdPartyUserAccount,
     "UploadFileResponse": UploadFileResponse,
     "UsGovernmentIdDocumentInput": UsGovernmentIdDocumentInput,
     "User": User,
     "UserAccountRemediation": UserAccountRemediation,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
-    "WyreUserAccount": WyreUserAccount,
 }
 
 export class ObjectSerializer {

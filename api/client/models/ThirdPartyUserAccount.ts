@@ -16,7 +16,7 @@ import { HttpFile } from '../http/http';
 /**
 * Represents the wyre user account status
 */
-export class WyreUserAccount {
+export class ThirdPartyUserAccount {
     'status'?: string;
     'remediations'?: Array<UserAccountRemediation>;
 
@@ -37,7 +37,7 @@ export class WyreUserAccount {
         }    ];
 
     static getAttributeTypeMap() {
-        return WyreUserAccount.attributeTypeMap;
+        return ThirdPartyUserAccount.attributeTypeMap;
     }
     
     public constructor() {

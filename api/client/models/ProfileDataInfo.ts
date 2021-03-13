@@ -11,7 +11,7 @@
  */
 
 import { ProfileDataItemInfo } from './ProfileDataItemInfo';
-import { WyreUserAccount } from './WyreUserAccount';
+import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
 import { HttpFile } from '../http/http';
 
 /**
@@ -19,7 +19,7 @@ import { HttpFile } from '../http/http';
 */
 export class ProfileDataInfo {
     'profile'?: Array<ProfileDataItemInfo>;
-    'wyre'?: WyreUserAccount;
+    'wyre'?: ThirdPartyUserAccount;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -33,7 +33,7 @@ export class ProfileDataInfo {
         {
             "name": "wyre",
             "baseName": "wyre",
-            "type": "WyreUserAccount",
+            "type": "ThirdPartyUserAccount",
             "format": ""
         }    ];
 

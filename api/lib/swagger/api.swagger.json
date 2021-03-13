@@ -569,7 +569,7 @@
           }
         },
         "wyre": {
-          "$ref": "#/definitions/WyreUserAccount"
+          "$ref": "#/definitions/ThirdPartyUserAccount"
         }
       },
       "description": "represents all profile data for a user",
@@ -667,6 +667,22 @@
       },
       "description": "request",
       "title": "SaveProfileDataRequest"
+    },
+    "ThirdPartyUserAccount": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "remediations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserAccountRemediation"
+          }
+        }
+      },
+      "description": "Represents the wyre user account status",
+      "title": "WyreUserAccount"
     },
     "UploadFileResponse": {
       "type": "object",
@@ -775,22 +791,6 @@
       "type": "object",
       "description": "response",
       "title": "WyreCreateAccountResponse"
-    },
-    "WyreUserAccount": {
-      "type": "object",
-      "properties": {
-        "status": {
-          "type": "string"
-        },
-        "remediations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserAccountRemediation"
-          }
-        }
-      },
-      "description": "Represents the wyre user account status",
-      "title": "WyreUserAccount"
     },
     "protobufAny": {
       "type": "object",
