@@ -173,7 +173,7 @@ message SaveProfileDataRequest {
   string date_of_birth = 2;
   string ssn = 3;
   Address address = 4;
-  UsGovernmentIdDocumentInput us_government_id_doc = 5;
+  GovernmentIdDocumentInput government_id_doc = 5;
   DocumentInput proof_of_address_doc = 6;
   DocumentInput ach_authorization_form_doc = 7;
 }
@@ -182,8 +182,8 @@ message DocumentInput {
   repeated string file_ids = 1;
 }
 
-message UsGovernmentIdDocumentInput {
-  UsGovernmentIdDocumentInputKind kind = 1;
+message GovernmentIdDocumentInput {
+  GovernmentIdDocumentInputKind kind = 1;
   repeated string               file_ids = 2;
 }
 
@@ -192,6 +192,24 @@ message UsGovernmentIdDocumentInput {
 // represents all profile data for a user
 message ProfileDataInfo {
   repeated ProfileDataItemInfo profile = 1;
+  WyreUserAccount wyre = 2;
+}
+
+// WyreUserAccount
+//
+// Represents the wyre user account status
+message WyreUserAccount {
+  string status = 1;
+  repeated UserAccountRemediation remediations = 2;
+}
+
+// UserAccountRemediation
+//
+// Represents an action that the client 
+// must take in order to resolve a condition.
+message UserAccountRemediation {
+  ProfileDataItemKind kind = 1;
+  string description = 2;
 }
 
 // ProfileDataInfo
@@ -230,7 +248,7 @@ enum ProfileDataItemStatus {
   S_APPROVED = 4;
 }
 
-enum UsGovernmentIdDocumentInputKind {
+enum GovernmentIdDocumentInputKind {
   GI_UNKNOWN = 0;
   GI_US_DRIVING_LICENSE = 1;
   GI_US_PASSPORT_CARD = 2;
