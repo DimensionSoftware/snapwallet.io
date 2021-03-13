@@ -1,7 +1,5 @@
 import type { PromiseFluxApi } from 'api-client/dist/types/PromiseAPI'
 
-
-
 declare global {
   interface Window {
     Plaid: any
