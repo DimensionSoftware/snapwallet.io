@@ -60,6 +60,7 @@ export const withMaskOnInput = (val?: string, mask?: Masks) => {
 
 /**
  * Validate any string value for a given mask.
+ * This should be used for partial matching while input is received.
  *
  * @param val Any string value.
  * @param mask The mask to validate input for.
