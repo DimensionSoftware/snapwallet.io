@@ -10,35 +10,34 @@
  * Do not edit the class manually.
  */
 
-import { ProfileDataItemInfo } from './ProfileDataItemInfo';
-import { WyreUserAccount } from './WyreUserAccount';
+import { UserAccountRemediation } from './UserAccountRemediation';
 import { HttpFile } from '../http/http';
 
 /**
-* represents all profile data for a user
+* Represents the wyre user account status
 */
-export class ProfileDataInfo {
-    'profile'?: Array<ProfileDataItemInfo>;
-    'wyre'?: WyreUserAccount;
+export class WyreUserAccount {
+    'status'?: string;
+    'remediations'?: Array<UserAccountRemediation>;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "profile",
-            "baseName": "profile",
-            "type": "Array<ProfileDataItemInfo>",
+            "name": "status",
+            "baseName": "status",
+            "type": "string",
             "format": ""
         },
         {
-            "name": "wyre",
-            "baseName": "wyre",
-            "type": "WyreUserAccount",
+            "name": "remediations",
+            "baseName": "remediations",
+            "type": "Array<UserAccountRemediation>",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return ProfileDataInfo.attributeTypeMap;
+        return WyreUserAccount.attributeTypeMap;
     }
     
     public constructor() {

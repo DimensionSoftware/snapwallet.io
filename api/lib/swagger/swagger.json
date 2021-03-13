@@ -655,6 +655,9 @@
           "items": {
             "$ref": "#/definitions/ProfileDataItemInfo"
           }
+        },
+        "wyre": {
+          "$ref": "#/definitions/WyreUserAccount"
         }
       },
       "description": "represents all profile data for a user",
@@ -806,6 +809,19 @@
       "description": "A user which is shared across customer applications",
       "title": "User"
     },
+    "UserAccountRemediation": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "$ref": "#/definitions/ProfileDataItemKind"
+        },
+        "description": {
+          "type": "string"
+        }
+      },
+      "description": "Represents an action that the client \nmust take in order to resolve a condition.",
+      "title": "UserAccountRemediation"
+    },
     "UserFlags": {
       "type": "object",
       "properties": {
@@ -847,6 +863,22 @@
       "type": "object",
       "description": "response",
       "title": "WyreCreateAccountResponse"
+    },
+    "WyreUserAccount": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "remediations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/UserAccountRemediation"
+          }
+        }
+      },
+      "description": "Represents the wyre user account status",
+      "title": "WyreUserAccount"
     },
     "protobufAny": {
       "type": "object",

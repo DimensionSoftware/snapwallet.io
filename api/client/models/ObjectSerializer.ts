@@ -23,8 +23,10 @@ export * from './UploadFileResponse';
 export * from './UsGovernmentIdDocumentInput';
 export * from './UsGovernmentIdDocumentInputKind';
 export * from './User';
+export * from './UserAccountRemediation';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
+export * from './WyreUserAccount';
 
 import { Address } from './Address';
 import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
@@ -51,8 +53,10 @@ import { UploadFileResponse } from './UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from './UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKind';
 import { User } from './User';
+import { UserAccountRemediation } from './UserAccountRemediation';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
+import { WyreUserAccount } from './WyreUserAccount';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -101,8 +105,10 @@ let typeMap: {[index: string]: any} = {
     "UploadFileResponse": UploadFileResponse,
     "UsGovernmentIdDocumentInput": UsGovernmentIdDocumentInput,
     "User": User,
+    "UserAccountRemediation": UserAccountRemediation,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
+    "WyreUserAccount": WyreUserAccount,
 }
 
 export class ObjectSerializer {

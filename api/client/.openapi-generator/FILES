@@ -37,8 +37,10 @@ models/UploadFileResponse.ts
 models/UsGovernmentIdDocumentInput.ts
 models/UsGovernmentIdDocumentInputKind.ts
 models/User.ts
+models/UserAccountRemediation.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
+models/WyreUserAccount.ts
 models/all.ts
 package.json
 rxjsStub.ts
