@@ -73,8 +73,8 @@
             exchangeRate,
           )}
         </div>
-      </div>
-      <div class="line" />
+      </div>     
+      <div class="line dashed" />
       <div class="line-item">
         <div><b>Total</b></div>
         <div>
@@ -84,6 +84,11 @@
           )}
         </div>
       </div>
+      <div class="line dashed" /> 
+      <div class="line-item muted">
+        <div>Deliver To</div>
+        <div>3x2kdkdj...k34w</div>  
+      </div> 
     </div>
   </ModalBody>
   <ModalFooter>
@@ -119,12 +124,15 @@
     width: 100%;
     border-bottom: 0.5px solid $textColor4;
     margin: 0.5rem 0 0.5rem 0;
+    &.dashed {
+      border-bottom: 0.7px dashed $textColor4;
+    }
   }
 
   .line-items {
     width: 90%;
     align-self: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -134,6 +142,7 @@
       align-items: center;
       &.muted {
         color: $textColor4;
+        font-weight: 300;
       }
     }
   }
