@@ -12,4 +12,4 @@
 
 import { HttpFile } from '../http/http';
 
-export type GovernmentIdDocumentInputKind = "GI_UNKNOWN" | "GI_US_DRIVING_LICENSE" | "GI_US_PASSPORT_CARD" | "GI_US_GOVERNMENT_ID" | "GI_US_PASSPORT" ;
+export type UsGovernmentIdDocumentInputKind = "GI_UNKNOWN" | "GI_US_DRIVING_LICENSE" | "GI_US_PASSPORT_CARD" | "GI_US_GOVERNMENT_ID" | "GI_US_PASSPORT" ;

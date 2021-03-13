@@ -12,7 +12,7 @@
 
 import { Address } from './Address';
 import { DocumentInput } from './DocumentInput';
-import { GovernmentIdDocumentInput } from './GovernmentIdDocumentInput';
+import { UsGovernmentIdDocumentInput } from './UsGovernmentIdDocumentInput';
 import { HttpFile } from '../http/http';
 
 /**
@@ -23,7 +23,7 @@ export class SaveProfileDataRequest {
     'dateOfBirth'?: string;
     'ssn'?: string;
     'address'?: Address;
-    'governmentIdDoc'?: GovernmentIdDocumentInput;
+    'usGovernmentIdDoc'?: UsGovernmentIdDocumentInput;
     'proofOfAddressDoc'?: DocumentInput;
     'achAuthorizationFormDoc'?: DocumentInput;
 
@@ -55,9 +55,9 @@ export class SaveProfileDataRequest {
             "format": ""
         },
         {
-            "name": "governmentIdDoc",
-            "baseName": "governmentIdDoc",
-            "type": "GovernmentIdDocumentInput",
+            "name": "usGovernmentIdDoc",
+            "baseName": "usGovernmentIdDoc",
+            "type": "UsGovernmentIdDocumentInput",
             "format": ""
         },
         {

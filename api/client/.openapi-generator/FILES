@@ -16,8 +16,6 @@ models/ChangeViewerEmailRequest.ts
 models/ChangeViewerPhoneRequest.ts
 models/DocumentInput.ts
 models/GetImageResponse.ts
-models/GovernmentIdDocumentInput.ts
-models/GovernmentIdDocumentInputKind.ts
 models/ImageProcessingMode.ts
 models/InlineResponse200.ts
 models/ObjectSerializer.ts
@@ -36,6 +34,8 @@ models/ProtobufAny.ts
 models/RpcStatus.ts
 models/SaveProfileDataRequest.ts
 models/UploadFileResponse.ts
+models/UsGovernmentIdDocumentInput.ts
+models/UsGovernmentIdDocumentInputKind.ts
 models/User.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts

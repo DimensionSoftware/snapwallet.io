@@ -3,8 +3,6 @@ export * from './ChangeViewerEmailRequest';
 export * from './ChangeViewerPhoneRequest';
 export * from './DocumentInput';
 export * from './GetImageResponse';
-export * from './GovernmentIdDocumentInput';
-export * from './GovernmentIdDocumentInputKind';
 export * from './ImageProcessingMode';
 export * from './InlineResponse200';
 export * from './OneTimePasscodeRequest';
@@ -22,6 +20,8 @@ export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
 export * from './UploadFileResponse';
+export * from './UsGovernmentIdDocumentInput';
+export * from './UsGovernmentIdDocumentInputKind';
 export * from './User';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
@@ -31,8 +31,6 @@ import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from './ChangeViewerPhoneRequest';
 import { DocumentInput } from './DocumentInput';
 import { GetImageResponse } from './GetImageResponse';
-import { GovernmentIdDocumentInput } from './GovernmentIdDocumentInput';
-import { GovernmentIdDocumentInputKind } from './GovernmentIdDocumentInputKind';
 import { ImageProcessingMode } from './ImageProcessingMode';
 import { InlineResponse200 } from './InlineResponse200';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
@@ -50,6 +48,8 @@ import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
 import { UploadFileResponse } from './UploadFileResponse';
+import { UsGovernmentIdDocumentInput } from './UsGovernmentIdDocumentInput';
+import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKind';
 import { User } from './User';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
@@ -73,10 +73,10 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
 
                  
 let enumsMap: Set<string> = new Set<string>([
-    "GovernmentIdDocumentInputKind",
     "ImageProcessingMode",
     "ProfileDataItemKind",
     "ProfileDataItemStatus",
+    "UsGovernmentIdDocumentInputKind",
 ]);
 
 let typeMap: {[index: string]: any} = {
@@ -85,7 +85,6 @@ let typeMap: {[index: string]: any} = {
     "ChangeViewerPhoneRequest": ChangeViewerPhoneRequest,
     "DocumentInput": DocumentInput,
     "GetImageResponse": GetImageResponse,
-    "GovernmentIdDocumentInput": GovernmentIdDocumentInput,
     "InlineResponse200": InlineResponse200,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,
@@ -100,6 +99,7 @@ let typeMap: {[index: string]: any} = {
     "RpcStatus": RpcStatus,
     "SaveProfileDataRequest": SaveProfileDataRequest,
     "UploadFileResponse": UploadFileResponse,
+    "UsGovernmentIdDocumentInput": UsGovernmentIdDocumentInput,
     "User": User,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,

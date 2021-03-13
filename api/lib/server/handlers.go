@@ -432,17 +432,17 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			case common.KindGovernmentID:
 				var governmentIDData *governmentid.ProfileDataGovernmentID
 
-				if req.GovernmentIdDoc != nil {
-					if req.GovernmentIdDoc.Kind == proto.GovernmentIdDocumentInputKind_GI_UNKNOWN {
+				if req.UsGovernmentIdDoc != nil {
+					if req.UsGovernmentIdDoc.Kind == proto.UsGovernmentIdDocumentInputKind_GI_UNKNOWN {
 						return status.Errorf(codes.InvalidArgument, "government id document kind needs to be specified ")
 					}
-					kind := governmentid.KindFromGovernmentIdDocKind(req.GovernmentIdDoc.Kind)
+					kind := governmentid.KindFromGovernmentIdDocKind(req.UsGovernmentIdDoc.Kind)
 
-					if len(req.GovernmentIdDoc.FileIds) != kind.FilesRequired() {
+					if len(req.UsGovernmentIdDoc.FileIds) != kind.FilesRequired() {
 						return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
 					}
 
-					for _, fileID := range req.GovernmentIdDoc.FileIds {
+					for _, fileID := range req.UsGovernmentIdDoc.FileIds {
 						meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
 						if err != nil {
 							return err
@@ -466,11 +466,11 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						now := time.Now()
 
 						fileIDs := []file.ID{}
-						for _, id := range req.GovernmentIdDoc.FileIds {
+						for _, id := range req.UsGovernmentIdDoc.FileIds {
 							fileIDs = append(fileIDs, file.ID(id))
 						}
 
-						governmentIDData.GovernmentIDKind = governmentid.Kind(req.GovernmentIdDoc.Kind)
+						governmentIDData.GovernmentIDKind = governmentid.Kind(req.UsGovernmentIdDoc.Kind)
 						governmentIDData.FileIDs = fileIDs
 						governmentIDData.UpdatedAt = &now
 					}

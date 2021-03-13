@@ -10,11 +10,11 @@
  * Do not edit the class manually.
  */
 
-import { GovernmentIdDocumentInputKind } from './GovernmentIdDocumentInputKind';
+import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKind';
 import { HttpFile } from '../http/http';
 
-export class GovernmentIdDocumentInput {
-    'kind'?: GovernmentIdDocumentInputKind;
+export class UsGovernmentIdDocumentInput {
+    'kind'?: UsGovernmentIdDocumentInputKind;
     'fileIds'?: Array<string>;
 
     static readonly discriminator: string | undefined = undefined;
@@ -23,7 +23,7 @@ export class GovernmentIdDocumentInput {
         {
             "name": "kind",
             "baseName": "kind",
-            "type": "GovernmentIdDocumentInputKind",
+            "type": "UsGovernmentIdDocumentInputKind",
             "format": ""
         },
         {
@@ -34,7 +34,7 @@ export class GovernmentIdDocumentInput {
         }    ];
 
     static getAttributeTypeMap() {
-        return GovernmentIdDocumentInput.attributeTypeMap;
+        return UsGovernmentIdDocumentInput.attributeTypeMap;
     }
     
     public constructor() {
