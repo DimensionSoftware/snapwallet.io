@@ -3,6 +3,7 @@ import { IAsset, TransactionMediums } from '../types'
 
 const createStore = () => {
   const { subscribe, update } = writable({
+    intent: 'buy',
     inMedium: TransactionMediums.ACH,
     outMedium: TransactionMediums.BLOCKCHAIN,
     sourceId: null,

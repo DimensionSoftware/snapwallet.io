@@ -1,5 +1,14 @@
 import nodeDebug from 'debug'
 import { JWT_SESSION_KEY } from './constants'
+import * as CRYPTO_SVGS from 'svelte-cryptoicon'
+
+// HACK: this lib. does not offer a good
+// way to import icons dynamically, so convert all tickers to uppercase.
+export const CryptoIcons = {}
+Object.entries(CRYPTO_SVGS).forEach(([k, v]) => {
+  CryptoIcons[k.toUpperCase()] = v
+})
+
 import {
   FluxApi,
   createConfiguration,
@@ -20,7 +29,7 @@ export function onKeysPressed(e: Event, keys: Array<string>) {
 }
 
 export const isValidNumber = (num: any) => {
-  return Number(num) && !isNaN(num) && num !== Infinity
+  return isFinite(num) && !isNaN(num) && Number(num)
 }
 
 // Application logger module
