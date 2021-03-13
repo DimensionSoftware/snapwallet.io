@@ -17,8 +17,9 @@
   // Price Data
   $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
-  $: exchangeRate =
-    1 / selectedPriceMap[$transactionStore.destinationCurrency.ticker]
+  $: destRate = selectedPriceMap[$transactionStore.destinationCurrency.ticker]
+  $: exchangeRate = 1 / destRate
+  $: destinationAmount = $transactionStore.sourceAmount * destRate
 
   // TODO: move to util
   const formatLocaleCurrency = (ticker: string, amount: number) => {
@@ -46,7 +47,7 @@
         <Icon size="80" />
       </div>
       <div class="checkout-item-name">
-        {$transactionStore.destinationAmount.toFixed(8)}
+        {(destinationAmount).toFixed(8)}
         {$transactionStore.destinationCurrency.ticker}
       </div>
     </div>
