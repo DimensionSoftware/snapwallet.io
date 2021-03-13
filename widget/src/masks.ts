@@ -67,5 +67,6 @@ export const withMaskOnInput = (val?: string, mask?: Masks) => {
  */
 export const isValidMaskInput = (val = '', mask) => {
   if ([Masks.INTL_DATE, Masks.SSN].includes(mask)) return /\d(-\d)?/.test(val)
+  // Don't prevent user from typing if no match
   return true
 }
