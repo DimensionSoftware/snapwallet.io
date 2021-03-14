@@ -5,4 +5,5 @@ var RPCPublicWhitelist = map[string]bool{
 	"/Flux/PricingData":           true,
 	"/Flux/OneTimePasscode":       true,
 	"/Flux/OneTimePasscodeVerify": true,
+	"/Flux/WyreWebhook":           true,
 }

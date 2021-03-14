@@ -135,11 +135,15 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	}
 
 	// todo we need an endpoint ngrok?
-	hookResponse, err := m.Wyre.SubscribeWebhook(secretKey, "account:"+string(account.ID), string(m.APIHost)+"/wyre/hooks/"+string(userID))
-	if err != nil {
-		return nil, err
-	}
-	log.Printf("hook response from wyre: %#v", hookResponse)
+	/*
+		log.Println("FUCK3 sleeping 10 secs b4 webhook", m.APIHost, account.ID)
+		time.Sleep(10 * time.Second)
+			hookResponse, err := m.Wyre.SubscribeWebhook(secretKey, "account:"+string(account.ID), string(m.APIHost)+"/wyre/hooks/"+string(userID))
+			if err != nil {
+				return nil, err
+			}
+			log.Printf("hook response from wyre: %#v", hookResponse)
+	*/
 
 	return &account, nil
 }
