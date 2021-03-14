@@ -97,6 +97,7 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 
 	account := account.Account{
 		ID:        account.ID(wyreAccountResp.ID),
+		APIKey:    wyreAuthTokenResp.APIKey,
 		SecretKey: secretKey,
 		Status:    wyreAccountResp.Status,
 		CreatedAt: now,
