@@ -515,6 +515,10 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		// todo add payment methods
 	}
 
+	if !profile.HasWyreAccountPreconditionsMet() {
+		log.Printf("Preconditions for wyre are unmetfor user id: %s", u.ID)
+	}
+
 	if len(existingWyreAccounts) == 0 {
 		return &proto.ProfileDataInfo{
 			Profile: profile.GetProfileDataItemInfo(),
