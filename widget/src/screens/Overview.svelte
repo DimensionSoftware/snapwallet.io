@@ -6,7 +6,7 @@
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { priceStore } from '../stores/PriceStore'
-  import { CryptoIcons, isValidNumber } from '../util'
+  import { CryptoIcons, isValidNumber, formatLocaleCurrency } from '../util'
   import { onMount, afterUpdate } from 'svelte'
 
   $: Icon = CryptoIcons[$transactionStore.destinationCurrency.ticker]
@@ -17,19 +17,10 @@
   // Price Data
   $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
-  $: exchangeRate =
-    1 / selectedPriceMap[$transactionStore.destinationCurrency.ticker]
+  $: destRate = selectedPriceMap[$transactionStore.destinationCurrency.ticker]
+  $: exchangeRate = 1 / destRate
+  $: destinationAmount = $transactionStore.sourceAmount * destRate
 
-  // TODO: move to util
-  const formatLocaleCurrency = (ticker: string, amount: number) => {
-    amount = isValidNumber(amount) ? amount : 0
-    const locale =
-      (navigator?.languages || [])[0] || navigator?.language || 'en-US'
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: ticker,
-    }).format(amount)
-  }
 
   onMount(() => {
     priceStore.fetchPrices()
@@ -46,14 +37,14 @@
         <Icon size="80" />
       </div>
       <div class="checkout-item-name">
-        {$transactionStore.destinationAmount.toFixed(8)}
+        {(destinationAmount).toFixed(8)}
         {$transactionStore.destinationCurrency.ticker}
       </div>
     </div>
     <div class="line-items">
       <h4>Overview</h4>
       <div class="line-item muted">
-        <div>Network Fee</div>
+        <div>Crypto Fee</div>
         <div>
           {(0).toFixed(8)}
           {$transactionStore.destinationCurrency.ticker}
@@ -73,8 +64,8 @@
             exchangeRate,
           )}
         </div>
-      </div>
-      <div class="line" />
+      </div>     
+      <div class="line dashed" />
       <div class="line-item">
         <div><b>Total</b></div>
         <div>
@@ -84,6 +75,11 @@
           )}
         </div>
       </div>
+      <div class="line dashed" /> 
+      <div class="line-item muted">
+        <div>Wallet</div>
+        <div>3x2kdkdj...k34w</div>  
+      </div> 
     </div>
   </ModalBody>
   <ModalFooter>
@@ -119,12 +115,15 @@
     width: 100%;
     border-bottom: 0.5px solid $textColor4;
     margin: 0.5rem 0 0.5rem 0;
+    &.dashed {
+      border-bottom: 0.7px dashed $textColor4;
+    }
   }
 
   .line-items {
     width: 90%;
     align-self: center;
-    margin-top: 2rem;
+    margin-top: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -134,6 +133,7 @@
       align-items: center;
       &.muted {
         color: $textColor4;
+        font-weight: 300;
       }
     }
   }

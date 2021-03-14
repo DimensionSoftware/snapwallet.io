@@ -117,3 +117,13 @@ class FluxBearerAuthentication implements SecurityAuthentication {
     }
   }
 }
+
+export const formatLocaleCurrency = (ticker: string, amount: number) => {
+  amount = isValidNumber(amount) ? amount : 0
+  const locale =
+    (navigator?.languages || [])[0] || navigator?.language || 'en-US'
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: ticker,
+  }).format(amount)
+}

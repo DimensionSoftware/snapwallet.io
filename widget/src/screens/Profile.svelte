@@ -35,9 +35,11 @@
     if (!birthDate) return focus(1)
     if (!socialSecurityNumber) return focus(2)
 
+    const [mm, dd, yyyy] = birthDate.split('-')
+
     window.API.fluxSaveProfileData({
       ssn: socialSecurityNumber,
-      dateOfBirth: birthDate,
+      dateOfBirth: `${yyyy}-${mm}-${dd}`,
       // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
       legalName: `${firstName} ${lastName}`,
     }).then(() => {
@@ -80,9 +82,9 @@
         autocomplete="bday"
         required
         type="text"
-        placeholder="yyyy-mm-dd"
-        pattern={`[\\d]{4}-[\\d]{2}-[\\d]{2}`}
-        mask={Masks.INTL_DATE}
+        placeholder="mm-dd-yyyy"
+        pattern={`[\\d]{2}-[\\d]{2}-[\\d]{4}`}
+        mask={Masks.US_DATE}
         defaultValue={$userStore.birthDate}
         on:change={e => {
           userStore.setBirthDate(e.detail)

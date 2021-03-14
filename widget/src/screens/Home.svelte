@@ -14,7 +14,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
-  import { numberWithCommas, isValidNumber, onEnterPressed } from '../util'
+  import { numberWithCommas, isValidNumber, onEnterPressed, formatLocaleCurrency } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
 
@@ -38,13 +38,16 @@
     selectedPriceMap[$transactionStore.sourceCurrency.ticker]
   $: selectedDestinationPrice =
     selectedPriceMap[$transactionStore.destinationCurrency.ticker]
-  $: destinationRate = $transactionStore.sourceAmount / selectedSourcePrice
+  $: exchangeRate = 1 / selectedDestinationPrice;
+  $: destinationRate = $transactionStore.sourceAmount * selectedDestinationPrice
   $: sourceRate = $transactionStore.destinationAmount / selectedDestinationPrice
 
   let isEnteringSourceAmount = true
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
+  let isGettingUserView = false
 
   $: fakePrice = 10_000
+  $: nextRoute = Routes.PLAID_LINK
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
@@ -55,12 +58,22 @@
     })
   }
 
-  const handleNextStep = () => {
+  const handleNextStep = async () => {
     const { sourceAmount } = $transactionStore
     if (!sourceAmount || isNaN(sourceAmount) || !isValidNumber(destinationRate))
       // focus input
       return document.querySelector('input')?.focus()
-    push(Routes.SELECT_PAYMENT)
+
+    push(nextRoute)
+  }
+
+  // Find the next path based on user data
+  const getNextPath = async () => {
+    const { flags = {} } = await window.API.fluxViewerData()
+    const { hasPlaidItems, hasWyreAccount } = flags
+
+    if (hasPlaidItems && hasWyreAccount) nextRoute = Routes.CHECKOUT_OVERVIEW
+    else if (hasPlaidItems) nextRoute = Routes.PROFILE
   }
 
   const onKeyDown = (e: Event) => {
@@ -78,6 +91,7 @@
 
   onMount(() => {
     getInitialPrices()
+    getNextPath()
     const priceInterval = priceStore.pollPrices()
     return () => clearInterval(priceInterval)
   })
@@ -148,10 +162,10 @@
       </div>
       <ul class="vertical-stepper">
         <li class="exchange-rate-container">
-          1 {$transactionStore.destinationCurrency.ticker} =
+          1 {$transactionStore.destinationCurrency.ticker} ≈
           {isLoadingPrices
-            ? numberWithCommas(fakePrice.toFixed(2))
-            : numberWithCommas(selectedSourcePrice.toFixed(2))}
+            ? formatLocaleCurrency($transactionStore.sourceCurrency.ticker, fakePrice)
+            : formatLocaleCurrency($transactionStore.sourceCurrency.ticker, exchangeRate)}
           {srcTicker}
         </li>
         <li>
