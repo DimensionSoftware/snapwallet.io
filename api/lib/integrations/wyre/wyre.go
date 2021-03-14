@@ -174,6 +174,28 @@ func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account,
 	return resp.Result().(*Account), nil
 }
 
+// GetAccount gets an an account from the wyre system
+// https://docs.sendwyre.com/docs/get-account
+// GET https://api.sendwyre.com/v3/accounts/:accountId
+func (c Client) GetAccount(token string, accountID string) (*Account, error) {
+	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+token).
+		SetError(APIError{}).
+		SetResult(Account{}).
+		EnableTrace().
+		SetPathParam("accountID", accountID).
+		Get("/v3/accounts/{accountID}")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*Account), nil
+}
+
 // SubscribeWebhook creates a subscription
 // Receive HTTP webhooks when subscribed objects are updated
 // https://docs.sendwyre.com/docs/subscribe-webhook

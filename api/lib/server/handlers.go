@@ -267,6 +267,21 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 			log.Println(err)
 		}
 	}()
+
+	{
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
+		if err != nil {
+			return nil, err
+		}
+		if len(accounts) > 0 {
+			account := accounts[0]
+			wyreAcct, err := s.Wyre.GetAccount(account.SecretKey, string(account.ID))
+			if err != nil {
+				return nil, err
+			}
+			log.Printf("WYRE_ACCOUNT %#v\n", wyreAcct)
+		}
+	}
 	/*** TEST ***/
 
 	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
