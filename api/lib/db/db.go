@@ -254,6 +254,44 @@ func (db Db) SaveWyreAccount(ctx context.Context, tx *firestore.Transaction, use
 	return err
 }
 
+// SaveWyreAccount ...
+func (db Db) GetWyreAccounts(ctx context.Context, tx *firestore.Transaction, userID user.ID) ([]*account.Account, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreAccounts")
+
+	var (
+		snaps []*firestore.DocumentSnapshot
+		err   error
+	)
+	if tx == nil {
+		snaps, err = ref.Documents(ctx).GetAll()
+	} else {
+		snaps, err = tx.Documents(ref).GetAll()
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var out []*account.Account
+
+	for _, snap := range snaps {
+		var encA account.EncryptedAccount
+
+		err := snap.DataTo(&encA)
+		if err != nil {
+			return nil, err
+		}
+
+		account, err := encA.Decrypt(db.EncryptionManager, userID)
+		if err != nil {
+			return nil, err
+		}
+
+		out = append(out, account)
+	}
+
+	return out, nil
+}
+
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone
 func (db Db) GetUserByEmailOrPhone(ctx context.Context, tx *firestore.Transaction, emailOrPhone string) (*user.User, error) {
 	if emailOrPhone == "" {

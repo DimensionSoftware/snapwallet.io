@@ -498,25 +498,39 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
-	if profile.HasWyreAccountPreconditionsMet() {
-		// handle alreaady created account possibly before creating new one (getOrCreateAccount method?)
+	existingWyreAccounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	if len(existingWyreAccounts) == 0 && profile.HasWyreAccountPreconditionsMet() {
+		log.Printf("Creating new wyre account for user id: %s", u.ID)
+
 		account, err := s.WyreManager.CreateAccount(ctx, u.ID, profile)
 		if err != nil {
 			return nil, err
 		}
+		existingWyreAccounts = append(existingWyreAccounts, account)
 
 		// todo add payment methods
+	}
+
+	if len(existingWyreAccounts) == 0 {
+		return &proto.ProfileDataInfo{
+			Profile: profile.GetProfileDataItemInfo(),
+		}, nil
+	} else {
+		// todo: add remediations to this resp somehow (gotta think it thru)
+
+		log.Printf("Wyre account found for user id: %s, %#v", u.ID, existingWyreAccounts[0])
+
 		return &proto.ProfileDataInfo{
 			Profile: profile.GetProfileDataItemInfo(),
 			Wyre: &proto.ThirdPartyUserAccount{
-				Status: account.Status,
+				Status: existingWyreAccounts[0].Status,
 			},
 		}, nil
 	}
-
-	return &proto.ProfileDataInfo{
-		Profile: profile.GetProfileDataItemInfo(),
-	}, nil
 }
 
 // ViewerProfileData is an rpc handler
