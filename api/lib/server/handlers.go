@@ -368,7 +368,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindSSN:
+			case common.KindUSSSN:
 				var ssnData *ssn.ProfileDataSSN
 
 				if req.Ssn != "" {
@@ -429,7 +429,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindGovernmentID:
+			case common.KindUSGovernmentID:
 				var governmentIDData *usgovernmentid.ProfileDataUSGovernmentID
 
 				if req.UsGovernmentIdDoc != nil {

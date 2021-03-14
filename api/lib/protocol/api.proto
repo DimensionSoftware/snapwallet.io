@@ -235,8 +235,8 @@ enum ProfileDataItemKind {
   K_EMAIL = 3;
   K_ADDRESS = 4;
   K_DATE_OF_BIRTH = 5;
-  K_SSN = 6;
-  K_GOVERNMENT_ID_DOC = 7;
+  K_US_SSN = 6;
+  K_US_GOVERNMENT_ID_DOC = 7;
   K_PROOF_OF_ADDRESS_DOC = 8;
   K_ACH_AUTHORIZATION_FORM_DOC = 9;
 }

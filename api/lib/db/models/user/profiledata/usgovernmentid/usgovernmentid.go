@@ -76,7 +76,7 @@ func (pdata ProfileDataUSGovernmentID) Encrypt(m *encryption.Manager, userID use
 
 	return &common.EncryptedProfileData{
 		ID:        pdata.ID,
-		Kind:      common.KindGovernmentID,
+		Kind:      common.KindUSGovernmentID,
 		SubKind:   (*string)(&pdata.GovernmentIDKind),
 		Status:    pdata.Status,
 		FileIDs:   &pdata.FileIDs,

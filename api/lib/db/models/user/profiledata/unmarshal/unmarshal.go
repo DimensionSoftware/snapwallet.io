@@ -55,7 +55,7 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 			UpdatedAt:   pdata.UpdatedAt,
 			SealedAt:    pdata.SealedAt,
 		}, nil
-	case common.KindSSN:
+	case common.KindUSSSN:
 		return &ssn.ProfileDataSSN{
 			ID:        pdata.ID,
 			Status:    pdata.Status,

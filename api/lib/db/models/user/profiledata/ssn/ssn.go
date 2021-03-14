@@ -21,7 +21,7 @@ type ProfileDataSSN struct {
 
 // Kind the kind of profile data
 func (pdata ProfileDataSSN) Kind() common.ProfileDataKind {
-	return common.KindSSN
+	return common.KindUSSSN
 }
 
 // GetStatus get the status of the profile data

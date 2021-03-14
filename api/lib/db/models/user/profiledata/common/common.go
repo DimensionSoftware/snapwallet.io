@@ -58,10 +58,10 @@ func (k ProfileDataKind) ToProfileDataItemKind() proto.ProfileDataItemKind {
 		return proto.ProfileDataItemKind_K_ADDRESS
 	case KindDateOfBirth:
 		return proto.ProfileDataItemKind_K_DATE_OF_BIRTH
-	case KindSSN:
-		return proto.ProfileDataItemKind_K_SSN
-	case KindGovernmentID:
-		return proto.ProfileDataItemKind_K_GOVERNMENT_ID_DOC
+	case KindUSSSN:
+		return proto.ProfileDataItemKind_K_US_SSN
+	case KindUSGovernmentID:
+		return proto.ProfileDataItemKind_K_US_GOVERNMENT_ID_DOC
 	}
 
 	return proto.ProfileDataItemKind_K_UNKNOWN
@@ -79,9 +79,9 @@ const (
 	// KindDateOfBirth signifies an individuals' date of birth in a ProfileDataDateOfBirth object
 	KindDateOfBirth ProfileDataKind = "DATE_OF_BIRTH"
 	// KindSSN signifies an individuals' U.S. social security number in a ProfileDataSSN object
-	KindSSN ProfileDataKind = "SSN"
+	KindUSSSN ProfileDataKind = "US_SSN"
 	// KindGovernmentID signifies an individuals' government id in a ProfileDataGovernmentID object
-	KindGovernmentID ProfileDataKind = "GOVERNMENT_ID"
+	KindUSGovernmentID ProfileDataKind = "US_GOVERNMENT_ID"
 )
 
 var ProfileDataKinds = []ProfileDataKind{
@@ -90,8 +90,8 @@ var ProfileDataKinds = []ProfileDataKind{
 	KindEmail,
 	KindAddress,
 	KindDateOfBirth,
-	KindSSN,
-	KindGovernmentID,
+	KindUSSSN,
+	KindUSGovernmentID,
 }
 
 // in the future it will be a subset of profiledatakinds
@@ -99,7 +99,7 @@ var ProfileDataKinds = []ProfileDataKind{
 var ProfileDataRequiredForWyre = []ProfileDataKind{
 	KindLegalName,
 	KindDateOfBirth,
-	KindSSN,
+	KindUSSSN,
 }
 
 // EncryptedProfileData is a generic container store encrypted ProfileData
