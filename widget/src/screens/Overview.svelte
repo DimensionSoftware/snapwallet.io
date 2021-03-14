@@ -6,7 +6,7 @@
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { priceStore } from '../stores/PriceStore'
-  import { CryptoIcons, isValidNumber } from '../util'
+  import { CryptoIcons, isValidNumber, formatLocaleCurrency } from '../util'
   import { onMount, afterUpdate } from 'svelte'
 
   $: Icon = CryptoIcons[$transactionStore.destinationCurrency.ticker]
@@ -21,16 +21,6 @@
   $: exchangeRate = 1 / destRate
   $: destinationAmount = $transactionStore.sourceAmount * destRate
 
-  // TODO: move to util
-  const formatLocaleCurrency = (ticker: string, amount: number) => {
-    amount = isValidNumber(amount) ? amount : 0
-    const locale =
-      (navigator?.languages || [])[0] || navigator?.language || 'en-US'
-    return new Intl.NumberFormat(locale, {
-      style: 'currency',
-      currency: ticker,
-    }).format(amount)
-  }
 
   onMount(() => {
     priceStore.fetchPrices()
