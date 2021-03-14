@@ -3,6 +3,8 @@ package wyre
 import (
 	"context"
 	"fmt"
+	"log"
+	"os"
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db"
@@ -13,9 +15,26 @@ import (
 	"github.com/lithammer/shortuuid/v3"
 )
 
+const apiHostEnvVarName = "API_HOST"
+
+type APIHost string
+
 type Manager struct {
-	Wyre *Client
-	Db   *db.Db
+	APIHost APIHost
+	Wyre    *Client
+	Db      *db.Db
+}
+
+// ProvideAPIHost ...
+func ProvideAPIHost() (APIHost, error) {
+	apiHost := os.Getenv(apiHostEnvVarName)
+	if apiHost == "" {
+		return "", fmt.Errorf("you must set %s", apiHost)
+	}
+
+	log.Println("🚨 API Host for webhooks set to: ", apiHost)
+
+	return APIHost(apiHost), nil
 }
 
 func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*account.Account, error) {
@@ -116,13 +135,11 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	}
 
 	// todo we need an endpoint ngrok?
-	/*
-		hookResponse, err := m.Wyre.SubscribeWebhook(secretKey, "account:"+string(account.ID), "HOST_HERE_FIXME/wyre/hooks/"+string(userID))
-		if err != nil {
-			return nil, err
-		}
-		log.Printf("hook response from wyre: %#v", hookResponse)
-	*/
+	hookResponse, err := m.Wyre.SubscribeWebhook(secretKey, "account:"+string(account.ID), string(m.APIHost)+"/wyre/hooks/"+string(userID))
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("hook response from wyre: %#v", hookResponse)
 
 	return &account, nil
 }

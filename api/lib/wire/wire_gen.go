@@ -68,9 +68,14 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	wyreClient := wyre.NewClient(wyreConfig)
+	apiHost, err := wyre.ProvideAPIHost()
+	if err != nil {
+		return server.Server{}, err
+	}
 	wyreManager := &wyre.Manager{
-		Wyre: wyreClient,
-		Db:   dbDb,
+		APIHost: apiHost,
+		Wyre:    wyreClient,
+		Db:      dbDb,
 	}
 	clientOptions, err := plaid.ProvideClientOptions()
 	if err != nil {

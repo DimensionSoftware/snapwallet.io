@@ -41,6 +41,7 @@ func InitializeServer() (server.Server, error) {
 		encryption.ProvideConfig,
 		encryption.NewManager,
 		wire.Struct(new(db.Db), "*"),
+		wyre.ProvideAPIHost,
 		wire.Struct(new(wyre.Manager), "*"),
 	)
 	return server.Server{}, nil
