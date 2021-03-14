@@ -516,7 +516,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	}
 
 	if !profile.HasWyreAccountPreconditionsMet() {
-		log.Printf("Preconditions for wyre are unmetfor user id: %s", u.ID)
+		log.Printf("Preconditions for wyre are unmet for user id: %s", u.ID)
 	}
 
 	if len(existingWyreAccounts) == 0 {

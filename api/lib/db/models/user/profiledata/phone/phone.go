@@ -77,12 +77,12 @@ func (pdata ProfileDataPhone) Encrypt(m *encryption.Manager, userID user.ID) (*c
 	}, nil
 }
 
-type ProfileDataPhones []ProfileDataPhone
+type ProfileDataPhones []*ProfileDataPhone
 
 func (pdatas ProfileDataPhones) FindByPhone(phone string) *ProfileDataPhone {
 	for _, pdata := range pdatas {
 		if pdata.Phone == phone {
-			return &pdata
+			return pdata
 		}
 	}
 	return nil

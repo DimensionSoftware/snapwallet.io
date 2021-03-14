@@ -9,7 +9,9 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/address"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/dateofbirth"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/email"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/phone"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/encryption"
 )
@@ -23,6 +25,25 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 			Status:    pdata.Status,
 			LegalName: string(clear),
 			CreatedAt: pdata.CreatedAt,
+			UpdatedAt: pdata.UpdatedAt,
+			SealedAt:  pdata.SealedAt,
+		}, nil
+	case common.KindEmail:
+		return &email.ProfileDataEmail{
+			ID:        pdata.ID,
+			Status:    pdata.Status,
+			Email:     string(clear),
+			CreatedAt: pdata.CreatedAt,
+			UpdatedAt: pdata.UpdatedAt,
+			SealedAt:  pdata.SealedAt,
+		}, nil
+	case common.KindPhone:
+		return &phone.ProfileDataPhone{
+			ID:        pdata.ID,
+			Status:    pdata.Status,
+			Phone:     string(clear),
+			CreatedAt: pdata.CreatedAt,
+			UpdatedAt: pdata.UpdatedAt,
 			SealedAt:  pdata.SealedAt,
 		}, nil
 	case common.KindDateOfBirth:
@@ -31,6 +52,7 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 			Status:      pdata.Status,
 			DateOfBirth: string(clear),
 			CreatedAt:   pdata.CreatedAt,
+			UpdatedAt:   pdata.UpdatedAt,
 			SealedAt:    pdata.SealedAt,
 		}, nil
 	case common.KindSSN:
@@ -39,6 +61,7 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 			Status:    pdata.Status,
 			SSN:       string(clear),
 			CreatedAt: pdata.CreatedAt,
+			UpdatedAt: pdata.UpdatedAt,
 			SealedAt:  pdata.SealedAt,
 		}, nil
 	case common.KindAddress:
@@ -59,6 +82,7 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 			PostalCode: out.PostalCode,
 			Country:    out.Country,
 			CreatedAt:  pdata.CreatedAt,
+			UpdatedAt:  pdata.UpdatedAt,
 			SealedAt:   pdata.SealedAt,
 		}, nil
 	}

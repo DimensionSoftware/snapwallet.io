@@ -23,17 +23,19 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	t := true
 	f := false
 
-	if !profile.HasWyreAccountPreconditionsMet() {
-		return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
-	}
+	/*
+		if !profile.HasWyreAccountPreconditionsMet() {
+			return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
+		}
 
-	if len(profile) != len(common.ProfileDataRequiredForWyre) {
-		return nil, fmt.Errorf(
-			"Number of profile data items necessary for wyre is supposed to be %d but received %d",
-			len(common.ProfileDataRequiredForWyre),
-			len(profile),
-		)
-	}
+		if len(profile) != len(common.ProfileDataRequiredForWyre) {
+			return nil, fmt.Errorf(
+				"Number of profile data items necessary for wyre is supposed to be %d but received %d",
+				len(common.ProfileDataRequiredForWyre),
+				len(profile),
+			)
+		}
+	*/
 
 	address := profile.FilterKindAddress()[0]
 

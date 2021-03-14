@@ -77,12 +77,12 @@ func (pdata ProfileDataEmail) Encrypt(m *encryption.Manager, userID user.ID) (*c
 	}, nil
 }
 
-type ProfileDataEmails []ProfileDataEmail
+type ProfileDataEmails []*ProfileDataEmail
 
 func (pdatas ProfileDataEmails) FindByEmail(email string) *ProfileDataEmail {
 	for _, pdata := range pdatas {
 		if pdata.Email == email {
-			return &pdata
+			return pdata
 		}
 	}
 	return nil

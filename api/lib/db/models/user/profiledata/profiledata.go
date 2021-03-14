@@ -27,6 +27,7 @@ type ProfileDatas []ProfileData
 
 // WyreAccountPreconditionsMet ...
 func (profile ProfileDatas) HasWyreAccountPreconditionsMet() bool {
+	return true
 	for _, kind := range common.ProfileDataRequiredForWyre {
 		if profile.FilterKind(kind).First() == nil {
 			return false
@@ -49,44 +50,44 @@ func (profile ProfileDatas) FilterKind(kind common.ProfileDataKind) ProfileDatas
 }
 
 // FilterKindLegalName ...
-func (profile ProfileDatas) FilterKindLegalName() []legalname.ProfileDataLegalName {
-	out := []legalname.ProfileDataLegalName{}
+func (profile ProfileDatas) FilterKindLegalName() []*legalname.ProfileDataLegalName {
+	out := []*legalname.ProfileDataLegalName{}
 
 	for _, pdata := range profile.FilterKind(common.KindLegalName) {
-		out = append(out, pdata.(legalname.ProfileDataLegalName))
+		out = append(out, pdata.(*legalname.ProfileDataLegalName))
 	}
 
 	return out
 }
 
 // FilterKindDateOfBirth ...
-func (profile ProfileDatas) FilterKindDateOfBirth() []dateofbirth.ProfileDataDateOfBirth {
-	out := []dateofbirth.ProfileDataDateOfBirth{}
+func (profile ProfileDatas) FilterKindDateOfBirth() []*dateofbirth.ProfileDataDateOfBirth {
+	out := []*dateofbirth.ProfileDataDateOfBirth{}
 
 	for _, pdata := range profile.FilterKind(common.KindDateOfBirth) {
-		out = append(out, pdata.(dateofbirth.ProfileDataDateOfBirth))
+		out = append(out, pdata.(*dateofbirth.ProfileDataDateOfBirth))
 	}
 
 	return out
 }
 
 // FilterKindSSN ...
-func (profile ProfileDatas) FilterKindSSN() []ssn.ProfileDataSSN {
-	out := []ssn.ProfileDataSSN{}
+func (profile ProfileDatas) FilterKindSSN() []*ssn.ProfileDataSSN {
+	out := []*ssn.ProfileDataSSN{}
 
 	for _, pdata := range profile.FilterKind(common.KindSSN) {
-		out = append(out, pdata.(ssn.ProfileDataSSN))
+		out = append(out, pdata.(*ssn.ProfileDataSSN))
 	}
 
 	return out
 }
 
 // FilterKindAddress ...
-func (profile ProfileDatas) FilterKindAddress() []address.ProfileDataAddress {
-	out := []address.ProfileDataAddress{}
+func (profile ProfileDatas) FilterKindAddress() []*address.ProfileDataAddress {
+	out := []*address.ProfileDataAddress{}
 
 	for _, pdata := range profile.FilterKind(common.KindAddress) {
-		out = append(out, pdata.(address.ProfileDataAddress))
+		out = append(out, pdata.(*address.ProfileDataAddress))
 	}
 
 	return out
@@ -94,10 +95,10 @@ func (profile ProfileDatas) FilterKindAddress() []address.ProfileDataAddress {
 
 // FilterKindEmail ...
 func (profile ProfileDatas) FilterKindEmail() email.ProfileDataEmails {
-	out := []email.ProfileDataEmail{}
+	out := []*email.ProfileDataEmail{}
 
 	for _, pdata := range profile.FilterKind(common.KindEmail) {
-		out = append(out, pdata.(email.ProfileDataEmail))
+		out = append(out, pdata.(*email.ProfileDataEmail))
 	}
 
 	return out
@@ -105,10 +106,10 @@ func (profile ProfileDatas) FilterKindEmail() email.ProfileDataEmails {
 
 // FilterKindEmail ...
 func (profile ProfileDatas) FilterKindPhone() phone.ProfileDataPhones {
-	out := []phone.ProfileDataPhone{}
+	out := []*phone.ProfileDataPhone{}
 
-	for _, pdata := range profile.FilterKind(common.KindEmail) {
-		out = append(out, pdata.(phone.ProfileDataPhone))
+	for _, pdata := range profile.FilterKind(common.KindPhone) {
+		out = append(out, pdata.(*phone.ProfileDataPhone))
 	}
 
 	return out
