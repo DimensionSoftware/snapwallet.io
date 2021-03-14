@@ -21,6 +21,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/email"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/phone"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/unmarshal"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"google.golang.org/api/iterator"
@@ -233,6 +234,24 @@ func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, 
 	}
 
 	return &item, nil
+}
+
+// SaveWyreAccount ...
+func (db Db) SaveWyreAccount(ctx context.Context, tx *firestore.Transaction, userID user.ID, account *account.Account) error {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreAccounts").Doc(string(account.ID))
+
+	out, err := account.Encrypt(db.EncryptionManager, userID)
+	if err != nil {
+		return err
+	}
+
+	if tx == nil {
+		_, err = ref.Set(ctx, out)
+	} else {
+		err = tx.Set(ref, out)
+	}
+
+	return err
 }
 
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone
