@@ -1,0 +1,15 @@
+WYRE-NOTES
+
+That depends on how we plan to maintain credentials, if we want to use centralized credentials (single api key + secret) then yes, if not then we need to generate a token for every user and submit it to https://docs.sendwyre.com/docs/initialize-auth-token in exchange for the api key (client generated secret.)
+The first way limits us so that we cannot allow customers to have special deals with Wyre (lower fees etc.) which is probably ok
+There isn't really a limitation to the second method and I feel it is more secure in case the centralized credentials are swooped (every user has different credentials.)
+The flow would look something like
+1. Generate secret (varchar 35)
+2. Store secret + API Key from response
+3. Create account using either a signature https://docs.sendwyre.com/docs/authentication or use the user's secret as the bearer token
+4. Store UserAccount with external ID
+5. Subscribe to changes on the account  https://docs.sendwyre.com/docs/subscribe-webhook (edited) 
+
+
+
+
