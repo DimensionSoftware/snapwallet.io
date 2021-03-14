@@ -74,7 +74,7 @@ func (profile ProfileDatas) FilterKindDateOfBirth() []*dateofbirth.ProfileDataDa
 func (profile ProfileDatas) FilterKindSSN() []*ssn.ProfileDataSSN {
 	out := []*ssn.ProfileDataSSN{}
 
-	for _, pdata := range profile.FilterKind(common.KindSSN) {
+	for _, pdata := range profile.FilterKind(common.KindUSSSN) {
 		out = append(out, pdata.(*ssn.ProfileDataSSN))
 	}
 
