@@ -3,6 +3,7 @@
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
+  import ModalHeader from '../components/ModalHeader.svelte'
   import IntentSelector from '../components/IntentSelector.svelte'
   import { toaster } from '../stores/ToastStore'
   import Button from '../components/Button.svelte'
@@ -103,7 +104,8 @@
 
 <ModalContent>
   <ModalBody>
-    <IntentSelector />
+    <!-- <IntentSelector /> -->
+    <ModalHeader hideBackButton>Checkout</ModalHeader>
     <div class="cryptocurrencies-container">
       <div class="dst-container">
         <Label>
@@ -166,7 +168,6 @@
           {isLoadingPrices
             ? formatLocaleCurrency($transactionStore.sourceCurrency.ticker, fakePrice)
             : formatLocaleCurrency($transactionStore.sourceCurrency.ticker, exchangeRate)}
-          {srcTicker}
         </li>
         <li>
           <TotalContainer
@@ -178,7 +179,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Checkout</Button>
+    <Button on:click={handleNextStep}>Buy {$transactionStore.destinationCurrency.ticker}</Button>
   </ModalFooter>
 </ModalContent>
 
