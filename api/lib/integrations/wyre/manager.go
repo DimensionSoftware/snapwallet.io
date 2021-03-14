@@ -37,7 +37,7 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 		}
 	*/
 
-	address := profile.FilterKindAddress()[0]
+	//address := profile.FilterKindAddress()[0]
 
 	secretKey := GenerateSecretKey(35)
 	wyreAuthTokenResp, err := m.Wyre.SubmitAuthToken(secretKey)
@@ -54,14 +54,16 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 				FieldID: ProfileFieldIDIndividualLegalName,
 				Value:   profile.FilterKindLegalName()[0].LegalName,
 			},
-			{
-				FieldID: ProfileFieldIDIndividualCellphoneNumber,
-				Value:   profile.FilterKindPhone()[0].Phone,
-			},
-			{
-				FieldID: ProfileFieldIDIndividualEmail,
-				Value:   profile.FilterKindEmail()[0].Email,
-			},
+			/*
+				{
+					FieldID: ProfileFieldIDIndividualCellphoneNumber,
+					Value:   profile.FilterKindPhone()[0].Phone,
+				},
+				{
+					FieldID: ProfileFieldIDIndividualEmail,
+					Value:   profile.FilterKindEmail()[0].Email,
+				},
+			*/
 			{
 				FieldID: ProfileFieldIDIndividualDateOfBirth,
 				Value:   profile.FilterKindDateOfBirth()[0].DateOfBirth,
@@ -70,22 +72,25 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 				FieldID: ProfileFieldIDIndividualSSN,
 				Value:   profile.FilterKindSSN()[0].SSN,
 			},
-			{
-				FieldID: ProfileFieldIDIndividualResidenceAddress,
-				Value: ProfileFieldAddress{
-					Street1:    address.Street1,
-					Street2:    address.Street2,
-					City:       address.City,
-					State:      address.State,
-					PostalCode: address.PostalCode,
-					Country:    address.Country,
+			/*
+				{
+					FieldID: ProfileFieldIDIndividualResidenceAddress,
+					Value: ProfileFieldAddress{
+						Street1:    address.Street1,
+						Street2:    address.Street2,
+						City:       address.City,
+						State:      address.State,
+						PostalCode: address.PostalCode,
+						Country:    address.Country,
+					},
 				},
-			},
+			*/
 		},
 	}.WithDefaults())
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("WAR %#v\n", wyreAccountResp)
 
 	modifiedProfile := profile.SetStatuses(common.StatusPending)
 
@@ -105,6 +110,7 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 
 	//TODO: use tx
 	//TODO:  upload 2 docs proof of address, govt id
+	fmt.Printf("mPDATA %#v\n", modifiedProfile)
 	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, modifiedProfile)
 	if err != nil {
 		return nil, err

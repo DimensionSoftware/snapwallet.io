@@ -153,12 +153,17 @@ func NewClient(config *Config) *Client {
 func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account, error) {
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
-		SetBody(req).
+		SetError(APIError{}).
 		SetResult(Account{}).
+		SetBody(req).
 		EnableTrace().
 		Post("/v3/accounts")
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
 	}
 
 	return resp.Result().(*Account), nil
@@ -414,6 +419,10 @@ func (c Client) SubmitAuthToken(secretKey string) (*SubmitAuthTokenResponse, err
 
 	if err != nil {
 		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
 	}
 
 	return resp.Result().(*SubmitAuthTokenResponse), nil
