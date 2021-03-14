@@ -14,7 +14,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
-  import { numberWithCommas, isValidNumber, onEnterPressed } from '../util'
+  import { numberWithCommas, isValidNumber, onEnterPressed, formatLocaleCurrency } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
 
@@ -38,7 +38,8 @@
     selectedPriceMap[$transactionStore.sourceCurrency.ticker]
   $: selectedDestinationPrice =
     selectedPriceMap[$transactionStore.destinationCurrency.ticker]
-  $: destinationRate = $transactionStore.sourceAmount / selectedSourcePrice
+  $: exchangeRate = 1 / selectedDestinationPrice;
+  $: destinationRate = $transactionStore.sourceAmount * selectedDestinationPrice
   $: sourceRate = $transactionStore.destinationAmount / selectedDestinationPrice
 
   let isEnteringSourceAmount = true
@@ -161,10 +162,10 @@
       </div>
       <ul class="vertical-stepper">
         <li class="exchange-rate-container">
-          1 {$transactionStore.destinationCurrency.ticker} =
+          1 {$transactionStore.destinationCurrency.ticker} ≈
           {isLoadingPrices
-            ? numberWithCommas(fakePrice.toFixed(2))
-            : numberWithCommas(selectedSourcePrice.toFixed(2))}
+            ? formatLocaleCurrency($transactionStore.sourceCurrency.ticker, fakePrice)
+            : formatLocaleCurrency($transactionStore.sourceCurrency.ticker, exchangeRate)}
           {srcTicker}
         </li>
         <li>
