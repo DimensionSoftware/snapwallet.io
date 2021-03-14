@@ -27,7 +27,6 @@ type ProfileDatas []ProfileData
 
 // WyreAccountPreconditionsMet ...
 func (profile ProfileDatas) HasWyreAccountPreconditionsMet() bool {
-	return true
 	for _, kind := range common.ProfileDataRequiredForWyre {
 		if profile.FilterKind(kind).First() == nil {
 			return false

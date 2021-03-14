@@ -151,6 +151,7 @@ func NewClient(config *Config) *Client {
 // https://docs.sendwyre.com/docs/create-account
 // POST https://api.sendwyre.com/v3/accounts
 func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account, error) {
+	log.Println("TOKEN: ", token)
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).

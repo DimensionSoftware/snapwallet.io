@@ -95,7 +95,12 @@ var ProfileDataKinds = []ProfileDataKind{
 }
 
 // in the future it will be a subset of profiledatakinds
-var ProfileDataRequiredForWyre = ProfileDataKinds
+//var ProfileDataRequiredForWyre = ProfileDataKinds
+var ProfileDataRequiredForWyre = []ProfileDataKind{
+	KindLegalName,
+	KindDateOfBirth,
+	KindSSN,
+}
 
 // EncryptedProfileData is a generic container store encrypted ProfileData
 type EncryptedProfileData struct {

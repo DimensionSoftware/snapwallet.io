@@ -23,11 +23,11 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	t := true
 	f := false
 
-	/*
-		if !profile.HasWyreAccountPreconditionsMet() {
-			return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
-		}
+	if !profile.HasWyreAccountPreconditionsMet() {
+		return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
+	}
 
+	/*
 		if len(profile) != len(common.ProfileDataRequiredForWyre) {
 			return nil, fmt.Errorf(
 				"Number of profile data items necessary for wyre is supposed to be %d but received %d",
@@ -46,7 +46,7 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	}
 	fmt.Printf("wyreAuthTokenResp: %#v", wyreAuthTokenResp)
 
-	wyreAccountResp, err := m.Wyre.CreateAccount(wyreAuthTokenResp.APIKey, CreateAccountRequest{
+	wyreAccountResp, err := m.Wyre.CreateAccount(secretKey, CreateAccountRequest{
 		SubAccount:   &f,
 		DisableEmail: &t,
 		ProfileFields: []ProfileField{
@@ -90,7 +90,6 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("WAR %#v\n", wyreAccountResp)
 
 	modifiedProfile := profile.SetStatuses(common.StatusPending)
 
@@ -110,7 +109,6 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 
 	//TODO: use tx
 	//TODO:  upload 2 docs proof of address, govt id
-	fmt.Printf("mPDATA %#v\n", modifiedProfile)
 	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, modifiedProfile)
 	if err != nil {
 		return nil, err

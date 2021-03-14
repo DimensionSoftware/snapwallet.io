@@ -14,6 +14,7 @@ type ID string
 type EncryptedAccount struct {
 	ID                 ID         `firestore:"id"`
 	DataEncryptionKey  []byte     `firestore:"DEK"`
+	APIKeyEncrypted    []byte     `firestore:"apiKeyEncrypted"`
 	SecretKeyEncrypted []byte     `firestore:"secretKeyEncrypted"`
 	Status             string     `firestore:"status"`
 	CreatedAt          time.Time  `firestore:"createdAt"`
@@ -23,6 +24,7 @@ type EncryptedAccount struct {
 // Account ...
 type Account struct {
 	ID        ID
+	APIKey    string
 	SecretKey string
 	Status    string
 	CreatedAt time.Time
@@ -37,6 +39,11 @@ func (enc EncryptedAccount) Decrypt(m *encryption.Manager, userID user.ID) (*Acc
 	}
 	dek := encryption.NewEncryptor(dekH)
 
+	apiKey, err := encryption.DecryptStringIfNonNil(dek, []byte(userID), &enc.APIKeyEncrypted)
+	if err != nil {
+		return nil, err
+	}
+
 	secretKey, err := encryption.DecryptStringIfNonNil(dek, []byte(userID), &enc.SecretKeyEncrypted)
 	if err != nil {
 		return nil, err
@@ -44,6 +51,7 @@ func (enc EncryptedAccount) Decrypt(m *encryption.Manager, userID user.ID) (*Acc
 
 	return &Account{
 		ID:        enc.ID,
+		APIKey:    *apiKey,
 		SecretKey: *secretKey,
 		Status:    enc.Status,
 		CreatedAt: enc.CreatedAt,
@@ -56,6 +64,11 @@ func (account Account) Encrypt(m *encryption.Manager, userID user.ID) (*Encrypte
 	dekH := encryption.NewDEK()
 	dek := encryption.NewEncryptor(dekH)
 
+	apiKeyEncrypted, err := encryption.EncryptStringIfNonNil(dek, []byte(userID), &account.APIKey)
+	if err != nil {
+		return nil, err
+	}
+
 	secretKeyEncrypted, err := encryption.EncryptStringIfNonNil(dek, []byte(userID), &account.SecretKey)
 	if err != nil {
 		return nil, err
@@ -64,6 +77,7 @@ func (account Account) Encrypt(m *encryption.Manager, userID user.ID) (*Encrypte
 	return &EncryptedAccount{
 		ID:                 account.ID,
 		DataEncryptionKey:  *encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
+		APIKeyEncrypted:    *apiKeyEncrypted,
 		SecretKeyEncrypted: *secretKeyEncrypted,
 		Status:             account.Status,
 		CreatedAt:          account.CreatedAt,
