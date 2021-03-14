@@ -10,6 +10,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
+	"github.com/pusher/pusher-http-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -242,10 +243,31 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 
 // PlaidCreateLinkToken is an rpc handler
 func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreateLinkTokenRequest) (*proto.PlaidCreateLinkTokenResponse, error) {
+
 	userID := GetUserIDFromIncomingContext(ctx)
 	if userID == "" {
 		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
+
+	/*** TEST ***/
+	go func() {
+		time.Sleep(5 * time.Second)
+
+		pusherClient := pusher.Client{
+			AppID:   "1171786",
+			Key:     "dd280d42ccafc24e19ff",
+			Secret:  "d8cfa16565ede2ae414d",
+			Cluster: "us3",
+			Secure:  true,
+		}
+
+		data := map[string]string{"message": "hello world"}
+		err := pusherClient.Trigger(string(userID), "my-event", data)
+		if err != nil {
+			log.Println(err)
+		}
+	}()
+	/*** TEST ***/
 
 	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
 
