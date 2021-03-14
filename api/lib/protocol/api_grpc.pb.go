@@ -62,6 +62,7 @@ type FluxClient interface {
 	//
 	// ...
 	WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error)
+	WyreWebhook(ctx context.Context, in *WyreWebhookRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -181,6 +182,15 @@ func (c *fluxClient) WyreCreateAccount(ctx context.Context, in *WyreCreateAccoun
 	return out, nil
 }
 
+func (c *fluxClient) WyreWebhook(ctx context.Context, in *WyreWebhookRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, "/Flux/WyreWebhook", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fluxClient) UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileResponse, error) {
 	out := new(UploadFileResponse)
 	err := c.cc.Invoke(ctx, "/Flux/UploadFile", in, out, opts...)
@@ -246,6 +256,7 @@ type FluxServer interface {
 	//
 	// ...
 	WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error)
+	WyreWebhook(context.Context, *WyreWebhookRequest) (*emptypb.Empty, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -295,6 +306,9 @@ func (UnimplementedFluxServer) SaveProfileData(context.Context, *SaveProfileData
 }
 func (UnimplementedFluxServer) WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateAccount not implemented")
+}
+func (UnimplementedFluxServer) WyreWebhook(context.Context, *WyreWebhookRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreWebhook not implemented")
 }
 func (UnimplementedFluxServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
@@ -513,6 +527,24 @@ func _Flux_WyreCreateAccount_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_WyreWebhook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreWebhookRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreWebhook(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreWebhook",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreWebhook(ctx, req.(*WyreWebhookRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Flux_UploadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UploadFileRequest)
 	if err := dec(in); err != nil {
@@ -599,6 +631,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WyreCreateAccount",
 			Handler:    _Flux_WyreCreateAccount_Handler,
+		},
+		{
+			MethodName: "WyreWebhook",
+			Handler:    _Flux_WyreWebhook_Handler,
 		},
 		{
 			MethodName: "UploadFile",

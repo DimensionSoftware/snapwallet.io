@@ -300,6 +300,12 @@ message GetImageResponse {
 }
 
 
+message WyreWebhookRequest {
+  string hook_id = 1;
+  string subscription_id = 2;
+  string trigger = 3;
+}
+
 service Flux {
   // Get viewer data
   //
@@ -405,6 +411,13 @@ service Flux {
   rpc WyreCreateAccount(WyreCreateAccountRequest) returns (WyreCreateAccountResponse) {
     option (google.api.http) = {
       post: "/wyre/create-account"
+      body: "*"
+    };
+  }
+
+  rpc WyreWebhook(WyreWebhookRequest) returns (google.protobuf.Empty) {
+    option (google.api.http) = {
+      post: "/wyre/hooks/{hook_id}"
       body: "*"
     };
   }

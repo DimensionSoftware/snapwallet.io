@@ -31,6 +31,7 @@ import { User } from '../models/User';
 import { UserAccountRemediation } from '../models/UserAccountRemediation';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
 import { ObservableFluxApi } from "./ObservableAPI";
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
@@ -123,6 +124,21 @@ export interface FluxApiFluxWyreCreateAccountRequest {
      * @memberof FluxApifluxWyreCreateAccount
      */
     body: any
+}
+
+export interface FluxApiFluxWyreWebhookRequest {
+    /**
+     * 
+     * @type string
+     * @memberof FluxApifluxWyreWebhook
+     */
+    hookId: string
+    /**
+     * 
+     * @type WyreWebhookRequest
+     * @memberof FluxApifluxWyreWebhook
+     */
+    body: WyreWebhookRequest
 }
 
 
@@ -237,6 +253,13 @@ export class ObjectFluxApi {
      */
     public fluxWyreCreateAccount(param: FluxApiFluxWyreCreateAccountRequest, options?: Configuration): Promise<any> {
         return this.api.fluxWyreCreateAccount(param.body,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreWebhook(param: FluxApiFluxWyreWebhookRequest, options?: Configuration): Promise<any> {
+        return this.api.fluxWyreWebhook(param.hookId, param.body,  options).toPromise();
     }
 	
 

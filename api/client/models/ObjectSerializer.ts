@@ -27,6 +27,7 @@ export * from './User';
 export * from './UserAccountRemediation';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
+export * from './WyreWebhookRequest';
 
 import { Address } from './Address';
 import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
@@ -57,6 +58,7 @@ import { User } from './User';
 import { UserAccountRemediation } from './UserAccountRemediation';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
+import { WyreWebhookRequest } from './WyreWebhookRequest';
 
 /* tslint:disable:no-unused-variable */
 let primitives = [
@@ -109,6 +111,7 @@ let typeMap: {[index: string]: any} = {
     "UserAccountRemediation": UserAccountRemediation,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
+    "WyreWebhookRequest": WyreWebhookRequest,
 }
 
 export class ObjectSerializer {

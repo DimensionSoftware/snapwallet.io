@@ -31,6 +31,7 @@ import { User } from '../models/User';
 import { UserAccountRemediation } from '../models/UserAccountRemediation';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 import { ObservableFluxApi } from './ObservableAPI';
 
 
@@ -158,6 +159,15 @@ export class PromiseFluxApi {
      */
     public fluxWyreCreateAccount(body: any, options?: Configuration): Promise<any> {
     	const result = this.api.fluxWyreCreateAccount(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param hookId 
+     * @param body 
+     */
+    public fluxWyreWebhook(hookId: string, body: WyreWebhookRequest, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxWyreWebhook(hookId, body, options);
         return result.toPromise();
     }
 	

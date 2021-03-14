@@ -33,6 +33,7 @@ import { User } from '../models/User';
 import { UserAccountRemediation } from '../models/UserAccountRemediation';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
 import { FluxApiRequestFactory, FluxApiResponseProcessor} from "../apis/FluxApi";
 export class ObservableFluxApi {
@@ -330,6 +331,29 @@ export class ObservableFluxApi {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
 	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxWyreCreateAccount(rsp)));
+	    	}));
+    }
+	
+    /**
+     * @param hookId 
+     * @param body 
+     */
+    public fluxWyreWebhook(hookId: string, body: WyreWebhookRequest, options?: Configuration): Observable<any> {
+    	const requestContextPromise = this.requestFactory.fluxWyreWebhook(hookId, body, options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxWyreWebhook(rsp)));
 	    	}));
     }
 	

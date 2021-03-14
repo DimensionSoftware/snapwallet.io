@@ -783,3 +783,10 @@ func (s *Server) GetImage(ctx context.Context, req *proto.GetImageRequest) (*pro
 		Height:   height,
 	}, nil
 }
+
+// GetImage is an rpc handler
+func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest) (*emptypb.Empty, error) {
+	// todo: auth the webhook?!?
+	log.Printf("WyreWebhook %#v", req)
+	return &emptypb.Empty{}, nil
+}

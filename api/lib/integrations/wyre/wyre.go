@@ -151,7 +151,6 @@ func NewClient(config *Config) *Client {
 // https://docs.sendwyre.com/docs/create-account
 // POST https://api.sendwyre.com/v3/accounts
 func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account, error) {
-	log.Println("TOKEN: ", token)
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).
@@ -168,6 +167,49 @@ func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account,
 	}
 
 	return resp.Result().(*Account), nil
+}
+
+// SubscribeWebhook creates a subscription
+// Receive HTTP webhooks when subscribed objects are updated
+// https://docs.sendwyre.com/docs/subscribe-webhook
+// POST https://api.sendwyre.com/v3/subscriptions
+func (c Client) SubscribeWebhook(token string, subscribeTo string, notifyTarget string) (*SubscribeWebhookResponse, error) {
+	req := map[string]string{
+		"subscribeTo":  subscribeTo,
+		"notifyTarget": notifyTarget,
+	}
+
+	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+token).
+		SetError(APIError{}).
+		SetResult(SubscribeWebhookResponse{}).
+		SetBody(req).
+		EnableTrace().
+		Post("https://api.sendwyre.com/v3/subscriptions")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*SubscribeWebhookResponse), nil
+}
+
+type SubscribeWebhookResponse struct {
+	// "id": "JF4DQ2NE1",
+	ID string `json:"id"`
+	// "subscribed": "account:AC-F930QD8A2RRR",
+	Subscribed string `json:"subscribed"`
+	// "notifyTarget": "https://www.potatoes.com/webhook1",
+	NotifyTarget string `json:"notifyTarget"`
+	// "createdAt": 1548368619000,
+	CreatedAt int64 `json:"createdAt"`
+	// "failure": null,
+	Failure *interface{} `json:"failure,omitempty"`
+	// "failCount": 0
+	FailCount int32 `json:"failCount"`
 }
 
 // CreatePaymentMethodRequest represents the request object for https://api.sendwyre.com/v2/paymentMethods

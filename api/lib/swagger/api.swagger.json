@@ -356,6 +356,44 @@
           "Flux"
         ]
       }
+    },
+    "/wyre/hooks/{hookId}": {
+      "post": {
+        "operationId": "Flux_WyreWebhook",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "properties": {}
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "hookId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreWebhookRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
     }
   },
   "definitions": {
@@ -792,6 +830,20 @@
       "type": "object",
       "description": "response",
       "title": "WyreCreateAccountResponse"
+    },
+    "WyreWebhookRequest": {
+      "type": "object",
+      "properties": {
+        "hookId": {
+          "type": "string"
+        },
+        "subscriptionId": {
+          "type": "string"
+        },
+        "trigger": {
+          "type": "string"
+        }
+      }
     },
     "protobufAny": {
       "type": "object",
