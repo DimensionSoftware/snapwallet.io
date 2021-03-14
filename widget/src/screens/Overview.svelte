@@ -21,7 +21,6 @@
   $: exchangeRate = 1 / destRate
   $: destinationAmount = $transactionStore.sourceAmount * destRate
 
-
   onMount(() => {
     priceStore.fetchPrices()
     const priceInterval = priceStore.pollPrices()
@@ -37,7 +36,7 @@
         <Icon size="80" />
       </div>
       <div class="checkout-item-name">
-        {(destinationAmount).toFixed(8)}
+        {destinationAmount.toFixed(8)}
         {$transactionStore.destinationCurrency.ticker}
       </div>
     </div>
@@ -64,7 +63,7 @@
             exchangeRate,
           )}
         </div>
-      </div>     
+      </div>
       <div class="line dashed" />
       <div class="line-item">
         <div><b>Total</b></div>
@@ -75,11 +74,11 @@
           )}
         </div>
       </div>
-      <div class="line dashed" /> 
+      <div class="line dashed" />
       <div class="line-item muted">
         <div>Wallet</div>
-        <div>3x2kdkdj...k34w</div>  
-      </div> 
+        <div>3x2kdkdj...k34w</div>
+      </div>
     </div>
   </ModalBody>
   <ModalFooter>

@@ -14,9 +14,11 @@
   import { Routes, APIErrors } from './constants'
   import {
     authedRouteOptions,
-    isJWTValid,
+getFluxSession,
+        isJWTValid,
     Logger,
-    setFluxSession,
+parseJwt,
+        setFluxSession,
   } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
@@ -105,6 +107,22 @@
       })
     }
   })
+  function initializePusher() {
+    // Enable pusher logging - don't include this in production
+    window.Pusher.logToConsole = true
+
+    var pusher = new window.Pusher('dd280d42ccafc24e19ff', {
+      cluster: 'us3',
+    })
+
+    const userID = parseJwt(getFluxSession())?.sub
+    const channel = pusher.subscribe(userID)
+    channel.bind('my-event', function (data) {
+      console.log(JSON.stringify(data))
+    })
+
+    console.log('PUSHER LOADED :)')
+  }
 </script>
 
 <div id="modal">
@@ -113,6 +131,12 @@
     <Toast />
   </div>
 </div>
+
+<svelte:head>
+  <script
+    src="https://js.pusher.com/7.0/pusher.min.js"
+    on:load={initializePusher}></script>
+</svelte:head>
 
 <style lang="scss">
   @import './styles/_vars.scss';
