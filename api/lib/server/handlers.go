@@ -498,7 +498,25 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
-	return profile.GetProfileDataInfo(u), nil
+	if profile.HasWyreAccountPreconditionsMet() {
+		// handle alreaady created account possibly before creating new one (getOrCreateAccount method?)
+		account, err := s.WyreManager.CreateAccount(ctx, u.ID, profile)
+		if err != nil {
+			return nil, err
+		}
+
+		// todo add payment methods
+		return &proto.ProfileDataInfo{
+			Profile: profile.GetProfileDataItemInfo(),
+			Wyre: &proto.ThirdPartyUserAccount{
+				Status: account.Status,
+			},
+		}, nil
+	}
+
+	return &proto.ProfileDataInfo{
+		Profile: profile.GetProfileDataItemInfo(),
+	}, nil
 }
 
 // ViewerProfileData is an rpc handler
@@ -513,7 +531,9 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 		return nil, err
 	}
 
-	return profile.GetProfileDataInfo(u), nil
+	return &proto.ProfileDataInfo{
+		Profile: profile.GetProfileDataItemInfo(),
+	}, nil
 }
 
 // WyreCreateAccount is an rpc handler

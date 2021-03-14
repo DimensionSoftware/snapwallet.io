@@ -68,6 +68,10 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	wyreClient := wyre.NewClient(wyreConfig)
+	wyreManager := &wyre.Manager{
+		Wyre: wyreClient,
+		Db:   dbDb,
+	}
 	clientOptions, err := plaid.ProvideClientOptions()
 	if err != nil {
 		return server.Server{}, err
@@ -91,6 +95,6 @@ func InitializeServer() (server.Server, error) {
 		Firestore:         firestoreClient,
 		EncryptionManager: manager,
 	}
-	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, filemanagerManager, wyreClient, plaidClient, jwtSigner, jwtVerifier, db2)
+	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, filemanagerManager, wyreClient, wyreManager, plaidClient, jwtSigner, jwtVerifier, db2)
 	return serverServer, nil
 }

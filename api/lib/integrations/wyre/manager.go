@@ -18,17 +18,17 @@ type Manager struct {
 	Db   *db.Db
 }
 
-func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) error {
+func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*account.Account, error) {
 	now := time.Now()
 	t := true
 	f := false
 
 	if !profile.HasWyreAccountPreconditionsMet() {
-		return fmt.Errorf("Profile data is not complete enough to submit to Wyre")
+		return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
 	}
 
 	if len(profile) != len(common.ProfileDataRequiredForWyre) {
-		return fmt.Errorf(
+		return nil, fmt.Errorf(
 			"Number of profile data items necessary for wyre is supposed to be %d but received %d",
 			len(common.ProfileDataRequiredForWyre),
 			len(profile),
@@ -40,7 +40,7 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	secretKey := GenerateSecretKey(35)
 	wyreAuthTokenResp, err := m.Wyre.SubmitAuthToken(secretKey)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	fmt.Printf("wyreAuthTokenResp: %#v", wyreAuthTokenResp)
 
@@ -82,31 +82,33 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 		},
 	}.WithDefaults())
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	modifiedProfile := profile.SetStatuses(common.StatusPending)
 
 	// todo, can't create account if they already have one
 
-	err = m.Db.SaveWyreAccount(ctx, nil, userID, &account.Account{
+	account := account.Account{
 		ID:        account.ID(wyreAccountResp.ID),
 		SecretKey: secretKey,
 		Status:    wyreAccountResp.Status,
 		CreatedAt: now,
-	})
+	}
+
+	err = m.Db.SaveWyreAccount(ctx, nil, userID, &account)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
 	//TODO: use tx
 	//TODO:  upload 2 docs proof of address, govt id
 	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, modifiedProfile)
 	if err != nil {
-		return err
+		return nil, err
 	}
 
-	return nil
+	return &account, nil
 }
 
 // GenerateSecretKey ...

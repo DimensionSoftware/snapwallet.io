@@ -130,7 +130,7 @@ func ProvideWyreConfig() (*Config, error) {
 }
 
 // NewClient instantiates a new Client
-func NewClient(config *Config) Client {
+func NewClient(config *Config) *Client {
 	resty := resty.New()
 
 	if config.EnableProduction {
@@ -141,7 +141,7 @@ func NewClient(config *Config) Client {
 		resty.SetHostURL(wyreTestAPIEndpoint)
 	}
 
-	return Client{
+	return &Client{
 		http:   resty,
 		config: *config,
 	}

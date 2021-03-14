@@ -27,6 +27,7 @@ type Server struct {
 	FileManager       *filemanager.Manager
 	Db                *db.Db
 	Wyre              *wyre.Client
+	WyreManager       *wyre.Manager
 	Plaid             *plaid.Client
 	JwtSigner         *auth.JwtSigner
 	JwtVerifier       *auth.JwtVerifier
@@ -44,7 +45,8 @@ func ProvideServer(
 	twilioConfig *twilio.Config,
 	firestore *firestore.Client,
 	filemanager *filemanager.Manager,
-	wyre wyre.Client,
+	wyre *wyre.Client,
+	wyreManager *wyre.Manager,
 	plaid *plaid.Client,
 	jwtSigner auth.JwtSigner,
 	jwtVerifier auth.JwtVerifier,
@@ -57,7 +59,8 @@ func ProvideServer(
 		TwilioPhoneNumber: twilioConfig.PhoneNumber,
 		FileManager:       filemanager,
 		Firestore:         firestore,
-		Wyre:              &wyre,
+		Wyre:              wyre,
+		WyreManager:       wyreManager,
 		Plaid:             plaid,
 		JwtSigner:         &jwtSigner,
 		JwtVerifier:       &jwtVerifier,
