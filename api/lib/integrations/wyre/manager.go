@@ -15,7 +15,7 @@ type Manager struct {
 	Db   *db.Db
 }
 
-func (m Manager) CreateAccount(ctx context.Context, u *user.User, profile profiledata.ProfileDatas) error {
+func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) error {
 	t := true
 	f := false
 
@@ -43,11 +43,11 @@ func (m Manager) CreateAccount(ctx context.Context, u *user.User, profile profil
 			},
 			{
 				FieldID: ProfileFieldIDIndividualCellphoneNumber,
-				Value:   u.Phone,
+				Value:   profile.FilterKindPhone()[0].Phone,
 			},
 			{
 				FieldID: ProfileFieldIDIndividualEmail,
-				Value:   u.Email,
+				Value:   profile.FilterKindEmail()[0].Email,
 			},
 			{
 				FieldID: ProfileFieldIDIndividualDateOfBirth,
@@ -77,7 +77,7 @@ func (m Manager) CreateAccount(ctx context.Context, u *user.User, profile profil
 	modifiedProfile := profile.SetStatuses(common.StatusPending)
 
 	//TODO:  upload 2 docs proof of address, govt id
-	_, err = m.Db.SaveProfileDatas(ctx, nil, u.ID, modifiedProfile)
+	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, modifiedProfile)
 	if err != nil {
 		return err
 	}
