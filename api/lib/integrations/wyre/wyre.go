@@ -190,7 +190,7 @@ func (c Client) SubscribeWebhook(token string, subscribeTo string, notifyTarget 
 		SetResult(SubscribeWebhookResponse{}).
 		SetBody(req).
 		EnableTrace().
-		Post("https://api.sendwyre.com/v3/subscriptions")
+		Post("/v3/subscriptions")
 	if err != nil {
 		return nil, err
 	}
