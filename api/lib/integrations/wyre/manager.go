@@ -66,8 +66,9 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	fmt.Printf("wyreAuthTokenResp: %#v", wyreAuthTokenResp)
 
 	wyreAccountResp, err := m.Wyre.CreateAccount(secretKey, CreateAccountRequest{
-		SubAccount:   &f,
-		DisableEmail: &t,
+		SubAccount:        &f,
+		DisableEmail:      &t,
+		ReferrerAccountID: &m.Wyre.config.WyreAccountID,
 		ProfileFields: []ProfileField{
 			{
 				FieldID: ProfileFieldIDIndividualLegalName,
@@ -136,13 +137,11 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 
 	// todo we need an endpoint ngrok?
 	/*
-		log.Println("FUCK3 sleeping 10 secs b4 webhook", m.APIHost, account.ID)
-		time.Sleep(10 * time.Second)
-			hookResponse, err := m.Wyre.SubscribeWebhook(secretKey, "account:"+string(account.ID), string(m.APIHost)+"/wyre/hooks/"+string(userID))
-			if err != nil {
-				return nil, err
-			}
-			log.Printf("hook response from wyre: %#v", hookResponse)
+		hookResponse, err := m.Wyre.SubscribeWebhook(m.Wyre.config.WyreSecretKey, "account:"+string(account.ID), string(m.APIHost)+"/wyre/hooks/"+string(userID))
+		if err != nil {
+			return nil, err
+		}
+		log.Printf("hook response from wyre: %#v", hookResponse)
 	*/
 
 	return &account, nil

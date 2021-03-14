@@ -15,7 +15,6 @@ const wyreTestAPIEndpoint = "https://api.testwyre.com"
 const wyreAPIKeyEnvVarName = "WYRE_API_KEY"
 const wyreSecretKeyEnvVarName = "WYRE_SECRET_KEY"
 const wyreAccountIDEnvVarName = "WYRE_ACCOUNT_ID"
-const wyreTokenEnvVarName = "WYRE_TOKEN"
 
 // ProfileField represents PII data which is used during the create account process
 type ProfileField struct {
@@ -108,6 +107,7 @@ type Config struct {
 	EnableProduction bool
 	WyreAPIKey       string
 	WyreSecretKey    string
+	WyreAccountID    string
 }
 
 // ProvideWyreConfig provides the config necessary to connect to the wyre api
@@ -118,14 +118,19 @@ func ProvideWyreConfig() (*Config, error) {
 		return nil, fmt.Errorf("you must set %s", wyreAPIKeyEnvVarName)
 	}
 	wyreSecretKey := os.Getenv(wyreSecretKeyEnvVarName)
-	if wyreSecretKeyEnvVarName == "" {
-		return nil, fmt.Errorf("you must set %s", wyreAPIKeyEnvVarName)
+	if wyreSecretKey == "" {
+		return nil, fmt.Errorf("you must set %s", wyreSecretKeyEnvVarName)
+	}
+	wyreAccountID := os.Getenv(wyreAccountIDEnvVarName)
+	if wyreAccountID == "" {
+		return nil, fmt.Errorf("you must set %s", wyreAccountIDEnvVarName)
 	}
 
 	return &Config{
 		EnableProduction: false,
 		WyreAPIKey:       wyreAPIKey,
 		WyreSecretKey:    wyreSecretKey,
+		WyreAccountID:    wyreAccountID,
 	}, nil
 }
 
