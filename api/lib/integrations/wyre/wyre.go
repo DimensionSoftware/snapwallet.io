@@ -150,8 +150,9 @@ func NewClient(config *Config) Client {
 // CreateAccount creates an an account in the wyre system
 // https://docs.sendwyre.com/docs/create-account
 // POST https://api.sendwyre.com/v3/accounts
-func (c Client) CreateAccount(req CreateAccountRequest) (*Account, error) {
+func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account, error) {
 	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+token).
 		SetBody(req).
 		SetResult(Account{}).
 		EnableTrace().
@@ -392,4 +393,33 @@ func (c Client) PricedExchangeRates() (*PricingRates, error) {
 	}
 
 	return resp.Result().(*PricingRates), nil
+}
+
+// SubmitAuthToken
+// https://docs.sendwyre.com/docs/initialize-auth-token
+// POST https://api.sendwyre.com/v2/sessions/auth/key
+// secretKey: A 25-35 character randomly generated string to use as the key. Any valid JSON string without newlines is acceptable
+func (c Client) SubmitAuthToken(secretKey string) (*SubmitAuthTokenResponse, error) {
+	req := map[string]string{
+		"secretKey": secretKey,
+	}
+
+	resp, err := c.http.R().
+		SetHeader("Content-Type", "application/json").
+		SetBody(req).
+		SetResult(SubmitAuthTokenResponse{}).
+		SetError(APIError{}).
+		EnableTrace().
+		Post("/v2/sessions/auth/key")
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Result().(*SubmitAuthTokenResponse), nil
+}
+
+type SubmitAuthTokenResponse struct {
+	APIKey          string      `json:"apiKey"`
+	AuthenticatedAs interface{} `json:"authenticatedAs"`
 }
