@@ -364,7 +364,7 @@ type Account struct {
 	DepositAddresses  CryptoAddresses `json:"depositAddresses"`
 	TotalBalances     CryptoAmounts   `json:"totalBalances"`
 	AvailableBalances CryptoAmounts   `json:"availableBalances"`
-	ProfileData       []ProfileData   `json:"profileData"`
+	ProfileFields     []ProfileData   `json:"profileFields"`
 }
 
 /*
