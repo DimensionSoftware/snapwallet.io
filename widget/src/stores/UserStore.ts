@@ -1,3 +1,4 @@
+import type { UserFlags } from 'api-client'
 import { writable } from 'svelte/store'
 import { Routes } from '../constants'
 
@@ -12,6 +13,7 @@ function createStore() {
     // Used for routing to last position
     // when auth kicks in.
     lastKnownRoute: Routes.ROOT,
+    flags: {} as UserFlags,
   })
 
   return {
@@ -40,6 +42,9 @@ function createStore() {
     setBirthDate: (birthDate: string) => update(s => ({ ...s, birthDate })),
     updateLastKnownRoute: (lastKnownRoute: Routes) =>
       update(s => ({ ...s, lastKnownRoute })),
+    setFlags: (flags: UserFlags) => {
+      update(s => ({ ...s, flags }))
+    },
   }
 }
 
