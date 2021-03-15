@@ -8,6 +8,7 @@
   import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import CryptoCard from '../components/cards/CryptoCard.svelte'
   import { transactionStore } from '../stores/TransactionStore'
+  import { userStore } from '../stores/UserStore'
   import { priceStore } from '../stores/PriceStore'
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
@@ -17,8 +18,10 @@
   import { Routes } from '../constants'
   import PaymentCard from '../components/cards/PaymentCard.svelte'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
+  import FaIcon from 'svelte-awesome'
 
   let selectorVisible = false
+  let paymentSelectorVisible = false
 
   const cryptoCurrencies = [
     { name: 'Bitcoin', ticker: 'BTC', popular: true },
@@ -68,7 +71,9 @@
 
   // Find the next path based on user data
   const getNextPath = async () => {
+    // TODO: move this request somewhere sane
     const { flags = {} } = await window.API.fluxViewerData()
+    userStore.setFlags(flags)
     const { hasPlaidItems, hasWyreAccount } = flags
 
     if (hasPlaidItems && hasWyreAccount) nextRoute = Routes.CHECKOUT_OVERVIEW
@@ -179,6 +184,15 @@
             isDestination={isEnteringSourceAmount}
           />
         </li>
+        <li
+          style="cursor:pointer;display:flex;align-items:center;"
+          on:click={() => (paymentSelectorVisible = true)}
+        >
+          <FaIcon data={faUniversity} />
+          <b style="margin-left:0.5rem;text-decoration:underline"
+            >Select Payment</b
+          >
+        </li>
       </ul>
     </div>
   </ModalBody>
@@ -221,15 +235,21 @@
 <!-- TODO: handle pm selection here -->
 <PopupSelector
   on:close={() => {
-    /* toggle pm selector*/
+    paymentSelectorVisible = false
   }}
-  visible={false}
+  visible={paymentSelectorVisible}
   headerTitle="Payment Methods"
 >
   <div class="scroll cryptocurrencies-container">
     <h5>Add a Payment Method</h5>
-    <PaymentCard icon={faUniversity} on:click={() => {}} label="Bank Account" />
-    <h5 style="margin-top: 1.25rem">Select a Payment Method</h5>
+    <PaymentCard
+      icon={faUniversity}
+      on:click={() => push(Routes.PLAID_LINK)}
+      label="Bank Account"
+    />
+    {#if $userStore.flags?.hasPlaidItems}
+      <h5 style="margin-top: 1.25rem">Select a Payment Method</h5>
+    {/if}
   </div>
 </PopupSelector>
 
