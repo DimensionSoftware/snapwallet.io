@@ -14,11 +14,11 @@
   import { Routes, APIErrors } from './constants'
   import {
     authedRouteOptions,
-getFluxSession,
-        isJWTValid,
+    getFluxSession,
+    isJWTValid,
     Logger,
-parseJwt,
-        setFluxSession,
+    parseJwt,
+    setFluxSession,
   } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
