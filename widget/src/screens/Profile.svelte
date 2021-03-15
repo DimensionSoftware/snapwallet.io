@@ -9,8 +9,7 @@
   import Input from '../components/inputs/Input.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed } from '../util'
-  import { toaster } from '../stores/ToastStore'
+  import { onEnterPressed } from '../util'
   import { Routes } from '../constants'
   import { Masks } from '../types'
 
@@ -19,32 +18,41 @@
   let animation = 'left'
 
   $: fullName = `${$userStore.firstName} ${$userStore.lastName}`.trim()
-  const defaultName = `${$userStore.firstName} ${$userStore.lastName}`.trim()
+  let isSaving = false
 
-  const handleNextStep = () => {
-    const { firstName, lastName, birthDate, socialSecurityNumber } = $userStore,
-      focus = (ndx: number) => {
-        const thingie = document.querySelectorAll('input[type="text"]')[
-          ndx
-        ] as any
-        thingie.focus()
-      }
+  const handleNextStep = async () => {
+    try {
+      isSaving = true
+      const {
+          firstName,
+          lastName,
+          birthDate,
+          socialSecurityNumber,
+        } = $userStore,
+        focus = (ndx: number) => {
+          const thingie = document.querySelectorAll('input[type="text"]')[
+            ndx
+          ] as any
+          thingie.focus()
+        }
 
-    // validate inputs
-    if (!firstName || !lastName?.length) return focus(0)
-    if (!birthDate) return focus(1)
-    if (!socialSecurityNumber) return focus(2)
+      // validate inputs
+      if (!firstName || !lastName?.length) return focus(0)
+      if (!birthDate) return focus(1)
+      if (!socialSecurityNumber) return focus(2)
 
-    const [mm, dd, yyyy] = birthDate.split('-')
+      const [mm, dd, yyyy] = birthDate.split('-')
 
-    window.API.fluxSaveProfileData({
-      ssn: socialSecurityNumber,
-      dateOfBirth: `${yyyy}-${mm}-${dd}`,
-      // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
-      legalName: `${firstName} ${lastName}`,
-    }).then(() => {
-      push(Routes.CHECKOUT_OVERVIEW)
-    })
+      await window.API.fluxSaveProfileData({
+        ssn: socialSecurityNumber,
+        dateOfBirth: `${yyyy}-${mm}-${dd}`,
+        // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
+        legalName: `${firstName} ${lastName}`,
+      })
+      setTimeout(() => push(Routes.CHECKOUT_OVERVIEW), 1000)
+    } finally {
+      setTimeout(() => (isSaving = false), 1000)
+    }
   }
 
   const onKeyDown = (e: Event) => {
@@ -99,7 +107,6 @@
         required
         type="text"
         placeholder="xxx-xx-xxxx"
-        maskChar="[\d-]"
         pattern={`[\\d]{3}-[\\d]{2}-[\\d]{4}`}
         mask={Masks.SSN}
         defaultValue={$userStore.socialSecurityNumber}
@@ -110,7 +117,9 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Save</Button>
+    <Button disabled={isSaving} on:click={handleNextStep}
+      >{isSaving ? 'Saving...' : 'Save'}</Button
+    >
   </ModalFooter>
 </ModalContent>
 
