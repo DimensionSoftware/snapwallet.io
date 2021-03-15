@@ -145,10 +145,18 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			log.Printf("User not found; created: %v", u)
 		}
 
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	log.Printf("user??? : %#v\n", u)
+
+	err = db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		pdatas, err := db.GetAllProfileData(ctx, tx, u.ID)
 		if err != nil {
 			return err
-
 		}
 
 		if loginKind == onetimepasscode.LoginKindPhone {
@@ -181,7 +189,6 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 		}
 		return nil
 	})
-
 	if err != nil {
 		return nil, err
 	}
@@ -412,16 +419,16 @@ func (db Db) SaveProfileDatas(ctx context.Context, passedTx *firestore.Transacti
 
 // GetAllProfileData ...
 func (db Db) GetAllProfileData(ctx context.Context, tx *firestore.Transaction, userID user.ID) (profiledata.ProfileDatas, error) {
-	profile := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
 
 	var (
 		docs []*firestore.DocumentSnapshot
 		err  error
 	)
 	if tx == nil {
-		docs, err = profile.Documents(ctx).GetAll()
+		docs, err = ref.Documents(ctx).GetAll()
 	} else {
-		docs, err = tx.Documents(profile).GetAll()
+		docs, err = tx.Documents(ref).GetAll()
 	}
 	if err != nil {
 		return []profiledata.ProfileData{}, err
