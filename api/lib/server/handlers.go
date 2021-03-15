@@ -68,11 +68,23 @@ func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.Viewe
 		return nil, err
 	}
 
+	var hasWyreAccount bool
+
+	{
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
+		if err != nil {
+			return nil, err
+		}
+		if len(accounts) > 0 {
+			hasWyreAccount = true
+		}
+	}
+
 	flags := proto.UserFlags{
 		HasPlaidItems:                  hasPlaidItems,
 		HasWyreAccountPrerequisitesMet: profile.HasWyreAccountPreconditionsMet(),
 		// todo: implement first
-		//HasWyreAccount:        false,
+		HasWyreAccount: hasWyreAccount,
 		//HasWyrePaymentMethods: false,
 	}
 
