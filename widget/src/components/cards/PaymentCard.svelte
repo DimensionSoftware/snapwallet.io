@@ -5,13 +5,14 @@
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
 
+  export let icon
   export let label: string
 </script>
 
 <Card on:click={() => dispatch('click')}>
   <div class="payment-card-container">
     <div class="content-container">
-      <slot name="icon" />
+      <FaIcon data={icon} />
       <div class="label">{label}</div>
     </div>
     <FaIcon data={faChevronRight} />
@@ -25,7 +26,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem;
+    padding: 1rem 0;
     & > .content-container {
       height: 100%;
       width: 100%;
