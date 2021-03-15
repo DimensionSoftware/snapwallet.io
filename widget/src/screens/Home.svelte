@@ -4,9 +4,7 @@
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import IntentSelector from '../components/IntentSelector.svelte'
-  import { toaster } from '../stores/ToastStore'
   import Button from '../components/Button.svelte'
-  import { userStore } from '../stores/UserStore'
   import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import CryptoCard from '../components/cards/CryptoCard.svelte'
   import { transactionStore } from '../stores/TransactionStore'
@@ -14,14 +12,11 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
-  import {
-    numberWithCommas,
-    isValidNumber,
-    onEnterPressed,
-    formatLocaleCurrency,
-  } from '../util'
+  import { isValidNumber, onEnterPressed, formatLocaleCurrency } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
+  import PaymentCard from '../components/cards/PaymentCard.svelte'
+  import { faUniversity } from '@fortawesome/free-solid-svg-icons'
 
   let selectorVisible = false
 
@@ -49,7 +44,6 @@
 
   let isEnteringSourceAmount = true
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
-  let isGettingUserView = false
 
   $: fakePrice = 10_000
   $: nextRoute = Routes.PLAID_LINK
@@ -221,6 +215,21 @@
         </Label>
       </div>
     {/each}
+  </div>
+</PopupSelector>
+
+<!-- TODO: handle pm selection here -->
+<PopupSelector
+  on:close={() => {
+    /* toggle pm selector*/
+  }}
+  visible={false}
+  headerTitle="Payment Methods"
+>
+  <div class="scroll cryptocurrencies-container">
+    <h5>Add a Payment Method</h5>
+    <PaymentCard icon={faUniversity} on:click={() => {}} label="Bank Account" />
+    <h5 style="margin-top: 1.25rem">Select a Payment Method</h5>
   </div>
 </PopupSelector>
 
