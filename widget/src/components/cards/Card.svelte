@@ -11,11 +11,9 @@
   @import '../../styles/_vars.scss';
 
   .card-container {
-    border-bottom: 1px solid var(--theme-color);
     min-height: 3rem;
     width: 100%;
     border-radius: 0.5rem;
-    padding: 0.2rem;
     cursor: pointer;
     background-color: var(--theme-color-inverse);
   }
