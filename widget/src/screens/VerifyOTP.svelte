@@ -103,6 +103,7 @@
         required
         type="number"
         placeholder="123456"
+        defaultValue={code}
         on:change={e => {
           code = e.detail
           if (code.length >= 6) {

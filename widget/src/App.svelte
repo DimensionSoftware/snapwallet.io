@@ -95,7 +95,10 @@
       const msg = 'Oops, an unexpected error occurred. Please try again later.'
       const { reason, body } = e
 
-      if (reason?.body?.code === APIErrors.UNAUTHORIZED) {
+      if (
+        reason?.body?.code === APIErrors.UNAUTHORIZED &&
+        ($location as Routes) !== Routes.VERIFY_OTP
+      ) {
         setFluxSession('')
         push(Routes.SEND_OTP)
         return
