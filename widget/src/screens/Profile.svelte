@@ -49,7 +49,7 @@
         // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
         legalName: `${firstName} ${lastName}`,
       })
-      setTimeout(() => push(Routes.CHECKOUT_OVERVIEW), 1000)
+      setTimeout(() => push(Routes.ADDRESS), 1000)
     } finally {
       setTimeout(() => (isSaving = false), 1000)
     }

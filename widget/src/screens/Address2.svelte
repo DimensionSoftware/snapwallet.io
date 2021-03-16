@@ -8,7 +8,9 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
+  import { transactionStore } from '../stores/TransactionStore'
   import { onEnterPressed } from '../util'
+  import { Routes } from '../constants'
 
   let animation = 'left'
   let isSubmittingProfile = false
@@ -19,7 +21,10 @@
       await window.API.fluxSaveProfileData({
         address: $userStore.address,
       })
-      // TODO: push(somewhere)
+      const nextRoute = $transactionStore.sourceAmount
+        ? Routes.CHECKOUT_OVERVIEW
+        : Routes.ROOT
+      push(nextRoute)
     } finally {
       setTimeout(() => {
         isSubmittingProfile = false
@@ -53,7 +58,7 @@
   </ModalBody>
   <ModalFooter>
     <Button on:click={handleNextStep}
-      >{isSubmittingProfile ? 'Submitting...' : 'Done'}</Button
+      >{isSubmittingProfile ? 'Saving...' : 'Save'}</Button
     >
   </ModalFooter>
 </ModalContent>
