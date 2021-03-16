@@ -59,7 +59,8 @@
           push(Routes.ROOT)
         },
         onEvent: (_eventName, _metadata) => {},
-        isWebView: true,
+        // Required for RN
+        isWebview: true,
       })
 
       return Promise.resolve(handler)
