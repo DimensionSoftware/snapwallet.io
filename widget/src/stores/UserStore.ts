@@ -14,6 +14,14 @@ function createStore() {
     // when auth kicks in.
     lastKnownRoute: Routes.ROOT,
     flags: {} as UserFlags,
+    address: {
+      street1: '',
+      street2: '',
+      city: '',
+      state: '',
+      postalCode: '',
+      country: '',
+    },
   })
 
   return {
@@ -44,6 +52,12 @@ function createStore() {
       update(s => ({ ...s, lastKnownRoute })),
     setFlags: (flags: UserFlags) => {
       update(s => ({ ...s, flags }))
+    },
+    setFullAddress: (address: any) => {
+      update(s => ({
+        ...s,
+        address,
+      }))
     },
   }
 }
