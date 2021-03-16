@@ -23,11 +23,11 @@ import type { Address } from 'api-client';
     const handleNextStep = async () => {
       const resp = await window.API.fluxUploadFile(fileEl.files[0])
       console.log(resp)
-      /*
-        await window.API.fluxSaveProfileData({
-          proofOfAddressDoc,
-        })
-        */
+      await window.API.fluxSaveProfileData({
+        proofOfAddressDoc: {
+          fileIds: [resp.fileId],
+        },
+      })
 
     }
   </script>
