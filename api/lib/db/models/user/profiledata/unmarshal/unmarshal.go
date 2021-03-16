@@ -12,6 +12,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/email"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/phone"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/proofofaddress"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/encryption"
 )
@@ -85,6 +86,15 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 			UpdatedAt:  pdata.UpdatedAt,
 			SealedAt:   pdata.SealedAt,
 		}, nil
+	case common.KindProofOfAddressDoc:
+		return &proofofaddress.ProfileDataProofOfAddressDoc{
+			ID:        pdata.ID,
+			Status:    pdata.Status,
+			FileIDs:   *pdata.FileIDs,
+			CreatedAt: pdata.CreatedAt,
+			UpdatedAt: pdata.UpdatedAt,
+			SealedAt:  pdata.SealedAt,
+		}, nil
 	}
 
 	return nil, fmt.Errorf("ProfileDataKind: %s is not implemented yet", pdata.Kind)
@@ -92,16 +102,17 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 
 // DecryptAndUnmarshal ...
 func DecryptAndUnmarshal(m *encryption.Manager, userID user.ID, data common.EncryptedProfileData) (*profiledata.ProfileData, error) {
-	clear, err := data.Decrypt(m, userID)
+	maybeClear, err := data.Decrypt(m, userID)
 	if err != nil {
 		return nil, err
 	}
 
-	if clear == nil {
-		return nil, nil
+	var clear []byte
+	if maybeClear != nil {
+		clear = *maybeClear
 	}
 
-	out, err := Unmarshal(&data, *clear)
+	out, err := Unmarshal(&data, clear)
 	if err != nil {
 		return nil, err
 	}

@@ -51,9 +51,15 @@ func (pdata ProfileDataProofOfAddressDoc) SetStatus(newStatus common.ProfileData
 
 // GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
 func (pdata ProfileDataProofOfAddressDoc) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
+	var fileIDs []string
+	for _, fileID := range pdata.FileIDs {
+		fileIDs = append(fileIDs, string(fileID))
+	}
+
 	info := proto.ProfileDataItemInfo{
 		Id:        string(pdata.ID),
 		Kind:      pdata.Kind().ToProfileDataItemKind(),
+		FileIds:   fileIDs,
 		Status:    pdata.Status.ToProfileDataItemStatus(),
 		CreatedAt: pdata.CreatedAt.Format(time.RFC3339),
 		Length:    int32(len(pdata.FileIDs)),
