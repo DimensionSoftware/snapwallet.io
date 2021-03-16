@@ -23,7 +23,7 @@ function createStore() {
     // when auth kicks in.
     lastKnownRoute: Routes.ROOT,
     flags: {} as UserFlags,
-    address: initialAddress,
+    address: { ...initialAddress },
   })
 
   return {
@@ -61,8 +61,8 @@ function createStore() {
         address,
       }))
     },
-    clearAddress = () => {
-      update(s => ({ ...s, address: initialAddress }))
+    clearAddress: () => {
+      update(s => ({ ...s, address: { ...initialAddress } }))
     },
   }
 }
