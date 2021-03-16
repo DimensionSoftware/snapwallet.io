@@ -21,7 +21,10 @@
       })
       // TODO: push(somewhere)
     } finally {
-      setTimeout(() => (isSubmittingProfile = false), 800)
+      setTimeout(() => {
+        isSubmittingProfile = false
+        userStore.clearAddress()
+      }, 800)
     }
   }
 

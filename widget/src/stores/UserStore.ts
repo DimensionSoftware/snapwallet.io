@@ -2,6 +2,15 @@ import type { UserFlags } from 'api-client'
 import { writable } from 'svelte/store'
 import { Routes } from '../constants'
 
+const initialAddress = {
+  street1: '',
+  street2: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  country: '',
+}
+
 function createStore() {
   const { subscribe, update } = writable({
     intent: 'buy',
@@ -14,14 +23,7 @@ function createStore() {
     // when auth kicks in.
     lastKnownRoute: Routes.ROOT,
     flags: {} as UserFlags,
-    address: {
-      street1: '',
-      street2: '',
-      city: '',
-      state: '',
-      postalCode: '',
-      country: '',
-    },
+    address: initialAddress,
   })
 
   return {
@@ -58,6 +60,9 @@ function createStore() {
         ...s,
         address,
       }))
+    },
+    clearAddress = () => {
+      update(s => ({ ...s, address: initialAddress }))
     },
   }
 }
