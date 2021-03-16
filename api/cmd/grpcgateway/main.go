@@ -166,8 +166,9 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 
 		w.Header().Add("content-type", "application/json")
 
-		out, err := json.Marshal(map[string]string{
+		out, err := json.Marshal(map[string]interface{}{
 			"fileId": resp.FileId,
+			"size":   int32(n),
 		})
 		if err != nil {
 			log.Println(err)
