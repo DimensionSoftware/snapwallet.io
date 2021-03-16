@@ -24,6 +24,22 @@ const (
 	KindUSPassport Kind = "US_PASSPORT"
 )
 
+// ToUsGovernmentIdDocumentInputKind...
+func (k Kind) ToUsGovernmentIdDocumentInputKind() proto.UsGovernmentIdDocumentInputKind {
+	switch k {
+	case KindUSDrivingLicense:
+		return proto.UsGovernmentIdDocumentInputKind_GI_US_DRIVING_LICENSE
+	case KindUSGovernmentID:
+		return proto.UsGovernmentIdDocumentInputKind_GI_US_GOVERNMENT_ID
+	case KindUSPassportCard:
+		return proto.UsGovernmentIdDocumentInputKind_GI_US_PASSPORT_CARD
+	case KindUSPassport:
+		return proto.UsGovernmentIdDocumentInputKind_GI_US_PASSPORT
+	}
+	// should never get here
+	panic("proto.GovernmentIdDocumentInputKind unknown when KindFromGovernmentIdDocKind(...) called")
+}
+
 // KindFromGovernmentIdDocKind ...
 func KindFromUsGovernmentIdDocumentInputKind(k proto.UsGovernmentIdDocumentInputKind) Kind {
 	switch k {
@@ -103,10 +119,16 @@ func (pdata ProfileDataUSGovernmentIDDoc) SetStatus(newStatus common.ProfileData
 
 // GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
 func (pdata ProfileDataUSGovernmentIDDoc) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
+	var fileIDs []string
+	for _, fileID := range pdata.FileIDs {
+		fileIDs = append(fileIDs, string(fileID))
+	}
+
 	info := proto.ProfileDataItemInfo{
 		Id:        string(pdata.ID),
 		Kind:      pdata.Kind().ToProfileDataItemKind(),
-		SubKind:   string(pdata.GovernmentIDKind),
+		SubKind:   pdata.GovernmentIDKind.ToUsGovernmentIdDocumentInputKind().String(),
+		FileIds:   fileIDs,
 		Status:    pdata.Status.ToProfileDataItemStatus(),
 		CreatedAt: pdata.CreatedAt.Format(time.RFC3339),
 		Length:    int32(len(pdata.FileIDs)),
