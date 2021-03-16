@@ -36,28 +36,32 @@
   <ModalContent {animation}>
     <ModalBody>
       <ModalHeader hideBackButton>Hi, we need your address dawg</ModalHeader>
-      <Label label="Street 1">
-        <Input type="text"  placeholder="street1" />
-      </Label>
-      <Label label="Street 2">
-        <Input type="text"  placeholder="street2" />
-      </Label>
-      <Label label="City">
-        <Input type="text"  placeholder="city" />
-      </Label>
-      <Label label="State">
-        <Input type="text"  placeholder="state" />
-      </Label>
-      <Label label="PostalCode">
-        <Input type="text"  placeholder="postalCode" />
-      </Label>
-      <Label label="Country">
-        <Input type="text"  placeholder="country" />
-      </Label>
+      <label label="Street 1">
+        <input type="text"  placeholder="street1" />
+      </label>
+      <label label="Street 2">
+        <input type="text"  placeholder="street2" />
+      </label>
+      <label label="City">
+        <input type="text"  placeholder="city" />
+      </label>
+      <label label="State">
+        <input type="text"  placeholder="state" />
+      </label>
+      <label label="PostalCode">
+        <input type="text"  placeholder="postalCode" />
+      </label>
+      <label label="Country">
+        <input type="text"  placeholder="country" />
+      </label>
     </ModalBody>
+    <button>Plz give me now</button>
   </ModalContent>
   
   <style lang="scss">
     @import '../styles/_vars.scss';
+    label {
+        size: smaller;
+    }
   </style>
   
