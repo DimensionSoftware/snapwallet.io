@@ -22,6 +22,7 @@ export enum Routes {
   VERIFY_OTP = '/verify-otp',
   PLAID_LINK = '/link-bank',
   CHECKOUT_OVERVIEW = '/checkout-overview',
+  ADDRESS = '/address',
 }
 
 export enum APIErrors {

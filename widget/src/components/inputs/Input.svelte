@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount, afterUpdate, createEventDispatcher } from 'svelte'
-  import { Masks } from '../../types'
+  import type { Masks } from '../../types'
   import { withMaskOnInput, isValidMaskInput } from '../../masks'
 
   const dispatch = createEventDispatcher()

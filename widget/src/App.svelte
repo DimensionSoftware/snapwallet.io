@@ -6,6 +6,7 @@
   import SendOTP from './screens/SendOTP.svelte'
   import NotFound from './screens/NotFound.svelte'
   import Profile from './screens/Profile.svelte'
+  import Address from './screens/Address.svelte'
   import VerifyOTP from './screens/VerifyOTP.svelte'
   import Overview from './screens/Overview.svelte'
   import { onMount, setContext } from 'svelte'
@@ -71,6 +72,9 @@
     }),
     [Routes.CHECKOUT_OVERVIEW]: wrap({
       ...authedRouteOptions(Overview),
+    }),
+    [Routes.ADDRESS]: wrap({
+      ...authedRouteOptions(Address),
     }),
     '*': NotFound as any,
   }
