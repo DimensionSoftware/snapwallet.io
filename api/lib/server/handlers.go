@@ -779,6 +779,7 @@ func (s *Server) UploadFile(ctx context.Context, req *proto.UploadFileRequest) (
 
 	return &proto.UploadFileResponse{
 		FileId: string(fileID),
+		Size:   req.Size,
 	}, nil
 }
 

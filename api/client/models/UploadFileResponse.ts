@@ -14,6 +14,7 @@ import { HttpFile } from '../http/http';
 
 export class UploadFileResponse {
     'fileId'?: string;
+    'size'?: number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -23,6 +24,12 @@ export class UploadFileResponse {
             "baseName": "fileId",
             "type": "string",
             "format": ""
+        },
+        {
+            "name": "size",
+            "baseName": "size",
+            "type": "number",
+            "format": "int32"
         }    ];
 
     static getAttributeTypeMap() {

@@ -728,6 +728,10 @@
       "properties": {
         "fileId": {
           "type": "string"
+        },
+        "size": {
+          "type": "integer",
+          "format": "int32"
         }
       }
     },
