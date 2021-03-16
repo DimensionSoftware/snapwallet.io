@@ -117,15 +117,6 @@ export interface FluxApiFluxViewerDataRequest {
 export interface FluxApiFluxViewerProfileDataRequest {
 }
 
-export interface FluxApiFluxWyreCreateAccountRequest {
-    /**
-     * 
-     * @type any
-     * @memberof FluxApifluxWyreCreateAccount
-     */
-    body: any
-}
-
 export interface FluxApiFluxWyreWebhookRequest {
     /**
      * 
@@ -244,15 +235,6 @@ export class ObjectFluxApi {
      */
     public fluxViewerProfileData(param: FluxApiFluxViewerProfileDataRequest, options?: Configuration): Promise<ProfileDataInfo> {
         return this.api.fluxViewerProfileData( options).toPromise();
-    }
-	
-    /**
-     * ...
-     * WyreCreateAccount creates an account with Wyre
-     * @param param the request object
-     */
-    public fluxWyreCreateAccount(param: FluxApiFluxWyreCreateAccountRequest, options?: Configuration): Promise<any> {
-        return this.api.fluxWyreCreateAccount(param.body,  options).toPromise();
     }
 	
     /**

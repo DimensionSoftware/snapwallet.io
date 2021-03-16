@@ -58,10 +58,6 @@ type FluxClient interface {
 	//
 	// ...
 	SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*ProfileDataInfo, error)
-	// WyreCreateAccount creates an account with Wyre
-	//
-	// ...
-	WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error)
 	WyreWebhook(ctx context.Context, in *WyreWebhookRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	// UploadFile uploads a file and returns a file id
 	//
@@ -173,15 +169,6 @@ func (c *fluxClient) SaveProfileData(ctx context.Context, in *SaveProfileDataReq
 	return out, nil
 }
 
-func (c *fluxClient) WyreCreateAccount(ctx context.Context, in *WyreCreateAccountRequest, opts ...grpc.CallOption) (*WyreCreateAccountResponse, error) {
-	out := new(WyreCreateAccountResponse)
-	err := c.cc.Invoke(ctx, "/Flux/WyreCreateAccount", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *fluxClient) WyreWebhook(ctx context.Context, in *WyreWebhookRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
 	out := new(emptypb.Empty)
 	err := c.cc.Invoke(ctx, "/Flux/WyreWebhook", in, out, opts...)
@@ -252,10 +239,6 @@ type FluxServer interface {
 	//
 	// ...
 	SaveProfileData(context.Context, *SaveProfileDataRequest) (*ProfileDataInfo, error)
-	// WyreCreateAccount creates an account with Wyre
-	//
-	// ...
-	WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error)
 	WyreWebhook(context.Context, *WyreWebhookRequest) (*emptypb.Empty, error)
 	// UploadFile uploads a file and returns a file id
 	//
@@ -303,9 +286,6 @@ func (UnimplementedFluxServer) PlaidCreateLinkToken(context.Context, *PlaidCreat
 }
 func (UnimplementedFluxServer) SaveProfileData(context.Context, *SaveProfileDataRequest) (*ProfileDataInfo, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SaveProfileData not implemented")
-}
-func (UnimplementedFluxServer) WyreCreateAccount(context.Context, *WyreCreateAccountRequest) (*WyreCreateAccountResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateAccount not implemented")
 }
 func (UnimplementedFluxServer) WyreWebhook(context.Context, *WyreWebhookRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreWebhook not implemented")
@@ -509,24 +489,6 @@ func _Flux_SaveProfileData_Handler(srv interface{}, ctx context.Context, dec fun
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Flux_WyreCreateAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WyreCreateAccountRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(FluxServer).WyreCreateAccount(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/Flux/WyreCreateAccount",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FluxServer).WyreCreateAccount(ctx, req.(*WyreCreateAccountRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _Flux_WyreWebhook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WyreWebhookRequest)
 	if err := dec(in); err != nil {
@@ -627,10 +589,6 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SaveProfileData",
 			Handler:    _Flux_SaveProfileData_Handler,
-		},
-		{
-			MethodName: "WyreCreateAccount",
-			Handler:    _Flux_WyreCreateAccount_Handler,
 		},
 		{
 			MethodName: "WyreWebhook",

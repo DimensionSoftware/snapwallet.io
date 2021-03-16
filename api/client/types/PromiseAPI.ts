@@ -153,16 +153,6 @@ export class PromiseFluxApi {
     }
 	
     /**
-     * ...
-     * WyreCreateAccount creates an account with Wyre
-     * @param body 
-     */
-    public fluxWyreCreateAccount(body: any, options?: Configuration): Promise<any> {
-    	const result = this.api.fluxWyreCreateAccount(body, options);
-        return result.toPromise();
-    }
-	
-    /**
      * @param hookId 
      * @param body 
      */

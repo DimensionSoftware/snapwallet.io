@@ -152,19 +152,6 @@ message PlaidCreateLinkTokenResponse {
   string link_token = 1;
 }
 
-// WyreCreateAccountRequest
-//
-// request
-message WyreCreateAccountRequest {
-}
-
-// WyreCreateAccountResponse
-//
-// response
-message WyreCreateAccountResponse {
-
-}
-
 // SaveProfileDataRequest
 //
 // request
@@ -402,16 +389,6 @@ service Flux {
   rpc SaveProfileData(SaveProfileDataRequest) returns (ProfileDataInfo) {
     option (google.api.http) = {
       patch: "/viewer/profile"
-      body: "*"
-    };
-  }
-
-  // WyreCreateAccount creates an account with Wyre
-  //
-  // ...
-  rpc WyreCreateAccount(WyreCreateAccountRequest) returns (WyreCreateAccountResponse) {
-    option (google.api.http) = {
-      post: "/wyre/create-account"
       body: "*"
     };
   }

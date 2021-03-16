@@ -44,11 +44,6 @@
         "security": [{"Bearer": []}]
       }
     },
-    "/wyre/create-account": {
-      "post": {
-        "security": [{"Bearer": []}]
-      }
-    },
     "/upload": {
       "post": {
         "summary": "Uploads a file and returns a fileId.",

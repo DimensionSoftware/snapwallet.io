@@ -358,45 +358,6 @@
         ]
       }
     },
-    "/wyre/create-account": {
-      "post": {
-        "summary": "WyreCreateAccount creates an account with Wyre",
-        "description": "...",
-        "operationId": "Flux_WyreCreateAccount",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/WyreCreateAccountResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/WyreCreateAccountRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Flux"
-        ],
-        "security": [
-          {
-            "Bearer": []
-          }
-        ]
-      }
-    },
     "/wyre/hooks/{hookId}": {
       "post": {
         "operationId": "Flux_WyreWebhook",
@@ -916,16 +877,6 @@
       },
       "description": "response",
       "title": "ViewerDataResponse"
-    },
-    "WyreCreateAccountRequest": {
-      "type": "object",
-      "description": "request",
-      "title": "WyreCreateAccountRequest"
-    },
-    "WyreCreateAccountResponse": {
-      "type": "object",
-      "description": "response",
-      "title": "WyreCreateAccountResponse"
     },
     "WyreWebhookRequest": {
       "type": "object",
