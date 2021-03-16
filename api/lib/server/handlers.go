@@ -358,17 +358,17 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
-	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
-		profile, err := s.Db.GetAllProfileData(ctx, tx, u.ID)
-		if err != nil {
-			return err
-		}
+	profile, err := s.Db.GetAllProfileData(ctx, nil, u.ID)
+	if err != nil {
+		return nil, err
+	}
 
-		for _, kind := range common.ProfileDataKinds {
-			existingProfileData := profile.FilterKind(kind).First()
+	for _, kind := range common.ProfileDataKinds {
+		existingProfileData := profile.FilterKind(kind).First()
 
-			switch kind {
-			case common.KindLegalName:
+		switch kind {
+		case common.KindLegalName:
+			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var legalNameData *legalname.ProfileDataLegalName
 
 				if req.LegalName != "" {
@@ -393,7 +393,10 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindDateOfBirth:
+				return nil
+			})
+		case common.KindDateOfBirth:
+			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var dobData *dateofbirth.ProfileDataDateOfBirth
 
 				if req.DateOfBirth != "" {
@@ -418,7 +421,10 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindUSSSN:
+				return nil
+			})
+		case common.KindUSSSN:
+			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var ssnData *ssn.ProfileDataSSN
 
 				if req.Ssn != "" {
@@ -443,7 +449,10 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindAddress:
+				return nil
+			})
+		case common.KindAddress:
+			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var addressData *address.ProfileDataAddress
 
 				if req.Address != nil {
@@ -479,7 +488,10 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindProofOfAddressDoc:
+				return nil
+			})
+		case common.KindProofOfAddressDoc:
+			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var proofOfAddressData *proofofaddress.ProfileDataProofOfAddressDoc
 
 				if req.ProofOfAddressDoc != nil {
@@ -522,7 +534,10 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindUSGovernmentIDDoc:
+				return nil
+			})
+		case common.KindUSGovernmentIDDoc:
+			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var governmentIDData *usgovernmentid.ProfileDataUSGovernmentIDDoc
 
 				if req.UsGovernmentIdDoc != nil {
@@ -572,21 +587,22 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindPhone:
-				// do nothing we don't accept input from here (we get it from our user record, and stamp it out from there because its verified)
-			case common.KindEmail:
-				// do nothing we don't accept input from here (we get it from our user record, and stamp it out from there because its verified)
-			default:
-				panic(fmt.Sprintf("handlers.SaveProfileData: unhandled profile data kind: %s", kind))
-			}
+				return nil
+			})
+		case common.KindPhone:
+			// do nothing we don't accept input from here (we get it from our user record, and stamp it out from there because its verified)
+		case common.KindEmail:
+			// do nothing we don't accept input from here (we get it from our user record, and stamp it out from there because its verified)
+		default:
+			panic(fmt.Sprintf("handlers.SaveProfileData: unhandled profile data kind: %s", kind))
 		}
-		return nil
-	})
-	if err != nil {
-		return nil, err
+
+		if err != nil {
+			return nil, err
+		}
 	}
 
-	profile, err := s.Db.GetAllProfileData(ctx, nil, u.ID)
+	profile, err = s.Db.GetAllProfileData(ctx, nil, u.ID)
 	if err != nil {
 		return nil, err
 	}

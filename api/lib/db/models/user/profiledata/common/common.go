@@ -95,6 +95,7 @@ var ProfileDataKinds = []ProfileDataKind{
 	KindDateOfBirth,
 	KindUSSSN,
 	KindUSGovernmentIDDoc,
+	KindProofOfAddressDoc,
 }
 
 // in the future it will be a subset of profiledatakinds
