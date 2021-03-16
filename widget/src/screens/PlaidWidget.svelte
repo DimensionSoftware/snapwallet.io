@@ -2,10 +2,12 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { Logger } from '../util'
+  import { onDestroy, onMount } from 'svelte'
+
+  let handler
 
   async function getLinkToken(): Promise<string> {
     const resp = await window.API.fluxPlaidCreateLinkToken({})
-
     return resp.linkToken
   }
 
@@ -38,8 +40,8 @@
   }
 
   function initializePlaid() {
-    getLinkToken().then(token => {
-      const handler = window.Plaid.create({
+    return getLinkToken().then(token => {
+      handler = window.Plaid.create({
         token,
         onSuccess: (
           publicToken: string,
@@ -53,26 +55,23 @@
             setTimeout(() => push(Routes.PROFILE), 700)
           })
         },
-        onLoad: () => {},
-        onExit: (err, metadata) => {
-          handler.destroy()
+        onExit: (_err, _metadata) => {
           push(Routes.ROOT)
         },
-        onEvent: (eventName, metadata) => {},
-        receivedRedirectUri: null,
+        onEvent: (_eventName, _metadata) => {},
+        // Required for RN
+        isWebview: true,
       })
-      handler.open()
+
+      return Promise.resolve(handler)
     })
-
-    /* handler.destroy() <-- cleanup function for plaid */
   }
-</script>
 
-<svelte:head>
-  <script
-    src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"
-    on:load={initializePlaid}></script>
-</svelte:head>
+  onDestroy(() => handler?.destroy())
+  onMount(() => {
+    initializePlaid().then(h => h.open())
+  })
+</script>
 
 <style lang="scss">
   @import '../styles/_vars.scss';

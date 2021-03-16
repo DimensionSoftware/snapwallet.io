@@ -143,6 +143,8 @@
   <script
     src="https://js.pusher.com/7.0/pusher.min.js"
     on:load={initializePusher}></script>
+  <script
+    src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 </svelte:head>
 
 <style lang="scss">
