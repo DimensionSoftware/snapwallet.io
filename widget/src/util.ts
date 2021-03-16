@@ -34,7 +34,7 @@ export const isValidNumber = (num: any) => {
 
 // Application logger module
 export const Logger = (() => {
-  window.localStorage.debug = __ENV.DEBUG
+  window.localStorage.setItem('debug', __ENV.DEBUG)
   const error = nodeDebug('flux:error')
   const warn = nodeDebug('flux:warn')
   const debug = nodeDebug('flux:debug')
