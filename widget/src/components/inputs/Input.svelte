@@ -14,6 +14,7 @@
   export let required: boolean
   export let pattern: string = ''
   export let mask: Masks
+  export let id: string
 
   let isActive: boolean = Boolean(defaultValue)
 
@@ -24,6 +25,7 @@
 
 <div class:active={isActive} class="input-container">
   <input
+    {id}
     {type}
     {inputmode}
     {autocapitalize}
