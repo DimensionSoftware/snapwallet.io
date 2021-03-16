@@ -24,8 +24,8 @@ const (
 	KindUSPassport Kind = "US_PASSPORT"
 )
 
-// ToProfileDataItemKind converts the profile data kind to a protocol.ProfileDataItemKind
-func KindFromGovernmentIdDocKind(k proto.UsGovernmentIdDocumentInputKind) Kind {
+// KindFromGovernmentIdDocKind ...
+func KindFromUsGovernmentIdDocumentInputKind(k proto.UsGovernmentIdDocumentInputKind) Kind {
 	switch k {
 	case proto.UsGovernmentIdDocumentInputKind_GI_US_DRIVING_LICENSE:
 		return KindUSDrivingLicense

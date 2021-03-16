@@ -544,7 +544,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 					if req.UsGovernmentIdDoc.Kind == proto.UsGovernmentIdDocumentInputKind_GI_UNKNOWN {
 						return status.Errorf(codes.InvalidArgument, "government id document kind needs to be specified ")
 					}
-					kind := usgovernmentid.KindFromGovernmentIdDocKind(req.UsGovernmentIdDoc.Kind)
+					kind := usgovernmentid.KindFromUsGovernmentIdDocumentInputKind(req.UsGovernmentIdDoc.Kind)
 
 					if len(req.UsGovernmentIdDoc.FileIds) != kind.FilesRequired() {
 						return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
@@ -578,7 +578,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 							fileIDs = append(fileIDs, file.ID(id))
 						}
 
-						governmentIDData.GovernmentIDKind = usgovernmentid.Kind(req.UsGovernmentIdDoc.Kind)
+						governmentIDData.GovernmentIDKind = kind
 						governmentIDData.FileIDs = fileIDs
 						governmentIDData.UpdatedAt = &now
 					}

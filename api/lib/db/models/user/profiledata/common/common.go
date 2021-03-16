@@ -69,6 +69,30 @@ func (k ProfileDataKind) ToProfileDataItemKind() proto.ProfileDataItemKind {
 	return proto.ProfileDataItemKind_K_UNKNOWN
 }
 
+// FromProfileDataItemKind converts from proto.ProfileDataItemKind to a profile data kind
+func FromProfileDataItemKind(pdik proto.ProfileDataItemKind) ProfileDataKind {
+	switch pdik {
+	case proto.ProfileDataItemKind_K_LEGAL_NAME:
+		return KindLegalName
+	case proto.ProfileDataItemKind_K_PHONE:
+		return KindPhone
+	case proto.ProfileDataItemKind_K_EMAIL:
+		return KindEmail
+	case proto.ProfileDataItemKind_K_ADDRESS:
+		return KindAddress
+	case proto.ProfileDataItemKind_K_DATE_OF_BIRTH:
+		return KindDateOfBirth
+	case proto.ProfileDataItemKind_K_US_SSN:
+		return KindUSSSN
+	case proto.ProfileDataItemKind_K_US_GOVERNMENT_ID_DOC:
+		return KindUSGovernmentIDDoc
+	case proto.ProfileDataItemKind_K_PROOF_OF_ADDRESS_DOC:
+		return KindProofOfAddressDoc
+	}
+	// should never get here
+	panic("proto.ProfileDataItemKind unknown when FromProfileDataItemKind(...) called")
+}
+
 const (
 	// KindLegalName signifies an individuals' legal name in a ProfileDataLegalName object
 	KindLegalName ProfileDataKind = "LEGAL_NAME"
