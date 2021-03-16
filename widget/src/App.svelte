@@ -23,6 +23,7 @@
   } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
+import ProofOfAddress from './screens/ProofOfAddress.svelte';
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -75,6 +76,9 @@
     }),
     [Routes.ADDRESS]: wrap({
       ...authedRouteOptions(Address),
+    }),
+    [Routes.PROOF_OF_ADDRESS]: wrap({
+      ...authedRouteOptions(ProofOfAddress),
     }),
     '*': NotFound as any,
   }

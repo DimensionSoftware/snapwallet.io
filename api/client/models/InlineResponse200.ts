@@ -17,6 +17,10 @@ export class InlineResponse200 {
     * The file id
     */
     'fileId'?: string;
+    /**
+    * The size of the file just uploaded in bytes
+    */
+    'size'?: number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -25,6 +29,12 @@ export class InlineResponse200 {
             "name": "fileId",
             "baseName": "fileId",
             "type": "string",
+            "format": ""
+        },
+        {
+            "name": "size",
+            "baseName": "size",
+            "type": "number",
             "format": ""
         }    ];
 

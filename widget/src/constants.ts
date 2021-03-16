@@ -23,6 +23,7 @@ export enum Routes {
   PLAID_LINK = '/link-bank',
   CHECKOUT_OVERVIEW = '/checkout-overview',
   ADDRESS = '/address',
+  PROOF_OF_ADDRESS = '/proof-of-address',
 }
 
 export enum APIErrors {
