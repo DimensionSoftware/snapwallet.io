@@ -23,6 +23,7 @@ export enum Routes {
   PLAID_LINK = '/link-bank',
   CHECKOUT_OVERVIEW = '/checkout-overview',
   ADDRESS = '/address',
+  ADDRESS_2 = '/address-2',
   PROOF_OF_ADDRESS = '/proof-of-address',
   GOVERNMENT_ID = '/government-id',
 }
