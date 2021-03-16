@@ -76,8 +76,6 @@
 
       if (componentForm[addressType]) {
         const val = component[componentForm[addressType]]
-        console.log(addressType, val)
-
         const fluxType = googleTypeToFluxType[addressType]
         const isStreetNumber = fluxType === googleTypeToFluxType.street_number
         const isStreetRoute = fluxType === googleTypeToFluxType.route

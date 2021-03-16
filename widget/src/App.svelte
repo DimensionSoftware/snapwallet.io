@@ -137,10 +137,10 @@
     const userID = parseJwt(getFluxSession())?.sub
     const channel = pusher.subscribe(userID)
     channel.bind('my-event', function (data) {
-      console.log(JSON.stringify(data))
+      Logger.debug(JSON.stringify(data))
     })
 
-    console.log('PUSHER LOADED :)')
+    Logger.debug('PUSHER LOADED :)')
   }
 </script>
 
