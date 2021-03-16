@@ -14,6 +14,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/phone"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/proofofaddress"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
 	"github.com/khoerling/flux/api/lib/encryption"
 )
 
@@ -94,6 +95,16 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 			CreatedAt: pdata.CreatedAt,
 			UpdatedAt: pdata.UpdatedAt,
 			SealedAt:  pdata.SealedAt,
+		}, nil
+	case common.KindUSGovernmentIDDoc:
+		return &usgovernmentid.ProfileDataUSGovernmentIDDoc{
+			ID:               pdata.ID,
+			Status:           pdata.Status,
+			GovernmentIDKind: usgovernmentid.Kind(*pdata.SubKind),
+			FileIDs:          *pdata.FileIDs,
+			CreatedAt:        pdata.CreatedAt,
+			UpdatedAt:        pdata.UpdatedAt,
+			SealedAt:         pdata.SealedAt,
 		}, nil
 	}
 

@@ -12,7 +12,7 @@
     import { toaster } from '../stores/ToastStore'
     import { Logger, onEnterPressed } from '../util'
     import { APIErrors, Routes } from '../constants'
-import type { Address } from 'api-client';
+import type { Address, UsGovernmentIdDocumentInputKind } from 'api-client';
   
     let animation = 'left'
     let isMakingRequest = false
@@ -20,12 +20,16 @@ import type { Address } from 'api-client';
     const timeout = 700
 
     let fileEl: HTMLInputElement
+    let file2El: HTMLInputElement
+    let usIDKind: string
     const handleNextStep = async () => {
       const resp = await window.API.fluxUploadFile(fileEl.files[0])
+      const resp2 = await window.API.fluxUploadFile(file2El.files[0])
       console.log(resp)
       await window.API.fluxSaveProfileData({
-        proofOfAddressDoc: {
-          fileIds: [resp.fileId],
+        usGovernmentIdDoc: {
+          kind: usIDKind as UsGovernmentIdDocumentInputKind,
+          fileIds: [resp.fileId, resp2.fileId],
         },
       })
 
@@ -34,9 +38,23 @@ import type { Address } from 'api-client';
   
   <ModalContent {animation}>
     <ModalBody>
-      <ModalHeader hideBackButton>you have an address; prove it!</ModalHeader>
-      <label label="Upload Proof of Address">
+      <ModalHeader hideBackButton>CITIZEN?: gonna need to see some ID</ModalHeader>
+      <label label="Upload US Government ID (Front)">
+        <strong>Upload US Government ID (Front)</strong><br />
         <input type="file" bind:this={fileEl} />
+      </label>
+      <label label="Upload US Government ID (Back)">
+        <strong>Upload US Government ID (Back)</strong><br />
+        <input type="file" bind:this={file2El} />
+      </label>
+      <label label="US Government ID Kind">
+        <strong>US Government ID Kind</strong><br />
+        <select bind:value={usIDKind}>
+          <option value="GI_US_DRIVING_LICENSE">US Drivers' license (front/back)</option>
+          <option value="GI_US_PASSPORT_CARD">US Passport Card (front/back)</option>
+          <option value="GI_US_GOVERNMENT_ID">US Government ID (front/back)</option>
+          <option value="GI_US_PASSPORT">US Passport (picture page)</option>
+        </select>
       </label>
     </ModalBody>
     <button on:click={handleNextStep}>Plz give me now</button>
