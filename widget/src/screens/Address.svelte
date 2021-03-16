@@ -12,23 +12,25 @@
     import { toaster } from '../stores/ToastStore'
     import { Logger, onEnterPressed } from '../util'
     import { APIErrors, Routes } from '../constants'
+import type { Address } from 'api-client';
   
     let animation = 'left'
     let isMakingRequest = false
   
     const timeout = 700
   
-    const handleNextStep = async () => {
-        window.API.fluxSaveProfileData({
-            address: {
-                street1:"",
-                street2:"",
-                city:"",
-                state:"",
-                postalCode:"",
-                country:"",
-            }
+    let address: Address = {
+        street1: "",
+        street2: "",
+        city: "",
+        state: "",
+        postalCode: "",
+        country: "",
+    }
 
+    const handleNextStep = async () => {
+        await window.API.fluxSaveProfileData({
+            address
         })
     }
   </script>
@@ -37,25 +39,25 @@
     <ModalBody>
       <ModalHeader hideBackButton>Hi, we need your address dawg</ModalHeader>
       <label label="Street 1">
-        <input type="text"  placeholder="street1" />
+        <input type="text"  placeholder="street1" bind:value={address.street1} />
       </label>
       <label label="Street 2">
-        <input type="text"  placeholder="street2" />
+        <input type="text"  placeholder="street2" bind:value={address.street2} />
       </label>
       <label label="City">
-        <input type="text"  placeholder="city" />
+        <input type="text"  placeholder="city" bind:value={address.city} />
       </label>
       <label label="State">
-        <input type="text"  placeholder="state" />
+        <input type="text"  placeholder="state" bind:value={address.state} />
       </label>
       <label label="PostalCode">
-        <input type="text"  placeholder="postalCode" />
+        <input type="text"  placeholder="postalCode" bind:value={address.postalCode} />
       </label>
       <label label="Country">
-        <input type="text"  placeholder="country" />
+        <input type="text"  placeholder="country" bind:value={address.country} />
       </label>
     </ModalBody>
-    <button>Plz give me now</button>
+    <button on:click={handleNextStep}>Plz give me now</button>
   </ModalContent>
   
   <style lang="scss">
