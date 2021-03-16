@@ -52,7 +52,7 @@
             publicToken,
             metadata.accounts.map(a => a.id),
           ).then(() => {
-            setTimeout(() => push(Routes.PROFILE), 700)
+            setTimeout(() => push(Routes.ROOT), 700)
           })
         },
         onExit: (_err, _metadata) => {
