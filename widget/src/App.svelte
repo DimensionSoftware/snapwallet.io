@@ -127,7 +127,7 @@
     }
   })
   function initializePusher() {
-    // Enable pusher logging - don't include this in production
+    window.Pusher.log = Logger.debug
     window.Pusher.logToConsole = true
 
     var pusher = new window.Pusher('dd280d42ccafc24e19ff', {

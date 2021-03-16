@@ -36,11 +36,13 @@ export const isValidNumber = (num: any) => {
 export const Logger = (() => {
   window.localStorage.debug = __ENV.DEBUG
   const error = nodeDebug('flux:error')
+  const warn = nodeDebug('flux:warn')
   const debug = nodeDebug('flux:debug')
   const info = nodeDebug('flux:info')
 
   return {
     error,
+    warn,
     debug,
     info,
   }
