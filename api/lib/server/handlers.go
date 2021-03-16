@@ -26,6 +26,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/dateofbirth"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/proofofaddress"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
 	proto "github.com/khoerling/flux/api/lib/protocol"
@@ -478,8 +479,51 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return err
 					}
 				}
-			case common.KindUSGovernmentID:
-				var governmentIDData *usgovernmentid.ProfileDataUSGovernmentID
+			case common.KindProofOfAddressDoc:
+				var proofOfAddressData *proofofaddress.ProfileDataProofOfAddressDoc
+
+				if req.ProofOfAddressDoc != nil {
+					if len(req.ProofOfAddressDoc.FileIds) == 0 {
+						return status.Errorf(codes.InvalidArgument, "at least one file id must be attached")
+					}
+
+					for _, fileID := range req.ProofOfAddressDoc.FileIds {
+						meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
+						if err != nil {
+							return err
+						}
+						if meta == nil {
+							return status.Errorf(codes.InvalidArgument, "one or more file ids is invalid")
+						}
+					}
+
+					if existingProfileData == nil {
+						proofOfAddressData = &proofofaddress.ProfileDataProofOfAddressDoc{
+							ID:        common.ProfileDataID(shortuuid.New()),
+							Status:    common.StatusReceived,
+							FileIDs:   []file.ID{},
+							CreatedAt: time.Now(),
+						}
+					} else {
+						proofOfAddressData = (*existingProfileData).(*proofofaddress.ProfileDataProofOfAddressDoc)
+
+						now := time.Now()
+
+						fileIDs := []file.ID{}
+						for _, id := range req.ProofOfAddressDoc.FileIds {
+							fileIDs = append(fileIDs, file.ID(id))
+						}
+
+						proofOfAddressData.FileIDs = fileIDs
+						proofOfAddressData.UpdatedAt = &now
+					}
+					_, err := s.Db.SaveProfileData(ctx, tx, u.ID, *proofOfAddressData)
+					if err != nil {
+						return err
+					}
+				}
+			case common.KindUSGovernmentIDDoc:
+				var governmentIDData *usgovernmentid.ProfileDataUSGovernmentIDDoc
 
 				if req.UsGovernmentIdDoc != nil {
 					if req.UsGovernmentIdDoc.Kind == proto.UsGovernmentIdDocumentInputKind_GI_UNKNOWN {
@@ -502,7 +546,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 					}
 
 					if existingProfileData == nil {
-						governmentIDData = &usgovernmentid.ProfileDataUSGovernmentID{
+						governmentIDData = &usgovernmentid.ProfileDataUSGovernmentIDDoc{
 							ID:               common.ProfileDataID(shortuuid.New()),
 							Status:           common.StatusReceived,
 							GovernmentIDKind: kind,
@@ -510,7 +554,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 							CreatedAt:        time.Now(),
 						}
 					} else {
-						governmentIDData = (*existingProfileData).(*usgovernmentid.ProfileDataUSGovernmentID)
+						governmentIDData = (*existingProfileData).(*usgovernmentid.ProfileDataUSGovernmentIDDoc)
 
 						now := time.Now()
 

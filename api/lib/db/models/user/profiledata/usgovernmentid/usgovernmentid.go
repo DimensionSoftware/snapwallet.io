@@ -61,7 +61,7 @@ func (govtIDKind Kind) FilesRequired() int {
 }
 
 // ProfileDataGovernmentID represents a government ID for a user
-type ProfileDataUSGovernmentID struct {
+type ProfileDataUSGovernmentIDDoc struct {
 	ID               common.ProfileDataID
 	Status           common.ProfileDataStatus
 	GovernmentIDKind Kind
@@ -72,11 +72,11 @@ type ProfileDataUSGovernmentID struct {
 }
 
 // Encrypt ...
-func (pdata ProfileDataUSGovernmentID) Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error) {
+func (pdata ProfileDataUSGovernmentIDDoc) Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error) {
 
 	return &common.EncryptedProfileData{
 		ID:        pdata.ID,
-		Kind:      common.KindUSGovernmentID,
+		Kind:      pdata.Kind(),
 		SubKind:   (*string)(&pdata.GovernmentIDKind),
 		Status:    pdata.Status,
 		FileIDs:   &pdata.FileIDs,
@@ -87,25 +87,26 @@ func (pdata ProfileDataUSGovernmentID) Encrypt(m *encryption.Manager, userID use
 }
 
 // Kind the kind of profile data
-func (pdata ProfileDataUSGovernmentID) Kind() common.ProfileDataKind {
-	return common.KindLegalName
+func (pdata ProfileDataUSGovernmentIDDoc) Kind() common.ProfileDataKind {
+	return common.KindUSGovernmentIDDoc
 }
 
 // GetStatus get the status of the profile data
-func (pdata ProfileDataUSGovernmentID) GetStatus() common.ProfileDataStatus {
+func (pdata ProfileDataUSGovernmentIDDoc) GetStatus() common.ProfileDataStatus {
 	return pdata.Status
 }
 
 // SetStatus set the status of the profile data
-func (pdata ProfileDataUSGovernmentID) SetStatus(newStatus common.ProfileDataStatus) {
+func (pdata ProfileDataUSGovernmentIDDoc) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus
 }
 
 // GetProfileDataItemInfo converts the profile data to a ProfileDataItemInfo for protocol usage
-func (pdata ProfileDataUSGovernmentID) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
+func (pdata ProfileDataUSGovernmentIDDoc) GetProfileDataItemInfo() *proto.ProfileDataItemInfo {
 	info := proto.ProfileDataItemInfo{
 		Id:        string(pdata.ID),
 		Kind:      pdata.Kind().ToProfileDataItemKind(),
+		SubKind:   string(pdata.GovernmentIDKind),
 		Status:    pdata.Status.ToProfileDataItemStatus(),
 		CreatedAt: pdata.CreatedAt.Format(time.RFC3339),
 		Length:    int32(len(pdata.FileIDs)),

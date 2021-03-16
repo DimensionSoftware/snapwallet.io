@@ -56,7 +56,24 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 		}
 	*/
 
-	//address := profile.FilterKindAddress()[0]
+	var fields []*ProfileField
+
+	if addrs := profile.FilterKindAddress(); len(addrs) > 0 {
+		address := addrs[0]
+		fields = append(fields,
+			&ProfileField{
+				FieldID: ProfileFieldIDIndividualResidenceAddress,
+				Value: ProfileFieldAddress{
+					Street1:    address.Street1,
+					Street2:    address.Street2,
+					City:       address.City,
+					State:      address.State,
+					PostalCode: address.PostalCode,
+					Country:    address.Country,
+				},
+			},
+		)
+	}
 
 	secretKey := GenerateSecretKey(35)
 	wyreAuthTokenResp, err := m.Wyre.SubmitAuthToken(secretKey)
@@ -92,19 +109,6 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 				FieldID: ProfileFieldIDIndividualSSN,
 				Value:   profile.FilterKindSSN()[0].SSN,
 			},
-			/*
-				{
-					FieldID: ProfileFieldIDIndividualResidenceAddress,
-					Value: ProfileFieldAddress{
-						Street1:    address.Street1,
-						Street2:    address.Street2,
-						City:       address.City,
-						State:      address.State,
-						PostalCode: address.PostalCode,
-						Country:    address.Country,
-					},
-				},
-			*/
 		},
 	}.WithDefaults())
 	if err != nil {

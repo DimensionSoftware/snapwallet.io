@@ -60,8 +60,10 @@ func (k ProfileDataKind) ToProfileDataItemKind() proto.ProfileDataItemKind {
 		return proto.ProfileDataItemKind_K_DATE_OF_BIRTH
 	case KindUSSSN:
 		return proto.ProfileDataItemKind_K_US_SSN
-	case KindUSGovernmentID:
+	case KindUSGovernmentIDDoc:
 		return proto.ProfileDataItemKind_K_US_GOVERNMENT_ID_DOC
+	case KindProofOfAddressDoc:
+		return proto.ProfileDataItemKind_K_PROOF_OF_ADDRESS_DOC
 	}
 
 	return proto.ProfileDataItemKind_K_UNKNOWN
@@ -81,7 +83,8 @@ const (
 	// KindSSN signifies an individuals' U.S. social security number in a ProfileDataSSN object
 	KindUSSSN ProfileDataKind = "US_SSN"
 	// KindGovernmentID signifies an individuals' government id in a ProfileDataGovernmentID object
-	KindUSGovernmentID ProfileDataKind = "US_GOVERNMENT_ID"
+	KindUSGovernmentIDDoc ProfileDataKind = "US_GOVERNMENT_ID_DOC"
+	KindProofOfAddressDoc ProfileDataKind = "PROOF_OF_ADDRESS_DOC"
 )
 
 var ProfileDataKinds = []ProfileDataKind{
@@ -91,7 +94,7 @@ var ProfileDataKinds = []ProfileDataKind{
 	KindAddress,
 	KindDateOfBirth,
 	KindUSSSN,
-	KindUSGovernmentID,
+	KindUSGovernmentIDDoc,
 }
 
 // in the future it will be a subset of profiledatakinds

@@ -78,6 +78,14 @@ func (req *SaveProfileDataRequest) Validate() error {
 		}
 	}
 
+	if req.ProofOfAddressDoc != nil {
+		atLeastOneItemSetOnRequest = true
+	}
+
+	if req.UsGovernmentIdDoc != nil {
+		atLeastOneItemSetOnRequest = true
+	}
+
 	if !atLeastOneItemSetOnRequest {
 		return status.Errorf(codes.InvalidArgument, "At least one profile field needs to be set")
 	}
