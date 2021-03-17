@@ -20,6 +20,7 @@
   let fileEl: HTMLInputElement
   let selectedFileURI: string = ''
   let selectedFileName: string = ''
+  let fileSizeError: string = ''
 
   const handleNextStep = async () => {
     const resp = await window.API.fluxUploadFile(fileEl.files[0])
@@ -78,7 +79,9 @@
           src={selectedFileURI}
         />
       {:else}
-        <p class="underlined">Select a File</p>
+        <p class:underlined={!fileSizeError} class:error={fileSizeError}>
+          {fileSizeError || 'Select a File'}
+        </p>
       {/if}
     </div>
     <input
@@ -89,6 +92,10 @@
       bind:this={fileEl}
       on:change={async e => {
         const file = e.target.files[0]
+        if (file.size >= 7e6) {
+          fileSizeError = 'Please select a file smaller than 7mb'
+          return
+        }
         selectedFileName = file.name
         selectedFileURI = await fileToBase64(file)
       }}
@@ -136,6 +143,10 @@
 
   .underlined {
     text-decoration: underline;
+  }
+
+  .error {
+    color: var(--theme-error-color);
   }
 
   .selected-image {
