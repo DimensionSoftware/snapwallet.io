@@ -7,10 +7,12 @@
 
   export let icon
   export let label: string
+  export let paddingSmall = false
+  export let blend = false
 </script>
 
 <Card on:click={() => dispatch('click')}>
-  <div class="payment-card-container">
+  <div class="icon-card-container" class:blend class:paddingSmall>
     <div class="content-container">
       <FaIcon data={icon} />
       <div class="label">{label}</div>
@@ -22,11 +24,18 @@
 <style lang="scss">
   @import '../../styles/_vars.scss';
 
-  .payment-card-container {
+  .icon-card-container {
+    flex: 1;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 1rem 0;
+    &.paddingSmall {
+      padding: 0.5rem;
+    }
+    &.blend {
+      background-color: var(--theme-modal-background);
+    }
     & > .content-container {
       height: 100%;
       width: 100%;
