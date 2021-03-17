@@ -66,7 +66,6 @@
     <ModalHeader>Verify Identity</ModalHeader>
     <IconCard
       blend
-      paddingSmall
       icon={iconCardProps.icon}
       on:click={() => (isFileTypeSelectorOpen = true)}
       label={iconCardProps.label}
