@@ -129,6 +129,7 @@
   }
 
   .selected-image {
-    height: 95%;
+    max-height: 95%;
+    max-width: 95%;
   }
 </style>
