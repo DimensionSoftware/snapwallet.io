@@ -19,6 +19,7 @@
   let fileType = ''
   let fileEl: HTMLInputElement
   let selectedFileURI: string = ''
+  let selectedFileName: string = ''
 
   const handleNextStep = async () => {
     const resp = await window.API.fluxUploadFile(fileEl.files[0])
@@ -71,9 +72,13 @@
     />
     <div on:click={openFileBrowser} class="dropzone">
       {#if selectedFileURI}
-        <img class="selected-image" alt="uploaded file" src={selectedFileURI} />
+        <img
+          class="selected-image"
+          alt={selectedFileName}
+          src={selectedFileURI}
+        />
       {:else}
-        Select a File
+        <p class="underlined">Select a File</p>
       {/if}
     </div>
     <input
@@ -83,7 +88,9 @@
       type="file"
       bind:this={fileEl}
       on:change={async e => {
-        selectedFileURI = await fileToBase64(e.target.files[0])
+        const file = e.target.files[0]
+        selectedFileName = file.name
+        selectedFileURI = await fileToBase64(file)
       }}
     />
   </ModalBody>
@@ -124,8 +131,11 @@
     width: 100%;
     border: 1px dashed var(--theme-color);
     cursor: pointer;
-    text-decoration: underline;
     font-weight: 600;
+  }
+
+  .underlined {
+    text-decoration: underline;
   }
 
   .selected-image {
