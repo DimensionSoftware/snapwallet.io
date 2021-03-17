@@ -23,9 +23,8 @@
   } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
-  import ProofOfAddress from './screens/ProofOfAddress.svelte'
-  import GovernmentId from './screens/GovernmentID.svelte'
   import Address2 from './screens/Address2.svelte'
+  import FileUpload from './screens/FileUpload.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -82,11 +81,8 @@
     [Routes.ADDRESS_2]: wrap({
       ...authedRouteOptions(Address2),
     }),
-    [Routes.PROOF_OF_ADDRESS]: wrap({
-      ...authedRouteOptions(ProofOfAddress),
-    }),
-    [Routes.GOVERNMENT_ID]: wrap({
-      ...authedRouteOptions(GovernmentId),
+    [Routes.FILE_UPLOAD]: wrap({
+      ...authedRouteOptions(FileUpload),
     }),
     '*': NotFound as any,
   }

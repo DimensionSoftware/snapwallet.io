@@ -24,8 +24,7 @@ export enum Routes {
   CHECKOUT_OVERVIEW = '/checkout-overview',
   ADDRESS = '/address',
   ADDRESS_2 = '/address-2',
-  PROOF_OF_ADDRESS = '/proof-of-address',
-  GOVERNMENT_ID = '/government-id',
+  FILE_UPLOAD = '/file-upload',
 }
 
 export enum APIErrors {
