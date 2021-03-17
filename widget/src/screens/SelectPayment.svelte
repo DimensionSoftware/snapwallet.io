@@ -6,10 +6,9 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import FaIcon from 'svelte-awesome'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
-  import PaymentCard from '../components/cards/PaymentCard.svelte'
+  import IconCard from '../components/cards/IconCard.svelte'
   import PlaidBanner from '../components/PlaidBanner.svelte'
   import { Routes } from '../constants'
-  import { toaster } from '../stores/ToastStore'
 
   const onACHClicked = async () => {
     const { flags = {} } = await window.API.fluxViewerData()
@@ -26,11 +25,11 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader hideCloseButton>Payment Method</ModalHeader>
-    <PaymentCard on:click|once={onACHClicked} label="Bank Account">
+    <IconCard on:click|once={onACHClicked} label="Bank Account">
       <div class="icon-slot-container" slot="icon">
         <FaIcon data={faUniversity} />
       </div>
-    </PaymentCard>
+    </IconCard>
     <PlaidBanner />
   </ModalBody>
   <ModalFooter />

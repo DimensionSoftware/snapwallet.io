@@ -16,7 +16,7 @@
   import { isValidNumber, onEnterPressed, formatLocaleCurrency } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
-  import PaymentCard from '../components/cards/PaymentCard.svelte'
+  import IconCard from '../components/cards/IconCard.svelte'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
 
@@ -242,7 +242,7 @@
 >
   <div class="scroll cryptocurrencies-container">
     <h5>Add a Payment Method</h5>
-    <PaymentCard
+    <IconCard
       icon={faUniversity}
       on:click={() => push(Routes.PLAID_LINK)}
       label="Bank Account"
