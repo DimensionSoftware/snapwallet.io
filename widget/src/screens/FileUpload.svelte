@@ -93,6 +93,8 @@
       on:change={async e => {
         const file = e.target.files[0]
         if (file.size >= 7e6) {
+          selectedFileName = ''
+          selectedFileURI = ''
           fileSizeError = 'Please select a file smaller than 7mb'
           return
         }
