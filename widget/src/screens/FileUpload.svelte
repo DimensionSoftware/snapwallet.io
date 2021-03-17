@@ -2,7 +2,7 @@
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
-  import { Logger } from '../util'
+  import { Logger, fileToBase64 } from '../util'
   import IconCard from '../components/cards/IconCard.svelte'
   import {
     faFileImage,
@@ -18,6 +18,7 @@
   let isFileTypeSelectorOpen = false
   let fileType = ''
   let fileEl: HTMLInputElement
+  let selectedFileURI: string = ''
 
   const handleNextStep = async () => {
     const resp = await window.API.fluxUploadFile(fileEl.files[0])
@@ -68,13 +69,22 @@
       on:click={() => (isFileTypeSelectorOpen = true)}
       label={iconCardProps.label}
     />
-    <div on:click={openFileBrowser} class="dropzone">Select a File</div>
+    <div on:click={openFileBrowser} class="dropzone">
+      {#if selectedFileURI}
+        <img class="selected-image" alt="uploaded file" src={selectedFileURI} />
+      {:else}
+        Select a File
+      {/if}
+    </div>
     <input
       accept={allowedFileTypes}
       id="file-input"
       hidden
       type="file"
       bind:this={fileEl}
+      on:change={async e => {
+        selectedFileURI = await fileToBase64(e.target.files[0])
+      }}
     />
   </ModalBody>
   <Button disabled={!fileType} on:click={handleNextStep}>Upload</Button>
@@ -116,5 +126,10 @@
     cursor: pointer;
     text-decoration: underline;
     font-weight: 600;
+  }
+
+  .selected-image {
+    height: 90%;
+    width: 90%;
   }
 </style>

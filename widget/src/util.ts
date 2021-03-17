@@ -129,3 +129,11 @@ export const formatLocaleCurrency = (ticker: string, amount: number) => {
     currency: ticker,
   }).format(amount)
 }
+
+export const fileToBase64 = (file): Promise<string> =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.readAsDataURL(file)
+    reader.onload = () => resolve(reader.result as string)
+    reader.onerror = error => reject(error)
+  })
