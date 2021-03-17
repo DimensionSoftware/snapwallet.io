@@ -247,14 +247,16 @@
       on:click={() => push(Routes.PLAID_LINK)}
       label="Bank Account"
     />
-    {#if $userStore.flags?.hasPlaidItems}
-      <h5 style="margin-top: 1.25rem">Select a Payment Method</h5>
+    <h5 style="margin-top: 1.25rem">Select a Payment Method</h5>
+    {#if !$userStore.flags?.hasPlaidItems}
+      <p class="help">No payment methods available</p>
     {/if}
   </div>
 </PopupSelector>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
+  @import '../styles/text.scss';
 
   h5 {
     margin: 0;
