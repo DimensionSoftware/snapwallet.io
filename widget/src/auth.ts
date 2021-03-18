@@ -37,7 +37,7 @@ export class AuthManager {
     return window.localStorage.getItem(JWT_REFRESH_TOKEN_KEY) || ''
   }
 
-  public accessTokenIsExpired(): boolean {
+  private accessTokenIsExpired(): boolean {
     const token = this.getCurrentAccessToken()
     if (!token) {
       return true
@@ -54,7 +54,7 @@ export class AuthManager {
     return !isTimeLeft
   }
 
-  public refreshTokenIsExpired(): boolean {
+  private refreshTokenIsExpired(): boolean {
     const token = this.getCurrentRefreshToken()
     if (!token) {
       return true
@@ -110,6 +110,10 @@ export class AuthManager {
   public logout() {
     this.setCurrentAccessToken('')
     this.setCurrentRefreshToken('')
+  }
+
+  public viewerIsLoggedIn(): boolean {
+    return !this.refreshTokenIsExpired()
   }
 }
 

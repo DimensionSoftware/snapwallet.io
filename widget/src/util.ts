@@ -63,10 +63,7 @@ export const parseJwt = token => {
 
 // Test for JWT expiration and existence.
 export const isJWTValid = () => {
-  return (
-    !window.AUTH_MANAGER.accessTokenIsExpired() ||
-    !window.AUTH_MANAGER.refreshTokenIsExpired()
-  )
+  return window.AUTH_MANAGER.viewerIsLoggedIn()
 }
 
 // Authenticated route common configuration
