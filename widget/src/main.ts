@@ -1,7 +1,8 @@
 import App from './App.svelte'
-import { genAPIClient } from './util'
+import { AuthManager, genAPIClient } from './auth'
 
-window.API = genAPIClient()
+window.AUTH_MANAGER = new AuthManager()
+window.API = genAPIClient(window.AUTH_MANAGER)
 
 const queryParams = new URLSearchParams(window.location.search)
 

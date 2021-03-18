@@ -8,7 +8,7 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed, setFluxSession, genAPIClient } from '../util'
+  import { Logger, onEnterPressed } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
 
@@ -76,7 +76,7 @@
 
     try {
       const { tokens } = await verifyOTP()
-      setFluxSession(tokens.refreshToken, tokens.accessToken)
+      window.AUTH_MANAGER.login(tokens)
       Logger.debug('Logged in')
       setTimeout(() => push($userStore.lastKnownRoute), 700)
     } finally {

@@ -49,42 +49,6 @@ export const Logger = (() => {
   }
 })()
 
-// Set a JWT in local storage.
-export const setFluxSession = (
-  refreshToken: string | null,
-  accessToken: string | null,
-) => {
-  try {
-    if (refreshToken != null) {
-      if (refreshToken) {
-        window.localStorage.setItem(JWT_REFRESH_TOKEN_KEY, refreshToken)
-      } else {
-        window.localStorage.removeItem(JWT_REFRESH_TOKEN_KEY)
-      }
-    }
-
-    if (accessToken != null) {
-      if (accessToken) {
-        window.localStorage.setItem(JWT_ACCESS_TOKEN_KEY, accessToken)
-      } else {
-        window.localStorage.removeItem(JWT_ACCESS_TOKEN_KEY)
-      }
-    }
-  } catch (e) {
-    Logger.error('Error setting flux session:', e)
-    throw e
-  }
-}
-
-// Get a JWT from local storage.
-export const getFluxSession = (): string => {
-  return window.localStorage.getItem(JWT_ACCESS_TOKEN_KEY) || ''
-}
-
-// Get a JWT from local storage.
-export const getFluxRefreshToken = (): string => {
-  return window.localStorage.getItem(JWT_REFRESH_TOKEN_KEY) || ''
-}
 
 export const numberWithCommas = (s: string) =>
   s.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -100,12 +64,7 @@ export const parseJwt = token => {
 
 // Test for JWT expiration and existence.
 export const isJWTValid = () => {
-  const jwt = getFluxSession()
-  const userData = parseJwt(jwt)
-  if (!userData) return false
-  const isTimeLeft = userData.exp > Math.floor(Date.now() / 1000)
-  if (!isTimeLeft) setFluxSession(null, '')
-  return isTimeLeft
+  return !window.AUTH_MANAGER.accessTokenIsExpired() || !window.AUTH_MANAGER.refreshTokenIsExpired()
 }
 
 // Authenticated route common configuration

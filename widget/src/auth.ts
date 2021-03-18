@@ -14,10 +14,18 @@ export class AuthManager {
   private readonly unauthenticatedAPI = genAPIClient()
 
   private setCurrentAccessToken(newToken: string) {
-    return window.localStorage.setItem(JWT_ACCESS_TOKEN_KEY, newToken)
+    if (newToken) {
+      window.localStorage.setItem(JWT_ACCESS_TOKEN_KEY, newToken)
+    } else {
+      window.localStorage.removeItem(JWT_ACCESS_TOKEN_KEY)
+    }
   }
   private setCurrentRefreshToken(newToken: string) {
-    return window.localStorage.setItem(JWT_REFRESH_TOKEN_KEY, newToken)
+    if (newToken) {
+      window.localStorage.setItem(JWT_REFRESH_TOKEN_KEY, newToken)
+    } else {
+      window.localStorage.removeItem(JWT_REFRESH_TOKEN_KEY)
+    }
   }
 
   private getCurrentAccessToken(): string {
@@ -27,7 +35,7 @@ export class AuthManager {
     return window.localStorage.getItem(JWT_REFRESH_TOKEN_KEY) || ''
   }
 
-  private accessTokenIsExpired(): boolean {
+  public accessTokenIsExpired(): boolean {
     const token = this.getCurrentAccessToken()
     if (!token) {
       return true
@@ -44,7 +52,7 @@ export class AuthManager {
     return !isTimeLeft
   }
 
-  private refreshTokenIsExpired(): boolean {
+  public refreshTokenIsExpired(): boolean {
     const token = this.getCurrentRefreshToken()
     if (!token) {
       return true
@@ -90,6 +98,11 @@ export class AuthManager {
     this.setCurrentAccessToken(tokens.accessToken)
     this.setCurrentRefreshToken(tokens.refreshToken)
   }
+
+  public logout() {
+    this.setCurrentAccessToken('')
+    this.setCurrentRefreshToken('')
+  }
 }
 
 export class FluxBearerAuthentication implements SecurityAuthentication {
@@ -99,23 +112,21 @@ export class FluxBearerAuthentication implements SecurityAuthentication {
     return 'Bearer'
   }
 
-  public applySecurityAuthentication(context: RequestContext) {
-    if (this.manager.getAccessToken()) {
-      context.setHeaderParam('Authorization', `Bearer ${this.accessToken}`)
+  public async applySecurityAuthentication(context: RequestContext) {
+    const token = await this.manager.getAccessToken()
+    if (token) {
+      context.setHeaderParam('Authorization', `Bearer ${token}`)
     }
   }
 }
 
-export function genAPIClient(fba?: FluxBearerAuthentication): FluxApi {
+export function genAPIClient(authManager?: AuthManager): FluxApi {
   const config = createConfiguration({
     baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
   })
-  if (fba) {
-    config.authMethods.Bearer = fba
+  if (authManager) {
+    config.authMethods.Bearer = new FluxBearerAuthentication(authManager)
   }
 
   return new FluxApi(config)
 }
-
-const api = genAPIClient()
-const manager = new AuthManager(api, fba)

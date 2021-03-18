@@ -15,11 +15,9 @@
   import { Routes, APIErrors } from './constants'
   import {
     authedRouteOptions,
-    getFluxSession,
     isJWTValid,
     Logger,
     parseJwt,
-    setFluxSession,
   } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
@@ -111,7 +109,7 @@
         reason?.body?.code === APIErrors.UNAUTHORIZED &&
         ($location as Routes) !== Routes.VERIFY_OTP
       ) {
-        setFluxSession('', '')
+        window.AUTH_MANAGER.logout()
         push(Routes.SEND_OTP)
         return
       }
@@ -130,13 +128,17 @@
       cluster: 'us3',
     })
 
-    const userID = parseJwt(getFluxSession())?.sub
-    const channel = pusher.subscribe(userID)
-    channel.bind('my-event', function (data) {
-      Logger.debug(JSON.stringify(data))
-    })
+    window.AUTH_MANAGER.getAccessToken().then((jwt) => {
+      if (jwt) {
+        const userID = parseJwt(jwt)?.sub
+        const channel = pusher.subscribe(userID)
+        channel.bind('my-event', function (data) {
+          Logger.debug(JSON.stringify(data))
+        })
 
-    Logger.debug('PUSHER LOADED :)')
+        Logger.debug('PUSHER LOADED :)')
+      }
+    })
   }
 </script>
 
