@@ -16,6 +16,7 @@ import {
   SecurityAuthentication,
   RequestContext,
 } from 'api-client'
+import { FluxBearerAuthentication } from './auth'
 
 // pure fns
 // ---------
@@ -49,7 +50,10 @@ export const Logger = (() => {
 })()
 
 // Set a JWT in local storage.
-export const setFluxSession = (refreshToken: string | null, accessToken: string | null) => {
+export const setFluxSession = (
+  refreshToken: string | null,
+  accessToken: string | null,
+) => {
   try {
     if (refreshToken != null) {
       if (refreshToken) {
@@ -76,7 +80,6 @@ export const setFluxSession = (refreshToken: string | null, accessToken: string 
 export const getFluxSession = (): string => {
   return window.localStorage.getItem(JWT_ACCESS_TOKEN_KEY) || ''
 }
-
 
 // Get a JWT from local storage.
 export const getFluxRefreshToken = (): string => {
@@ -110,31 +113,6 @@ export const authedRouteOptions = (component: any) => ({
   conditions: [isJWTValid],
   component,
 })
-
-export const genAPIClient = (): FluxApi => {
-  const config = createConfiguration({
-    baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
-  })
-  config.authMethods.Bearer = new FluxBearerAuthentication()
-
-  return new FluxApi(config)
-}
-
-class FluxBearerAuthentication implements SecurityAuthentication {
-  public constructor() {}
-
-  public getName(): string {
-    return 'Bearer'
-  }
-
-  public applySecurityAuthentication(context: RequestContext) {
-    const token = getFluxSession()
-
-    if (token) {
-      context.setHeaderParam('Authorization', `Bearer ${token}`)
-    }
-  }
-}
 
 export const formatLocaleCurrency = (ticker: string, amount: number) => {
   amount = isValidNumber(amount) ? amount : 0
