@@ -122,14 +122,15 @@ func (signer JwtVerifier) ParseAndVerify(ctx context.Context, rawToken string) (
 
 	claims := token.Claims.(*jwt.StandardClaims)
 
-	//TODO: only need to perform this lookup if the type is an access token
-	urt, err := signer.Db.GetUsedRefreshToken(ctx, nil, claims.Issuer)
-	if err != nil {
-		return nil, err
-	}
+	if claims.Issuer != "" {
+		urt, err := signer.Db.GetUsedRefreshToken(ctx, nil, claims.Issuer)
+		if err != nil {
+			return nil, err
+		}
 
-	if urt != nil && urt.RevokedAt != nil {
-		return nil, fmt.Errorf("token is invalid; revoked at: %s", urt.RevokedAt)
+		if urt != nil && urt.RevokedAt != nil {
+			return nil, fmt.Errorf("token is invalid; revoked at: %s", urt.RevokedAt)
+		}
 	}
 
 	return claims, nil
