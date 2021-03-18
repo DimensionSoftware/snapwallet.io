@@ -100,7 +100,7 @@ func (signer JwtVerifier) ParseAndVerify(rawToken string) (*jwt.StandardClaims, 
 	// Create the token
 	token, err := jwt.ParseWithClaims(
 		rawToken,
-		jwt.StandardClaims{},
+		new(jwt.StandardClaims),
 		func(token *jwt.Token) (interface{}, error) {
 			return signer.PublicKey, nil
 		},
