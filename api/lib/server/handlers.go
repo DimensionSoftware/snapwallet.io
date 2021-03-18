@@ -183,7 +183,7 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
-	tokenMaterial, err := s.AuthManager.NewTokenMaterial(time.Now(), u.ID)
+	tokenMaterial, err := s.AuthManager.NewTokenMaterial(time.Now(), u.ID, string(u.ID))
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)

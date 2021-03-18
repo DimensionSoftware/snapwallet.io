@@ -3,7 +3,6 @@ package auth
 import (
 	"context"
 	"fmt"
-	"log"
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db"
@@ -18,9 +17,9 @@ type Manager struct {
 	*db.Db
 }
 
-func (m Manager) NewTokenMaterial(now time.Time, userID user.ID) (*proto.TokenMaterial, error) {
+func (m Manager) NewTokenMaterial(now time.Time, userID user.ID, parentRefreshTokenID string) (*proto.TokenMaterial, error) {
 	refresh := NewRefreshTokenClaims(now, userID)
-	access := NewAccessTokenClaims(now, userID, refresh.Id)
+	access := NewAccessTokenClaims(now, userID, parentRefreshTokenID)
 
 	refreshToken, err := m.JwtSigner.Sign(refresh)
 	if err != nil {
@@ -49,13 +48,11 @@ func (m Manager) TokenExchange(ctx context.Context, now time.Time, refreshToken 
 		return nil, err
 	}
 
-	log.Println("FUXX1")
 	used, err := m.Db.GetUsedRefreshToken(ctx, nil, refresh.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Println("FUXX2")
 	if used != nil {
 		used.RevokedAt = &now
 
@@ -66,14 +63,12 @@ func (m Manager) TokenExchange(ctx context.Context, now time.Time, refreshToken 
 
 		return nil, fmt.Errorf("TokenExchange failure: refresh token used more than once!")
 	}
-	log.Println("FUXX3")
 
-	material, err := m.NewTokenMaterial(now, user.ID(refresh.Subject))
+	material, err := m.NewTokenMaterial(now, user.ID(refresh.Subject), refresh.Id)
 	if err != nil {
 		return nil, err
 	}
 
-	log.Println("FUXX4")
 	used = &usedrefreshtoken.UsedRefreshToken{
 		ID:        refresh.Id,
 		Subject:   refresh.Subject,
