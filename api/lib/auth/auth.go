@@ -15,54 +15,6 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 )
 
-// Claims represents the data we want to put on the jwt
-// https://tools.ietf.org/html/rfc7519
-type Claims struct {
-	/*
-	   The "jti" (JWT ID) claim provides a unique identifier for the JWT.
-	   The identifier value MUST be assigned in a manner that ensures that
-	   there is a negligible probability that the same value will be
-	   accidentally assigned to a different data object; if the application
-	   uses multiple issuers, collisions MUST be prevented among values
-	   produced by different issuers as well.  The "jti" claim can be used
-	   to prevent the JWT from being replayed.  The "jti" value is a case-
-	   sensitive string.  Use of this claim is OPTIONAL.
-	*/
-	ID string `json:"jti,omitempty"`
-
-	/*
-		The "sub" (subject) claim identifies the principal that is the
-		subject of the JWT.  The claims in a JWT are normally statements
-		about the subject.  The subject value MUST either be scoped to be
-		locally unique in the context of the issuer or be globally unique.
-		The processing of this claim is generally application specific.  The
-		"sub" value is a case-sensitive string containing a StringOrURI
-		value.  Use of this claim is OPTIONAL.
-	*/
-	Subject string `json:"sub,omitempty"`
-
-	/*
-		The "iat" (issued at) claim identifies the time at which the JWT was
-		issued.  This claim can be used to determine the age of the JWT.  Its
-		value MUST be a number containing a NumericDate value.  Use of this
-		claim is OPTIONAL.
-	*/
-	IssuedAt int64 `json:"iat,omitempty"`
-
-	/*
-		The "exp" (expiration time) claim identifies the expiration time on
-		or after which the JWT MUST NOT be accepted for processing.  The
-		processing of the "exp" claim requires that the current date/time
-		MUST be before the expiration date/time listed in the "exp" claim.
-	*/
-	ExpiresAt int64 `json:"exp,omitempty"`
-}
-
-// Valid checks the claims for validity
-func (Claims) Valid() error {
-	return nil
-}
-
 // JwtPrivateKey represents the private key for signing the jwt
 type JwtPrivateKey = *rsa.PrivateKey
 
@@ -75,7 +27,7 @@ type JwtSigner struct {
 }
 
 // Sign signs claims into a jwt token returned as a string
-func (signer JwtSigner) Sign(claims Claims) (string, error) {
+func (signer JwtSigner) Sign(claims jwt.StandardClaims) (string, error) {
 	// Create the token
 	token := jwt.NewWithClaims(jwt.SigningMethodRS256, claims)
 	return token.SignedString(signer.PrivateKey)
@@ -119,13 +71,22 @@ func ProvideJwtPublicKey(priv JwtPrivateKey) JwtPublicKey {
 	return &priv.PublicKey
 }
 
-// NewClaims instantiates the claims object to be signed
-func NewClaims(userID user.ID) Claims {
-	return Claims{
-		ID:        shortuuid.New(),
+func NewAccessTokenClaims(now time.Time, userID user.ID, refreshTokenID string) jwt.StandardClaims {
+	return jwt.StandardClaims{
+		Id:        shortuuid.New(),
 		Subject:   string(userID),
-		IssuedAt:  time.Now().Unix(),
-		ExpiresAt: time.Now().Add(24 * time.Hour).Unix(),
+		IssuedAt:  now.Unix(),
+		ExpiresAt: now.Add(24 * time.Hour).Unix(),
+		Issuer:    refreshTokenID,
+	}
+}
+
+func NewRefreshTokenClaims(now time.Time, userID user.ID) jwt.StandardClaims {
+	return jwt.StandardClaims{
+		Id:        shortuuid.New(),
+		Subject:   string(userID),
+		IssuedAt:  now.Unix(),
+		ExpiresAt: now.Add(24 * time.Hour).Unix(),
 	}
 }
 
@@ -135,11 +96,16 @@ type JwtVerifier struct {
 }
 
 // ParseAndVerify parses and verifies a raw jwt token and returns the claims if successful
-func (signer JwtVerifier) ParseAndVerify(rawToken string) (*Claims, error) {
+func (signer JwtVerifier) ParseAndVerify(rawToken string) (*jwt.StandardClaims, error) {
 	// Create the token
-	token, err := jwt.Parse(rawToken, func(token *jwt.Token) (interface{}, error) {
-		return signer.PublicKey, nil
-	})
+	token, err := jwt.ParseWithClaims(
+		rawToken,
+		jwt.StandardClaims{},
+		func(token *jwt.Token) (interface{}, error) {
+			return signer.PublicKey, nil
+		},
+	)
+
 	if err != nil {
 		return nil, err
 	}
@@ -147,12 +113,7 @@ func (signer JwtVerifier) ParseAndVerify(rawToken string) (*Claims, error) {
 		return nil, fmt.Errorf("token is invalid")
 	}
 
-	c := token.Claims.(jwt.MapClaims)
+	//claims := token.Claims.(jwt.StandardClaims)
 
-	return &Claims{
-		ID:        c["jti"].(string),
-		Subject:   c["sub"].(string),
-		IssuedAt:  int64(c["iat"].(float64)),
-		ExpiresAt: int64(c["exp"].(float64)),
-	}, nil
+	return token.Claims.(*jwt.StandardClaims), nil
 }

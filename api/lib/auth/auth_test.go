@@ -2,6 +2,7 @@ package auth
 
 import (
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -21,7 +22,7 @@ func Test_JwtSigner(t *testing.T) {
 	signer := JwtSigner{
 		PrivateKey: priv,
 	}
-	jwt, err := signer.Sign(NewClaims("bob@gmail.com"))
+	jwt, err := signer.Sign(NewRefreshTokenClaims(time.Now(), "bob@gmail.com"))
 	a.NoError(err)
 	a.Greater(len(jwt), 1)
 }
