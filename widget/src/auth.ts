@@ -49,7 +49,7 @@ export class AuthManager {
       return true
     }
 
-    const isTimeLeft = parsed.exp > Math.floor(Date.now() / 1000)
+    const isTimeLeft = parsed.exp > Math.floor(add10seconds(Date.now()) / 1000)
 
     return !isTimeLeft
   }
@@ -66,7 +66,7 @@ export class AuthManager {
       return true
     }
 
-    const isTimeLeft = parsed.exp > Math.floor(Date.now() / 1000)
+    const isTimeLeft = parsed.exp > Math.floor(add10seconds(Date.now()) / 1000)
 
     return !isTimeLeft
   }
@@ -137,4 +137,8 @@ export function genAPIClient(authManager?: AuthManager): FluxApi {
   }
 
   return new FluxApi(config)
+}
+
+function add10seconds(epoch: number): number {
+  return epoch + (10 * 1000)
 }
