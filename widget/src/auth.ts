@@ -16,6 +16,17 @@ export class AuthManager {
 
   private sessionExpiresAt = 0
 
+  constructor() {
+    const parsed = this.parseRefreshTokenClaims()
+    if (!parsed) {
+      return
+    }
+    if (!parsed.exp) {
+      return
+    }
+    this.sessionExpiresAt = parsed.exp
+  }
+
   // to avoid duplicate calls, we can only use a refresh token to exchange once
   private tokenExchangePromise?: Promise<TokenExchangeResponse>
 
