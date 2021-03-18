@@ -13,12 +13,7 @@
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes, APIErrors } from './constants'
-  import {
-    authedRouteOptions,
-    isJWTValid,
-    Logger,
-    parseJwt,
-  } from './util'
+  import { authedRouteOptions, isJWTValid, Logger, parseJwt } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
   import Address2 from './screens/Address2.svelte'
@@ -109,8 +104,7 @@
         reason?.body?.code === APIErrors.UNAUTHORIZED &&
         ($location as Routes) !== Routes.VERIFY_OTP
       ) {
-        window.AUTH_MANAGER.logout()
-        push(Routes.SEND_OTP)
+        //push(Routes.SEND_OTP)
         return
       }
 
@@ -128,7 +122,7 @@
       cluster: 'us3',
     })
 
-    window.AUTH_MANAGER.getAccessToken().then((jwt) => {
+    window.AUTH_MANAGER.getAccessToken().then(jwt => {
       if (jwt) {
         const userID = parseJwt(jwt)?.sub
         const channel = pusher.subscribe(userID)
