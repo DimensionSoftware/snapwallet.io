@@ -4,6 +4,11 @@ import { AuthManager, genAPIClient } from './auth'
 window.AUTH_MANAGER = new AuthManager()
 window.API = genAPIClient(window.AUTH_MANAGER)
 
+// a test
+window.addEventListener('logout', () => {
+  console.log('viewer has logged out')
+})
+
 const queryParams = new URLSearchParams(window.location.search)
 
 const app = new App({

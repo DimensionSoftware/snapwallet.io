@@ -128,6 +128,7 @@ export class AuthManager {
   public logout() {
     this.setCurrentAccessToken('')
     this.setCurrentRefreshToken('')
+    window.dispatchEvent(new Event('logout'))
   }
 
   public viewerIsLoggedIn(): boolean {
