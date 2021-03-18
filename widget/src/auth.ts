@@ -37,15 +37,39 @@ export class AuthManager {
     return window.localStorage.getItem(JWT_REFRESH_TOKEN_KEY) || ''
   }
 
-  private accessTokenIsExpired(): boolean {
-    const token = this.getCurrentAccessToken()
+  private parseRefreshTokenClaims(): {[k: string]: any} | null {
+    const token = this.getCurrentRefreshToken()
     if (!token) {
-      return true
+      return null
     }
 
     const parsed = parseJwt(token)
     if (!parsed) {
       console.log('WARNING: could not parse jwt')
+      return null
+    }
+
+    return parsed
+  }
+
+  private parseAccessTokenClaims(): {[k: string]: any} | null {
+    const token = this.getCurrentAccessToken()
+    if (!token) {
+      return null
+    }
+
+    const parsed = parseJwt(token)
+    if (!parsed) {
+      console.log('WARNING: could not parse jwt')
+      return null
+    }
+
+    return parsed
+  }
+
+  private accessTokenIsExpired(): boolean {
+    const parsed = this.parseAccessTokenClaims()
+    if (!parsed) {
       return true
     }
 
@@ -55,14 +79,8 @@ export class AuthManager {
   }
 
   private refreshTokenIsExpired(): boolean {
-    const token = this.getCurrentRefreshToken()
-    if (!token) {
-      return true
-    }
-
-    const parsed = parseJwt(token)
+    const parsed = this.parseRefreshTokenClaims()
     if (!parsed) {
-      console.log('WARNING: could not parse jwt')
       return true
     }
 
@@ -118,14 +136,12 @@ export class AuthManager {
 
   // will return '' if user is not logged in
   public viewerUserID(): string {
-    const token = this.getCurrentRefreshToken()
-    if (!token) {
+    const parsed = this.parseRefreshTokenClaims()
+    if (!parsed) {
       return ''
     }
 
-    const parsed = parseJwt(token)
-    if (!parsed) {
-      console.log('WARNING: could not parse jwt')
+    if (!parsed.sub) {
       return ''
     }
 
