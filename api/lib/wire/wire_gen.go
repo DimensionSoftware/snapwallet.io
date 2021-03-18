@@ -29,43 +29,44 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	publicKey := auth.ProvideJwtPublicKey(privateKey)
+	fireProjectID, err := firestore.ProvideFirestoreProjectID()
+	if err != nil {
+		return server.Server{}, err
+	}
+	client, err := firestore.ProvideFirestore(fireProjectID)
+	if err != nil {
+		return server.Server{}, err
+	}
+	config, err := encryption.ProvideConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	manager, err := encryption.NewManager(config)
+	if err != nil {
+		return server.Server{}, err
+	}
+	dbDb := &db.Db{
+		Firestore:         client,
+		EncryptionManager: manager,
+	}
 	jwtVerifier := &auth.JwtVerifier{
 		PublicKey: publicKey,
+		Db:        dbDb,
 	}
 	grpcServer := server.ProvideGrpcServer(jwtVerifier)
 	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
 	if err != nil {
 		return server.Server{}, err
 	}
-	client := sendgrid.ProvideSendClient(sendAPIKey)
-	config, err := twilio.ProvideTwilioConfig()
+	sendgridClient := sendgrid.ProvideSendClient(sendAPIKey)
+	twilioConfig, err := twilio.ProvideTwilioConfig()
 	if err != nil {
 		return server.Server{}, err
 	}
-	gotwilioTwilio := twilio.ProvideTwilio(config)
-	fireProjectID, err := firestore.ProvideFirestoreProjectID()
-	if err != nil {
-		return server.Server{}, err
-	}
-	firestoreClient, err := firestore.ProvideFirestore(fireProjectID)
-	if err != nil {
-		return server.Server{}, err
-	}
+	gotwilioTwilio := twilio.ProvideTwilio(twilioConfig)
 	bucketHandle, err := cloudstorage.ProvideBucket()
 	if err != nil {
 		return server.Server{}, err
-	}
-	encryptionConfig, err := encryption.ProvideConfig()
-	if err != nil {
-		return server.Server{}, err
-	}
-	manager, err := encryption.NewManager(encryptionConfig)
-	if err != nil {
-		return server.Server{}, err
-	}
-	dbDb := &db.Db{
-		Firestore:         firestoreClient,
-		EncryptionManager: manager,
 	}
 	filemanagerManager := &filemanager.Manager{
 		BucketHandle:      bucketHandle,
@@ -104,10 +105,10 @@ func InitializeServer() (server.Server, error) {
 	}
 	serverServer := server.Server{
 		GrpcServer:   grpcServer,
-		Sendgrid:     client,
+		Sendgrid:     sendgridClient,
 		Twilio:       gotwilioTwilio,
-		TwilioConfig: config,
-		Firestore:    firestoreClient,
+		TwilioConfig: twilioConfig,
+		Firestore:    client,
 		FileManager:  filemanagerManager,
 		Db:           dbDb,
 		Wyre:         wyreClient,

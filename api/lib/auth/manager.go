@@ -43,7 +43,7 @@ func (m Manager) TokenExchange(ctx context.Context, now time.Time, refreshToken 
 	// if not found in db, new token material can be presented to the user
 
 	// todo : need way to know if its a refresh token, could use separate privkey, or just sign some data in jwt
-	refresh, err := m.JwtVerifier.ParseAndVerify(refreshToken)
+	refresh, err := m.JwtVerifier.ParseAndVerify(ctx, refreshToken)
 	if err != nil {
 		return nil, err
 	}

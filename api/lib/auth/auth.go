@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"context"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
@@ -12,6 +13,7 @@ import (
 	"github.com/lithammer/shortuuid/v3"
 
 	"github.com/dgrijalva/jwt-go"
+	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 )
 
@@ -93,10 +95,11 @@ func NewRefreshTokenClaims(now time.Time, userID user.ID) jwt.StandardClaims {
 // JwtVerifier manages the verification of our jwt
 type JwtVerifier struct {
 	PublicKey JwtPublicKey
+	*db.Db
 }
 
 // ParseAndVerify parses and verifies a raw jwt token and returns the claims if successful
-func (signer JwtVerifier) ParseAndVerify(rawToken string) (*jwt.StandardClaims, error) {
+func (signer JwtVerifier) ParseAndVerify(ctx context.Context, rawToken string) (*jwt.StandardClaims, error) {
 	// Create the token
 	token, err := jwt.ParseWithClaims(
 		rawToken,
@@ -113,7 +116,21 @@ func (signer JwtVerifier) ParseAndVerify(rawToken string) (*jwt.StandardClaims, 
 		return nil, fmt.Errorf("token is invalid")
 	}
 
-	//claims := token.Claims.(jwt.StandardClaims)
+	if token.Claims == nil {
+		return nil, fmt.Errorf("token is invalid")
+	}
 
-	return token.Claims.(*jwt.StandardClaims), nil
+	claims := token.Claims.(*jwt.StandardClaims)
+
+	//TODO: only need to perform this lookup if the type is an access token
+	urt, err := signer.Db.GetUsedRefreshToken(ctx, nil, claims.Issuer)
+	if err != nil {
+		return nil, err
+	}
+
+	if urt != nil && urt.RevokedAt != nil {
+		return nil, fmt.Errorf("token is invalid; revoked at: %s", urt.RevokedAt)
+	}
+
+	return claims, nil
 }
