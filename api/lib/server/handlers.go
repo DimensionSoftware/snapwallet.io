@@ -139,7 +139,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 	}
 
 	if loginKind == onetimepasscode.LoginKindPhone {
-		from := s.TwilioPhoneNumber
+		from := s.TwilioConfig.PhoneNumber
 		to := loginValue
 		message := fmt.Sprintf("Your one time passcode for flux is: %s", otp.Code)
 

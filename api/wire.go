@@ -21,7 +21,8 @@ import (
 // InitializeServer creates the main server container
 func InitializeServer() (server.Server, error) {
 	wire.Build(
-		server.ProvideServer,
+		server.ProvideGrpcServer,
+		wire.Struct(new(server.Server), "*"),
 		sendgrid.ProvideSendClientAPIKey,
 		sendgrid.ProvideSendClient,
 		twilio.ProvideTwilioConfig,

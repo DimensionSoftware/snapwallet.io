@@ -24,6 +24,15 @@ import (
 
 // InitializeServer creates the main server container
 func InitializeServer() (server.Server, error) {
+	privateKey, err := auth.ProvideJwtPrivateKey()
+	if err != nil {
+		return server.Server{}, err
+	}
+	publicKey := auth.ProvideJwtPublicKey(privateKey)
+	jwtVerifier := &auth.JwtVerifier{
+		PublicKey: publicKey,
+	}
+	grpcServer := server.ProvideGrpcServer(jwtVerifier)
 	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
 	if err != nil {
 		return server.Server{}, err
@@ -85,21 +94,22 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	privateKey, err := auth.ProvideJwtPrivateKey()
-	if err != nil {
-		return server.Server{}, err
-	}
-	jwtSigner := auth.JwtSigner{
+	jwtSigner := &auth.JwtSigner{
 		PrivateKey: privateKey,
 	}
-	publicKey := auth.ProvideJwtPublicKey(privateKey)
-	jwtVerifier := auth.JwtVerifier{
-		PublicKey: publicKey,
+	serverServer := server.Server{
+		GrpcServer:   grpcServer,
+		Sendgrid:     client,
+		Twilio:       gotwilioTwilio,
+		TwilioConfig: config,
+		Firestore:    firestoreClient,
+		FileManager:  filemanagerManager,
+		Db:           dbDb,
+		Wyre:         wyreClient,
+		WyreManager:  wyreManager,
+		Plaid:        plaidClient,
+		JwtSigner:    jwtSigner,
+		JwtVerifier:  jwtVerifier,
 	}
-	db2 := db.Db{
-		Firestore:         firestoreClient,
-		EncryptionManager: manager,
-	}
-	serverServer := server.ProvideServer(client, gotwilioTwilio, config, firestoreClient, filemanagerManager, wyreClient, wyreManager, plaidClient, jwtSigner, jwtVerifier, db2)
 	return serverServer, nil
 }

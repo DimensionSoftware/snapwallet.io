@@ -18,19 +18,19 @@ import (
 
 // Server represents the grpc server and all its handlers attached
 type Server struct {
-	proto.UnimplementedFluxServer
-	GrpcServer        *grpc.Server
-	Sendgrid          *sendgrid.Client
-	Twilio            *gotwilio.Twilio
-	TwilioPhoneNumber string
-	Firestore         *firestore.Client
-	FileManager       *filemanager.Manager
-	Db                *db.Db
-	Wyre              *wyre.Client
-	WyreManager       *wyre.Manager
-	Plaid             *plaid.Client
-	JwtSigner         *auth.JwtSigner
-	JwtVerifier       *auth.JwtVerifier
+	proto.UnimplementedFluxServer `wire:"-"`
+	GrpcServer                    *grpc.Server
+	Sendgrid                      *sendgrid.Client
+	Twilio                        *gotwilio.Twilio
+	TwilioConfig                  *twilio.Config
+	Firestore                     *firestore.Client
+	FileManager                   *filemanager.Manager
+	Db                            *db.Db
+	Wyre                          *wyre.Client
+	WyreManager                   *wyre.Manager
+	Plaid                         *plaid.Client
+	JwtSigner                     *auth.JwtSigner
+	JwtVerifier                   *auth.JwtVerifier
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
@@ -38,40 +38,14 @@ const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
 // Maximum upload of 25 MB
 const maxMsgSizeBytes = 1024 * 1024 * 25
 
-// ProvideServer instantiates a new grpc server
-func ProvideServer(
-	sendgridClient *sendgrid.Client,
-	twilio *gotwilio.Twilio,
-	twilioConfig *twilio.Config,
-	firestore *firestore.Client,
-	filemanager *filemanager.Manager,
-	wyre *wyre.Client,
-	wyreManager *wyre.Manager,
-	plaid *plaid.Client,
-	jwtSigner auth.JwtSigner,
-	jwtVerifier auth.JwtVerifier,
-	db db.Db,
-) Server {
-	server := Server{
-		GrpcServer:        grpc.NewServer(grpc.UnaryInterceptor(jwtVerifier.AuthenticationInterceptor), grpc.MaxRecvMsgSize(maxMsgSizeBytes)),
-		Sendgrid:          sendgridClient,
-		Twilio:            twilio,
-		TwilioPhoneNumber: twilioConfig.PhoneNumber,
-		FileManager:       filemanager,
-		Firestore:         firestore,
-		Wyre:              wyre,
-		WyreManager:       wyreManager,
-		Plaid:             plaid,
-		JwtSigner:         &jwtSigner,
-		JwtVerifier:       &jwtVerifier,
-		Db:                &db,
-	}
-	proto.RegisterFluxServer(server.GrpcServer, &server)
-	return server
+func ProvideGrpcServer(jwtVerifier *auth.JwtVerifier) *grpc.Server {
+	return grpc.NewServer(grpc.UnaryInterceptor(jwtVerifier.AuthenticationInterceptor), grpc.MaxRecvMsgSize(maxMsgSizeBytes))
 }
 
 // Serve starts up the grpc server and listens on a tcp port
 func (s *Server) Serve(address string) error {
+	proto.RegisterFluxServer(s.GrpcServer, s)
+
 	lis, err := net.Listen("tcp", address)
 	if err != nil {
 		return err
