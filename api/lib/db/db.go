@@ -453,6 +453,21 @@ func (db Db) GetAllProfileData(ctx context.Context, tx *firestore.Transaction, u
 	return out, nil
 }
 
+func (db Db) SaveUsedRefreshToken(ctx context.Context, tx *firestore.Transaction, urt *usedrefreshtoken.UsedRefreshToken) error {
+	var err error
+
+	ref := db.Firestore.Collection("used-refresh-tokens").Doc(urt.ID)
+
+	if tx == nil {
+		_, err = ref.Set(ctx, urt)
+	} else {
+		err = tx.Set(ref, urt)
+	}
+
+	return err
+
+}
+
 func (db Db) GetUsedRefreshToken(ctx context.Context, tx *firestore.Transaction, id string) (*usedrefreshtoken.UsedRefreshToken, error) {
 	var (
 		err  error

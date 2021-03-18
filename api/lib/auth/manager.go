@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/db/models/usedrefreshtoken"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 )
@@ -16,8 +17,7 @@ type Manager struct {
 	*db.Db
 }
 
-func (m Manager) NewTokenMaterial(userID user.ID) (*proto.TokenMaterial, error) {
-	now := time.Now()
+func (m Manager) NewTokenMaterial(now time.Time, userID user.ID) (*proto.TokenMaterial, error) {
 	refresh := NewRefreshTokenClaims(now, userID)
 	access := NewAccessTokenClaims(now, userID, refresh.Id)
 
@@ -38,7 +38,7 @@ func (m Manager) NewTokenMaterial(userID user.ID) (*proto.TokenMaterial, error) 
 
 }
 
-func (m Manager) TokenExchange(ctx context.Context, refreshToken string) (*proto.TokenMaterial, error) {
+func (m Manager) TokenExchange(ctx context.Context, now time.Time, refreshToken string) (*proto.TokenMaterial, error) {
 	// if refresh token found in db, then access denied, and access tokens should be revoked which were birthed by that refresh token
 	// if not found in db, new token material can be presented to the user
 
@@ -53,16 +53,35 @@ func (m Manager) TokenExchange(ctx context.Context, refreshToken string) (*proto
 		return nil, err
 	}
 
-	if used == nil {
-		// TODO: save used token
-		material, err := m.NewTokenMaterial(user.ID(refresh.Subject))
+	if used != nil {
+		used.RevokedAt = &now
+
+		err = m.Db.SaveUsedRefreshToken(ctx, nil, used)
 		if err != nil {
 			return nil, err
 		}
 
-		return material, nil
-	} else {
-		// TODO: mark as revoked, update interceptor to use this info to block access tokens?
 		return nil, fmt.Errorf("TokenExchange failure: refresh token used more than once!")
 	}
+
+	material, err := m.NewTokenMaterial(now, user.ID(refresh.Subject))
+	if err != nil {
+		return nil, err
+	}
+
+	used = &usedrefreshtoken.UsedRefreshToken{
+		ID:        refresh.Id,
+		Subject:   refresh.Subject,
+		IssuedAt:  time.Unix(refresh.IssuedAt, 0),
+		ExpiresAt: time.Unix(refresh.ExpiresAt, 0),
+		UsedAt:    now,
+	}
+
+	err = m.Db.SaveUsedRefreshToken(ctx, nil, used)
+	if err != nil {
+		return nil, err
+	}
+
+	return material, nil
+
 }
