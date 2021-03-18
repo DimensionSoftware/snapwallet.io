@@ -104,7 +104,8 @@
         reason?.body?.code === APIErrors.UNAUTHORIZED &&
         ($location as Routes) !== Routes.VERIFY_OTP
       ) {
-        //push(Routes.SEND_OTP)
+        window.AUTH_MANAGER.logout()
+        push(Routes.SEND_OTP)
         return
       }
 
