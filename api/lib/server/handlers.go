@@ -17,7 +17,6 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/disintegration/imaging"
-	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/file"
@@ -184,17 +183,7 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
-	now := time.Now()
-	refresh := auth.NewRefreshTokenClaims(now, u.ID)
-	access := auth.NewAccessTokenClaims(now, u.ID, refresh.Id)
-
-	refreshToken, err := s.JwtSigner.Sign(refresh)
-	if err != nil {
-		log.Println(err)
-		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
-	}
-
-	accessToken, err := s.JwtSigner.Sign(access)
+	tokenMaterial, err := s.AuthManager.NewTokenMaterial(u.ID)
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
@@ -214,11 +203,8 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}
 
 	return &proto.OneTimePasscodeVerifyResponse{
-		Tokens: &proto.TokenMaterial{
-			AccessToken:  accessToken,
-			RefreshToken: refreshToken,
-		},
-		User: respUser,
+		Tokens: tokenMaterial,
+		User:   respUser,
 	}, nil
 }
 

@@ -97,6 +97,12 @@ func InitializeServer() (server.Server, error) {
 	jwtSigner := &auth.JwtSigner{
 		PrivateKey: privateKey,
 	}
+	authJwtSigner := auth.JwtSigner{
+		PrivateKey: privateKey,
+	}
+	authManager := &auth.Manager{
+		JwtSigner: authJwtSigner,
+	}
 	serverServer := server.Server{
 		GrpcServer:   grpcServer,
 		Sendgrid:     client,
@@ -110,6 +116,7 @@ func InitializeServer() (server.Server, error) {
 		Plaid:        plaidClient,
 		JwtSigner:    jwtSigner,
 		JwtVerifier:  jwtVerifier,
+		AuthManager:  authManager,
 	}
 	return serverServer, nil
 }

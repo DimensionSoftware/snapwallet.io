@@ -31,6 +31,7 @@ type Server struct {
 	Plaid                         *plaid.Client
 	JwtSigner                     *auth.JwtSigner
 	JwtVerifier                   *auth.JwtVerifier
+	AuthManager                   *auth.Manager
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"

@@ -22,6 +22,7 @@ import (
 func InitializeServer() (server.Server, error) {
 	wire.Build(
 		server.ProvideGrpcServer,
+		wire.Struct(new(auth.Manager), "*"),
 		wire.Struct(new(server.Server), "*"),
 		sendgrid.ProvideSendClientAPIKey,
 		sendgrid.ProvideSendClient,
