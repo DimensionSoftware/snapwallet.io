@@ -76,7 +76,7 @@ func NewAccessTokenClaims(now time.Time, userID user.ID, refreshTokenID string) 
 		Id:        shortuuid.New(),
 		Subject:   string(userID),
 		IssuedAt:  now.Unix(),
-		ExpiresAt: now.Add(24 * time.Hour).Unix(),
+		ExpiresAt: now.Add(1 * time.Minute).Unix(),
 		Issuer:    refreshTokenID,
 	}
 }

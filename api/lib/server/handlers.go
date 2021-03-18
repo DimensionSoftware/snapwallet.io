@@ -208,6 +208,17 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}, nil
 }
 
+func (s *Server) TokenExchange(ctx context.Context, req *proto.TokenExchangeRequest) (*proto.TokenExchangeResponse, error) {
+	material, err := s.AuthManager.TokenExchange(ctx, req.RefreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.TokenExchangeResponse{
+		Tokens: material,
+	}, nil
+}
+
 // PlaidConnectBankAccounts is an rpc handler
 func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
 	userID := GetUserIDFromIncomingContext(ctx)

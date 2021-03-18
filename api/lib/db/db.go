@@ -13,6 +13,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
+	"github.com/khoerling/flux/api/lib/db/models/usedrefreshtoken"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/file"
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
@@ -450,6 +451,35 @@ func (db Db) GetAllProfileData(ctx context.Context, tx *firestore.Transaction, u
 	}
 
 	return out, nil
+}
+
+func (db Db) GetUsedRefreshToken(ctx context.Context, tx *firestore.Transaction, id string) (*usedrefreshtoken.UsedRefreshToken, error) {
+	var (
+		err  error
+		snap *firestore.DocumentSnapshot
+	)
+
+	ref := db.Firestore.Collection("used-refresh-tokens").Doc(id)
+
+	if tx == nil {
+		snap, err = ref.Get(ctx)
+	} else {
+		snap, err = tx.Get(ref)
+	}
+	if status.Code(err) == codes.NotFound {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var usedRefreshToken usedrefreshtoken.UsedRefreshToken
+	err = snap.DataTo(&usedRefreshToken)
+	if err != nil {
+		return nil, err
+	}
+
+	return &usedRefreshToken, nil
 }
 
 // AckOneTimePasscode tries to find the OneTimePasscode object matching the loginValue and code

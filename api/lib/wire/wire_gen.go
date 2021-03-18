@@ -98,8 +98,9 @@ func InitializeServer() (server.Server, error) {
 		PrivateKey: privateKey,
 	}
 	authManager := &auth.Manager{
-		JwtSigner: jwtSigner,
-		Db:        dbDb,
+		JwtSigner:   jwtSigner,
+		JwtVerifier: jwtVerifier,
+		Db:          dbDb,
 	}
 	serverServer := server.Server{
 		GrpcServer:   grpcServer,
