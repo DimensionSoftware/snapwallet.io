@@ -115,6 +115,22 @@ export class AuthManager {
   public viewerIsLoggedIn(): boolean {
     return !this.refreshTokenIsExpired()
   }
+
+  // will return '' if user is not logged in
+  public viewerUserID(): string {
+    const token = this.getCurrentRefreshToken()
+    if (!token) {
+      return ''
+    }
+
+    const parsed = parseJwt(token)
+    if (!parsed) {
+      console.log('WARNING: could not parse jwt')
+      return ''
+    }
+
+    return parsed.sub
+  }
 }
 
 export class FluxBearerAuthentication implements SecurityAuthentication {
