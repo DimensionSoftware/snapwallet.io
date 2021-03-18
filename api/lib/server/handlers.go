@@ -211,7 +211,8 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 func (s *Server) TokenExchange(ctx context.Context, req *proto.TokenExchangeRequest) (*proto.TokenExchangeResponse, error) {
 	material, err := s.AuthManager.TokenExchange(ctx, req.RefreshToken)
 	if err != nil {
-		return nil, err
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
 	}
 
 	return &proto.TokenExchangeResponse{
