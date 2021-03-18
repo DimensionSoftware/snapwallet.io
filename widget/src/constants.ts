@@ -12,7 +12,8 @@ export const supportedCurrencyPairs = {
   ],
 }
 
-export const JWT_SESSION_KEY = '__FLUX_SESSION'
+export const JWT_REFRESH_TOKEN_KEY = '__FLUX_REFRESH'
+export const JWT_ACCESS_TOKEN_KEY = '__FLUX_ACCESS'
 
 export enum Routes {
   ROOT = '/',

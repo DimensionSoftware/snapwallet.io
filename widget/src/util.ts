@@ -1,5 +1,5 @@
 import nodeDebug from 'debug'
-import { JWT_SESSION_KEY } from './constants'
+import { JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY } from './constants'
 import * as CRYPTO_SVGS from 'svelte-cryptoicon'
 
 // HACK: this lib. does not offer a good
@@ -49,12 +49,22 @@ export const Logger = (() => {
 })()
 
 // Set a JWT in local storage.
-export const setFluxSession = (jwt: string) => {
+export const setFluxSession = (refreshToken: string | null, accessToken: string | null) => {
   try {
-    if (jwt) {
-      window.localStorage.setItem(JWT_SESSION_KEY, jwt)
-    } else {
-      window.localStorage.removeItem(JWT_SESSION_KEY)
+    if (refreshToken != null) {
+      if (refreshToken) {
+        window.localStorage.setItem(JWT_REFRESH_TOKEN_KEY, refreshToken)
+      } else {
+        window.localStorage.removeItem(JWT_REFRESH_TOKEN_KEY)
+      }
+    }
+
+    if (accessToken != null) {
+      if (accessToken) {
+        window.localStorage.setItem(JWT_ACCESS_TOKEN_KEY, accessToken)
+      } else {
+        window.localStorage.removeItem(JWT_ACCESS_TOKEN_KEY)
+      }
     }
   } catch (e) {
     Logger.error('Error setting flux session:', e)
@@ -64,7 +74,13 @@ export const setFluxSession = (jwt: string) => {
 
 // Get a JWT from local storage.
 export const getFluxSession = (): string => {
-  return window.localStorage.getItem(JWT_SESSION_KEY) || ''
+  return window.localStorage.getItem(JWT_ACCESS_TOKEN_KEY) || ''
+}
+
+
+// Get a JWT from local storage.
+export const getFluxRefreshToken = (): string => {
+  return window.localStorage.getItem(JWT_REFRESH_TOKEN_KEY) || ''
 }
 
 export const numberWithCommas = (s: string) =>
@@ -85,7 +101,7 @@ export const isJWTValid = () => {
   const userData = parseJwt(jwt)
   if (!userData) return false
   const isTimeLeft = userData.exp > Math.floor(Date.now() / 1000)
-  if (!isTimeLeft) setFluxSession('')
+  if (!isTimeLeft) setFluxSession(null, '')
   return isTimeLeft
 }
 

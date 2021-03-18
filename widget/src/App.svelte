@@ -111,7 +111,7 @@
         reason?.body?.code === APIErrors.UNAUTHORIZED &&
         ($location as Routes) !== Routes.VERIFY_OTP
       ) {
-        setFluxSession('')
+        setFluxSession('', '')
         push(Routes.SEND_OTP)
         return
       }

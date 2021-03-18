@@ -75,8 +75,8 @@
     isMakingRequest = true
 
     try {
-      const { jwt } = await verifyOTP()
-      setFluxSession(jwt)
+      const { tokens } = await verifyOTP()
+      setFluxSession(tokens.refreshToken, tokens.accessToken)
       Logger.debug('Logged in')
       setTimeout(() => push($userStore.lastKnownRoute), 700)
     } finally {
