@@ -119,21 +119,19 @@
     window.Pusher.log = Logger.debug
     window.Pusher.logToConsole = true
 
-    var pusher = new window.Pusher('dd280d42ccafc24e19ff', {
-      cluster: 'us3',
-    })
+    const userID = window.AUTH_MANAGER.viewerUserID()
+    if (userID) {
+      var pusher = new window.Pusher('dd280d42ccafc24e19ff', {
+        cluster: 'us3',
+      })
 
-    window.AUTH_MANAGER.getAccessToken().then(jwt => {
-      if (jwt) {
-        const userID = parseJwt(jwt)?.sub
-        const channel = pusher.subscribe(userID)
-        channel.bind('my-event', function (data) {
-          Logger.debug(JSON.stringify(data))
-        })
+      const channel = pusher.subscribe(userID)
+      channel.bind('my-event', function (data) {
+        Logger.debug(JSON.stringify(data))
+      })
 
-        Logger.debug('PUSHER LOADED :)')
-      }
-    })
+      Logger.debug('PUSHER LOADED :)')
+    }
   }
 </script>
 
