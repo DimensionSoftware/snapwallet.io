@@ -10,35 +10,23 @@
  * Do not edit the class manually.
  */
 
-import { TokenMaterial } from './TokenMaterial';
-import { User } from './User';
 import { HttpFile } from '../http/http';
 
-/**
-* response
-*/
-export class OneTimePasscodeVerifyResponse {
-    'tokens'?: TokenMaterial;
-    'user'?: User;
+export class TokenExchangeRequest {
+    'refreshToken'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "tokens",
-            "baseName": "tokens",
-            "type": "TokenMaterial",
-            "format": ""
-        },
-        {
-            "name": "user",
-            "baseName": "user",
-            "type": "User",
+            "name": "refreshToken",
+            "baseName": "refreshToken",
+            "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return OneTimePasscodeVerifyResponse.attributeTypeMap;
+        return TokenExchangeRequest.attributeTypeMap;
     }
     
     public constructor() {

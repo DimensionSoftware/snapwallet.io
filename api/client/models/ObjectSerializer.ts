@@ -20,6 +20,9 @@ export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
 export * from './ThirdPartyUserAccount';
+export * from './TokenExchangeRequest';
+export * from './TokenExchangeResponse';
+export * from './TokenMaterial';
 export * from './UploadFileResponse';
 export * from './UsGovernmentIdDocumentInput';
 export * from './UsGovernmentIdDocumentInputKind';
@@ -51,6 +54,9 @@ import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
 import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
+import { TokenExchangeRequest } from './TokenExchangeRequest';
+import { TokenExchangeResponse } from './TokenExchangeResponse';
+import { TokenMaterial } from './TokenMaterial';
 import { UploadFileResponse } from './UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from './UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKind';
@@ -105,6 +111,9 @@ let typeMap: {[index: string]: any} = {
     "RpcStatus": RpcStatus,
     "SaveProfileDataRequest": SaveProfileDataRequest,
     "ThirdPartyUserAccount": ThirdPartyUserAccount,
+    "TokenExchangeRequest": TokenExchangeRequest,
+    "TokenExchangeResponse": TokenExchangeResponse,
+    "TokenMaterial": TokenMaterial,
     "UploadFileResponse": UploadFileResponse,
     "UsGovernmentIdDocumentInput": UsGovernmentIdDocumentInput,
     "User": User,

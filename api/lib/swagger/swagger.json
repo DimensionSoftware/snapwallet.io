@@ -84,6 +84,39 @@
         ]
       }
     },
+    "/flux/auth/token": {
+      "post": {
+        "summary": "Exchange a refresh token for new token material; refresh tokens can only be used once\nIf refresh tokens are used more than once RTR dictates that any access tokens which were created by it should be immediately revoked\nthis is because this indicates an attack (something is wrong)",
+        "operationId": "Flux_TokenExchange",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/TokenExchangeResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/TokenExchangeRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/flux/pricing-data": {
       "get": {
         "summary": "Get pricing data",
@@ -577,8 +610,8 @@
     "OneTimePasscodeVerifyResponse": {
       "type": "object",
       "properties": {
-        "jwt": {
-          "type": "string"
+        "tokens": {
+          "$ref": "#/definitions/TokenMaterial"
         },
         "user": {
           "$ref": "#/definitions/User"
@@ -775,6 +808,33 @@
       },
       "description": "Represents the wyre user account status",
       "title": "WyreUserAccount"
+    },
+    "TokenExchangeRequest": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        }
+      }
+    },
+    "TokenExchangeResponse": {
+      "type": "object",
+      "properties": {
+        "tokens": {
+          "$ref": "#/definitions/TokenMaterial"
+        }
+      }
+    },
+    "TokenMaterial": {
+      "type": "object",
+      "properties": {
+        "refreshToken": {
+          "type": "string"
+        },
+        "accessToken": {
+          "type": "string"
+        }
+      }
     },
     "UploadFileResponse": {
       "type": "object",

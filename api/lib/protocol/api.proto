@@ -120,9 +120,15 @@ message OneTimePasscodeVerifyRequest {
 //
 // response
 message OneTimePasscodeVerifyResponse {
-  string jwt = 1;
+  TokenMaterial tokens = 1;
   User user = 2;
 }
+
+message TokenMaterial {
+  string refresh_token = 1;
+  string access_token = 2;
+}
+
 
 // PlaidConnectBankAccountsRequest
 //
@@ -294,6 +300,14 @@ message WyreWebhookRequest {
   string trigger = 3;
 }
 
+message TokenExchangeRequest {
+  string refresh_token = 1;
+}
+
+message TokenExchangeResponse {
+  TokenMaterial tokens = 1;
+}
+
 service Flux {
   // Get viewer data
   //
@@ -359,6 +373,16 @@ service Flux {
   rpc OneTimePasscodeVerify(OneTimePasscodeVerifyRequest) returns (OneTimePasscodeVerifyResponse) {
     option (google.api.http) = {
       post: "/flux/auth/one-time-passcode-verify"
+      body: "*"
+    };
+  }
+
+  // Exchange a refresh token for new token material; refresh tokens can only be used once
+  // If refresh tokens are used more than once RTR dictates that any access tokens which were created by it should be immediately revoked
+  // this is because this indicates an attack (something is wrong)
+  rpc TokenExchange(TokenExchangeRequest) returns (TokenExchangeResponse) {
+    option (google.api.http) = {
+      post: "/flux/auth/token"
       body: "*"
     };
   }

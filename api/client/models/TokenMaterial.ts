@@ -10,35 +10,30 @@
  * Do not edit the class manually.
  */
 
-import { TokenMaterial } from './TokenMaterial';
-import { User } from './User';
 import { HttpFile } from '../http/http';
 
-/**
-* response
-*/
-export class OneTimePasscodeVerifyResponse {
-    'tokens'?: TokenMaterial;
-    'user'?: User;
+export class TokenMaterial {
+    'refreshToken'?: string;
+    'accessToken'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "tokens",
-            "baseName": "tokens",
-            "type": "TokenMaterial",
+            "name": "refreshToken",
+            "baseName": "refreshToken",
+            "type": "string",
             "format": ""
         },
         {
-            "name": "user",
-            "baseName": "user",
-            "type": "User",
+            "name": "accessToken",
+            "baseName": "accessToken",
+            "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return OneTimePasscodeVerifyResponse.attributeTypeMap;
+        return TokenMaterial.attributeTypeMap;
     }
     
     public constructor() {

@@ -24,6 +24,9 @@ import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
 import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
+import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
+import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
+import { TokenMaterial } from '../models/TokenMaterial';
 import { UploadFileResponse } from '../models/UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from '../models/UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from '../models/UsGovernmentIdDocumentInputKind';
@@ -122,6 +125,15 @@ export class PromiseFluxApi {
      */
     public fluxSaveProfileData(body: SaveProfileDataRequest, options?: Configuration): Promise<ProfileDataInfo> {
     	const result = this.api.fluxSaveProfileData(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * Exchange a refresh token for new token material; refresh tokens can only be used once If refresh tokens are used more than once RTR dictates that any access tokens which were created by it should be immediately revoked this is because this indicates an attack (something is wrong)
+     * @param body 
+     */
+    public fluxTokenExchange(body: TokenExchangeRequest, options?: Configuration): Promise<TokenExchangeResponse> {
+    	const result = this.api.fluxTokenExchange(body, options);
         return result.toPromise();
     }
 	

@@ -34,6 +34,9 @@ models/ProtobufAny.ts
 models/RpcStatus.ts
 models/SaveProfileDataRequest.ts
 models/ThirdPartyUserAccount.ts
+models/TokenExchangeRequest.ts
+models/TokenExchangeResponse.ts
+models/TokenMaterial.ts
 models/UploadFileResponse.ts
 models/UsGovernmentIdDocumentInput.ts
 models/UsGovernmentIdDocumentInputKind.ts

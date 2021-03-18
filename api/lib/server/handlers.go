@@ -184,7 +184,17 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
 	}
 
-	jwt, err := s.JwtSigner.Sign(auth.NewClaims(u.ID))
+	now := time.Now()
+	refresh := auth.NewRefreshTokenClaims(now, u.ID)
+	access := auth.NewAccessTokenClaims(now, u.ID, refresh.Id)
+
+	refreshToken, err := s.JwtSigner.Sign(refresh)
+	if err != nil {
+		log.Println(err)
+		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
+	}
+
+	accessToken, err := s.JwtSigner.Sign(access)
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unauthenticated, unknownMsg)
@@ -204,7 +214,10 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}
 
 	return &proto.OneTimePasscodeVerifyResponse{
-		Jwt:  jwt,
+		Tokens: &proto.TokenMaterial{
+			AccessToken:  accessToken,
+			RefreshToken: refreshToken,
+		},
 		User: respUser,
 	}, nil
 }

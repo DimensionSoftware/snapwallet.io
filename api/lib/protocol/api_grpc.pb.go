@@ -48,6 +48,10 @@ type FluxClient interface {
 	//
 	// The passcode received in either email or phone text message should be provided here in order to obtain on access token
 	OneTimePasscodeVerify(ctx context.Context, in *OneTimePasscodeVerifyRequest, opts ...grpc.CallOption) (*OneTimePasscodeVerifyResponse, error)
+	// Exchange a refresh token for new token material; refresh tokens can only be used once
+	// If refresh tokens are used more than once RTR dictates that any access tokens which were created by it should be immediately revoked
+	// this is because this indicates an attack (something is wrong)
+	TokenExchange(ctx context.Context, in *TokenExchangeRequest, opts ...grpc.CallOption) (*TokenExchangeResponse, error)
 	// Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
@@ -142,6 +146,15 @@ func (c *fluxClient) OneTimePasscodeVerify(ctx context.Context, in *OneTimePassc
 	return out, nil
 }
 
+func (c *fluxClient) TokenExchange(ctx context.Context, in *TokenExchangeRequest, opts ...grpc.CallOption) (*TokenExchangeResponse, error) {
+	out := new(TokenExchangeResponse)
+	err := c.cc.Invoke(ctx, "/Flux/TokenExchange", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fluxClient) PlaidConnectBankAccounts(ctx context.Context, in *PlaidConnectBankAccountsRequest, opts ...grpc.CallOption) (*PlaidConnectBankAccountsResponse, error) {
 	out := new(PlaidConnectBankAccountsResponse)
 	err := c.cc.Invoke(ctx, "/Flux/PlaidConnectBankAccounts", in, out, opts...)
@@ -229,6 +242,10 @@ type FluxServer interface {
 	//
 	// The passcode received in either email or phone text message should be provided here in order to obtain on access token
 	OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error)
+	// Exchange a refresh token for new token material; refresh tokens can only be used once
+	// If refresh tokens are used more than once RTR dictates that any access tokens which were created by it should be immediately revoked
+	// this is because this indicates an attack (something is wrong)
+	TokenExchange(context.Context, *TokenExchangeRequest) (*TokenExchangeResponse, error)
 	// Post chosen bank info from plaid in order to create a new ACH pyment method in wyre
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
@@ -277,6 +294,9 @@ func (UnimplementedFluxServer) OneTimePasscode(context.Context, *OneTimePasscode
 }
 func (UnimplementedFluxServer) OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OneTimePasscodeVerify not implemented")
+}
+func (UnimplementedFluxServer) TokenExchange(context.Context, *TokenExchangeRequest) (*TokenExchangeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method TokenExchange not implemented")
 }
 func (UnimplementedFluxServer) PlaidConnectBankAccounts(context.Context, *PlaidConnectBankAccountsRequest) (*PlaidConnectBankAccountsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidConnectBankAccounts not implemented")
@@ -435,6 +455,24 @@ func _Flux_OneTimePasscodeVerify_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_TokenExchange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TokenExchangeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).TokenExchange(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/TokenExchange",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).TokenExchange(ctx, req.(*TokenExchangeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Flux_PlaidConnectBankAccounts_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(PlaidConnectBankAccountsRequest)
 	if err := dec(in); err != nil {
@@ -577,6 +615,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "OneTimePasscodeVerify",
 			Handler:    _Flux_OneTimePasscodeVerify_Handler,
+		},
+		{
+			MethodName: "TokenExchange",
+			Handler:    _Flux_TokenExchange_Handler,
 		},
 		{
 			MethodName: "PlaidConnectBankAccounts",
