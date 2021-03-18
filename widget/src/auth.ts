@@ -4,6 +4,7 @@ import {
   RequestContext,
   SecurityAuthentication,
   ServerConfiguration,
+  TokenExchangeResponse,
   TokenMaterial,
 } from 'api-client'
 import { JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY } from './constants'
@@ -12,6 +13,7 @@ import { parseJwt } from './util'
 export class AuthManager {
   // to avoid cycle
   private readonly unauthenticatedAPI = genAPIClient()
+  private tokenExchangePromise?: Promise<TokenExchangeResponse>
 
   private setCurrentAccessToken(newToken: string) {
     if (newToken) {
@@ -71,12 +73,18 @@ export class AuthManager {
 
   // exchanges and updates tokens
   private async tokenExchange(): Promise<void> {
-    const resp = await this.unauthenticatedAPI.fluxTokenExchange({
-      refreshToken: this.getCurrentRefreshToken(),
-    })
+    if (!this.tokenExchangePromise) {
+      this.tokenExchangePromise = this.unauthenticatedAPI.fluxTokenExchange({
+        refreshToken: this.getCurrentRefreshToken(),
+      })
+      const resp = await this.tokenExchangePromise
+      this.tokenExchangePromise = null
 
-    this.setCurrentAccessToken(resp.tokens.accessToken)
-    this.setCurrentRefreshToken(resp.tokens.refreshToken)
+      this.setCurrentAccessToken(resp.tokens.accessToken)
+      this.setCurrentRefreshToken(resp.tokens.refreshToken)
+    } else {
+      await this.tokenExchangePromise
+    }
   }
 
   // returns '' if token is non-refreshable or completely expired
