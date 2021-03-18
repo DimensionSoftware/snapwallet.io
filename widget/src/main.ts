@@ -2,6 +2,7 @@ import App from './App.svelte'
 import { AuthManager, genAPIClient } from './auth'
 
 window.AUTH_MANAGER = new AuthManager()
+window.AUTH_MANAGER.watch()
 window.API = genAPIClient(window.AUTH_MANAGER)
 
 // a test

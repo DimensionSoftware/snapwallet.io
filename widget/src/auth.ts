@@ -13,6 +13,10 @@ import { parseJwt } from './util'
 export class AuthManager {
   // to avoid cycle
   private readonly unauthenticatedAPI = genAPIClient()
+
+  private sessionExpiresAt = 0
+
+  // to avoid duplicate calls, we can only use a refresh token to exchange once
   private tokenExchangePromise?: Promise<TokenExchangeResponse>
 
   private setCurrentAccessToken(newToken: string) {
@@ -79,12 +83,7 @@ export class AuthManager {
   }
 
   private refreshTokenIsExpired(): boolean {
-    const parsed = this.parseRefreshTokenClaims()
-    if (!parsed) {
-      return true
-    }
-
-    const isTimeLeft = parsed.exp > Math.floor(add10seconds(Date.now()) / 1000)
+    const isTimeLeft = this.sessionExpiresAt > Math.floor(add10seconds(Date.now()) / 1000)
 
     return !isTimeLeft
   }
@@ -100,6 +99,15 @@ export class AuthManager {
 
       this.setCurrentAccessToken(resp.tokens.accessToken)
       this.setCurrentRefreshToken(resp.tokens.refreshToken)
+
+      const parsed = this.parseRefreshTokenClaims()
+      if (!parsed) {
+        throw new Error('could not parse refresh token claims')
+      }
+      if (!parsed.exp) {
+        throw new Error('refresh token claims lacks an expiration')
+      }
+      this.sessionExpiresAt = parsed.exp
     } else {
       await this.tokenExchangePromise
     }
@@ -123,11 +131,21 @@ export class AuthManager {
   public login(tokens: TokenMaterial) {
     this.setCurrentAccessToken(tokens.accessToken)
     this.setCurrentRefreshToken(tokens.refreshToken)
+
+    const parsed = this.parseRefreshTokenClaims()
+    if (!parsed) {
+      throw new Error('could not parse refresh token claims')
+    }
+    if (!parsed.exp) {
+      throw new Error('refresh token claims lacks an expiration')
+    }
+    this.sessionExpiresAt = parsed.exp
   }
 
   public logout() {
     this.setCurrentAccessToken('')
     this.setCurrentRefreshToken('')
+    this.sessionExpiresAt = 0
     window.dispatchEvent(new Event('logout'))
   }
 
@@ -147,6 +165,15 @@ export class AuthManager {
     }
 
     return parsed.sub
+  }
+
+  // watch for session changes so a logout message can be emitted
+  public watch() {
+    setInterval(() => {
+      if (this.refreshTokenIsExpired()) {
+        this.logout()
+      }
+    }, 30 * 1000)
   }
 }
 

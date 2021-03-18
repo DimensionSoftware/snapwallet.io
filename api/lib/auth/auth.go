@@ -78,7 +78,7 @@ func NewAccessTokenClaims(now time.Time, userID user.ID, refreshTokenID string) 
 		Id:        shortuuid.New(),
 		Subject:   string(userID),
 		IssuedAt:  now.Unix(),
-		ExpiresAt: now.Add(1 * time.Minute).Unix(),
+		ExpiresAt: now.Add(3 * time.Minute).Unix(),
 		Issuer:    refreshTokenID,
 	}
 }
@@ -88,7 +88,7 @@ func NewRefreshTokenClaims(now time.Time, userID user.ID) jwt.StandardClaims {
 		Id:        shortuuid.New(),
 		Subject:   string(userID),
 		IssuedAt:  now.Unix(),
-		ExpiresAt: now.Add(24 * time.Hour).Unix(),
+		ExpiresAt: now.Add(1 * time.Hour).Unix(),
 	}
 }
 
