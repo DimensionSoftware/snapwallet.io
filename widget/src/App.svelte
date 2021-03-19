@@ -71,9 +71,6 @@
     [Routes.ADDRESS]: wrap({
       ...authedRouteOptions(Address),
     }),
-    [Routes.ADDRESS_2]: wrap({
-      ...authedRouteOptions(Address2),
-    }),
     [Routes.FILE_UPLOAD]: wrap({
       ...authedRouteOptions(FileUpload),
     }),
