@@ -4,7 +4,7 @@
 </script>
 
 {#if !hidden}
-  <label>
+  <label class={$$props.class} style={$$props.style}>
     <span class="input-label">{label}</span>
     <slot />
   </label>
