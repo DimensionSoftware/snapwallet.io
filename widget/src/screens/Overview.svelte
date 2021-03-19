@@ -9,6 +9,7 @@
   import { CryptoIcons, isValidNumber, formatLocaleCurrency } from '../util'
   import { onMount, afterUpdate } from 'svelte'
   import { TransactionIntents } from '../types'
+  import { replace } from 'svelte-spa-router'
 
   $: ({
     intent,
@@ -35,6 +36,8 @@
   $: exchangeRate = isBuy ? 1 / destRate : destRate
   $: total = isBuy ? sourceAmount : destinationAmount
 
+  $: cryptoPrecision = cryptoAmount % 1 === 0 ? 1 : 8
+
   onMount(() => {
     priceStore.fetchPrices()
     const priceInterval = priceStore.pollPrices()
@@ -50,7 +53,7 @@
         <Icon size="80" />
       </div>
       <div class="checkout-item-name">
-        {cryptoAmount.toFixed(8)}
+        {cryptoAmount.toFixed(cryptoPrecision).replace(/\.0+0?$/g, '')}
         {cryptoTicker}
       </div>
     </div>
@@ -59,7 +62,7 @@
       <div class="line-item muted">
         <div>Crypto Fee</div>
         <div>
-          {(0).toFixed(8)}
+          {(0).toFixed(cryptoPrecision).replace(/\.0+0?$/g, '')}
           {cryptoTicker}
         </div>
       </div>
