@@ -108,10 +108,11 @@
       await window.API.fluxSaveProfileData({
         address: $userStore.address,
       })
-      const nextRoute = $transactionStore.sourceAmount
-        ? Routes.CHECKOUT_OVERVIEW
-        : Routes.ROOT
-      setTimeout(() => push(nextRoute), 800)
+      setTimeout(() => {
+        if (!$userStore.flags.hasWyreAccount) push(Routes.FILE_UPLOAD)
+        else if ($transactionStore.sourceAmount) push(Routes.CHECKOUT_OVERVIEW)
+        else push(Routes.ROOT)
+      }, 800)
     } finally {
       setTimeout(() => {
         isSubmittingProfile = false
