@@ -70,10 +70,11 @@
     // TODO: move this request somewhere sane
     const { flags = {} } = await window.API.fluxViewerData()
     userStore.setFlags(flags)
-    const { hasPlaidItems, hasWyreAccount } = flags
+    const { hasWyrePaymentMethods, hasWyreAccount } = flags
 
-    if (hasPlaidItems && hasWyreAccount) nextRoute = Routes.CHECKOUT_OVERVIEW
-    else if (hasPlaidItems) nextRoute = Routes.PROFILE
+    if (hasWyrePaymentMethods && hasWyreAccount)
+      nextRoute = Routes.CHECKOUT_OVERVIEW
+    else if (hasWyrePaymentMethods) nextRoute = Routes.PROFILE
   }
 
   const onKeyDown = (e: Event) => {

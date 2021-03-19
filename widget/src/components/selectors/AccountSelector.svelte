@@ -49,7 +49,7 @@
       label="Bank Account"
     />
     <h5 style="margin-top: 1.25rem">{copy.sectionTwoTitle}</h5>
-    {#if !flags?.hasPlaidItems}
+    {#if !flags?.hasWyrePaymentMethods}
       <p class="help">{copy.unavailable}</p>
     {/if}
   </div>

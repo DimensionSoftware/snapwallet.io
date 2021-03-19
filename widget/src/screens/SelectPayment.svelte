@@ -12,11 +12,12 @@
 
   const onACHClicked = async () => {
     const { flags = {} } = await window.API.fluxViewerData()
-    const { hasPlaidItems, hasWyreAccount } = flags
+    const { hasWyrePaymentMethods, hasWyreAccount } = flags
     let nextRoute = Routes.PLAID_LINK
 
-    if (hasPlaidItems && hasWyreAccount) nextRoute = Routes.CHECKOUT_OVERVIEW
-    else if (hasPlaidItems) nextRoute = Routes.PROFILE
+    if (hasWyrePaymentMethods && hasWyreAccount)
+      nextRoute = Routes.CHECKOUT_OVERVIEW
+    else if (hasWyrePaymentMethods) nextRoute = Routes.PROFILE
 
     push(nextRoute)
   }
