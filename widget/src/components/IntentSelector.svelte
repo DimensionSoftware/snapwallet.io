@@ -1,19 +1,19 @@
 <script lang="ts">
-  import { userStore } from '../stores/UserStore'
-  $: isSell = $userStore.intent === 'sell'
+  import { transactionStore } from '../stores/TransactionStore'
+  $: isSell = $transactionStore.intent === 'sell'
 </script>
 
 <div class="intent-selector-container">
   <div class="intent-selector">
     <div
-      on:click={() => userStore.setIntent('buy')}
+      on:click={() => transactionStore.setIntent('buy')}
       class:active={!isSell}
       class="buy-toggle"
     >
       Buy
     </div>
     <div
-      on:click={() => userStore.setIntent('sell')}
+      on:click={() => transactionStore.setIntent('sell')}
       class:active={isSell}
       class="sell-toggle"
     >

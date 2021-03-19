@@ -25,6 +25,9 @@ const createStore = () => {
       update(s => ({ ...s, sourceCurrency })),
     setDestinationCurrency: (destinationCurrency: IAsset) =>
       update(s => ({ ...s, destinationCurrency })),
+    setInent: (intent: 'buy' | 'sell') => {
+      update(s => ({ ...s, intent }))
+    },
   }
 }
 
