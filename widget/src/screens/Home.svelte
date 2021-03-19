@@ -16,11 +16,11 @@
   import { isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
-  import IconCard from '../components/cards/IconCard.svelte'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
   import { TransactionIntents } from '../types'
   import ExchangeRate from '../components/ExchangeRate.svelte'
+  import AccountSelector from '../components/selectors/AccountSelector.svelte'
 
   let selectorVisible = false
   let paymentSelectorVisible = false
@@ -196,27 +196,11 @@
   </div>
 </PopupSelector>
 
-<!-- TODO: handle pm selection here -->
-<PopupSelector
-  on:close={() => {
-    paymentSelectorVisible = false
-  }}
+<!-- Payment Method Selector -->
+<AccountSelector
+  on:close={() => (paymentSelectorVisible = false)}
   visible={paymentSelectorVisible}
-  headerTitle="Payment Methods"
->
-  <div class="scroll cryptocurrencies-container">
-    <h5>Add a Payment Method</h5>
-    <IconCard
-      icon={faUniversity}
-      on:click={() => push(Routes.PLAID_LINK)}
-      label="Bank Account"
-    />
-    <h5 style="margin-top: 1.25rem">Select a Payment Method</h5>
-    {#if !$userStore.flags?.hasPlaidItems}
-      <p class="help">No payment methods available</p>
-    {/if}
-  </div>
-</PopupSelector>
+/>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
