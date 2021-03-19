@@ -1,9 +1,9 @@
 import { writable } from 'svelte/store'
-import { IAsset, TransactionMediums } from '../types'
+import { IAsset, TransactionIntents, TransactionMediums } from '../types'
 
 const createStore = () => {
   const { subscribe, update } = writable({
-    intent: 'buy',
+    intent: TransactionIntents.BUY,
     inMedium: TransactionMediums.ACH,
     outMedium: TransactionMediums.BLOCKCHAIN,
     sourceId: null,
@@ -18,14 +18,34 @@ const createStore = () => {
     setDestinationAmount: (destinationAmount: number) => {
       update(s => ({ ...s, destinationAmount }))
     },
-    setSourceAmount: (sourceAmount: number) => {
-      update(s => ({ ...s, sourceAmount }))
+    setSourceAmount: (sourceAmount: number, destinationPrice: number) => {
+      update(s => {
+        return {
+          ...s,
+          sourceAmount,
+          // Calculate destination amount for future intent switches
+          destinationAmount: destinationPrice * sourceAmount,
+        }
+      })
     },
     setSourceCurrency: (sourceCurrency: IAsset) =>
       update(s => ({ ...s, sourceCurrency })),
     setDestinationCurrency: (destinationCurrency: IAsset) =>
       update(s => ({ ...s, destinationCurrency })),
-    setIntent: (intent: 'buy' | 'sell') => update(s => ({ ...s, intent })),
+    toggleIntent: () =>
+      update(s => {
+        return {
+          ...s,
+          intent:
+            s.intent === TransactionIntents.BUY
+              ? TransactionIntents.SELL
+              : TransactionIntents.BUY,
+          sourceCurrency: s.destinationCurrency,
+          destinationCurrency: s.sourceCurrency,
+          sourceAmount: s.destinationAmount,
+          destinationAmount: s.sourceAmount,
+        }
+      }),
   }
 }
 
