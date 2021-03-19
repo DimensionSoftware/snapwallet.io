@@ -1,22 +1,14 @@
 <script lang="ts">
-  import { isValidNumber } from '../util'
   import { transactionStore } from '../stores/TransactionStore'
+  import { TransactionIntents } from '../types'
 
-  export let isDestination: boolean
-  export let rate: number = 0.0
-
-  $: precision = isDestination ? 8 : 2
-
-  $: ticker = isDestination
-    ? $transactionStore.destinationCurrency.ticker
-    : $transactionStore.sourceCurrency.ticker
-
-  $: total = isValidNumber(rate) ? rate : 0
+  $: ({ destinationCurrency, intent, destinationAmount } = $transactionStore)
+  $: precision = intent === TransactionIntents.BUY ? 8 : 2
 </script>
 
 <div class="total-container">
-  {total.toFixed(precision)}
-  {ticker}
+  {destinationAmount.toFixed(precision)}
+  {destinationCurrency.ticker}
 </div>
 
 <style lang="scss">
