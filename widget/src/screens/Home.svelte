@@ -177,7 +177,12 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Checkout</Button>
+    <Button
+      disabled={!sourceAmount ||
+        !flags?.hasWyreAccount ||
+        !flags?.hasWyrePaymentMethods}
+      on:click={handleNextStep}>Checkout</Button
+    >
   </ModalFooter>
 </ModalContent>
 
