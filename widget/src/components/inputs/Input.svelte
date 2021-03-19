@@ -69,7 +69,7 @@
 
   .input-container {
     padding-bottom: 0;
-    margin-bottom: 0.75rem;
+    margin-bottom: 0rem;
     position: relative;
     input[type='number'] {
       padding-right: 0.75em;
@@ -93,7 +93,7 @@
       cursor: pointer;
       text-overflow: ellipsis;
       outline: none;
-      padding: 35px 5px 15px 5px !important;
+      padding: 1.5em 5px 15px 5px !important;
       vertical-align: middle;
       font-size: 1.8em;
       color: var(--theme-text-color);
