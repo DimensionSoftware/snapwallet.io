@@ -14,3 +14,8 @@ export enum Masks {
   INTL_DATE = 'xxxx-xx-xx',
   US_DATE = 'xx-xx-xxxx',
 }
+
+export enum TransactionIntents {
+  BUY = 'buy',
+  SELL = 'sell',
+}
