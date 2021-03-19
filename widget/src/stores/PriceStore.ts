@@ -1,5 +1,6 @@
 import { writable } from 'svelte/store'
 import { supportedCurrencyPairs } from '../constants'
+import { Logger } from '../util'
 
 const stubPrices = () => {
   return supportedCurrencyPairs.wyre.reduce((acc, key) => {
@@ -24,7 +25,10 @@ const createStore = () => {
     const result = {}
     await Promise.all(
       supportedCurrencyPairs.wyre.map(s => {
-        if (!prices[s]) return
+        if (!prices[s]) {
+          Logger.warn(s, 'is not a valid price currency pair.')
+          return
+        }
         result[s] = prices[s]['rate']
       }),
     )
