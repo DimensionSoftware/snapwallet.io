@@ -28,8 +28,6 @@
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
-
-  let isEnteringSourceAmount = true
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
 
   $: ({
@@ -41,12 +39,13 @@
 
   $: ({ flags } = $userStore)
 
-  $: selectedDirection = `${sourceCurrency.ticker}_${destinationCurrency.ticker}`
+  $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
   $: isBuy = intent === TransactionIntents.BUY
 
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
-  $: selectedDestinationPrice = selectedPriceMap[destinationCurrency.ticker]
-  $: exchangeRate = isEnteringSourceAmount
+  $: selectedDestinationPrice =
+    selectedPriceMap[$transactionStore.destinationCurrency.ticker]
+  $: exchangeRate = isBuy
     ? 1 / selectedDestinationPrice
     : selectedDestinationPrice
 
@@ -108,9 +107,7 @@
 
 <ModalContent>
   <ModalBody>
-    <IntentSelector
-      on:change={() => (isEnteringSourceAmount = !isEnteringSourceAmount)}
-    />
+    <IntentSelector />
     <div class="cryptocurrencies-container">
       <div class="dst-container">
         <Label>
