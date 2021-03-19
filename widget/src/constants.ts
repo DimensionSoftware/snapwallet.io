@@ -1,14 +1,23 @@
 export const supportedCurrencyPairs = {
   wyre: [
     'USD_BTC',
+    'BTC_USD',
     'USD_ETH',
+    'ETH_USD',
     'USD_USDC',
+    'USDC_USD',
     'USD_USDT',
+    'USDT_USD',
     'USD_DAI',
+    'DAI_USD',
     'USD_MKR',
+    'MKR_USD',
     'USD_GUSD',
+    'GUSD_USD',
     'USD_PAX',
+    'PAX_USD',
     'USD_LINK',
+    'LINK_USD',
   ],
 }
 
