@@ -13,12 +13,14 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
-  import { isValidNumber, onEnterPressed, formatLocaleCurrency } from '../util'
+  import { isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
   import IconCard from '../components/cards/IconCard.svelte'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
+  import { TransactionIntents } from '../types'
+  import ExchangeRate from '../components/ExchangeRate.svelte'
 
   let selectorVisible = false
   let paymentSelectorVisible = false
@@ -34,19 +36,24 @@
     { name: 'Paxos Standard', ticker: 'PAX' },
     { name: 'Link', ticker: 'LINK' },
   ]
-
-  $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
-  $: selectedPriceMap = $priceStore.prices[selectedDirection]
-  $: selectedSourcePrice =
-    selectedPriceMap[$transactionStore.sourceCurrency.ticker]
-  $: selectedDestinationPrice =
-    selectedPriceMap[$transactionStore.destinationCurrency.ticker]
-  $: exchangeRate = 1 / selectedDestinationPrice
-  $: destinationRate = $transactionStore.sourceAmount * selectedDestinationPrice
-  $: sourceRate = $transactionStore.destinationAmount / selectedDestinationPrice
-
   let isEnteringSourceAmount = true
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
+
+  $: ({
+    sourceCurrency,
+    destinationCurrency,
+    sourceAmount,
+    intent,
+  } = $transactionStore)
+
+  $: selectedDirection = `${sourceCurrency.ticker}_${destinationCurrency.ticker}`
+  $: isBuy = intent === TransactionIntents.BUY
+
+  $: selectedPriceMap = $priceStore.prices[selectedDirection]
+  $: selectedDestinationPrice = selectedPriceMap[destinationCurrency.ticker]
+  $: exchangeRate = isEnteringSourceAmount
+    ? 1 / selectedDestinationPrice
+    : selectedDestinationPrice
 
   $: fakePrice = 10_000
   $: nextRoute = Routes.PLAID_LINK
@@ -62,7 +69,7 @@
 
   const handleNextStep = async () => {
     const { sourceAmount } = $transactionStore
-    if (!sourceAmount || isNaN(sourceAmount) || !isValidNumber(destinationRate))
+    if (!sourceAmount || !isValidNumber(sourceAmount))
       // focus input
       return document.querySelector('input')?.focus()
 
@@ -99,64 +106,33 @@
     const priceInterval = priceStore.pollPrices()
     return () => clearInterval(priceInterval)
   })
-
-  const srcTicker = $transactionStore.sourceCurrency.ticker
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent>
   <ModalBody>
-    <IntentSelector />
+    <IntentSelector
+      on:change={() => (isEnteringSourceAmount = !isEnteringSourceAmount)}
+    />
     <div class="cryptocurrencies-container">
       <div class="dst-container">
         <Label>
           <CryptoCard
             on:click={() => (selectorVisible = true)}
-            crypto={$transactionStore.destinationCurrency}
+            crypto={isBuy ? destinationCurrency : sourceCurrency}
           />
         </Label>
       </div>
       <div style="display:flex;flex-direction:column;height:5rem;">
-        <div class="dstCurrency">
-          <Label>
-            <span
-              class:bold-pointer={isEnteringSourceAmount}
-              class:muted={!isEnteringSourceAmount}
-              on:click={() => {
-                const sourceAmount = Number(sourceRate.toFixed(2))
-                transactionStore.setSourceAmount(sourceAmount)
-                isEnteringSourceAmount = true
-              }}
-            >
-              {srcTicker}
-            </span>
-            /
-            <span
-              class:bold-pointer={!isEnteringSourceAmount}
-              class:muted={isEnteringSourceAmount}
-              on:click={() => {
-                transactionStore.setDestinationAmount(destinationRate)
-                isEnteringSourceAmount = false
-              }}
-            >
-              {$transactionStore.destinationCurrency.ticker}
-            </span>
-          </Label>
-        </div>
         <Label label="Amount">
           <Input
             pattern={`[\\d,\\.]*`}
-            maskChar="[\d,\.]"
             on:change={e => {
               const val = Number(e.detail)
-              isEnteringSourceAmount
-                ? transactionStore.setSourceAmount(val)
-                : transactionStore.setDestinationAmount(val)
+              transactionStore.setSourceAmount(val, selectedDestinationPrice)
             }}
-            defaultValue={isEnteringSourceAmount
-              ? $transactionStore.sourceAmount
-              : $transactionStore.destinationAmount}
+            defaultValue={sourceAmount}
             required
             type="number"
             inputmode="number"
@@ -165,33 +141,20 @@
         </Label>
       </div>
       <ul class="vertical-stepper">
-        <li class="exchange-rate-container">
-          1 {$transactionStore.destinationCurrency.ticker} ≈
-          {isLoadingPrices
-            ? formatLocaleCurrency(
-                $transactionStore.sourceCurrency.ticker,
-                fakePrice,
-              )
-            : formatLocaleCurrency(
-                $transactionStore.sourceCurrency.ticker,
-                exchangeRate,
-              )}
-          {srcTicker}
+        <li>
+          <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
         </li>
         <li>
-          <TotalContainer
-            rate={isEnteringSourceAmount ? destinationRate : sourceRate}
-            isDestination={isEnteringSourceAmount}
-          />
+          <TotalContainer />
         </li>
         <li
           style="cursor:pointer;display:flex;align-items:center;"
           on:click={() => (paymentSelectorVisible = true)}
         >
           <FaIcon data={faUniversity} />
-          <b style="margin-left:0.5rem;text-decoration:underline"
-            >Select Payment</b
-          >
+          <b style="margin-left:0.5rem;text-decoration:underline">
+            Select Bank Account
+          </b>
         </li>
       </ul>
     </div>
@@ -270,42 +233,6 @@
     width: 100%;
     padding: 0 0.5rem;
     margin-top: 1rem;
-  }
-
-  .exchange-rate-container {
-    height: 1.5rem;
-    position: relative;
-    z-index: 2;
-    font-size: 0.9rem;
-    color: var(--theme-text-color);
-  }
-
-  .muted {
-    cursor: pointer;
-    color: var(--theme-text-color-muted);
-  }
-
-  .bold-pointer {
-    font-weight: bold;
-  }
-
-  span {
-    width: 35px;
-  }
-
-  .dst-container {
-    margin-top: 1rem;
-    display: flex;
-    flex-direction: column;
-    height: 5rem;
-    margin-bottom: 1rem;
-  }
-  .dstCurrency {
-    position: absolute;
-    right: 0.5rem;
-    display: flex;
-    justify-content: space-between;
-    cursor: pointer;
   }
 
   .vertical-stepper {
