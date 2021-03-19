@@ -11,8 +11,10 @@
   import { Logger, onEnterPressed } from '../util'
   import { Routes } from '../constants'
   import type { Address } from 'api-client'
+  import { transactionStore } from '../stores/TransactionStore'
 
   let animation = 'left'
+  let isSubmittingProfile = false
   let autocomplete: google.maps.places.Autocomplete
 
   const componentForm = {
@@ -101,7 +103,21 @@
   }
 
   const handleNextStep = async () => {
-    push(Routes.ADDRESS_2)
+    try {
+      isSubmittingProfile = true
+      await window.API.fluxSaveProfileData({
+        address: $userStore.address,
+      })
+      const nextRoute = $transactionStore.sourceAmount
+        ? Routes.CHECKOUT_OVERVIEW
+        : Routes.ROOT
+      setTimeout(() => push(nextRoute), 800)
+    } finally {
+      setTimeout(() => {
+        isSubmittingProfile = false
+        userStore.clearAddress()
+      }, 800)
+    }
   }
 
   const onKeyDown = (e: Event) => {
@@ -131,9 +147,28 @@
     <Label label="City">
       <Input placeholder="City" defaultValue={$userStore.address.city} />
     </Label>
+    <div class="inline-inputs">
+      <Label label="Country" style="margin-right:1rem;">
+        <Input
+          placeholder="Country"
+          defaultValue={$userStore.address.country}
+        />
+      </Label>
+      <Label class="state" label="State">
+        <Input placeholder="State" defaultValue={$userStore.address.state} />
+      </Label>
+    </div>
+    <Label label="Postal Code">
+      <Input
+        placeholder="Postal Code"
+        defaultValue={$userStore.address.postalCode}
+      />
+    </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Save</Button>
+    <Button on:click={handleNextStep}
+      >{isSubmittingProfile ? 'Saving...' : 'Save'}</Button
+    >
   </ModalFooter>
 </ModalContent>
 
@@ -147,5 +182,10 @@
   @import '../styles/_vars.scss';
   label {
     size: smaller;
+  }
+  .inline-inputs {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 </style>
