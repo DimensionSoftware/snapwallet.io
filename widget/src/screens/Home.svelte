@@ -137,12 +137,6 @@
         </Label>
       </div>
       <ul class="vertical-stepper">
-        <li>
-          <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
-        </li>
-        <li>
-          <TotalContainer />
-        </li>
         {#if flags?.hasWyreAccount}
           <li class="success">
             Verify Identity
@@ -172,6 +166,12 @@
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
             {isBuy ? 'Select Payment Method' : 'Select Bank Account'}
           </b>
+        </li>
+        <li>
+          <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
+        </li>
+        <li>
+          <TotalContainer />
         </li>
       </ul>
     </div>
