@@ -181,6 +181,7 @@
   </ModalFooter>
 </ModalContent>
 
+<!-- Cryptocurrency Selector -->
 <CryptoSelector
   visible={cryptoSelectorVisible}
   on:close={() => (cryptoSelectorVisible = false)}
