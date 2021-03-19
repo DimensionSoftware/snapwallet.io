@@ -13,7 +13,6 @@ const initialAddress = {
 
 function createStore() {
   const { subscribe, update } = writable({
-    intent: 'buy',
     emailAddress: '',
     firstName: '',
     lastName: '',
@@ -28,7 +27,6 @@ function createStore() {
 
   return {
     subscribe,
-    setIntent: (intent: string) => update(s => ({ ...s, intent })),
     setEmailAddress: (emailAddress: string) =>
       update(s => ({ ...s, emailAddress })),
     setFullName: (fullName: string) => {
