@@ -21,21 +21,11 @@
   import { TransactionIntents } from '../types'
   import ExchangeRate from '../components/ExchangeRate.svelte'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
+  import CryptoSelector from '../components/selectors/CryptoSelector.svelte'
 
-  let selectorVisible = false
+  let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
 
-  const cryptoCurrencies = [
-    { name: 'Bitcoin', ticker: 'BTC', popular: true },
-    { name: 'Ethereum', ticker: 'ETH', popular: true },
-    { name: 'USDC', ticker: 'USDC' },
-    { name: 'Tether', ticker: 'USDT', popular: true },
-    { name: 'DAI', ticker: 'DAI' },
-    { name: 'MakerDAO', ticker: 'MKR' },
-    { name: 'Gemini Dollar', ticker: 'GUSD' },
-    { name: 'Paxos Standard', ticker: 'PAX' },
-    { name: 'Link', ticker: 'LINK' },
-  ]
   let isEnteringSourceAmount = true
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
 
@@ -119,7 +109,7 @@
       <div class="dst-container">
         <Label>
           <CryptoCard
-            on:click={() => (selectorVisible = true)}
+            on:click={() => (cryptoSelectorVisible = true)}
             crypto={isBuy ? destinationCurrency : sourceCurrency}
           />
         </Label>
@@ -165,36 +155,10 @@
   </ModalFooter>
 </ModalContent>
 
-<PopupSelector
-  on:close={() => (selectorVisible = false)}
-  visible={selectorVisible}
-  headerTitle="Select Currency"
->
-  <div class="scroll cryptocurrencies-container">
-    <h5>Popular</h5>
-    {#each cryptoCurrencies.filter(c => c.popular) as cryptoCurrency (cryptoCurrency.ticker)}
-      <div style="margin: 0.5rem 0">
-        <Label>
-          <CryptoCard
-            on:click={() => (selectorVisible = false)}
-            crypto={cryptoCurrency}
-          />
-        </Label>
-      </div>
-    {/each}
-    <h5 style="margin-top: 1.25rem">All</h5>
-    {#each cryptoCurrencies.filter(c => !c.popular) as cryptoCurrency (cryptoCurrency.ticker)}
-      <div style="margin: 0.5rem 0">
-        <Label>
-          <CryptoCard
-            on:click={() => (selectorVisible = false)}
-            crypto={cryptoCurrency}
-          />
-        </Label>
-      </div>
-    {/each}
-  </div>
-</PopupSelector>
+<CryptoSelector
+  visible={cryptoSelectorVisible}
+  on:close={() => (cryptoSelectorVisible = false)}
+/>
 
 <!-- Payment Method Selector -->
 <AccountSelector
@@ -206,18 +170,11 @@
   @import '../styles/_vars.scss';
   @import '../styles/text.scss';
 
-  h5 {
-    margin: 0;
-  }
-  .scroll {
-    overflow-y: scroll;
-  }
-  .cryptocurrencies-container {
-    position: relative;
-    height: 100%;
-    width: 100%;
-    padding: 0 0.5rem;
-    margin-top: 1rem;
+  .dst-container {
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    height: 5rem;
   }
 
   .vertical-stepper {
