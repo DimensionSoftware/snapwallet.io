@@ -5,7 +5,6 @@
   import ModalFooter from '../components/ModalFooter.svelte'
   import IntentSelector from '../components/IntentSelector.svelte'
   import Button from '../components/Button.svelte'
-  import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import CryptoCard from '../components/cards/CryptoCard.svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { userStore } from '../stores/UserStore'
