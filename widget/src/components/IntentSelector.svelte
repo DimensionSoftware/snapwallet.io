@@ -1,19 +1,27 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
   import { transactionStore } from '../stores/TransactionStore'
-  $: isSell = $transactionStore.intent === 'sell'
+  import { TransactionIntents } from '../types'
+  const dispatch = createEventDispatcher()
+
+  $: isSell = $transactionStore.intent === TransactionIntents.SELL
+  const onClick = () => {
+    transactionStore.toggleIntent()
+    dispatch('change')
+  }
 </script>
 
 <div class="intent-selector-container">
   <div class="intent-selector">
     <div
-      on:click={() => transactionStore.setIntent('buy')}
+      on:click={() => isSell && onClick()}
       class:active={!isSell}
       class="buy-toggle"
     >
       Buy
     </div>
     <div
-      on:click={() => transactionStore.setIntent('sell')}
+      on:click={() => !isSell && onClick()}
       class:active={isSell}
       class="sell-toggle"
     >
