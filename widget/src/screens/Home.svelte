@@ -153,7 +153,8 @@
         >
           <FaIcon data={faUniversity} />
           <b style="margin-left:0.5rem;text-decoration:underline">
-            Select Bank Account
+            <!-- PMs are only for buy, bank account is only option for sell atm -->
+            {isBuy ? 'Select Payment Method' : 'Select Bank Account'}
           </b>
         </li>
       </ul>
