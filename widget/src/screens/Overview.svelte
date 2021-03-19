@@ -50,7 +50,7 @@
         </div>
       </div>
       <div class="line-item muted">
-        <div>Partner Fee</div>
+        <div>Service Fee</div>
         <div>
           {formatLocaleCurrency($transactionStore.sourceCurrency.ticker, 0)}
         </div>
