@@ -8,18 +8,32 @@
   import { priceStore } from '../stores/PriceStore'
   import { CryptoIcons, isValidNumber, formatLocaleCurrency } from '../util'
   import { onMount, afterUpdate } from 'svelte'
+  import { TransactionIntents } from '../types'
 
-  $: Icon = CryptoIcons[$transactionStore.destinationCurrency.ticker]
+  $: ({
+    intent,
+    destinationCurrency,
+    sourceCurrency,
+    sourceAmount,
+    destinationAmount,
+  } = $transactionStore)
+
+  $: isBuy = intent === TransactionIntents.BUY
+  $: cryptoTicker = isBuy ? destinationCurrency.ticker : sourceCurrency.ticker
+  $: fiatTicker = isBuy ? sourceCurrency.ticker : destinationCurrency.ticker
+  $: cryptoAmount = isBuy ? destinationAmount : sourceAmount
+
+  $: Icon = CryptoIcons[cryptoTicker]
   $: screenTitle = $transactionStore.intent === 'buy' ? 'Buying' : 'Selling'
   $: buttonText = $transactionStore.intent === 'buy' ? 'Buy Now' : 'Sell Now'
 
   // TODO: these prices will be removed once txn endpoint is wired up ;)
   // Price Data
-  $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
+  $: selectedDirection = `${sourceCurrency.ticker}_${destinationCurrency.ticker}`
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
-  $: destRate = selectedPriceMap[$transactionStore.destinationCurrency.ticker]
-  $: exchangeRate = 1 / destRate
-  $: destinationAmount = $transactionStore.sourceAmount * destRate
+  $: destRate = selectedPriceMap[destinationCurrency.ticker]
+  $: exchangeRate = isBuy ? 1 / destRate : destRate
+  $: total = isBuy ? sourceAmount : destinationAmount
 
   onMount(() => {
     priceStore.fetchPrices()
@@ -36,8 +50,8 @@
         <Icon size="80" />
       </div>
       <div class="checkout-item-name">
-        {destinationAmount.toFixed(8)}
-        {$transactionStore.destinationCurrency.ticker}
+        {cryptoAmount.toFixed(8)}
+        {cryptoTicker}
       </div>
     </div>
     <div class="line-items">
@@ -46,39 +60,42 @@
         <div>Crypto Fee</div>
         <div>
           {(0).toFixed(8)}
-          {$transactionStore.destinationCurrency.ticker}
+          {cryptoTicker}
         </div>
       </div>
-      <div class="line-item muted">
-        <div>Service Fee</div>
-        <div>
-          {formatLocaleCurrency($transactionStore.sourceCurrency.ticker, 0)}
+      {#if isBuy}
+        <div class="line-item muted">
+          <div>Service Fee</div>
+          <div>
+            {formatLocaleCurrency($transactionStore.sourceCurrency.ticker, 0)}
+          </div>
         </div>
-      </div>
+      {/if}
       <div class="line-item muted">
         <div>Exchange Rate</div>
         <div>
-          {formatLocaleCurrency(
-            $transactionStore.sourceCurrency.ticker,
-            exchangeRate,
-          )}
+          {formatLocaleCurrency(fiatTicker, exchangeRate)}
         </div>
       </div>
       <div class="line dashed" />
       <div class="line-item">
         <div><b>Total</b></div>
         <div>
-          {formatLocaleCurrency(
-            $transactionStore.sourceCurrency.ticker,
-            $transactionStore.sourceAmount,
-          )}
+          {formatLocaleCurrency(fiatTicker, total)}
         </div>
       </div>
       <div class="line dashed" />
-      <div class="line-item muted">
-        <div>Wallet</div>
-        <div>3x2kdkdj...k34w</div>
-      </div>
+      {#if isBuy}
+        <div class="line-item muted">
+          <div>Wallet</div>
+          <div>3x2kdkdj...k34w</div>
+        </div>
+      {:else}
+        <div class="line-item muted">
+          <div>Bank Account</div>
+          <div>Checking 3234</div>
+        </div>
+      {/if}
     </div>
   </ModalBody>
   <ModalFooter>
