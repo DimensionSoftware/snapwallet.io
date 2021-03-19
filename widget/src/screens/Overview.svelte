@@ -6,7 +6,12 @@
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { priceStore } from '../stores/PriceStore'
-  import { CryptoIcons, isValidNumber, formatLocaleCurrency } from '../util'
+  import {
+    CryptoIcons,
+    isValidNumber,
+    formatLocaleCurrency,
+    dropEndingZeros,
+  } from '../util'
   import { onMount, afterUpdate } from 'svelte'
   import { TransactionIntents } from '../types'
   import { replace } from 'svelte-spa-router'
@@ -53,7 +58,7 @@
         <Icon size="80" />
       </div>
       <div class="checkout-item-name">
-        {cryptoAmount.toFixed(cryptoPrecision).replace(/\.0+0?$/g, '')}
+        {dropEndingZeros(cryptoAmount.toFixed(cryptoPrecision))}
         {cryptoTicker}
       </div>
     </div>
@@ -62,7 +67,7 @@
       <div class="line-item muted">
         <div>Crypto Fee</div>
         <div>
-          {(0).toFixed(cryptoPrecision).replace(/\.0+0?$/g, '')}
+          {dropEndingZeros((0).toFixed(cryptoPrecision))}
           {cryptoTicker}
         </div>
       </div>

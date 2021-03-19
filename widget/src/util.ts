@@ -89,3 +89,7 @@ export const fileToBase64 = (file): Promise<string> =>
     reader.onload = () => resolve(reader.result as string)
     reader.onerror = error => reject(error)
   })
+
+export const dropEndingZeros = (str: string): string => {
+  return str.replace(/\.0+0?$/g, '')
+}
