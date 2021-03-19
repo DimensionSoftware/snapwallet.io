@@ -15,7 +15,11 @@
   import { isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
-  import { faUniversity } from '@fortawesome/free-solid-svg-icons'
+  import {
+    faCheck,
+    faIdCard,
+    faUniversity,
+  } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
   import { TransactionIntents } from '../types'
   import ExchangeRate from '../components/ExchangeRate.svelte'
@@ -34,6 +38,8 @@
     sourceAmount,
     intent,
   } = $transactionStore)
+
+  $: ({ flags } = $userStore)
 
   $: selectedDirection = `${sourceCurrency.ticker}_${destinationCurrency.ticker}`
   $: isBuy = intent === TransactionIntents.BUY
@@ -137,9 +143,29 @@
         <li>
           <TotalContainer />
         </li>
+        {#if flags?.hasWyreAccount}
+          <li class="success">
+            Verify Identity
+            <span class="icon">
+              <FaIcon data={faCheck} />
+            </span>
+          </li>
+        {:else}
+          <li
+            style="cursor:pointer;display:flex;align-items:center;"
+            on:click={() => (paymentSelectorVisible = true)}
+          >
+            <FaIcon data={faIdCard} />
+            <b style="margin-left:0.5rem;text-decoration:underline">
+              Verify Identity
+            </b>
+          </li>
+        {/if}
         <li
+          class:disabled={!flags?.hasWyreAccount}
           style="cursor:pointer;display:flex;align-items:center;"
-          on:click={() => (paymentSelectorVisible = true)}
+          on:click={() =>
+            flags?.hasWyreAccount && (paymentSelectorVisible = true)}
         >
           <FaIcon data={faUniversity} />
           <b style="margin-left:0.5rem;text-decoration:underline">
@@ -184,7 +210,7 @@
       position: relative;
       padding-left: 1.25rem;
       margin-left: 1rem;
-      margin-top: 0.25rem;
+      margin-top: 0.5rem;
       // marker
       &:before {
         content: '';
@@ -214,6 +240,22 @@
         border-color: inherit;
         border-width: 0;
         outline: 0;
+      }
+      &.success {
+        display: flex;
+        align-items: center;
+        color: var(--theme-text-color-4);
+        & > .icon {
+          margin-left: 0.4rem;
+          color: var(--theme-success-color);
+        }
+        &:before {
+          border: 4px solid var(--theme-success-color) !important;
+        }
+      }
+      &.disabled {
+        color: var(--theme-text-color-4);
+        cursor: auto !important;
       }
     }
   }
