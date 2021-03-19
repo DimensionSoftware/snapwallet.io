@@ -11,6 +11,9 @@
   } from '@fortawesome/free-solid-svg-icons'
   import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import Button from '../components/Button.svelte'
+  import { push } from 'svelte-spa-router'
+  import { Routes } from '../constants'
+  import { transactionStore } from '../stores/TransactionStore'
 
   const allowedFileTypes = 'image/png,image/jpeg,image/jpg,application/pdf'
 
@@ -23,13 +26,19 @@
   let fileSizeError: string = ''
 
   const handleNextStep = async () => {
-    const resp = await window.API.fluxUploadFile(fileEl.files[0])
-    Logger.debug(resp)
-    await window.API.fluxSaveProfileData({
+    const uploadResponse = await window.API.fluxUploadFile(fileEl.files[0])
+    Logger.debug(uploadResponse)
+    const profileResponse = await window.API.fluxSaveProfileData({
       proofOfAddressDoc: {
-        fileIds: [resp.fileId],
+        fileIds: [uploadResponse.fileId],
       },
     })
+    setTimeout(() => {
+      const wyreApproved = profileResponse.wyre?.status === 'APPROVED'
+      if (wyreApproved && $transactionStore.sourceAmount)
+        push(Routes.CHECKOUT_OVERVIEW)
+      else push(Routes.ROOT)
+    }, 800)
   }
 
   const selectFileType = selectedType => () => {
