@@ -4,6 +4,7 @@
   import { createEventDispatcher } from 'svelte'
   import FaIcon from 'svelte-awesome'
   import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+  import { TransactionIntents } from '../../types'
 
   export let crypto
 
@@ -12,7 +13,18 @@
 
 <div
   on:click={() => {
-    transactionStore.setDestinationCurrency(crypto)
+    const { destinationCurrency, sourceCurrency } = $transactionStore
+    if ($transactionStore.intent === TransactionIntents.BUY) {
+      transactionStore.setCurrencies({
+        destinationCurrency: crypto,
+        sourceCurrency,
+      })
+    } else {
+      transactionStore.setCurrencies({
+        destinationCurrency,
+        sourceCurrency: crypto,
+      })
+    }
     dispatch('click')
   }}
   class="crypto-card"

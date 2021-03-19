@@ -32,6 +32,14 @@ const createStore = () => {
       update(s => ({ ...s, sourceCurrency })),
     setDestinationCurrency: (destinationCurrency: IAsset) =>
       update(s => ({ ...s, destinationCurrency })),
+    // Update both currencies at one time in order
+    // to keep svelte + currencies in sync
+    setCurrencies: (currencies: {
+      sourceCurrency: IAsset
+      destinationCurrency: IAsset
+    }) => {
+      update(s => ({ ...s, ...currencies }))
+    },
     toggleIntent: () =>
       update(s => {
         return {
