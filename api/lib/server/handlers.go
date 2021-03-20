@@ -27,6 +27,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/proofofaddress"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
+	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
 	"github.com/lithammer/shortuuid/v3"
@@ -812,6 +813,17 @@ func (s *Server) GetImage(ctx context.Context, req *proto.GetImageRequest) (*pro
 // GetImage is an rpc handler
 func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest) (*emptypb.Empty, error) {
 	// todo: auth the webhook?!?
+	// todo, check api and store status update/updated at in our db
 	log.Printf("WyreWebhook %#v", req)
+
+	now := time.Now()
+	userID := user.ID(req.HookId)
+
+	s.Pusher.Send(userID, &pusher.Message{
+		Kind: pusher.MessageKindWyreAccountUpdated,
+		IDs:  []string{},
+		At:   now,
+	})
+
 	return &emptypb.Empty{}, nil
 }
