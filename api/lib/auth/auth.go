@@ -14,6 +14,7 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/db/models/usedrefreshtoken"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 )
 
@@ -92,6 +93,13 @@ func NewRefreshTokenClaims(now time.Time, userID user.ID) jwt.StandardClaims {
 	}
 }
 
+type TokenKind string
+
+const (
+	TokenKindAccess  TokenKind = "ACCESS"
+	TokenKindRefresh TokenKind = "REFRESH"
+)
+
 // JwtVerifier manages the verification of our jwt
 type JwtVerifier struct {
 	PublicKey JwtPublicKey
@@ -99,7 +107,7 @@ type JwtVerifier struct {
 }
 
 // ParseAndVerify parses and verifies a raw jwt token and returns the claims if successful
-func (signer JwtVerifier) ParseAndVerify(ctx context.Context, rawToken string) (*jwt.StandardClaims, error) {
+func (signer JwtVerifier) ParseAndVerify(ctx context.Context, expectedTokenKind TokenKind, rawToken string) (*jwt.StandardClaims, error) {
 	// Create the token
 	token, err := jwt.ParseWithClaims(
 		rawToken,
@@ -122,7 +130,49 @@ func (signer JwtVerifier) ParseAndVerify(ctx context.Context, rawToken string) (
 
 	claims := token.Claims.(*jwt.StandardClaims)
 
-	if claims.Issuer != "" {
+	// todo : need way to _KNOW_ if its a refresh vs access token, could use separate privkey, or just sign some data in jwt
+
+	if expectedTokenKind == TokenKindRefresh {
+		now := time.Now()
+
+		used, err := signer.Db.GetUsedRefreshToken(ctx, nil, claims.Id)
+		if err != nil {
+			return nil, err
+		}
+
+		if used != nil {
+			used.RevokedAt = &now
+
+			err = signer.Db.SaveUsedRefreshToken(ctx, nil, used)
+			if err != nil {
+				return nil, err
+			}
+
+			return nil, fmt.Errorf("Verification failure: refresh token used more than once!")
+		}
+
+		used = &usedrefreshtoken.UsedRefreshToken{
+			ID:        claims.Id,
+			Subject:   claims.Subject,
+			IssuedAt:  time.Unix(claims.IssuedAt, 0),
+			ExpiresAt: time.Unix(claims.ExpiresAt, 0),
+			UsedAt:    now,
+		}
+
+		err = signer.Db.SaveUsedRefreshToken(ctx, nil, used)
+		if err != nil {
+			return nil, err
+		}
+
+		return claims, nil
+	}
+
+	if expectedTokenKind == TokenKindAccess {
+		// refresh token issuer _must_ be known
+		if claims.Issuer == "" {
+			return nil, fmt.Errorf("token is invalid")
+		}
+
 		urt, err := signer.Db.GetUsedRefreshToken(ctx, nil, claims.Issuer)
 		if err != nil {
 			return nil, err
@@ -131,7 +181,9 @@ func (signer JwtVerifier) ParseAndVerify(ctx context.Context, rawToken string) (
 		if urt != nil && urt.RevokedAt != nil {
 			return nil, fmt.Errorf("token is invalid; revoked at: %s", urt.RevokedAt)
 		}
+
+		return claims, nil
 	}
 
-	return claims, nil
+	return nil, fmt.Errorf("unhandled expected token kind: %s", expectedTokenKind)
 }
