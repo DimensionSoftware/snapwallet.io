@@ -77,6 +77,7 @@ func ProvideJwtPublicKey(priv JwtPrivateKey) JwtPublicKey {
 func NewAccessTokenClaims(now time.Time, userID user.ID, refreshTokenID string) jwt.StandardClaims {
 	return jwt.StandardClaims{
 		Id:        shortuuid.New(),
+		Audience:  string(TokenKindAccess),
 		Subject:   string(userID),
 		IssuedAt:  now.Unix(),
 		ExpiresAt: now.Add(3 * time.Minute).Unix(),
@@ -87,6 +88,7 @@ func NewAccessTokenClaims(now time.Time, userID user.ID, refreshTokenID string) 
 func NewRefreshTokenClaims(now time.Time, userID user.ID) jwt.StandardClaims {
 	return jwt.StandardClaims{
 		Id:        shortuuid.New(),
+		Audience:  string(TokenKindRefresh),
 		Subject:   string(userID),
 		IssuedAt:  now.Unix(),
 		ExpiresAt: now.Add(15 * time.Minute).Unix(),
@@ -130,7 +132,9 @@ func (signer JwtVerifier) ParseAndVerify(ctx context.Context, expectedTokenKind 
 
 	claims := token.Claims.(*jwt.StandardClaims)
 
-	// todo : need way to _KNOW_ if its a refresh vs access token, could use separate privkey, or just sign some data in jwt
+	if claims.Audience != string(expectedTokenKind) {
+		return nil, fmt.Errorf("token is invalid")
+	}
 
 	if expectedTokenKind == TokenKindRefresh {
 		now := time.Now()
