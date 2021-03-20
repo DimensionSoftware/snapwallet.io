@@ -1,7 +1,7 @@
-class Flux {
-  IFRAME_ID = '__FLUX_IFRAME'
+class Snap {
+  IFRAME_ID = '__SNAP_IFRAME'
   events = {
-    EXIT: '__FLUX_EXIT',
+    EXIT: '__SNAP_EXIT',
   }
   onMessage = (e: any) => {}
 
@@ -48,6 +48,6 @@ class Flux {
   }
 }
 
-;(globalThis as any).Flux = Flux
+;(globalThis as any).Snap = Snap
 
-export default Flux
+export default Snap

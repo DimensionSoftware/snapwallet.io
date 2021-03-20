@@ -5,14 +5,14 @@
     <button id="buy-button">Buy Crypto</button>
     <script src="./dist/index.js"></script>
     <script>
-      const flux = new Flux({
+      const snap = new Snap({
         onMessage: (msg) => {
-          if (msg.event === flux.events.EXIT) flux.closeWeb()
+          if (msg.event === snap.events.EXIT) snap.closeWeb()
         },
       })
 
       const btn = document.getElementById('buy-button')
-      btn.onclick = flux.openWeb
+      btn.onclick = snap.openWeb
     </script>
   </body>
 </html>
