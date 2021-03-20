@@ -31,7 +31,6 @@
 
   $: fileIds = []
   $: minimumFiles = fileType === FileUploadTypes.US_DRIVER_LICENSE ? 2 : 1
-  $: Logger.debug('FILE IDS', fileIds)
   $: {
     if (minimumFiles <= 1) {
       browseTitle = 'Select Document'
@@ -47,7 +46,6 @@
       isUploadingFile = true
       const uploadResponse = await window.API.fluxUploadFile(fileEl.files[0])
       fileIds = [...fileIds, uploadResponse.fileId]
-      Logger.debug(uploadResponse)
       if (fileIds.length < minimumFiles) {
         selectedFileURI = ''
         selectedFileName = ''
