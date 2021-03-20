@@ -1,0 +1,5 @@
+#!/bin/bash -xeu
+
+#gcloud functions deploy RunSnapJob --entry-point cmd/jobrunner -POINT  -runtime go113 RUNTIME TRIGGER [FLAGS...]
+gcloud functions deploy RunSnapJob --runtime go113 --trigger-topic snap-jobs --source cmd/jobrunner
+

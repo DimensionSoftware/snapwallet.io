@@ -85,3 +85,11 @@ func ProvideFoo() {
 }
 
 ```
+
+### pubsub emulator
+may be needed in the future...
+
+```
+gcloud components install pubsub-emulator
+gcloud components update
+```
