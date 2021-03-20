@@ -5,7 +5,7 @@ WORKDIR /tmp/build
 RUN apk add --no-cache \
   bash
 
-COPY go.mod go.sum .
+COPY go.mod go.sum ./
 COPY bin bin
 COPY cmd cmd
 COPY lib lib
@@ -23,7 +23,7 @@ WORKDIR /usr/local/flux
 COPY --from=0 \
   /tmp/build/grpcserver \
   /tmp/build/grpcgateway \
-  .
+  ./
 
 COPY lib/swagger lib/swagger
 
