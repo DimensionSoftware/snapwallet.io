@@ -144,7 +144,7 @@
         {:else}
           <li
             style="cursor:pointer;display:flex;align-items:center;"
-            on:click={() => (paymentSelectorVisible = true)}
+            on:click={() => push(Routes.PROFILE)}
           >
             <FaIcon data={faIdCard} />
             <b style="margin-left:0.5rem;text-decoration:underline">
