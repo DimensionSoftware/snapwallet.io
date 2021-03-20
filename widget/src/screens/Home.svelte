@@ -25,6 +25,7 @@
   import ExchangeRate from '../components/ExchangeRate.svelte'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import CryptoSelector from '../components/selectors/CryptoSelector.svelte'
+  import ModalHeader from '../components/ModalHeader.svelte'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
@@ -111,7 +112,9 @@
 
 <ModalContent>
   <ModalBody>
-    <IntentSelector />
+    <ModalHeader hideBackButton>
+      <IntentSelector />
+    </ModalHeader>
     <div class="cryptocurrencies-container">
       <div class="dst-container">
         <Label>
