@@ -29,7 +29,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1rem 0;
+    padding: .25rem 0;
     &.paddingSmall {
       padding: 0.5rem;
     }

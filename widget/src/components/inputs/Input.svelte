@@ -93,7 +93,7 @@
       cursor: pointer;
       text-overflow: ellipsis;
       outline: none;
-      padding: 1.5em 5px 15px 5px !important;
+      padding: 1.6em 5px 15px 5px !important;
       vertical-align: middle;
       font-size: 1.8em;
       color: var(--theme-text-color);
@@ -112,7 +112,7 @@
         position: absolute;
         content: '';
         top: 0;
-        bottom: -1px;
+        bottom: 0px;
         left: -1px;
         right: -1px;
         border-radius: 0.8em;

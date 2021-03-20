@@ -120,7 +120,7 @@
       <div style="display:flex;flex-direction:column;height:5rem;">
         <Label label="Amount">
           <Input
-            pattern={`[\\d,\\.]*`}
+            pattern={`[\\d,\\.]+`}
             on:change={e => {
               const val = Number(e.detail)
               transactionStore.setSourceAmount(val, selectedDestinationPrice)
@@ -204,6 +204,10 @@
     display: flex;
     flex-direction: column;
     height: 5rem;
+  }
+
+  p {
+    margin: 0;
   }
 
   .vertical-stepper {
