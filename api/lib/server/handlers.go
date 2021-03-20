@@ -492,7 +492,9 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return status.Errorf(codes.InvalidArgument, "at least one file id must be attached")
 					}
 
+					fileIDs := []file.ID{}
 					for _, fileID := range req.ProofOfAddressDoc.FileIds {
+						fileIDs = append(fileIDs, file.ID(fileID))
 						meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
 						if err != nil {
 							return err
@@ -506,18 +508,13 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						proofOfAddressData = &proofofaddress.ProfileDataProofOfAddressDoc{
 							ID:        common.ProfileDataID(shortuuid.New()),
 							Status:    common.StatusReceived,
-							FileIDs:   []file.ID{},
+							FileIDs:   fileIDs,
 							CreatedAt: time.Now(),
 						}
 					} else {
 						proofOfAddressData = (*existingProfileData).(*proofofaddress.ProfileDataProofOfAddressDoc)
 
 						now := time.Now()
-
-						fileIDs := []file.ID{}
-						for _, id := range req.ProofOfAddressDoc.FileIds {
-							fileIDs = append(fileIDs, file.ID(id))
-						}
 
 						proofOfAddressData.FileIDs = fileIDs
 						proofOfAddressData.UpdatedAt = &now
@@ -543,7 +540,9 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
 					}
 
+					fileIDs := []file.ID{}
 					for _, fileID := range req.UsGovernmentIdDoc.FileIds {
+						fileIDs = append(fileIDs, file.ID(fileID))
 						meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
 						if err != nil {
 							return err
@@ -558,18 +557,13 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 							ID:               common.ProfileDataID(shortuuid.New()),
 							Status:           common.StatusReceived,
 							GovernmentIDKind: kind,
-							FileIDs:          []file.ID{},
+							FileIDs:          fileIDs,
 							CreatedAt:        time.Now(),
 						}
 					} else {
 						governmentIDData = (*existingProfileData).(*usgovernmentid.ProfileDataUSGovernmentIDDoc)
 
 						now := time.Now()
-
-						fileIDs := []file.ID{}
-						for _, id := range req.UsGovernmentIdDoc.FileIds {
-							fileIDs = append(fileIDs, file.ID(id))
-						}
 
 						governmentIDData.GovernmentIDKind = kind
 						governmentIDData.FileIDs = fileIDs

@@ -1,6 +1,7 @@
 package proofofaddress
 
 import (
+	"log"
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -23,6 +24,7 @@ type ProfileDataProofOfAddressDoc struct {
 // Encrypt ...
 func (pdata ProfileDataProofOfAddressDoc) Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error) {
 
+	log.Printf("%#v: ", pdata)
 	return &common.EncryptedProfileData{
 		ID:        pdata.ID,
 		Kind:      pdata.Kind(),
