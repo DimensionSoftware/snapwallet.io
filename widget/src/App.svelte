@@ -101,9 +101,9 @@
         reason?.body?.code === APIErrors.UNAUTHORIZED &&
         ($location as Routes) !== Routes.VERIFY_OTP
       ) {
-        window.AUTH_MANAGER.logout()
-        push(Routes.SEND_OTP)
-        return
+        // expired session, so-- automagically logout
+        // - handle re-routing elsewhere
+        return window.AUTH_MANAGER.logout()
       }
 
       toaster.pop({
