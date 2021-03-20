@@ -1,4 +1,4 @@
 #!/bin/bash -xeu
 
-gcloud functions deploy RunSnapJob --runtime go113 --retry --trigger-topic snap-jobs --source cmd/jobrunner
+gcloud functions deploy RunSnapJob --runtime go113 --retry --timeout 300s --trigger-topic snap-jobs --source cmd/jobrunner
 
