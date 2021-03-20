@@ -102,12 +102,14 @@
 <ModalContent {animation}>
   <ModalBody>
     <ModalHeader>Verify Identity</ModalHeader>
-    <IconCard
-      blend
-      icon={iconCardProps.icon}
-      on:click={() => (isFileTypeSelectorOpen = true)}
-      label={iconCardProps.label}
-    />
+    <div style="margin-top:1rem;margin-bottom:0.75rem;">
+      <IconCard
+        blend
+        icon={iconCardProps.icon}
+        on:click={() => (isFileTypeSelectorOpen = true)}
+        label={iconCardProps.label}
+      />
+    </div>
     <div on:click={openFileBrowser} class="dropzone">
       {#if selectedFileURI}
         <img
@@ -153,7 +155,7 @@
   headerTitle="Select a Document Type"
 >
   <div>
-    <div style="margin-bottom:0.75rem;margin-top:1rem;">
+    <div style="margin-bottom:1rem;margin-top:1rem;">
       <IconCard
         icon={faPassport}
         on:click={selectFileType(FileUploadTypes.US_PASSPORT)}
