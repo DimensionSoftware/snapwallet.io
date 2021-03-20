@@ -112,10 +112,7 @@
       <div class="dst-container">
         <Label>
           <CryptoCard
-            on:click={() => {
-              if (isLoadingPrices) return
-              cryptoSelectorVisible = true
-            }}
+            on:click={() => (cryptoSelectorVisible = true)}
             crypto={isBuy ? destinationCurrency : sourceCurrency}
           />
         </Label>
