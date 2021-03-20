@@ -80,7 +80,7 @@
         &:before {
           background: $themeColor;
           animation: currency 0.3s $easeOutBack, background 0s ease-out 0.3s;
-          top: 0;
+          top: -1px;
           right: -1px;
           left: -1px;
           bottom: 0;

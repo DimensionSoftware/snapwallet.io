@@ -15,6 +15,7 @@ type EncryptedItem struct {
 	ID                   ID        `firestore:"id"`
 	DataEncryptionKey    []byte    `firestore:"DEK"`
 	AccessTokenEncrypted []byte    `firestore:"accessTokenEncrypted"`
+	AccountIDs           []string  `firestore:"accountIDs"`
 	CreatedAt            time.Time `firestore:"createdAt"`
 }
 
@@ -23,6 +24,7 @@ type EncryptedItem struct {
 type Item struct {
 	ID          ID
 	AccessToken string
+	AccountIDs  []string
 	CreatedAt   time.Time
 }
 
@@ -42,6 +44,7 @@ func (enc *EncryptedItem) Decrypt(m *encryption.Manager, userID user.ID) (*Item,
 	return &Item{
 		ID:          enc.ID,
 		AccessToken: *accessToken,
+		AccountIDs:  enc.AccountIDs,
 		CreatedAt:   enc.CreatedAt,
 	}, nil
 }
@@ -60,6 +63,7 @@ func (u *Item) Encrypt(m *encryption.Manager, userID user.ID) (*EncryptedItem, e
 		ID:                   u.ID,
 		DataEncryptionKey:    *encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		AccessTokenEncrypted: *accessTokenEncrypted,
+		AccountIDs:           u.AccountIDs,
 		CreatedAt:            u.CreatedAt,
 	}, nil
 }

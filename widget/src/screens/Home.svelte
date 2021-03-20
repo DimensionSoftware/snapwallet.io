@@ -73,13 +73,17 @@
   // Find the next path based on user data
   const getNextPath = async () => {
     // TODO: move this request somewhere sane
-    const { flags = {} } = await window.API.fluxViewerData()
-    userStore.setFlags(flags)
-    const { hasWyrePaymentMethods, hasWyreAccount } = flags
+    if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
+      const { flags = {} } = await window.API.fluxViewerData()
+      userStore.setFlags(flags)
+      const { hasWyrePaymentMethods, hasWyreAccount } = flags
 
-    if (hasWyrePaymentMethods && hasWyreAccount)
-      nextRoute = Routes.CHECKOUT_OVERVIEW
-    else if (hasWyrePaymentMethods) nextRoute = Routes.PROFILE
+      if (hasWyrePaymentMethods && hasWyreAccount)
+        nextRoute = Routes.CHECKOUT_OVERVIEW
+      else if (hasWyrePaymentMethods) nextRoute = Routes.PROFILE
+    }
+
+    nextRoute = Routes.CHECKOUT_OVERVIEW
   }
 
   const onKeyDown = (e: Event) => {
@@ -120,7 +124,7 @@
       <div style="display:flex;flex-direction:column;height:5rem;">
         <Label label="Amount">
           <Input
-            pattern={`[\\d,\\.]*`}
+            pattern={`[\\d,\\.]+`}
             on:change={e => {
               const val = Number(e.detail)
               transactionStore.setSourceAmount(val, selectedDestinationPrice)
@@ -204,6 +208,10 @@
     display: flex;
     flex-direction: column;
     height: 5rem;
+  }
+
+  p {
+    margin: 0;
   }
 
   .vertical-stepper {

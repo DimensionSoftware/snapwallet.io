@@ -44,6 +44,11 @@
         "security": [{"Bearer": []}]
       }
     },
+    "/wyre/payment-methods": {
+      "get": {
+        "security": [{"Bearer": []}]
+      }
+    },
     "/upload": {
       "post": {
         "summary": "Uploads a file and returns a fileId.",

@@ -10,7 +10,6 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
-	"github.com/pusher/pusher-http-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -28,6 +27,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/proofofaddress"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
+	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
 	"github.com/lithammer/shortuuid/v3"
@@ -37,14 +37,9 @@ import (
 
 // ViewerData is an rpc handler
 func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.ViewerDataResponse, error) {
-	userID := GetUserIDFromIncomingContext(ctx)
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
-	}
-
-	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
-	if err != nil || u == nil {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
 	}
 
 	user := proto.User{
@@ -71,7 +66,7 @@ func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.Viewe
 	var hasWyreAccount bool
 
 	{
-		accounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -222,12 +217,12 @@ func (s *Server) TokenExchange(ctx context.Context, req *proto.TokenExchangeRequ
 
 // PlaidConnectBankAccounts is an rpc handler
 func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
-	userID := GetUserIDFromIncomingContext(ctx)
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
 	}
 
-	err := req.Validate()
+	err = req.Validate()
 	if err != nil {
 		return nil, err
 	}
@@ -238,15 +233,11 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	}
 	log.Printf("Plaid Public Token successfuly exchanged")
 
-	_, err = s.Db.SavePlaidItem(ctx, userID, item.ID(resp.ItemID), resp.AccessToken)
+	_, err = s.Db.SavePlaidItem(ctx, u.ID, item.ID(resp.ItemID), resp.AccessToken, req.PlaidAccountIds)
 	if err != nil {
 		return nil, err
 	}
 	log.Printf("Plaid ItemID %s saved", resp.ItemID)
-
-	for _, plaidAccountID := range req.PlaidAccountIds {
-		log.Printf("STUB > process PlaidAccountID: %s", plaidAccountID)
-	}
 
 	processorTokenResp, err := s.Plaid.CreateProcessorToken(resp.AccessToken, req.PlaidAccountIds[0], "wyre")
 	if err != nil {
@@ -274,24 +265,6 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 	}
 
 	/*** TEST ***/
-	go func() {
-		time.Sleep(5 * time.Second)
-
-		pusherClient := pusher.Client{
-			AppID:   "1171786",
-			Key:     "dd280d42ccafc24e19ff",
-			Secret:  "d8cfa16565ede2ae414d",
-			Cluster: "us3",
-			Secure:  true,
-		}
-
-		data := map[string]string{"message": "hello world"}
-		err := pusherClient.Trigger(string(userID), "my-event", data)
-		if err != nil {
-			log.Println(err)
-		}
-	}()
-
 	{
 		accounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
 		if err != nil {
@@ -510,7 +483,9 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return status.Errorf(codes.InvalidArgument, "at least one file id must be attached")
 					}
 
+					fileIDs := []file.ID{}
 					for _, fileID := range req.ProofOfAddressDoc.FileIds {
+						fileIDs = append(fileIDs, file.ID(fileID))
 						meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
 						if err != nil {
 							return err
@@ -524,18 +499,13 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						proofOfAddressData = &proofofaddress.ProfileDataProofOfAddressDoc{
 							ID:        common.ProfileDataID(shortuuid.New()),
 							Status:    common.StatusReceived,
-							FileIDs:   []file.ID{},
+							FileIDs:   fileIDs,
 							CreatedAt: time.Now(),
 						}
 					} else {
 						proofOfAddressData = (*existingProfileData).(*proofofaddress.ProfileDataProofOfAddressDoc)
 
 						now := time.Now()
-
-						fileIDs := []file.ID{}
-						for _, id := range req.ProofOfAddressDoc.FileIds {
-							fileIDs = append(fileIDs, file.ID(id))
-						}
 
 						proofOfAddressData.FileIDs = fileIDs
 						proofOfAddressData.UpdatedAt = &now
@@ -561,7 +531,9 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 						return status.Errorf(codes.InvalidArgument, fmt.Sprintf("%s requires %d files to be attached to its input", kind, kind.FilesRequired()))
 					}
 
+					fileIDs := []file.ID{}
 					for _, fileID := range req.UsGovernmentIdDoc.FileIds {
+						fileIDs = append(fileIDs, file.ID(fileID))
 						meta, err := s.Db.GetFileMetadata(ctx, u.ID, file.ID(fileID))
 						if err != nil {
 							return err
@@ -576,18 +548,13 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 							ID:               common.ProfileDataID(shortuuid.New()),
 							Status:           common.StatusReceived,
 							GovernmentIDKind: kind,
-							FileIDs:          []file.ID{},
+							FileIDs:          fileIDs,
 							CreatedAt:        time.Now(),
 						}
 					} else {
 						governmentIDData = (*existingProfileData).(*usgovernmentid.ProfileDataUSGovernmentIDDoc)
 
 						now := time.Now()
-
-						fileIDs := []file.ID{}
-						for _, id := range req.UsGovernmentIdDoc.FileIds {
-							fileIDs = append(fileIDs, file.ID(id))
-						}
 
 						governmentIDData.GovernmentIDKind = kind
 						governmentIDData.FileIDs = fileIDs
@@ -831,6 +798,17 @@ func (s *Server) GetImage(ctx context.Context, req *proto.GetImageRequest) (*pro
 // GetImage is an rpc handler
 func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest) (*emptypb.Empty, error) {
 	// todo: auth the webhook?!?
+	// todo, check api and store status update/updated at in our db
 	log.Printf("WyreWebhook %#v", req)
+
+	now := time.Now()
+	userID := user.ID(req.HookId)
+
+	s.Pusher.Send(userID, &pusher.Message{
+		Kind: pusher.MessageKindWyreAccountUpdated,
+		IDs:  []string{},
+		At:   now,
+	})
+
 	return &emptypb.Empty{}, nil
 }

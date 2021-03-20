@@ -308,6 +308,23 @@ message TokenExchangeResponse {
   TokenMaterial tokens = 1;
 }
 
+message WyrePaymentMethod {
+  string id = 1;
+  string status = 2;
+  string name = 3;
+  string last4 = 4;
+  repeated string chargeable_currencies = 5;
+  repeated string depositable_currencies = 6;
+}
+
+// 2. quote
+// 3. confirm
+// 4. webhooks on transfer
+
+message WyreGetPaymentMethodsResponse {
+  repeated WyrePaymentMethod payment_methods = 1;
+}
+
 service Flux {
   // Get viewer data
   //
@@ -420,6 +437,13 @@ service Flux {
   rpc WyreWebhook(WyreWebhookRequest) returns (google.protobuf.Empty) {
     option (google.api.http) = {
       post: "/wyre/hooks/{hook_id}"
+      body: "*"
+    };
+  }
+
+  rpc WyreGetPaymentMethods(google.protobuf.Empty) returns (WyreGetPaymentMethodsResponse) {
+    option (google.api.http) = {
+      post: "/wyre/payment-methods"
       body: "*"
     };
   }

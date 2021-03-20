@@ -14,6 +14,7 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { transactionStore } from '../stores/TransactionStore'
+  import type { UsGovernmentIdDocumentInputKind } from 'api-client';
 
   const allowedFileTypes = 'image/png,image/jpeg,image/jpg,application/pdf'
 
@@ -29,7 +30,8 @@
     const uploadResponse = await window.API.fluxUploadFile(fileEl.files[0])
     Logger.debug(uploadResponse)
     const profileResponse = await window.API.fluxSaveProfileData({
-      proofOfAddressDoc: {
+      usGovernmentIdDoc: {
+        kind: fileType as UsGovernmentIdDocumentInputKind,
         fileIds: [uploadResponse.fileId],
       },
     })
@@ -124,12 +126,12 @@
   <div class="">
     <IconCard
       icon={faPassport}
-      on:click={selectFileType('passport')}
+      on:click={selectFileType('GI_US_PASSPORT')}
       label="Passport"
     />
     <IconCard
       icon={faIdCard}
-      on:click={selectFileType('drivers_license')}
+      on:click={selectFileType('GI_US_DRIVING_LICENSE')}
       label="Drivers License"
     />
   </div>

@@ -11,7 +11,6 @@
   @import '../../styles/_vars.scss';
 
   .card-container {
-    min-height: 3rem;
     width: 100%;
     border-radius: 0.5rem;
     cursor: pointer;
