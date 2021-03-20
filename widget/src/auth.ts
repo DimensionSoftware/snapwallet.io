@@ -52,7 +52,7 @@ export class AuthManager {
     return window.localStorage.getItem(JWT_REFRESH_TOKEN_KEY) || ''
   }
 
-  private parseRefreshTokenClaims(): {[k: string]: any} | null {
+  private parseRefreshTokenClaims(): { [k: string]: any } | null {
     const token = this.getCurrentRefreshToken()
     if (!token) {
       return null
@@ -67,7 +67,7 @@ export class AuthManager {
     return parsed
   }
 
-  private parseAccessTokenClaims(): {[k: string]: any} | null {
+  private parseAccessTokenClaims(): { [k: string]: any } | null {
     const token = this.getCurrentAccessToken()
     if (!token) {
       return null
@@ -94,7 +94,8 @@ export class AuthManager {
   }
 
   private refreshTokenIsExpired(): boolean {
-    const isTimeLeft = this.sessionExpiresAt > Math.floor(add10seconds(Date.now()) / 1000)
+    const isTimeLeft =
+      this.sessionExpiresAt > Math.floor(add10seconds(Date.now()) / 1000)
 
     return !isTimeLeft
   }
@@ -215,5 +216,5 @@ export function genAPIClient(authManager?: AuthManager): FluxApi {
 }
 
 function add10seconds(epoch: number): number {
-  return epoch + (10 * 1000)
+  return epoch + 10 * 1000
 }
