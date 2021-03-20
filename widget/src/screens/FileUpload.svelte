@@ -14,33 +14,62 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { transactionStore } from '../stores/TransactionStore'
-  import type { UsGovernmentIdDocumentInputKind } from 'api-client';
+  import type { UsGovernmentIdDocumentInputKind } from 'api-client'
+  import { FileUploadTypes } from '../types'
 
   const allowedFileTypes = 'image/png,image/jpeg,image/jpg,application/pdf'
 
   let animation = 'left'
   let isFileTypeSelectorOpen = false
+  let isUploadingFile = false
   let fileType = ''
   let fileEl: HTMLInputElement
   let selectedFileURI: string = ''
   let selectedFileName: string = ''
   let fileSizeError: string = ''
+  let browseTitle
+
+  $: fileIds = []
+  $: minimumFiles = fileType === FileUploadTypes.US_DRIVER_LICENSE ? 2 : 1
+  $: Logger.debug('FILE IDS', fileIds)
+  $: {
+    if (minimumFiles <= 1) {
+      browseTitle = 'Select Document'
+    } else if (fileIds.length < 1) {
+      browseTitle = 'Select Document (Front)'
+    } else {
+      browseTitle = 'Select Document (Back)'
+    }
+  }
 
   const handleNextStep = async () => {
-    const uploadResponse = await window.API.fluxUploadFile(fileEl.files[0])
-    Logger.debug(uploadResponse)
-    const profileResponse = await window.API.fluxSaveProfileData({
-      usGovernmentIdDoc: {
-        kind: fileType as UsGovernmentIdDocumentInputKind,
-        fileIds: [uploadResponse.fileId],
-      },
-    })
-    setTimeout(() => {
-      const wyreApproved = profileResponse.wyre?.status === 'APPROVED'
-      if (wyreApproved && $transactionStore.sourceAmount)
-        push(Routes.CHECKOUT_OVERVIEW)
-      else push(Routes.ROOT)
-    }, 800)
+    try {
+      isUploadingFile = true
+      const uploadResponse = await window.API.fluxUploadFile(fileEl.files[0])
+      fileIds = [...fileIds, uploadResponse.fileId]
+      Logger.debug(uploadResponse)
+      if (fileIds.length < minimumFiles) {
+        selectedFileURI = ''
+        selectedFileName = ''
+      }
+      if (fileIds.length >= minimumFiles) {
+        const profileResponse = await window.API.fluxSaveProfileData({
+          usGovernmentIdDoc: {
+            kind: fileType as UsGovernmentIdDocumentInputKind,
+            fileIds,
+          },
+        })
+        setTimeout(() => {
+          Logger.debug(profileResponse.wyre)
+          const wyreApproved = profileResponse.wyre?.status === 'APPROVED'
+          if (wyreApproved && $transactionStore.sourceAmount)
+            push(Routes.CHECKOUT_OVERVIEW)
+          else push(Routes.ROOT)
+        }, 800)
+      }
+    } finally {
+      setTimeout(() => (isUploadingFile = false), 800)
+    }
   }
 
   const selectFileType = selectedType => () => {
@@ -48,16 +77,16 @@
     isFileTypeSelectorOpen = false
   }
 
-  const openFileBrowser = () => document.getElementById('file-input').click()
+  const openFileBrowser = () => fileEl.click()
 
   const getSelectorProps = ft => {
-    if (ft === 'passport')
+    if (ft === FileUploadTypes.US_PASSPORT)
       return {
         icon: faPassport,
         label: 'Passport',
       }
 
-    if (ft === 'drivers_license')
+    if (ft === FileUploadTypes.US_DRIVER_LICENSE)
       return {
         icon: faIdCard,
         label: 'Drivers License',
@@ -90,7 +119,7 @@
         />
       {:else}
         <p class:underlined={!fileSizeError} class:error={fileSizeError}>
-          {fileSizeError || 'Select a File'}
+          {fileSizeError || browseTitle}
         </p>
       {/if}
     </div>
@@ -113,7 +142,9 @@
       }}
     />
   </ModalBody>
-  <Button disabled={!fileType} on:click={handleNextStep}>Upload</Button>
+  <Button disabled={!fileType} on:click={handleNextStep}
+    >{isUploadingFile ? 'Uploading...' : 'Upload'}</Button
+  >
 </ModalContent>
 
 <PopupSelector
@@ -123,15 +154,17 @@
   visible={isFileTypeSelectorOpen}
   headerTitle="Select a Document Type"
 >
-  <div class="">
-    <IconCard
-      icon={faPassport}
-      on:click={selectFileType('GI_US_PASSPORT')}
-      label="Passport"
-    />
+  <div>
+    <div style="margin-bottom:0.75rem;margin-top:1rem;">
+      <IconCard
+        icon={faPassport}
+        on:click={selectFileType(FileUploadTypes.US_PASSPORT)}
+        label="Passport"
+      />
+    </div>
     <IconCard
       icon={faIdCard}
-      on:click={selectFileType('GI_US_DRIVING_LICENSE')}
+      on:click={selectFileType(FileUploadTypes.US_DRIVER_LICENSE)}
       label="Drivers License"
     />
   </div>
