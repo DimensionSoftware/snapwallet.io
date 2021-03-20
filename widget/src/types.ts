@@ -19,3 +19,8 @@ export enum TransactionIntents {
   BUY = 'buy',
   SELL = 'sell',
 }
+
+export enum FileUploadTypes {
+  US_PASSPORT = 'GI_US_PASSPORT',
+  US_DRIVER_LICENSE = 'GI_US_DRIVING_LICENSE',
+}

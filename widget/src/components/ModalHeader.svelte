@@ -1,14 +1,14 @@
 <script lang="ts">
   import { pop } from 'svelte-spa-router'
   import FaIcon from 'svelte-awesome'
-  import { faChevronLeft, faTimes } from '@fortawesome/free-solid-svg-icons'
+  import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
 
   export let hideCloseButton = false
   export let hideBackButton = false
 
   const handleExit = () => {
     const event = JSON.stringify({
-      event: '__FLUX_EXIT',
+      event: '__SNAP_EXIT',
     })
     if (window.parent) {
       window.parent.postMessage(event, '*')

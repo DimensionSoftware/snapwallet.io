@@ -25,6 +25,7 @@
   import ExchangeRate from '../components/ExchangeRate.svelte'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import CryptoSelector from '../components/selectors/CryptoSelector.svelte'
+  import ModalHeader from '../components/ModalHeader.svelte'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
@@ -111,7 +112,9 @@
 
 <ModalContent>
   <ModalBody>
-    <IntentSelector />
+    <ModalHeader hideBackButton>
+      <IntentSelector />
+    </ModalHeader>
     <div class="cryptocurrencies-container">
       <div class="dst-container">
         <Label>
@@ -178,12 +181,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button
-      disabled={!sourceAmount ||
-        !flags?.hasWyreAccount ||
-        !flags?.hasWyrePaymentMethods}
-      on:click={handleNextStep}>Checkout</Button
-    >
+    <Button on:click={handleNextStep}>Checkout</Button>
   </ModalFooter>
 </ModalContent>
 
@@ -204,7 +202,7 @@
   @import '../styles/text.scss';
 
   .dst-container {
-    margin-top: 3rem;
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     height: 5rem;

@@ -3,7 +3,7 @@ import {Button, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {WebView} from 'react-native-webview';
 
 enum ChildMessages {
-  EXIT = '__FLUX_EXIT',
+  EXIT = '__SNAP_EXIT',
 }
 
 const Flux = (props: {onExit?: (msg?: any) => any}) => (
