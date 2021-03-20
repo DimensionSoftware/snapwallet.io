@@ -11,6 +11,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"github.com/plaid/plaid-go/plaid"
+	"github.com/pusher/pusher-http-go"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sfreiberg/gotwilio"
 	"google.golang.org/grpc"
@@ -32,6 +33,7 @@ type Server struct {
 	JwtSigner                     *auth.JwtSigner
 	JwtVerifier                   *auth.JwtVerifier
 	AuthManager                   *auth.Manager
+	Pusher                        *pusher.Client
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"

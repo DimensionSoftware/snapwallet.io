@@ -10,7 +10,6 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
-	"github.com/pusher/pusher-http-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -274,24 +273,6 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 	}
 
 	/*** TEST ***/
-	go func() {
-		time.Sleep(5 * time.Second)
-
-		pusherClient := pusher.Client{
-			AppID:   "1171786",
-			Key:     "dd280d42ccafc24e19ff",
-			Secret:  "d8cfa16565ede2ae414d",
-			Cluster: "us3",
-			Secure:  true,
-		}
-
-		data := map[string]string{"message": "hello world"}
-		err := pusherClient.Trigger(string(userID), "my-event", data)
-		if err != nil {
-			log.Println(err)
-		}
-	}()
-
 	{
 		accounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
 		if err != nil {

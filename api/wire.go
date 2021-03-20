@@ -9,6 +9,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
+	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
@@ -45,6 +46,8 @@ func InitializeServer() (server.Server, error) {
 		wire.Struct(new(db.Db), "*"),
 		wyre.ProvideAPIHost,
 		wire.Struct(new(wyre.Manager), "*"),
+		pusher.ProviderPusherConfig,
+		pusher.ProvidePusherClient,
 	)
 	return server.Server{}, nil
 }
