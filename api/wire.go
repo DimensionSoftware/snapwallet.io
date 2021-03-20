@@ -46,6 +46,7 @@ func InitializeServer() (server.Server, error) {
 		wire.Struct(new(db.Db), "*"),
 		wyre.ProvideAPIHost,
 		wire.Struct(new(wyre.Manager), "*"),
+		wire.Struct(new(pusher.Manager), "*"),
 		pusher.ProviderPusherConfig,
 		pusher.ProvidePusherClient,
 	)

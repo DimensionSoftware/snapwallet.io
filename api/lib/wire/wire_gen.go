@@ -109,6 +109,9 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	pusherClient := pusher.ProvidePusherClient(pusherConfig)
+	pusherManager := &pusher.Manager{
+		Pusher: pusherClient,
+	}
 	serverServer := server.Server{
 		GrpcServer:   grpcServer,
 		Sendgrid:     sendgridClient,
@@ -123,7 +126,7 @@ func InitializeServer() (server.Server, error) {
 		JwtSigner:    jwtSigner,
 		JwtVerifier:  jwtVerifier,
 		AuthManager:  authManager,
-		Pusher:       pusherClient,
+		Pusher:       pusherManager,
 	}
 	return serverServer, nil
 }
