@@ -233,15 +233,11 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	}
 	log.Printf("Plaid Public Token successfuly exchanged")
 
-	_, err = s.Db.SavePlaidItem(ctx, u.ID, item.ID(resp.ItemID), resp.AccessToken)
+	_, err = s.Db.SavePlaidItem(ctx, u.ID, item.ID(resp.ItemID), resp.AccessToken, req.PlaidAccountIds)
 	if err != nil {
 		return nil, err
 	}
 	log.Printf("Plaid ItemID %s saved", resp.ItemID)
-
-	for _, plaidAccountID := range req.PlaidAccountIds {
-		log.Printf("STUB > process PlaidAccountID: %s", plaidAccountID)
-	}
 
 	processorTokenResp, err := s.Plaid.CreateProcessorToken(resp.AccessToken, req.PlaidAccountIds[0], "wyre")
 	if err != nil {

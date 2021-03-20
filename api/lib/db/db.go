@@ -224,9 +224,10 @@ func (db Db) GetUserByID(ctx context.Context, userID user.ID) (*user.User, error
 }
 
 // SavePlaidItem ...
-func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, accessToken string) (*item.Item, error) {
+func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, accessToken string, accountIDs []string) (*item.Item, error) {
 	item := item.Item{
 		ID:          itemID,
+		AccountIDs:  accountIDs,
 		AccessToken: accessToken,
 		CreatedAt:   time.Now(),
 	}
