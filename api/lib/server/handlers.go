@@ -37,14 +37,9 @@ import (
 
 // ViewerData is an rpc handler
 func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.ViewerDataResponse, error) {
-	userID := GetUserIDFromIncomingContext(ctx)
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
-	}
-
-	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
-	if err != nil || u == nil {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
 	}
 
 	user := proto.User{
@@ -71,7 +66,7 @@ func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.Viewe
 	var hasWyreAccount bool
 
 	{
-		accounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
 		if err != nil {
 			return nil, err
 		}
@@ -222,12 +217,12 @@ func (s *Server) TokenExchange(ctx context.Context, req *proto.TokenExchangeRequ
 
 // PlaidConnectBankAccounts is an rpc handler
 func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
-	userID := GetUserIDFromIncomingContext(ctx)
-	if userID == "" {
-		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
 	}
 
-	err := req.Validate()
+	err = req.Validate()
 	if err != nil {
 		return nil, err
 	}
@@ -238,7 +233,7 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	}
 	log.Printf("Plaid Public Token successfuly exchanged")
 
-	_, err = s.Db.SavePlaidItem(ctx, userID, item.ID(resp.ItemID), resp.AccessToken)
+	_, err = s.Db.SavePlaidItem(ctx, u.ID, item.ID(resp.ItemID), resp.AccessToken)
 	if err != nil {
 		return nil, err
 	}
