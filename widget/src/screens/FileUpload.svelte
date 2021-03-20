@@ -47,8 +47,10 @@
       const uploadResponse = await window.API.fluxUploadFile(fileEl.files[0])
       fileIds = [...fileIds, uploadResponse.fileId]
       if (fileIds.length < minimumFiles) {
-        selectedFileURI = ''
-        selectedFileName = ''
+        setTimeout(() => {
+          selectedFileURI = ''
+          selectedFileName = ''
+        }, 800)
       }
       if (fileIds.length >= minimumFiles) {
         const profileResponse = await window.API.fluxSaveProfileData({
