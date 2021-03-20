@@ -48,7 +48,7 @@
       on:click={() => push(Routes.PLAID_LINK)}
       label="Bank Account"
     />
-    <h5 style="margin-top: 1.25rem">{copy.sectionTwoTitle}</h5>
+    <h5 style="margin-top:2rem">{copy.sectionTwoTitle}</h5>
     {#if !flags?.hasWyrePaymentMethods}
       <p class="help">{copy.unavailable}</p>
     {/if}
