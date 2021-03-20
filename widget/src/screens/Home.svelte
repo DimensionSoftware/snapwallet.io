@@ -202,7 +202,7 @@
   @import '../styles/text.scss';
 
   .dst-container {
-    margin-top: 3rem;
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
     height: 5rem;
