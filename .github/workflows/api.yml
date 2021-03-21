@@ -17,6 +17,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Run Tests
         run: |
+          . .env.ci
           make test
         working-directory: api
       # - name: Archive production artifacts
