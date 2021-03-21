@@ -5,9 +5,9 @@ on:
     branches:
       - master
     paths:
-      - .github/workflows/api-docker.yml
-      - api/**
-      - !api/README.md
+      - '.github/workflows/api-docker.yml'
+      - 'api/**'
+      - '!api/README.md'
 
 jobs:
   build-and-push-to-gcr:
