@@ -10,6 +10,8 @@ type ID string
 // PaymentMethod ...
 type PaymentMethod struct {
 	ID                    ID        `firestore:"id"`
+	PlaidItemID           string    `firestore:"plaidItemID,omitempty"`
+	PlaidAccountID        string    `firestore:"plaidAccountID,omitempty"`
 	Status                string    `firestore:"status"`
 	Name                  string    `firestore:"name"`
 	Last4                 string    `firestore:"last4"`

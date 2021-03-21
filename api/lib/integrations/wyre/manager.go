@@ -42,7 +42,7 @@ func ProvideAPIHost() (APIHost, error) {
 	return APIHost(apiHost), nil
 }
 
-func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccessToken string, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {
+func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccessToken string, plaidItemID string, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {
 	resp, err := m.Plaid.CreateProcessorToken(plaidAccessToken, plaidAccountID, "wyre")
 	if err != nil {
 		return nil, err
@@ -57,6 +57,8 @@ func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAc
 
 	pm := paymentmethod.PaymentMethod{
 		ID:                    paymentmethod.ID(wyrePm.ID),
+		PlaidItemID:           plaidItemID,
+		PlaidAccountID:        plaidAccountID,
 		Status:                wyrePm.Status,
 		Name:                  wyrePm.Name,
 		Last4:                 wyrePm.Last4Digits,
@@ -77,7 +79,7 @@ func (m Manager) CreatePaymentMethodsFromPlaidItem(ctx context.Context, userID u
 	var out []*paymentmethod.PaymentMethod
 
 	for _, accountID := range item.AccountIDs {
-		pm, err := m.CreatePaymentMethod(ctx, userID, wyreAccountID, item.AccessToken, accountID)
+		pm, err := m.CreatePaymentMethod(ctx, userID, wyreAccountID, item.AccessToken, string(item.ID), accountID)
 		if err != nil {
 			return nil, err
 		}

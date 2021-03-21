@@ -3,6 +3,7 @@ package jobrunner
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"time"
 
@@ -38,7 +39,9 @@ func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
 
 	switch j.Kind {
 	case job.KindCreateWyreAccountForUser:
-		err = RunCreateWyreAccountForUser(ctx, m, j)
+		err = runCreateWyreAccountForUser(ctx, m, j)
+	case job.KindCreateWyrePaymentMethodsForUser:
+		err = runCreateWyrePaymentMethodsForUser(ctx, m, j)
 	default:
 		log.Printf("error: unsupported job kind: %s\n", j.Kind)
 		return nil
@@ -51,7 +54,53 @@ func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
 	return nil
 }
 
-func RunCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j job.Job) error {
+func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manager, j job.Job) error {
+	if len(j.RelatedIDs) == 0 {
+		return fmt.Errorf("error: relatedIDs can't be empty")
+	}
+
+	userID := user.ID(j.RelatedIDs[0])
+
+	items, err := m.Db.GetAllPlaidItems(ctx, nil, userID)
+	if err != nil {
+		return err
+	}
+
+	wyreAccounts, err := m.Db.GetWyreAccounts(ctx, nil, userID)
+	if err != nil {
+		return err
+	}
+	if len(wyreAccounts) == 0 {
+		return fmt.Errorf("error: user %s must have wyre account to create payment methods", userID)
+	}
+	wyreAccount := wyreAccounts[0]
+
+	log.Println("creating wyre payment methods (if needed)")
+	pms, err := m.WyreManager.CreatePaymentMethodsFromPlaidItems(ctx, userID, wyreAccount.ID, items)
+	if err != nil {
+		return err
+	}
+
+	{
+		var ids []string
+		for _, pm := range pms {
+			ids = append(ids, string(pm.ID))
+		}
+
+		err = m.Pusher.Send(userID, &pusher.Message{
+			Kind: pusher.MessageKindWyrePaymentMethodUpdated,
+			IDs:  ids,
+			At:   time.Now(),
+		})
+		if err != nil {
+			return fmt.Errorf("error while trying to send via pusher.io to user: %#v", err)
+		}
+	}
+
+	return nil
+}
+
+func runCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j job.Job) error {
 	if len(j.RelatedIDs) == 0 {
 		log.Println("error: relatedIDs can't be empty")
 		return nil

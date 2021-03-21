@@ -264,7 +264,7 @@ func (db Db) SaveWyreAccount(ctx context.Context, tx *firestore.Transaction, use
 	return err
 }
 
-// SaveWyreAccount ...
+// GetWyreAccounts ...
 func (db Db) GetWyreAccounts(ctx context.Context, tx *firestore.Transaction, userID user.ID) ([]*account.Account, error) {
 	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreAccounts")
 

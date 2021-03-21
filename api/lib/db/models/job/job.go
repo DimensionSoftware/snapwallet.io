@@ -3,7 +3,8 @@ package job
 type Kind string
 
 const (
-	KindCreateWyreAccountForUser Kind = "CREATE_WYRE_ACCOUNT_FOR_USER"
+	KindCreateWyreAccountForUser        Kind = "CREATE_WYRE_ACCOUNT_FOR_USER"
+	KindCreateWyrePaymentMethodsForUser Kind = "CREATE_WYRE_PAYMENT_METHODS_FOR_USER"
 )
 
 type Status string
