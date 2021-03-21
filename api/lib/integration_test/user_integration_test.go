@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
+	"github.com/khoerling/flux/api/cmd/grpcserver/wire"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
-	"github.com/khoerling/flux/api/lib/wire"
 	"syreclabs.com/go/faker"
 
 	"github.com/stretchr/testify/assert"

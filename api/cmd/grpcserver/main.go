@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"github.com/khoerling/flux/api/lib/wire"
+	"github.com/khoerling/flux/api/cmd/grpcserver/wire"
 )
 
 const (

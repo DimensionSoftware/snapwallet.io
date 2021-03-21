@@ -1,3 +1,4 @@
 #!/bin/bash -xeu
 
-wire gen -output_file_prefix lib/wire/
+wire gen -output_file_prefix ../../cmd/grpcserver/wire/ injectors/grpcserver/wire.go
+wire gen -output_file_prefix ../../cmd/jobrunner/wire/ injectors/jobrunner/wire.go
