@@ -53,6 +53,9 @@ func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, plaidA
 		return nil, err
 	}
 
+	// todo save and return this instead of raw api resp
+	//m.Db.SaveWyrePaymentMethod
+
 	return pm, nil
 }
 
