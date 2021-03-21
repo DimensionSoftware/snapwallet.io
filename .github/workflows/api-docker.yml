@@ -11,10 +11,13 @@ on:
 
 jobs:
   build-and-push-to-gcr:
+    name: Build & Push Docker Image to GCR
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+      - name: Checkout Repo
+        uses: actions/checkout@v2
+      - name: Build & Push Docker Image to GCR
+        uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
         with:
           gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
           registry: gcr.io
@@ -23,3 +26,8 @@ jobs:
           image_tag: ${{ github.sha }}
           context: ./api
           dockerfile: ./api/Dockerfile
+      - uses: google-github-actions/deploy-cloudrun@main
+        with:
+          image: gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }}
+          service: snap-api
+          credentials: ${{ secrets.GCP_SA_KEY }}
