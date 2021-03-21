@@ -7,7 +7,6 @@ COVERPKG="$COVERPKG,./lib/hashing/..."
 COVERPKG="$COVERPKG,./lib/integrations/..."
 COVERPKG="$COVERPKG,./lib/server/..."
 
-JWT_PRIVATE_PEM_BASE64=CNnY66oOEmQKWAowdHlwZS5nb29nbGVhcGlzLmNvbS9nb29nbGUuY3J5cHRvLnRpbmsuQWVzR2NtS2V5EiIaIMYBG8Z+K47VfoOChDg7zDGTWu+ChKCpBhww5Pjif0KNGAEQARjZ2OuqDiAB
 set -x
 go test -cover \
   -coverprofile cover.out \
