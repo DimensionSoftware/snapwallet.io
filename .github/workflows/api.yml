@@ -10,9 +10,23 @@ on:
       - '!api/README.md'
 
 jobs:
-  #test: 
+  test: 
+    name: Run Test Suite
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run Tests
+        run: |
+          make test
+      # - name: Archive production artifacts
+      #   uses: actions/upload-artifact@v2
+      #   with:
+      #     name: dist-without-markdown
+      #     path: |
+      #       dist
+      #       !dist/**/*.md
   deploy-jobrunner: 
-    #needs: test
+    needs: test
     name: Build/Deploy JobRunner
     runs-on: ubuntu-latest
     steps:
@@ -36,7 +50,7 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
   deploy-api:
-    #needs: test
+    needs: test
     name: Build/Deploy API
     runs-on: ubuntu-latest
     steps:
