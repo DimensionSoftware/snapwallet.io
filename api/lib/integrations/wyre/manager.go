@@ -43,6 +43,14 @@ func ProvideAPIHost() (APIHost, error) {
 }
 
 func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccessToken string, plaidItemID string, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {
+	existingPm, err := m.Db.GetWyrePaymentMethodByPlaidAccountID(ctx, userID, wyreAccountID, plaidAccountID)
+	if err != nil {
+		return nil, err
+	}
+	if existingPm != nil {
+		return nil, nil
+	}
+
 	resp, err := m.Plaid.CreateProcessorToken(plaidAccessToken, plaidAccountID, "wyre")
 	if err != nil {
 		return nil, err
@@ -83,8 +91,9 @@ func (m Manager) CreatePaymentMethodsFromPlaidItem(ctx context.Context, userID u
 		if err != nil {
 			return nil, err
 		}
-
-		out = append(out, pm)
+		if pm != nil {
+			out = append(out, pm)
+		}
 	}
 
 	return out, nil

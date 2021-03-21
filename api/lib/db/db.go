@@ -302,6 +302,32 @@ func (db Db) GetWyreAccounts(ctx context.Context, tx *firestore.Transaction, use
 	return out, nil
 }
 
+// GetWyrePaymentMethodByPlaidAccountID ...
+func (db Db) GetWyrePaymentMethodByPlaidAccountID(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {
+	collection := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreAccounts").Doc(string(wyreAccountID)).Collection("wyrePaymentMethods")
+	docs := collection.
+		Where("plaidAccountID", "==", plaidAccountID).
+		Limit(1).
+		Documents(ctx)
+
+	snap, err := docs.Next()
+	if err == iterator.Done {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var pm paymentmethod.PaymentMethod
+	err = snap.DataTo(&pm)
+	if err != nil {
+		return nil, err
+	}
+
+	return &pm, nil
+
+}
+
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone
 func (db Db) GetUserByEmailOrPhone(ctx context.Context, tx *firestore.Transaction, emailOrPhone string) (*user.User, error) {
 	if emailOrPhone == "" {
