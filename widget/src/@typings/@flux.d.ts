@@ -6,6 +6,8 @@ declare global {
     Pusher: any
     API?: PromiseFluxApi
     AUTH_MANAGER?: AuthManager
+    __SOCKET?: any
+    tryInitializePusher: any
   }
 
   declare var __ENV: {

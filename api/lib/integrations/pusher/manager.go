@@ -14,9 +14,9 @@ type Manager struct {
 type MessageKind string
 
 const (
-	MessageKindWyreAccountUpdated       MessageKind = "WYRE_ACCOUNT_UPDATED"
-	MessageKindWyrePaymentMethodUpdated MessageKind = "WYRE_PAYMENT_METHOD_UPDATED"
-	MessageKindProfileStatusUpdated     MessageKind = "PROFILE_STATUS_UPDATED"
+	MessageKindWyreAccountUpdated        MessageKind = "WYRE_ACCOUNT_UPDATED"
+	MessageKindWyrePaymentsMethodUpdated MessageKind = "WYRE_PAYMENT_METHODS_UPDATED"
+	MessageKindProfileStatusUpdated      MessageKind = "PROFILE_STATUS_UPDATED"
 )
 
 type Message struct {

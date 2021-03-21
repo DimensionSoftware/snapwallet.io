@@ -17,6 +17,7 @@ require (
 	github.com/google/tink/go v1.5.0
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.2.0
+	github.com/lithammer/shortuuid v3.0.0+incompatible
 	github.com/lithammer/shortuuid/v3 v3.0.6
 	github.com/nyaruka/phonenumbers v1.0.66
 	github.com/plaid/plaid-go v0.0.0-20210216195344-700b8cfc627d

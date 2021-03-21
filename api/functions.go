@@ -89,7 +89,7 @@ func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manage
 		}
 
 		err = m.Pusher.Send(userID, &pusher.Message{
-			Kind: pusher.MessageKindWyrePaymentMethodUpdated,
+			Kind: pusher.MessageKindWyrePaymentsMethodUpdated,
 			IDs:  ids,
 			At:   time.Now(),
 		})

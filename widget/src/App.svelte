@@ -112,24 +112,7 @@
       })
     }
   })
-  function initializePusher() {
-    //window.Pusher.log = Logger.debug
-    window.Pusher.logToConsole = true
 
-    const userID = window.AUTH_MANAGER.viewerUserID()
-    if (userID) {
-      var pusher = new window.Pusher('dd280d42ccafc24e19ff', {
-        cluster: 'us3',
-      })
-
-      const channel = pusher.subscribe(userID)
-      channel.bind('my-event', function (data) {
-        Logger.debug(JSON.stringify(data))
-      })
-
-      Logger.debug('PUSHER LOADED :)')
-    }
-  }
 </script>
 
 <div id="modal">
@@ -142,7 +125,7 @@
 <svelte:head>
   <script
     src="https://js.pusher.com/7.0/pusher.min.js"
-    on:load={initializePusher}></script>
+    on:load={window.tryInitializePusher}></script>
   <script
     src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 </svelte:head>

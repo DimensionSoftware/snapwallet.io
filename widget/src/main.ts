@@ -5,6 +5,29 @@ window.AUTH_MANAGER = new AuthManager()
 window.AUTH_MANAGER.watch()
 window.API = genAPIClient(window.AUTH_MANAGER)
 
+window.tryInitializePusher = function tryInitializePusher() {
+  //window.Pusher.log = Logger.debug
+  if (window.Pusher) {
+    window.Pusher.logToConsole = true
+  }
+
+  const userID = window.AUTH_MANAGER.viewerUserID()
+  if (userID && !window.__SOCKET) {
+    window.__SOCKET = new window.Pusher('dd280d42ccafc24e19ff', {
+      cluster: 'us3',
+    })
+
+    const channel = window.__SOCKET.subscribe(userID)
+    channel.bind(function (data) {
+      //Logger.debug(JSON.stringify(data))
+      console.log(data)
+    })
+
+    //Logger.debug('PUSHER LOADED :)')
+    console.log('pusher loaded')
+  }
+}
+
 // a test
 window.addEventListener('logout', () => {
   console.log('viewer has logged out')

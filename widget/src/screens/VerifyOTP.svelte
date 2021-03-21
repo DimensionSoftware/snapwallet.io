@@ -78,6 +78,7 @@
       const resp = await verifyOTP()
       window.AUTH_MANAGER.login(resp.tokens)
       Logger.debug('Logged in')
+      window.tryInitializePusher()
       setTimeout(() => push($userStore.lastKnownRoute), 700)
     } finally {
       setTimeout(() => (isMakingRequest = false), 700)
