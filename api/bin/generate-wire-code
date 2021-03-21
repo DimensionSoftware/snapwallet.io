@@ -2,3 +2,4 @@
 
 wire gen -output_file_prefix ../../cmd/grpcserver/wire/ injectors/grpcserver/wire.go
 wire gen -output_file_prefix ../../cmd/jobrunner/wire/ injectors/jobrunner/wire.go
+wire gen -output_file_prefix ../../lib/integration_test/wire/ injectors/test/wire.go
