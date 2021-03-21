@@ -19,12 +19,17 @@ jobs:
       - uses: actions/checkout@v2
       - name: Deploy RunSnapJob Cloud Function
         run: |
-          echo -n "$GCP_SA_KEY" | base64 --decode > /tmp/gcloud-service-key.json
+          pushd /tmp
+
+          echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
 
           curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
           tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+
           ./google-cloud-sdk/install.sh --usage-reporting false
-          gcloud auth activate-service-account --key-file /tmp/gcloud-service-key.json
+          gcloud auth activate-service-account --key-file gcloud-service-key.json
+
+          popd
 
           bin/deploy-jobrunner --project silken-phalanx-305703
         working-directory: api
