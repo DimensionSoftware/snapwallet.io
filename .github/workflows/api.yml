@@ -20,10 +20,10 @@ jobs:
       - name: Deploy RunSnapJob Cloud Function
         run: |
           curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
-          tar -xvzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+          tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
           ./google-cloud-sdk/install.sh --usage-reporting false
           bin/deploy-jobrunner
-
+        working-directory: api
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
        #credentials: ${{ secrets.GCP_SA_KEY }}
