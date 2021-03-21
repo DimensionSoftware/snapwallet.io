@@ -6,127 +6,64 @@
 package wire
 
 import (
-	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
-	"github.com/khoerling/flux/api/lib/filemanager"
-	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
-	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
-	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
-	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
-	"github.com/khoerling/flux/api/lib/server"
-	plaid2 "github.com/plaid/plaid-go/plaid"
+	"github.com/khoerling/flux/api/lib/jobmanager"
 )
 
 // Injectors from wire.go:
 
 // InitializeServer creates the main server container
-func InitializeServer() (server.Server, error) {
-	privateKey, err := auth.ProvideJwtPrivateKey()
-	if err != nil {
-		return server.Server{}, err
-	}
-	publicKey := auth.ProvideJwtPublicKey(privateKey)
+func InitializeJobManager() (jobmanager.Manager, error) {
 	fireProjectID, err := firestore.ProvideFirestoreProjectID()
 	if err != nil {
-		return server.Server{}, err
+		return jobmanager.Manager{}, err
 	}
 	client, err := firestore.ProvideFirestore(fireProjectID)
 	if err != nil {
-		return server.Server{}, err
+		return jobmanager.Manager{}, err
 	}
 	config, err := encryption.ProvideConfig()
 	if err != nil {
-		return server.Server{}, err
+		return jobmanager.Manager{}, err
 	}
 	manager, err := encryption.NewManager(config)
 	if err != nil {
-		return server.Server{}, err
+		return jobmanager.Manager{}, err
 	}
 	dbDb := &db.Db{
 		Firestore:         client,
 		EncryptionManager: manager,
 	}
-	jwtVerifier := &auth.JwtVerifier{
-		PublicKey: publicKey,
-		Db:        dbDb,
-	}
-	grpcServer := server.ProvideGrpcServer(jwtVerifier)
-	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
-	if err != nil {
-		return server.Server{}, err
-	}
-	sendgridClient := sendgrid.ProvideSendClient(sendAPIKey)
-	twilioConfig, err := twilio.ProvideTwilioConfig()
-	if err != nil {
-		return server.Server{}, err
-	}
-	gotwilioTwilio := twilio.ProvideTwilio(twilioConfig)
-	bucketHandle, err := cloudstorage.ProvideBucket()
-	if err != nil {
-		return server.Server{}, err
-	}
-	filemanagerManager := &filemanager.Manager{
-		BucketHandle:      bucketHandle,
-		Db:                dbDb,
-		EncryptionManager: manager,
-	}
-	wyreConfig, err := wyre.ProvideWyreConfig()
-	if err != nil {
-		return server.Server{}, err
-	}
-	wyreClient := wyre.NewClient(wyreConfig)
-	apiHost, err := wyre.ProvideAPIHost()
-	if err != nil {
-		return server.Server{}, err
-	}
-	wyreManager := &wyre.Manager{
-		APIHost: apiHost,
-		Wyre:    wyreClient,
-		Db:      dbDb,
-	}
-	clientOptions, err := plaid.ProvideClientOptions()
-	if err != nil {
-		return server.Server{}, err
-	}
-	plaidClient, err := plaid2.NewClient(clientOptions)
-	if err != nil {
-		return server.Server{}, err
-	}
-	jwtSigner := &auth.JwtSigner{
-		PrivateKey: privateKey,
-	}
-	authManager := &auth.Manager{
-		JwtSigner:   jwtSigner,
-		JwtVerifier: jwtVerifier,
-		Db:          dbDb,
-	}
 	pusherConfig, err := pusher.ProviderPusherConfig()
 	if err != nil {
-		return server.Server{}, err
+		return jobmanager.Manager{}, err
 	}
 	pusherClient := pusher.ProvidePusherClient(pusherConfig)
 	pusherManager := &pusher.Manager{
 		Pusher: pusherClient,
 	}
-	serverServer := server.Server{
-		GrpcServer:   grpcServer,
-		Sendgrid:     sendgridClient,
-		Twilio:       gotwilioTwilio,
-		TwilioConfig: twilioConfig,
-		Firestore:    client,
-		FileManager:  filemanagerManager,
-		Db:           dbDb,
-		Wyre:         wyreClient,
-		WyreManager:  wyreManager,
-		Plaid:        plaidClient,
-		JwtSigner:    jwtSigner,
-		JwtVerifier:  jwtVerifier,
-		AuthManager:  authManager,
-		Pusher:       pusherManager,
+	apiHost, err := wyre.ProvideAPIHost()
+	if err != nil {
+		return jobmanager.Manager{}, err
 	}
-	return serverServer, nil
+	wyreConfig, err := wyre.ProvideWyreConfig()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	wyreClient := wyre.NewClient(wyreConfig)
+	wyreManager := &wyre.Manager{
+		APIHost: apiHost,
+		Wyre:    wyreClient,
+		Db:      dbDb,
+	}
+	jobmanagerManager := jobmanager.Manager{
+		Db:          dbDb,
+		Pusher:      pusherManager,
+		WyreManager: wyreManager,
+	}
+	return jobmanagerManager, nil
 }

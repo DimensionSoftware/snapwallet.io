@@ -3,6 +3,8 @@ package jobrunner
 import (
 	"context"
 	"log"
+
+	"github.com/khoerling/flux/api/cmd/jobrunner/wire"
 )
 
 // PubSubMessage is the payload of a Pub/Sub event.
@@ -13,8 +15,13 @@ type PubSubMessage struct {
 }
 
 // RunSnapJob consumes a Pub/Sub message.
-func RunSnapJob(ctx context.Context, m PubSubMessage) error {
-	name := string(m.Data) // Automatically decoded from base64.
+func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
+	_, err := wire.InitializeJobManager()
+	if err != nil {
+		return err
+	}
+
+	name := string(msg.Data) // Automatically decoded from base64.
 	if name == "" {
 		name = "World"
 	}
