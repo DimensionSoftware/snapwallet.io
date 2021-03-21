@@ -48,5 +48,5 @@ func Test_Profile_Lifecycle(t *testing.T) {
 	a.Equal(pdata.ID, pdataRetrieved.ID)
 	a.Equal(pdata.LegalName, pdataRetrieved.LegalName)
 	a.Equal(pdata.Status, pdataRetrieved.Status)
-	a.True(pdata.CreatedAt.Equal(pdataRetrieved.CreatedAt), "pdata.CreatedAt.Equal(pdataRetrieved.CreatedAt)")
+	a.WithinDuration(pdata.CreatedAt, pdataRetrieved.CreatedAt, time.Second)
 }
