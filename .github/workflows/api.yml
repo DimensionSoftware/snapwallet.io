@@ -22,7 +22,10 @@ jobs:
           curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
           tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
           ./google-cloud-sdk/install.sh --usage-reporting false
+          echo -n "$GCP_SA_KEY" | base64 -D > gcloud-service-key.json
+          export GCLOUD_SERVICE_KEY="$(pwd)/gcloud-service-key.json"
           bin/deploy-jobrunner --project silken-phalanx-305703
+
         working-directory: api
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
