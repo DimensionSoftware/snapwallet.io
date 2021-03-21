@@ -9,9 +9,11 @@ import (
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
+	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/jobmanager"
+	plaid2 "github.com/plaid/plaid-go/plaid"
 )
 
 // Injectors from wire.go:
@@ -55,10 +57,19 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		return jobmanager.Manager{}, err
 	}
 	wyreClient := wyre.NewClient(wyreConfig)
+	clientOptions, err := plaid.ProvideClientOptions()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	plaidClient, err := plaid2.NewClient(clientOptions)
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
 	wyreManager := &wyre.Manager{
 		APIHost: apiHost,
 		Wyre:    wyreClient,
 		Db:      dbDb,
+		Plaid:   plaidClient,
 	}
 	jobmanagerManager := jobmanager.Manager{
 		Db:          dbDb,

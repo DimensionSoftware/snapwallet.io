@@ -5,9 +5,11 @@ import (
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
+	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/jobmanager"
+	vendorplaid "github.com/plaid/plaid-go/plaid"
 )
 
 // wire.go
@@ -19,6 +21,8 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		wire.Struct(new(pusher.Manager), "*"),
 		wire.Struct(new(jobmanager.Manager), "*"),
 		wire.Struct(new(wyre.Manager), "*"),
+		vendorplaid.NewClient,
+		plaid.ProvideClientOptions,
 		firestore.ProvideFirestoreProjectID,
 		firestore.ProvideFirestore,
 		encryption.ProvideConfig,

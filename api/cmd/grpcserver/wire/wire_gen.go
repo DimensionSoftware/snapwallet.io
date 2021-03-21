@@ -84,11 +84,6 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	wyreManager := &wyre.Manager{
-		APIHost: apiHost,
-		Wyre:    wyreClient,
-		Db:      dbDb,
-	}
 	clientOptions, err := plaid.ProvideClientOptions()
 	if err != nil {
 		return server.Server{}, err
@@ -96,6 +91,12 @@ func InitializeServer() (server.Server, error) {
 	plaidClient, err := plaid2.NewClient(clientOptions)
 	if err != nil {
 		return server.Server{}, err
+	}
+	wyreManager := &wyre.Manager{
+		APIHost: apiHost,
+		Wyre:    wyreClient,
+		Db:      dbDb,
+		Plaid:   plaidClient,
 	}
 	jwtSigner := &auth.JwtSigner{
 		PrivateKey: privateKey,
