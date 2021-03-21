@@ -420,6 +420,41 @@ func (db Db) SaveProfileDatas(ctx context.Context, passedTx *firestore.Transacti
 	return ids, nil
 }
 
+// GetAllPlaidItems ...
+func (db Db) GetAllPlaidItems(ctx context.Context, tx *firestore.Transaction, userID user.ID) ([]*item.Item, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("plaidItems")
+
+	var (
+		docs []*firestore.DocumentSnapshot
+		err  error
+	)
+	if tx == nil {
+		docs, err = ref.Documents(ctx).GetAll()
+	} else {
+		docs, err = tx.Documents(ref).GetAll()
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var out []*item.Item
+	for _, snap := range docs {
+		var enc item.EncryptedItem
+		err := snap.DataTo(&enc)
+		if err != nil {
+			return nil, err
+		}
+
+		item, err := enc.Decrypt(db.EncryptionManager, userID)
+		if err != nil {
+			return nil, err
+		}
+		out = append(out, item)
+	}
+
+	return out, nil
+}
+
 // GetAllProfileData ...
 func (db Db) GetAllProfileData(ctx context.Context, tx *firestore.Transaction, userID user.ID) (profiledata.ProfileDatas, error) {
 	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("profile")
