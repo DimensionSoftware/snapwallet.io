@@ -10,6 +10,7 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
+	"github.com/khoerling/flux/api/lib/integrations/pubsub"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/jobmanager"
@@ -71,10 +72,18 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		Db:      dbDb,
 		Plaid:   plaidClient,
 	}
+	pubsubClient, err := pubsub.ProvideClient(fireProjectID)
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	pubsubManager := &pubsub.Manager{
+		PubSub: pubsubClient,
+	}
 	jobmanagerManager := jobmanager.Manager{
 		Db:          dbDb,
 		Pusher:      pusherManager,
 		WyreManager: wyreManager,
+		PubSub:      pubsubManager,
 	}
 	return jobmanagerManager, nil
 }

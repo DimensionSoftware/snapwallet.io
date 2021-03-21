@@ -6,6 +6,7 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
+	"github.com/khoerling/flux/api/lib/integrations/pubsub"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/jobmanager"
@@ -19,6 +20,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	wire.Build(
 		wire.Struct(new(db.Db), "*"),
 		wire.Struct(new(pusher.Manager), "*"),
+		wire.Struct(new(pubsub.Manager), "*"),
 		wire.Struct(new(jobmanager.Manager), "*"),
 		wire.Struct(new(wyre.Manager), "*"),
 		vendorplaid.NewClient,
@@ -32,6 +34,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		wyre.ProvideAPIHost,
 		wyre.ProvideWyreConfig,
 		wyre.NewClient,
+		pubsub.ProvideClient,
 	)
 	return jobmanager.Manager{}, nil
 }

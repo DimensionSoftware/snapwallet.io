@@ -12,6 +12,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/jobmanager"
+	"github.com/lithammer/shortuuid"
 )
 
 // PubSubMessage is the payload of a Pub/Sub event.
@@ -129,6 +130,23 @@ func runCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j jo
 	if err != nil {
 		log.Println("error while trying to send via pusher.io to user: ", err)
 		return nil
+	}
+
+	// submit wyre create payment methods job once account is complete
+	{
+		now := time.Now()
+
+		err = m.PubSub.SendJob(ctx, &job.Job{
+			ID:         shortuuid.New(),
+			Kind:       job.KindCreateWyrePaymentMethodsForUser,
+			Status:     job.StatusQueued,
+			RelatedIDs: []string{string(userID)},
+			CreatedAt:  now.Unix(),
+			UpdatedAt:  now.Unix(),
+		})
+		if err != nil {
+			return err
+		}
 	}
 
 	return nil
