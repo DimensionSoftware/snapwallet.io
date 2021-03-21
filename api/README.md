@@ -93,3 +93,9 @@ may be needed in the future...
 gcloud components install pubsub-emulator
 gcloud components update
 ```
+
+job message examples
+
+```
+{"kind": "CREATE_WYRE_ACCOUNT_FOR_USER", "relatedIDs": ["<user_id>"]}
+```
