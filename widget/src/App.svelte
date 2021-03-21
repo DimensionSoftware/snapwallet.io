@@ -113,7 +113,7 @@
     }
   })
   function initializePusher() {
-    window.Pusher.log = Logger.debug
+    //window.Pusher.log = Logger.debug
     window.Pusher.logToConsole = true
 
     const userID = window.AUTH_MANAGER.viewerUserID()

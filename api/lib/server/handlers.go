@@ -805,7 +805,6 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 
 	s.Pusher.Send(userID, &pusher.Message{
 		Kind: pusher.MessageKindWyreAccountUpdated,
-		IDs:  []string{},
 		At:   now,
 	})
 
