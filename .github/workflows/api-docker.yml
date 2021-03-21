@@ -21,5 +21,5 @@ jobs:
           project_id: silken-phalanx-305703
           image_name: snap-api
           image_tag: ${{ github.sha }}
-          #dockerfile: ./api/Dockerfile
-        working-directory: api
+          context: ./api
+          dockerfile: ./api/Dockerfile
