@@ -22,6 +22,10 @@ jobs:
           curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
           tar -xvzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
           ./google-cloud-sdk/install.sh --usage-reporting false
+          bin/deploy-jobrunner
+
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
        #credentials: ${{ secrets.GCP_SA_KEY }}
   # build-and-push-to-gcr:
   #   #needs: test
