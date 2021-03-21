@@ -9,10 +9,12 @@ import (
 
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
-	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
+	wyre_model "github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/lithammer/shortuuid/v3"
+	"github.com/plaid/plaid-go/plaid"
 )
 
 const apiHostEnvVarName = "API_HOST"
@@ -23,6 +25,7 @@ type Manager struct {
 	APIHost APIHost
 	Wyre    *Client
 	Db      *db.Db
+	Plaid   *plaid.Client
 }
 
 // ProvideAPIHost ...
@@ -37,7 +40,55 @@ func ProvideAPIHost() (APIHost, error) {
 	return APIHost(apiHost), nil
 }
 
-func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*account.Account, error) {
+func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, plaidAccessToken string, plaidAccountID string) (*PaymentMethod, error) {
+	resp, err := m.Plaid.CreateProcessorToken(plaidAccessToken, plaidAccountID, "wyre")
+	if err != nil {
+		return nil, err
+	}
+
+	pm, err := m.Wyre.CreatePaymentMethod(CreatePaymentMethodRequest{
+		PlaidProcessorToken: resp.ProcessorToken,
+	}.WithDefaults())
+	if err != nil {
+		return nil, err
+	}
+
+	return pm, nil
+}
+
+func (m Manager) CreatePaymentMethodsFromPlaidItem(ctx context.Context, userID user.ID, item *item.Item) ([]*PaymentMethod, error) {
+	var out []*PaymentMethod
+
+	for _, accountID := range item.AccountIDs {
+		pm, err := m.CreatePaymentMethod(ctx, userID, item.AccessToken, accountID)
+		if err != nil {
+			return nil, err
+		}
+
+		out = append(out, pm)
+	}
+
+	return out, nil
+}
+
+func (m Manager) CreatePaymentMethodsFromPlaidItems(ctx context.Context, userID user.ID, items []*item.Item) ([]*PaymentMethod, error) {
+	var out []*PaymentMethod
+
+	for _, item := range items {
+		pms, err := m.CreatePaymentMethodsFromPlaidItem(ctx, userID, item)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, pm := range pms {
+			out = append(out, pm)
+		}
+	}
+
+	return out, nil
+}
+
+func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*wyre_model.Account, error) {
 	now := time.Now()
 	t := true
 	f := false
@@ -119,8 +170,8 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 
 	// todo, can't create account if they already have one
 
-	account := account.Account{
-		ID:        account.ID(wyreAccountResp.ID),
+	account := wyre_model.Account{
+		ID:        wyre_model.ID(wyreAccountResp.ID),
 		APIKey:    wyreAuthTokenResp.APIKey,
 		SecretKey: secretKey,
 		Status:    wyreAccountResp.Status,
