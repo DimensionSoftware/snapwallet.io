@@ -3,7 +3,6 @@ package jobrunner
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"log"
 	"time"
 
@@ -24,36 +23,50 @@ type PubSubMessage struct {
 func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
 	m, err := wire.InitializeJobManager()
 	if err != nil {
-		return err
+		log.Println("error during initialization: ", err)
+		return nil
 	}
 
 	var j job.Job
 	if err := json.Unmarshal(msg.Data, &j); err != nil {
-		return err
+		log.Println("unmarshaling message failed: ", err)
+		return nil
 	}
 
 	if j.Kind == job.KindCreateWyreAccountForUser {
+		if len(j.RelatedIDs) == 0 {
+			log.Println("error: relatedIDs can't be empty")
+			return nil
+		}
+
 		userID := user.ID(j.RelatedIDs[0])
 		log.Println("creating wyre account")
 
 		pdata, err := m.Db.GetAllProfileData(ctx, nil, userID)
 		if err != nil {
-			return err
+			log.Println("error while getting profile data: ", err)
+			return nil
 		}
 
 		_, err = m.WyreManager.CreateAccount(ctx, userID, pdata)
 		if err != nil {
-			return err
+			log.Println("error while creating wyre account: ", err)
+			// retryable once i work out issues?
+			return nil
 		}
 
-		m.Pusher.Send(userID, &pusher.Message{
+		err = m.Pusher.Send(userID, &pusher.Message{
 			Kind: pusher.MessageKindWyreAccountUpdated,
 			At:   time.Now(),
 		})
+		if err != nil {
+			log.Println("error while trying to send via pusher.io to user: ", err)
+			return nil
+		}
 
-	} else {
-		panic(fmt.Sprintf("unsupported job kind: %s\n", j.Kind))
+		return nil
 	}
 
+	log.Printf("error: unsupported job kind: %s\n", j.Kind)
 	return nil
 }
