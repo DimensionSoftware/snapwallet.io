@@ -26,7 +26,6 @@ jobs:
           tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
 
           ./google-cloud-sdk/install.sh --usage-reporting false
-          gcloud init
 
           bin/deploy-jobrunner --project silken-phalanx-305703
         working-directory: api
