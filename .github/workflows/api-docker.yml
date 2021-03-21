@@ -6,8 +6,7 @@ on:
       - master
     paths:
       - api/**
-    paths-ignore:
-      - api/README.md
+      - !api/README.md
 
 jobs:
   build-and-push-to-gcr:
