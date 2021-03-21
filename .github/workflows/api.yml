@@ -21,7 +21,7 @@ jobs:
         run: |
           curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
           tar -xvzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
-          ls -lha .
+          ./google-cloud-sdk/install.sh --usage-reporting false
        #credentials: ${{ secrets.GCP_SA_KEY }}
   # build-and-push-to-gcr:
   #   #needs: test
