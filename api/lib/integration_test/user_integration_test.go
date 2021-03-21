@@ -4,6 +4,7 @@ import (
 	"context"
 	"log"
 	"testing"
+	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/integration_t_manager/wire"
@@ -30,11 +31,11 @@ func Test_User_Lifecycle(t *testing.T) {
 	a.Equal(u.ID, u2.ID, "the same email should correlate with the same user id on second visit")
 	a.Equal(u.Email, u2.Email)
 	log.Println(u.CreatedAt, u2.CreatedAt)
-	a.True(u.CreatedAt.Equal(u2.CreatedAt), "u.CreatedAt.Equal(u2.CreatedAt)")
+	a.WithinDuration(u.CreatedAt, u2.CreatedAt, time.Second)
 
 	u3, err := s.Db.GetUserByID(ctx, u.ID)
 	a.NoError(err, "fetch user by id needs to work and should return the same results as an email lookup")
 	a.Equal(u.ID, u3.ID)
 	a.Equal(u.Email, u3.Email)
-	a.True(u.CreatedAt.Equal(u3.CreatedAt), "u.CreatedAt.Equal(u3.CreatedAt)")
+	a.WithinDuration(u.CreatedAt, u3.CreatedAt, time.Second)
 }
