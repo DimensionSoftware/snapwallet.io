@@ -35,26 +35,25 @@ jobs:
         working-directory: api
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-       #credentials: ${{ secrets.GCP_SA_KEY }}
-  # build-and-push-to-gcr:
-  #   #needs: test
-  #   name: Build/Deploy API
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Build/Push Docker Image to GCR
-  #       uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
-  #       with:
-  #         gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
-  #         registry: gcr.io
-  #         project_id: silken-phalanx-305703
-  #         image_name: snap-api
-  #         image_tag: ${{ github.sha }}
-  #         context: ./api
-  #         dockerfile: ./api/Dockerfile
-  #     - name: Deploy Docker Image to CloudRun
-  #       uses: google-github-actions/deploy-cloudrun@main
-  #       with:
-  #         image: gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }}
-  #         service: snap-api
-  #         credentials: ${{ secrets.GCP_SA_KEY }}
+  deploy-api:
+    #needs: test
+    name: Build/Deploy API
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build/Push Docker Image to GCR
+        uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+        with:
+          gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
+          registry: gcr.io
+          project_id: silken-phalanx-305703
+          image_name: snap-api
+          image_tag: ${{ github.sha }}
+          context: ./api
+          dockerfile: ./api/Dockerfile
+      - name: Deploy Docker Image to CloudRun
+        uses: google-github-actions/deploy-cloudrun@main
+        with:
+          image: gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }}
+          service: snap-api
+          credentials: ${{ secrets.GCP_SA_KEY }}
