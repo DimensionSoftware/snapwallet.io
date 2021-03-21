@@ -2,6 +2,7 @@ package integration_test
 
 import (
 	"context"
+	"log"
 	"testing"
 
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
@@ -28,6 +29,7 @@ func Test_User_Lifecycle(t *testing.T) {
 	a.NoError(err)
 	a.Equal(u.ID, u2.ID, "the same email should correlate with the same user id on second visit")
 	a.Equal(u.Email, u2.Email)
+	log.Println(u.CreatedAt, u2.CreatedAt)
 	a.True(u.CreatedAt.Equal(u2.CreatedAt), "u.CreatedAt.Equal(u2.CreatedAt)")
 
 	u3, err := s.Db.GetUserByID(ctx, u.ID)
