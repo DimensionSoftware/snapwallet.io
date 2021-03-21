@@ -126,8 +126,12 @@ var ProfileDataKinds = []ProfileDataKind{
 //var ProfileDataRequiredForWyre = ProfileDataKinds
 var ProfileDataRequiredForWyre = []ProfileDataKind{
 	KindLegalName,
+	KindEmail,
+	//KindPhone,
+	KindAddress,
 	KindDateOfBirth,
 	KindUSSSN,
+	KindUSGovernmentIDDoc,
 }
 
 // EncryptedProfileData is a generic container store encrypted ProfileData

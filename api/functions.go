@@ -2,9 +2,15 @@ package jobrunner
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 	"log"
+	"time"
 
 	"github.com/khoerling/flux/api/cmd/jobrunner/wire"
+	"github.com/khoerling/flux/api/lib/db/models/job"
+	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/integrations/pusher"
 )
 
 // PubSubMessage is the payload of a Pub/Sub event.
@@ -16,15 +22,38 @@ type PubSubMessage struct {
 
 // RunSnapJob consumes a Pub/Sub message.
 func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
-	_, err := wire.InitializeJobManager()
+	m, err := wire.InitializeJobManager()
 	if err != nil {
 		return err
 	}
 
-	name := string(msg.Data) // Automatically decoded from base64.
-	if name == "" {
-		name = "World"
+	var j job.Job
+	if err := json.Unmarshal(msg.Data, &j); err != nil {
+		return err
 	}
-	log.Printf("Hello, %s!", name)
+
+	if j.Kind == job.KindCreateWyreAccountForUser {
+		userID := user.ID(j.RelatedIDs[0])
+		log.Println("creating wyre account")
+
+		pdata, err := m.Db.GetAllProfileData(ctx, nil, userID)
+		if err != nil {
+			return err
+		}
+
+		_, err = m.WyreManager.CreateAccount(ctx, userID, pdata)
+		if err != nil {
+			return err
+		}
+
+		m.Pusher.Send(userID, &pusher.Message{
+			Kind: pusher.MessageKindWyreAccountUpdated,
+			At:   time.Now(),
+		})
+
+	} else {
+		panic(fmt.Sprintf("unsupported job kind: %s\n", j.Kind))
+	}
+
 	return nil
 }
