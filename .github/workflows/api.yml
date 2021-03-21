@@ -19,8 +19,9 @@ jobs:
         run: |
           curl -O  https://storage.googleapis.com/firebase-preview-drop/emulator/cloud-firestore-emulator-v1.11.7.jar
           java -jar cloud-firestore-emulator-v1.11.7.jar &
+          sleep 2
+
           . .env.ci
-          sleep 10
           make test
         working-directory: api
       # - name: Archive production artifacts
