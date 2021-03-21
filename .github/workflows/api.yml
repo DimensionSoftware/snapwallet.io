@@ -5,7 +5,7 @@ on:
     branches:
       - master
     paths:
-      - '.github/workflows/api-docker.yml'
+      - '.github/workflows/api.yml'
       - 'api/**'
       - '!api/README.md'
 
