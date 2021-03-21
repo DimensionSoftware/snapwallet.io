@@ -260,13 +260,15 @@ func (req CreatePaymentMethodRequest) WithDefaults() CreatePaymentMethodRequest 
 
 // PaymentMethod represents the response object for https://api.sendwyre.com/v2/paymentMethods
 type PaymentMethod struct {
-	ID              string `json:"id"`
-	Owner           string `json:"owner"`
-	Name            string `json:"name"`
-	Last4Digits     string `json:"last4Digits"`
-	Status          string `json:"status"`
-	CountryCode     string `json:"countryCode"`
-	DefaultCurrency string `json:"defaultCurrency"`
+	ID                    string   `json:"id"`
+	Owner                 string   `json:"owner"`
+	Name                  string   `json:"name"`
+	Last4Digits           string   `json:"last4Digits"`
+	Status                string   `json:"status"`
+	CountryCode           string   `json:"countryCode"`
+	DefaultCurrency       string   `json:"defaultCurrency"`
+	ChargeableCurrencies  []string `json:"chargeableCurrencies"`
+	DepositableCurrencies []string `json:"depositableCurrencies"`
 	/*
 	  "id": "PA-W7YN28ABCHT",
 	  "owner": "account:AC-XX38VYXUA84",

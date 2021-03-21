@@ -12,7 +12,9 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	wyre_model "github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/lithammer/shortuuid/v3"
 	"github.com/plaid/plaid-go/plaid"
 )
@@ -40,30 +42,42 @@ func ProvideAPIHost() (APIHost, error) {
 	return APIHost(apiHost), nil
 }
 
-func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, plaidAccessToken string, plaidAccountID string) (*PaymentMethod, error) {
+func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccessToken string, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {
 	resp, err := m.Plaid.CreateProcessorToken(plaidAccessToken, plaidAccountID, "wyre")
 	if err != nil {
 		return nil, err
 	}
 
-	pm, err := m.Wyre.CreatePaymentMethod(CreatePaymentMethodRequest{
+	wyrePm, err := m.Wyre.CreatePaymentMethod(CreatePaymentMethodRequest{
 		PlaidProcessorToken: resp.ProcessorToken,
 	}.WithDefaults())
 	if err != nil {
 		return nil, err
 	}
 
-	// todo save and return this instead of raw api resp
-	//m.Db.SaveWyrePaymentMethod
+	pm := paymentmethod.PaymentMethod{
+		ID:                    paymentmethod.ID(wyrePm.ID),
+		Status:                wyrePm.Status,
+		Name:                  wyrePm.Name,
+		Last4:                 wyrePm.Last4Digits,
+		ChargeableCurrencies:  wyrePm.ChargeableCurrencies,
+		DepositableCurrencies: wyrePm.DepositableCurrencies,
+		UpdatedAt:             time.Now(),
+		CreatedAt:             time.Now(),
+	}
+	m.Db.SaveWyrePaymentMethod(ctx, nil, userID, wyreAccountID, &pm)
+	if err != nil {
+		return nil, err
+	}
 
-	return pm, nil
+	return &pm, nil
 }
 
-func (m Manager) CreatePaymentMethodsFromPlaidItem(ctx context.Context, userID user.ID, item *item.Item) ([]*PaymentMethod, error) {
-	var out []*PaymentMethod
+func (m Manager) CreatePaymentMethodsFromPlaidItem(ctx context.Context, userID user.ID, wyreAccountID account.ID, item *item.Item) ([]*paymentmethod.PaymentMethod, error) {
+	var out []*paymentmethod.PaymentMethod
 
 	for _, accountID := range item.AccountIDs {
-		pm, err := m.CreatePaymentMethod(ctx, userID, item.AccessToken, accountID)
+		pm, err := m.CreatePaymentMethod(ctx, userID, wyreAccountID, item.AccessToken, accountID)
 		if err != nil {
 			return nil, err
 		}
@@ -74,11 +88,11 @@ func (m Manager) CreatePaymentMethodsFromPlaidItem(ctx context.Context, userID u
 	return out, nil
 }
 
-func (m Manager) CreatePaymentMethodsFromPlaidItems(ctx context.Context, userID user.ID, items []*item.Item) ([]*PaymentMethod, error) {
-	var out []*PaymentMethod
+func (m Manager) CreatePaymentMethodsFromPlaidItems(ctx context.Context, userID user.ID, wyreAccountID account.ID, items []*item.Item) ([]*paymentmethod.PaymentMethod, error) {
+	var out []*paymentmethod.PaymentMethod
 
 	for _, item := range items {
-		pms, err := m.CreatePaymentMethodsFromPlaidItem(ctx, userID, item)
+		pms, err := m.CreatePaymentMethodsFromPlaidItem(ctx, userID, wyreAccountID, item)
 		if err != nil {
 			return nil, err
 		}

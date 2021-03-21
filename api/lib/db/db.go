@@ -23,6 +23,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/phone"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/unmarshal"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"google.golang.org/api/iterator"
@@ -467,6 +468,20 @@ func (db Db) SaveUsedRefreshToken(ctx context.Context, tx *firestore.Transaction
 
 	return err
 
+}
+
+func (db Db) SaveWyrePaymentMethod(ctx context.Context, tx *firestore.Transaction, userID user.ID, wyreAccountID account.ID, wpm *paymentmethod.PaymentMethod) error {
+	var err error
+
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreAccounts").Doc(string(wyreAccountID)).Collection("wyrePaymentMethods").Doc(string(wpm.ID))
+
+	if tx == nil {
+		_, err = ref.Set(ctx, wpm)
+	} else {
+		err = tx.Set(ref, wpm)
+	}
+
+	return err
 }
 
 func (db Db) GetUsedRefreshToken(ctx context.Context, tx *firestore.Transaction, id string) (*usedrefreshtoken.UsedRefreshToken, error) {
