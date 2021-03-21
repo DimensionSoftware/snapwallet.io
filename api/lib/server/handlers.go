@@ -602,7 +602,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			ID:         shortuuid.New(),
 			Kind:       job.KindCreateWyreAccountForUser,
 			Status:     job.StatusQueued,
-			RelatedIDs: []string{},
+			RelatedIDs: []string{string(u.ID)},
 			CreatedAt:  now.Unix(),
 			UpdatedAt:  now.Unix(),
 		})
