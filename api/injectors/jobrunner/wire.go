@@ -1,4 +1,3 @@
-// +build wireinject
 package wire
 
 import (

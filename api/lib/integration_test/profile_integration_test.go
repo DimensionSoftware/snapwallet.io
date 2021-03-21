@@ -41,8 +41,8 @@ func Test_Profile_Lifecycle(t *testing.T) {
 
 	profile, err := s.Db.GetAllProfileData(ctx, nil, u.ID)
 	a.NoError(err)
-	a.Len(profile, 1)
-	pdataRetrieved := (profile[0]).(*legalname.ProfileDataLegalName)
+	a.Len(profile, 2)
+	pdataRetrieved := (profile.FilterKind(common.KindLegalName)[0]).(*legalname.ProfileDataLegalName)
 
 	a.Equal(pdata.ID, pdataRetrieved.ID)
 	a.Equal(pdata.LegalName, pdataRetrieved.LegalName)
