@@ -5,10 +5,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/khoerling/flux/api/cmd/grpcserver/wire"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
+	"github.com/khoerling/flux/api/lib/integration_t_manager/wire"
 	"syreclabs.com/go/faker"
 
 	"github.com/lithammer/shortuuid/v3"
@@ -18,7 +18,8 @@ import (
 func Test_Profile_Lifecycle(t *testing.T) {
 	a := assert.New(t)
 	ctx := context.Background()
-	s, err := wire.InitializeServer()
+
+	s, err := wire.InitializeTestManager()
 	if err != nil {
 		panic(err)
 	}

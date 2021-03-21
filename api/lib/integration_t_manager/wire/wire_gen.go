@@ -8,35 +8,35 @@ package wire
 import (
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
-	"github.com/khoerling/flux/api/lib/integration_test"
+	"github.com/khoerling/flux/api/lib/integration_t_manager"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 )
 
 // Injectors from wire.go:
 
-func InitializeTestManager() (integration_test.Manager, error) {
+func InitializeTestManager() (integration_t_manager.Manager, error) {
 	fireProjectID, err := firestore.ProvideFirestoreProjectID()
 	if err != nil {
-		return integration_test.Manager{}, err
+		return integration_t_manager.Manager{}, err
 	}
 	client, err := firestore.ProvideFirestore(fireProjectID)
 	if err != nil {
-		return integration_test.Manager{}, err
+		return integration_t_manager.Manager{}, err
 	}
 	config, err := encryption.ProvideConfig()
 	if err != nil {
-		return integration_test.Manager{}, err
+		return integration_t_manager.Manager{}, err
 	}
 	manager, err := encryption.NewManager(config)
 	if err != nil {
-		return integration_test.Manager{}, err
+		return integration_t_manager.Manager{}, err
 	}
 	dbDb := &db.Db{
 		Firestore:         client,
 		EncryptionManager: manager,
 	}
-	integration_testManager := integration_test.Manager{
+	integration_t_managerManager := integration_t_manager.Manager{
 		Db: dbDb,
 	}
-	return integration_testManager, nil
+	return integration_t_managerManager, nil
 }
