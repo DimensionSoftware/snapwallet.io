@@ -43,6 +43,20 @@ func ProvideAPIHost() (APIHost, error) {
 }
 
 func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccessToken string, plaidItemID string, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {
+	wyreAccounts, err := m.Db.GetWyreAccounts(ctx, nil, userID)
+	if err != nil {
+		return nil, err
+	}
+	var wyreAccount *account.Account
+	for _, wyreAcc := range wyreAccounts {
+		if wyreAcc.ID == wyreAccountID {
+			wyreAccount = wyreAcc
+		}
+	}
+	if wyreAccount == nil {
+		return nil, fmt.Errorf("the wyreAccountID doesn't exist or is not associated with this user")
+	}
+
 	existingPm, err := m.Db.GetWyrePaymentMethodByPlaidAccountID(ctx, userID, wyreAccountID, plaidAccountID)
 	if err != nil {
 		return nil, err
@@ -56,7 +70,7 @@ func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAc
 		return nil, err
 	}
 
-	wyrePm, err := m.Wyre.CreatePaymentMethod(CreatePaymentMethodRequest{
+	wyrePm, err := m.Wyre.CreatePaymentMethod(wyreAccount.SecretKey, CreatePaymentMethodRequest{
 		PlaidProcessorToken: resp.ProcessorToken,
 	}.WithDefaults())
 	if err != nil {

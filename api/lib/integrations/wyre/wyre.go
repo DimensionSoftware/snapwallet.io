@@ -300,9 +300,9 @@ func (err APIError) Error() string {
 // CreatePaymentMethod adds a bank payment method from a plaid token to a wyre account
 // https://docs.sendwyre.com/docs/ach-create-payment-method-processor-token-model
 // POST https://api.sendwyre.com/v2/paymentMethods
-func (c Client) CreatePaymentMethod(req CreatePaymentMethodRequest) (*PaymentMethod, error) {
+func (c Client) CreatePaymentMethod(token string, req CreatePaymentMethodRequest) (*PaymentMethod, error) {
 	resp, err := c.http.R().
-		SetHeader("Authorization", "Bearer "+c.config.WyreSecretKey).
+		SetHeader("Authorization", "Bearer "+token).
 		SetBody(req).
 		SetResult(PaymentMethod{}).
 		SetError(APIError{}).
