@@ -13,6 +13,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
+	"github.com/khoerling/flux/api/lib/integrations/pubsub"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
@@ -112,6 +113,13 @@ func InitializeServer() (server.Server, error) {
 	pusherManager := &pusher.Manager{
 		Pusher: pusherClient,
 	}
+	pubsubClient, err := pubsub.ProvideClient(fireProjectID)
+	if err != nil {
+		return server.Server{}, err
+	}
+	pubsubManager := &pubsub.Manager{
+		PubSub: pubsubClient,
+	}
 	serverServer := server.Server{
 		GrpcServer:   grpcServer,
 		Sendgrid:     sendgridClient,
@@ -127,6 +135,7 @@ func InitializeServer() (server.Server, error) {
 		JwtVerifier:  jwtVerifier,
 		AuthManager:  authManager,
 		Pusher:       pusherManager,
+		PubSub:       pubsubManager,
 	}
 	return serverServer, nil
 }

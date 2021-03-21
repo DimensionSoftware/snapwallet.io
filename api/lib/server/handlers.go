@@ -16,6 +16,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/disintegration/imaging"
+	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/file"
@@ -591,14 +592,23 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	}
 
 	if len(existingWyreAccounts) == 0 && profile.HasWyreAccountPreconditionsMet() {
+		// todo, create job in db
+		// todo make sure theres not a job already running
 		log.Printf("Creating new wyre account for user id: %s", u.ID)
 
-		account, err := s.WyreManager.CreateAccount(ctx, u.ID, profile)
+		now := time.Now()
+
+		err = s.PubSub.SendJob(ctx, &job.Job{
+			ID:         shortuuid.New(),
+			Kind:       job.KindCreateWyreAccountForUser,
+			Status:     job.StatusQueued,
+			RelatedIDs: []string{},
+			CreatedAt:  now.Unix(),
+			UpdatedAt:  now.Unix(),
+		})
 		if err != nil {
 			return nil, err
 		}
-		existingWyreAccounts = append(existingWyreAccounts, account)
-
 		// todo add payment methods
 	}
 
@@ -606,22 +616,11 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		log.Printf("Preconditions for wyre are unmet for user id: %s", u.ID)
 	}
 
-	if len(existingWyreAccounts) == 0 {
-		return &proto.ProfileDataInfo{
-			Profile: profile.GetProfileDataItemInfo(),
-		}, nil
-	} else {
-		// todo: add remediations to this resp somehow (gotta think it thru)
+	// todo: add remediations to this resp somehow (gotta think it thru)
+	return &proto.ProfileDataInfo{
+		Profile: profile.GetProfileDataItemInfo(),
+	}, nil
 
-		log.Printf("Wyre account found for user id: %s, %#v", u.ID, existingWyreAccounts[0])
-
-		return &proto.ProfileDataInfo{
-			Profile: profile.GetProfileDataItemInfo(),
-			Wyre: &proto.ThirdPartyUserAccount{
-				Status: existingWyreAccounts[0].Status,
-			},
-		}, nil
-	}
 }
 
 // ViewerProfileData is an rpc handler
