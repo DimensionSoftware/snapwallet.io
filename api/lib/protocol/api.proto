@@ -188,18 +188,19 @@ message ProfileDataInfo {
   ThirdPartyUserAccount wyre = 2;
 }
 
-enum ThirdPartyUserAccountStatus {
-  TPS_UNKNOWN = 0;
-  TPS_PENDING = 1;
-  TPS_CREATED = 2;
-  TPS_ERROR = 3;
+enum LifecycleStatus {
+  L_UNKNOWN = 0;
+  L_PENDING = 1;
+  L_CREATED = 2;
+  L_ERROR = 3;
 }
+
 // WyreUserAccount
 //
 // Represents the wyre user account status (or other tps)
 message ThirdPartyUserAccount {
-  ThirdPartyUserAccountStatus status = 1;
-  string vendor_status = 2;
+  LifecycleStatus lifecyle_status = 1;
+  string status = 2;
   repeated UserAccountRemediation remediations = 3;
 }
 
