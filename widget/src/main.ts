@@ -8,6 +8,8 @@ window.API = genAPIClient(window.AUTH_MANAGER)
 
 window.tryInitializePusher = function tryInitializePusher() {
   if (window.Pusher) {
+    // Use Logger to control log output for builds
+    // See env.example DEBUG variable
     window.Pusher.log = Logger.debug
     window.Pusher.logToConsole = true
   }
