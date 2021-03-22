@@ -10,7 +10,7 @@
   export let paddingSmall = false
   export let blend = false
   export let badgeText = ''
-  export let badgeType: 'error' | 'warning' | 'success' | undefined
+  export let badgeType: 'error' | 'warning' | 'success' | undefined = undefined
 </script>
 
 <Card on:click={() => dispatch('click')}>
