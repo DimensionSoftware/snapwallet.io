@@ -140,6 +140,7 @@
             inputmode="number"
             placeholder="0"
           />
+          <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
         </Label>
       </div>
       <ul class="vertical-stepper">
@@ -169,11 +170,6 @@
           <b slot="step">
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
             {isBuy ? 'Select Payment Method' : 'Select Bank Account'}
-          </b>
-        </VStep>
-        <VStep>
-          <b slot="step">
-            <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
           </b>
         </VStep>
         <VStep>
