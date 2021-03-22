@@ -145,12 +145,16 @@
       <ul class="vertical-stepper">
         {#if flags?.hasWyreAccount}
           <VStep success>
+            <slot name="icon">
+              <FaIcon data={faCheck} />
+            </slot>
             <b slot="step">Verify Identity</b>
-            <FaIcon slot="icon" data={faCheck} />
           </VStep>
         {:else}
           <VStep onClick={() => push(Routes.PROFILE)}>
-            <FaIcon slot="icon" data={faIdCard} />
+            <slot name="icon">
+              <FaIcon data={faIdCard} />
+            </slot>
             <b slot="step"> Verify Identity </b>
           </VStep>
         {/if}
@@ -159,22 +163,23 @@
           onClick={() =>
             flags?.hasWyreAccount && (paymentSelectorVisible = true)}
         >
-          <FaIcon slot="icon" data={faUniversity} />
+          <slot name="icon">
+            <FaIcon data={faUniversity} />
+          </slot>
           <b slot="step">
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
             {isBuy ? 'Select Payment Method' : 'Select Bank Account'}
           </b>
         </VStep>
         <VStep>
-          <ExchangeRate
-            slot="step"
-            {fakePrice}
-            {isLoadingPrices}
-            {exchangeRate}
-          />
+          <b slot="step">
+            <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
+          </b>
         </VStep>
         <VStep>
-          <TotalContainer slot="step" />
+          <b slot="step">
+            <TotalContainer />
+          </b>
         </VStep>
       </ul>
     </div>
