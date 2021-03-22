@@ -25,14 +25,13 @@ window.tryInitializePusher = function tryInitializePusher() {
       Logger.debug(data)
     })
 
-    //Logger.debug('PUSHER LOADED :)')
-    console.log('pusher loaded')
+    Logger.debug('PUSHER LOADED')
   }
 }
 
 // a test
 window.addEventListener('logout', () => {
-  console.log('viewer has logged out')
+  Logger.debug('viewer has logged out')
 })
 
 const queryParams = new URLSearchParams(window.location.search)

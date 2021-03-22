@@ -8,7 +8,7 @@ import {
   TokenMaterial,
 } from 'api-client'
 import { JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY } from './constants'
-import { parseJwt } from './util'
+import { Logger, parseJwt } from './util'
 
 export class AuthManager {
   // to avoid cycle
@@ -60,7 +60,7 @@ export class AuthManager {
 
     const parsed = parseJwt(token)
     if (!parsed) {
-      console.log('WARNING: could not parse jwt')
+      Logger.warn('could not parse jwt')
       return null
     }
 
@@ -75,7 +75,7 @@ export class AuthManager {
 
     const parsed = parseJwt(token)
     if (!parsed) {
-      console.log('WARNING: could not parse jwt')
+      Logger.warn('could not parse jwt')
       return null
     }
 
