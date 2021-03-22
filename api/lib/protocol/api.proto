@@ -190,10 +190,9 @@ message ProfileDataInfo {
 
 enum ThirdPartyUserAccountStatus {
   TPS_UNKNOWN = 0;
-  TPS_NOT_CREATED = 1;
-  TPS_PENDING = 2;
-  TPS_CREATED = 3;
-  TPS_ERROR = 4;
+  TPS_PENDING = 1;
+  TPS_CREATED = 2;
+  TPS_ERROR = 3;
 }
 // WyreUserAccount
 //

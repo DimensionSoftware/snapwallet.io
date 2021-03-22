@@ -12,4 +12,4 @@
 
 import { HttpFile } from '../http/http';
 
-export type ThirdPartyUserAccountStatus = "TPS_UNKNOWN" | "TPS_NOT_CREATED" | "TPS_PENDING" | "TPS_CREATED" | "TPS_ERROR" ;
+export type ThirdPartyUserAccountStatus = "TPS_UNKNOWN" | "TPS_PENDING" | "TPS_CREATED" | "TPS_ERROR" ;

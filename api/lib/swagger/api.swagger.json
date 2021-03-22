@@ -750,7 +750,6 @@
       "type": "string",
       "enum": [
         "TPS_UNKNOWN",
-        "TPS_NOT_CREATED",
         "TPS_PENDING",
         "TPS_CREATED",
         "TPS_ERROR"
