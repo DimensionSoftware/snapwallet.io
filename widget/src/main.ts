@@ -1,13 +1,14 @@
 import App from './App.svelte'
 import { AuthManager, genAPIClient } from './auth'
+import { Logger } from './util'
 
 window.AUTH_MANAGER = new AuthManager()
 window.AUTH_MANAGER.watch()
 window.API = genAPIClient(window.AUTH_MANAGER)
 
 window.tryInitializePusher = function tryInitializePusher() {
-  //window.Pusher.log = Logger.debug
   if (window.Pusher) {
+    window.Pusher.log = Logger.debug
     window.Pusher.logToConsole = true
   }
 
