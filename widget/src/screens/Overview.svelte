@@ -131,7 +131,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 0.8rem;
     .checkout-item-name {
       margin-top: 1.4rem;
       height: 100%;
