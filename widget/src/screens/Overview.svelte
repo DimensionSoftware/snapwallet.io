@@ -64,6 +64,28 @@
     </div>
     <div class="line-items">
       <h4>Overview</h4>
+      {#if $transactionStore.selectedSourcePaymentMethod}
+        {#if isBuy}
+          <div class="line-item muted">
+            <div>From</div>
+            <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
+          </div>
+          <div class="line-item muted">
+            <div>To</div>
+            <div>3x2kdkdj...k34w</div>
+          </div>
+        {:else}
+          <div class="line-item muted">
+            <div>From</div>
+            <div>3x2kdkdj...k34w</div>
+          </div>
+          <div class="line-item muted">
+            <div>To</div>
+            <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
+          </div>
+        {/if}
+        <div class="line dashed" />
+      {/if}
       <div class="line-item muted">
         <div>Crypto Fee</div>
         <div>
@@ -92,28 +114,6 @@
           {formatLocaleCurrency(fiatTicker, total)}
         </div>
       </div>
-      <div class="line dashed" />
-      {#if $transactionStore.selectedSourcePaymentMethod}
-        {#if isBuy}
-          <div class="line-item muted">
-            <div>Bank Account</div>
-            <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
-          </div>
-          <div class="line-item muted">
-            <div>Wallet</div>
-            <div>3x2kdkdj...k34w</div>
-          </div>
-        {:else}
-          <div class="line-item muted">
-            <div>Wallet</div>
-            <div>3x2kdkdj...k34w</div>
-          </div>
-          <div class="line-item muted">
-            <div>Bank Account</div>
-            <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
-          </div>
-        {/if}
-      {/if}
     </div>
   </ModalBody>
   <ModalFooter>
