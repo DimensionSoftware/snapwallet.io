@@ -59,11 +59,13 @@
 >
   <div class="scroll selector-container">
     <h5>{copy.sectionOneTitle}</h5>
-    <IconCard
-      icon={faUniversity}
-      on:click={() => push(Routes.PLAID_LINK)}
-      label="Bank Account"
-    />
+    <div class="card-vertical-margin">
+      <IconCard
+        icon={faUniversity}
+        on:click={() => push(Routes.PLAID_LINK)}
+        label="Bank Account"
+      />
+    </div>
     <h5 style="margin-top:2rem">{copy.sectionTwoTitle}</h5>
     {#if !$paymentMethodStore.wyrePaymentMethods.length && isLoadingPaymentMethods}
       <p class="help">Retrieving Payment Methods...</p>
