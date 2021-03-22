@@ -169,7 +169,7 @@
           </span>
           <b slot="step">
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
-            {#if isBuy && $transactionStore.selectedSourcePaymentMethod}
+            {#if $transactionStore.selectedSourcePaymentMethod}
               {$transactionStore.selectedSourcePaymentMethod.name}
             {:else if isBuy}
               Select Payment Method
