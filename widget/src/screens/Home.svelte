@@ -26,6 +26,7 @@
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import CryptoSelector from '../components/selectors/CryptoSelector.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
+  import VStep from '../components/VStep.svelte'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
@@ -142,41 +143,38 @@
       </div>
       <ul class="vertical-stepper">
         {#if flags?.hasWyreAccount}
-          <li class="success">
-            Verify Identity
-            <span class="icon">
-              <FaIcon data={faCheck} />
-            </span>
-          </li>
+          <VStep success>
+            <b slot="step">Verify Identity</b>
+            <FaIcon slot="icon" data={faCheck} />
+          </VStep>
         {:else}
-          <li
-            style="cursor:pointer;display:flex;align-items:center;"
-            on:click={() => push(Routes.PROFILE)}
-          >
-            <FaIcon data={faIdCard} />
-            <b style="margin-left:0.5rem;text-decoration:underline">
-              Verify Identity
-            </b>
-          </li>
+          <VStep onClick={() => push(Routes.PROFILE)}>
+            <FaIcon slot="icon" data={faIdCard} />
+            <b slot="step"> Verify Identity </b>
+          </VStep>
         {/if}
-        <li
-          class:disabled={!flags?.hasWyreAccount}
-          style="cursor:pointer;display:flex;align-items:center;"
-          on:click={() =>
+        <VStep
+          disabled={!flags?.hasWyreAccount}
+          onClick={() =>
             flags?.hasWyreAccount && (paymentSelectorVisible = true)}
         >
-          <FaIcon data={faUniversity} />
-          <b style="margin-left:0.5rem;text-decoration:underline">
+          <FaIcon slot="icon" data={faUniversity} />
+          <b slot="step">
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
             {isBuy ? 'Select Payment Method' : 'Select Bank Account'}
           </b>
-        </li>
-        <li>
-          <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
-        </li>
-        <li>
-          <TotalContainer />
-        </li>
+        </VStep>
+        <VStep>
+          <ExchangeRate
+            slot="step"
+            {fakePrice}
+            {isLoadingPrices}
+            {exchangeRate}
+          />
+        </VStep>
+        <VStep>
+          <TotalContainer slot="step" />
+        </VStep>
       </ul>
     </div>
   </ModalBody>
@@ -203,69 +201,15 @@
 
   .dst-container {
     margin-top: 2rem;
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
     display: flex;
     flex-direction: column;
     height: 5rem;
   }
 
-  p {
-    margin: 0;
-  }
-
   .vertical-stepper {
     list-style: none;
     padding: 0;
-    li {
-      position: relative;
-      padding-left: 1.25rem;
-      margin-left: 1rem;
-      margin-top: 0.5rem;
-      // marker
-      &:before {
-        content: '';
-        border: 4px solid $textColor4;
-        border-radius: 100%;
-        position: absolute;
-        height: 0;
-        width: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        top: 8px;
-        z-index: 1;
-      }
-      // line
-      &:after {
-        position: absolute;
-        width: 1px;
-        left: 4px;
-        top: -1.25rem;
-        opacity: 0.3;
-        height: 110%;
-        content: '';
-        background-color: $textColor4;
-        background-position: 0 0;
-        background-size: 200% 200%;
-        border-color: inherit;
-        border-width: 0;
-        outline: 0;
-      }
-      &.success {
-        display: flex;
-        align-items: center;
-        color: var(--theme-text-color-4);
-        & > .icon {
-          margin-left: 0.4rem;
-          color: var(--theme-success-color);
-        }
-        &:before {
-          border: 4px solid var(--theme-success-color) !important;
-        }
-      }
-      &.disabled {
-        color: var(--theme-text-color-4);
-        cursor: auto !important;
-      }
-    }
   }
 </style>
