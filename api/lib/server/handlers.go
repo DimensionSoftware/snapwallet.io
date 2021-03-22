@@ -28,6 +28,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/proofofaddress"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
@@ -65,6 +66,7 @@ func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.Viewe
 	}
 
 	var hasWyreAccount bool
+	var wyreAccountID account.ID
 
 	{
 		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
@@ -73,15 +75,27 @@ func (s *Server) ViewerData(ctx context.Context, _ *emptypb.Empty) (*proto.Viewe
 		}
 		if len(accounts) > 0 {
 			hasWyreAccount = true
+			wyreAccountID = accounts[0].ID
+		}
+	}
+
+	var hasWyrePaymentMethods bool
+
+	if hasWyreAccount {
+		pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccountID)
+		if err != nil {
+			return nil, err
+		}
+		if len(pms) > 0 {
+			hasWyrePaymentMethods = true
 		}
 	}
 
 	flags := proto.UserFlags{
 		HasPlaidItems:                  hasPlaidItems,
 		HasWyreAccountPrerequisitesMet: profile.HasWyreAccountPreconditionsMet(),
-		// todo: implement first
-		HasWyreAccount: hasWyreAccount,
-		//HasWyrePaymentMethods: false,
+		HasWyreAccount:                 hasWyreAccount,
+		HasWyrePaymentMethods:          hasWyrePaymentMethods,
 	}
 
 	return &proto.ViewerDataResponse{

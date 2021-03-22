@@ -302,6 +302,38 @@ func (db Db) GetWyreAccounts(ctx context.Context, tx *firestore.Transaction, use
 	return out, nil
 }
 
+func (db Db) GetWyrePaymentMethods(ctx context.Context, tx *firestore.Transaction, userID user.ID, wyreAccountID account.ID) ([]*paymentmethod.PaymentMethod, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreAccounts").Doc(string(wyreAccountID)).Collection("wyrePaymentMethods")
+
+	var (
+		snaps []*firestore.DocumentSnapshot
+		err   error
+	)
+	if tx == nil {
+		snaps, err = ref.Documents(ctx).GetAll()
+	} else {
+		snaps, err = tx.Documents(ref).GetAll()
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var out []*paymentmethod.PaymentMethod
+
+	for _, snap := range snaps {
+		var pm paymentmethod.PaymentMethod
+
+		err := snap.DataTo(&pm)
+		if err != nil {
+			return nil, err
+		}
+
+		out = append(out, &pm)
+	}
+
+	return out, nil
+}
+
 // GetWyrePaymentMethodByPlaidAccountID ...
 func (db Db) GetWyrePaymentMethodByPlaidAccountID(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {
 	collection := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreAccounts").Doc(string(wyreAccountID)).Collection("wyrePaymentMethods")
