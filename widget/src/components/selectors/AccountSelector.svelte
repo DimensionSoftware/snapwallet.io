@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
   import { createEventDispatcher } from 'svelte'
   import { push } from 'svelte-spa-router'
@@ -8,6 +9,7 @@
   import { TransactionIntents } from '../../types'
   import IconCard from '../cards/IconCard.svelte'
   import PopupSelector from '../inputs/PopupSelector.svelte'
+  import { paymentMethodStore } from '../../stores/PaymentMethodStore'
   const dispatch = createEventDispatcher()
 
   export let visible = false
@@ -16,6 +18,7 @@
   $: ({ flags } = $userStore)
   $: isSell = intent === TransactionIntents.SELL
 
+  let isLoadingPaymentMethods = true
   let copy
   $: {
     if (isSell) {
@@ -34,6 +37,19 @@
       }
     }
   }
+
+  onMount(() => {
+    if (flags && !flags.hasWyreAccount) {
+      isLoadingPaymentMethods = false
+      return
+    }
+    try {
+      // Load latest payment methods on open
+      paymentMethodStore.fetchWyrePaymentMethods()
+    } finally {
+      setTimeout(() => (isLoadingPaymentMethods = false), 1000)
+    }
+  })
 </script>
 
 <PopupSelector
@@ -49,8 +65,23 @@
       label="Bank Account"
     />
     <h5 style="margin-top:2rem">{copy.sectionTwoTitle}</h5>
-    {#if !flags?.hasWyrePaymentMethods}
+    {#if !$paymentMethodStore.wyrePaymentMethods.length && isLoadingPaymentMethods}
+      <p class="help">Retrieving Payment Methods...</p>
+    {:else if !$paymentMethodStore.wyrePaymentMethods.length}
       <p class="help">{copy.unavailable}</p>
+    {:else}
+      {#each $paymentMethodStore.wyrePaymentMethods as pm (pm.id)}
+        <div class="card-vertical-margin">
+          <IconCard
+            label={pm.name}
+            icon={faUniversity}
+            on:click={() => {
+              transactionStore.setSelectedSourcePaymentMethod(pm)
+              dispatch('close')
+            }}
+          />
+        </div>
+      {/each}
     {/if}
   </div>
 </PopupSelector>
