@@ -10,9 +10,11 @@
  * Do not edit the class manually.
  */
 
+import { LifecycleStatus } from './LifecycleStatus';
 import { HttpFile } from '../http/http';
 
 export class WyrePaymentMethod {
+    'lifecyleStatus'?: LifecycleStatus;
     'id'?: string;
     'status'?: string;
     'name'?: string;
@@ -23,6 +25,12 @@ export class WyrePaymentMethod {
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
+        {
+            "name": "lifecyleStatus",
+            "baseName": "lifecyleStatus",
+            "type": "LifecycleStatus",
+            "format": ""
+        },
         {
             "name": "id",
             "baseName": "id",

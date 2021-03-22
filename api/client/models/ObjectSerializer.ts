@@ -5,6 +5,7 @@ export * from './DocumentInput';
 export * from './GetImageResponse';
 export * from './ImageProcessingMode';
 export * from './InlineResponse200';
+export * from './LifecycleStatus';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
@@ -20,7 +21,6 @@ export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
 export * from './ThirdPartyUserAccount';
-export * from './ThirdPartyUserAccountStatus';
 export * from './TokenExchangeRequest';
 export * from './TokenExchangeResponse';
 export * from './TokenMaterial';
@@ -42,6 +42,7 @@ import { DocumentInput } from './DocumentInput';
 import { GetImageResponse } from './GetImageResponse';
 import { ImageProcessingMode } from './ImageProcessingMode';
 import { InlineResponse200 } from './InlineResponse200';
+import { LifecycleStatus } from './LifecycleStatus';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
@@ -57,7 +58,6 @@ import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
 import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
-import { ThirdPartyUserAccountStatus } from './ThirdPartyUserAccountStatus';
 import { TokenExchangeRequest } from './TokenExchangeRequest';
 import { TokenExchangeResponse } from './TokenExchangeResponse';
 import { TokenMaterial } from './TokenMaterial';
@@ -92,9 +92,9 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
                  
 let enumsMap: Set<string> = new Set<string>([
     "ImageProcessingMode",
+    "LifecycleStatus",
     "ProfileDataItemKind",
     "ProfileDataItemStatus",
-    "ThirdPartyUserAccountStatus",
     "UsGovernmentIdDocumentInputKind",
 ]);
 

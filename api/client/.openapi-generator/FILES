@@ -18,6 +18,7 @@ models/DocumentInput.ts
 models/GetImageResponse.ts
 models/ImageProcessingMode.ts
 models/InlineResponse200.ts
+models/LifecycleStatus.ts
 models/ObjectSerializer.ts
 models/OneTimePasscodeRequest.ts
 models/OneTimePasscodeVerifyRequest.ts
@@ -34,7 +35,6 @@ models/ProtobufAny.ts
 models/RpcStatus.ts
 models/SaveProfileDataRequest.ts
 models/ThirdPartyUserAccount.ts
-models/ThirdPartyUserAccountStatus.ts
 models/TokenExchangeRequest.ts
 models/TokenExchangeResponse.ts
 models/TokenMaterial.ts

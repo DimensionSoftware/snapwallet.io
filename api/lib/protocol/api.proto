@@ -316,12 +316,13 @@ message TokenExchangeResponse {
 }
 
 message WyrePaymentMethod {
-  string id = 1;
-  string status = 2;
-  string name = 3;
-  string last4 = 4;
-  repeated string chargeable_currencies = 5;
-  repeated string depositable_currencies = 6;
+  LifecycleStatus lifecyle_status = 1;
+  string id = 2;
+  string status = 3;
+  string name = 4;
+  string last4 = 5;
+  repeated string chargeable_currencies = 6;
+  repeated string depositable_currencies = 7;
 }
 
 // 2. quote

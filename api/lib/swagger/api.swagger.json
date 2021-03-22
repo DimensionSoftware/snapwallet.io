@@ -514,6 +514,16 @@
       ],
       "default": "IP_FIT"
     },
+    "LifecycleStatus": {
+      "type": "string",
+      "enum": [
+        "L_UNKNOWN",
+        "L_PENDING",
+        "L_CREATED",
+        "L_ERROR"
+      ],
+      "default": "L_UNKNOWN"
+    },
     "OneTimePasscodeRequest": {
       "type": "object",
       "properties": {
@@ -730,10 +740,10 @@
     "ThirdPartyUserAccount": {
       "type": "object",
       "properties": {
-        "status": {
-          "$ref": "#/definitions/ThirdPartyUserAccountStatus"
+        "lifecyleStatus": {
+          "$ref": "#/definitions/LifecycleStatus"
         },
-        "vendorStatus": {
+        "status": {
           "type": "string"
         },
         "remediations": {
@@ -745,16 +755,6 @@
       },
       "description": "Represents the wyre user account status (or other tps)",
       "title": "WyreUserAccount"
-    },
-    "ThirdPartyUserAccountStatus": {
-      "type": "string",
-      "enum": [
-        "TPS_UNKNOWN",
-        "TPS_PENDING",
-        "TPS_CREATED",
-        "TPS_ERROR"
-      ],
-      "default": "TPS_UNKNOWN"
     },
     "TokenExchangeRequest": {
       "type": "object",
@@ -899,6 +899,9 @@
     "WyrePaymentMethod": {
       "type": "object",
       "properties": {
+        "lifecyleStatus": {
+          "$ref": "#/definitions/LifecycleStatus"
+        },
         "id": {
           "type": "string"
         },
