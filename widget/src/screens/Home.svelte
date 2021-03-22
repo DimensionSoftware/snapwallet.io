@@ -146,9 +146,9 @@
       <ul class="vertical-stepper">
         {#if flags?.hasWyreAccount}
           <VStep success>
-            <slot name="icon">
+            <span name="icon">
               <FaIcon data={faCheck} />
-            </slot>
+            </span>
             <b slot="step">Verify Identity</b>
           </VStep>
         {:else}
