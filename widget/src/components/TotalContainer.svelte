@@ -1,7 +1,7 @@
 <script lang="ts">
   import { transactionStore } from '../stores/TransactionStore'
   import { TransactionIntents } from '../types'
-  import { numberWithCommas, dropEndingZeros } from '../util'
+  import { dropEndingZeros } from '../util'
 
   $: ({ destinationCurrency, intent, destinationAmount } = $transactionStore)
   $: precision = intent === TransactionIntents.BUY ? 8 : 2
@@ -9,7 +9,7 @@
 
 <div class="total-container">
   You Get
-  {numberWithCommas(dropEndingZeros(destinationAmount.toFixed(precision)))}
+  {dropEndingZeros(destinationAmount.toFixed(precision))}
   {destinationCurrency.ticker}
 </div>
 
