@@ -169,7 +169,13 @@
           </span>
           <b slot="step">
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
-            {isBuy ? 'Select Payment Method' : 'Select Bank Account'}
+            {#if isBuy && $transactionStore.selectedSourcePaymentMethod}
+              {$transactionStore.selectedSourcePaymentMethod.name}
+            {:else if isBuy}
+              Select Payment Method
+            {:else}
+              Select Bank Account
+            {/if}
           </b>
         </VStep>
         <VStep>
@@ -185,17 +191,15 @@
   </ModalFooter>
 </ModalContent>
 
-<!-- Cryptocurrency Selector -->
-<CryptoSelector
-  visible={cryptoSelectorVisible}
-  on:close={() => (cryptoSelectorVisible = false)}
-/>
+<!-- Cryptocurrency Selector (remount for onMount trigger) -->
+{#if cryptoSelectorVisible}
+  <CryptoSelector visible on:close={() => (cryptoSelectorVisible = false)} />
+{/if}
 
-<!-- Payment Method Selector -->
-<AccountSelector
-  on:close={() => (paymentSelectorVisible = false)}
-  visible={paymentSelectorVisible}
-/>
+<!-- Payment Method Selector (remount for onMount trigger) -->
+{#if paymentSelectorVisible}
+  <AccountSelector visible on:close={() => (paymentSelectorVisible = false)} />
+{/if}
 
 <style lang="scss">
   @import '../styles/_vars.scss';
