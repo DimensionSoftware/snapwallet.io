@@ -4,11 +4,18 @@
   export let onClick: () => {}
 </script>
 
-<li on:click={onClick} class:success class:disabled style={onClick ? 'cursor: pointer' : ''}>
+<li
+  on:click={onClick}
+  class:success
+  class:disabled
+  style={onClick ? 'cursor: pointer' : ''}
+>
   <slot name="icon">
-    <span class="icon" />
+    <span class="default-icon" />
   </slot>
-  <slot name="step" />
+  <div class="step">
+    <slot name="step" />
+  </div>
 </li>
 
 <style lang="scss">
@@ -18,8 +25,14 @@
     padding-left: 1.25rem;
     margin-left: 1rem;
     margin-top: 0.5rem;
+    > :global(svg) {
+      position: absolute;
+      left: -4px;
+      z-index: 1;
+      top: 3px;
+    }
     // marker
-    &:before {
+    .default-icon:before {
       content: '';
       border: 4px solid $textColor4;
       border-radius: 100%;
@@ -61,14 +74,15 @@
       }
     }
     &.disabled {
-      cursor: inherit;
-      color: var(--theme-text-color-4);
       cursor: auto !important;
+      :global(b) {
+        font-weight: normal;
+      }
     }
-    b {
-      cursor: pointer;
-      margin-left: 0.5rem;
-      text-decoration: underline;
+    .step {
+      margin-left: .5rem;
+      top: -1px;
+      position: relative;
     }
   }
 </style>

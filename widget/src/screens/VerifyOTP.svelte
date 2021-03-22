@@ -137,7 +137,7 @@
     justify-content: center;
     align-items: center;
     font-size: 0.8rem;
-    margin-top: -1rem;
+    margin-top: .35rem;
     & > a {
       margin-left: 0.75em;
     }

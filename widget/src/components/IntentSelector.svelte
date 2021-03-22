@@ -48,7 +48,6 @@
     border-radius: 1.5rem;
     padding: 5px;
     background: white;
-    box-shadow: 0 0 2px -1px var(--theme-text-color);
   }
 
   .sell-toggle,
