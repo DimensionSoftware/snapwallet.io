@@ -1,3 +1,4 @@
+import type { WyrePaymentMethod } from 'api-client'
 import { writable } from 'svelte/store'
 import { IAsset, TransactionIntents, TransactionMediums } from '../types'
 
@@ -11,10 +12,16 @@ const createStore = () => {
     destinationCurrency: { name: 'Bitcoin', ticker: 'BTC' },
     sourceAmount: 0.0,
     destinationAmount: 0.0,
+    selectedSourcePaymentMethod: null,
   })
 
   return {
     subscribe,
+    setSelectedSourcePaymentMethod: (
+      selectedSourcePaymentMethod: WyrePaymentMethod,
+    ) => {
+      update(s => ({ ...s, selectedSourcePaymentMethod }))
+    },
     setDestinationAmount: (destinationAmount: number) => {
       update(s => ({ ...s, destinationAmount }))
     },
