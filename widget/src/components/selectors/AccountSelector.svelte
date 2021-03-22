@@ -70,7 +70,7 @@
     <h5 style="margin-top:2rem">{copy.sectionTwoTitle}</h5>
     {#if !allPaymentMethods.length && isLoadingPaymentMethods}
       <p class="help">Retrieving Payment Methods...</p>
-    {:else if !allPaymentMethods.length}
+    {:else if !allPaymentMethods.length && !isLoadingPaymentMethods}
       <p class="help">{copy.unavailable}</p>
     {:else}
       {#each allPaymentMethods as pm (pm.id)}
