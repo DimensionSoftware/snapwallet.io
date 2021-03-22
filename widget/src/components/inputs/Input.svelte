@@ -97,7 +97,7 @@
       font-size: 1.8em;
       color: var(--theme-text-color);
       border: none;
-      border-bottom: 1px solid lighten($themeColor, 35%);
+      border-bottom: 1px solid lighten($themeColor, 50%);
       outline: none;
       width: 100%;
       transform: scale(1);
@@ -117,13 +117,12 @@
         background: linear-gradient(transparent, var(--theme-color));
         opacity: 0;
         transform: scale(0);
-        transition: opacity 0.5s ease-out, left 0s ease 0.51s,
-          right 0s ease 0.51s, top 0.4s ease-out 0.01s,
-          bottom 0.4s ease-out 0.11s, background 0s ease 0.51s,
+        transition: opacity 0.5s ease-out, left 0s ease-out 0.51s,
+          right 0s ease-out 0.51s, top 0.4s ease-out 0.01s,
+          bottom 0.4s ease-out 0.11s, background 0s ease-out 0.51s,
           transform 0s ease-out 0.51s;
       }
       &:valid ~ .bg {
-        opacity: 0.3;
         transform: scale(1);
       }
       &:hover,
