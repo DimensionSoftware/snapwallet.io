@@ -254,11 +254,22 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	}
 	log.Printf("Plaid ItemID %s saved", resp.ItemID)
 
-	processorTokenResp, err := s.Plaid.CreateProcessorToken(resp.AccessToken, req.PlaidAccountIds[0], "wyre")
-	if err != nil {
-		return nil, err
+	// submit wyre create payment methods job; will still need wyre account prereq but this is the other update path when they add new accounts too
+	{
+		now := time.Now()
+
+		err = s.PubSub.SendJob(ctx, &job.Job{
+			ID:         shortuuid.New(),
+			Kind:       job.KindCreateWyrePaymentMethodsForUser,
+			Status:     job.StatusQueued,
+			RelatedIDs: []string{string(u.ID)},
+			CreatedAt:  now.Unix(),
+			UpdatedAt:  now.Unix(),
+		})
+		if err != nil {
+			log.Println(err)
+		}
 	}
-	log.Printf("processor token: %s", processorTokenResp.ProcessorToken)
 
 	return &proto.PlaidConnectBankAccountsResponse{}, nil
 }
@@ -621,9 +632,8 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			UpdatedAt:  now.Unix(),
 		})
 		if err != nil {
-			return nil, err
+			log.Println(err)
 		}
-		// todo add payment methods
 	}
 
 	if !profile.HasWyreAccountPreconditionsMet() {
