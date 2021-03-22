@@ -443,8 +443,7 @@ service Flux {
 
   rpc WyreGetPaymentMethods(google.protobuf.Empty) returns (WyreGetPaymentMethodsResponse) {
     option (google.api.http) = {
-      post: "/wyre/payment-methods"
-      body: "*"
+      get: "/wyre/payment-methods"
     };
   }
 

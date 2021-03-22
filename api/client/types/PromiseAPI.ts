@@ -34,6 +34,8 @@ import { User } from '../models/User';
 import { UserAccountRemediation } from '../models/UserAccountRemediation';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WyreGetPaymentMethodsResponse } from '../models/WyreGetPaymentMethodsResponse';
+import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 import { ObservableFluxApi } from './ObservableAPI';
 
@@ -161,6 +163,13 @@ export class PromiseFluxApi {
      */
     public fluxViewerProfileData(options?: Configuration): Promise<ProfileDataInfo> {
     	const result = this.api.fluxViewerProfileData(options);
+        return result.toPromise();
+    }
+	
+    /**
+     */
+    public fluxWyreGetPaymentMethods(options?: Configuration): Promise<WyreGetPaymentMethodsResponse> {
+    	const result = this.api.fluxWyreGetPaymentMethods(options);
         return result.toPromise();
     }
 	

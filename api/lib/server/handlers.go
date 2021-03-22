@@ -824,3 +824,43 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 
 	return &emptypb.Empty{}, nil
 }
+func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*proto.WyreGetPaymentMethodsResponse, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	var wyreAccountID account.ID
+	{
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		if err != nil {
+			return nil, err
+		}
+		if len(accounts) == 0 {
+			return &proto.WyreGetPaymentMethodsResponse{}, nil
+		}
+
+		wyreAccountID = accounts[0].ID
+	}
+
+	pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccountID)
+	if err != nil {
+		return nil, err
+	}
+
+	var out []*proto.WyrePaymentMethod
+	for _, pm := range pms {
+		out = append(out, &proto.WyrePaymentMethod{
+			Id:                    string(pm.ID),
+			Status:                pm.Status,
+			Name:                  pm.Name,
+			Last4:                 pm.Last4,
+			ChargeableCurrencies:  pm.ChargeableCurrencies,
+			DepositableCurrencies: pm.DepositableCurrencies,
+		})
+	}
+
+	return &proto.WyreGetPaymentMethodsResponse{
+		PaymentMethods: out,
+	}, nil
+}

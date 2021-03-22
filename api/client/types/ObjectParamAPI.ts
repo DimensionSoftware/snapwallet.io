@@ -34,6 +34,8 @@ import { User } from '../models/User';
 import { UserAccountRemediation } from '../models/UserAccountRemediation';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WyreGetPaymentMethodsResponse } from '../models/WyreGetPaymentMethodsResponse';
+import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
 import { ObservableFluxApi } from "./ObservableAPI";
@@ -127,6 +129,9 @@ export interface FluxApiFluxViewerDataRequest {
 }
 
 export interface FluxApiFluxViewerProfileDataRequest {
+}
+
+export interface FluxApiFluxWyreGetPaymentMethodsRequest {
 }
 
 export interface FluxApiFluxWyreWebhookRequest {
@@ -255,6 +260,13 @@ export class ObjectFluxApi {
      */
     public fluxViewerProfileData(param: FluxApiFluxViewerProfileDataRequest, options?: Configuration): Promise<ProfileDataInfo> {
         return this.api.fluxViewerProfileData( options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreGetPaymentMethods(param: FluxApiFluxWyreGetPaymentMethodsRequest, options?: Configuration): Promise<WyreGetPaymentMethodsResponse> {
+        return this.api.fluxWyreGetPaymentMethods( options).toPromise();
     }
 	
     /**

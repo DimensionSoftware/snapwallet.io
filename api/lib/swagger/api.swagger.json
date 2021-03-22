@@ -393,6 +393,28 @@
           "Flux"
         ]
       }
+    },
+    "/wyre/payment-methods": {
+      "get": {
+        "operationId": "Flux_WyreGetPaymentMethods",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreGetPaymentMethodsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Flux"
+        ]
+      }
     }
   },
   "definitions": {
@@ -850,6 +872,46 @@
       },
       "description": "response",
       "title": "ViewerDataResponse"
+    },
+    "WyreGetPaymentMethodsResponse": {
+      "type": "object",
+      "properties": {
+        "paymentMethods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WyrePaymentMethod"
+          }
+        }
+      }
+    },
+    "WyrePaymentMethod": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "last4": {
+          "type": "string"
+        },
+        "chargeableCurrencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "depositableCurrencies": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
     },
     "WyreWebhookRequest": {
       "type": "object",
