@@ -27,6 +27,7 @@ var (
 )
 var serveSwaggerJSON = serveFileHandler("lib/swagger/swagger.json", "application/json")
 var serveSwaggerUI = serveFileHandler("lib/swagger/swagger-ui.html", "text/html")
+var serveFavicon = serveFileHandler("public/favicon.ico", "image/x-icon")
 
 // Maximum upload of 25 MB
 const maxUploadSizeBytes = 1024 * 1024 * 25
@@ -46,6 +47,7 @@ func run() error {
 	}
 
 	// Start HTTP server (and proxy calls to gRPC server endpoint)
+	mux.HandlePath("GET", "/favicon.ico", serveFavicon)
 	mux.HandlePath("GET", "/swagger.json", serveSwaggerJSON)
 	mux.HandlePath("GET", "/swagger", serveSwaggerUI)
 

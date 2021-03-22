@@ -26,6 +26,7 @@ COPY --from=0 \
   ./
 
 COPY lib/swagger lib/swagger
+COPY public public
 
 COPY docker-launch.sh docker-launch.sh
 
