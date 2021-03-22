@@ -2,9 +2,13 @@
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
   export let disabled: boolean = false
+  export let isLoading: boolean = false
 </script>
 
-<button {disabled} on:click={() => dispatch('click')}><slot /></button>
+<button {disabled} class:isLoading on:click={() => dispatch('click')}>
+  <div class="lds-circle"><div /></div>
+  <slot /></button
+>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
@@ -17,7 +21,7 @@
     background: var(--theme-color);
     border-radius: 0.5rem;
     border: none;
-    border-top: 1px solid lighten($themeColor, 10%);
+    border-top: none;
     border-bottom: 1px solid var(--theme-color-darkened);
     color: white;
     cursor: pointer;
@@ -26,7 +30,7 @@
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
-    transition: background 0.3s ease-in 0.1s, box-shadow 0.2s ease-in 0.123s;
+    transition: background 0.3s ease-in 0.1s, box-shadow 0.3s ease-in 0.123s;
     // gloss fix
     &:before {
       position: absolute;
@@ -48,7 +52,7 @@
     }
     &:hover {
       box-shadow: 0 0 0 1px $themeColor,
-        0 6px 6px var(--theme-button-shadow-color);
+        0 8px 6px var(--theme-button-shadow-color);
       transition: none;
       &:before {
         opacity: 0.3;
@@ -77,6 +81,46 @@
       box-shadow: none;
       &:before {
         display: none;
+      }
+    }
+    &.isLoading {
+      .lds-circle {
+        opacity: 1;
+      }
+    }
+    .lds-circle {
+      position: absolute;
+      left: 0;
+      top: 0;
+      display: inline-block;
+      transform: translateZ(1px);
+      opacity: 0;
+      transition: opacity .2s ease-out;
+    > div {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      margin: 8px;
+      border-radius: 50%;
+      background: rgba(#fff, .8);
+      background: radial-gradient(rgba(#fff,.5), #fff);
+      animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+    }
+    }
+    @keyframes lds-circle {
+      0%,
+      100% {
+        animation-timing-function: cubic-bezier(0.5, 0, 1, 0.5);
+      }
+      0% {
+        transform: rotateY(0deg);
+      }
+      50% {
+        transform: rotateY(1800deg);
+        animation-timing-function: cubic-bezier(0, 0.5, 0.5, 1);
+      }
+      100% {
+        transform: rotateY(3600deg);
       }
     }
   }
