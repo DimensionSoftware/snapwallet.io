@@ -22,8 +22,7 @@ window.tryInitializePusher = function tryInitializePusher() {
 
     const channel = window.__SOCKET.subscribe(userID)
     channel.bind(function (data) {
-      //Logger.debug(JSON.stringify(data))
-      console.log(data)
+      Logger.debug(data)
     })
 
     //Logger.debug('PUSHER LOADED :)')
