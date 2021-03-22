@@ -861,6 +861,7 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 	var out []*proto.WyrePaymentMethod
 	for _, pm := range pms {
 		out = append(out, &proto.WyrePaymentMethod{
+			LifecyleStatus:        proto.LifecycleStatus_L_CREATED,
 			Id:                    string(pm.ID),
 			Status:                pm.Status,
 			Name:                  pm.Name,

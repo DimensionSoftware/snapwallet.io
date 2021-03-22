@@ -188,13 +188,20 @@ message ProfileDataInfo {
   ThirdPartyUserAccount wyre = 2;
 }
 
+enum LifecycleStatus {
+  L_UNKNOWN = 0;
+  L_PENDING = 1;
+  L_CREATED = 2;
+  L_ERROR = 3;
+}
+
 // WyreUserAccount
 //
-// Represents the wyre user account status
+// Represents the wyre user account status (or other tps)
 message ThirdPartyUserAccount {
-  // TODO: create enum? SUBMITTED -> APPROVED -> PENDING -> REJECTED
-  string status = 1;
-  repeated UserAccountRemediation remediations = 2;
+  LifecycleStatus lifecyle_status = 1;
+  string status = 2;
+  repeated UserAccountRemediation remediations = 3;
 }
 
 // UserAccountRemediation
@@ -309,12 +316,13 @@ message TokenExchangeResponse {
 }
 
 message WyrePaymentMethod {
-  string id = 1;
-  string status = 2;
-  string name = 3;
-  string last4 = 4;
-  repeated string chargeable_currencies = 5;
-  repeated string depositable_currencies = 6;
+  LifecycleStatus lifecyle_status = 1;
+  string id = 2;
+  string status = 3;
+  string name = 4;
+  string last4 = 5;
+  repeated string chargeable_currencies = 6;
+  repeated string depositable_currencies = 7;
 }
 
 // 2. quote

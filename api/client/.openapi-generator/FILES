@@ -18,6 +18,7 @@ models/DocumentInput.ts
 models/GetImageResponse.ts
 models/ImageProcessingMode.ts
 models/InlineResponse200.ts
+models/LifecycleStatus.ts
 models/ObjectSerializer.ts
 models/OneTimePasscodeRequest.ts
 models/OneTimePasscodeVerifyRequest.ts

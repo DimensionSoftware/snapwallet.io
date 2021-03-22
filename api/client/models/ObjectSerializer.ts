@@ -5,6 +5,7 @@ export * from './DocumentInput';
 export * from './GetImageResponse';
 export * from './ImageProcessingMode';
 export * from './InlineResponse200';
+export * from './LifecycleStatus';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
@@ -41,6 +42,7 @@ import { DocumentInput } from './DocumentInput';
 import { GetImageResponse } from './GetImageResponse';
 import { ImageProcessingMode } from './ImageProcessingMode';
 import { InlineResponse200 } from './InlineResponse200';
+import { LifecycleStatus } from './LifecycleStatus';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
@@ -90,6 +92,7 @@ const supportedMediaTypes: { [mediaType: string]: number } = {
                  
 let enumsMap: Set<string> = new Set<string>([
     "ImageProcessingMode",
+    "LifecycleStatus",
     "ProfileDataItemKind",
     "ProfileDataItemStatus",
     "UsGovernmentIdDocumentInputKind",

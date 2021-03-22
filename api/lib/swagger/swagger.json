@@ -606,6 +606,16 @@
       ],
       "default": "IP_FIT"
     },
+    "LifecycleStatus": {
+      "type": "string",
+      "enum": [
+        "L_UNKNOWN",
+        "L_PENDING",
+        "L_CREATED",
+        "L_ERROR"
+      ],
+      "default": "L_UNKNOWN"
+    },
     "OneTimePasscodeRequest": {
       "type": "object",
       "properties": {
@@ -822,9 +832,11 @@
     "ThirdPartyUserAccount": {
       "type": "object",
       "properties": {
+        "lifecyleStatus": {
+          "$ref": "#/definitions/LifecycleStatus"
+        },
         "status": {
-          "type": "string",
-          "title": "TODO: create enum? SUBMITTED -> APPROVED -> PENDING -> REJECTED"
+          "type": "string"
         },
         "remediations": {
           "type": "array",
@@ -833,7 +845,7 @@
           }
         }
       },
-      "description": "Represents the wyre user account status",
+      "description": "Represents the wyre user account status (or other tps)",
       "title": "WyreUserAccount"
     },
     "TokenExchangeRequest": {
@@ -979,6 +991,9 @@
     "WyrePaymentMethod": {
       "type": "object",
       "properties": {
+        "lifecyleStatus": {
+          "$ref": "#/definitions/LifecycleStatus"
+        },
         "id": {
           "type": "string"
         },

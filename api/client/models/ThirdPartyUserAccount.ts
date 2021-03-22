@@ -10,19 +10,27 @@
  * Do not edit the class manually.
  */
 
+import { LifecycleStatus } from './LifecycleStatus';
 import { UserAccountRemediation } from './UserAccountRemediation';
 import { HttpFile } from '../http/http';
 
 /**
-* Represents the wyre user account status
+* Represents the wyre user account status (or other tps)
 */
 export class ThirdPartyUserAccount {
+    'lifecyleStatus'?: LifecycleStatus;
     'status'?: string;
     'remediations'?: Array<UserAccountRemediation>;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
+        {
+            "name": "lifecyleStatus",
+            "baseName": "lifecyleStatus",
+            "type": "LifecycleStatus",
+            "format": ""
+        },
         {
             "name": "status",
             "baseName": "status",
