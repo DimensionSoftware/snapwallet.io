@@ -10,14 +10,16 @@
  * Do not edit the class manually.
  */
 
+import { ThirdPartyUserAccountStatus } from './ThirdPartyUserAccountStatus';
 import { UserAccountRemediation } from './UserAccountRemediation';
 import { HttpFile } from '../http/http';
 
 /**
-* Represents the wyre user account status
+* Represents the wyre user account status (or other tps)
 */
 export class ThirdPartyUserAccount {
-    'status'?: string;
+    'status'?: ThirdPartyUserAccountStatus;
+    'vendorStatus'?: string;
     'remediations'?: Array<UserAccountRemediation>;
 
     static readonly discriminator: string | undefined = undefined;
@@ -26,6 +28,12 @@ export class ThirdPartyUserAccount {
         {
             "name": "status",
             "baseName": "status",
+            "type": "ThirdPartyUserAccountStatus",
+            "format": ""
+        },
+        {
+            "name": "vendorStatus",
+            "baseName": "vendorStatus",
             "type": "string",
             "format": ""
         },

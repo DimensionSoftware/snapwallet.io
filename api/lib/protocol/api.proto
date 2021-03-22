@@ -188,13 +188,20 @@ message ProfileDataInfo {
   ThirdPartyUserAccount wyre = 2;
 }
 
+enum ThirdPartyUserAccountStatus {
+  TPS_UNKNOWN = 0;
+  TPS_NOT_CREATED = 1;
+  TPS_PENDING = 2;
+  TPS_CREATED = 3;
+  TPS_ERROR = 4;
+}
 // WyreUserAccount
 //
-// Represents the wyre user account status
+// Represents the wyre user account status (or other tps)
 message ThirdPartyUserAccount {
-  // TODO: create enum? SUBMITTED -> APPROVED -> PENDING -> REJECTED
-  string status = 1;
-  repeated UserAccountRemediation remediations = 2;
+  ThirdPartyUserAccountStatus status = 1;
+  string vendor_status = 2;
+  repeated UserAccountRemediation remediations = 3;
 }
 
 // UserAccountRemediation

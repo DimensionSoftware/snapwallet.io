@@ -26,6 +26,7 @@ import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
 import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
+import { ThirdPartyUserAccountStatus } from '../models/ThirdPartyUserAccountStatus';
 import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
 import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
 import { TokenMaterial } from '../models/TokenMaterial';

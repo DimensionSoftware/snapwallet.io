@@ -20,6 +20,7 @@ export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
 export * from './ThirdPartyUserAccount';
+export * from './ThirdPartyUserAccountStatus';
 export * from './TokenExchangeRequest';
 export * from './TokenExchangeResponse';
 export * from './TokenMaterial';
@@ -56,6 +57,7 @@ import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
 import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
+import { ThirdPartyUserAccountStatus } from './ThirdPartyUserAccountStatus';
 import { TokenExchangeRequest } from './TokenExchangeRequest';
 import { TokenExchangeResponse } from './TokenExchangeResponse';
 import { TokenMaterial } from './TokenMaterial';
@@ -92,6 +94,7 @@ let enumsMap: Set<string> = new Set<string>([
     "ImageProcessingMode",
     "ProfileDataItemKind",
     "ProfileDataItemStatus",
+    "ThirdPartyUserAccountStatus",
     "UsGovernmentIdDocumentInputKind",
 ]);
 

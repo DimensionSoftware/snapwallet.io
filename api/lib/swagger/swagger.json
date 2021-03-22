@@ -823,8 +823,10 @@
       "type": "object",
       "properties": {
         "status": {
-          "type": "string",
-          "title": "TODO: create enum? SUBMITTED -> APPROVED -> PENDING -> REJECTED"
+          "$ref": "#/definitions/ThirdPartyUserAccountStatus"
+        },
+        "vendorStatus": {
+          "type": "string"
         },
         "remediations": {
           "type": "array",
@@ -833,8 +835,19 @@
           }
         }
       },
-      "description": "Represents the wyre user account status",
+      "description": "Represents the wyre user account status (or other tps)",
       "title": "WyreUserAccount"
+    },
+    "ThirdPartyUserAccountStatus": {
+      "type": "string",
+      "enum": [
+        "TPS_UNKNOWN",
+        "TPS_NOT_CREATED",
+        "TPS_PENDING",
+        "TPS_CREATED",
+        "TPS_ERROR"
+      ],
+      "default": "TPS_UNKNOWN"
     },
     "TokenExchangeRequest": {
       "type": "object",

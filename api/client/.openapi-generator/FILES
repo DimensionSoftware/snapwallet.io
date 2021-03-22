@@ -34,6 +34,7 @@ models/ProtobufAny.ts
 models/RpcStatus.ts
 models/SaveProfileDataRequest.ts
 models/ThirdPartyUserAccount.ts
+models/ThirdPartyUserAccountStatus.ts
 models/TokenExchangeRequest.ts
 models/TokenExchangeResponse.ts
 models/TokenMaterial.ts
