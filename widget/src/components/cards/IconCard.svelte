@@ -9,6 +9,8 @@
   export let label: string
   export let paddingSmall = false
   export let blend = false
+  export let badgeText = ''
+  export let badgeType: 'error' | 'warning' | 'success' | undefined
 </script>
 
 <Card on:click={() => dispatch('click')}>
@@ -17,6 +19,16 @@
       <FaIcon data={icon} />
       <div class="label">{label}</div>
     </div>
+    {#if badgeText}
+      <div
+        class="badge"
+        class:error={badgeType === 'error'}
+        class:success={badgeType === 'success'}
+        class:warning={badgeType === 'warning'}
+      >
+        {badgeText}
+      </div>
+    {/if}
     <FaIcon data={faChevronRight} />
   </div>
 </Card>
@@ -46,6 +58,40 @@
         font-weight: 500;
         margin-left: 0.5rem;
       }
+    }
+    /* &.disabled {
+      color: var(--theme-text-color-4);
+      cursor: auto !important;
+      & > .content-container {
+        & > .label {
+          font-weight: 300 !important;
+        }
+      }
+    } */
+  }
+
+  .badge {
+    border-radius: 0.5rem;
+    padding: 0 0.25rem;
+    margin-right: 1rem;
+    font-size: 0.75rem;
+
+    &.success {
+      color: var(--theme-success-color);
+      border: 1px solid var(--theme-success-color);
+      background-color: lighten($success, 35%);
+    }
+
+    &.warning {
+      color: var(--theme-warning-color);
+      border: 1px solid var(--theme-warning-color);
+      background-color: lighten($warning, 35%);
+    }
+
+    &.error {
+      color: var(--theme-error-color);
+      border: 1px solid var(--theme-error-color);
+      background-color: lighten($error, 35%);
     }
   }
 </style>

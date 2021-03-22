@@ -75,6 +75,12 @@
           <IconCard
             label={pm.name}
             icon={faUniversity}
+            badgeText={['OPEN', 'PENDING'].includes(pm.status)
+              ? 'Pending'
+              : 'Active'}
+            badgeType={['OPEN', 'PENDING'].includes(pm.status)
+              ? 'warning'
+              : 'success'}
             on:click={() => {
               transactionStore.setSelectedSourcePaymentMethod(pm)
               dispatch('close')
