@@ -152,9 +152,9 @@
           </VStep>
         {:else}
           <VStep onClick={() => push(Routes.PROFILE)}>
-            <slot name="icon">
+            <span slot="icon">
               <FaIcon data={faIdCard} />
-            </slot>
+            </span>
             <b slot="step"> Verify Identity </b>
           </VStep>
         {/if}
@@ -163,9 +163,9 @@
           onClick={() =>
             flags?.hasWyreAccount && (paymentSelectorVisible = true)}
         >
-          <slot name="icon">
+          <span slot="icon">
             <FaIcon data={faUniversity} />
-          </slot>
+          </span>
           <b slot="step">
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
             {isBuy ? 'Select Payment Method' : 'Select Bank Account'}

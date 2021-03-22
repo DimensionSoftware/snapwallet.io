@@ -25,11 +25,25 @@
     padding-left: 1.25rem;
     margin-left: 1rem;
     margin-top: 0.5rem;
-    > :global(svg) {
+    // icon surround
+    :global(span):before {
+      position: absolute;
+      content: '';
+      background: rgba($themeColor, 0.08);
+      border-radius: 50%;
+      height: 30px;
+      width: 30px;
+      left: -11px;
+      top: -4px;
+    }
+    > :global(span > svg) {
       position: absolute;
       left: -4px;
       z-index: 1;
       top: 3px;
+    }
+    div {
+      display: inline-block;
     }
     // marker
     .default-icon:before {
@@ -64,10 +78,11 @@
     &.success {
       display: flex;
       align-items: center;
-      color: var(--theme-text-color-4);
-      & > .icon {
+      :global(span):before {
+        background: var(--theme-success-color);
+      }
+      & > :global(.icon) {
         margin-left: 0.4rem;
-        color: var(--theme-success-color);
       }
       &:before {
         border: 4px solid var(--theme-success-color) !important;
@@ -80,7 +95,7 @@
       }
     }
     .step {
-      margin-left: .5rem;
+      margin-left: 0.5rem;
       top: -1px;
       position: relative;
     }

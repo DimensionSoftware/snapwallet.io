@@ -25,5 +25,6 @@
     z-index: 2;
     font-size: 0.9rem;
     color: var(--theme-text-color);
+    font-weight: normal;
   }
 </style>
