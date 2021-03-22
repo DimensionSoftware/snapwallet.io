@@ -96,20 +96,20 @@
       {#if $transactionStore.selectedSourcePaymentMethod}
         {#if isBuy}
           <div class="line-item muted">
-            <div>Source</div>
+            <div>Bank Account</div>
             <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
           </div>
           <div class="line-item muted">
-            <div>Destination</div>
+            <div>Wallet</div>
             <div>3x2kdkdj...k34w</div>
           </div>
         {:else}
           <div class="line-item muted">
-            <div>Source</div>
+            <div>Wallet</div>
             <div>3x2kdkdj...k34w</div>
           </div>
           <div class="line-item muted">
-            <div>Destination</div>
+            <div>Bank Account</div>
             <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
           </div>
         {/if}
