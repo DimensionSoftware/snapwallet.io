@@ -21,8 +21,8 @@
 <style lang="scss">
   .exchange-rate-container {
     position: absolute;
-    bottom: 3px;
-    right: 25px;
+    bottom: -2rem;
+    right: 0.5rem;
     font-size: 0.85rem;
     z-index: 2;
     color: var(--theme-text-color);

@@ -24,17 +24,18 @@
     position: relative;
     padding-left: 1.25rem;
     margin-left: 1rem;
-    margin-top: 0.5rem;
+    margin-top: 0.75rem;
     // icon surround
     :global(span):before {
       position: absolute;
       content: '';
-      background: rgba($themeColor, 0.08);
+      background: darken($modalBackground, 3%);
       border-radius: 50%;
       height: 30px;
       width: 30px;
       left: -11px;
       top: -4px;
+      z-index: 1;
     }
     > :global(span > svg) {
       position: absolute;
@@ -60,13 +61,17 @@
       z-index: 1;
     }
     // line
+    &:first-child:after {
+      height: 500%;
+      top: -3rem;
+    }
     &:after {
       position: absolute;
       width: 1px;
       left: 4px;
       top: -1.25rem;
       opacity: 0.3;
-      height: 110%;
+      height: 120%;
       content: '';
       background-color: $textColor4;
       background-position: 0 0;

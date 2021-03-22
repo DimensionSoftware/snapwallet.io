@@ -215,6 +215,7 @@
   }
 
   .vertical-stepper {
+    margin-top: 2.5rem;
     list-style: none;
     padding: 0;
   }
