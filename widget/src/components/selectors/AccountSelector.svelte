@@ -17,6 +17,7 @@
   $: ({ intent } = $transactionStore)
   $: ({ flags } = $userStore)
   $: isSell = intent === TransactionIntents.SELL
+  $: allPaymentMethods = [...$paymentMethodStore.wyrePaymentMethods]
 
   let isLoadingPaymentMethods = true
   let copy
@@ -67,12 +68,12 @@
       />
     </div>
     <h5 style="margin-top:2rem">{copy.sectionTwoTitle}</h5>
-    {#if !$paymentMethodStore.wyrePaymentMethods.length && isLoadingPaymentMethods}
+    {#if !allPaymentMethods.length && isLoadingPaymentMethods}
       <p class="help">Retrieving Payment Methods...</p>
-    {:else if !$paymentMethodStore.wyrePaymentMethods.length}
+    {:else if !allPaymentMethods.length}
       <p class="help">{copy.unavailable}</p>
     {:else}
-      {#each $paymentMethodStore.wyrePaymentMethods as pm (pm.id)}
+      {#each allPaymentMethods as pm (pm.id)}
         <div class="card-vertical-margin">
           <IconCard
             label={pm.name}
