@@ -12,6 +12,7 @@
 
 <style lang="scss">
   @import '../../styles/_vars.scss';
+  @import '../../styles/animations.scss';
   label {
     cursor: pointer;
     position: relative;
@@ -20,9 +21,12 @@
     font-size: 0.7rem;
     font-weight: 600;
     margin-bottom: 1.25em;
+    &:active {
+      animation: focus 0.16s;
+    }
     span {
       position: absolute;
-      top: 10px;
+      top: 12px;
       margin-left: 15px;
       z-index: 99;
     }

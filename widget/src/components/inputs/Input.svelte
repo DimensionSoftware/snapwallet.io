@@ -81,7 +81,6 @@
       color: var(--theme-textColor);
       background-color: #fff;
       outline: none;
-      box-shadow: 0 -1px 10px -5px var(--theme-shadow-color);
       width: 100%;
       appearance: none;
       backface-visibility: hidden;
@@ -104,7 +103,6 @@
       transform: scale(1);
       transition-duration: 0.3s;
       transition-property: transform;
-      transition: color 0.2s ease-out, border 0.3s ease-out 0.1s;
       &:valid {
         border-bottom: 1px solid lighten($themeColor, 25%);
       }
@@ -115,21 +113,21 @@
         bottom: 0px;
         left: -1px;
         right: -1px;
-        border-radius: 0.8em;
+        border-radius: 0.9em;
         background: linear-gradient(transparent, var(--theme-color));
         opacity: 0;
-        transform: opacity(0), scale(0);
-        transition: opacity 0.3s ease-out 0.2s, transform 0.4s ease-in 0.1s;
+        transform: scale(0);
+        transition: opacity 0.5s ease-out, left 0s ease 0.51s,
+          right 0s ease 0.51s, top 0.4s ease-out 0.01s,
+          bottom 0.4s ease-out 0.11s, background 0s ease 0.51s,
+          transform 0s ease-out 0.51s;
       }
       &:valid ~ .bg {
-        opacity: 0.5;
-        transform: opacity(1), scale(1);
-        transition: none;
+        opacity: 0.3;
+        transform: scale(1);
       }
       &:hover,
       &:focus {
-        // background-image: none;
-        transition: none;
         z-index: 1;
         border-bottom: 1px solid var(--theme-color);
         transition: none;
@@ -139,10 +137,7 @@
       }
       &:focus {
         cursor: text;
-        z-index: 10;
         color: var(--theme-text-color);
-        animation: focus 0.15s;
-        animation-timing-function: ease-out;
         transition: none;
       }
 
@@ -155,35 +150,34 @@
         right: 0;
         bottom: 0;
         height: 1px;
-        overflow: hidden;
-        &:after {
-          content: '';
-          position: absolute;
-          width: 100%;
-          left: 0;
-          right: 0;
-          height: 2px;
-          z-index: 9;
-          background: linear-gradient(
-            to right,
-            transparent,
-            $themeColor,
-            transparent
-          );
-          transform: scale(0);
-          transition: transform 0.5s $easeOutExpo 0.15s;
-        }
+        background: linear-gradient(
+          to right,
+          transparent,
+          $themeColor,
+          transparent
+        );
+        z-index: 9;
+        opacity: 0;
+        transform: scale(0);
+        transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s;
       }
+      &:active ~ .bg,
       &:focus ~ .bg {
-        animation: focus 0.18s;
-        animation-timing-function: ease-in;
+        left: -5px;
+        top: -4px;
+        right: -5px;
+        bottom: -4px;
+        background: $themeColor;
+        opacity: 0.075;
+        transform: scale(1);
+        transition: none;
       }
+      &:active + .fx,
       &:hover + .fx,
       &:focus + .fx {
-        &:after {
-          transform: scale(1);
-          transition: none;
-        }
+        opacity: 1;
+        transform: scale(1) translateX(0);
+        transition: none;
       }
     }
     // HACK: remove yellow autofill background
