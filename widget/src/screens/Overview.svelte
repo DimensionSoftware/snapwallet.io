@@ -93,16 +93,26 @@
         </div>
       </div>
       <div class="line dashed" />
-      {#if isBuy}
-        <div class="line-item muted">
-          <div>Wallet</div>
-          <div>3x2kdkdj...k34w</div>
-        </div>
-      {:else}
-        <div class="line-item muted">
-          <div>Bank Account</div>
-          <div>Checking 3234</div>
-        </div>
+      {#if $transactionStore.selectedSourcePaymentMethod}
+        {#if isBuy}
+          <div class="line-item muted">
+            <div>Source</div>
+            <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
+          </div>
+          <div class="line-item muted">
+            <div>Destination</div>
+            <div>3x2kdkdj...k34w</div>
+          </div>
+        {:else}
+          <div class="line-item muted">
+            <div>Source</div>
+            <div>3x2kdkdj...k34w</div>
+          </div>
+          <div class="line-item muted">
+            <div>Destination</div>
+            <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
+          </div>
+        {/if}
       {/if}
     </div>
   </ModalBody>
