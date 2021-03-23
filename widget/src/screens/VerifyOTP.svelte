@@ -80,6 +80,13 @@
       Logger.debug('Logged in')
       window.tryInitializePusher()
       setTimeout(() => push($userStore.lastKnownRoute), 700)
+    } catch (e) {
+      if (e.body?.code) {
+        toaster.pop({ msg: e.body?.message, error: true })
+        setTimeout(() => {
+          push(Routes.SEND_OTP)
+        }, 800)
+      }
     } finally {
       setTimeout(() => (isMakingRequest = false), 700)
     }
@@ -137,7 +144,7 @@
     justify-content: center;
     align-items: center;
     font-size: 0.8rem;
-    margin-top: .35rem;
+    margin-top: 0.35rem;
     & > a {
       margin-left: 0.75em;
     }
