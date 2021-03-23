@@ -24,6 +24,7 @@ import { ViewerDataResponse } from '../models/ViewerDataResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
+import { WyreTransfer } from '../models/WyreTransfer';
 import { WyreTransfers } from '../models/WyreTransfers';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
@@ -1251,13 +1252,13 @@ export class FluxApiResponseProcessor {
      * @params response Response returned by the server for a request to fluxWyreConfirmTransfer
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async fluxWyreConfirmTransfer(response: ResponseContext): Promise<any > {
+     public async fluxWyreConfirmTransfer(response: ResponseContext): Promise<WyreTransfer > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: any = ObjectSerializer.deserialize(
+            const body: WyreTransfer = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "any", ""
-            ) as any;
+                "WyreTransfer", ""
+            ) as WyreTransfer;
             return body;
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
@@ -1270,10 +1271,10 @@ export class FluxApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: any = ObjectSerializer.deserialize(
+            const body: WyreTransfer = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "any", ""
-            ) as any;
+                "WyreTransfer", ""
+            ) as WyreTransfer;
             return body;
         }
 
@@ -1288,13 +1289,13 @@ export class FluxApiResponseProcessor {
      * @params response Response returned by the server for a request to fluxWyreCreateTransfer
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async fluxWyreCreateTransfer(response: ResponseContext): Promise<any > {
+     public async fluxWyreCreateTransfer(response: ResponseContext): Promise<WyreTransfer > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: any = ObjectSerializer.deserialize(
+            const body: WyreTransfer = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "any", ""
-            ) as any;
+                "WyreTransfer", ""
+            ) as WyreTransfer;
             return body;
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
@@ -1307,10 +1308,10 @@ export class FluxApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: any = ObjectSerializer.deserialize(
+            const body: WyreTransfer = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "any", ""
-            ) as any;
+                "WyreTransfer", ""
+            ) as WyreTransfer;
             return body;
         }
 
@@ -1362,13 +1363,13 @@ export class FluxApiResponseProcessor {
      * @params response Response returned by the server for a request to fluxWyreGetTransfer
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async fluxWyreGetTransfer(response: ResponseContext): Promise<any > {
+     public async fluxWyreGetTransfer(response: ResponseContext): Promise<WyreTransfer > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: any = ObjectSerializer.deserialize(
+            const body: WyreTransfer = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "any", ""
-            ) as any;
+                "WyreTransfer", ""
+            ) as WyreTransfer;
             return body;
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
@@ -1381,10 +1382,10 @@ export class FluxApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: any = ObjectSerializer.deserialize(
+            const body: WyreTransfer = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "any", ""
-            ) as any;
+                "WyreTransfer", ""
+            ) as WyreTransfer;
             return body;
         }
 

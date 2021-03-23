@@ -35,6 +35,7 @@ export * from './WyreConfirmTransferRequest';
 export * from './WyreCreateTransferRequest';
 export * from './WyrePaymentMethod';
 export * from './WyrePaymentMethods';
+export * from './WyreTransfer';
 export * from './WyreTransfers';
 export * from './WyreWebhookRequest';
 
@@ -75,6 +76,7 @@ import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
 import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
 import { WyrePaymentMethod } from './WyrePaymentMethod';
 import { WyrePaymentMethods } from './WyrePaymentMethods';
+import { WyreTransfer } from './WyreTransfer';
 import { WyreTransfers } from './WyreTransfers';
 import { WyreWebhookRequest } from './WyreWebhookRequest';
 
@@ -137,6 +139,7 @@ let typeMap: {[index: string]: any} = {
     "WyreCreateTransferRequest": WyreCreateTransferRequest,
     "WyrePaymentMethod": WyrePaymentMethod,
     "WyrePaymentMethods": WyrePaymentMethods,
+    "WyreTransfer": WyreTransfer,
     "WyreTransfers": WyreTransfers,
     "WyreWebhookRequest": WyreWebhookRequest,
 }

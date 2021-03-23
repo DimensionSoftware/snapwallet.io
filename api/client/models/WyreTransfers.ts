@@ -10,10 +10,11 @@
  * Do not edit the class manually.
  */
 
+import { WyreTransfer } from './WyreTransfer';
 import { HttpFile } from '../http/http';
 
 export class WyreTransfers {
-    'transfers'?: Array<any>;
+    'transfers'?: Array<WyreTransfer>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -21,7 +22,7 @@ export class WyreTransfers {
         {
             "name": "transfers",
             "baseName": "transfers",
-            "type": "Array<any>",
+            "type": "Array<WyreTransfer>",
             "format": ""
         }    ];
 

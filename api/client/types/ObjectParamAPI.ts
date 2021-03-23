@@ -39,6 +39,7 @@ import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
+import { WyreTransfer } from '../models/WyreTransfer';
 import { WyreTransfers } from '../models/WyreTransfers';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
@@ -305,14 +306,14 @@ export class ObjectFluxApi {
     /**
      * @param param the request object
      */
-    public fluxWyreConfirmTransfer(param: FluxApiFluxWyreConfirmTransferRequest, options?: Configuration): Promise<any> {
+    public fluxWyreConfirmTransfer(param: FluxApiFluxWyreConfirmTransferRequest, options?: Configuration): Promise<WyreTransfer> {
         return this.api.fluxWyreConfirmTransfer(param.transferId, param.body,  options).toPromise();
     }
 	
     /**
      * @param param the request object
      */
-    public fluxWyreCreateTransfer(param: FluxApiFluxWyreCreateTransferRequest, options?: Configuration): Promise<any> {
+    public fluxWyreCreateTransfer(param: FluxApiFluxWyreCreateTransferRequest, options?: Configuration): Promise<WyreTransfer> {
         return this.api.fluxWyreCreateTransfer(param.body,  options).toPromise();
     }
 	
@@ -326,7 +327,7 @@ export class ObjectFluxApi {
     /**
      * @param param the request object
      */
-    public fluxWyreGetTransfer(param: FluxApiFluxWyreGetTransferRequest, options?: Configuration): Promise<any> {
+    public fluxWyreGetTransfer(param: FluxApiFluxWyreGetTransferRequest, options?: Configuration): Promise<WyreTransfer> {
         return this.api.fluxWyreGetTransfer(param.transferId,  options).toPromise();
     }
 	

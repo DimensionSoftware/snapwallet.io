@@ -1079,7 +1079,58 @@
       }
     },
     "WyreTransfer": {
-      "type": "object"
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "fees": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "blockhash": {
+          "type": "string"
+        },
+        "networkTxId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string"
+        }
+      }
     },
     "WyreTransfers": {
       "type": "object",

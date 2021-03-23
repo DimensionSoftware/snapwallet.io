@@ -347,66 +347,25 @@ message WyreGetTransferRequest {
 }
 
 message WyreTransfer {
+  string id = 1;
+  string source = 2;
+  string dest = 3;
+  string source_currency = 4;
+  string dest_currency = 5;
+  double source_amount = 6;
+  double dest_amount = 7;
+  double exchange_rate = 8;
+  map<string, double> fees = 9;
+  string blockhash = 10;
+  string network_tx_id = 11;
+  string status = 12;
+  string created_at = 13;
+  string expires_at = 14;
 }
 
 message WyreTransfers {
   repeated WyreTransfer transfers = 1;
 }
-
-/*
-{
-    "id": "TF-4F3HRUYPNFY",
-    "sourceAmount": 5,
-    "sourceCurrency": "USD",
-    "destAmount": 0.01,
-    "destCurrency": "BTC",
-    "status": "PENDING",
-    "message": "Payment for DorianNakamoto@sendwyre.com",
-    "customId": null,
-    "exchangeRate": 499.00,
-    "createdAt": 1541552388000,
-    "fees": {
-        "USD": 0.1,
-        "BTC": 0
-    },
-    "totalFees": 0.1,
-    "completedAt": 1541552388000,
-    "cancelledAt": null,
-    "failureReason": null,
-    "expiresAt": 1541553288000,
-    "reversingSubStatus": null,
-    "reversalReason": null,
-    "pendingSubStatus": null,
-    "dest": "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq",
-    "blockchainTx": null,
-    "statusHistories": [
-        {
-            "id": "N88AFATLRZY",
-            "transferId": "TF-4F3HRUYPNFY",
-            "createdAt": 1541552388000,
-            "type": "OUTGOING",
-            "statusOrder": 0,
-            "statusDetail": "Initiating Transfer",
-            "state": "INITIATED",
-            "failedState": null
-        },
-        {
-            "id": "PED3FNLNUV7",
-            "transferId": "TF-4F3HRUYPNFY",
-            "createdAt": 1541552388000,
-            "type": "OUTGOING",
-            "statusOrder": 200,
-            "statusDetail": "Processing Exchange",
-            "state": "PENDING",
-            "failedState": null
-        }
-    ],
-    "owner": "account:AC-WYUR7ZZ6UMU",
-    "source": "account:AC-WYUR7ZZ6UMU"
-}
-*/
-
-
 
 service Flux {
   // Get viewer data
