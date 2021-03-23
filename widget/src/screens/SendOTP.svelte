@@ -80,7 +80,12 @@
         />
       </Label>
       <div class="link">
-        <a on:click={() => (isUsingPhoneNumber = true)}>Use my phone</a>
+        <a
+          on:click={() => {
+            isUsingPhoneNumber = true
+            userStore.setEmailAddress('')
+          }}>Use my phone</a
+        >
       </div>
     {:else}
       <Label label="Your Phone Number">
@@ -94,11 +99,18 @@
           mask={Masks.PHONE}
           placeholder="1 (222) 333-4444"
           defaultValue={$userStore.phoneNumber}
-          on:change={e => userStore.setPhoneNumber(e.detail)}
+          on:change={e => {
+            userStore.setPhoneNumber(e.detail)
+          }}
         />
       </Label>
       <div class="link">
-        <a on:click={() => (isUsingPhoneNumber = false)}>Use my email</a>
+        <a
+          on:click={() => {
+            isUsingPhoneNumber = false
+            userStore.setPhoneNumber('')
+          }}>Use my email</a
+        >
       </div>
     {/if}
   </ModalBody>
