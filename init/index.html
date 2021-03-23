@@ -7,7 +7,10 @@
     <script>
       const snap = new Snap({
         onMessage: (msg) => {
-          if (msg.event === snap.events.EXIT) snap.closeWeb()
+          if (msg.event === snap.events.EXIT) {
+            console.log('Exit Data', msg.data)
+            snap.closeWeb()
+          }
         },
       })
 
