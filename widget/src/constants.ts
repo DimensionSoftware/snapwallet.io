@@ -39,3 +39,7 @@ export enum Routes {
 export enum APIErrors {
   UNAUTHORIZED = 16,
 }
+
+export enum ParentMessages {
+  EXIT = '__SNAP_EXIT',
+}
