@@ -1,5 +1,6 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
+  import { fly } from 'svelte/transition'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -15,21 +16,29 @@
   let animation = 'left'
   let code = ''
   let isMakingRequest = false
-  let isSendingEmail = false
+  let isSendingCode = false
 
-  const resendEmail = async () => {
+  const resendCode = async () => {
     Logger.debug('Resending email')
-    isSendingEmail = true
+    isSendingCode = true
     return await window.API.fluxOneTimePasscode({
-      emailOrPhone: $userStore.emailAddress,
+      emailOrPhone: $userStore.phoneNumber || $userStore.emailAddress,
     })
   }
 
   const verifyOTP = async () => {
     Logger.debug('Verifying using OTP code:', code)
+    const emailOrPhone = $userStore.phoneNumber || $userStore.emailAddress
+    if (!emailOrPhone)
+    document.getElementById('code').focus()
+      return toaster.pop({
+        msg: 'Check for your code and try again!',
+        error: true,
+      })
+
     return await window.API.fluxOneTimePasscodeVerify({
       code,
-      emailOrPhone: $userStore.phoneNumber || $userStore.emailAddress,
+      emailOrPhone,
     })
   }
 
@@ -37,7 +46,7 @@
     isMakingRequest = true
 
     try {
-      await resendEmail()
+      await resendCode()
       Logger.debug('Email sent')
       setTimeout(() => {
         code = ''
@@ -65,7 +74,7 @@
       }, 1700)
     } finally {
       setTimeout(() => {
-        isSendingEmail = false
+        isSendingCode = false
         isMakingRequest = false
       }, 1000)
     }
@@ -102,36 +111,39 @@
 <ModalContent {animation}>
   <ModalBody>
     <ModalHeader>Enter Your Code</ModalHeader>
-    <Label label="Your Email Code">
-      <Input
-        inputmode="numeric"
-        autocapitalize="none"
-        autocomplete="one-time-code"
-        autofocus
-        required
-        type="number"
-        placeholder="123456"
-        defaultValue={code}
-        on:change={e => {
-          code = e.detail
-          if (code.length >= 6) {
-            handleNextStep()
-          }
-        }}
-      />
-    </Label>
-    <div class="resend" title="Check your SPAM folder!">
-      Didn't get an email? <a on:click={handleResend}>Resend Code</a>
+    <div in:fly={{ y: 25, duration: 300 }}>
+      <Label label="Your Code">
+        <Input
+          id="code"
+          inputmode="numeric"
+          autocapitalize="none"
+          autocomplete="one-time-code"
+          autofocus
+          required
+          type="number"
+          placeholder="123456"
+          defaultValue={code}
+          on:change={e => {
+            code = e.detail
+            if (code.length >= 6) {
+              handleNextStep()
+            }
+          }}
+        />
+      </Label>
+      <div class="resend" title="Check SPAM">
+        Didn't get a code? <a on:click={handleResend}>Resend Code</a>
+      </div>
     </div>
   </ModalBody>
   <ModalFooter>
     <Button disabled={isMakingRequest} on:click={handleNextStep}>
-      {#if isMakingRequest && !isSendingEmail}
-        Confirming Code...
-      {:else if isMakingRequest && isSendingEmail}
-        Resending Email...
+      {#if isMakingRequest && !isSendingCode}
+        Confirming...
+      {:else if isMakingRequest && isSendingCode}
+        Resending...
       {:else}
-        Confirm Code
+        Confirm
       {/if}
     </Button>
   </ModalFooter>
