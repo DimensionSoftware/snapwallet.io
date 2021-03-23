@@ -29,6 +29,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
@@ -874,4 +875,36 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 	return &proto.WyrePaymentMethods{
 		PaymentMethods: out,
 	}, nil
+}
+
+func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTransferRequest) (*proto.WyreTransfer, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	var wyreAccountID account.ID
+	{
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		if err != nil {
+			return nil, err
+		}
+		if len(accounts) > 0 {
+			wyreAccountID = accounts[0].ID
+		}
+	}
+
+	pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccountID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, pm := range pms {
+		if pm.ID == paymentmethod.ID(req.Source) {
+			// good to go
+			return &proto.WyreTransfer{}, nil
+		}
+	}
+
+	return nil, status.Errorf(codes.InvalidArgument, "source %s is not a payment method ID belonging to this user", req.Source)
 }
