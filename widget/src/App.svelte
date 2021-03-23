@@ -30,6 +30,8 @@
     const isAccessingAuthRoutes = [Routes.SEND_OTP, Routes.VERIFY_OTP].includes(
       event.detail.location,
     )
+
+    // Don't allow user to hit send or verify when authed.
     if (isAccessingAuthRoutes) {
       pop()
       return false
