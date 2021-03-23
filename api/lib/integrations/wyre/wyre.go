@@ -288,6 +288,27 @@ func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*Transf
 	return resp.Result().(*Transfer), nil
 }
 
+// GetTransferHistory gets a history of transfers in the wyre system
+// https://docs.sendwyre.com/docs/transfer-history
+// GET https://api.sendwyre.com/v3/transfers
+func (c Client) GetTransferHistory(token string) ([]*Transfer, error) {
+	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+token).
+		SetError(APIError{}).
+		SetResult([]*Transfer{}).
+		EnableTrace().
+		Get("/v3/transfers")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().([]*Transfer), nil
+}
+
 // GetAccount gets an an account from the wyre system
 // https://docs.sendwyre.com/docs/get-account
 // GET https://api.sendwyre.com/v3/accounts/:accountId

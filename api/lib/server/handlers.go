@@ -932,3 +932,35 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 
 	return wyre.WyreTransferToProto(t), nil
 }
+
+func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto.WyreTransfers, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	var wyreAccount *account.Account
+	{
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		if err != nil {
+			return nil, err
+		}
+		if len(accounts) > 0 {
+			wyreAccount = accounts[0]
+		}
+	}
+
+	transfers, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey)
+	if err != nil {
+		return nil, err
+	}
+
+	var out []*proto.WyreTransfer
+	for _, transfer := range transfers {
+		out = append(out, wyre.WyreTransferToProto(transfer))
+	}
+
+	return &proto.WyreTransfers{
+		Transfers: out,
+	}, nil
+}
