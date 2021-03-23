@@ -2,6 +2,8 @@ import type { UserFlags } from 'api-client'
 import { writable } from 'svelte/store'
 import { Routes } from '../constants'
 
+type ViewerFlags = UserFlags & { hasEmail: boolean; hasPhone: boolean }
+
 const initialAddress = {
   street1: '',
   street2: '',
@@ -23,7 +25,7 @@ function createStore() {
     // Used for routing to last position
     // when auth kicks in.
     lastKnownRoute: Routes.ROOT,
-    flags: {} as UserFlags,
+    flags: {} as ViewerFlags,
     address: { ...initialAddress },
   })
 
@@ -41,7 +43,7 @@ function createStore() {
     setBirthDate: (birthDate: string) => update(s => ({ ...s, birthDate })),
     updateLastKnownRoute: (lastKnownRoute: Routes) =>
       update(s => ({ ...s, lastKnownRoute })),
-    setFlags: (flags: UserFlags) => {
+    setFlags: (flags: ViewerFlags) => {
       update(s => ({ ...s, flags }))
     },
     setFullAddress: (address: any) => {
