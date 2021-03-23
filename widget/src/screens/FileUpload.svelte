@@ -149,28 +149,29 @@
   >
 </ModalContent>
 
-<PopupSelector
-  on:close={() => {
-    isFileTypeSelectorOpen = false
-  }}
-  visible={isFileTypeSelectorOpen}
-  headerTitle="Select a Document Type"
->
-  <div>
-    <div style="margin-bottom:1rem;margin-top:1rem;">
+{#if isFileTypeSelectorOpen}
+  <PopupSelector
+    on:close={() => {
+      isFileTypeSelectorOpen = false
+    }}
+    headerTitle="Select a Document Type"
+  >
+    <div>
+      <div style="margin-bottom:1rem;margin-top:1rem;">
+        <IconCard
+          icon={faPassport}
+          on:click={selectFileType(FileUploadTypes.US_PASSPORT)}
+          label="Passport"
+        />
+      </div>
       <IconCard
-        icon={faPassport}
-        on:click={selectFileType(FileUploadTypes.US_PASSPORT)}
-        label="Passport"
+        icon={faIdCard}
+        on:click={selectFileType(FileUploadTypes.US_DRIVER_LICENSE)}
+        label="Drivers License"
       />
     </div>
-    <IconCard
-      icon={faIdCard}
-      on:click={selectFileType(FileUploadTypes.US_DRIVER_LICENSE)}
-      label="Drivers License"
-    />
-  </div>
-</PopupSelector>
+  </PopupSelector>
+{/if}
 
 <style lang="scss">
   @import '../styles/_vars.scss';
