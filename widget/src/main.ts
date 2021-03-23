@@ -1,5 +1,6 @@
 import App from './App.svelte'
 import { AuthManager, genAPIClient } from './auth'
+import { paymentMethodStore } from './stores/PaymentMethodStore'
 import { Logger } from './util'
 
 window.AUTH_MANAGER = new AuthManager()
@@ -18,11 +19,13 @@ window.tryInitializePusher = function tryInitializePusher() {
   if (userID && !window.__SOCKET) {
     window.__SOCKET = new window.Pusher('dd280d42ccafc24e19ff', {
       cluster: 'us3',
+      encrypted: true,
     })
 
     const channel = window.__SOCKET.subscribe(userID)
-    channel.bind(function (data) {
+    channel.bind('WYRE_PAYMENT_METHODS_UPDATED', data => {
       Logger.debug(data)
+      paymentMethodStore.fetchWyrePaymentMethods()
     })
 
     Logger.debug('PUSHER LOADED')
