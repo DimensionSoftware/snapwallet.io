@@ -115,6 +115,22 @@ type Transfer struct {
 	PendingSubStatus   string `json:"pendingSubStatus"`
 }
 
+type CreateTransferRequest struct {
+	Source             string  `json:"source"`                 // An SRN representing an account that the funds will be retrieved from
+	Dest               string  `json:"dest"`                   // An email address, cellphone number, digital currency address or bank account to send the digital currency to. For bitcoin address use "bitcoin:[address]". Note: cellphone numbers are assumed to be a US number, for international numbers include a '+' and the country code as the prefix.
+	SourceAmount       float64 `json:"sourceAmount,omitempty"` // The amount to withdrawal from the source, in units of sourceCurrency. Only include sourceAmount OR destAmount, not both.
+	DestAmount         float64 `json:"destAmount,omitempty"`   // Specifies the total amount of currency to deposit (as defined in depositCurrency). Only include sourceAmount OR destAmount, not both.
+	SourceCurrency     string  `json:"sourceCurrency"`         // The currency (ISO 3166-1 alpha-3) to withdrawal from the source wallet
+	DestCurrency       string  `json:"destCurrency,omitempty"` // The currency (ISO 3166-1 alpha-3) to deposit. if not provided, the deposit will be the same as the withdrawal currency (no exchange performed)
+	Message            string  `json:"message,omitempty"`      // An optional user visible message to be sent with the transaction.
+	NotifyURL          string  `json:"notifyUrl,omitempty"`    // An optional url that Wyre will POST a status callback to (see Callbacks for more information)
+	AutoConfirm        bool    `json:"autoConfirm"`            // An optional parameter to automatically confirm the transfer order.
+	CustomID           string  `json:"customId,omitempty"`     // an optional custom ID to tag the transfer
+	AmountIncludesFees bool    `json:"amountIncludesFees"`     // Optional. When true, the amount indicated (source or dest) will be treated as already including the fees
+	Preview            bool    `json:"preview"`                // creates a quote transfer object, but does not execute a real transfer.
+	MuteMessages       bool    `json:"muteMessages"`           // When true, disables outbound emails/messages to the destination
+}
+
 // WithDefaults provides default values for CreateAccountRequest
 func (req CreateAccountRequest) WithDefaults() CreateAccountRequest {
 	newReq := req
@@ -210,7 +226,7 @@ func NewClient(config *Config) *Client {
 	}
 }
 
-// CreateAccount creates an an account in the wyre system
+// CreateAccount creates an account in the wyre system
 // https://docs.sendwyre.com/docs/create-account
 // POST https://api.sendwyre.com/v3/accounts
 func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account, error) {
@@ -230,6 +246,28 @@ func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account,
 	}
 
 	return resp.Result().(*Account), nil
+}
+
+// CreateTransfer creates a transfer in the wyre system
+// https://docs.sendwyre.com/docs/create-transfer
+// POST https://api.sendwyre.com/v3/transfers
+func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*Transfer, error) {
+	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+token).
+		SetError(APIError{}).
+		SetResult(Transfer{}).
+		SetBody(req).
+		EnableTrace().
+		Post("/v3/transfers")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*Transfer), nil
 }
 
 // GetAccount gets an an account from the wyre system
