@@ -14,6 +14,7 @@
   import { Routes } from '../constants'
   import { Masks } from '../types'
   import { unMaskValue } from '../masks'
+  import { fly } from 'svelte/transition'
 
   let animation = 'left'
   let isMakingRequest = false
@@ -66,53 +67,57 @@
   <ModalBody>
     <ModalHeader hideBackButton>Login or Sign Up</ModalHeader>
     {#if !isUsingPhoneNumber}
-      <Label label="Your Email">
-        <Input
-          inputmode="email"
-          autocapitalize="none"
-          autocomplete="on"
-          autofocus
-          required
-          type="email"
-          placeholder="your@email.address"
-          defaultValue={$userStore.emailAddress}
-          on:change={e => userStore.setEmailAddress(e.detail)}
-        />
-      </Label>
-      <div class="link">
-        <a
-          on:click={() => {
-            isUsingPhoneNumber = true
-            // clear so verify doesn't use this value
-            userStore.setEmailAddress('')
-          }}>Use my phone</a
-        >
+      <div in:fly={{ y: 25, duration: 300 }}>
+        <Label label="Your Email">
+          <Input
+            inputmode="email"
+            autocapitalize="none"
+            autocomplete="on"
+            autofocus
+            required
+            type="email"
+            placeholder="your@email.address"
+            defaultValue={$userStore.emailAddress}
+            on:change={e => userStore.setEmailAddress(e.detail)}
+          />
+        </Label>
+        <div class="link">
+          <a
+            on:click={() => {
+              isUsingPhoneNumber = true
+              // clear so verify doesn't use this value
+              userStore.setEmailAddress('')
+            }}>Use my phone</a
+          >
+        </div>
       </div>
     {:else}
-      <Label label="Your Phone Number">
-        <Input
-          inputmode="phone"
-          autocapitalize="none"
-          autocomplete="on"
-          autofocus
-          required
-          type="tel"
-          mask={Masks.PHONE}
-          placeholder="1 (222) 333-4444"
-          defaultValue={$userStore.phoneNumber}
-          on:change={e => {
-            userStore.setPhoneNumber(e.detail)
-          }}
-        />
-      </Label>
-      <div class="link">
-        <a
-          on:click={() => {
-            isUsingPhoneNumber = false
-            // clear so verify doesn't use this value
-            userStore.setPhoneNumber('')
-          }}>Use my email</a
-        >
+      <div in:fly={{ y: 25, duration: 300 }}>
+        <Label label="Your Phone Number">
+          <Input
+            inputmode="phone"
+            autocapitalize="none"
+            autocomplete="on"
+            autofocus
+            required
+            type="tel"
+            mask={Masks.PHONE}
+            placeholder="1 (222) 333-4444"
+            defaultValue={$userStore.phoneNumber}
+            on:change={e => {
+              userStore.setPhoneNumber(e.detail)
+            }}
+          />
+        </Label>
+        <div class="link">
+          <a
+            on:click={() => {
+              isUsingPhoneNumber = false
+              // clear so verify doesn't use this value
+              userStore.setPhoneNumber('')
+            }}>Use my email</a
+          >
+        </div>
       </div>
     {/if}
   </ModalBody>
@@ -132,7 +137,7 @@
   .link {
     display: flex;
     align-items: center;
-    justify-content: flex-end;
-    font-size: 0.75rem;
+    justify-content: center;
+    font-size: 0.8rem;
   }
 </style>
