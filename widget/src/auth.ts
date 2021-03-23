@@ -198,6 +198,10 @@ export class AuthManager {
   // watch for session changes so a logout message can be emitted
   public watch() {
     setInterval(() => {
+      if (this.getCurrentRefreshToken() == '') {
+        return
+      }
+
       if (this.refreshTokenIsExpired()) {
         this.logout()
         return
