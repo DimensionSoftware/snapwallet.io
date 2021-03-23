@@ -43,3 +43,7 @@ export enum APIErrors {
 export enum ParentMessages {
   EXIT = '__SNAP_EXIT',
 }
+
+export enum PusherMessages {
+  WYRE_PM_UPDATED = 'WYRE_PAYMENT_METHODS_UPDATED',
+}
