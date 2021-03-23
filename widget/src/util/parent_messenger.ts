@@ -10,7 +10,7 @@ export const ParentMessenger = (() => {
    *
    * @param event Any outgoing JSON event event.
    */
-  const send = (ev: { event: ParentMessages }) => {
+  const send = (ev: { event: ParentMessages; data: object }) => {
     const msg = JSON.stringify(ev)
     if (window.parent) {
       window.parent.postMessage(msg, '*')
@@ -22,11 +22,17 @@ export const ParentMessenger = (() => {
 
   /**
    * User exited application (clicked X)
+   * Sends user ID to parent for reference.
    */
-  const exit = () =>
+  const exit = () => {
+    const userID = window.AUTH_MANAGER.viewerUserID()
     send({
       event: ParentMessages.EXIT,
+      data: {
+        userID,
+      },
     })
+  }
 
   return {
     exit,
