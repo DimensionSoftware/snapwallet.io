@@ -9,6 +9,7 @@ const initialAddress = {
   state: '',
   postalCode: '',
   country: '',
+  phoneNumber: '',
 }
 
 function createStore() {
@@ -18,6 +19,7 @@ function createStore() {
     lastName: '',
     socialSecurityNumber: '',
     birthDate: '',
+    phoneNumber: '',
     // Used for routing to last position
     // when auth kicks in.
     lastKnownRoute: Routes.ROOT,
@@ -27,6 +29,9 @@ function createStore() {
 
   return {
     subscribe,
+    setPhoneNumber: (phoneNumber: string) => {
+      update(s => ({ ...s, phoneNumber }))
+    },
     setEmailAddress: (emailAddress: string) =>
       update(s => ({ ...s, emailAddress })),
     setFirstName: (firstName: string) => update(s => ({ ...s, firstName })),
