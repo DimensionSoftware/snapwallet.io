@@ -106,7 +106,7 @@ type Transfer struct {
 	CancelledAt    int64              `json:"cancelledAt"`    // i.e. 1541552388000 (epoch)
 
 	StatusHistory []TransferStatusHistoryItem `json:"statusHistories"`
-	BlockchainTx  *TransferBlockchainTx       `json:"blockchainTx"`
+	BlockchainTx  TransferBlockchainTx        `json:"blockchainTx"`
 
 	// not documented well... who knows if its right; we'll find out
 	FailureReason      string `json:"failureReason"`
