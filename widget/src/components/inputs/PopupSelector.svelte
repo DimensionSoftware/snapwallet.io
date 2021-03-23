@@ -4,7 +4,6 @@
 
   const dispatch = createEventDispatcher()
 
-  export let visible: boolean
   export let headerTitle: string
 
   function handleClose(e: Event) {
@@ -24,7 +23,7 @@
 
 <svelte:window on:keydown={handleClose} on:click={handleClose} />
 
-<div class="popup-selector" class:visible>
+<div class="popup-selector">
   <div class="popup-selector-header">
     <div class="popup-title">{headerTitle}</div>
     <div on:click={() => dispatch('close')} class="close-icon">
@@ -41,27 +40,22 @@
 
 <style lang="scss">
   @import '../../styles/_vars.scss';
-
+  @import '../../styles/animations.scss';
   .popup-selector {
     padding: 1rem;
     display: flex;
     flex-direction: column;
-    height: 97%;
     width: 100%;
     border-radius: 1rem;
     z-index: 1000;
     position: absolute;
+    top: 2%;
     bottom: 0;
     left: 0;
     right: 0;
     background-color: white;
     box-shadow: 0px -7px 25px 10px var(--theme-shadow-color);
-    transform: translateY(110%);
-    transition: transform 0.08s var(--theme-ease-in-expo);
-    &.visible {
-      transform: translateY(0);
-      transition: transform 0.25s var(--theme-ease-out-expo);
-    }
+    animation: slideUp .2s $easeOutExpo forwards;
   }
 
   .popup-selector-header {
