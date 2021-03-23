@@ -1,6 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   import { onKeysPressed } from '../../util'
+  import { fly } from 'svelte/transition'
 
   const dispatch = createEventDispatcher()
 
@@ -23,7 +24,7 @@
 
 <svelte:window on:keydown={handleClose} on:click={handleClose} />
 
-<div class="popup-selector">
+<div out:fly={{y: 15, duration: 125}} class="popup-selector">
   <div class="popup-selector-header">
     <div class="popup-title">{headerTitle}</div>
     <div on:click={() => dispatch('close')} class="close-icon">

@@ -34,6 +34,12 @@ window.addEventListener('logout', () => {
   Logger.debug('viewer has logged out')
 })
 
+window.addEventListener('prelogout', () => {
+  Logger.debug('viewer has 5 minutes before logout')
+  // TODO pop inactive session dialog up
+  // TODO either reactivate session via getAccessToken() or logout()
+})
+
 const queryParams = new URLSearchParams(window.location.search)
 
 const app = new App({
