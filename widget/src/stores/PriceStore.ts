@@ -45,7 +45,7 @@ const createStore = () => {
         } catch (e) {
           clearInterval(interval)
         }
-      }, 15_000)
+      }, 30_000)
       return interval
     },
   }
