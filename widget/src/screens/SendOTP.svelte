@@ -16,6 +16,8 @@
   import { unMaskValue } from '../masks'
   import { fly } from 'svelte/transition'
 
+  export let phoneVerificationOnly: boolean = false
+
   let animation = 'left'
   let isMakingRequest = false
   let isUsingPhoneNumber = false
@@ -24,7 +26,7 @@
 
   const handleNextStep = async () => {
     try {
-      if (!isUsingPhoneNumber) {
+      if (!phoneVerificationOnly && !isUsingPhoneNumber) {
         let emailIsValid = vld8.isEmail($userStore.emailAddress)
         if (!emailIsValid)
           return (document.querySelector('input[type="email"]') as any).focus()
@@ -37,12 +39,16 @@
 
       isMakingRequest = true
       await window.API.fluxOneTimePasscode({
-        emailOrPhone: isUsingPhoneNumber
-          ? `+${unMaskValue($userStore.phoneNumber, Masks.PHONE)}`
-          : $userStore.emailAddress,
+        emailOrPhone:
+          phoneVerificationOnly || isUsingPhoneNumber
+            ? `+${unMaskValue($userStore.phoneNumber, Masks.PHONE)}`
+            : $userStore.emailAddress,
       })
 
-      setTimeout(() => push(Routes.VERIFY_OTP), timeout)
+      let nextRoute = phoneVerificationOnly
+        ? Routes.PROFILE_VERIFY_SMS
+        : Routes.VERIFY_OTP
+      setTimeout(() => push(nextRoute), timeout)
     } catch (e) {
       const err = e as { body: { code: number; message: string } }
       Logger.error(err)
@@ -65,8 +71,14 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader>Login or Sign Up</ModalHeader>
-    {#if !isUsingPhoneNumber}
+    <ModalHeader>
+      {#if phoneVerificationOnly}
+        Phone Verification
+      {:else}
+        Login or Sign Up
+      {/if}
+    </ModalHeader>
+    {#if !phoneVerificationOnly && (!$userStore.flags?.hasEmail || !isUsingPhoneNumber)}
       <div in:fly={{ y: 25, duration: 300 }}>
         <Label label="Your Email">
           <Input
@@ -81,15 +93,17 @@
             on:change={e => userStore.setEmailAddress(e.detail)}
           />
         </Label>
-        <div class="link">
-          <a
-            on:click={() => {
-              isUsingPhoneNumber = true
-              // clear so verify doesn't use this value
-              userStore.setEmailAddress('')
-            }}>Use my phone</a
-          >
-        </div>
+        {#if $userStore.flags?.hasEmail}
+          <div class="link">
+            <a
+              on:click={() => {
+                isUsingPhoneNumber = true
+                // clear so verify doesn't use this value
+                userStore.setEmailAddress('')
+              }}>Use my phone</a
+            >
+          </div>
+        {/if}
       </div>
     {:else}
       <div in:fly={{ y: 25, duration: 300 }}>
@@ -109,15 +123,17 @@
             }}
           />
         </Label>
-        <div class="link">
-          <a
-            on:click={() => {
-              isUsingPhoneNumber = false
-              // clear so verify doesn't use this value
-              userStore.setPhoneNumber('')
-            }}>Use my email</a
-          >
-        </div>
+        {#if $userStore.flags?.hasPhone}
+          <div class="link">
+            <a
+              on:click={() => {
+                isUsingPhoneNumber = false
+                // clear so verify doesn't use this value
+                userStore.setPhoneNumber('')
+              }}>Use my email</a
+            >
+          </div>
+        {/if}
       </div>
     {/if}
   </ModalBody>
