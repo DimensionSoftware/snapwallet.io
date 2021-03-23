@@ -475,6 +475,11 @@
         },
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       },
       "post": {
@@ -505,6 +510,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -535,6 +545,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -573,6 +588,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },

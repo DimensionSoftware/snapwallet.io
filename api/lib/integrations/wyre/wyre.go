@@ -57,6 +57,67 @@ type CreateAccountRequest struct {
 	DisableEmail *bool `json:"disableEmail,omitempty"`
 }
 
+type TransferStatusHistoryItem struct {
+	ID           string `json:"id"`           // i.e. "N88AFATLRZY"
+	TransferID   string `json:"transferId"`   // i.e. "TF-4F3HRUYPNFY"
+	CreatedAt    int64  `json:"createdAt"`    // i.e. 1541552388000
+	Type         string `json:"type"`         // i.e. "OUTGOING"
+	StatusOrder  int32  `json:"statusOrder"`  // i.e. 0, 200, 400, or 5100
+	StatusDetail string `json:"statusDetail"` // i.e. "Initiating Transfer"
+	State        string `json:"state"`        // i.e. "INITIATED"
+	FailedState  string `json:"failedState"`  // ??
+}
+
+type Transfer struct {
+	ID             string             `json:"id"`             // i.e. "TF-4F3HRUYPNFY"
+	Owner          string             `json:"owner"`          // i.e. "account:AC-WYUR7ZZ6UMU"
+	CustomID       string             `json:"customId"`       // an optional custom ID to tag the transfer
+	Source         string             `json:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
+	Dest           string             `json:"dest"`           // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
+	SourceAmount   float64            `json:"sourceAmount"`   // i.e. 5
+	DestAmount     float64            `json:"destAmount"`     // i.e. 0.01
+	SourceCurrency string             `json:"sourceCurrency"` // i.e. "USD"
+	DestCurrency   string             `json:"destCurrency"`   // i.e. "BTC"
+	Message        string             `json:"message"`        // i.e. "Payment for DorianNakamoto@sendwyre.com"
+	Status         string             `json:"status"`         // i.e. "PENDING"
+	ExchangeRate   float64            `json:"exchangeRate"`   // i.e. 499.00
+	TotalFees      float64            `json:"totalFees"`      // i.e. 0.1
+	Fees           map[string]float64 `json:"fees"`           // i.e. { "USD": 0.1, "BTC": 0 }
+	CreatedAt      int64              `json:"createdAt"`      // i.e. 1541552388000 (epoch)
+	ExpiresAt      int64              `json:"expiresAt"`      // i.e. 1541552388000 (epoch)
+	CompletedAt    int64              `json:"completedAt"`    // i.e. 1541552388000 (epoch)
+	CancelledAt    int64              `json:"cancelledAt"`    // i.e. 1541552388000 (epoch)
+
+	StatusHistory []TransferStatusHistoryItem `json:"statusHistories"`
+
+	// not documented well... who knows if its right; we'll find out
+	FailureReason      string `json:"failureReason"`
+	ReversalReason     string `json:"reversalReason"`
+	ReversingSubStatus string `json:"reversingSubStatus"`
+	PendingSubStatus   string `json:"pendingSubStatus"`
+}
+
+/*
+	{
+		"blockchainTx": {
+			"id": "TR_XXXXXXXX1",
+			"networkTxId": "8ba2f644f71b2eaa5edd8e421df4a0b902e...",
+			"createdAt": 1604343572000,
+			"confirmations": 1,
+			"timeObserved": 1604344752000,
+			"blockTime": 1604346566000,
+			"blockhash": "0000000000000000000299574cd707c36...",
+			"amount": 0.00014529,
+			"direction": "OUTGOING",
+			"networkFee": 0.00066185,
+			"address": "3PZsfrHEsCooPM6BC9AXWyfxxxxxxxxxx",
+			"sourceAddress": null,
+			"currency": "BTC",
+			"twinTxId": null
+		},
+	}
+*/
+
 // WithDefaults provides default values for CreateAccountRequest
 func (req CreateAccountRequest) WithDefaults() CreateAccountRequest {
 	newReq := req

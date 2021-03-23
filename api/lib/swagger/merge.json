@@ -49,6 +49,24 @@
         "security": [{"Bearer": []}]
       }
     },
+    "/wyre/transfers": {
+      "get": {
+        "security": [{"Bearer": []}]
+      },
+      "post": {
+        "security": [{"Bearer": []}]
+      }
+    },
+    "/wyre/transfers/{transferId}": {
+      "get": {
+        "security": [{"Bearer": []}]
+      }
+    },
+    "/wyre/transfers/{transferId}/confirm": {
+      "post": {
+        "security": [{"Bearer": []}]
+      }
+    },
     "/upload": {
       "post": {
         "summary": "Uploads a file and returns a fileId.",
