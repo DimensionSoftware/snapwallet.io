@@ -930,20 +930,5 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 	// TODO: store info in db about xfer
 	fmt.Printf("WYRE TRANSFER RESP: %#v", t)
 
-	return &proto.WyreTransfer{
-		Id:             t.ID,
-		Source:         strings.Split(t.Source, ":")[1],
-		Dest:           strings.Split(t.Dest, ":")[1],
-		SourceCurrency: t.SourceCurrency,
-		DestCurrency:   t.DestCurrency,
-		SourceAmount:   t.SourceAmount,
-		DestAmount:     t.DestAmount,
-		ExchangeRate:   t.ExchangeRate,
-		Fees:           t.Fees,
-		Blockhash:      t.BlockchainTx.Blockhash,
-		NetworkTxId:    t.BlockchainTx.NetworkTxID,
-		Status:         t.Status,
-		CreatedAt:      time.Unix(t.CreatedAt, 0).Format(time.RFC3339),
-		ExpiresAt:      time.Unix(t.ExpiresAt, 0).Format(time.RFC3339),
-	}, nil
+	return wyre.WyreTransferToProto(t), nil
 }
