@@ -12,6 +12,7 @@
   import { Logger, onEnterPressed } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
+import type { OneTimePasscodeVerifyResponse } from 'api-client';
 
   let animation = 'left'
   let code = ''
@@ -26,19 +27,21 @@
     })
   }
 
-  const verifyOTP = async () => {
+  const verifyOTP = async (): Promise<OneTimePasscodeVerifyResponse> => {
     Logger.debug('Verifying using OTP code:', code)
     const emailOrPhone = $userStore.phoneNumber || $userStore.emailAddress
     if (!emailOrPhone) {
       document.getElementById('code').focus()
 
-      return toaster.pop({
+      toaster.pop({
         msg: 'Check for your code and try again!',
         error: true,
       })
+
+      return
     }
 
-    return await window.API.fluxOneTimePasscodeVerify({
+    return window.API.fluxOneTimePasscodeVerify({
       code,
       emailOrPhone,
     })
@@ -134,7 +137,10 @@
         />
       </Label>
       <div class="resend" title="Check SPAM">
-        Didn't get a code? <a on:click={handleResend}>Resend Code</a>
+
+        Didn't get a code?
+        <!-- svelte-ignore a11y-missing-attribute -->
+        <a on:click={handleResend}>Resend Code</a>
       </div>
     </div>
   </ModalBody>
