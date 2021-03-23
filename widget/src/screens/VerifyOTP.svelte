@@ -146,7 +146,7 @@
     font-size: 0.8rem;
     margin-top: 0.35rem;
     & > a {
-      margin-left: 0.75em;
+      margin-left: 0.25em;
     }
   }
 </style>
