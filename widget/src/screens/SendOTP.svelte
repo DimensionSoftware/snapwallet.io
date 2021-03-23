@@ -83,6 +83,7 @@
         <a
           on:click={() => {
             isUsingPhoneNumber = true
+            // clear so verify doesn't use this value
             userStore.setEmailAddress('')
           }}>Use my phone</a
         >
@@ -108,6 +109,7 @@
         <a
           on:click={() => {
             isUsingPhoneNumber = false
+            // clear so verify doesn't use this value
             userStore.setPhoneNumber('')
           }}>Use my email</a
         >
