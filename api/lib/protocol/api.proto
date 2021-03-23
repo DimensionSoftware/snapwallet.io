@@ -86,7 +86,7 @@ message PricingDataRequest {}
 //
 // the pricing rate map; the keys are currency symbols and the values are the rates
 message PricingRate {
-  map<string,float> rate = 1;
+  map<string,double> rate = 1;
 }
 
 // PricingDataResponse
@@ -325,22 +325,17 @@ message WyrePaymentMethod {
   repeated string depositable_currencies = 7;
 }
 
-// 2. quote
-// 3. confirm
-// 4. webhooks on transfer
-
 message WyrePaymentMethods {
   repeated WyrePaymentMethod payment_methods = 1;
 }
 
 message WyreCreateTransferRequest {
-  string source = 2;
-  string dest = 3;
-  string source_currency = 4;
-  string dest_currency = 5;
+  string source = 1;
+  string dest = 2;
+  string dest_currency = 3;
   oneof amount {
-    string source_amount = 6;
-    string dest_amount = 7;
+    double source_amount = 4;
+    double dest_amount = 5;
   }
 }
 

@@ -565,7 +565,7 @@ resp ex:
 // CreateAccount https://docs.sendwyre.com/docs/create-account
 
 // PricingRate represents rates keyed by currency symbol for a particular type of exchange
-type PricingRate map[string]float32
+type PricingRate map[string]float64
 
 // PricingRates represents rates across all markets
 type PricingRates = map[string](PricingRate)

@@ -31,6 +31,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
+	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
 	"github.com/lithammer/shortuuid/v3"
@@ -883,28 +884,53 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 		return nil, err
 	}
 
-	var wyreAccountID account.ID
+	var wyreAccount *account.Account
 	{
 		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
 		if err != nil {
 			return nil, err
 		}
 		if len(accounts) > 0 {
-			wyreAccountID = accounts[0].ID
+			wyreAccount = accounts[0]
 		}
 	}
 
-	pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccountID)
+	pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccount.ID)
 	if err != nil {
 		return nil, err
 	}
 
+	var source *paymentmethod.PaymentMethod
 	for _, pm := range pms {
 		if pm.ID == paymentmethod.ID(req.Source) {
-			// good to go
-			return &proto.WyreTransfer{}, nil
+			source = pm
 		}
 	}
+	if source == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "source %s is not a payment method ID belonging to this user", req.Source)
+	}
 
-	return nil, status.Errorf(codes.InvalidArgument, "source %s is not a payment method ID belonging to this user", req.Source)
+	// TODO: more validation
+	{
+		req := wyre.CreateTransferRequest{
+			Source:         "paymentmethod:" + string(source.ID),
+			SourceCurrency: "USD",
+			Dest:           req.Dest,
+			DestCurrency:   req.DestCurrency,
+			Message:        "TODO",
+
+			DestAmount:   req.GetDestAmount(),
+			SourceAmount: req.GetSourceAmount(),
+		}.WithDefaults()
+
+		transfer, err := s.Wyre.CreateTransfer(wyreAccount.SecretKey, req)
+		if err != nil {
+			return nil, err
+
+		}
+		fmt.Printf("WYRE TRANSFER RESP: %#v", transfer)
+
+	}
+
+	return &proto.WyreTransfer{}, nil
 }

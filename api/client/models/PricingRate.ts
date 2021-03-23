@@ -25,7 +25,7 @@ export class PricingRate {
             "name": "rate",
             "baseName": "rate",
             "type": "{ [key: string]: number; }",
-            "format": "float"
+            "format": "double"
         }    ];
 
     static getAttributeTypeMap() {
