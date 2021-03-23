@@ -52,7 +52,7 @@
     : selectedDestinationPrice
 
   $: fakePrice = 10_000
-  $: nextRoute = Routes.PLAID_LINK
+  $: nextRoute = Routes.PROFILE
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
@@ -87,6 +87,7 @@
       if (hasWyrePaymentMethods && hasWyreAccount)
         nextRoute = Routes.CHECKOUT_OVERVIEW
       else if (hasWyrePaymentMethods) nextRoute = Routes.PROFILE
+      else nextRoute = Routes.PLAID_LINK
       return
     }
 
