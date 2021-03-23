@@ -1,6 +1,6 @@
 import { paymentMethodStore } from '../stores/PaymentMethodStore'
 import { Logger } from '.'
-import { PusherMessages } from '../constants'
+import { PusherServerMessages, PusherClientMessages } from '../constants'
 
 const handleWyrePaymentMethodUpdates = data => {
   Logger.debug(data)
@@ -23,15 +23,33 @@ const tryInitializePusher = () => {
     })
     const channel = window.__SOCKET.subscribe(userID)
 
-    channel.bind(PusherMessages.WYRE_PM_UPDATED, handleWyrePaymentMethodUpdates)
+    channel.bind(
+      PusherServerMessages.WYRE_PM_UPDATED,
+      handleWyrePaymentMethodUpdates,
+    )
     Logger.debug('PUSHER LOADED')
   }
 }
 
 export const PusherUtil = (() => {
+  /**
+   * Initial setup of pusher.
+   */
   const setup = () => {
     window.tryInitializePusher = tryInitializePusher
   }
 
-  return { setup }
+  /**
+   * Send messages to the server over the user channel.
+   *
+   * @param eventName The event name to be sent to the server.
+   * @param data Any data expected by the server for the event
+   */
+  const send = (eventName: PusherClientMessages, data: object = {}) => {
+    if (!window.Pusher || !window.__SOCKET) return
+    const userID = window.AUTH_MANAGER.viewerUserID()
+    window.__SOCKET.trigger(`client-${userID}`, eventName, data)
+  }
+
+  return { setup, send }
 })()

@@ -1,29 +1,15 @@
 import App from './App.svelte'
 import { AuthManager, genAPIClient } from './auth'
-import { Logger } from './util'
 import { PusherUtil } from './util/pusher_util'
 
+// Auth
 window.AUTH_MANAGER = new AuthManager()
 window.AUTH_MANAGER.watch()
 window.API = genAPIClient(window.AUTH_MANAGER)
+window.AUTH_MANAGER.addEventListeners()
 
+// Pusher
 PusherUtil.setup()
-
-// a test
-window.addEventListener('logout', () => {
-  Logger.debug('viewer has logged out')
-})
-
-window.addEventListener('prelogout', () => {
-  const expirationEpoch = window.AUTH_MANAGER.getSessionExpiration()
-  const expirationDate = new Date(expirationEpoch)
-  // TODO: use ^^ for countdown input
-
-  Logger.debug(`viewer will be logged out at: ${expirationDate}`)
-
-  // TODO pop inactive session dialog up
-  // TODO either reactivate session via getAccessToken() or logout()
-})
 
 const queryParams = new URLSearchParams(window.location.search)
 
