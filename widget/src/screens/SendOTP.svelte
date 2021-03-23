@@ -65,7 +65,7 @@
 
 <ModalContent {animation}>
   <ModalBody>
-    <ModalHeader hideBackButton>Login or Sign Up</ModalHeader>
+    <ModalHeader>Login or Sign Up</ModalHeader>
     {#if !isUsingPhoneNumber}
       <div in:fly={{ y: 25, duration: 300 }}>
         <Label label="Your Email">

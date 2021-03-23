@@ -13,7 +13,7 @@
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes, APIErrors } from './constants'
-  import { authedRouteOptions, isJWTValid, Logger, parseJwt } from './util'
+  import { authedRouteOptions, isJWTValid, Logger } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
   import FileUpload from './screens/FileUpload.svelte'
@@ -26,7 +26,11 @@
 
   // Handler for routing condition failure
   const routeConditionsFailed = (event: any): boolean => {
-    Logger.debug('route conditions failed', event.detail)
+    Logger.debug(
+      'route conditions failed',
+      event.detail,
+      $userStore.lastKnownRoute,
+    )
     const isAccessingAuthRoutes = [Routes.SEND_OTP, Routes.VERIFY_OTP].includes(
       event.detail.location,
     )
@@ -36,6 +40,14 @@
       pop()
       return false
     }
+
+    // Allow back from OTP screens
+    if ($userStore.lastKnownRoute === $location) {
+      userStore.updateLastKnownRoute(Routes.ROOT)
+      push(Routes.ROOT)
+      return
+    }
+
     // Sets the last known route for redirect
     // upon successful auth/reauth.
     userStore.updateLastKnownRoute($location as Routes)
