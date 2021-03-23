@@ -43,6 +43,12 @@
       return
     }
 
+    if (phoneVerificationOnly)
+      return window.API.fluxChangeViewerPhone({
+        code,
+        phone: $userStore.phoneNumber,
+      })
+
     return window.API.fluxOneTimePasscodeVerify({
       code,
       emailOrPhone,
@@ -95,12 +101,16 @@
 
     try {
       const resp = await verifyOTP()
-      window.AUTH_MANAGER.login(resp.tokens)
-      Logger.debug('Logged in')
-      window.tryInitializePusher()
       let nextRoute = phoneVerificationOnly
         ? Routes.FILE_UPLOAD
         : $userStore.lastKnownRoute
+
+      if (!phoneVerificationOnly) {
+        window.AUTH_MANAGER.login(resp.tokens)
+        Logger.debug('Logged in')
+        window.tryInitializePusher()
+      }
+
       setTimeout(() => push(nextRoute), 700)
     } catch (e) {
       if (e.body?.code) {
