@@ -179,6 +179,10 @@ export class AuthManager {
     return parsed.sub
   }
 
+  public getSessionExpiration(): number {
+    return this.sessionExpiresAt
+  }
+
   // watch for session changes so a logout message can be emitted
   public watch() {
     setInterval(() => {
