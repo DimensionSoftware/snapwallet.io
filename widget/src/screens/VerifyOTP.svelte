@@ -29,7 +29,7 @@
     Logger.debug('Verifying using OTP code:', code)
     return await window.API.fluxOneTimePasscodeVerify({
       code,
-      emailOrPhone: $userStore.emailAddress,
+      emailOrPhone: $userStore.phoneNumber || $userStore.emailAddress,
     })
   }
 

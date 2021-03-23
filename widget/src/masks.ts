@@ -29,14 +29,17 @@ export const maskValue = (
  * @param maskType The mask to use for unmasking the given value.
  */
 export const unMaskValue = (val: string, mask: Masks): string => {
-  if (!val || !mask) return val
-  const minChars = mask.length
+  if (!val || !mask || val.length <= 1) return val
+  const minChars = mask.split('')
   const splitVal = val.split('')
-  return [...new Array(minChars)].reduce((acc, v, index) => {
-    if (mask[index] === 'x' && splitVal[index])
-      return `${acc}${splitVal[index]}`
-    return acc
-  }, '')
+  return minChars
+    .map((v, index) => {
+      if (v === 'x') {
+        return splitVal[index] || ''
+      }
+      return ''
+    })
+    .join('')
 }
 
 /**
@@ -55,7 +58,6 @@ export const withMaskOnInput = (val?: string, mask?: Masks) => {
       return acc.replace(/x/, v)
     }, mask)
     .split('x')[0]
-    .trim()
 }
 
 /**
@@ -66,7 +68,7 @@ export const withMaskOnInput = (val?: string, mask?: Masks) => {
  * @param mask The mask to validate input for.
  */
 export const isValidMaskInput = (val = '', mask) => {
-  if ([Masks.INTL_DATE, Masks.SSN, Masks.US_DATE].includes(mask))
+  if ([Masks.INTL_DATE, Masks.SSN, Masks.US_DATE, Masks.PHONE].includes(mask))
     return /\d(-\d)?/.test(val)
   // Don't prevent user from typing if no match
   return true
