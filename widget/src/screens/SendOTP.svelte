@@ -31,7 +31,7 @@
         const rawPhone = unMaskValue($userStore.phoneNumber, Masks.PHONE)
         let isPhoneValid = vld8.isMobilePhone(rawPhone)
         if (!isPhoneValid)
-          return (document.querySelector('input[type="phone"]') as any).focus()
+          return (document.querySelector('input[type="tel"]') as any).focus()
       }
 
       isMakingRequest = true
@@ -90,7 +90,7 @@
           autocomplete="on"
           autofocus
           required
-          type="phone"
+          type="tel"
           mask={Masks.PHONE}
           placeholder="1 (222) 333-4444"
           defaultValue={$userStore.phoneNumber}
