@@ -1,36 +1,13 @@
 import App from './App.svelte'
 import { AuthManager, genAPIClient } from './auth'
-import { paymentMethodStore } from './stores/PaymentMethodStore'
 import { Logger } from './util'
+import { PusherUtil } from './util/pusher_util'
 
 window.AUTH_MANAGER = new AuthManager()
 window.AUTH_MANAGER.watch()
 window.API = genAPIClient(window.AUTH_MANAGER)
 
-window.tryInitializePusher = function tryInitializePusher() {
-  if (window.Pusher) {
-    // Use Logger to control log output for builds
-    // See env.example DEBUG variable
-    window.Pusher.log = Logger.debug
-    window.Pusher.logToConsole = true
-  }
-
-  const userID = window.AUTH_MANAGER.viewerUserID()
-  if (userID && !window.__SOCKET) {
-    window.__SOCKET = new window.Pusher('dd280d42ccafc24e19ff', {
-      cluster: 'us3',
-      encrypted: true,
-    })
-
-    const channel = window.__SOCKET.subscribe(userID)
-    channel.bind('WYRE_PAYMENT_METHODS_UPDATED', data => {
-      Logger.debug(data)
-      paymentMethodStore.fetchWyrePaymentMethods()
-    })
-
-    Logger.debug('PUSHER LOADED')
-  }
-}
+PusherUtil.setup()
 
 // a test
 window.addEventListener('logout', () => {

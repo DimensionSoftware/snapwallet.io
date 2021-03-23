@@ -1,5 +1,5 @@
 import nodeDebug from 'debug'
-import { JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY } from './constants'
+import { JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY } from '../constants'
 import * as CRYPTO_SVGS from 'svelte-cryptoicon'
 
 // HACK: this lib. does not offer a good
@@ -16,7 +16,7 @@ import {
   SecurityAuthentication,
   RequestContext,
 } from 'api-client'
-import { FluxBearerAuthentication } from './auth'
+import { FluxBearerAuthentication } from '../auth'
 
 // pure fns
 // ---------

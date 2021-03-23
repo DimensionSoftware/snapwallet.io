@@ -2,21 +2,10 @@
   import { pop } from 'svelte-spa-router'
   import FaIcon from 'svelte-awesome'
   import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
+  import { ParentMessenger } from '../util/parent_messenger'
 
   export let hideCloseButton = false
   export let hideBackButton = false
-
-  const handleExit = () => {
-    const event = JSON.stringify({
-      event: '__SNAP_EXIT',
-    })
-    if (window.parent) {
-      window.parent.postMessage(event, '*')
-    }
-    if ((window as any).ReactNativeWebView) {
-      ;(window as any).ReactNativeWebView?.postMessage(event)
-    }
-  }
 </script>
 
 <div class="modal-header">
@@ -32,7 +21,7 @@
   </div>
   <div
     class:hidden={hideCloseButton}
-    on:click={handleExit}
+    on:click={ParentMessenger.exit}
     class="modal-header-close-button"
   >
     <svg

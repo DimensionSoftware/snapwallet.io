@@ -39,3 +39,11 @@ export enum Routes {
 export enum APIErrors {
   UNAUTHORIZED = 16,
 }
+
+export enum ParentMessages {
+  EXIT = '__SNAP_EXIT',
+}
+
+export enum PusherMessages {
+  WYRE_PM_UPDATED = 'WYRE_PAYMENT_METHODS_UPDATED',
+}
