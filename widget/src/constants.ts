@@ -33,7 +33,6 @@ export enum Routes {
   PLAID_LINK = '/link-bank',
   CHECKOUT_OVERVIEW = '/checkout-overview',
   ADDRESS = '/address',
-  ADDRESS_2 = '/address-2',
   FILE_UPLOAD = '/file-upload',
 }
 

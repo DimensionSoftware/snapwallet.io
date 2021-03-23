@@ -16,7 +16,6 @@
   import { authedRouteOptions, isJWTValid, Logger, parseJwt } from './util'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
-  import Address2 from './screens/Address2.svelte'
   import FileUpload from './screens/FileUpload.svelte'
 
   // Querystring provided props, see main.ts.
