@@ -853,7 +853,7 @@
           "type": "object",
           "additionalProperties": {
             "type": "number",
-            "format": "float"
+            "format": "double"
           }
         }
       },
@@ -1134,17 +1134,16 @@
         "dest": {
           "type": "string"
         },
-        "sourceCurrency": {
-          "type": "string"
-        },
         "destCurrency": {
           "type": "string"
         },
         "sourceAmount": {
-          "type": "string"
+          "type": "number",
+          "format": "double"
         },
         "destAmount": {
-          "type": "string"
+          "type": "number",
+          "format": "double"
         }
       }
     },

@@ -15,10 +15,9 @@ import { HttpFile } from '../http/http';
 export class WyreCreateTransferRequest {
     'source'?: string;
     'dest'?: string;
-    'sourceCurrency'?: string;
     'destCurrency'?: string;
-    'sourceAmount'?: string;
-    'destAmount'?: string;
+    'sourceAmount'?: number;
+    'destAmount'?: number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -36,12 +35,6 @@ export class WyreCreateTransferRequest {
             "format": ""
         },
         {
-            "name": "sourceCurrency",
-            "baseName": "sourceCurrency",
-            "type": "string",
-            "format": ""
-        },
-        {
             "name": "destCurrency",
             "baseName": "destCurrency",
             "type": "string",
@@ -50,14 +43,14 @@ export class WyreCreateTransferRequest {
         {
             "name": "sourceAmount",
             "baseName": "sourceAmount",
-            "type": "string",
-            "format": ""
+            "type": "number",
+            "format": "double"
         },
         {
             "name": "destAmount",
             "baseName": "destAmount",
-            "type": "string",
-            "format": ""
+            "type": "number",
+            "format": "double"
         }    ];
 
     static getAttributeTypeMap() {
