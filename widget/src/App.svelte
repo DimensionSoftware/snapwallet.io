@@ -17,6 +17,8 @@
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
   import FileUpload from './screens/FileUpload.svelte'
+  import SendOtp from './screens/SendOTP.svelte'
+  import VerifyOtp from './screens/VerifyOTP.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -86,6 +88,18 @@
     }),
     [Routes.FILE_UPLOAD]: wrap({
       ...authedRouteOptions(FileUpload),
+    }),
+    [Routes.PROFILE_SEND_SMS]: wrap({
+      ...authedRouteOptions(SendOtp),
+      props: {
+        phoneVerificationOnly: true,
+      },
+    }),
+    [Routes.PROFILE_VERIFY_SMS]: wrap({
+      ...authedRouteOptions(VerifyOtp),
+      props: {
+        phoneVerificationOnly: true,
+      },
     }),
     '*': NotFound as any,
   }
