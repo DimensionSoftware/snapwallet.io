@@ -35,7 +35,12 @@ window.addEventListener('logout', () => {
 })
 
 window.addEventListener('prelogout', () => {
-  Logger.debug('viewer has 5 minutes before logout')
+  const expirationEpoch = window.AUTH_MANAGER.getSessionExpiration()
+  const expirationDate = new Date(expirationEpoch)
+  // TODO: use ^^ for countdown input
+
+  Logger.debug(`viewer will be logged out at: ${expirationDate}`)
+
   // TODO pop inactive session dialog up
   // TODO either reactivate session via getAccessToken() or logout()
 })
