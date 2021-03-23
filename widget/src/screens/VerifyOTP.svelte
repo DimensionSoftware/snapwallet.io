@@ -12,7 +12,9 @@
   import { Logger, onEnterPressed } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
-import type { OneTimePasscodeVerifyResponse } from 'api-client';
+  import type { OneTimePasscodeVerifyResponse } from 'api-client'
+
+  export let phoneVerificationOnly: boolean = false
 
   let animation = 'left'
   let code = ''
@@ -75,7 +77,10 @@ import type { OneTimePasscodeVerifyResponse } from 'api-client';
         error: true,
       })
       setTimeout(() => {
-        push(Routes.SEND_OTP)
+        let nextRoute = phoneVerificationOnly
+          ? Routes.PROFILE_SEND_SMS
+          : Routes.SEND_OTP
+        push(nextRoute)
       }, 1700)
     } finally {
       setTimeout(() => {
@@ -93,7 +98,10 @@ import type { OneTimePasscodeVerifyResponse } from 'api-client';
       window.AUTH_MANAGER.login(resp.tokens)
       Logger.debug('Logged in')
       window.tryInitializePusher()
-      setTimeout(() => push($userStore.lastKnownRoute), 700)
+      let nextRoute = phoneVerificationOnly
+        ? Routes.FILE_UPLOAD
+        : $userStore.lastKnownRoute
+      setTimeout(() => push(nextRoute), 700)
     } catch (e) {
       if (e.body?.code) {
         toaster.pop({ msg: e.body?.message, error: true })
@@ -137,7 +145,6 @@ import type { OneTimePasscodeVerifyResponse } from 'api-client';
         />
       </Label>
       <div class="resend" title="Check SPAM">
-
         Didn't get a code?
         <!-- svelte-ignore a11y-missing-attribute -->
         <a on:click={handleResend}>Resend Code</a>
