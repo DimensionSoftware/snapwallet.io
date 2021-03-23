@@ -27,7 +27,6 @@
   import CryptoSelector from '../components/selectors/CryptoSelector.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import VStep from '../components/VStep.svelte'
-  import VerticalStepper from '../components/VerticalStepper.svelte'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
