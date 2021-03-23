@@ -24,7 +24,7 @@
 
 <svelte:window on:keydown={handleClose} on:click={handleClose} />
 
-<div out:fly={{y: 15, duration: 125}} class="popup-selector">
+<div out:fly={{ y: 15, duration: 125 }} class="popup-selector">
   <div class="popup-selector-header">
     <div class="popup-title">{headerTitle}</div>
     <div on:click={() => dispatch('close')} class="close-icon">
@@ -56,7 +56,7 @@
     right: 0;
     background-color: white;
     box-shadow: 0px -7px 25px 10px var(--theme-shadow-color);
-    animation: slideUp .2s $easeOutExpo forwards;
+    animation: slideUp 0.2s $easeOutExpo forwards;
   }
 
   .popup-selector-header {

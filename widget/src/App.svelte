@@ -112,7 +112,6 @@
       })
     }
   })
-
 </script>
 
 <div id="modal">

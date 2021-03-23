@@ -25,7 +25,7 @@ export class AuthManager {
     if (!parsed.exp) {
       return
     }
-    this.sessionExpiresAt = parsed.exp
+    this.sessionExpiresAt = parseInt(parsed.exp) * 1000
   }
 
   // to avoid duplicate calls, we can only use a refresh token to exchange once
@@ -89,30 +89,34 @@ export class AuthManager {
       return true
     }
 
-    const isTimeLeft = parsed.exp > Math.floor(add10seconds(Date.now()) / 1000)
+    const exp = parseInt(parsed.exp)
+    if (isNaN(exp)) {
+      return true
+    }
 
-    return !isTimeLeft
+    const accessTokenExpiresAt = exp * 1000
+
+    return addEpochBuffer(Date.now()) > accessTokenExpiresAt
   }
 
   private refreshTokenIsExpired(): boolean {
-    const isTimeLeft =
-      this.sessionExpiresAt > Math.floor(add10seconds(Date.now()) / 1000)
-
-    return !isTimeLeft
+    return addEpochBuffer(Date.now()) > this.sessionExpiresAt
   }
 
   private refreshTokenIsExpiredSoon(): boolean {
-    const isTimeLeft =
-      this.sessionExpiresAt > Math.floor((Date.now() + this.prelogoutThreshold) / 1000)
-
-    return !isTimeLeft
+    return Date.now() + this.prelogoutThreshold > this.sessionExpiresAt
   }
 
-  // exchanges and updates tokens
+  // exchanges and updates tokens -- and makes sure only one is in flight at a time to not violate RTR
   private async tokenExchange(): Promise<void> {
     if (!this.tokenExchangePromise) {
+      const token = this.getCurrentRefreshToken()
+      if (!token) {
+        return
+      }
+
       this.tokenExchangePromise = this.unauthenticatedAPI.fluxTokenExchange({
-        refreshToken: this.getCurrentRefreshToken(),
+        refreshToken: token,
       })
       const resp = await this.tokenExchangePromise
       this.tokenExchangePromise = null
@@ -127,7 +131,7 @@ export class AuthManager {
       if (!parsed.exp) {
         throw new Error('refresh token claims lacks an expiration')
       }
-      this.sessionExpiresAt = parsed.exp
+      this.sessionExpiresAt = parseInt(parsed.exp) * 1000
     } else {
       await this.tokenExchangePromise
     }
@@ -159,7 +163,7 @@ export class AuthManager {
     if (!parsed.exp) {
       throw new Error('refresh token claims lacks an expiration')
     }
-    this.sessionExpiresAt = parsed.exp
+    this.sessionExpiresAt = parseInt(parsed.exp) * 1000
   }
 
   public logout() {
@@ -232,6 +236,6 @@ export function genAPIClient(authManager?: AuthManager): FluxApi {
   return new FluxApi(config)
 }
 
-function add10seconds(epoch: number): number {
-  return epoch + 10 * 1000
+function addEpochBuffer(epoch: number): number {
+  return epoch + 5 * 1000
 }

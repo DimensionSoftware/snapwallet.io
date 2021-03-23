@@ -29,12 +29,11 @@
   const verifyOTP = async () => {
     Logger.debug('Verifying using OTP code:', code)
     const emailOrPhone = $userStore.phoneNumber || $userStore.emailAddress
-    if (!emailOrPhone)
-    document.getElementById('code').focus()
-      return toaster.pop({
-        msg: 'Check for your code and try again!',
-        error: true,
-      })
+    if (!emailOrPhone) document.getElementById('code').focus()
+    return toaster.pop({
+      msg: 'Check for your code and try again!',
+      error: true,
+    })
 
     return await window.API.fluxOneTimePasscodeVerify({
       code,

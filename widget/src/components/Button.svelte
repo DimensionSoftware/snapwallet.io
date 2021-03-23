@@ -95,17 +95,17 @@
       display: inline-block;
       transform: translateZ(1px);
       opacity: 0;
-      transition: opacity .2s ease-out;
-    > div {
-      display: inline-block;
-      width: 32px;
-      height: 32px;
-      margin: 8px;
-      border-radius: 50%;
-      background: rgba(#fff, .8);
-      background: radial-gradient(rgba(#fff,.5), #fff);
-      animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-    }
+      transition: opacity 0.2s ease-out;
+      > div {
+        display: inline-block;
+        width: 32px;
+        height: 32px;
+        margin: 8px;
+        border-radius: 50%;
+        background: rgba(#fff, 0.8);
+        background: radial-gradient(rgba(#fff, 0.5), #fff);
+        animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+      }
     }
     @keyframes lds-circle {
       0%,
