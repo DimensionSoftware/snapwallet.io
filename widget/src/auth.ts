@@ -196,6 +196,7 @@ export class AuthManager {
     setInterval(() => {
       if (this.refreshTokenIsExpired()) {
         this.logout()
+        return
       }
 
       if (this.refreshTokenIsExpiredSoon()) {
