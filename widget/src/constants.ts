@@ -27,6 +27,8 @@ export const JWT_ACCESS_TOKEN_KEY = '__SNAP_ACCESS'
 export enum Routes {
   ROOT = '/',
   SELECT_PAYMENT = '/select-payment',
+  PROFILE_SEND_SMS = '/profile-send-sms',
+  PROFILE_VERIFY_SMS = '/profile-verify-sms',
   PROFILE = '/profile',
   SEND_OTP = '/send-otp',
   VERIFY_OTP = '/verify-otp',
