@@ -13,6 +13,7 @@ import { Logger, parseJwt } from './util'
 export class AuthManager {
   // to avoid cycle
   private readonly unauthenticatedAPI = genAPIClient()
+  private readonly prelogoutThreshold = 60 * 1000
 
   private sessionExpiresAt = 0
 
@@ -96,6 +97,13 @@ export class AuthManager {
   private refreshTokenIsExpired(): boolean {
     const isTimeLeft =
       this.sessionExpiresAt > Math.floor(add10seconds(Date.now()) / 1000)
+
+    return !isTimeLeft
+  }
+
+  private refreshTokenIsExpiredSoon(): boolean {
+    const isTimeLeft =
+      this.sessionExpiresAt > Math.floor((Date.now() + this.prelogoutThreshold) / 1000)
 
     return !isTimeLeft
   }
@@ -188,6 +196,10 @@ export class AuthManager {
     setInterval(() => {
       if (this.refreshTokenIsExpired()) {
         this.logout()
+      }
+
+      if (this.refreshTokenIsExpiredSoon()) {
+        window.dispatchEvent(new Event('prelogout'))
       }
     }, 30 * 1000)
   }
