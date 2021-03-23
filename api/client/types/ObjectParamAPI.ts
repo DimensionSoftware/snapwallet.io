@@ -35,8 +35,11 @@ import { User } from '../models/User';
 import { UserAccountRemediation } from '../models/UserAccountRemediation';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
-import { WyreGetPaymentMethodsResponse } from '../models/WyreGetPaymentMethodsResponse';
+import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
+import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
+import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
+import { WyreTransfers } from '../models/WyreTransfers';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
 import { ObservableFluxApi } from "./ObservableAPI";
@@ -132,7 +135,43 @@ export interface FluxApiFluxViewerDataRequest {
 export interface FluxApiFluxViewerProfileDataRequest {
 }
 
+export interface FluxApiFluxWyreConfirmTransferRequest {
+    /**
+     * 
+     * @type string
+     * @memberof FluxApifluxWyreConfirmTransfer
+     */
+    transferId: string
+    /**
+     * 
+     * @type WyreConfirmTransferRequest
+     * @memberof FluxApifluxWyreConfirmTransfer
+     */
+    body: WyreConfirmTransferRequest
+}
+
+export interface FluxApiFluxWyreCreateTransferRequest {
+    /**
+     * 
+     * @type WyreCreateTransferRequest
+     * @memberof FluxApifluxWyreCreateTransfer
+     */
+    body: WyreCreateTransferRequest
+}
+
 export interface FluxApiFluxWyreGetPaymentMethodsRequest {
+}
+
+export interface FluxApiFluxWyreGetTransferRequest {
+    /**
+     * 
+     * @type string
+     * @memberof FluxApifluxWyreGetTransfer
+     */
+    transferId: string
+}
+
+export interface FluxApiFluxWyreGetTransfersRequest {
 }
 
 export interface FluxApiFluxWyreWebhookRequest {
@@ -266,8 +305,36 @@ export class ObjectFluxApi {
     /**
      * @param param the request object
      */
-    public fluxWyreGetPaymentMethods(param: FluxApiFluxWyreGetPaymentMethodsRequest, options?: Configuration): Promise<WyreGetPaymentMethodsResponse> {
+    public fluxWyreConfirmTransfer(param: FluxApiFluxWyreConfirmTransferRequest, options?: Configuration): Promise<any> {
+        return this.api.fluxWyreConfirmTransfer(param.transferId, param.body,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreCreateTransfer(param: FluxApiFluxWyreCreateTransferRequest, options?: Configuration): Promise<any> {
+        return this.api.fluxWyreCreateTransfer(param.body,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreGetPaymentMethods(param: FluxApiFluxWyreGetPaymentMethodsRequest, options?: Configuration): Promise<WyrePaymentMethods> {
         return this.api.fluxWyreGetPaymentMethods( options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreGetTransfer(param: FluxApiFluxWyreGetTransferRequest, options?: Configuration): Promise<any> {
+        return this.api.fluxWyreGetTransfer(param.transferId,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreGetTransfers(param: FluxApiFluxWyreGetTransfersRequest, options?: Configuration): Promise<WyreTransfers> {
+        return this.api.fluxWyreGetTransfers( options).toPromise();
     }
 	
     /**

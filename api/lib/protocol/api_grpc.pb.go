@@ -63,7 +63,11 @@ type FluxClient interface {
 	// ...
 	SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*ProfileDataInfo, error)
 	WyreWebhook(ctx context.Context, in *WyreWebhookRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
-	WyreGetPaymentMethods(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyreGetPaymentMethodsResponse, error)
+	WyreGetPaymentMethods(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyrePaymentMethods, error)
+	WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
+	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
+	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
+	WyreGetTransfers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyreTransfers, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -192,9 +196,45 @@ func (c *fluxClient) WyreWebhook(ctx context.Context, in *WyreWebhookRequest, op
 	return out, nil
 }
 
-func (c *fluxClient) WyreGetPaymentMethods(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyreGetPaymentMethodsResponse, error) {
-	out := new(WyreGetPaymentMethodsResponse)
+func (c *fluxClient) WyreGetPaymentMethods(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyrePaymentMethods, error) {
+	out := new(WyrePaymentMethods)
 	err := c.cc.Invoke(ctx, "/Flux/WyreGetPaymentMethods", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
+	out := new(WyreTransfer)
+	err := c.cc.Invoke(ctx, "/Flux/WyreCreateTransfer", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
+	out := new(WyreTransfer)
+	err := c.cc.Invoke(ctx, "/Flux/WyreConfirmTransfer", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
+	out := new(WyreTransfer)
+	err := c.cc.Invoke(ctx, "/Flux/WyreGetTransfer", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreGetTransfers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyreTransfers, error) {
+	out := new(WyreTransfers)
+	err := c.cc.Invoke(ctx, "/Flux/WyreGetTransfers", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -267,7 +307,11 @@ type FluxServer interface {
 	// ...
 	SaveProfileData(context.Context, *SaveProfileDataRequest) (*ProfileDataInfo, error)
 	WyreWebhook(context.Context, *WyreWebhookRequest) (*emptypb.Empty, error)
-	WyreGetPaymentMethods(context.Context, *emptypb.Empty) (*WyreGetPaymentMethodsResponse, error)
+	WyreGetPaymentMethods(context.Context, *emptypb.Empty) (*WyrePaymentMethods, error)
+	WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransfer, error)
+	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransfer, error)
+	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error)
+	WyreGetTransfers(context.Context, *emptypb.Empty) (*WyreTransfers, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -321,8 +365,20 @@ func (UnimplementedFluxServer) SaveProfileData(context.Context, *SaveProfileData
 func (UnimplementedFluxServer) WyreWebhook(context.Context, *WyreWebhookRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreWebhook not implemented")
 }
-func (UnimplementedFluxServer) WyreGetPaymentMethods(context.Context, *emptypb.Empty) (*WyreGetPaymentMethodsResponse, error) {
+func (UnimplementedFluxServer) WyreGetPaymentMethods(context.Context, *emptypb.Empty) (*WyrePaymentMethods, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetPaymentMethods not implemented")
+}
+func (UnimplementedFluxServer) WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransfer, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateTransfer not implemented")
+}
+func (UnimplementedFluxServer) WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransfer, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreConfirmTransfer not implemented")
+}
+func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfer not implemented")
+}
+func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *emptypb.Empty) (*WyreTransfers, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfers not implemented")
 }
 func (UnimplementedFluxServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
@@ -577,6 +633,78 @@ func _Flux_WyreGetPaymentMethods_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_WyreCreateTransfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreCreateTransferRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreCreateTransfer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreCreateTransfer",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreCreateTransfer(ctx, req.(*WyreCreateTransferRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreConfirmTransfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreConfirmTransferRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreConfirmTransfer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreConfirmTransfer",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreConfirmTransfer(ctx, req.(*WyreConfirmTransferRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreGetTransfer_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreGetTransferRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreGetTransfer(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreGetTransfer",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreGetTransfer(ctx, req.(*WyreGetTransferRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreGetTransfers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreGetTransfers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreGetTransfers",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreGetTransfers(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Flux_UploadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UploadFileRequest)
 	if err := dec(in); err != nil {
@@ -671,6 +799,22 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WyreGetPaymentMethods",
 			Handler:    _Flux_WyreGetPaymentMethods_Handler,
+		},
+		{
+			MethodName: "WyreCreateTransfer",
+			Handler:    _Flux_WyreCreateTransfer_Handler,
+		},
+		{
+			MethodName: "WyreConfirmTransfer",
+			Handler:    _Flux_WyreConfirmTransfer_Handler,
+		},
+		{
+			MethodName: "WyreGetTransfer",
+			Handler:    _Flux_WyreGetTransfer_Handler,
+		},
+		{
+			MethodName: "WyreGetTransfers",
+			Handler:    _Flux_WyreGetTransfers_Handler,
 		},
 		{
 			MethodName: "UploadFile",

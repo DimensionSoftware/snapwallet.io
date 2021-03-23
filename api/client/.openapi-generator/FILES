@@ -45,8 +45,11 @@ models/User.ts
 models/UserAccountRemediation.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
-models/WyreGetPaymentMethodsResponse.ts
+models/WyreConfirmTransferRequest.ts
+models/WyreCreateTransferRequest.ts
 models/WyrePaymentMethod.ts
+models/WyrePaymentMethods.ts
+models/WyreTransfers.ts
 models/WyreWebhookRequest.ts
 models/all.ts
 package.json

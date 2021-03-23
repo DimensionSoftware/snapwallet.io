@@ -35,8 +35,11 @@ import { User } from '../models/User';
 import { UserAccountRemediation } from '../models/UserAccountRemediation';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
-import { WyreGetPaymentMethodsResponse } from '../models/WyreGetPaymentMethodsResponse';
+import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
+import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
+import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
+import { WyreTransfers } from '../models/WyreTransfers';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 import { ObservableFluxApi } from './ObservableAPI';
 
@@ -168,9 +171,41 @@ export class PromiseFluxApi {
     }
 	
     /**
+     * @param transferId 
+     * @param body 
      */
-    public fluxWyreGetPaymentMethods(options?: Configuration): Promise<WyreGetPaymentMethodsResponse> {
+    public fluxWyreConfirmTransfer(transferId: string, body: WyreConfirmTransferRequest, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxWyreConfirmTransfer(transferId, body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param body 
+     */
+    public fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxWyreCreateTransfer(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     */
+    public fluxWyreGetPaymentMethods(options?: Configuration): Promise<WyrePaymentMethods> {
     	const result = this.api.fluxWyreGetPaymentMethods(options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param transferId 
+     */
+    public fluxWyreGetTransfer(transferId: string, options?: Configuration): Promise<any> {
+    	const result = this.api.fluxWyreGetTransfer(transferId, options);
+        return result.toPromise();
+    }
+	
+    /**
+     */
+    public fluxWyreGetTransfers(options?: Configuration): Promise<WyreTransfers> {
+    	const result = this.api.fluxWyreGetTransfers(options);
         return result.toPromise();
     }
 	

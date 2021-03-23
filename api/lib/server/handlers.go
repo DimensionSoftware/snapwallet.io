@@ -834,7 +834,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 
 	return &emptypb.Empty{}, nil
 }
-func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*proto.WyreGetPaymentMethodsResponse, error) {
+func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*proto.WyrePaymentMethods, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
 		return nil, err
@@ -847,7 +847,7 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 			return nil, err
 		}
 		if len(accounts) == 0 {
-			return &proto.WyreGetPaymentMethodsResponse{}, nil
+			return &proto.WyrePaymentMethods{}, nil
 		}
 
 		wyreAccountID = accounts[0].ID
@@ -871,7 +871,7 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 		})
 	}
 
-	return &proto.WyreGetPaymentMethodsResponse{
+	return &proto.WyrePaymentMethods{
 		PaymentMethods: out,
 	}, nil
 }

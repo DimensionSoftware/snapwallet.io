@@ -21,7 +21,10 @@ import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
 import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
 import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
-import { WyreGetPaymentMethodsResponse } from '../models/WyreGetPaymentMethodsResponse';
+import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
+import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
+import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
+import { WyreTransfers } from '../models/WyreTransfers';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
 /**
@@ -539,6 +542,98 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
+     * @param transferId 
+     * @param body 
+     */
+    public async fluxWyreConfirmTransfer(transferId: string, body: WyreConfirmTransferRequest, options?: Configuration): Promise<RequestContext> {
+		let config = options || this.configuration;
+		
+        // verify required parameter 'transferId' is not null or undefined
+        if (transferId === null || transferId === undefined) {
+            throw new RequiredError('Required parameter transferId was null or undefined when calling fluxWyreConfirmTransfer.');
+        }
+
+		
+        // verify required parameter 'body' is not null or undefined
+        if (body === null || body === undefined) {
+            throw new RequiredError('Required parameter body was null or undefined when calling fluxWyreConfirmTransfer.');
+        }
+
+		
+		// Path Params
+    	const localVarPath = '/wyre/transfers/{transferId}/confirm'
+            .replace('{' + 'transferId' + '}', encodeURIComponent(String(transferId)));
+
+		// Make Request Context
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+        // Query Params
+	
+		// Header Params
+	
+		// Form Params
+
+
+		// Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(body, "WyreConfirmTransferRequest", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
+
+        // Apply auth methods
+
+        return requestContext;
+    }
+
+    /**
+     * @param body 
+     */
+    public async fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Promise<RequestContext> {
+		let config = options || this.configuration;
+		
+        // verify required parameter 'body' is not null or undefined
+        if (body === null || body === undefined) {
+            throw new RequiredError('Required parameter body was null or undefined when calling fluxWyreCreateTransfer.');
+        }
+
+		
+		// Path Params
+    	const localVarPath = '/wyre/transfers';
+
+		// Make Request Context
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+        // Query Params
+	
+		// Header Params
+	
+		// Form Params
+
+
+		// Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(body, "WyreCreateTransferRequest", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
+
+        // Apply auth methods
+
+        return requestContext;
+    }
+
+    /**
      */
     public async fluxWyreGetPaymentMethods(options?: Configuration): Promise<RequestContext> {
 		let config = options || this.configuration;
@@ -565,6 +660,66 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         if (authMethod) {
             await authMethod.applySecurityAuthentication(requestContext);
         }
+
+        return requestContext;
+    }
+
+    /**
+     * @param transferId 
+     */
+    public async fluxWyreGetTransfer(transferId: string, options?: Configuration): Promise<RequestContext> {
+		let config = options || this.configuration;
+		
+        // verify required parameter 'transferId' is not null or undefined
+        if (transferId === null || transferId === undefined) {
+            throw new RequiredError('Required parameter transferId was null or undefined when calling fluxWyreGetTransfer.');
+        }
+
+		
+		// Path Params
+    	const localVarPath = '/wyre/transfers/{transferId}'
+            .replace('{' + 'transferId' + '}', encodeURIComponent(String(transferId)));
+
+		// Make Request Context
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+        // Query Params
+	
+		// Header Params
+	
+		// Form Params
+
+
+		// Body Params
+
+        // Apply auth methods
+
+        return requestContext;
+    }
+
+    /**
+     */
+    public async fluxWyreGetTransfers(options?: Configuration): Promise<RequestContext> {
+		let config = options || this.configuration;
+		
+		// Path Params
+    	const localVarPath = '/wyre/transfers';
+
+		// Make Request Context
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+        // Query Params
+	
+		// Header Params
+	
+		// Form Params
+
+
+		// Body Params
+
+        // Apply auth methods
 
         return requestContext;
     }
@@ -1073,16 +1228,16 @@ export class FluxApiResponseProcessor {
      * Unwraps the actual response sent by the server from the response context and deserializes the response content
      * to the expected objects
      *
-     * @params response Response returned by the server for a request to fluxWyreGetPaymentMethods
+     * @params response Response returned by the server for a request to fluxWyreConfirmTransfer
      * @throws ApiException if the response code was not in [200, 299]
      */
-     public async fluxWyreGetPaymentMethods(response: ResponseContext): Promise<WyreGetPaymentMethodsResponse > {
+     public async fluxWyreConfirmTransfer(response: ResponseContext): Promise<any > {
         const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
         if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: WyreGetPaymentMethodsResponse = ObjectSerializer.deserialize(
+            const body: any = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "WyreGetPaymentMethodsResponse", ""
-            ) as WyreGetPaymentMethodsResponse;
+                "any", ""
+            ) as any;
             return body;
         }
         if (isCodeInRange("0", response.httpStatusCode)) {
@@ -1095,10 +1250,158 @@ export class FluxApiResponseProcessor {
 
         // Work around for missing responses in specification, e.g. for petstore.yaml
         if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: WyreGetPaymentMethodsResponse = ObjectSerializer.deserialize(
+            const body: any = ObjectSerializer.deserialize(
                 ObjectSerializer.parse(await response.body.text(), contentType),
-                "WyreGetPaymentMethodsResponse", ""
-            ) as WyreGetPaymentMethodsResponse;
+                "any", ""
+            ) as any;
+            return body;
+        }
+
+        let body = response.body || "";
+    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
+    }
+			
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to fluxWyreCreateTransfer
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async fluxWyreCreateTransfer(response: ResponseContext): Promise<any > {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "any", ""
+            ) as any;
+            return body;
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: RpcStatus = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "RpcStatus", ""
+            ) as RpcStatus;
+            throw new ApiException<RpcStatus>(0, body);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "any", ""
+            ) as any;
+            return body;
+        }
+
+        let body = response.body || "";
+    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
+    }
+			
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to fluxWyreGetPaymentMethods
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async fluxWyreGetPaymentMethods(response: ResponseContext): Promise<WyrePaymentMethods > {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: WyrePaymentMethods = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "WyrePaymentMethods", ""
+            ) as WyrePaymentMethods;
+            return body;
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: RpcStatus = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "RpcStatus", ""
+            ) as RpcStatus;
+            throw new ApiException<RpcStatus>(0, body);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: WyrePaymentMethods = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "WyrePaymentMethods", ""
+            ) as WyrePaymentMethods;
+            return body;
+        }
+
+        let body = response.body || "";
+    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
+    }
+			
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to fluxWyreGetTransfer
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async fluxWyreGetTransfer(response: ResponseContext): Promise<any > {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "any", ""
+            ) as any;
+            return body;
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: RpcStatus = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "RpcStatus", ""
+            ) as RpcStatus;
+            throw new ApiException<RpcStatus>(0, body);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: any = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "any", ""
+            ) as any;
+            return body;
+        }
+
+        let body = response.body || "";
+    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
+    }
+			
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to fluxWyreGetTransfers
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async fluxWyreGetTransfers(response: ResponseContext): Promise<WyreTransfers > {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: WyreTransfers = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "WyreTransfers", ""
+            ) as WyreTransfers;
+            return body;
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: RpcStatus = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "RpcStatus", ""
+            ) as RpcStatus;
+            throw new ApiException<RpcStatus>(0, body);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: WyreTransfers = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "WyreTransfers", ""
+            ) as WyreTransfers;
             return body;
         }
 

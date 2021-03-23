@@ -10,24 +10,23 @@
  * Do not edit the class manually.
  */
 
-import { WyrePaymentMethod } from './WyrePaymentMethod';
 import { HttpFile } from '../http/http';
 
-export class WyreGetPaymentMethodsResponse {
-    'paymentMethods'?: Array<WyrePaymentMethod>;
+export class WyreTransfers {
+    'transfers'?: Array<any>;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "paymentMethods",
-            "baseName": "paymentMethods",
-            "type": "Array<WyrePaymentMethod>",
+            "name": "transfers",
+            "baseName": "transfers",
+            "type": "Array<any>",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return WyreGetPaymentMethodsResponse.attributeTypeMap;
+        return WyreTransfers.attributeTypeMap;
     }
     
     public constructor() {

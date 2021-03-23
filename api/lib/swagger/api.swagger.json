@@ -401,7 +401,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/WyreGetPaymentMethodsResponse"
+              "$ref": "#/definitions/WyrePaymentMethods"
             }
           },
           "default": {
@@ -411,6 +411,126 @@
             }
           }
         },
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/wyre/transfers": {
+      "get": {
+        "operationId": "Flux_WyreGetTransfers",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreTransfers"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Flux"
+        ]
+      },
+      "post": {
+        "operationId": "Flux_WyreCreateTransfer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreTransfer"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreCreateTransferRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/wyre/transfers/{transferId}": {
+      "get": {
+        "operationId": "Flux_WyreGetTransfer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreTransfer"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "transferId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/wyre/transfers/{transferId}/confirm": {
+      "post": {
+        "operationId": "Flux_WyreConfirmTransfer",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreTransfer"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "transferId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreConfirmTransferRequest"
+            }
+          }
+        ],
         "tags": [
           "Flux"
         ]
@@ -885,14 +1005,34 @@
       "description": "response",
       "title": "ViewerDataResponse"
     },
-    "WyreGetPaymentMethodsResponse": {
+    "WyreConfirmTransferRequest": {
       "type": "object",
       "properties": {
-        "paymentMethods": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/WyrePaymentMethod"
-          }
+        "transferId": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreCreateTransferRequest": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "string"
+        },
+        "destAmount": {
+          "type": "string"
         }
       }
     },
@@ -924,6 +1064,31 @@
           "type": "array",
           "items": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "WyrePaymentMethods": {
+      "type": "object",
+      "properties": {
+        "paymentMethods": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WyrePaymentMethod"
+          }
+        }
+      }
+    },
+    "WyreTransfer": {
+      "type": "object"
+    },
+    "WyreTransfers": {
+      "type": "object",
+      "properties": {
+        "transfers": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/WyreTransfer"
           }
         }
       }

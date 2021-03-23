@@ -31,8 +31,11 @@ export * from './User';
 export * from './UserAccountRemediation';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
-export * from './WyreGetPaymentMethodsResponse';
+export * from './WyreConfirmTransferRequest';
+export * from './WyreCreateTransferRequest';
 export * from './WyrePaymentMethod';
+export * from './WyrePaymentMethods';
+export * from './WyreTransfers';
 export * from './WyreWebhookRequest';
 
 import { Address } from './Address';
@@ -68,8 +71,11 @@ import { User } from './User';
 import { UserAccountRemediation } from './UserAccountRemediation';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
-import { WyreGetPaymentMethodsResponse } from './WyreGetPaymentMethodsResponse';
+import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
+import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
 import { WyrePaymentMethod } from './WyrePaymentMethod';
+import { WyrePaymentMethods } from './WyrePaymentMethods';
+import { WyreTransfers } from './WyreTransfers';
 import { WyreWebhookRequest } from './WyreWebhookRequest';
 
 /* tslint:disable:no-unused-variable */
@@ -127,8 +133,11 @@ let typeMap: {[index: string]: any} = {
     "UserAccountRemediation": UserAccountRemediation,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
-    "WyreGetPaymentMethodsResponse": WyreGetPaymentMethodsResponse,
+    "WyreConfirmTransferRequest": WyreConfirmTransferRequest,
+    "WyreCreateTransferRequest": WyreCreateTransferRequest,
     "WyrePaymentMethod": WyrePaymentMethod,
+    "WyrePaymentMethods": WyrePaymentMethods,
+    "WyreTransfers": WyreTransfers,
     "WyreWebhookRequest": WyreWebhookRequest,
 }
 
