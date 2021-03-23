@@ -894,6 +894,9 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 			wyreAccount = accounts[0]
 		}
 	}
+	if wyreAccount == nil {
+		return nil, status.Errorf(codes.FailedPrecondition, "you must have a wyre account to create a transfer")
+	}
 
 	pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccount.ID)
 	if err != nil {
