@@ -68,6 +68,23 @@ type TransferStatusHistoryItem struct {
 	FailedState  string `json:"failedState"`  // ??
 }
 
+type TransferBlockchainTx struct {
+	ID            string  `json:"id"`            // i.e. "TR_XXXXXXXX1"
+	CreatedAt     int64   `json:"createdAt"`     // i.e. 1541552388000
+	TimeObserved  int64   `json:"timeObserved"`  // i.e. 1604344752000
+	BlockTime     int64   `json:"blockTime"`     // i.e. 1604344752000
+	Currency      string  `json:"currency"`      // i.e. "BTC"
+	Direction     string  `json:"direction"`     // i.e. "OUTGOING",
+	NetworkTxID   string  `json:"networkTxId"`   // i.e. "8ba2f644f71b2eaa5edd8e421df4a0b902e..."
+	Blockhash     string  `json:"blockhash"`     // i.e. "0000000000000000000299574cd707c36..."
+	Address       string  `json:"address"`       // i.e "3PZsfrHEsCooPM6BC9AXWyfxxxxxxxxxx"
+	Confirmations int32   `json:"confirmations"` // i.e. 1
+	Amount        float64 `json:"amount"`        // i.e. 0.00014529
+	NetworkFee    float64 `json:"networkFee"`    // i.e. 0.00066185
+	SourceAddress string  `json:"sourceAddress"` // i.e. "3PZsfrHEsCooPM6BC9AXWyfxxxxxxxxxx"
+	TwinTxDd      string  `json:"twinTxId"`      // i.e. ??
+}
+
 type Transfer struct {
 	ID             string             `json:"id"`             // i.e. "TF-4F3HRUYPNFY"
 	Owner          string             `json:"owner"`          // i.e. "account:AC-WYUR7ZZ6UMU"
@@ -89,6 +106,7 @@ type Transfer struct {
 	CancelledAt    int64              `json:"cancelledAt"`    // i.e. 1541552388000 (epoch)
 
 	StatusHistory []TransferStatusHistoryItem `json:"statusHistories"`
+	BlockchainTx  *TransferBlockchainTx       `json:"blockchainTx"`
 
 	// not documented well... who knows if its right; we'll find out
 	FailureReason      string `json:"failureReason"`
@@ -96,27 +114,6 @@ type Transfer struct {
 	ReversingSubStatus string `json:"reversingSubStatus"`
 	PendingSubStatus   string `json:"pendingSubStatus"`
 }
-
-/*
-	{
-		"blockchainTx": {
-			"id": "TR_XXXXXXXX1",
-			"networkTxId": "8ba2f644f71b2eaa5edd8e421df4a0b902e...",
-			"createdAt": 1604343572000,
-			"confirmations": 1,
-			"timeObserved": 1604344752000,
-			"blockTime": 1604346566000,
-			"blockhash": "0000000000000000000299574cd707c36...",
-			"amount": 0.00014529,
-			"direction": "OUTGOING",
-			"networkFee": 0.00066185,
-			"address": "3PZsfrHEsCooPM6BC9AXWyfxxxxxxxxxx",
-			"sourceAddress": null,
-			"currency": "BTC",
-			"twinTxId": null
-		},
-	}
-*/
 
 // WithDefaults provides default values for CreateAccountRequest
 func (req CreateAccountRequest) WithDefaults() CreateAccountRequest {
