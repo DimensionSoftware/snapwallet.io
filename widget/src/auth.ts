@@ -197,10 +197,10 @@ export class AuthManager {
       if (this.refreshTokenIsExpired()) {
         this.logout()
         return
-      }
-
-      if (this.refreshTokenIsExpiredSoon()) {
-        window.dispatchEvent(new Event('prelogout'))
+      } else {
+        if (this.refreshTokenIsExpiredSoon()) {
+          window.dispatchEvent(new Event('prelogout'))
+        }
       }
     }, 30 * 1000)
   }
