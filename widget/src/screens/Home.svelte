@@ -76,8 +76,12 @@
   const getNextPath = async () => {
     // TODO: move this request somewhere sane
     if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
-      const { flags = {} } = await window.API.fluxViewerData()
-      userStore.setFlags(flags)
+      const { flags = {}, user = {} } = await window.API.fluxViewerData()
+      userStore.setFlags({
+        ...flags,
+        hasEmail: Boolean(user.email),
+        hasPhone: Boolean(user.phone),
+      })
       const { hasWyrePaymentMethods, hasWyreAccount } = flags
 
       if (hasWyrePaymentMethods && hasWyreAccount)
