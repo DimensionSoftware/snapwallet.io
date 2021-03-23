@@ -44,6 +44,8 @@ export enum ParentMessages {
   EXIT = '__SNAP_EXIT',
 }
 
-export enum PusherMessages {
+export enum PusherServerMessages {
   WYRE_PM_UPDATED = 'WYRE_PAYMENT_METHODS_UPDATED',
 }
+
+export enum PusherClientMessages {}
