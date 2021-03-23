@@ -109,7 +109,8 @@
         address: $userStore.address,
       })
       setTimeout(() => {
-        if (!$userStore.flags.hasWyreAccount) push(Routes.FILE_UPLOAD)
+        if (!$userStore.flags?.hasPhone) push(Routes.PROFILE_SEND_SMS)
+        else if (!$userStore.flags.hasWyreAccount) push(Routes.FILE_UPLOAD)
         else if ($transactionStore.sourceAmount) push(Routes.CHECKOUT_OVERVIEW)
         else push(Routes.ROOT)
       }, 800)
