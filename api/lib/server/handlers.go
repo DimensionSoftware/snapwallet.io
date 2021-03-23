@@ -950,14 +950,14 @@ func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto
 		}
 	}
 
-	transfers, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey)
+	history, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey)
 	if err != nil {
 		return nil, err
 	}
 
 	var out []*proto.WyreTransfer
-	for _, transfer := range transfers {
-		out = append(out, wyre.WyreTransferToProto(transfer))
+	for _, transfer := range history.Transfers {
+		out = append(out, wyre.WyreTransferToProto(&transfer))
 	}
 
 	return &proto.WyreTransfers{

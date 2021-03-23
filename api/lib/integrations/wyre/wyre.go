@@ -115,6 +115,10 @@ type Transfer struct {
 	PendingSubStatus   string `json:"pendingSubStatus"`
 }
 
+type GetTransferHistoryResponse struct {
+	Transfers []Transfer `json:"data"`
+}
+
 type CreateTransferRequest struct {
 	Source             string  `json:"source"`                       // An SRN representing an account that the funds will be retrieved from
 	Dest               string  `json:"dest"`                         // An email address, cellphone number, digital currency address or bank account to send the digital currency to. For bitcoin address use "bitcoin:[address]". Note: cellphone numbers are assumed to be a US number, for international numbers include a '+' and the country code as the prefix.
@@ -291,11 +295,11 @@ func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*Transf
 // GetTransferHistory gets a history of transfers in the wyre system
 // https://docs.sendwyre.com/docs/transfer-history
 // GET https://api.sendwyre.com/v3/transfers
-func (c Client) GetTransferHistory(token string) ([]*Transfer, error) {
+func (c Client) GetTransferHistory(token string) (*GetTransferHistoryResponse, error) {
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).
-		SetResult([]*Transfer{}).
+		SetResult(GetTransferHistoryResponse{}).
 		EnableTrace().
 		Get("/v3/transfers")
 	if err != nil {
@@ -306,7 +310,7 @@ func (c Client) GetTransferHistory(token string) ([]*Transfer, error) {
 		return nil, resp.Error().(*APIError)
 	}
 
-	return resp.Result().([]*Transfer), nil
+	return resp.Result().(*GetTransferHistoryResponse), nil
 }
 
 // GetAccount gets an an account from the wyre system
