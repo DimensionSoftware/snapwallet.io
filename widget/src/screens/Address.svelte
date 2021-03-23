@@ -12,6 +12,7 @@
   import { Routes } from '../constants'
   import type { Address } from 'api-client'
   import { transactionStore } from '../stores/TransactionStore'
+  import { onMount } from 'svelte'
 
   let animation = 'left'
   let isSubmittingProfile = false
@@ -62,6 +63,10 @@
 
     return () => (autocomplete = undefined)
   }
+
+  onMount(() => {
+    initAutoComplete()
+  })
 
   function fillInAddress() {
     // Get the place details from the autocomplete object.
@@ -173,12 +178,6 @@
     >
   </ModalFooter>
 </ModalContent>
-
-<svelte:head>
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDr7FQk1bZV4Zght87YNUgCv5P4cg_1DIs&libraries=places"
-    on:load={initAutoComplete}></script>
-</svelte:head>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
