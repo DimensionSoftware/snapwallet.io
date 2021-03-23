@@ -1,10 +1,21 @@
 import { paymentMethodStore } from '../stores/PaymentMethodStore'
 import { Logger } from '.'
 import { PusherServerMessages, PusherClientMessages } from '../constants'
+import { userStore } from '../stores/UserStore'
 
 const handleWyrePaymentMethodUpdates = data => {
   Logger.debug(data)
   paymentMethodStore.fetchWyrePaymentMethods()
+}
+
+const handleWyreAccountUpdates = async data => {
+  Logger.debug(data)
+  const { flags = {}, user = {} } = await window.API.fluxViewerData()
+  userStore.setFlags({
+    ...flags,
+    hasEmail: Boolean(user.email),
+    hasPhone: Boolean(user.phone),
+  })
 }
 
 const tryInitializePusher = () => {
@@ -26,6 +37,10 @@ const tryInitializePusher = () => {
     channel.bind(
       PusherServerMessages.WYRE_PM_UPDATED,
       handleWyrePaymentMethodUpdates,
+    )
+    channel.bind(
+      PusherServerMessages.WYRE_ACCOUNT_UPDATED,
+      handleWyreAccountUpdates,
     )
     Logger.debug('PUSHER LOADED')
   }
