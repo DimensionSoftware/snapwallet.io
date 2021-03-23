@@ -87,9 +87,10 @@
       if (hasWyrePaymentMethods && hasWyreAccount)
         nextRoute = Routes.CHECKOUT_OVERVIEW
       else if (hasWyrePaymentMethods) nextRoute = Routes.PROFILE
+      return
     }
 
-    nextRoute = Routes.CHECKOUT_OVERVIEW
+    nextRoute = Routes.SEND_OTP
   }
 
   const onKeyDown = (e: Event) => {
