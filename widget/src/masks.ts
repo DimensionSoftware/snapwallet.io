@@ -67,9 +67,10 @@ export const withMaskOnInput = (val?: string, mask?: Masks) => {
  * @param val Any string value.
  * @param mask The mask to validate input for.
  */
+const validNumberMask = /^[\d\s\+\-\(\)]+$/
 export const isValidMaskInput = (val = '', mask) => {
   if ([Masks.INTL_DATE, Masks.SSN, Masks.US_DATE, Masks.PHONE].includes(mask))
-    return /\d(-\d)?/.test(val)
+    return validNumberMask.test(val)
   // Don't prevent user from typing if no match
   return true
 }
