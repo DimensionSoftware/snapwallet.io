@@ -86,8 +86,7 @@
 
       if (hasWyrePaymentMethods && hasWyreAccount)
         nextRoute = Routes.CHECKOUT_OVERVIEW
-      else if (hasWyrePaymentMethods) nextRoute = Routes.PROFILE
-      else nextRoute = Routes.PLAID_LINK
+      else if (!hasWyrePaymentMethods) nextRoute = Routes.PLAID_LINK
       return
     }
 
