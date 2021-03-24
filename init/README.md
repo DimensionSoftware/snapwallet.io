@@ -5,6 +5,10 @@ The `index.html` file is a working demo of the widget being launched using the `
 
 ## Up and Running
 
+### Environment
+
+Make sure that you have a `.env` file in the `init/` directory. Environment variable examples can be found in `.env.example`.
+
 ### Build
 
 Run the build script in order to output `dist/`. This is where the script will live locally.
