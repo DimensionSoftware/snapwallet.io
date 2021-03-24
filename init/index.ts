@@ -1,19 +1,49 @@
+interface IWallet {
+  asset: string
+  address?: string
+}
+
+interface IConfig {
+  onMessage?: (e: any) => any
+  wallets: IWallet[]
+  appName: string
+}
+
 class Snap {
   IFRAME_ID = '__SNAP_IFRAME'
   events = {
     EXIT: '__SNAP_EXIT',
   }
   onMessage = (e: any) => {}
+  wallets: IWallet[] = []
+  appName: string = 'Snap Wallet'
 
-  constructor(args: { onMessage?: (e: any) => any }) {
-    this.onMessage = args.onMessage || this.onMessage
+  constructor(args: IConfig) {
+    this.setConfig(args)
   }
 
-  openWeb = () => {
+  setConfig = (config: IConfig) => {
+    this.onMessage = config.onMessage || this.onMessage
+    this.wallets = config.wallets || this.wallets
+    this.appName = config.appName || this.appName
+  }
+
+  configToQueryString = () => {
+    return encodeURIComponent(
+      JSON.stringify({
+        wallets: this.wallets,
+        appName: this.appName,
+      })
+    )
+  }
+
+  openWeb = (config?: IConfig) => {
+    config && this.setConfig(config)
+    const qs = `?config=${this.configToQueryString()}`
     const iframe = document.createElement('iframe')
     iframe.id = this.IFRAME_ID
     // TODO: toggle URL per env
-    iframe.src = 'http://localhost:5000/#/'
+    iframe.src = `http://localhost:5000/${qs}#/`
     iframe.frameBorder = '0'
     iframe.style.backgroundColor = 'transparent'
     iframe.style.position = 'fixed'
