@@ -18,9 +18,9 @@ const app = new App({
   target: document.body,
   props: {
     apiKey: config?.apiKey,
-    appName: config.appName,
-    intent: config.intent,
-    wallets: config.wallets || [],
+    appName: config?.appName,
+    intent: config?.intent,
+    wallets: config?.wallets || [],
     theme: {
       /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */
       // color: '#7f8c8d',
