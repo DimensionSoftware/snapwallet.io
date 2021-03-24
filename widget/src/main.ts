@@ -12,14 +12,15 @@ window.AUTH_MANAGER.addEventListeners()
 PusherUtil.setup()
 
 const queryParams = new URLSearchParams(window.location.search)
+const config = JSON.parse(queryParams.get('config'))
 
 const app = new App({
   target: document.body,
   props: {
-    apiKey: queryParams.get('apiKey') || '',
-    appName: queryParams.get('appName') || 'Snap Wallet',
-    intent: queryParams.get('intent') || 'buy',
-    wallets: JSON.parse(queryParams.get('wallets') || '[]'),
+    apiKey: config?.apiKey || '',
+    appName: config.appName || 'Snap Wallet',
+    intent: config?.intent || 'buy',
+    wallets: config.wallets || [],
     theme: {
       /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */
       // color: '#7f8c8d',
