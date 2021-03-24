@@ -1,3 +1,5 @@
+type UserIntent = 'buy' | 'sell'
+
 interface IWallet {
   asset: string
   address?: string
@@ -7,6 +9,7 @@ interface IConfig {
   onMessage?: (e: any) => any
   wallets: IWallet[]
   appName: string
+  intent: UserIntent
 }
 
 class Snap {
@@ -17,6 +20,7 @@ class Snap {
   onMessage = (e: any) => {}
   wallets: IWallet[] = []
   appName: string = 'Snap Wallet'
+  intent: UserIntent = 'buy'
 
   constructor(args: IConfig) {
     this.setConfig(args)
@@ -26,6 +30,7 @@ class Snap {
     this.onMessage = config.onMessage || this.onMessage
     this.wallets = config.wallets || this.wallets
     this.appName = config.appName || this.appName
+    this.intent = config.intent || this.intent
   }
 
   configToQueryString = () => {
