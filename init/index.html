@@ -2,7 +2,10 @@
 <html>
   <head> </head>
   <body>
+    <canvas id="qr-canvas"></canvas>
+    <br />
     <button id="buy-button">Buy Crypto</button>
+
     <script src="./dist/index.js"></script>
     <script>
       const snap = new Snap({
@@ -18,8 +21,13 @@
         },
       })
 
+      // Open using a button
       const btn = document.getElementById('buy-button')
       btn.onclick = snap.openWeb
+
+      // Open using a QR code
+      const canvas = document.getElementById('qr-canvas')
+      snap.createQR({ element: canvas, pixelSize: 200 })
     </script>
   </body>
 </html>
