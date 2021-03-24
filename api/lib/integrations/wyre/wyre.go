@@ -119,6 +119,21 @@ type GetTransferHistoryResponse struct {
 	Transfers []Transfer `json:"data"`
 }
 
+type CreateAPIKeyRequest struct {
+	Description string   `json:"desc"`                  // A description of the credentials.
+	Type        string   `json:"type"`                  // Can be "FULL" or "READONLY"
+	IPWhitelist []string `json:"ipWhitelist,omitempty"` // List of IP addresses allowed to use the key, or empty for no restrictions.
+}
+
+type CreateAPIKeyResponse struct {
+	APIKey      string   `json:"apiKey"`      // i.e. "AK-XXXX-YYYYY-ZZZZZ-QQQQQ"
+	Owner       string   `json:"owner"`       // i.e. "account:AC_XYZ"
+	Type        string   `json:"type"`        // i.e. "FULL"
+	Description string   `json:"desc"`        // i.e. "AwesomeWallet Connection"
+	SecretKey   string   `json:"secretKey"`   // i.e. "SK-ZZZZ-ZZZZ-ZZZZ-ZZZZ"
+	IPWhitelist []string `json:"ipWhitelist"` // i.e. []
+}
+
 type CreateTransferRequest struct {
 	Source             string  `json:"source"`                       // An SRN representing an account that the funds will be retrieved from
 	Dest               string  `json:"dest"`                         // An email address, cellphone number, digital currency address or bank account to send the digital currency to. For bitcoin address use "bitcoin:[address]". Note: cellphone numbers are assumed to be a US number, for international numbers include a '+' and the country code as the prefix.
@@ -268,6 +283,36 @@ func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account,
 	}
 
 	return resp.Result().(*Account), nil
+}
+
+// CreateAPIKey Generate a new set of API credentials for the token bearer
+// https://docs.sendwyre.com/docs/create-api-key
+// POST https://api.sendwyre.com/v2/apiKeys
+func (c Client) CreateAPIKey(token string, masqueradeAs string, req CreateAPIKeyRequest) (*CreateAPIKeyResponse, error) {
+	// to make sure we don't inadvertently create an api key linking to master key instead of intended customer key
+	if masqueradeAs == "" {
+		return nil, fmt.Errorf("masqueradeAs must be provided when creating an api key")
+	}
+
+	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+token).
+		SetError(APIError{}).
+		SetResult(CreateAPIKeyResponse{}).
+		SetBody(req).
+		SetQueryParams(map[string]string{
+			"masqueradeAs": masqueradeAs,
+		}).
+		EnableTrace().
+		Post("/v3/transfers")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*CreateAPIKeyResponse), nil
 }
 
 // CreateTransfer creates a transfer in the wyre system

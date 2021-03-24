@@ -198,27 +198,40 @@ func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, 
 
 func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*wyre_model.Account, error) {
 	now := time.Now()
-	f := false
+	t := true
 
 	if !profile.HasWyreAccountPreconditionsMet() {
 		return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
 	}
 
-	secretKey := GenerateSecretKey(35)
-	wyreAuthTokenResp, err := m.Wyre.SubmitAuthToken(secretKey)
-	if err != nil {
-		return nil, err
-	}
-	fmt.Printf("wyreAuthTokenResp: %#v", wyreAuthTokenResp)
+	/*
+		secretKey := GenerateSecretKey(35)
+		wyreAuthTokenResp, err := m.Wyre.SubmitAuthToken(secretKey)
+		if err != nil {
+			return nil, err
+		}
+		fmt.Printf("wyreAuthTokenResp: %#v", wyreAuthTokenResp)
+	*/
 
 	fields, selected := selectWyreProfileFields(profile)
 
-	wyreAccountResp, err := m.Wyre.CreateAccount(secretKey, CreateAccountRequest{
-		SubAccount:        &f,
-		DisableEmail:      &f,
+	wyreAccountResp, err := m.Wyre.CreateAccount(m.Wyre.config.WyreSecretKey, CreateAccountRequest{
+		SubAccount:        &t,
+		DisableEmail:      &t,
 		ReferrerAccountID: &m.Wyre.config.WyreAccountID,
 		ProfileFields:     fields,
 	}.WithDefaults())
+	if err != nil {
+		return nil, err
+	}
+
+	accountAPIKey, err := m.Wyre.CreateAPIKey(
+		m.Wyre.config.WyreSecretKey,
+		wyreAccountResp.ID,
+		CreateAPIKeyRequest{
+			Description: fmt.Sprintf("snapwallet.io user %s", userID),
+			Type:        "FULL",
+		})
 	if err != nil {
 		return nil, err
 	}
@@ -229,8 +242,8 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 
 	account := wyre_model.Account{
 		ID:        wyre_model.ID(wyreAccountResp.ID),
-		APIKey:    wyreAuthTokenResp.APIKey,
-		SecretKey: secretKey,
+		APIKey:    accountAPIKey.APIKey,
+		SecretKey: accountAPIKey.SecretKey,
 		Status:    wyreAccountResp.Status,
 		CreatedAt: now,
 	}
@@ -247,7 +260,7 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 		return nil, err
 	}
 
-	hookResponse, err := m.Wyre.SubscribeWebhook(secretKey, "account:"+string(account.ID), string(m.APIHost)+"/wyre/hooks/"+string(userID))
+	hookResponse, err := m.Wyre.SubscribeWebhook(accountAPIKey.SecretKey, "account:"+string(account.ID), string(m.APIHost)+"/wyre/hooks/"+string(userID))
 	if err != nil {
 		return nil, err
 	}
