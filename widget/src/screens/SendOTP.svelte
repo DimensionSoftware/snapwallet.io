@@ -79,7 +79,7 @@
       {/if}
     </ModalHeader>
     {#if !phoneVerificationOnly && (!$userStore.flags?.hasEmail || !isUsingPhoneNumber)}
-      <div in:fly={{ y: 25, duration: 300 }}>
+      <div in:fly={{ y: 15, duration: 300 }}>
         <Label label="Your Email">
           <Input
             inputmode="email"
@@ -106,7 +106,7 @@
         {/if}
       </div>
     {:else}
-      <div in:fly={{ y: 25, duration: 300 }}>
+      <div in:fly={{ y: 15, duration: 300 }}>
         <Label label="Your Phone Number">
           <Input
             inputmode="phone"
