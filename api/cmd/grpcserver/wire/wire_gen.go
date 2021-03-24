@@ -93,10 +93,11 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	wyreManager := &wyre.Manager{
-		APIHost: apiHost,
-		Wyre:    wyreClient,
-		Db:      dbDb,
-		Plaid:   plaidClient,
+		APIHost:     apiHost,
+		Wyre:        wyreClient,
+		Db:          dbDb,
+		Plaid:       plaidClient,
+		FileManager: filemanagerManager,
 	}
 	jwtSigner := &auth.JwtSigner{
 		PrivateKey: privateKey,

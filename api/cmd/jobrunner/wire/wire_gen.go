@@ -8,6 +8,8 @@ package wire
 import (
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
+	"github.com/khoerling/flux/api/lib/filemanager"
+	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/pubsub"
@@ -66,11 +68,21 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
+	bucketHandle, err := cloudstorage.ProvideBucket()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	filemanagerManager := &filemanager.Manager{
+		BucketHandle:      bucketHandle,
+		Db:                dbDb,
+		EncryptionManager: manager,
+	}
 	wyreManager := &wyre.Manager{
-		APIHost: apiHost,
-		Wyre:    wyreClient,
-		Db:      dbDb,
-		Plaid:   plaidClient,
+		APIHost:     apiHost,
+		Wyre:        wyreClient,
+		Db:          dbDb,
+		Plaid:       plaidClient,
+		FileManager: filemanagerManager,
 	}
 	pubsubClient, err := pubsub.ProvideClient(fireProjectID)
 	if err != nil {

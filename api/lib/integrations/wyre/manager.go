@@ -12,9 +12,11 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
+	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	wyre_model "github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
+	"github.com/khoerling/flux/api/lib/filemanager"
 	"github.com/lithammer/shortuuid/v3"
 	"github.com/plaid/plaid-go/plaid"
 )
@@ -24,10 +26,11 @@ const apiHostEnvVarName = "API_HOST"
 type APIHost string
 
 type Manager struct {
-	APIHost APIHost
-	Wyre    *Client
-	Db      *db.Db
-	Plaid   *plaid.Client
+	APIHost     APIHost
+	Wyre        *Client
+	Db          *db.Db
+	Plaid       *plaid.Client
+	FileManager *filemanager.Manager
 }
 
 // ProvideAPIHost ...
@@ -234,6 +237,54 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 		})
 	if err != nil {
 		return nil, err
+	}
+
+	if usgoviddocs := profile.FilterStatus(common.StatusReceived).FilterKindUSGovernmentIDDoc(); len(usgoviddocs) > 0 {
+		usgoviddoc := usgoviddocs[0]
+		selected = append(selected, usgoviddoc)
+
+		for i, fileID := range usgoviddoc.FileIDs {
+			file, err := m.FileManager.GetFile(ctx, userID, fileID)
+			if err != nil {
+				return nil, err
+			}
+
+			upload := func(req UploadDocumentRequest) error {
+				_, err = m.Wyre.UploadDocument(accountAPIKey.SecretKey, req)
+				return err
+			}
+
+			req := UploadDocumentRequest{
+				AccountID:    wyreAccountResp.ID,
+				FieldID:      ProfileFieldIDIndividualGovernmentID,
+				DocumentType: usgoviddoc.GovernmentIDKind.ToWyreDocumentType(),
+				MimeType:     file.MimeType,
+				Body:         file.Body,
+			}
+
+			if usgoviddoc.GovernmentIDKind == usgovernmentid.KindUSPassport {
+				err := upload(req)
+				if err != nil {
+					return nil, err
+				}
+				break
+			}
+
+			if i == 0 {
+				req.DocumentSubtype = "FRONT"
+				err := upload(req)
+				if err != nil {
+					return nil, err
+				}
+			} else if i == 1 {
+				req.DocumentSubtype = "BACK"
+				err := upload(req)
+				if err != nil {
+					return nil, err
+				}
+				break
+			}
+		}
 	}
 
 	modifiedProfile := selected.SetStatuses(common.StatusPending)

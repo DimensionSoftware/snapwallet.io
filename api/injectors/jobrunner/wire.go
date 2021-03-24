@@ -4,6 +4,8 @@ import (
 	"github.com/google/wire"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
+	"github.com/khoerling/flux/api/lib/filemanager"
+	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/pubsub"
@@ -22,7 +24,9 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		wire.Struct(new(pusher.Manager), "*"),
 		wire.Struct(new(pubsub.Manager), "*"),
 		wire.Struct(new(jobmanager.Manager), "*"),
+		wire.Struct(new(filemanager.Manager), "*"),
 		wire.Struct(new(wyre.Manager), "*"),
+		cloudstorage.ProvideBucket,
 		vendorplaid.NewClient,
 		plaid.ProvideClientOptions,
 		firestore.ProvideFirestoreProjectID,

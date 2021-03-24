@@ -285,6 +285,43 @@ func (c Client) CreateAccount(token string, req CreateAccountRequest) (*Account,
 	return resp.Result().(*Account), nil
 }
 
+type UploadDocumentRequest struct {
+	AccountID       string
+	FieldID         ProfileFieldID
+	DocumentType    string
+	DocumentSubtype string
+	MimeType        string
+	Body            *[]byte
+}
+
+// UploadDocument upload an account document to wyre
+// https://docs.sendwyre.com/docs/upload-document
+// POST https://api.sendwyre.com/v3/accounts/:accountId/:fieldId
+func (c Client) UploadDocument(token string, req UploadDocumentRequest) (*Account, error) {
+	resp, err := c.http.R().
+		SetAuthToken(token).
+		SetError(APIError{}).
+		SetResult(Account{}).
+		EnableTrace().
+		SetPathParam("accountID", req.AccountID).
+		SetPathParam("fieldID", string(req.FieldID)).
+		SetQueryParam("documentType", req.DocumentType).
+		SetQueryParam("documentSubType", req.DocumentSubtype).
+		SetHeader("content-type", req.MimeType).
+		SetBody(req.Body).
+		Post("/v3/accounts/{accountID}/{fieldID}")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*Account), nil
+
+}
+
 // CreateAPIKey Generate a new set of API credentials for the token bearer
 // https://docs.sendwyre.com/docs/create-api-key
 // POST https://api.sendwyre.com/v2/apiKeys
@@ -299,9 +336,7 @@ func (c Client) CreateAPIKey(token string, masqueradeAs string, req CreateAPIKey
 		SetError(APIError{}).
 		SetResult(CreateAPIKeyResponse{}).
 		SetBody(req).
-		SetQueryParams(map[string]string{
-			"masqueradeAs": masqueradeAs,
-		}).
+		SetQueryParam("masqueradeAs", masqueradeAs).
 		EnableTrace().
 		Post("/v2/apiKeys")
 	if err != nil {

@@ -13,6 +13,21 @@ import (
 // Kind indicates the type of government identification the profiledata holds
 type Kind string
 
+func (k Kind) ToWyreDocumentType() string {
+	switch k {
+	case KindUSDrivingLicense:
+		return "DRIVING_LICENSE"
+	case KindUSGovernmentID:
+		return "GOVT_ID"
+	case KindUSPassportCard:
+		return "PASSPORT_CARD"
+	case KindUSPassport:
+		return "PASSPORT"
+	}
+	// should never get here
+	panic("usgovernmentid.Kind unknown when ToWyreDocumentType(...) was called")
+}
+
 const (
 	// KindUSDrivingLicense is a United States drivers license
 	KindUSDrivingLicense Kind = "US_DRIVING_LICENSE"
@@ -37,7 +52,7 @@ func (k Kind) ToUsGovernmentIdDocumentInputKind() proto.UsGovernmentIdDocumentIn
 		return proto.UsGovernmentIdDocumentInputKind_GI_US_PASSPORT
 	}
 	// should never get here
-	panic("proto.GovernmentIdDocumentInputKind unknown when KindFromGovernmentIdDocKind(...) called")
+	panic("usgovernmentid.Kind unknown when ToUsGovernmentIdDocumentInputKind(...) was called")
 }
 
 // KindFromGovernmentIdDocKind ...
@@ -53,7 +68,7 @@ func KindFromUsGovernmentIdDocumentInputKind(k proto.UsGovernmentIdDocumentInput
 		return KindUSPassport
 	}
 	// should never get here
-	panic("proto.GovernmentIdDocumentInputKind unknown when KindFromGovernmentIdDocKind(...) called")
+	panic("proto.GovernmentIdDocumentInputKind unknown when KindFromGovernmentIdDocKind(...) was called")
 }
 
 // FilesRequired indicates the number of files required for the ProfileDataGovernmentIDKind
