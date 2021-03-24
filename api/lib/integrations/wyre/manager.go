@@ -216,7 +216,7 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 
 	wyreAccountResp, err := m.Wyre.CreateAccount(secretKey, CreateAccountRequest{
 		SubAccount:        &f,
-		DisableEmail:      &t,
+		DisableEmail:      &f,
 		ReferrerAccountID: &m.Wyre.config.WyreAccountID,
 		ProfileFields:     fields,
 	}.WithDefaults())
