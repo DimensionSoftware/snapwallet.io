@@ -31,7 +31,7 @@ func GetUserIDFromIncomingContext(ctx context.Context) user.ID {
 func LookupUserFromIncomingContext(ctx context.Context, db *db.Db) (*user.User, error) {
 	userID := GetUserIDFromIncomingContext(ctx)
 
-	u, err := db.GetUserByID(ctx, user.ID(userID))
+	u, err := db.GetUserByID(ctx, nil, user.ID(userID))
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")

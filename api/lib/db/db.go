@@ -199,13 +199,24 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 }
 
 // GetUserByID gets a user object by id
-func (db Db) GetUserByID(ctx context.Context, userID user.ID) (*user.User, error) {
+func (db Db) GetUserByID(ctx context.Context, tx *firestore.Transaction, userID user.ID) (*user.User, error) {
 	if userID == "" {
 		return nil, nil
 
 	}
 
-	snap, err := db.Firestore.Collection("users").Doc(string(userID)).Get(ctx)
+	ref := db.Firestore.Collection("users").Doc(string(userID))
+
+	var (
+		snap *firestore.DocumentSnapshot
+		err  error
+	)
+	if tx == nil {
+		snap, err = ref.Get(ctx)
+	} else {
+		snap, err = tx.Get(ref)
+	}
+
 	if status.Code(err) == codes.NotFound {
 		return nil, nil
 	}
@@ -358,6 +369,50 @@ func (db Db) GetWyrePaymentMethodByPlaidAccountID(ctx context.Context, userID us
 
 	return &pm, nil
 
+}
+
+func (db Db) UpdatePhone(ctx context.Context, userID user.ID, newPhone string) error {
+	return db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		now := time.Now()
+
+		// read
+		u, err := db.GetUserByID(ctx, tx, userID)
+		if err != nil {
+			return err
+		}
+		if u == nil {
+			return fmt.Errorf("user id not found: %s", userID)
+		}
+
+		profile, err := db.GetAllProfileData(ctx, tx, userID)
+		if err != nil {
+			return err
+		}
+
+		// modify / upsert
+		u.Phone = &newPhone
+
+		phones := profile.FilterStatus(common.StatusReceived).FilterKindPhone()
+		if len(phones) == 0 {
+			phones = append(phones, &phone.ProfileDataPhone{
+				ID:        common.ProfileDataID(shortuuid.New()),
+				Status:    common.StatusReceived,
+				Phone:     newPhone,
+				CreatedAt: now,
+			})
+		}
+		phone := phones[0]
+
+		// save
+		if err := db.SaveUser(ctx, tx, u); err != nil {
+			return err
+		}
+		if _, err = db.SaveProfileData(ctx, tx, userID, phone); err != nil {
+			return err
+		}
+
+		return nil
+	})
 }
 
 // GetUserByEmailOrPhone will return a user if one is found matching the input by email or phone

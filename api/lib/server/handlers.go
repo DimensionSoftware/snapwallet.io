@@ -311,7 +311,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 
 	log.Printf("Generating Plaid Link Token for User ID: %s", userID)
 
-	u, err := s.Db.GetUserByID(ctx, user.ID(userID))
+	u, err := s.Db.GetUserByID(ctx, nil, user.ID(userID))
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")

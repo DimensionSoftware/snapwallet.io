@@ -33,7 +33,7 @@ func Test_User_Lifecycle(t *testing.T) {
 	log.Println(u.CreatedAt, u2.CreatedAt)
 	a.WithinDuration(u.CreatedAt, u2.CreatedAt, time.Second)
 
-	u3, err := s.Db.GetUserByID(ctx, u.ID)
+	u3, err := s.Db.GetUserByID(ctx, nil, u.ID)
 	a.NoError(err, "fetch user by id needs to work and should return the same results as an email lookup")
 	a.Equal(u.ID, u3.ID)
 	a.Equal(u.Email, u3.Email)
