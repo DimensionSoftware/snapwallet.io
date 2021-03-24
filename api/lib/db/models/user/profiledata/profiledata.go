@@ -116,11 +116,11 @@ func (profile ProfileDatas) FilterKindPhone() phone.ProfileDataPhones {
 }
 
 // FilterKindEmail ...
-func (profile ProfileDatas) FilterKindUSGovernmentIDDoc() []usgovernmentid.ProfileDataUSGovernmentIDDoc {
-	out := []usgovernmentid.ProfileDataUSGovernmentIDDoc{}
+func (profile ProfileDatas) FilterKindUSGovernmentIDDoc() []*usgovernmentid.ProfileDataUSGovernmentIDDoc {
+	out := []*usgovernmentid.ProfileDataUSGovernmentIDDoc{}
 
 	for _, pdata := range profile.FilterKind(common.KindUSGovernmentIDDoc) {
-		out = append(out, pdata.(usgovernmentid.ProfileDataUSGovernmentIDDoc))
+		out = append(out, pdata.(*usgovernmentid.ProfileDataUSGovernmentIDDoc))
 	}
 
 	return out
