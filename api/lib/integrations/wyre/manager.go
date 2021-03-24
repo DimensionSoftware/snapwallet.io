@@ -130,31 +130,56 @@ func (m Manager) CreatePaymentMethodsFromPlaidItems(ctx context.Context, userID 
 	return out, nil
 }
 
-func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*wyre_model.Account, error) {
-	now := time.Now()
-	t := true
-	f := false
+// converts pdata into wyre format
+func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, profiledata.ProfileDatas) {
+	var fields []ProfileField
+	var selected profiledata.ProfileDatas
 
-	if !profile.HasWyreAccountPreconditionsMet() {
-		return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
+	if legalNames := profile.FilterStatus(common.StatusReceived).FilterKindLegalName(); len(legalNames) > 0 {
+		selected = append(selected, legalNames[0])
+		fields = append(fields, ProfileField{
+			FieldID: ProfileFieldIDIndividualLegalName,
+			Value:   legalNames[0].LegalName,
+		})
 	}
 
-	/*
-		if len(profile) != len(common.ProfileDataRequiredForWyre) {
-			return nil, fmt.Errorf(
-				"Number of profile data items necessary for wyre is supposed to be %d but received %d",
-				len(common.ProfileDataRequiredForWyre),
-				len(profile),
-			)
-		}
-	*/
+	if phones := profile.FilterStatus(common.StatusReceived).FilterKindPhone(); len(phones) > 0 {
+		selected = append(selected, phones[0])
+		fields = append(fields, ProfileField{
+			FieldID: ProfileFieldIDIndividualCellphoneNumber,
+			Value:   phones[0].Phone,
+		})
+	}
 
-	var fields []*ProfileField
+	if emails := profile.FilterStatus(common.StatusReceived).FilterKindEmail(); len(emails) > 0 {
+		selected = append(selected, emails[0])
+		fields = append(fields, ProfileField{
+			FieldID: ProfileFieldIDIndividualEmail,
+			Value:   emails[0].Email,
+		})
+	}
 
-	if addrs := profile.FilterKindAddress(); len(addrs) > 0 {
+	if dobs := profile.FilterStatus(common.StatusReceived).FilterKindDateOfBirth(); len(dobs) > 0 {
+		selected = append(selected, dobs[0])
+		fields = append(fields, ProfileField{
+			FieldID: ProfileFieldIDIndividualDateOfBirth,
+			Value:   dobs[0].DateOfBirth,
+		})
+	}
+
+	if ssns := profile.FilterStatus(common.StatusReceived).FilterKindSSN(); len(ssns) > 0 {
+		selected = append(selected, ssns[0])
+		fields = append(fields, ProfileField{
+			FieldID: ProfileFieldIDIndividualSSN,
+			Value:   ssns[0].SSN,
+		})
+	}
+
+	if addrs := profile.FilterStatus(common.StatusReceived).FilterKindAddress(); len(addrs) > 0 {
 		address := addrs[0]
+		selected = append(selected, address)
 		fields = append(fields,
-			&ProfileField{
+			ProfileField{
 				FieldID: ProfileFieldIDIndividualResidenceAddress,
 				Value: ProfileFieldAddress{
 					Street1:    address.Street1,
@@ -168,6 +193,18 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 		)
 	}
 
+	return fields, selected
+}
+
+func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*wyre_model.Account, error) {
+	now := time.Now()
+	t := true
+	f := false
+
+	if !profile.HasWyreAccountPreconditionsMet() {
+		return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
+	}
+
 	secretKey := GenerateSecretKey(35)
 	wyreAuthTokenResp, err := m.Wyre.SubmitAuthToken(secretKey)
 	if err != nil {
@@ -175,40 +212,19 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	}
 	fmt.Printf("wyreAuthTokenResp: %#v", wyreAuthTokenResp)
 
+	fields, selected := selectWyreProfileFields(profile)
+
 	wyreAccountResp, err := m.Wyre.CreateAccount(secretKey, CreateAccountRequest{
 		SubAccount:        &f,
 		DisableEmail:      &t,
 		ReferrerAccountID: &m.Wyre.config.WyreAccountID,
-		ProfileFields: []ProfileField{
-			{
-				FieldID: ProfileFieldIDIndividualLegalName,
-				Value:   profile.FilterKindLegalName()[0].LegalName,
-			},
-			/*
-				{
-					FieldID: ProfileFieldIDIndividualCellphoneNumber,
-					Value:   profile.FilterKindPhone()[0].Phone,
-				},
-				{
-					FieldID: ProfileFieldIDIndividualEmail,
-					Value:   profile.FilterKindEmail()[0].Email,
-				},
-			*/
-			{
-				FieldID: ProfileFieldIDIndividualDateOfBirth,
-				Value:   profile.FilterKindDateOfBirth()[0].DateOfBirth,
-			},
-			{
-				FieldID: ProfileFieldIDIndividualSSN,
-				Value:   profile.FilterKindSSN()[0].SSN,
-			},
-		},
+		ProfileFields:     fields,
 	}.WithDefaults())
 	if err != nil {
 		return nil, err
 	}
 
-	modifiedProfile := profile.SetStatuses(common.StatusPending)
+	modifiedProfile := selected.SetStatuses(common.StatusPending)
 
 	// todo, can't create account if they already have one
 
