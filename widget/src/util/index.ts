@@ -36,6 +36,9 @@ export const isValidNumber = (num: any) => {
 // Application logger module
 export const Logger = (() => {
   window.localStorage.setItem('debug', __ENV.DEBUG)
+  // These are needed for chrome
+  localStorage.debug = __ENV.DEBUG
+  nodeDebug.log = console.log.bind(console)
   const error = nodeDebug('flux:error')
   const warn = nodeDebug('flux:warn')
   const debug = nodeDebug('flux:debug')
@@ -48,6 +51,8 @@ export const Logger = (() => {
     info,
   }
 })()
+
+window.L = Logger
 
 export const numberWithCommas = (s: string) =>
   s.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
