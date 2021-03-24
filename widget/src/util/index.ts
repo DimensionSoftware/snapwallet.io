@@ -56,8 +56,6 @@ export const Logger = (() => {
   }
 })()
 
-window.L = Logger
-
 export const numberWithCommas = (s: string) =>
   s.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
 
