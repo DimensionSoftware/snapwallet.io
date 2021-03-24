@@ -1,4 +1,19 @@
+import QR from 'qr-creator'
+
+declare global {
+  var _ENV: {
+    WIDGET_URL: string
+  }
+}
+
 type UserIntent = 'buy' | 'sell'
+
+interface QROptions {
+  element: HTMLElement
+  foregroundColor?: string
+  backgroundColor?: string
+  pixelSize?: number
+}
 
 interface IWallet {
   asset: string
@@ -21,6 +36,7 @@ class Snap {
   wallets: IWallet[] = []
   appName: string = 'Snap Wallet'
   intent: UserIntent = 'buy'
+  baseURL: string = _ENV.WIDGET_URL
 
   constructor(args: IConfig) {
     this.setConfig(args)
@@ -45,11 +61,11 @@ class Snap {
 
   openWeb = (config?: IConfig) => {
     config && this.setConfig(config)
-    const qs = `?config=${this.configToQueryString()}`
+
     const iframe = document.createElement('iframe')
     iframe.id = this.IFRAME_ID
     // TODO: toggle URL per env
-    iframe.src = `http://localhost:5000/${qs}#/`
+    iframe.src = this.generateURL()
     iframe.frameBorder = '0'
     iframe.style.backgroundColor = 'transparent'
     iframe.style.position = 'fixed'
@@ -77,10 +93,30 @@ class Snap {
     // TODO: add RN WV launch logic
   }
 
+  createQR = (qrOpts: QROptions, config?: IConfig) => {
+    config && this.setConfig(config)
+    QR.render(
+      {
+        text: this.generateURL(),
+        radius: 0.0, // 0.0 to 0.5
+        ecLevel: 'H', // L, M, Q, H
+        fill: qrOpts.foregroundColor || '#485460',
+        background: qrOpts.backgroundColor, // transparent defautl
+        size: qrOpts.pixelSize || 128, // in pixels
+      },
+      qrOpts.element
+    )
+  }
+
   private handleMessage = (event: any) => {
     const { data = '{}' } = event
     const msg = JSON.parse(data)
     this.onMessage && this.onMessage(msg)
+  }
+
+  private generateURL = () => {
+    const qs = `?config=${this.configToQueryString()}`
+    return `${this.baseURL}/${qs}#/`
   }
 }
 
