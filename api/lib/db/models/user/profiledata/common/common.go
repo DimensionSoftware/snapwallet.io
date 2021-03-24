@@ -127,7 +127,7 @@ var ProfileDataKinds = []ProfileDataKind{
 var ProfileDataRequiredForWyre = []ProfileDataKind{
 	KindLegalName,
 	KindEmail,
-	//KindPhone,
+	KindPhone,
 	KindAddress,
 	KindDateOfBirth,
 	KindUSSSN,
