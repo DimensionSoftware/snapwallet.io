@@ -35,7 +35,14 @@ export const isValidNumber = (num: any) => {
 
 // Application logger module
 export const Logger = (() => {
-  window.localStorage.setItem('debug', __ENV.DEBUG)
+  try {
+    window.localStorage.setItem('debug', __ENV.DEBUG)
+    // These are needed for chrome
+    window.localStorage.debug = __ENV.DEBUG
+    nodeDebug.log = console.log.bind(console)
+  } catch {
+    console.warn('Unable to enable logger. Incognito?')
+  }
   const error = nodeDebug('flux:error')
   const warn = nodeDebug('flux:warn')
   const debug = nodeDebug('flux:debug')

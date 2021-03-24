@@ -17,8 +17,9 @@ const app = new App({
   target: document.body,
   props: {
     apiKey: queryParams.get('apiKey') || '',
-    appName: queryParams.get('appName') || 'Flux',
+    appName: queryParams.get('appName') || 'Snap Wallet',
     intent: queryParams.get('intent') || 'buy',
+    wallets: JSON.parse(queryParams.get('wallets') || '[]'),
     theme: {
       /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */
       // color: '#7f8c8d',
