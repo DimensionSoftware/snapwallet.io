@@ -308,7 +308,7 @@ func (c Client) UploadDocument(token string, req UploadDocumentRequest) (*Accoun
 		SetQueryParam("documentType", req.DocumentType).
 		SetQueryParam("documentSubType", req.DocumentSubtype).
 		SetHeader("content-type", req.MimeType).
-		SetBody(req.Body).
+		SetBody(*req.Body).
 		Post("/v3/accounts/{accountID}/{fieldID}")
 	if err != nil {
 		return nil, err
