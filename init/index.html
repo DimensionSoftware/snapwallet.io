@@ -6,6 +6,10 @@
     <script src="./dist/index.js"></script>
     <script>
       const snap = new Snap({
+        appName: 'Example App',
+        wallets: [
+          { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
+        ],
         onMessage: (msg) => {
           if (msg.event === snap.events.EXIT) {
             console.log('Exit Data', msg.data)
