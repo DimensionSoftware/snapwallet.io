@@ -79,6 +79,7 @@ class Snap {
     iframe.style.zIndex = '1000000000'
     iframe.style.boxSizing = 'border-box'
     iframe.allow = 'camera:*;microphone:*;'
+    iframe.scrolling = 'no'
     window.addEventListener('message', this.handleMessage, false)
     document.body.appendChild(iframe)
   }
