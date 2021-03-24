@@ -198,7 +198,6 @@ func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, 
 
 func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*wyre_model.Account, error) {
 	now := time.Now()
-	t := true
 	f := false
 
 	if !profile.HasWyreAccountPreconditionsMet() {
