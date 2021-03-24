@@ -38,6 +38,7 @@ class Snap {
       JSON.stringify({
         wallets: this.wallets,
         appName: this.appName,
+        intent: this.intent,
       })
     )
   }
