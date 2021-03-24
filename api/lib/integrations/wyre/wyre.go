@@ -303,7 +303,7 @@ func (c Client) CreateAPIKey(token string, masqueradeAs string, req CreateAPIKey
 			"masqueradeAs": masqueradeAs,
 		}).
 		EnableTrace().
-		Post("/v3/transfers")
+		Post("/v2/apiKeys")
 	if err != nil {
 		return nil, err
 	}
