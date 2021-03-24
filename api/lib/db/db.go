@@ -371,6 +371,51 @@ func (db Db) GetWyrePaymentMethodByPlaidAccountID(ctx context.Context, userID us
 
 }
 
+func (db Db) UpdateEmail(ctx context.Context, userID user.ID, newEmail string) error {
+	return db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		now := time.Now()
+
+		// read
+		u, err := db.GetUserByID(ctx, tx, userID)
+		if err != nil {
+			return err
+		}
+		if u == nil {
+			return fmt.Errorf("user id not found: %s", userID)
+		}
+
+		profile, err := db.GetAllProfileData(ctx, tx, userID)
+		if err != nil {
+			return err
+		}
+
+		// modify / upsert
+		u.Email = &newEmail
+		u.EmailVerifiedAt = &now
+
+		emails := profile.FilterStatus(common.StatusReceived).FilterKindEmail()
+		if len(emails) == 0 {
+			emails = append(emails, &email.ProfileDataEmail{
+				ID:        common.ProfileDataID(shortuuid.New()),
+				Status:    common.StatusReceived,
+				Email:     newEmail,
+				CreatedAt: now,
+			})
+		}
+		email := emails[0]
+
+		// save
+		if err := db.SaveUser(ctx, tx, u); err != nil {
+			return err
+		}
+		if _, err = db.SaveProfileData(ctx, tx, userID, email); err != nil {
+			return err
+		}
+
+		return nil
+	})
+}
+
 func (db Db) UpdatePhone(ctx context.Context, userID user.ID, newPhone string) error {
 	return db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		now := time.Now()
@@ -391,6 +436,7 @@ func (db Db) UpdatePhone(ctx context.Context, userID user.ID, newPhone string) e
 
 		// modify / upsert
 		u.Phone = &newPhone
+		u.PhoneVerifiedAt = &now
 
 		phones := profile.FilterStatus(common.StatusReceived).FilterKindPhone()
 		if len(phones) == 0 {

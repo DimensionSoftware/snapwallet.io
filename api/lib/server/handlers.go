@@ -693,11 +693,7 @@ func (s *Server) ChangeViewerEmail(ctx context.Context, req *proto.ChangeViewerE
 	}
 
 	// everything checks out; modify the user and save with the new email address value
-	now := time.Now()
-	u.Email = &newEmailValue
-	u.EmailVerifiedAt = &now
-
-	err = s.Db.SaveUser(ctx, nil, u)
+	err = s.Db.UpdateEmail(ctx, u.ID, newEmailValue)
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
@@ -733,11 +729,7 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 	}
 
 	// everything checks out; modify the user and save with the new phone value
-	now := time.Now()
-	u.Phone = &newPhoneValue
-	u.PhoneVerifiedAt = &now
-
-	err = s.Db.SaveUser(ctx, nil, u)
+	err = s.Db.UpdatePhone(ctx, u.ID, newPhoneValue)
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
