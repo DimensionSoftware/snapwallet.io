@@ -934,7 +934,7 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 		return nil, err
 	}
 
-	if req.TransferId != "" {
+	if req.TransferId == "" {
 		return nil, status.Errorf(codes.InvalidArgument, "a valid transfer ID is required")
 	}
 
