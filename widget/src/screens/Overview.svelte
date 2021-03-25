@@ -5,49 +5,33 @@
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
-  import { priceStore } from '../stores/PriceStore'
-  import {
-    CryptoIcons,
-    isValidNumber,
-    formatLocaleCurrency,
-    dropEndingZeros,
-  } from '../util'
-  import { onMount, afterUpdate } from 'svelte'
+  import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
   import { TransactionIntents } from '../types'
-  import { replace } from 'svelte-spa-router'
+
+  $: ({ intent, wyrePreview } = $transactionStore)
 
   $: ({
-    intent,
-    destinationCurrency,
-    sourceCurrency,
+    id,
+    dest,
     sourceAmount,
-    destinationAmount,
-  } = $transactionStore)
+    sourceCurrency,
+    destAmount: destinationAmount,
+    destCurrency: destinationCurrency,
+    exchangeRate: txnExchangeRate,
+    fees,
+  } = wyrePreview)
 
   $: isBuy = intent === TransactionIntents.BUY
-  $: cryptoTicker = isBuy ? destinationCurrency.ticker : sourceCurrency.ticker
-  $: fiatTicker = isBuy ? sourceCurrency.ticker : destinationCurrency.ticker
+  $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
+  $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
   $: cryptoAmount = isBuy ? destinationAmount : sourceAmount
-
   $: Icon = CryptoIcons[cryptoTicker]
   $: screenTitle = $transactionStore.intent === 'buy' ? 'Buying' : 'Selling'
   $: buttonText = $transactionStore.intent === 'buy' ? 'Buy Now' : 'Sell Now'
-
-  // TODO: these prices will be removed once txn endpoint is wired up ;)
-  // Price Data
-  $: selectedDirection = `${sourceCurrency.ticker}_${destinationCurrency.ticker}`
-  $: selectedPriceMap = $priceStore.prices[selectedDirection]
-  $: destRate = selectedPriceMap[destinationCurrency.ticker]
-  $: exchangeRate = isBuy ? 1 / destRate : destRate
+  $: exchangeRate = isBuy ? 1 / txnExchangeRate : txnExchangeRate
   $: total = isBuy ? sourceAmount : destinationAmount
 
   $: cryptoPrecision = cryptoAmount % 1 === 0 ? 1 : 8
-
-  onMount(() => {
-    priceStore.fetchPrices()
-    const priceInterval = priceStore.pollPrices()
-    return () => clearInterval(priceInterval)
-  })
 </script>
 
 <ModalContent>
@@ -72,12 +56,16 @@
           </div>
           <div class="line-item muted">
             <div>To</div>
-            <div>3x2kdkdj...k34w</div>
+            <div>
+              {dest.substring(0, 6)}...{dest.substring(dest.length - 4)}
+            </div>
           </div>
         {:else}
           <div class="line-item muted">
             <div>From</div>
-            <div>3x2kdkdj...k34w</div>
+            <div>
+              {dest.substring(0, 6)}...{dest.substring(dest.length - 4)}
+            </div>
           </div>
           <div class="line-item muted">
             <div>To</div>
@@ -89,7 +77,7 @@
       <div class="line-item muted">
         <div>Crypto Fee</div>
         <div>
-          {dropEndingZeros((0).toFixed(cryptoPrecision))}
+          {dropEndingZeros(fees[destinationCurrency].toFixed(cryptoPrecision))}
           {cryptoTicker}
         </div>
       </div>
@@ -97,7 +85,7 @@
         <div class="line-item muted">
           <div>Service Fee</div>
           <div>
-            {formatLocaleCurrency($transactionStore.sourceCurrency.ticker, 0)}
+            {formatLocaleCurrency(sourceCurrency, fees[sourceCurrency])}
           </div>
         </div>
       {/if}
