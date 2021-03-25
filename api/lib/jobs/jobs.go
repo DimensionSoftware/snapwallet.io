@@ -9,12 +9,12 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
-	"github.com/khoerling/flux/api/lib/interfaces/ijobmanager"
+	"github.com/khoerling/flux/api/lib/jobmanager"
 	"github.com/lithammer/shortuuid"
 )
 
 // RunSnapJob consumes a Pub/Sub message.
-func RunSnapJob(ctx context.Context, jobManager ijobmanager.JobManager, j *job.Job) error {
+func RunSnapJob(ctx context.Context, jobManager jobmanager.Manager, j *job.Job) error {
 	switch j.Kind {
 	case job.KindCreateWyreAccountForUser:
 		return runCreateWyreAccountForUser(ctx, jobManager, j)
@@ -25,7 +25,7 @@ func RunSnapJob(ctx context.Context, jobManager ijobmanager.JobManager, j *job.J
 	return fmt.Errorf("error: unsupported job kind: %s", j.Kind)
 }
 
-func runCreateWyrePaymentMethodsForUser(ctx context.Context, m ijobmanager.JobManager, j *job.Job) error {
+func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manager, j *job.Job) error {
 	if len(j.RelatedIDs) == 0 {
 		return fmt.Errorf("error: relatedIDs can't be empty")
 	}
@@ -71,7 +71,7 @@ func runCreateWyrePaymentMethodsForUser(ctx context.Context, m ijobmanager.JobMa
 	return nil
 }
 
-func runCreateWyreAccountForUser(ctx context.Context, m ijobmanager.JobManager, j *job.Job) error {
+func runCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j *job.Job) error {
 	if len(j.RelatedIDs) == 0 {
 		log.Println("error: relatedIDs can't be empty")
 		return nil

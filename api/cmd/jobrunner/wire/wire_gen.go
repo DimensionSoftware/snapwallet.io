@@ -103,3 +103,79 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	}
 	return jobmanagerManager, nil
 }
+
+func InitializeDevJobManager() (jobmanager.Manager, error) {
+	fireProjectID, err := firestore.ProvideFirestoreProjectID()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	client, err := firestore.ProvideFirestore(fireProjectID)
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	config, err := encryption.ProvideConfig()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	manager, err := encryption.NewManager(config)
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	dbDb := &db.Db{
+		Firestore:         client,
+		EncryptionManager: manager,
+	}
+	pusherConfig, err := pusher.ProviderPusherConfig()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	pusherClient := pusher.ProvidePusherClient(pusherConfig)
+	pusherManager := &pusher.Manager{
+		Pusher: pusherClient,
+	}
+	apiHost, err := wyre.ProvideAPIHost()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	wyreConfig, err := wyre.ProvideWyreConfig()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	wyreClient := wyre.NewClient(wyreConfig)
+	clientOptions, err := plaid.ProvideClientOptions()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	plaidClient, err := plaid2.NewClient(clientOptions)
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	bucketHandle, err := cloudstorage.ProvideBucket()
+	if err != nil {
+		return jobmanager.Manager{}, err
+	}
+	filemanagerManager := &filemanager.Manager{
+		BucketHandle:      bucketHandle,
+		Db:                dbDb,
+		EncryptionManager: manager,
+	}
+	wyreManager := &wyre.Manager{
+		APIHost:     apiHost,
+		Wyre:        wyreClient,
+		Db:          dbDb,
+		Plaid:       plaidClient,
+		FileManager: filemanagerManager,
+	}
+	inProcessPublisher := jobpublisher.InProcessPublisher{
+		Db:          dbDb,
+		Pusher:      pusherManager,
+		WyreManager: wyreManager,
+	}
+	jobmanagerManager := jobmanager.Manager{
+		Db:           dbDb,
+		Pusher:       pusherManager,
+		WyreManager:  wyreManager,
+		JobPublisher: inProcessPublisher,
+	}
+	return jobmanagerManager, nil
+}

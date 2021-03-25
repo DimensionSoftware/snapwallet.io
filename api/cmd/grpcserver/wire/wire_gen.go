@@ -145,3 +145,118 @@ func InitializeServer() (server.Server, error) {
 	}
 	return serverServer, nil
 }
+
+func InitializeDevServer() (server.Server, error) {
+	privateKey, err := auth.ProvideJwtPrivateKey()
+	if err != nil {
+		return server.Server{}, err
+	}
+	publicKey := auth.ProvideJwtPublicKey(privateKey)
+	fireProjectID, err := firestore.ProvideFirestoreProjectID()
+	if err != nil {
+		return server.Server{}, err
+	}
+	client, err := firestore.ProvideFirestore(fireProjectID)
+	if err != nil {
+		return server.Server{}, err
+	}
+	config, err := encryption.ProvideConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	manager, err := encryption.NewManager(config)
+	if err != nil {
+		return server.Server{}, err
+	}
+	dbDb := &db.Db{
+		Firestore:         client,
+		EncryptionManager: manager,
+	}
+	jwtVerifier := &auth.JwtVerifier{
+		PublicKey: publicKey,
+		Db:        dbDb,
+	}
+	grpcServer := server.ProvideGrpcServer(jwtVerifier)
+	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
+	if err != nil {
+		return server.Server{}, err
+	}
+	sendgridClient := sendgrid.ProvideSendClient(sendAPIKey)
+	twilioConfig, err := twilio.ProvideTwilioConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	gotwilioTwilio := twilio.ProvideTwilio(twilioConfig)
+	bucketHandle, err := cloudstorage.ProvideBucket()
+	if err != nil {
+		return server.Server{}, err
+	}
+	filemanagerManager := &filemanager.Manager{
+		BucketHandle:      bucketHandle,
+		Db:                dbDb,
+		EncryptionManager: manager,
+	}
+	wyreConfig, err := wyre.ProvideWyreConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	wyreClient := wyre.NewClient(wyreConfig)
+	apiHost, err := wyre.ProvideAPIHost()
+	if err != nil {
+		return server.Server{}, err
+	}
+	clientOptions, err := plaid.ProvideClientOptions()
+	if err != nil {
+		return server.Server{}, err
+	}
+	plaidClient, err := plaid2.NewClient(clientOptions)
+	if err != nil {
+		return server.Server{}, err
+	}
+	wyreManager := &wyre.Manager{
+		APIHost:     apiHost,
+		Wyre:        wyreClient,
+		Db:          dbDb,
+		Plaid:       plaidClient,
+		FileManager: filemanagerManager,
+	}
+	jwtSigner := &auth.JwtSigner{
+		PrivateKey: privateKey,
+	}
+	authManager := &auth.Manager{
+		JwtSigner:   jwtSigner,
+		JwtVerifier: jwtVerifier,
+		Db:          dbDb,
+	}
+	pusherConfig, err := pusher.ProviderPusherConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	pusherClient := pusher.ProvidePusherClient(pusherConfig)
+	pusherManager := &pusher.Manager{
+		Pusher: pusherClient,
+	}
+	inProcessPublisher := jobpublisher.InProcessPublisher{
+		Db:          dbDb,
+		Pusher:      pusherManager,
+		WyreManager: wyreManager,
+	}
+	serverServer := server.Server{
+		GrpcServer:   grpcServer,
+		Sendgrid:     sendgridClient,
+		Twilio:       gotwilioTwilio,
+		TwilioConfig: twilioConfig,
+		Firestore:    client,
+		FileManager:  filemanagerManager,
+		Db:           dbDb,
+		Wyre:         wyreClient,
+		WyreManager:  wyreManager,
+		Plaid:        plaidClient,
+		JwtSigner:    jwtSigner,
+		JwtVerifier:  jwtVerifier,
+		AuthManager:  authManager,
+		Pusher:       pusherManager,
+		JobPublisher: inProcessPublisher,
+	}
+	return serverServer, nil
+}

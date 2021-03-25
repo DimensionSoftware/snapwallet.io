@@ -37,7 +37,7 @@ func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
 		return nil
 	}
 
-	if err := jobs.RunSnapJob(ctx, &jobManager, &j); err != nil {
+	if err := jobs.RunSnapJob(ctx, jobManager, &j); err != nil {
 		// todo: whitelist transient errors
 		log.Println("job failed: ", err)
 	}
