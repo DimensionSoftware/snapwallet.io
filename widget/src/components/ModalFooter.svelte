@@ -1,16 +1,18 @@
 <script lang="ts">
   import { ParentMessenger } from '../util/parent_messenger'
+  import { isEmbedded } from '../util'
   export let hideCloseButton = false
 </script>
+
 <div class="modal-footer">
   <slot />
   <span
-    class:hidden={hideCloseButton}
+    class:hidden={!isEmbedded || hideCloseButton}
     on:click={ParentMessenger.exit}
     class="modal-header-right-action"
   >
-  Close
-</span>
+    Close
+  </span>
 </div>
 
 <style lang="scss">
@@ -22,8 +24,12 @@
     padding: 0 initial;
     span {
       cursor: pointer;
-      margin-top: .5rem;
-      font-size: .9rem;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .hidden {
+      visibility: hidden;
+      cursor: initial;
     }
   }
 </style>

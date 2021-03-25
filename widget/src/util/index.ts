@@ -100,3 +100,5 @@ export const fileToBase64 = (file): Promise<string> =>
 export const dropEndingZeros = (str: string): string => {
   return str.replace(/\.0+0?$/g, '')
 }
+
+export const isEmbedded = window.location.search.indexOf('config=') !== -1

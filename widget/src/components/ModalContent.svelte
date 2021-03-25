@@ -1,8 +1,9 @@
 <script lang="ts">
+  import { isEmbedded } from '../util'
   export let animation: string = 'left'
 </script>
 
-<div class="modal-content {animation}">
+<div class="modal-content {animation}" style={`bottom: ${isEmbedded ? '5.5em' : '4.5em'}`}>
   <slot />
 </div>
 
@@ -33,7 +34,6 @@
   .modal-content {
     position: absolute;
     top: 1em;
-    bottom: 5.5em;
     left: 1em;
     right: 1em;
   }

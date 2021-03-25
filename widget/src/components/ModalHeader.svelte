@@ -64,9 +64,4 @@
       cursor: pointer;
     }
   }
-
-  .hidden {
-    visibility: hidden;
-    cursor: initial;
-  }
 </style>
