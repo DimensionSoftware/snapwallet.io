@@ -27,11 +27,17 @@
   $: cryptoAmount = isBuy ? destinationAmount : sourceAmount
   $: Icon = CryptoIcons[cryptoTicker]
   $: screenTitle = $transactionStore.intent === 'buy' ? 'Buying' : 'Selling'
-  $: exchangeRate = isBuy ? 1 / txnExchangeRate : txnExchangeRate
+  // $: exchangeRate = isBuy ? 1 / txnExchangeRate : txnExchangeRate
   $: total = isBuy ? sourceAmount : destinationAmount
 
   $: cryptoPrecision = cryptoAmount % 1 === 0 ? 1 : 8
   $: isConfirmingTxn = false
+  $: cryptoFee = isBuy
+    ? fees[destinationCurrency] / txnExchangeRate
+    : fees[sourceCurrency]
+  $: trueSourceAmount = isBuy
+    ? sourceAmount - cryptoFee - fees[sourceCurrency]
+    : sourceAmount
 
   let buttonText
   $: {
@@ -93,10 +99,15 @@
         <div class="line dashed" />
       {/if}
       <div class="line-item muted">
+        <div>Subtotal</div>
+        <div>
+          {formatLocaleCurrency(sourceCurrency, trueSourceAmount)}
+        </div>
+      </div>
+      <div class="line-item muted">
         <div>Crypto Fee</div>
         <div>
-          {dropEndingZeros(fees[destinationCurrency].toFixed(cryptoPrecision))}
-          {cryptoTicker}
+          {formatLocaleCurrency(sourceCurrency, cryptoFee)}
         </div>
       </div>
       {#if isBuy}
@@ -107,12 +118,6 @@
           </div>
         </div>
       {/if}
-      <div class="line-item muted">
-        <div>Exchange Rate</div>
-        <div>
-          {formatLocaleCurrency(fiatTicker, exchangeRate)}
-        </div>
-      </div>
       <div class="line dashed" />
       <div class="line-item">
         <div><b>Total</b></div>
