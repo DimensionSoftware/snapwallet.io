@@ -1,6 +1,6 @@
 GO_LIB_FILES := $(shell find lib -type f -name "*.go" | sort) $(shell find cmd -type f -name "*.go" | sort) go.mod go.sum
 
-run: grpcserver  grpcgateway
+run: grpcdevserver grpcgateway
 	hivemind
 
 test:
@@ -18,6 +18,9 @@ proto:
 
 grpcserver: ${GO_LIB_FILES}
 	go build ./cmd/grpcserver
+
+grpcdevserver: ${GO_LIB_FILES}
+	go build ./cmd/grpcdevserver
 
 grpcgateway: ${GO_LIB_FILES}
 	go build ./cmd/grpcgateway

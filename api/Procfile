@@ -1,2 +1,2 @@
-server: ./grpcserver
+server: ./grpcdevserver
 gateway: ./grpcgateway
