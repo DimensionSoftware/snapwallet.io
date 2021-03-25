@@ -53,6 +53,7 @@
 
   $: fakePrice = 10_000
   $: nextRoute = Routes.PROFILE
+  $: isCreatingTxnPreview = false
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
@@ -68,6 +69,23 @@
     if (!sourceAmount || !isValidNumber(sourceAmount))
       // focus input
       return document.querySelector('input')?.focus()
+
+    if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
+      try {
+        isCreatingTxnPreview = true
+        const preview = await window.API.fluxWyreCreateTransfer({
+          source: $transactionStore.selectedSourcePaymentMethod?.id,
+          sourceAmount: $transactionStore.sourceAmount,
+          // TODO: get this from app config wallets
+          dest: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK',
+          destCurrency: $transactionStore.destinationCurrency?.ticker,
+        })
+
+        transactionStore.setWyrePreview(preview)
+      } finally {
+        isCreatingTxnPreview = false
+      }
+    }
 
     push(nextRoute)
   }
@@ -191,7 +209,13 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}>Checkout</Button>
+    <Button isLoading={isCreatingTxnPreview} on:click={handleNextStep}>
+      {#if isCreatingTxnPreview}
+        Checking Out
+      {:else}
+        Checkout
+      {/if}
+    </Button>
   </ModalFooter>
 </ModalContent>
 
