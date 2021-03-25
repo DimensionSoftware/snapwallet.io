@@ -928,6 +928,45 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 	return wyre.WyreTransferToProto(t), nil
 }
 
+func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirmTransferRequest) (*proto.WyreTransfer, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	if req.TransferId != "" {
+		return nil, status.Errorf(codes.InvalidArgument, "a valid transfer ID is required")
+	}
+
+	var wyreAccount *account.Account
+	{
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		if err != nil {
+			return nil, err
+		}
+		if len(accounts) > 0 {
+			wyreAccount = accounts[0]
+		}
+	}
+	if wyreAccount == nil {
+		return nil, status.Errorf(codes.FailedPrecondition, "you must have a wyre account to confirm a transfer")
+	}
+
+	wyreReq := wyre.ConfirmTransferRequest{
+		TransferID: req.TransferId,
+	}
+
+	t, err := s.Wyre.ConfirmTransfer(wyreAccount.SecretKey, wyreReq)
+	if err != nil {
+		return nil, err
+
+	}
+	// TODO: store info in db about xfer
+	fmt.Printf("Wyre transfer confirmation response: %#v", t)
+
+	return wyre.WyreTransferToProto(t), nil
+}
+
 func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto.WyreTransfers, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
