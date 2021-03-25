@@ -162,7 +162,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button disabled={isMakingRequest} on:click={handleNextStep}>
+    <Button isLoading={isMakingRequest} on:click={handleNextStep}>
       {#if isMakingRequest && !isSendingCode}
         Confirming...
       {:else if isMakingRequest && isSendingCode}

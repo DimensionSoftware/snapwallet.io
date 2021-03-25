@@ -117,7 +117,7 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button disabled={isSaving} on:click={handleNextStep}
+    <Button disabled={isSaving} isLoading={isSaving} on:click={handleNextStep}
       >{isSaving ? 'Saving...' : 'Save'}</Button
     >
   </ModalFooter>
