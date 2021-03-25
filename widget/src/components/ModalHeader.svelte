@@ -63,5 +63,8 @@
       justify-content: flex-start;
       cursor: pointer;
     }
+    .hidden {
+      visibility: hidden;
+    }
   }
 </style>
