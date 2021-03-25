@@ -9,12 +9,12 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
-	"github.com/khoerling/flux/api/lib/jobmanager"
+	"github.com/khoerling/flux/api/lib/interfaces/ijobmanager"
 	"github.com/lithammer/shortuuid"
 )
 
 // RunSnapJob consumes a Pub/Sub message.
-func RunSnapJob(ctx context.Context, jobManager *jobmanager.Manager, j *job.Job) error {
+func RunSnapJob(ctx context.Context, jobManager ijobmanager.JobManager, j *job.Job) error {
 	switch j.Kind {
 	case job.KindCreateWyreAccountForUser:
 		return runCreateWyreAccountForUser(ctx, jobManager, j)
@@ -25,19 +25,19 @@ func RunSnapJob(ctx context.Context, jobManager *jobmanager.Manager, j *job.Job)
 	return fmt.Errorf("error: unsupported job kind: %s", j.Kind)
 }
 
-func runCreateWyrePaymentMethodsForUser(ctx context.Context, m *jobmanager.Manager, j *job.Job) error {
+func runCreateWyrePaymentMethodsForUser(ctx context.Context, m ijobmanager.JobManager, j *job.Job) error {
 	if len(j.RelatedIDs) == 0 {
 		return fmt.Errorf("error: relatedIDs can't be empty")
 	}
 
 	userID := user.ID(j.RelatedIDs[0])
 
-	items, err := m.Db.GetAllPlaidItems(ctx, nil, userID)
+	items, err := m.GetDb().GetAllPlaidItems(ctx, nil, userID)
 	if err != nil {
 		return err
 	}
 
-	wyreAccounts, err := m.Db.GetWyreAccounts(ctx, nil, userID)
+	wyreAccounts, err := m.GetDb().GetWyreAccounts(ctx, nil, userID)
 	if err != nil {
 		return err
 	}
@@ -47,7 +47,7 @@ func runCreateWyrePaymentMethodsForUser(ctx context.Context, m *jobmanager.Manag
 	wyreAccount := wyreAccounts[0]
 
 	log.Println("creating wyre payment methods (if needed)")
-	pms, err := m.WyreManager.CreatePaymentMethodsFromPlaidItems(ctx, userID, wyreAccount.ID, items)
+	pms, err := m.GetWyreManager().CreatePaymentMethodsFromPlaidItems(ctx, userID, wyreAccount.ID, items)
 	if err != nil {
 		return err
 	}
@@ -58,7 +58,7 @@ func runCreateWyrePaymentMethodsForUser(ctx context.Context, m *jobmanager.Manag
 			ids = append(ids, string(pm.ID))
 		}
 
-		err = m.Pusher.Send(userID, &pusher.Message{
+		err = m.GetPusher().Send(userID, &pusher.Message{
 			Kind: pusher.MessageKindWyrePaymentsMethodUpdated,
 			IDs:  ids,
 			At:   time.Now(),
@@ -71,7 +71,7 @@ func runCreateWyrePaymentMethodsForUser(ctx context.Context, m *jobmanager.Manag
 	return nil
 }
 
-func runCreateWyreAccountForUser(ctx context.Context, m *jobmanager.Manager, j *job.Job) error {
+func runCreateWyreAccountForUser(ctx context.Context, m ijobmanager.JobManager, j *job.Job) error {
 	if len(j.RelatedIDs) == 0 {
 		log.Println("error: relatedIDs can't be empty")
 		return nil
@@ -80,20 +80,20 @@ func runCreateWyreAccountForUser(ctx context.Context, m *jobmanager.Manager, j *
 	userID := user.ID(j.RelatedIDs[0])
 	log.Println("creating wyre account")
 
-	pdata, err := m.Db.GetAllProfileData(ctx, nil, userID)
+	pdata, err := m.GetDb().GetAllProfileData(ctx, nil, userID)
 	if err != nil {
 		log.Println("error while getting profile data: ", err)
 		return nil
 	}
 
-	_, err = m.WyreManager.CreateAccount(ctx, userID, pdata)
+	_, err = m.GetWyreManager().CreateAccount(ctx, userID, pdata)
 	if err != nil {
 		log.Println("error while creating wyre account: ", err)
 		// retryable once i work out issues?
 		return nil
 	}
 
-	err = m.Pusher.Send(userID, &pusher.Message{
+	err = m.GetPusher().Send(userID, &pusher.Message{
 		Kind: pusher.MessageKindWyreAccountUpdated,
 		At:   time.Now(),
 	})
@@ -106,7 +106,7 @@ func runCreateWyreAccountForUser(ctx context.Context, m *jobmanager.Manager, j *
 	{
 		now := time.Now()
 
-		err = m.JobPublisher.PublishJob(ctx, &job.Job{
+		err = m.GetJobPublisher().PublishJob(ctx, &job.Job{
 			ID:         shortuuid.New(),
 			Kind:       job.KindCreateWyrePaymentMethodsForUser,
 			Status:     job.StatusQueued,

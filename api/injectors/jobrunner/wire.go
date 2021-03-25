@@ -46,3 +46,30 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	)
 	return jobmanager.Manager{}, nil
 }
+
+func InitializeDevJobManager() (jobmanager.Manager, error) {
+	wire.Build(
+		wire.Struct(new(db.Db), "*"),
+		wire.Struct(new(pusher.Manager), "*"),
+		wire.Struct(new(pubsub.Manager), "*"),
+		wire.Struct(new(jobmanager.Manager), "*"),
+		wire.Struct(new(filemanager.Manager), "*"),
+		wire.Struct(new(wyre.Manager), "*"),
+		wire.Bind(new(ijobpublisher.JobPublisher), new(jobpublisher.InProcessPublisher)),
+		wire.Struct(new(jobpublisher.InProcessPublisher), "*"),
+		cloudstorage.ProvideBucket,
+		vendorplaid.NewClient,
+		plaid.ProvideClientOptions,
+		firestore.ProvideFirestoreProjectID,
+		firestore.ProvideFirestore,
+		encryption.ProvideConfig,
+		encryption.NewManager,
+		pusher.ProviderPusherConfig,
+		pusher.ProvidePusherClient,
+		wyre.ProvideAPIHost,
+		wyre.ProvideWyreConfig,
+		wyre.NewClient,
+		pubsub.ProvideClient,
+	)
+	return jobmanager.Manager{}, nil
+}

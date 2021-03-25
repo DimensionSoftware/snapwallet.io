@@ -5,12 +5,12 @@ import (
 	"log"
 
 	"github.com/khoerling/flux/api/lib/db/models/job"
-	"github.com/khoerling/flux/api/lib/jobmanager"
+	"github.com/khoerling/flux/api/lib/interfaces/ijobmanager"
 	"github.com/khoerling/flux/api/lib/jobs"
 )
 
 type InProcessPublisher struct {
-	JobManager *jobmanager.Manager
+	JobManager ijobmanager.JobManager
 }
 
 func (pub InProcessPublisher) PublishJob(_ context.Context, j *job.Job) error {

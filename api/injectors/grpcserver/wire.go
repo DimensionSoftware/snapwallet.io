@@ -14,6 +14,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/interfaces/ijobmanager"
 	"github.com/khoerling/flux/api/lib/interfaces/ijobpublisher"
 	"github.com/khoerling/flux/api/lib/jobmanager"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
@@ -68,6 +69,7 @@ func InitializeDevServer() (server.Server, error) {
 		wire.Struct(new(server.Server), "*"),
 		wire.Bind(new(ijobpublisher.JobPublisher), new(jobpublisher.InProcessPublisher)),
 		wire.Struct(new(jobpublisher.InProcessPublisher), "*"),
+		wire.Bind(new(ijobmanager.JobManager), new(jobmanager.Manager)),
 		wire.Struct(new(jobmanager.Manager), "*"),
 		sendgrid.ProvideSendClientAPIKey,
 		sendgrid.ProvideSendClient,

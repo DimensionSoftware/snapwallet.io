@@ -13,3 +13,19 @@ type Manager struct {
 	WyreManager  *wyre.Manager
 	JobPublisher ijobpublisher.JobPublisher
 }
+
+func (m Manager) GetDb() *db.Db {
+	return m.Db
+}
+
+func (m Manager) GetPusher() *pusher.Manager {
+	return m.Pusher
+}
+
+func (m Manager) GetWyreManager() *wyre.Manager {
+	return m.WyreManager
+}
+
+func (m Manager) GetJobPublisher() ijobpublisher.JobPublisher {
+	return m.JobPublisher
+}
