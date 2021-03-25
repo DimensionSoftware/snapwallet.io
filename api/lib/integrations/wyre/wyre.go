@@ -376,7 +376,7 @@ func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*Transf
 	return resp.Result().(*Transfer), nil
 }
 
-// CreateTransfer creates a transfer in the wyre system
+// ConfirmTransfer confirms an existing transfer in the wyre system
 // https://docs.sendwyre.com/docs/confirm-transfer
 // POST https://api.sendwyre.com/v3/transfers/transferId:/confirm
 func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*Transfer, error) {
