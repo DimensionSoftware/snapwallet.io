@@ -13,6 +13,7 @@ const createStore = () => {
     sourceAmount: 0.0,
     destinationAmount: 0.0,
     selectedSourcePaymentMethod: null,
+    wyrePreview: null,
   })
 
   return {
@@ -61,6 +62,8 @@ const createStore = () => {
           destinationAmount: s.sourceAmount,
         }
       }),
+    setWyrePreview: (wyrePreview: object) =>
+      update(s => ({ ...s, wyrePreview })),
   }
 }
 
