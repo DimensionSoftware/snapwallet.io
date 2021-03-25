@@ -90,7 +90,7 @@
     }
     .lds-circle {
       position: absolute;
-      left: 0;
+      left: .5rem;
       top: 0;
       display: inline-block;
       transform: translateZ(1px);
