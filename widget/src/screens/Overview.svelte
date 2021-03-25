@@ -11,7 +11,7 @@
   $: ({ intent, wyrePreview } = $transactionStore)
 
   $: ({
-    id,
+    id: txnId,
     dest,
     sourceAmount,
     sourceCurrency,
@@ -27,11 +27,29 @@
   $: cryptoAmount = isBuy ? destinationAmount : sourceAmount
   $: Icon = CryptoIcons[cryptoTicker]
   $: screenTitle = $transactionStore.intent === 'buy' ? 'Buying' : 'Selling'
-  $: buttonText = $transactionStore.intent === 'buy' ? 'Buy Now' : 'Sell Now'
   $: exchangeRate = isBuy ? 1 / txnExchangeRate : txnExchangeRate
   $: total = isBuy ? sourceAmount : destinationAmount
 
   $: cryptoPrecision = cryptoAmount % 1 === 0 ? 1 : 8
+  $: isConfirmingTxn = false
+
+  let buttonText
+  $: {
+    if (isBuy) {
+      buttonText = isConfirmingTxn ? 'Buying' : 'Buy Now'
+    } else {
+      buttonText = isConfirmingTxn ? 'Selling' : 'Sell Now'
+    }
+  }
+
+  const handleConfirmation = async () => {
+    try {
+      isConfirmingTxn = true
+      await window.API.fluxWyreConfirmTransfer(txnId, { transferId: txnId })
+    } finally {
+      isConfirmingTxn = false
+    }
+  }
 </script>
 
 <ModalContent>
@@ -105,7 +123,9 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button>{buttonText}</Button>
+    <Button isLoading={isConfirmingTxn} on:click={handleConfirmation}
+      >{buttonText}</Button
+    >
   </ModalFooter>
 </ModalContent>
 
