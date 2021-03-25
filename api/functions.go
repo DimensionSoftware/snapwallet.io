@@ -15,6 +15,17 @@ import (
 	"github.com/lithammer/shortuuid"
 )
 
+var jobManager jobmanager.Manager
+
+func init() {
+	var err error
+
+	jobManager, err = wire.InitializeJobManager()
+	if err != nil {
+		log.Fatalf("error during initialization: %#v", err)
+	}
+}
+
 // PubSubMessage is the payload of a Pub/Sub event.
 // See the documentation for more details:
 // https://cloud.google.com/pubsub/docs/reference/rest/v1/PubsubMessage
@@ -26,12 +37,6 @@ type PubSubMessage struct {
 func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
 	var err error
 
-	m, err := wire.InitializeJobManager()
-	if err != nil {
-		log.Println("error during initialization: ", err)
-		return nil
-	}
-
 	var j job.Job
 	if err = json.Unmarshal(msg.Data, &j); err != nil {
 		log.Println("unmarshaling message failed: ", err)
@@ -40,9 +45,9 @@ func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
 
 	switch j.Kind {
 	case job.KindCreateWyreAccountForUser:
-		err = runCreateWyreAccountForUser(ctx, m, j)
+		err = runCreateWyreAccountForUser(ctx, &jobManager, j)
 	case job.KindCreateWyrePaymentMethodsForUser:
-		err = runCreateWyrePaymentMethodsForUser(ctx, m, j)
+		err = runCreateWyrePaymentMethodsForUser(ctx, &jobManager, j)
 	default:
 		log.Printf("error: unsupported job kind: %s\n", j.Kind)
 		return nil
@@ -55,7 +60,7 @@ func RunSnapJob(ctx context.Context, msg PubSubMessage) error {
 	return nil
 }
 
-func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manager, j job.Job) error {
+func runCreateWyrePaymentMethodsForUser(ctx context.Context, m *jobmanager.Manager, j job.Job) error {
 	if len(j.RelatedIDs) == 0 {
 		return fmt.Errorf("error: relatedIDs can't be empty")
 	}
@@ -101,7 +106,7 @@ func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manage
 	return nil
 }
 
-func runCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j job.Job) error {
+func runCreateWyreAccountForUser(ctx context.Context, m *jobmanager.Manager, j job.Job) error {
 	if len(j.RelatedIDs) == 0 {
 		log.Println("error: relatedIDs can't be empty")
 		return nil
