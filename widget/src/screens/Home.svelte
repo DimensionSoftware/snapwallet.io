@@ -51,7 +51,7 @@
     ? 1 / selectedDestinationPrice
     : selectedDestinationPrice
 
-  $: fakePrice = 10_000
+  $: fakePrice = 1_000
   $: nextRoute = Routes.PROFILE
   $: isCreatingTxnPreview = false
 
@@ -120,7 +120,7 @@
       animateRandomPrice()
       await priceStore.fetchPrices()
     } finally {
-      setTimeout(() => (isLoadingPrices = false), 1200)
+      setTimeout(() => (isLoadingPrices = false), 250)
     }
   }
 
