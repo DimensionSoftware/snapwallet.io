@@ -260,7 +260,7 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	{
 		now := time.Now()
 
-		err = s.PubSub.SendJob(ctx, &job.Job{
+		err = s.JobPublisher.PublishJob(ctx, &job.Job{
 			ID:         shortuuid.New(),
 			Kind:       job.KindCreateWyrePaymentMethodsForUser,
 			Status:     job.StatusQueued,
@@ -625,7 +625,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 		now := time.Now()
 
-		err = s.PubSub.SendJob(ctx, &job.Job{
+		err = s.JobPublisher.PublishJob(ctx, &job.Job{
 			ID:         shortuuid.New(),
 			Kind:       job.KindCreateWyreAccountForUser,
 			Status:     job.StatusQueued,

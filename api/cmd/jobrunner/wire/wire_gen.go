@@ -16,6 +16,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/jobmanager"
+	"github.com/khoerling/flux/api/lib/jobpublisher"
 	plaid2 "github.com/plaid/plaid-go/plaid"
 )
 
@@ -91,11 +92,14 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	pubsubManager := &pubsub.Manager{
 		PubSub: pubsubClient,
 	}
+	pubSubPublisher := jobpublisher.PubSubPublisher{
+		PubSub: pubsubManager,
+	}
 	jobmanagerManager := jobmanager.Manager{
-		Db:          dbDb,
-		Pusher:      pusherManager,
-		WyreManager: wyreManager,
-		PubSub:      pubsubManager,
+		Db:           dbDb,
+		Pusher:       pusherManager,
+		WyreManager:  wyreManager,
+		JobPublisher: pubSubPublisher,
 	}
 	return jobmanagerManager, nil
 }

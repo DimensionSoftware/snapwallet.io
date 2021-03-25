@@ -1,4 +1,4 @@
-package jobpublisher
+package ijobpublisher
 
 import (
 	"context"
@@ -6,6 +6,6 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/job"
 )
 
-type Publisher interface {
+type JobPublisher interface {
 	PublishJob(context.Context, *job.Job) error
 }

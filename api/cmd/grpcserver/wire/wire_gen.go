@@ -18,6 +18,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/jobpublisher"
 	"github.com/khoerling/flux/api/lib/server"
 	plaid2 "github.com/plaid/plaid-go/plaid"
 )
@@ -122,6 +123,9 @@ func InitializeServer() (server.Server, error) {
 	pubsubManager := &pubsub.Manager{
 		PubSub: pubsubClient,
 	}
+	pubSubPublisher := jobpublisher.PubSubPublisher{
+		PubSub: pubsubManager,
+	}
 	serverServer := server.Server{
 		GrpcServer:   grpcServer,
 		Sendgrid:     sendgridClient,
@@ -137,7 +141,7 @@ func InitializeServer() (server.Server, error) {
 		JwtVerifier:  jwtVerifier,
 		AuthManager:  authManager,
 		Pusher:       pusherManager,
-		PubSub:       pubsubManager,
+		JobPublisher: pubSubPublisher,
 	}
 	return serverServer, nil
 }

@@ -7,10 +7,10 @@ import (
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/filemanager"
-	"github.com/khoerling/flux/api/lib/integrations/pubsub"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/interfaces/ijobpublisher"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/sendgrid/sendgrid-go"
@@ -35,7 +35,7 @@ type Server struct {
 	JwtVerifier                   *auth.JwtVerifier
 	AuthManager                   *auth.Manager
 	Pusher                        *pusher.Manager
-	PubSub                        *pubsub.Manager
+	JobPublisher                  ijobpublisher.JobPublisher
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
