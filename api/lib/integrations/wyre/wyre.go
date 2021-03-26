@@ -150,6 +150,10 @@ type CreateTransferRequest struct {
 	MuteMessages       *bool   `json:"muteMessages,omitempty"`       // When true, disables outbound emails/messages to the destination
 }
 
+type ConfirmTransferRequest struct {
+	TransferId string `json:"transferId"` // The Wyre transfer identifier
+}
+
 // WithDefaults provides defaults for CreateTransferRequest
 func (r CreateTransferRequest) WithDefaults() CreateTransferRequest {
 	t := true
@@ -361,6 +365,29 @@ func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*Transf
 		SetBody(req).
 		EnableTrace().
 		Post("/v3/transfers")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*Transfer), nil
+}
+
+// ConfirmTransfer confirms an existing transfer in the wyre system
+// https://docs.sendwyre.com/docs/confirm-transfer
+// POST https://api.sendwyre.com/v3/transfers/transferId:/confirm
+func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*Transfer, error) {
+	reqURL := fmt.Sprintf("/v3/transfers/%s/confirm", req.TransferId)
+	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+token).
+		SetError(APIError{}).
+		SetResult(Transfer{}).
+		SetBody(req).
+		EnableTrace().
+		Post(reqURL)
 	if err != nil {
 		return nil, err
 	}

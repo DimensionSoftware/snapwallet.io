@@ -7,6 +7,11 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
   import { TransactionIntents } from '../types'
+  import { push } from 'svelte-spa-router'
+  import { Routes } from '../constants'
+  import { ParentMessenger } from '../util/parent_messenger'
+  import { faLock } from '@fortawesome/free-solid-svg-icons'
+  import FaIcon from 'svelte-awesome'
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
@@ -51,7 +56,11 @@
   const handleConfirmation = async () => {
     try {
       isConfirmingTxn = true
-      await window.API.fluxWyreConfirmTransfer(txnId, { transferId: txnId })
+      const txn = await window.API.fluxWyreConfirmTransfer(txnId, {
+        transferId: txnId,
+      })
+      ParentMessenger.success(txn.id)
+      push(Routes.SUCCESS)
     } finally {
       isConfirmingTxn = false
     }
@@ -128,9 +137,14 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isConfirmingTxn} on:click={handleConfirmation}
-      >{buttonText}</Button
-    >
+    <Button isLoading={isConfirmingTxn} on:click={handleConfirmation}>
+      <div style="display:flex;justify-content:center;align-items:center;">
+        <span style="margin-right:0.75rem;">
+          {buttonText}
+        </span>
+        <FaIcon data={faLock} />
+      </div>
+    </Button>
   </ModalFooter>
 </ModalContent>
 

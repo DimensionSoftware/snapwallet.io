@@ -18,6 +18,7 @@
   import {
     faCheck,
     faIdCard,
+    faLock,
     faUniversity,
   } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
@@ -51,7 +52,7 @@
     ? 1 / selectedDestinationPrice
     : selectedDestinationPrice
 
-  $: fakePrice = 10_000
+  $: fakePrice = 1_000
   $: nextRoute = Routes.PROFILE
   $: isCreatingTxnPreview = false
 
@@ -120,7 +121,7 @@
       animateRandomPrice()
       await priceStore.fetchPrices()
     } finally {
-      setTimeout(() => (isLoadingPrices = false), 1200)
+      setTimeout(() => (isLoadingPrices = false), 250)
     }
   }
 
@@ -210,11 +211,16 @@
   </ModalBody>
   <ModalFooter>
     <Button isLoading={isCreatingTxnPreview} on:click={handleNextStep}>
-      {#if isCreatingTxnPreview}
-        Checking Out
-      {:else}
-        Checkout
-      {/if}
+      <div style="display:flex;justify-content:center;align-items:center;">
+        <span style="margin-right:0.75rem;">
+          {#if isCreatingTxnPreview}
+            Checking Out
+          {:else}
+            Checkout
+          {/if}
+        </span>
+        <FaIcon data={faLock} />
+      </div>
     </Button>
   </ModalFooter>
 </ModalContent>

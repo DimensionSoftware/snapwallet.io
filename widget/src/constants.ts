@@ -36,6 +36,7 @@ export enum Routes {
   CHECKOUT_OVERVIEW = '/checkout-overview',
   ADDRESS = '/address',
   FILE_UPLOAD = '/file-upload',
+  SUCCESS = '/success',
 }
 
 export enum APIErrors {
@@ -44,6 +45,7 @@ export enum APIErrors {
 
 export enum ParentMessages {
   EXIT = '__SNAP_EXIT',
+  SUCCESS = '__SNAP_SUCCESS',
 }
 
 export enum PusherServerMessages {

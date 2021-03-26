@@ -11,6 +11,7 @@
   function handleClose(e: Event) {
     if (onKeysPressed(e, ['Escape'])) {
       // close if esc pressed
+      e.stopPropagation()
       dispatch('close')
     } else if (e instanceof MouseEvent) {
       // close when bg clicked

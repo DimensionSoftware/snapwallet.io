@@ -4,7 +4,7 @@
   import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
   import { ParentMessenger } from '../util/parent_messenger'
 
-  export let hideCloseButton = false
+  export let hideRightAction = false
   export let hideBackButton = false
 </script>
 
@@ -20,28 +20,10 @@
     <slot />
   </div>
   <div
-    class:hidden={hideCloseButton}
-    on:click={ParentMessenger.exit}
-    class="modal-header-close-button"
+    class:hidden={hideRightAction}
+    class="modal-header-right-action"
   >
-    <svg
-      class="text-main"
-      fill="none"
-      height="24"
-      stroke="currentColor"
-      stroke-linecap="round"
-      stroke-linejoin="round"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-      width="24"
-      xmlns="http://www.w3.org/2000/svg"
-      ><line x1="18" y1="6" x2="6" y2="18" /><line
-        x1="6"
-        y1="6"
-        x2="18"
-        y2="18"
-      /></svg
-    >
+    <slot name="right" />
   </div>
 </div>
 
@@ -69,11 +51,10 @@
       font-weight: bold;
       font-size: 1.2rem;
     }
-    & > .modal-header-close-button {
+    & > .modal-header-right-action {
       @include flex-align-center();
       margin-right: 0.2em;
       justify-content: flex-end;
-      cursor: pointer;
     }
     & > .modal-header-back-button {
       @include flex-align-center();
@@ -81,10 +62,8 @@
       justify-content: flex-start;
       cursor: pointer;
     }
-  }
-
-  .hidden {
-    visibility: hidden;
-    cursor: initial;
+    .hidden {
+      visibility: hidden;
+    }
   }
 </style>

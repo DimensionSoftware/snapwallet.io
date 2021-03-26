@@ -6,6 +6,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
+if (!process.env.WIDGET_URL) throw new Error('Please set a WIDGET_URL and rebuild: `npm run build`')
+
 export default {
   input: 'index.ts',
   output: {

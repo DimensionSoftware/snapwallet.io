@@ -13,12 +13,14 @@
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes, APIErrors } from './constants'
-  import { authedRouteOptions, isJWTValid, Logger } from './util'
+  import { authedRouteOptions, isJWTValid, Logger, onEscPressed } from './util'
+  import { ParentMessenger } from './util/parent_messenger'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
   import FileUpload from './screens/FileUpload.svelte'
   import SendOtp from './screens/SendOTP.svelte'
   import VerifyOtp from './screens/VerifyOTP.svelte'
+  import Success from './screens/Success.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -56,6 +58,15 @@
     push(Routes.SEND_OTP)
   }
 
+  // close modal on escape and outside mouse click
+  const onKeyDown = (e: Event) => {
+    if (e.target !== document.body)
+      onEscPressed(e, ParentMessenger.exit)
+    },
+    onMouseDown = (e: MouseEvent) => {
+      if ((e.target as Element).id === 'modal') ParentMessenger.exit()
+    }
+
   const routes = {
     [Routes.ROOT]: wrap({
       component: Home as any,
@@ -74,6 +85,9 @@
       conditions: [() => !isJWTValid()],
     }),
     // Authenticated
+    [Routes.SUCCESS]: wrap({
+      ...authedRouteOptions(Success),
+    }),
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),
     }),
@@ -133,13 +147,23 @@
         return window.AUTH_MANAGER.logout()
       }
 
+      // show toast
+      console.log('error ', reason)
+      const isWyreErr =
+        reason instanceof String
+          ? reason.match(/wyre.APIError.*Message:.(.+)?"/)
+          : false
       toaster.pop({
-        msg: reason?.body?.message || body?.message || msg,
+        msg: isWyreErr
+          ? isWyreErr[0]
+          : reason?.body?.message || body?.message || msg,
         error: true,
       })
     }
   })
 </script>
+
+<svelte:window on:keydown={onKeyDown} on:mousedown={onMouseDown} />
 
 <div id="modal">
   <div id="modal-body">
@@ -162,6 +186,7 @@
 
 <style lang="scss">
   @import './styles/_vars.scss';
+  @import './styles/animations.scss';
 
   :global(*) {
     box-sizing: border-box;
@@ -213,6 +238,8 @@
     height: 100%;
     overflow: hidden;
     background: var(--theme-modal-container-background-color);
+    opacity: 0;
+    animation: backgroundFadeIn 1s ease-out forwards;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -223,6 +250,18 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    &:after {
+      position: absolute;
+      content: '';
+      bottom: 20px;
+      right: 20px;
+      height: 61px;
+      width: 61px;
+      opacity: 0.4;
+      // TODO switch this lock glyph out for a real asset
+      background: url('https://login.dimensionsoftware.com/static/images/954742-200.png')
+        no-repeat center;
+    }
   }
 
   #modal-body {
