@@ -19,6 +19,7 @@
   import FileUpload from './screens/FileUpload.svelte'
   import SendOtp from './screens/SendOTP.svelte'
   import VerifyOtp from './screens/VerifyOTP.svelte'
+  import Success from './screens/Success.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -74,6 +75,9 @@
       conditions: [() => !isJWTValid()],
     }),
     // Authenticated
+    [Routes.SUCCESS]: wrap({
+      ...authedRouteOptions(Success),
+    }),
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),
     }),
