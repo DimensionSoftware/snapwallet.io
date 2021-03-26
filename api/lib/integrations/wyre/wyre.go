@@ -151,7 +151,7 @@ type CreateTransferRequest struct {
 }
 
 type ConfirmTransferRequest struct {
-	TransferId string `json:"transferID"` // The Wyre transfer identifier
+	TransferId string `json:"transferId"` // The Wyre transfer identifier
 }
 
 // WithDefaults provides defaults for CreateTransferRequest
