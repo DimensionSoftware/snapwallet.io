@@ -952,11 +952,10 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 		return nil, status.Errorf(codes.FailedPrecondition, "you must have a wyre account to confirm a transfer")
 	}
 
-	wyreReq := wyre.ConfirmTransferRequest{
+	t, err := s.Wyre.ConfirmTransfer(wyreAccount.SecretKey, wyre.ConfirmTransferRequest{
 		TransferId: req.TransferId,
-	}
+	})
 
-	t, err := s.Wyre.ConfirmTransfer(wyreAccount.SecretKey, wyreReq)
 	if err != nil {
 		return nil, err
 
