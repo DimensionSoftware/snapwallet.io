@@ -10,6 +10,8 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { ParentMessenger } from '../util/parent_messenger'
+  import { faLock } from '@fortawesome/free-solid-svg-icons'
+  import FaIcon from 'svelte-awesome'
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
@@ -135,9 +137,14 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isConfirmingTxn} on:click={handleConfirmation}
-      >{buttonText}</Button
-    >
+    <Button isLoading={isConfirmingTxn} on:click={handleConfirmation}>
+      <div style="display:flex;justify-content:center;align-items:center;">
+        <span style="margin-right:0.75rem;">
+          {buttonText}
+        </span>
+        <FaIcon data={faLock} />
+      </div>
+    </Button>
   </ModalFooter>
 </ModalContent>
 
