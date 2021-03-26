@@ -6,7 +6,9 @@
     "dev": "HOST=0.0.0.0 rollup -c -w",
     "start": "sirv public",
     "format": "./node_modules/.bin/prettier --write . --config .prettierrc --ignore-path .prettierignore",
-    "validate": "svelte-check"
+    "validate": "svelte-check",
+    "cypress": "cypress run",
+    "cypress-open": "cypress open"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^17.1.0",
