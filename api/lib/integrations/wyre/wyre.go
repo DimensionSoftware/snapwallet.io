@@ -151,7 +151,7 @@ type CreateTransferRequest struct {
 }
 
 type ConfirmTransferRequest struct {
-	TransferID string `json:"transferID"` // The Wyre transfer identifier
+	TransferId string `json:"transferID"` // The Wyre transfer identifier
 }
 
 // WithDefaults provides defaults for CreateTransferRequest
@@ -380,7 +380,7 @@ func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*Transf
 // https://docs.sendwyre.com/docs/confirm-transfer
 // POST https://api.sendwyre.com/v3/transfers/transferId:/confirm
 func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*Transfer, error) {
-	reqURL := fmt.Sprintf("/v3/transfers/%s/confirm", req.TransferID)
+	reqURL := fmt.Sprintf("/v3/transfers/%s/confirm", req.TransferId)
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).

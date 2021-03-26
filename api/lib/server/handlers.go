@@ -953,7 +953,7 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	}
 
 	wyreReq := wyre.ConfirmTransferRequest{
-		TransferID: req.TransferId,
+		TransferId: req.TransferId,
 	}
 
 	t, err := s.Wyre.ConfirmTransfer(wyreAccount.SecretKey, wyreReq)
