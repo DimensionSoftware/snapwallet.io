@@ -35,8 +35,8 @@ export const ParentMessenger = (() => {
   }
 
   /**
-   * User exited application (clicked X)
-   * Sends user ID to parent for reference.
+   * User successfully completed a transaction.
+   * Sends user ID and transaction to parent for reference.
    */
   const success = (txnId: string) => {
     const userID = window.AUTH_MANAGER.viewerUserID()

@@ -8,7 +8,7 @@
 </script>
 
 <div class="total-container">
-  You Get
+  You Get ≈
   {dropEndingZeros(destinationAmount.toFixed(precision))}
   {destinationCurrency.ticker}
 </div>
