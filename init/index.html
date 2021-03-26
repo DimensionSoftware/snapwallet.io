@@ -16,8 +16,9 @@
           { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
         ],
         onMessage: (msg) => {
-          if (msg.event === snap.events.EXIT) {
-            console.log('Exit Data', msg.data)
+          const closeEvents = [snap.events.EXIT, snap.events.SUCCESS]
+          if (closeEvents.includes(msg.event)) {
+            console.log('Message Data', msg.data)
             snap.closeWeb()
           }
         },
