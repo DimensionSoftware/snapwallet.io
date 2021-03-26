@@ -21,9 +21,9 @@
   </div>
   <div
     class:hidden={hideRightAction}
-    on:click={ParentMessenger.exit}
     class="modal-header-right-action"
   >
+    <slot name="right" />
   </div>
 </div>
 
