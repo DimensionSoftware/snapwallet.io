@@ -186,6 +186,7 @@
 
 <style lang="scss">
   @import './styles/_vars.scss';
+  @import './styles/animations.scss';
 
   :global(*) {
     box-sizing: border-box;
@@ -237,6 +238,8 @@
     height: 100%;
     overflow: hidden;
     background: var(--theme-modal-container-background-color);
+    opacity: 0;
+    animation: backgroundFadeIn 1s ease-out forwards;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -247,6 +250,18 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    &:after {
+      position: absolute;
+      content: '';
+      bottom: 20px;
+      right: 20px;
+      height: 61px;
+      width: 61px;
+      opacity: 0.4;
+      // TODO switch this lock glyph out for a real asset
+      background: url('https://login.dimensionsoftware.com/static/images/954742-200.png')
+        no-repeat center;
+    }
   }
 
   #modal-body {

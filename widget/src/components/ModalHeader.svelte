@@ -55,7 +55,6 @@
       @include flex-align-center();
       margin-right: 0.2em;
       justify-content: flex-end;
-      cursor: pointer;
     }
     & > .modal-header-back-button {
       @include flex-align-center();
