@@ -24,6 +24,10 @@ export const onEnterPressed = (e, cb) => {
   if (onKeysPressed(e, ['Enter'])) cb()
 }
 
+export const onEscPressed = (e, cb) => {
+  if (onKeysPressed(e, ['Escape'])) cb()
+}
+
 export function onKeysPressed(e: Event, keys: Array<string>) {
   if (e instanceof KeyboardEvent) if (keys.includes(e.key)) return true
   return false

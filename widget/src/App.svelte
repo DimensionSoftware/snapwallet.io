@@ -13,7 +13,8 @@
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes, APIErrors } from './constants'
-  import { authedRouteOptions, isJWTValid, Logger } from './util'
+  import { authedRouteOptions, isJWTValid, Logger, onEscPressed } from './util'
+  import { ParentMessenger } from './util/parent_messenger'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
   import FileUpload from './screens/FileUpload.svelte'
@@ -56,6 +57,15 @@
     userStore.updateLastKnownRoute($location as Routes)
     push(Routes.SEND_OTP)
   }
+
+  // close modal on escape and outside mouse click
+  const onKeyDown = (e: Event) => {
+    if (e.target !== document.body)
+      onEscPressed(e, ParentMessenger.exit)
+    },
+    onMouseDown = (e: MouseEvent) => {
+      if ((e.target as Element).id === 'modal') ParentMessenger.exit()
+    }
 
   const routes = {
     [Routes.ROOT]: wrap({
@@ -137,13 +147,23 @@
         return window.AUTH_MANAGER.logout()
       }
 
+      // show toast
+      console.log('error ', reason)
+      const isWyreErr =
+        reason instanceof String
+          ? reason.match(/wyre.APIError.*Message:.(.+)?"/)
+          : false
       toaster.pop({
-        msg: reason?.body?.message || body?.message || msg,
+        msg: isWyreErr
+          ? isWyreErr[0]
+          : reason?.body?.message || body?.message || msg,
         error: true,
       })
     }
   })
 </script>
+
+<svelte:window on:keydown={onKeyDown} on:mousedown={onMouseDown} />
 
 <div id="modal">
   <div id="modal-body">
