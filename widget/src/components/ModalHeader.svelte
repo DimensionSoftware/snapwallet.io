@@ -19,10 +19,7 @@
   <div class="modal-header-title">
     <slot />
   </div>
-  <div
-    class:hidden={hideRightAction}
-    class="modal-header-right-action"
-  >
+  <div class:hidden={hideRightAction} class="modal-header-right-action">
     <slot name="right" />
   </div>
 </div>
@@ -50,6 +47,7 @@
       justify-content: center;
       font-weight: bold;
       font-size: 1.2rem;
+      text-align: center;
     }
     & > .modal-header-right-action {
       @include flex-align-center();
