@@ -864,12 +864,49 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			Kind: pusher.MessageKindWyreAccountUpdated,
 			At:   now,
 		}
+
+		// todo: tx
+		ourWyreAccounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
+		if err != nil {
+			log.Printf("failure getting our wyre accounts: %#v", err)
+			return nil, err
+		}
+
+		var ourWyreAccount *account.Account
+		for _, wa := range ourWyreAccounts {
+			if wa.ID == account.ID(objectID) {
+				ourWyreAccount = wa
+				break
+			}
+		}
+		if ourWyreAccount == nil {
+			log.Printf("wyre account not found: %s\n", objectID)
+			return nil, fmt.Errorf("wyre account not found: %s", objectID)
+		}
+
+		theirAccount, err := s.Wyre.GetAccount(ourWyreAccount.SecretKey, string(ourWyreAccount.ID))
+		if err != nil {
+			log.Printf("failure getting wyre account from them: %#v", err)
+			return nil, err
+		}
+
+		now := time.Now()
+
+		ourWyreAccount.Status = theirAccount.Status
+		ourWyreAccount.UpdatedAt = &now
+
+		err = s.Db.SaveWyreAccount(ctx, nil, userID, ourWyreAccount)
+		if err != nil {
+			log.Printf("failure saving our wyre account: %#v", err)
+			return nil, err
+		}
 	case "paymentmethod":
 		msg = &pusher.Message{
 			Kind: pusher.MessageKindWyrePaymentMethodsUpdated,
 			IDs:  []string{objectID},
 			At:   now,
 		}
+		// todo save like account
 	//case "transfer":
 	default:
 		log.Printf("UNIMPLEMENTED TRANSFER WEBHOOK: %s %s", userID, req.Trigger)
