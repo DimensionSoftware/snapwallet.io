@@ -910,8 +910,39 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 
 		err = s.Db.SaveWyreAccount(ctx, nil, userID, ourWyreAccount)
 		if err != nil {
-			log.Printf("failure saving our wyre account: %#v", err)
+			log.Printf("failure saving our wyre account: %#v\n", err)
 			return nil, status.Errorf(codes.Unknown, "hook failed")
+		}
+
+		profile, err := s.Db.GetAllProfileData(ctx, nil, userID)
+		if err != nil {
+			log.Printf("failure getting our profile data: %#v\n", err)
+			return nil, status.Errorf(codes.Unknown, "hook failed")
+		}
+
+		for _, pf := range theirAccount.ProfileFields {
+			switch pf.FieldID {
+			case string(wyre.ProfileFieldIDIndividualLegalName):
+				for _, legalName := range profile.FilterKindLegalName() {
+					newStatus := WyreProfileFieldStatusToProfileDataStatus(pf.Status)
+
+					log.Printf("updating legal name status to: %s", newStatus)
+
+					now = time.Now()
+					legalName.Status = newStatus
+					legalName.UpdatedAt = &now
+
+					_, err := s.Db.SaveProfileData(ctx, nil, userID, legalName)
+					if err != nil {
+						log.Printf("failure saving legal name profile data: %#v\n", err)
+						return nil, status.Errorf(codes.Unknown, "hook failed")
+					}
+
+					break
+				}
+			default:
+				log.Printf("Unhandled profile field id on webhook update %s\n", pf.FieldID)
+			}
 		}
 	case "paymentmethod":
 		msg = &pusher.Message{
@@ -978,6 +1009,21 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 
 	return &emptypb.Empty{}, nil
 }
+
+func WyreProfileFieldStatusToProfileDataStatus(wyreProfileFieldStatus string) common.ProfileDataStatus {
+	switch wyreProfileFieldStatus {
+	case "OPEN":
+		return common.StatusInvalid
+	case "PENDING":
+		return common.StatusPending
+	case "APPROVED":
+		return common.StatusApproved
+	}
+
+	// should never get here
+	panic("wyreProfileFieldStatus unknown when WyreProfileFieldStatusToProfileDataStatus(...) was called")
+}
+
 func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*proto.WyrePaymentMethods, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
