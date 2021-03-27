@@ -979,6 +979,70 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 
 					break
 				}
+			case string(wyre.ProfileFieldIDIndividualDateOfBirth):
+				for _, dob := range profile.FilterKindDateOfBirth() {
+					log.Printf("updating dob status to: %s", newStatus)
+
+					now = time.Now()
+					dob.Status = newStatus
+					dob.UpdatedAt = &now
+
+					_, err := s.Db.SaveProfileData(ctx, nil, userID, dob)
+					if err != nil {
+						log.Printf("failure saving dob profile data: %#v\n", err)
+						return nil, status.Errorf(codes.Unknown, "hook failed")
+					}
+
+					break
+				}
+			case string(wyre.ProfileFieldIDIndividualSSN):
+				for _, ssn := range profile.FilterKindSSN() {
+					log.Printf("updating ssn status to: %s", newStatus)
+
+					now = time.Now()
+					ssn.Status = newStatus
+					ssn.UpdatedAt = &now
+
+					_, err := s.Db.SaveProfileData(ctx, nil, userID, ssn)
+					if err != nil {
+						log.Printf("failure saving ssn profile data: %#v\n", err)
+						return nil, status.Errorf(codes.Unknown, "hook failed")
+					}
+
+					break
+				}
+			case string(wyre.ProfileFieldIDIndividualResidenceAddress):
+				for _, addr := range profile.FilterKindAddress() {
+					log.Printf("updating address status to: %s", newStatus)
+
+					now = time.Now()
+					addr.Status = newStatus
+					addr.UpdatedAt = &now
+
+					_, err := s.Db.SaveProfileData(ctx, nil, userID, addr)
+					if err != nil {
+						log.Printf("failure saving address profile data: %#v\n", err)
+						return nil, status.Errorf(codes.Unknown, "hook failed")
+					}
+
+					break
+				}
+			case string(wyre.ProfileFieldIDIndividualGovernmentID):
+				for _, govtid := range profile.FilterKindUSGovernmentIDDoc() {
+					log.Printf("updating government id status to: %s", newStatus)
+
+					now = time.Now()
+					govtid.Status = newStatus
+					govtid.UpdatedAt = &now
+
+					_, err := s.Db.SaveProfileData(ctx, nil, userID, govtid)
+					if err != nil {
+						log.Printf("failure saving government id profile data: %#v\n", err)
+						return nil, status.Errorf(codes.Unknown, "hook failed")
+					}
+
+					break
+				}
 			default:
 				log.Printf("Unhandled profile field id on webhook update %s\n", pf.FieldID)
 			}
