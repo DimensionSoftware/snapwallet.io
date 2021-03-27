@@ -869,7 +869,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 		ourWyreAccounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
 		if err != nil {
 			log.Printf("failure getting our wyre accounts: %#v", err)
-			return nil, err
+			return nil, status.Errorf(codes.Unknown, "hook failed")
 		}
 
 		var ourWyreAccount *account.Account
@@ -881,13 +881,13 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 		}
 		if ourWyreAccount == nil {
 			log.Printf("wyre account not found: %s\n", objectID)
-			return nil, fmt.Errorf("wyre account not found: %s", objectID)
+			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
 		}
 
 		theirAccount, err := s.Wyre.GetAccount(ourWyreAccount.SecretKey, string(ourWyreAccount.ID))
 		if err != nil {
 			log.Printf("failure getting wyre account from them: %#v", err)
-			return nil, err
+			return nil, status.Errorf(codes.Unknown, "hook failed")
 		}
 
 		now := time.Now()
@@ -898,7 +898,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 		err = s.Db.SaveWyreAccount(ctx, nil, userID, ourWyreAccount)
 		if err != nil {
 			log.Printf("failure saving our wyre account: %#v", err)
-			return nil, err
+			return nil, status.Errorf(codes.Unknown, "hook failed")
 		}
 	case "paymentmethod":
 		msg = &pusher.Message{
@@ -906,7 +906,52 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			IDs:  []string{objectID},
 			At:   now,
 		}
-		// todo save like account
+
+		ourWyreAccounts, err := s.Db.GetWyreAccounts(ctx, nil, userID)
+		if err != nil {
+			log.Printf("failure getting our wyre accounts: %#v", err)
+			return nil, status.Errorf(codes.Unknown, "hook failed")
+		}
+		if len(ourWyreAccounts) == 0 {
+			log.Printf("wyre account not found for user")
+			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
+		}
+		ourWyreAccount := ourWyreAccounts[0]
+
+		ourWyrePaymentMethods, err := s.Db.GetWyrePaymentMethods(ctx, nil, userID, ourWyreAccount.ID)
+		if err != nil {
+			log.Printf("failure getting our wyre payment methods: %#v", err)
+			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
+		}
+
+		var ourWyrePaymentMethod *paymentmethod.PaymentMethod
+		for _, pm := range ourWyrePaymentMethods {
+			if pm.ID == paymentmethod.ID(objectID) {
+				ourWyrePaymentMethod = pm
+				break
+			}
+		}
+		if ourWyrePaymentMethod == nil {
+			log.Printf("wyre payment method not found for user")
+			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
+		}
+
+		theirPaymentMethod, err := s.Wyre.GetPaymentMethod(ourWyreAccount.SecretKey, string(ourWyrePaymentMethod.ID))
+		if err != nil {
+			log.Printf("failure getting wyre payment method from them: %#v", err)
+			return nil, status.Errorf(codes.Unknown, "hook failed")
+		}
+
+		now := time.Now()
+
+		ourWyrePaymentMethod.Status = theirPaymentMethod.Status
+		ourWyrePaymentMethod.UpdatedAt = now
+
+		err = s.Db.SaveWyrePaymentMethod(ctx, nil, userID, ourWyreAccount.ID, ourWyrePaymentMethod)
+		if err != nil {
+			log.Printf("failure saving our wyre payment method: %#v", err)
+			return nil, status.Errorf(codes.Unknown, "hook failed")
+		}
 	//case "transfer":
 	default:
 		log.Printf("UNIMPLEMENTED TRANSFER WEBHOOK: %s %s", userID, req.Trigger)
