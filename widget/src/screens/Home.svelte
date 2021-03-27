@@ -3,7 +3,6 @@
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
-  import IntentSelector from '../components/IntentSelector.svelte'
   import Button from '../components/Button.svelte'
   import CryptoCard from '../components/cards/CryptoCard.svelte'
   import { transactionStore } from '../stores/TransactionStore'
@@ -138,7 +137,7 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader hideBackButton>
-      <IntentSelector />
+      Buy {destinationCurrency.name}
     </ModalHeader>
     <div class="cryptocurrencies-container">
       <div class="dst-container">
