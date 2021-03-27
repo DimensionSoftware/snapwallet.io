@@ -618,6 +618,14 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		return nil, err
 	}
 
+	if !profile.HasWyreAccountPreconditionsMet() {
+		log.Printf("Preconditions for wyre are unmet for user id: %s", u.ID)
+	}
+
+	resp := &proto.ProfileDataInfo{
+		Profile: profile.GetProfileDataItemInfo(),
+	}
+
 	if len(existingWyreAccounts) == 0 && profile.HasWyreAccountPreconditionsMet() {
 		// todo, create job in db
 		// todo make sure theres not a job already running
@@ -636,17 +644,23 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		if err != nil {
 			log.Println(err)
 		}
+
+		// todo: store pending lifecycle status? or can use job submitted information
+		resp.Wyre = &proto.ThirdPartyUserAccount{
+			LifecyleStatus: proto.LifecycleStatus_L_PENDING,
+		}
 	}
 
-	if !profile.HasWyreAccountPreconditionsMet() {
-		log.Printf("Preconditions for wyre are unmet for user id: %s", u.ID)
+	if len(existingWyreAccounts) > 0 {
+		resp.Wyre = &proto.ThirdPartyUserAccount{
+			// todo: store created lifecycle status?
+			LifecyleStatus: proto.LifecycleStatus_L_CREATED,
+			Status:         existingWyreAccounts[0].Status,
+			// todo: remediations
+		}
 	}
 
-	// todo: add remediations to this resp somehow (gotta think it thru)
-	return &proto.ProfileDataInfo{
-		Profile: profile.GetProfileDataItemInfo(),
-	}, nil
-
+	return resp, nil
 }
 
 // ViewerProfileData is an rpc handler
