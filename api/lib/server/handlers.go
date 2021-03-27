@@ -675,8 +675,26 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 		return nil, err
 	}
 
+	var wyre *proto.ThirdPartyUserAccount
+	{
+		existingWyreAccounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		if err != nil {
+			return nil, err
+		}
+		if len(existingWyreAccounts) > 0 {
+			wa := existingWyreAccounts[0]
+
+			wyre = &proto.ThirdPartyUserAccount{
+				LifecyleStatus: proto.LifecycleStatus_L_CREATED,
+				Status:         wa.Status,
+				// todo: remediations
+			}
+		}
+	}
+
 	return &proto.ProfileDataInfo{
 		Profile: profile.GetProfileDataItemInfo(),
+		Wyre:    wyre,
 	}, nil
 }
 
