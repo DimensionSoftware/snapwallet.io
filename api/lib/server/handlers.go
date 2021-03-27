@@ -853,10 +853,33 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 	now := time.Now()
 	userID := user.ID(req.HookId)
 
-	s.Pusher.Send(userID, &pusher.Message{
-		Kind: pusher.MessageKindWyreAccountUpdated,
-		At:   now,
-	})
+	parts := strings.Split(req.Trigger, ":")
+	objectKind := parts[0]
+	objectID := parts[1]
+
+	var msg *pusher.Message
+	switch objectKind {
+	case "account":
+		msg = &pusher.Message{
+			Kind: pusher.MessageKindWyreAccountUpdated,
+			At:   now,
+		}
+	case "paymentmethod":
+		msg = &pusher.Message{
+			Kind: pusher.MessageKindWyrePaymentMethodsUpdated,
+			IDs:  []string{objectID},
+			At:   now,
+		}
+	//case "transfer":
+	default:
+		log.Printf("UNIMPLEMENTED TRANSFER WEBHOOK: %s %s", userID, req.Trigger)
+		return &emptypb.Empty{}, nil
+	}
+
+	err := s.Pusher.Send(userID, msg)
+	if err != nil {
+		return nil, err
+	}
 
 	return &emptypb.Empty{}, nil
 }

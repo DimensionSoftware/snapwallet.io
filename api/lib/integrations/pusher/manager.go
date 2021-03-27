@@ -15,7 +15,7 @@ type MessageKind string
 
 const (
 	MessageKindWyreAccountUpdated        MessageKind = "WYRE_ACCOUNT_UPDATED"
-	MessageKindWyrePaymentsMethodUpdated MessageKind = "WYRE_PAYMENT_METHODS_UPDATED"
+	MessageKindWyrePaymentMethodsUpdated MessageKind = "WYRE_PAYMENT_METHODS_UPDATED"
 	MessageKindProfileStatusUpdated      MessageKind = "PROFILE_STATUS_UPDATED"
 )
 
