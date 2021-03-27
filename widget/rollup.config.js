@@ -8,6 +8,7 @@ import typescript from '@rollup/plugin-typescript'
 import css from 'rollup-plugin-css-only'
 import replace from '@rollup/plugin-replace'
 import dotenv from 'dotenv'
+import svelteSVG from 'rollup-plugin-svelte-svg'
 
 // Dotenv will also pick up api .env if path not defined
 dotenv.config({ path: './.env' })
@@ -48,6 +49,7 @@ export default {
     file: 'public/build/bundle.js',
   },
   plugins: [
+    svelteSVG(),
     replace({
       preventAssignment: true,
       __ENV: JSON.stringify({
