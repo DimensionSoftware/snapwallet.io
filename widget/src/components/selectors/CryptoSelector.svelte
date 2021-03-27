@@ -7,15 +7,26 @@
   const dispatch = createEventDispatcher()
 
   const cryptoCurrencies = [
+    { name: 'Aave', ticker: 'AAVE' },
+    { name: 'Basic Attention Token', ticker: 'BAT' },
+    { name: 'Binance USD', ticker: 'BUSD' },
     { name: 'Bitcoin', ticker: 'BTC', popular: true },
-    { name: 'Ethereum', ticker: 'ETH', popular: true },
-    { name: 'USDC', ticker: 'USDC' },
-    { name: 'Tether', ticker: 'USDT', popular: true },
+    { name: 'Curve', ticker: 'CRV' },
+    { name: 'Compound', ticker: 'COMP' },
     { name: 'DAI', ticker: 'DAI' },
-    { name: 'MakerDAO', ticker: 'MKR' },
+    { name: 'Ethereum', ticker: 'ETH', popular: true },
     { name: 'Gemini Dollar', ticker: 'GUSD' },
-    { name: 'Paxos Standard', ticker: 'PAX' },
     { name: 'Link', ticker: 'LINK' },
+    { name: 'MakerDAO', ticker: 'MKR' },
+    { name: 'Paxos Standard', ticker: 'PAX' },
+    { name: 'Stably Dollar', ticker: 'USDS' },
+    { name: 'Synthetix', ticker: 'SNX' },
+    { name: 'Tether', ticker: 'USDT', popular: true },
+    { name: 'UMA', ticker: 'UMA' },
+    { name: 'USDC', ticker: 'USDC' },
+    { name: 'Uniswap', ticker: 'UNI', popular: true },
+    { name: 'Wrapped Bitcoin', ticker: 'WBTC' },
+    { name: 'Yearn.Finance', ticker: 'YFI' },
   ]
 
   export let visible = false

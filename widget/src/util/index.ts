@@ -1,13 +1,8 @@
 import nodeDebug from 'debug'
+import * as Icons from './icons'
 import { JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY } from '../constants'
-import * as CRYPTO_SVGS from 'svelte-cryptoicon'
 
-// HACK: this lib. does not offer a good
-// way to import icons dynamically, so convert all tickers to uppercase.
-export const CryptoIcons = {}
-Object.entries(CRYPTO_SVGS).forEach(([k, v]) => {
-  CryptoIcons[k.toUpperCase()] = v
-})
+export const CryptoIcons = Icons
 
 import {
   FluxApi,

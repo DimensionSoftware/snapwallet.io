@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { CryptoIcons } from '../../util'
   import { transactionStore } from '../../stores/TransactionStore'
   import { createEventDispatcher } from 'svelte'
   import FaIcon from 'svelte-awesome'
   import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
   import { TransactionIntents } from '../../types'
+  import { CryptoIcons } from '../../util'
 
   export let crypto
 
@@ -30,7 +30,7 @@
   class="crypto-card"
 >
   <div class="crypto-icon">
-    <svelte:component this={CryptoIcons[crypto.ticker]} />
+    <svelte:component this={CryptoIcons[crypto.ticker.toUpperCase()]} />
   </div>
   <div class="crypto-name">
     <span>{crypto.ticker}</span> <small>{crypto.name}</small>
