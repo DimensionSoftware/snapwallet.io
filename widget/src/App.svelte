@@ -62,8 +62,7 @@
 
   // close modal on escape and outside mouse click
   const onKeyDown = (e: Event) => {
-    if (e.target !== document.body)
-      onEscPressed(e, ParentMessenger.exit)
+      if (e.target !== document.body) onEscPressed(e, ParentMessenger.exit)
     },
     onMouseDown = (e: MouseEvent) => {
       if ((e.target as Element).id === 'modal') ParentMessenger.exit()
@@ -150,7 +149,6 @@
       }
 
       // show toast
-      console.log('error ', reason)
       const isWyreErr =
         reason instanceof String
           ? reason.match(/wyre.APIError.*Message:.(.+)?"/)
