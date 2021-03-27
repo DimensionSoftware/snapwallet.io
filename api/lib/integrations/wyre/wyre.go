@@ -267,6 +267,29 @@ func NewClient(config *Config) *Client {
 	}
 }
 
+// GetPaymentMethod
+// https://docs.sendwyre.com/docs/get-payment-method
+// GET https://api.sendwyre.com/v2/paymentMethod/:paymentMethodId
+func (c Client) GetPaymentMethod(token string, paymentMethodID string) (*PaymentMethod, error) {
+	spec := c.http.R().
+		SetAuthToken(token).
+		SetError(APIError{}).
+		SetResult(PaymentMethod{}).
+		EnableTrace().
+		SetPathParam("paymentMethodID", paymentMethodID)
+
+	resp, err := spec.Get("/v2/paymentMethod/{paymentMethodID}")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*PaymentMethod), nil
+}
+
 // CreateAccount creates an account in the wyre system
 // https://docs.sendwyre.com/docs/create-account
 // POST https://api.sendwyre.com/v3/accounts
