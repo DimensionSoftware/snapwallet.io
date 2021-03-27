@@ -1,6 +1,8 @@
 <script lang="ts">
   import Router, { push, location, pop } from 'svelte-spa-router'
   import wrap from 'svelte-spa-router/wrap'
+  import FaIcon from 'svelte-awesome'
+  import { faLock } from '@fortawesome/free-solid-svg-icons'
   import Toast from './components/Toast.svelte'
   import Home from './screens/Home.svelte'
   import SendOTP from './screens/SendOTP.svelte'
@@ -60,8 +62,7 @@
 
   // close modal on escape and outside mouse click
   const onKeyDown = (e: Event) => {
-    if (e.target !== document.body)
-      onEscPressed(e, ParentMessenger.exit)
+      if (e.target !== document.body) onEscPressed(e, ParentMessenger.exit)
     },
     onMouseDown = (e: MouseEvent) => {
       if ((e.target as Element).id === 'modal') ParentMessenger.exit()
@@ -148,7 +149,6 @@
       }
 
       // show toast
-      console.log('error ', reason)
       const isWyreErr =
         reason instanceof String
           ? reason.match(/wyre.APIError.*Message:.(.+)?"/)
@@ -170,6 +170,7 @@
     <Router on:conditionsFailed={routeConditionsFailed} {routes} />
     <Toast />
   </div>
+  <FaIcon class="lock" data={faLock} />
 </div>
 
 <svelte:head>
@@ -234,6 +235,8 @@
     z-index: 1;
     left: 0;
     top: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
@@ -250,7 +253,7 @@
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    &:after {
+    :global(.lock) {
       position: absolute;
       content: '';
       bottom: 20px;
@@ -258,9 +261,6 @@
       height: 61px;
       width: 61px;
       opacity: 0.4;
-      // TODO switch this lock glyph out for a real asset
-      background: url('https://login.dimensionsoftware.com/static/images/954742-200.png')
-        no-repeat center;
     }
   }
 
