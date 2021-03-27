@@ -921,11 +921,10 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 		}
 
 		for _, pf := range theirAccount.ProfileFields {
+			newStatus := WyreProfileFieldStatusToProfileDataStatus(pf.Status)
 			switch pf.FieldID {
 			case string(wyre.ProfileFieldIDIndividualLegalName):
 				for _, legalName := range profile.FilterKindLegalName() {
-					newStatus := WyreProfileFieldStatusToProfileDataStatus(pf.Status)
-
 					log.Printf("updating legal name status to: %s", newStatus)
 
 					now = time.Now()
@@ -935,6 +934,46 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 					_, err := s.Db.SaveProfileData(ctx, nil, userID, legalName)
 					if err != nil {
 						log.Printf("failure saving legal name profile data: %#v\n", err)
+						return nil, status.Errorf(codes.Unknown, "hook failed")
+					}
+
+					break
+				}
+			case string(wyre.ProfileFieldIDIndividualEmail):
+				for _, email := range profile.FilterKindEmail() {
+					if email.Email != pf.Value {
+						continue
+					}
+
+					log.Printf("updating email status for %s to: %s", email.Email, newStatus)
+
+					now = time.Now()
+					email.Status = newStatus
+					email.UpdatedAt = &now
+
+					_, err := s.Db.SaveProfileData(ctx, nil, userID, email)
+					if err != nil {
+						log.Printf("failure saving email profile data: %#v\n", err)
+						return nil, status.Errorf(codes.Unknown, "hook failed")
+					}
+
+					break
+				}
+			case string(wyre.ProfileFieldIDIndividualCellphoneNumber):
+				for _, phone := range profile.FilterKindPhone() {
+					if phone.Phone != pf.Value {
+						continue
+					}
+
+					log.Printf("updating phone status for %s to: %s", phone.Phone, newStatus)
+
+					now = time.Now()
+					phone.Status = newStatus
+					phone.UpdatedAt = &now
+
+					_, err := s.Db.SaveProfileData(ctx, nil, userID, phone)
+					if err != nil {
+						log.Printf("failure saving phone profile data: %#v\n", err)
 						return nil, status.Errorf(codes.Unknown, "hook failed")
 					}
 
