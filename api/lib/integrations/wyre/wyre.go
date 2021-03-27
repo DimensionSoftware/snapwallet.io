@@ -302,7 +302,7 @@ type UploadDocumentRequest struct {
 // https://docs.sendwyre.com/docs/upload-document
 // POST https://api.sendwyre.com/v3/accounts/:accountId/:fieldId
 func (c Client) UploadDocument(token string, req UploadDocumentRequest) (*Account, error) {
-	resp, err := c.http.R().
+	spec := c.http.R().
 		SetAuthToken(token).
 		SetError(APIError{}).
 		SetResult(Account{}).
@@ -310,10 +310,14 @@ func (c Client) UploadDocument(token string, req UploadDocumentRequest) (*Accoun
 		SetPathParam("accountID", req.AccountID).
 		SetPathParam("fieldID", string(req.FieldID)).
 		SetQueryParam("documentType", req.DocumentType).
-		SetQueryParam("documentSubType", req.DocumentSubtype).
 		SetHeader("content-type", req.MimeType).
-		SetBody(*req.Body).
-		Post("/v3/accounts/{accountID}/{fieldID}")
+		SetBody(*req.Body)
+
+	if req.DocumentSubtype != "" {
+		spec.SetQueryParam("documentSubType", req.DocumentSubtype)
+	}
+
+	resp, err := spec.Post("/v3/accounts/{accountID}/{fieldID}")
 	if err != nil {
 		return nil, err
 	}
