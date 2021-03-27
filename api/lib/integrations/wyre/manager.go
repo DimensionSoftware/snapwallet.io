@@ -97,6 +97,12 @@ func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAc
 		return nil, err
 	}
 
+	hookResponse, err := m.Wyre.SubscribeWebhook(wyreAccount.SecretKey, "paymentmethod:"+string(pm.ID), string(m.APIHost)+"/wyre/hooks/"+string(userID))
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("hook response from wyre: %#v", hookResponse)
+
 	return &pm, nil
 }
 
