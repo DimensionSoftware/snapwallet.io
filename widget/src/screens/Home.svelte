@@ -134,7 +134,7 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<ModalContent>
+<ModalContent animation="right">
   <ModalBody>
     <ModalHeader hideBackButton>
       Buy {destinationCurrency.name}

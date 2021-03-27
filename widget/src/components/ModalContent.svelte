@@ -19,17 +19,18 @@
   }
   @keyframes slideInRight {
     0% {
-      transform: translateX(0);
+      transform: translateX(-100%);
     }
     100% {
-      transform: translateX(100%);
+      transform: translateX(0);
     }
   }
   .right {
-    animation: slideInRight 0.23s var(--theme-ease-out-expo);
+    transform: translateX(-100%);
+    animation: slideInRight 0.2s var(--theme-ease-out-expo) forwards;
   }
   .left {
-    animation: slideInLeft 0.25s var(--theme-ease-out-back);
+    animation: slideInLeft 0.25s var(--theme-ease-out-back) forwards;
   }
   .modal-content {
     position: absolute;

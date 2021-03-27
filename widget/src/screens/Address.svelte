@@ -14,7 +14,6 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { onMount } from 'svelte'
 
-  let animation = 'left'
   let isSubmittingProfile = false
   let autocomplete: google.maps.places.Autocomplete
 
@@ -134,7 +133,7 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<ModalContent {animation}>
+<ModalContent>
   <ModalBody>
     <ModalHeader>Where do you live?</ModalHeader>
     <Label label="Street 1">

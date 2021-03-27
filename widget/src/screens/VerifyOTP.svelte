@@ -16,7 +16,6 @@
 
   export let phoneVerificationOnly: boolean = false
 
-  let animation = 'left'
   let code = ''
   let isMakingRequest = false
   let isSendingCode = false
@@ -131,7 +130,7 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<ModalContent {animation}>
+<ModalContent>
   <ModalBody>
     <ModalHeader>Enter Your Code</ModalHeader>
     <div in:fly={{ y: 25, duration: 300 }}>

@@ -19,7 +19,6 @@
 
   const allowedFileTypes = 'image/png,image/jpeg,image/jpg,application/pdf'
 
-  let animation = 'left'
   let isFileTypeSelectorOpen = false
   let isUploadingFile = false
   let fileType = ''
@@ -101,7 +100,7 @@
   $: iconCardProps = getSelectorProps(fileType)
 </script>
 
-<ModalContent {animation}>
+<ModalContent>
   <ModalBody>
     <ModalHeader>Verify Identity</ModalHeader>
     <div style="margin-top:1rem;margin-bottom:0.75rem;">

@@ -15,8 +15,6 @@
 
   import { push } from 'svelte-spa-router'
 
-  let animation = 'left'
-
   $: fullName = `${$userStore.firstName} ${$userStore.lastName}`.trim()
   let isSaving = false
 
@@ -62,7 +60,7 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<ModalContent {animation}>
+<ModalContent>
   <ModalBody>
     <ModalHeader>Tell Us About You</ModalHeader>
     <Label label={fullName || 'Full Name'}>

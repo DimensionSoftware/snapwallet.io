@@ -14,7 +14,6 @@
   import { APIErrors, Routes } from '../constants'
   import type { Address, UsGovernmentIdDocumentInputKind } from 'api-client'
 
-  let animation = 'left'
   let isMakingRequest = false
 
   const timeout = 700
@@ -35,7 +34,7 @@
   }
 </script>
 
-<ModalContent {animation}>
+<ModalContent>
   <ModalBody>
     <ModalHeader hideBackButton>CITIZEN?: gonna need to see some ID</ModalHeader
     >

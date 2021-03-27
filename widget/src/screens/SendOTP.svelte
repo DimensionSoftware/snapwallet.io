@@ -18,7 +18,6 @@
 
   export let phoneVerificationOnly: boolean = false
 
-  let animation = 'left'
   let isMakingRequest = false
   let isUsingPhoneNumber = false
 
@@ -69,7 +68,7 @@
 
 <svelte:window on:keydown={onKeyDown} />
 
-<ModalContent {animation}>
+<ModalContent>
   <ModalBody>
     <ModalHeader>
       {#if phoneVerificationOnly}
