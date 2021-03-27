@@ -299,12 +299,25 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 			return nil, err
 		}
 		if len(accounts) > 0 {
-			account := accounts[0]
-			wyreAcct, err := s.Wyre.GetAccount(account.SecretKey, string(account.ID))
+			a := accounts[0]
+			wyreAcct, err := s.Wyre.GetAccount(a.SecretKey, string(a.ID))
 			if err != nil {
 				return nil, err
 			}
 			log.Printf("WYRE_ACCOUNT %#v\n", wyreAcct)
+
+			pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, userID, account.ID(wyreAcct.ID))
+			if err != nil {
+				return nil, err
+			}
+			for _, pm := range pms {
+				theirPm, err := s.Wyre.GetPaymentMethod(a.SecretKey, string(pm.ID))
+				if err != nil {
+					return nil, err
+				}
+				log.Printf("WYRE_PAYMENT_METHOD %#v\n", theirPm)
+
+			}
 		}
 	}
 	/*** TEST ***/
