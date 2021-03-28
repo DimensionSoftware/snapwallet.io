@@ -8,6 +8,7 @@
   import SendOTP from './screens/SendOTP.svelte'
   import NotFound from './screens/NotFound.svelte'
   import Profile from './screens/Profile.svelte'
+  import Transactions from './screens/Transactions.svelte'
   import Address from './screens/Address.svelte'
   import VerifyOTP from './screens/VerifyOTP.svelte'
   import Overview from './screens/Overview.svelte'
@@ -92,6 +93,9 @@
     }),
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),
+    }),
+    [Routes.TRANSACTIONS]: wrap({
+      ...authedRouteOptions(Transactions),
     }),
     [Routes.PLAID_LINK]: wrap({
       ...authedRouteOptions(PlaidWidget),
