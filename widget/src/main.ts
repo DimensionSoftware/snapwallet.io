@@ -20,6 +20,7 @@ const app = new App({
     apiKey: config?.apiKey,
     appName: config?.appName,
     intent: config?.intent,
+    focus: config?.focus,
     wallets: config?.wallets || [],
     theme: {
       /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */

@@ -25,6 +25,7 @@ interface IConfig {
   wallets: IWallet[]
   appName: string
   intent: UserIntent
+  focus: boolean
 }
 
 class Snap {
@@ -37,6 +38,7 @@ class Snap {
   appName: string = 'Snap Wallet'
   intent: UserIntent = 'buy'
   baseURL: string = _ENV.WIDGET_URL
+  focus: boolean = true
 
   constructor(args: IConfig) {
     this.setConfig(args)
@@ -47,6 +49,7 @@ class Snap {
     this.wallets = config.wallets || this.wallets
     this.appName = config.appName || this.appName
     this.intent = config.intent || this.intent
+    this.focus = config.focus ?? this.focus
   }
 
   configToQueryString = () => {
@@ -55,6 +58,7 @@ class Snap {
         wallets: this.wallets,
         appName: this.appName,
         intent: this.intent,
+        focus: this.focus,
       })
     )
   }

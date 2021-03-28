@@ -29,6 +29,7 @@
   export let intent: 'buy' | 'sell'
   export let apiKey: string
   export let theme: object
+  export let focus: boolean
 
   // Handler for routing condition failure
   const routeConditionsFailed = (event: any): boolean => {
@@ -126,6 +127,7 @@
 
   // Override theme css variables
   onMount(() => {
+    if (focus) setTimeout(() => document.getElementById('amount')?.focus(), 300)
     Object.entries(theme).forEach(([k, v]) => {
       k = k.replace(/[A-Z]/g, (k, i) =>
         i === 0 ? k.toLowerCase() : `-${k.toLowerCase()}`,

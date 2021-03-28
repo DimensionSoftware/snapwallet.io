@@ -151,6 +151,7 @@
       <div style="display:flex;flex-direction:column;height:5rem;">
         <Label label="Amount">
           <Input
+            id="amount"
             pattern={`[\\d,\\.]+`}
             on:change={e => {
               const val = Number(e.detail)
