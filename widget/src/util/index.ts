@@ -15,6 +15,10 @@ import { FluxBearerAuthentication } from '../auth'
 
 // pure fns
 // ---------
+export const focusFirstInput = () => {
+  setTimeout(() => document.querySelector('input:first-child')?.focus(), 375)
+}
+
 export const onEnterPressed = (e, cb) => {
   if (onKeysPressed(e, ['Enter'])) cb()
 }

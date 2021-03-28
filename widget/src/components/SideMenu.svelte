@@ -1,21 +1,27 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
+  import { focusFirstInput } from '../util'
 
   export let isExpanded: boolean = false
 
   function logout() {
     window.AUTH_MANAGER.logout()
     push(Routes.ROOT)
-    isExpanded = false
+    close()
   }
   function login() {
     push(Routes.SEND_OTP)
-    isExpanded = false
+    close()
   }
   function go(route) {
     push(route)
+    close()
+  }
+
+  function close() {
     isExpanded = false
+    focusFirstInput()
   }
 </script>
 
