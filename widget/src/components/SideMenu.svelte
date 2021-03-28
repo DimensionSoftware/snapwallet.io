@@ -27,6 +27,8 @@
     // close if esc pressed
     if (onKeysPressed(e, ['Escape'])) close()
   }
+
+  const isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
 </script>
 
 <svelte:window on:keydown={handleClose} />
@@ -48,7 +50,10 @@
     height="50"
     viewBox="0 0 200 200"
   >
-    <g stroke-width="4" stroke-linecap="round">
+    <g
+      stroke-width={isExpanded ? 5 : isLoggedIn ? 4 : 2}
+      stroke-linecap="round"
+    >
       <path
         d="M72 82.286h28.75"
         fill="#009100"
@@ -133,7 +138,7 @@
     transform-origin: 35% 63%;
   }
   path:nth-child(4) {
-    stroke-dasharray: 19 299;
+    stroke-dasharray: 10 299;
   }
   path:nth-child(5) {
     transform-origin: 61% 52%;
@@ -185,15 +190,6 @@
       &.hr {
         margin-top: 2rem;
         position: relative;
-        &:before {
-          content: '';
-          position: absolute;
-          left: 0;
-          width: 50px;
-          margin-top: -1rem;
-          height: 1px;
-          background-color: rgba(0, 0, 0, 0.1);
-        }
       }
     }
     &.active {

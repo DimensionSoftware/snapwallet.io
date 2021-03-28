@@ -15,7 +15,7 @@ import { FluxBearerAuthentication } from '../auth'
 
 // pure fns
 // ---------
-export const focusFirstInput = (duration = 350) => {
+export const focusFirstInput = (duration = 400) => {
   setTimeout(
     () => document.querySelector('input:first-child')?.focus(),
     duration,

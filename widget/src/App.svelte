@@ -232,6 +232,12 @@
     --theme-ease-out-expo: #{$easeOutExpo};
   }
 
+  :global(a) {
+    color: var(--theme-color);
+    position: relative;
+    text-decoration: underline;
+  }
+
   #modal {
     position: absolute;
     z-index: 1;
