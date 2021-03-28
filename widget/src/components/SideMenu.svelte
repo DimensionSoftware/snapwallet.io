@@ -6,9 +6,12 @@
 
   function logout() {
     window.AUTH_MANAGER.logout()
+    push(Routes.ROOT)
+    isExpanded = false
   }
   function login() {
     push(Routes.SEND_OTP)
+    isExpanded = false
   }
   function go(route) {
     push(route)
