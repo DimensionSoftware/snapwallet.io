@@ -635,8 +635,14 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		log.Printf("Preconditions for wyre are unmet for user id: %s", u.ID)
 	}
 
+	remediations, err := s.RemedyManager.GetRemediationsProto(profile)
+	if err != nil {
+		return nil, err
+	}
+
 	resp := &proto.ProfileDataInfo{
-		Profile: profile.GetProfileDataItemInfo(),
+		Profile:      profile.GetProfileDataItemInfo(),
+		Remediations: remediations,
 	}
 
 	if len(existingWyreAccounts) == 0 && profile.HasWyreAccountPreconditionsMet() {
