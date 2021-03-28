@@ -28,7 +28,13 @@
 <div
   class="container"
   class:active={isExpanded}
-  on:click={_ => (isExpanded = !isExpanded)}
+  on:click={_ => {
+    if (isExpanded) {
+      close()
+    } else {
+      isExpanded = !isExpanded
+    }
+  }}
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"
