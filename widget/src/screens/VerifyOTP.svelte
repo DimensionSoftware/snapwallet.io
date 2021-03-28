@@ -31,7 +31,7 @@
   const verifyOTP = async (): Promise<OneTimePasscodeVerifyResponse> => {
     Logger.debug('Verifying using OTP code:', code)
     const emailOrPhone = $userStore.phoneNumber || $userStore.emailAddress
-    if (!emailOrPhone) {
+    if (!(code?.length > 5) || !emailOrPhone) {
       document.getElementById('code').focus()
 
       toaster.pop({
@@ -66,7 +66,7 @@
           msg: 'Success! Please check your email inbox.',
           success: true,
         })
-      }, 600)
+      }, 250)
     } catch (e) {
       Logger.error(e)
       // TODO: move error messages to the server
