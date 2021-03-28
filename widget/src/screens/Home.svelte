@@ -11,7 +11,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
-  import { isValidNumber, onEnterPressed } from '../util'
+  import { focusFirstInput, isValidNumber, onEnterPressed } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
   import {
@@ -227,7 +227,13 @@
 
 <!-- Cryptocurrency Selector (remount for onMount trigger) -->
 {#if cryptoSelectorVisible}
-  <CryptoSelector visible on:close={() => (cryptoSelectorVisible = false)} />
+  <CryptoSelector
+    visible
+    on:close={() => {
+      cryptoSelectorVisible = false
+      focusFirstInput()
+    }}
+  />
 {/if}
 
 <!-- Payment Method Selector (remount for onMount trigger) -->
