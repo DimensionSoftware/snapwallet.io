@@ -185,7 +185,8 @@ message UsGovernmentIdDocumentInput {
 // represents all profile data for a user
 message ProfileDataInfo {
   repeated ProfileDataItemInfo profile = 1;
-  ThirdPartyUserAccount wyre = 2;
+  repeated ProfileDataItemRemediation remediations = 2;
+  ThirdPartyUserAccount wyre = 3;
 }
 
 enum LifecycleStatus {
@@ -201,16 +202,15 @@ enum LifecycleStatus {
 message ThirdPartyUserAccount {
   LifecycleStatus lifecyle_status = 1;
   string status = 2;
-  repeated UserAccountRemediation remediations = 3;
 }
 
 // UserAccountRemediation
 //
 // Represents an action that the client 
 // must take in order to resolve a condition.
-message UserAccountRemediation {
+message ProfileDataItemRemediation {
   ProfileDataItemKind kind = 1;
-  string description = 2;
+  string note = 2;
 }
 
 // ProfileDataInfo

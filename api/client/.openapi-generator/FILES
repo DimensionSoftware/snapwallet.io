@@ -30,6 +30,7 @@ models/PricingRate.ts
 models/ProfileDataInfo.ts
 models/ProfileDataItemInfo.ts
 models/ProfileDataItemKind.ts
+models/ProfileDataItemRemediation.ts
 models/ProfileDataItemStatus.ts
 models/ProtobufAny.ts
 models/RpcStatus.ts
@@ -42,7 +43,6 @@ models/UploadFileResponse.ts
 models/UsGovernmentIdDocumentInput.ts
 models/UsGovernmentIdDocumentInputKind.ts
 models/User.ts
-models/UserAccountRemediation.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
 models/WyreConfirmTransferRequest.ts

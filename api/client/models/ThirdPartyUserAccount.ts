@@ -11,7 +11,6 @@
  */
 
 import { LifecycleStatus } from './LifecycleStatus';
-import { UserAccountRemediation } from './UserAccountRemediation';
 import { HttpFile } from '../http/http';
 
 /**
@@ -20,7 +19,6 @@ import { HttpFile } from '../http/http';
 export class ThirdPartyUserAccount {
     'lifecyleStatus'?: LifecycleStatus;
     'status'?: string;
-    'remediations'?: Array<UserAccountRemediation>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -35,12 +33,6 @@ export class ThirdPartyUserAccount {
             "name": "status",
             "baseName": "status",
             "type": "string",
-            "format": ""
-        },
-        {
-            "name": "remediations",
-            "baseName": "remediations",
-            "type": "Array<UserAccountRemediation>",
             "format": ""
         }    ];
 

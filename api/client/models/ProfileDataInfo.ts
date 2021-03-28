@@ -11,6 +11,7 @@
  */
 
 import { ProfileDataItemInfo } from './ProfileDataItemInfo';
+import { ProfileDataItemRemediation } from './ProfileDataItemRemediation';
 import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
 import { HttpFile } from '../http/http';
 
@@ -19,6 +20,7 @@ import { HttpFile } from '../http/http';
 */
 export class ProfileDataInfo {
     'profile'?: Array<ProfileDataItemInfo>;
+    'remediations'?: Array<ProfileDataItemRemediation>;
     'wyre'?: ThirdPartyUserAccount;
 
     static readonly discriminator: string | undefined = undefined;
@@ -28,6 +30,12 @@ export class ProfileDataInfo {
             "name": "profile",
             "baseName": "profile",
             "type": "Array<ProfileDataItemInfo>",
+            "format": ""
+        },
+        {
+            "name": "remediations",
+            "baseName": "remediations",
+            "type": "Array<ProfileDataItemRemediation>",
             "format": ""
         },
         {

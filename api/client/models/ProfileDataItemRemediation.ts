@@ -16,9 +16,9 @@ import { HttpFile } from '../http/http';
 /**
 * Represents an action that the client  must take in order to resolve a condition.
 */
-export class UserAccountRemediation {
+export class ProfileDataItemRemediation {
     'kind'?: ProfileDataItemKind;
-    'description'?: string;
+    'note'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -30,14 +30,14 @@ export class UserAccountRemediation {
             "format": ""
         },
         {
-            "name": "description",
-            "baseName": "description",
+            "name": "note",
+            "baseName": "note",
             "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return UserAccountRemediation.attributeTypeMap;
+        return ProfileDataItemRemediation.attributeTypeMap;
     }
     
     public constructor() {

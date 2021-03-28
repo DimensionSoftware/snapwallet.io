@@ -16,6 +16,7 @@ export * from './PricingRate';
 export * from './ProfileDataInfo';
 export * from './ProfileDataItemInfo';
 export * from './ProfileDataItemKind';
+export * from './ProfileDataItemRemediation';
 export * from './ProfileDataItemStatus';
 export * from './ProtobufAny';
 export * from './RpcStatus';
@@ -28,7 +29,6 @@ export * from './UploadFileResponse';
 export * from './UsGovernmentIdDocumentInput';
 export * from './UsGovernmentIdDocumentInputKind';
 export * from './User';
-export * from './UserAccountRemediation';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
 export * from './WyreConfirmTransferRequest';
@@ -57,6 +57,7 @@ import { PricingRate } from './PricingRate';
 import { ProfileDataInfo } from './ProfileDataInfo';
 import { ProfileDataItemInfo } from './ProfileDataItemInfo';
 import { ProfileDataItemKind } from './ProfileDataItemKind';
+import { ProfileDataItemRemediation } from './ProfileDataItemRemediation';
 import { ProfileDataItemStatus } from './ProfileDataItemStatus';
 import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
@@ -69,7 +70,6 @@ import { UploadFileResponse } from './UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from './UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKind';
 import { User } from './User';
-import { UserAccountRemediation } from './UserAccountRemediation';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
 import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
@@ -122,6 +122,7 @@ let typeMap: {[index: string]: any} = {
     "PricingRate": PricingRate,
     "ProfileDataInfo": ProfileDataInfo,
     "ProfileDataItemInfo": ProfileDataItemInfo,
+    "ProfileDataItemRemediation": ProfileDataItemRemediation,
     "ProtobufAny": ProtobufAny,
     "RpcStatus": RpcStatus,
     "SaveProfileDataRequest": SaveProfileDataRequest,
@@ -132,7 +133,6 @@ let typeMap: {[index: string]: any} = {
     "UploadFileResponse": UploadFileResponse,
     "UsGovernmentIdDocumentInput": UsGovernmentIdDocumentInput,
     "User": User,
-    "UserAccountRemediation": UserAccountRemediation,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
     "WyreConfirmTransferRequest": WyreConfirmTransferRequest,

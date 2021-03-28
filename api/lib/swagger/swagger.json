@@ -869,6 +869,12 @@
             "$ref": "#/definitions/ProfileDataItemInfo"
           }
         },
+        "remediations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/ProfileDataItemRemediation"
+          }
+        },
         "wyre": {
           "$ref": "#/definitions/ThirdPartyUserAccount"
         }
@@ -930,6 +936,19 @@
       ],
       "default": "K_UNKNOWN"
     },
+    "ProfileDataItemRemediation": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "$ref": "#/definitions/ProfileDataItemKind"
+        },
+        "note": {
+          "type": "string"
+        }
+      },
+      "description": "Represents an action that the client \nmust take in order to resolve a condition.",
+      "title": "UserAccountRemediation"
+    },
     "ProfileDataItemStatus": {
       "type": "string",
       "enum": [
@@ -977,12 +996,6 @@
         },
         "status": {
           "type": "string"
-        },
-        "remediations": {
-          "type": "array",
-          "items": {
-            "$ref": "#/definitions/UserAccountRemediation"
-          }
         }
       },
       "description": "Represents the wyre user account status (or other tps)",
@@ -1071,19 +1084,6 @@
       },
       "description": "A user which is shared across customer applications",
       "title": "User"
-    },
-    "UserAccountRemediation": {
-      "type": "object",
-      "properties": {
-        "kind": {
-          "$ref": "#/definitions/ProfileDataItemKind"
-        },
-        "description": {
-          "type": "string"
-        }
-      },
-      "description": "Represents an action that the client \nmust take in order to resolve a condition.",
-      "title": "UserAccountRemediation"
     },
     "UserFlags": {
       "type": "object",
