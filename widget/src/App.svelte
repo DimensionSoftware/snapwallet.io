@@ -275,6 +275,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    animation: scaleIn .25s var(--theme-ease-out-back);
     // Used by toast
     position: relative;
   }

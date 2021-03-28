@@ -117,7 +117,7 @@
 
   const getInitialPrices = async () => {
     try {
-      setTimeout(animateRandomPrice, 150)
+      setTimeout(animateRandomPrice, 275)
       await priceStore.fetchPrices()
     } finally {
       setTimeout(() => (isLoadingPrices = false), 250)
