@@ -55,12 +55,12 @@
     border-radius: 1rem;
     z-index: 1000;
     position: absolute;
-    top: 2%;
+    top: 1.5rem;
     bottom: 0;
     left: 0;
     right: 0;
     background-color: white;
-    box-shadow: 0px -7px 25px 10px var(--theme-shadow-color);
+    box-shadow: 0px -5px 10px 7px var(--theme-shadow-color);
     animation: slideUp 0.2s $easeOutExpo forwards;
   }
 

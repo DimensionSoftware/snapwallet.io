@@ -127,7 +127,7 @@
 
   // Override theme css variables
   onMount(() => {
-    if (focus) setTimeout(() => document.getElementById('amount')?.focus(), 300)
+    if (focus) setTimeout(() => document.getElementById('amount')?.focus(), 350)
     Object.entries(theme).forEach(([k, v]) => {
       k = k.replace(/[A-Z]/g, (k, i) =>
         i === 0 ? k.toLowerCase() : `-${k.toLowerCase()}`,
@@ -275,7 +275,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    animation: scaleIn .25s var(--theme-ease-out-back);
+    animation: scaleIn 0.25s var(--theme-ease-out-back);
     // Used by toast
     position: relative;
   }

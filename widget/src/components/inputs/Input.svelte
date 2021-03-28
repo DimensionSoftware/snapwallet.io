@@ -155,7 +155,7 @@
           $themeColor,
           transparent
         );
-        z-index: 9;
+        z-index: 11;
         opacity: 0;
         transform: scale(0);
         transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s;
