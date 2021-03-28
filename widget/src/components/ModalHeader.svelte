@@ -3,6 +3,7 @@
   import FaIcon from 'svelte-awesome'
   import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
   import { ParentMessenger } from '../util/parent_messenger'
+  import SideMenu from './SideMenu.svelte'
 
   export let hideRightAction = false
   export let hideBackButton = false
@@ -20,7 +21,9 @@
     <slot />
   </div>
   <div class:hidden={hideRightAction} class="modal-header-right-action">
-    <slot name="right" />
+    <slot name="right">
+      <SideMenu />
+    </slot>
   </div>
 </div>
 
