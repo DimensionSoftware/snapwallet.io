@@ -143,32 +143,54 @@ type EncryptedProfileData struct {
 	CreatedAt         time.Time         `firestore:"createdAt"`
 	DataEncryptionKey *[]byte           `firestore:"DEK,omitempty"`
 	EncryptedData     *[]byte           `firestore:"encryptedData,omitempty"`
+	EncryptedNote     *[]byte           `firestore:"encryptedNote,omitempty"`
 	FileIDs           *[]file.ID        `firestore:"fileIds,omitempty"`
 	UpdatedAt         *time.Time        `firestore:"updatedAt,omitempty"`
 	SealedAt          *time.Time        `firestore:"sealedAt,omitempty"`
 }
 
-// Decrypt decrypts a type
-func (encryptedProfileData EncryptedProfileData) Decrypt(m *encryption.Manager, userID user.ID) (*[]byte, error) {
-	if encryptedProfileData.DataEncryptionKey == nil {
-		return nil, nil
-	}
+type CommonProfileData struct {
+	ID        ProfileDataID
+	Status    ProfileDataStatus
+	Note      string
+	CreatedAt time.Time
+	UpdatedAt *time.Time
+	SealedAt  *time.Time
+}
 
-	if encryptedProfileData.EncryptedData == nil {
-		return nil, nil
+// Decrypt decrypts a type; returns encrypted data, note data
+func (encryptedProfileData EncryptedProfileData) Decrypt(m *encryption.Manager, userID user.ID) (*[]byte, *[]byte, error) {
+	if encryptedProfileData.DataEncryptionKey == nil {
+		return nil, nil, nil
 	}
 
 	dekH, err := encryption.ParseAndDecryptKeyBytes(*encryptedProfileData.DataEncryptionKey, m.Encryptor)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 	dek := encryption.NewEncryptor(dekH)
 
-	decrypted, err := dek.Decrypt(*encryptedProfileData.EncryptedData, []byte(userID))
-	if err != nil {
-		return nil, err
+	var (
+		outData *[]byte
+		outNote *[]byte
+	)
+
+	if encryptedProfileData.EncryptedData != nil {
+		decryptedData, err := dek.Decrypt(*encryptedProfileData.EncryptedData, []byte(userID))
+		if err != nil {
+			return nil, nil, err
+		}
+		outData = &decryptedData
 	}
 
-	return &decrypted, nil
+	if encryptedProfileData.EncryptedNote != nil {
+		decryptedNote, err := dek.Decrypt(*encryptedProfileData.EncryptedNote, []byte(userID))
+		if err != nil {
+			return nil, nil, err
+		}
+		outNote = &decryptedNote
+	}
+
+	return outData, outNote, nil
 
 }

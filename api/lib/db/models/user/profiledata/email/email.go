@@ -11,12 +11,8 @@ import (
 
 // ProfileDataEmail the email of a user
 type ProfileDataEmail struct {
-	ID        common.ProfileDataID
-	Status    common.ProfileDataStatus
-	Email     string
-	CreatedAt time.Time
-	UpdatedAt *time.Time
-	SealedAt  *time.Time
+	common.CommonProfileData
+	Email string
 }
 
 // Kind the kind of profile data

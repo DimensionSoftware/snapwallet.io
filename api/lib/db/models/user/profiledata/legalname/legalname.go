@@ -11,12 +11,8 @@ import (
 
 // ProfileDataLegalName the legal name of a user
 type ProfileDataLegalName struct {
-	ID        common.ProfileDataID
-	Status    common.ProfileDataStatus
+	common.CommonProfileData
 	LegalName string
-	CreatedAt time.Time
-	UpdatedAt *time.Time
-	SealedAt  *time.Time
 }
 
 // Kind the kind of profile data

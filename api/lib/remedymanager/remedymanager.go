@@ -2,6 +2,7 @@ package remedymanager
 
 import (
 	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	proto "github.com/khoerling/flux/api/lib/protocol"
@@ -12,7 +13,17 @@ type Manager struct {
 	Db *db.Db
 }
 
-func (m Manager) GetRemediationsProto(profile profiledata.ProfileDatas) ([]*proto.ProfileDataItemRemediation, error) {
+func (m Manager) GetRemediationsProto(userID user.ID, profile profiledata.ProfileDatas) ([]*proto.ProfileDataItemRemediation, error) {
+	var out []*proto.ProfileDataItemRemediation
+
+	for _, remediation := range BuildSubmitRemediationsForMissing(profile) {
+		out = append(out, remediation)
+	}
+
+	return out, nil
+}
+
+func BuildSubmitRemediationsForMissing(profile profiledata.ProfileDatas) []*proto.ProfileDataItemRemediation {
 	var out []*proto.ProfileDataItemRemediation
 
 	for _, kind := range common.ProfileDataRequiredForWyre {
@@ -24,5 +35,5 @@ func (m Manager) GetRemediationsProto(profile profiledata.ProfileDatas) ([]*prot
 		}
 	}
 
-	return out, nil
+	return out
 }

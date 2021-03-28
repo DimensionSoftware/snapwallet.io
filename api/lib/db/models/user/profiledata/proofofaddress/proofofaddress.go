@@ -13,12 +13,8 @@ import (
 
 // ProfileDataProofOfAddress represents a proof of address document
 type ProfileDataProofOfAddressDoc struct {
-	ID        common.ProfileDataID
-	Status    common.ProfileDataStatus
-	FileIDs   []file.ID
-	CreatedAt time.Time
-	UpdatedAt *time.Time
-	SealedAt  *time.Time
+	common.CommonProfileData
+	FileIDs []file.ID
 }
 
 // Encrypt ...

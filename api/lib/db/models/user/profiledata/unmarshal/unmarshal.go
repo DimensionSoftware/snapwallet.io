@@ -19,52 +19,67 @@ import (
 )
 
 // Unmarshal ...
-func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.ProfileData, error) {
+func Unmarshal(pdata *common.EncryptedProfileData, clear []byte, note string) (profiledata.ProfileData, error) {
 	switch pdata.Kind {
 	case common.KindLegalName:
 		return &legalname.ProfileDataLegalName{
-			ID:        pdata.ID,
-			Status:    pdata.Status,
+			CommonProfileData: common.CommonProfileData{
+				ID:        pdata.ID,
+				Status:    pdata.Status,
+				CreatedAt: pdata.CreatedAt,
+				UpdatedAt: pdata.UpdatedAt,
+				SealedAt:  pdata.SealedAt,
+				Note:      note,
+			},
 			LegalName: string(clear),
-			CreatedAt: pdata.CreatedAt,
-			UpdatedAt: pdata.UpdatedAt,
-			SealedAt:  pdata.SealedAt,
 		}, nil
 	case common.KindEmail:
 		return &email.ProfileDataEmail{
-			ID:        pdata.ID,
-			Status:    pdata.Status,
-			Email:     string(clear),
-			CreatedAt: pdata.CreatedAt,
-			UpdatedAt: pdata.UpdatedAt,
-			SealedAt:  pdata.SealedAt,
+			CommonProfileData: common.CommonProfileData{
+				ID:        pdata.ID,
+				Status:    pdata.Status,
+				CreatedAt: pdata.CreatedAt,
+				UpdatedAt: pdata.UpdatedAt,
+				SealedAt:  pdata.SealedAt,
+				Note:      note,
+			},
+			Email: string(clear),
 		}, nil
 	case common.KindPhone:
 		return &phone.ProfileDataPhone{
-			ID:        pdata.ID,
-			Status:    pdata.Status,
-			Phone:     string(clear),
-			CreatedAt: pdata.CreatedAt,
-			UpdatedAt: pdata.UpdatedAt,
-			SealedAt:  pdata.SealedAt,
+			CommonProfileData: common.CommonProfileData{
+				ID:        pdata.ID,
+				Status:    pdata.Status,
+				CreatedAt: pdata.CreatedAt,
+				UpdatedAt: pdata.UpdatedAt,
+				SealedAt:  pdata.SealedAt,
+				Note:      note,
+			},
+			Phone: string(clear),
 		}, nil
 	case common.KindDateOfBirth:
 		return &dateofbirth.ProfileDataDateOfBirth{
-			ID:          pdata.ID,
-			Status:      pdata.Status,
+			CommonProfileData: common.CommonProfileData{
+				ID:        pdata.ID,
+				Status:    pdata.Status,
+				CreatedAt: pdata.CreatedAt,
+				UpdatedAt: pdata.UpdatedAt,
+				SealedAt:  pdata.SealedAt,
+				Note:      note,
+			},
 			DateOfBirth: string(clear),
-			CreatedAt:   pdata.CreatedAt,
-			UpdatedAt:   pdata.UpdatedAt,
-			SealedAt:    pdata.SealedAt,
 		}, nil
 	case common.KindUSSSN:
 		return &ssn.ProfileDataSSN{
-			ID:        pdata.ID,
-			Status:    pdata.Status,
-			SSN:       string(clear),
-			CreatedAt: pdata.CreatedAt,
-			UpdatedAt: pdata.UpdatedAt,
-			SealedAt:  pdata.SealedAt,
+			CommonProfileData: common.CommonProfileData{
+				ID:        pdata.ID,
+				Status:    pdata.Status,
+				CreatedAt: pdata.CreatedAt,
+				UpdatedAt: pdata.UpdatedAt,
+				SealedAt:  pdata.SealedAt,
+				Note:      note,
+			},
+			SSN: string(clear),
 		}, nil
 	case common.KindAddress:
 		var out address.ProfileDataAddressPIIData
@@ -75,36 +90,45 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 		}
 
 		return &address.ProfileDataAddress{
-			ID:         pdata.ID,
-			Status:     pdata.Status,
+			CommonProfileData: common.CommonProfileData{
+				ID:        pdata.ID,
+				Status:    pdata.Status,
+				CreatedAt: pdata.CreatedAt,
+				UpdatedAt: pdata.UpdatedAt,
+				SealedAt:  pdata.SealedAt,
+				Note:      note,
+			},
 			Street1:    out.Street1,
 			Street2:    out.Street2,
 			City:       out.City,
 			State:      out.State,
 			PostalCode: out.PostalCode,
 			Country:    out.Country,
-			CreatedAt:  pdata.CreatedAt,
-			UpdatedAt:  pdata.UpdatedAt,
-			SealedAt:   pdata.SealedAt,
 		}, nil
 	case common.KindProofOfAddressDoc:
 		return &proofofaddress.ProfileDataProofOfAddressDoc{
-			ID:        pdata.ID,
-			Status:    pdata.Status,
-			FileIDs:   *pdata.FileIDs,
-			CreatedAt: pdata.CreatedAt,
-			UpdatedAt: pdata.UpdatedAt,
-			SealedAt:  pdata.SealedAt,
+			CommonProfileData: common.CommonProfileData{
+				ID:        pdata.ID,
+				Status:    pdata.Status,
+				CreatedAt: pdata.CreatedAt,
+				UpdatedAt: pdata.UpdatedAt,
+				SealedAt:  pdata.SealedAt,
+				Note:      note,
+			},
+			FileIDs: *pdata.FileIDs,
 		}, nil
 	case common.KindUSGovernmentIDDoc:
 		return &usgovernmentid.ProfileDataUSGovernmentIDDoc{
-			ID:               pdata.ID,
-			Status:           pdata.Status,
+			CommonProfileData: common.CommonProfileData{
+				ID:        pdata.ID,
+				Status:    pdata.Status,
+				CreatedAt: pdata.CreatedAt,
+				UpdatedAt: pdata.UpdatedAt,
+				SealedAt:  pdata.SealedAt,
+				Note:      note,
+			},
 			GovernmentIDKind: usgovernmentid.Kind(*pdata.SubKind),
 			FileIDs:          *pdata.FileIDs,
-			CreatedAt:        pdata.CreatedAt,
-			UpdatedAt:        pdata.UpdatedAt,
-			SealedAt:         pdata.SealedAt,
 		}, nil
 	}
 
@@ -113,17 +137,23 @@ func Unmarshal(pdata *common.EncryptedProfileData, clear []byte) (profiledata.Pr
 
 // DecryptAndUnmarshal ...
 func DecryptAndUnmarshal(m *encryption.Manager, userID user.ID, data common.EncryptedProfileData) (*profiledata.ProfileData, error) {
-	maybeClear, err := data.Decrypt(m, userID)
+	maybeData, maybeNote, err := data.Decrypt(m, userID)
 	if err != nil {
 		return nil, err
 	}
 
-	var clear []byte
-	if maybeClear != nil {
-		clear = *maybeClear
+	var (
+		clear []byte
+		note  string
+	)
+	if maybeData != nil {
+		clear = *maybeData
+	}
+	if maybeNote != nil {
+		note = string(*maybeNote)
 	}
 
-	out, err := Unmarshal(&data, clear)
+	out, err := Unmarshal(&data, clear, note)
 	if err != nil {
 		return nil, err
 	}

@@ -11,12 +11,8 @@ import (
 
 // ProfileDataPhone the phone number of a user
 type ProfileDataPhone struct {
-	ID        common.ProfileDataID
-	Status    common.ProfileDataStatus
-	Phone     string
-	CreatedAt time.Time
-	UpdatedAt *time.Time
-	SealedAt  *time.Time
+	common.CommonProfileData
+	Phone string
 }
 
 // Kind the kind of profile data

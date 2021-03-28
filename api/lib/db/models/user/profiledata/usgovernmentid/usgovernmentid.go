@@ -93,13 +93,9 @@ func (govtIDKind Kind) FilesRequired() int {
 
 // ProfileDataGovernmentID represents a government ID for a user
 type ProfileDataUSGovernmentIDDoc struct {
-	ID               common.ProfileDataID
-	Status           common.ProfileDataStatus
+	common.CommonProfileData
 	GovernmentIDKind Kind
 	FileIDs          []file.ID
-	CreatedAt        time.Time
-	UpdatedAt        *time.Time
-	SealedAt         *time.Time
 }
 
 // Encrypt ...

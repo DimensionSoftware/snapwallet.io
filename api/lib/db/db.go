@@ -166,10 +166,12 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 
 			if existingPdata == nil {
 				pdatas = append(pdatas, phone.ProfileDataPhone{
-					ID:        common.ProfileDataID(shortuuid.New()),
-					Status:    common.StatusReceived,
-					Phone:     emailOrPhone,
-					CreatedAt: now,
+					CommonProfileData: common.CommonProfileData{
+						ID:        common.ProfileDataID(shortuuid.New()),
+						Status:    common.StatusReceived,
+						CreatedAt: now,
+					},
+					Phone: emailOrPhone,
 				})
 			}
 		} else {
@@ -177,10 +179,12 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 
 			if existingPdata == nil {
 				pdatas = append(pdatas, email.ProfileDataEmail{
-					ID:        common.ProfileDataID(shortuuid.New()),
-					Status:    common.StatusReceived,
-					Email:     emailOrPhone,
-					CreatedAt: now,
+					CommonProfileData: common.CommonProfileData{
+						ID:        common.ProfileDataID(shortuuid.New()),
+						Status:    common.StatusReceived,
+						CreatedAt: now,
+					},
+					Email: emailOrPhone,
 				})
 			}
 		}
@@ -396,10 +400,12 @@ func (db Db) UpdateEmail(ctx context.Context, userID user.ID, newEmail string) e
 		emails := profile.FilterStatus(common.StatusReceived).FilterKindEmail()
 		if len(emails) == 0 {
 			emails = append(emails, &email.ProfileDataEmail{
-				ID:        common.ProfileDataID(shortuuid.New()),
-				Status:    common.StatusReceived,
-				Email:     newEmail,
-				CreatedAt: now,
+				CommonProfileData: common.CommonProfileData{
+					ID:        common.ProfileDataID(shortuuid.New()),
+					Status:    common.StatusReceived,
+					CreatedAt: now,
+				},
+				Email: newEmail,
 			})
 		}
 		email := emails[0]
@@ -441,10 +447,12 @@ func (db Db) UpdatePhone(ctx context.Context, userID user.ID, newPhone string) e
 		phones := profile.FilterStatus(common.StatusReceived).FilterKindPhone()
 		if len(phones) == 0 {
 			phones = append(phones, &phone.ProfileDataPhone{
-				ID:        common.ProfileDataID(shortuuid.New()),
-				Status:    common.StatusReceived,
-				Phone:     newPhone,
-				CreatedAt: now,
+				CommonProfileData: common.CommonProfileData{
+					ID:        common.ProfileDataID(shortuuid.New()),
+					Status:    common.StatusReceived,
+					CreatedAt: now,
+				},
+				Phone: newPhone,
 			})
 		}
 		phone := phones[0]

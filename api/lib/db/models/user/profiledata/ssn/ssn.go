@@ -11,12 +11,8 @@ import (
 
 // ProfileDataSSN the social security number of a user
 type ProfileDataSSN struct {
-	ID        common.ProfileDataID
-	Status    common.ProfileDataStatus
-	SSN       string
-	CreatedAt time.Time
-	UpdatedAt *time.Time
-	SealedAt  *time.Time
+	common.CommonProfileData
+	SSN string
 }
 
 // Kind the kind of profile data

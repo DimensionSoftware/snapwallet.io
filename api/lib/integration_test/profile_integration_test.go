@@ -30,10 +30,12 @@ func Test_Profile_Lifecycle(t *testing.T) {
 	a.NoError(err)
 
 	pdata := legalname.ProfileDataLegalName{
-		ID:        common.ProfileDataID(shortuuid.New()),
-		Status:    common.StatusReceived,
+		CommonProfileData: common.CommonProfileData{
+			ID:        common.ProfileDataID(shortuuid.New()),
+			Status:    common.StatusReceived,
+			CreatedAt: time.Now(),
+		},
 		LegalName: "Bob Jones",
-		CreatedAt: time.Now(),
 	}
 
 	returnedID, err := s.Db.SaveProfileData(ctx, nil, u.ID, pdata)

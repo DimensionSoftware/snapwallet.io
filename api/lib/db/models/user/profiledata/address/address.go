@@ -13,17 +13,13 @@ import (
 
 // ProfileDataAddress an address for a user
 type ProfileDataAddress struct {
-	ID         common.ProfileDataID
-	Status     common.ProfileDataStatus
+	common.CommonProfileData
 	Street1    string
 	Street2    string
 	City       string
 	State      string
 	PostalCode string
 	Country    string
-	CreatedAt  time.Time
-	UpdatedAt  *time.Time
-	SealedAt   *time.Time
 }
 
 // Kind the kind of profile data

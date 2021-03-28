@@ -399,10 +399,12 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				if req.LegalName != "" {
 					if existingProfileData == nil {
 						legalNameData = &legalname.ProfileDataLegalName{
-							ID:        common.ProfileDataID(shortuuid.New()),
-							Status:    common.StatusReceived,
+							CommonProfileData: common.CommonProfileData{
+								ID:        common.ProfileDataID(shortuuid.New()),
+								Status:    common.StatusReceived,
+								CreatedAt: time.Now(),
+							},
 							LegalName: req.LegalName,
-							CreatedAt: time.Now(),
 						}
 					} else {
 						legalNameData = (*existingProfileData).(*legalname.ProfileDataLegalName)
@@ -427,10 +429,12 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				if req.DateOfBirth != "" {
 					if existingProfileData == nil {
 						dobData = &dateofbirth.ProfileDataDateOfBirth{
-							ID:          common.ProfileDataID(shortuuid.New()),
-							Status:      common.StatusReceived,
+							CommonProfileData: common.CommonProfileData{
+								ID:        common.ProfileDataID(shortuuid.New()),
+								Status:    common.StatusReceived,
+								CreatedAt: time.Now(),
+							},
 							DateOfBirth: req.DateOfBirth,
-							CreatedAt:   time.Now(),
 						}
 					} else {
 						dobData = (*existingProfileData).(*dateofbirth.ProfileDataDateOfBirth)
@@ -455,10 +459,12 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				if req.Ssn != "" {
 					if existingProfileData == nil {
 						ssnData = &ssn.ProfileDataSSN{
-							ID:        common.ProfileDataID(shortuuid.New()),
-							Status:    common.StatusReceived,
-							SSN:       req.Ssn,
-							CreatedAt: time.Now(),
+							CommonProfileData: common.CommonProfileData{
+								ID:        common.ProfileDataID(shortuuid.New()),
+								Status:    common.StatusReceived,
+								CreatedAt: time.Now(),
+							},
+							SSN: req.Ssn,
 						}
 					} else {
 						ssnData = (*existingProfileData).(*ssn.ProfileDataSSN)
@@ -483,15 +489,17 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				if req.Address != nil {
 					if existingProfileData == nil {
 						addressData = &address.ProfileDataAddress{
-							ID:         common.ProfileDataID(shortuuid.New()),
-							Status:     common.StatusReceived,
+							CommonProfileData: common.CommonProfileData{
+								ID:        common.ProfileDataID(shortuuid.New()),
+								Status:    common.StatusReceived,
+								CreatedAt: time.Now(),
+							},
 							Street1:    req.Address.Street_1,
 							Street2:    req.Address.Street_2,
 							City:       req.Address.City,
 							State:      req.Address.State,
 							PostalCode: req.Address.PostalCode,
 							Country:    req.Address.Country,
-							CreatedAt:  time.Now(),
 						}
 					} else {
 						addressData = (*existingProfileData).(*address.ProfileDataAddress)
@@ -538,10 +546,12 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 					if existingProfileData == nil {
 						proofOfAddressData = &proofofaddress.ProfileDataProofOfAddressDoc{
-							ID:        common.ProfileDataID(shortuuid.New()),
-							Status:    common.StatusReceived,
-							FileIDs:   fileIDs,
-							CreatedAt: time.Now(),
+							CommonProfileData: common.CommonProfileData{
+								ID:        common.ProfileDataID(shortuuid.New()),
+								Status:    common.StatusReceived,
+								CreatedAt: time.Now(),
+							},
+							FileIDs: fileIDs,
 						}
 					} else {
 						proofOfAddressData = (*existingProfileData).(*proofofaddress.ProfileDataProofOfAddressDoc)
@@ -586,11 +596,13 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 					if existingProfileData == nil {
 						governmentIDData = &usgovernmentid.ProfileDataUSGovernmentIDDoc{
-							ID:               common.ProfileDataID(shortuuid.New()),
-							Status:           common.StatusReceived,
+							CommonProfileData: common.CommonProfileData{
+								ID:        common.ProfileDataID(shortuuid.New()),
+								Status:    common.StatusReceived,
+								CreatedAt: time.Now(),
+							},
 							GovernmentIDKind: kind,
 							FileIDs:          fileIDs,
-							CreatedAt:        time.Now(),
 						}
 					} else {
 						governmentIDData = (*existingProfileData).(*usgovernmentid.ProfileDataUSGovernmentIDDoc)
@@ -635,7 +647,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		log.Printf("Preconditions for wyre are unmet for user id: %s", u.ID)
 	}
 
-	remediations, err := s.RemedyManager.GetRemediationsProto(profile)
+	remediations, err := s.RemedyManager.GetRemediationsProto(u.ID, profile)
 	if err != nil {
 		return nil, err
 	}
@@ -711,7 +723,7 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 		}
 	}
 
-	remediations, err := s.RemedyManager.GetRemediationsProto(profile)
+	remediations, err := s.RemedyManager.GetRemediationsProto(u.ID, profile)
 	if err != nil {
 		return nil, err
 	}

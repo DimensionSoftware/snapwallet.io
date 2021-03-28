@@ -11,13 +11,9 @@ import (
 
 // ProfileDataDateOfBirth thkke date of birth for a user
 type ProfileDataDateOfBirth struct {
-	ID     common.ProfileDataID
-	Status common.ProfileDataStatus
+	common.CommonProfileData
 	// indicates an individuals date of birth which is a string of the format YYYY-MM-DD
 	DateOfBirth string
-	CreatedAt   time.Time
-	UpdatedAt   *time.Time
-	SealedAt    *time.Time
 }
 
 // Kind the kind of profile data
@@ -66,7 +62,7 @@ func (pdata ProfileDataDateOfBirth) Encrypt(m *encryption.Manager, userID user.I
 		return nil, err
 	}
 
-	return &common.EncryptedProfileData{
+	out := common.EncryptedProfileData{
 		ID:                pdata.ID,
 		Kind:              pdata.Kind(),
 		Status:            pdata.Status,
@@ -74,5 +70,16 @@ func (pdata ProfileDataDateOfBirth) Encrypt(m *encryption.Manager, userID user.I
 		SealedAt:          pdata.SealedAt,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EncryptedData:     &encryptedData,
-	}, nil
+	}
+
+	if pdata.Note != "" {
+		noteData := []byte(pdata.Note)
+		encryptedNote, err := dek.Encrypt(noteData, []byte(userID))
+		if err != nil {
+			return nil, err
+		}
+		out.EncryptedNote = &encryptedNote
+	}
+
+	return &out, nil
 }
