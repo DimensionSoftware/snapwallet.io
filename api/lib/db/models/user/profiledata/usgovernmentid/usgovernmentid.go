@@ -134,11 +134,6 @@ func (pdata ProfileDataUSGovernmentIDDoc) Kind() common.ProfileDataKind {
 	return common.KindUSGovernmentIDDoc
 }
 
-// GetStatus get the status of the profile data
-func (pdata ProfileDataUSGovernmentIDDoc) GetStatus() common.ProfileDataStatus {
-	return pdata.Status
-}
-
 // SetStatus set the status of the profile data
 func (pdata ProfileDataUSGovernmentIDDoc) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus

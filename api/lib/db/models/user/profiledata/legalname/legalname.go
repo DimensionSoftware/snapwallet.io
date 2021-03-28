@@ -20,11 +20,6 @@ func (pdata ProfileDataLegalName) Kind() common.ProfileDataKind {
 	return common.KindLegalName
 }
 
-// GetStatus get the status of the profile data
-func (pdata ProfileDataLegalName) GetStatus() common.ProfileDataStatus {
-	return pdata.Status
-}
-
 // SetStatus set the status of the profile data
 func (pdata ProfileDataLegalName) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus

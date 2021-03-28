@@ -20,11 +20,6 @@ func (pdata ProfileDataPhone) Kind() common.ProfileDataKind {
 	return common.KindPhone
 }
 
-// GetStatus get the status of the profile data
-func (pdata ProfileDataPhone) GetStatus() common.ProfileDataStatus {
-	return pdata.Status
-}
-
 // SetStatus set the status of the profile data
 func (pdata ProfileDataPhone) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus

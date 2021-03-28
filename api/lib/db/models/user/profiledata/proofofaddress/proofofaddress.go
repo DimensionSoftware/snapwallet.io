@@ -50,11 +50,6 @@ func (pdata ProfileDataProofOfAddressDoc) Kind() common.ProfileDataKind {
 	return common.KindProofOfAddressDoc
 }
 
-// GetStatus get the status of the profile data
-func (pdata ProfileDataProofOfAddressDoc) GetStatus() common.ProfileDataStatus {
-	return pdata.Status
-}
-
 // SetStatus set the status of the profile data
 func (pdata ProfileDataProofOfAddressDoc) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus

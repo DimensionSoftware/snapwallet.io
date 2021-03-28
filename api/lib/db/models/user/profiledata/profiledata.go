@@ -18,6 +18,8 @@ import (
 type ProfileData interface {
 	Kind() common.ProfileDataKind
 	GetStatus() common.ProfileDataStatus
+	GetID() common.ProfileDataID
+	GetNote() string
 	GetProfileDataItemInfo() *proto.ProfileDataItemInfo
 	SetStatus(common.ProfileDataStatus)
 	Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error)

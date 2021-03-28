@@ -20,11 +20,6 @@ func (pdata ProfileDataEmail) Kind() common.ProfileDataKind {
 	return common.KindEmail
 }
 
-// GetStatus get the status of the profile data
-func (pdata ProfileDataEmail) GetStatus() common.ProfileDataStatus {
-	return pdata.Status
-}
-
 // SetStatus set the status of the profile data
 func (pdata ProfileDataEmail) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus

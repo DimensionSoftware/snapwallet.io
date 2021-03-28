@@ -158,6 +158,18 @@ type CommonProfileData struct {
 	SealedAt  *time.Time
 }
 
+func (c CommonProfileData) GetID() ProfileDataID {
+	return c.ID
+}
+
+func (c CommonProfileData) GetStatus() ProfileDataStatus {
+	return c.Status
+}
+
+func (c CommonProfileData) GetNote() string {
+	return c.Note
+}
+
 // Decrypt decrypts a type; returns encrypted data, note data
 func (encryptedProfileData EncryptedProfileData) Decrypt(m *encryption.Manager, userID user.ID) (*[]byte, *[]byte, error) {
 	if encryptedProfileData.DataEncryptionKey == nil {

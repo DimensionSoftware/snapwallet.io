@@ -27,11 +27,6 @@ func (pdata ProfileDataAddress) Kind() common.ProfileDataKind {
 	return common.KindAddress
 }
 
-// GetStatus get the status of the profile data
-func (pdata ProfileDataAddress) GetStatus() common.ProfileDataStatus {
-	return pdata.Status
-}
-
 // SetStatus set the status of the profile data
 func (pdata ProfileDataAddress) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus

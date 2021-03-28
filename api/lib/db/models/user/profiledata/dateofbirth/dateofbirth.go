@@ -21,11 +21,6 @@ func (pdata ProfileDataDateOfBirth) Kind() common.ProfileDataKind {
 	return common.KindDateOfBirth
 }
 
-// GetStatus get the status of the profile data
-func (pdata ProfileDataDateOfBirth) GetStatus() common.ProfileDataStatus {
-	return pdata.Status
-}
-
 // SetStatus set the status of the profile data
 func (pdata ProfileDataDateOfBirth) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus

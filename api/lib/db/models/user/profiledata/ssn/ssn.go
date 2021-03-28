@@ -20,11 +20,6 @@ func (pdata ProfileDataSSN) Kind() common.ProfileDataKind {
 	return common.KindUSSSN
 }
 
-// GetStatus get the status of the profile data
-func (pdata ProfileDataSSN) GetStatus() common.ProfileDataStatus {
-	return pdata.Status
-}
-
 // SetStatus set the status of the profile data
 func (pdata ProfileDataSSN) SetStatus(newStatus common.ProfileDataStatus) {
 	pdata.Status = newStatus
