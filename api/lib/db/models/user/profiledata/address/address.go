@@ -98,7 +98,7 @@ func (pdata ProfileDataAddress) Encrypt(m *encryption.Manager, userID user.ID) (
 		return nil, err
 	}
 
-	return &common.EncryptedProfileData{
+	out := common.EncryptedProfileData{
 		ID:                pdata.ID,
 		Kind:              common.KindAddress,
 		Status:            pdata.Status,
@@ -106,7 +106,18 @@ func (pdata ProfileDataAddress) Encrypt(m *encryption.Manager, userID user.ID) (
 		SealedAt:          pdata.SealedAt,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EncryptedData:     &encryptedData,
-	}, nil
+	}
+
+	if pdata.Note != "" {
+		noteData := []byte(pdata.Note)
+		encryptedNote, err := dek.Encrypt(noteData, []byte(userID))
+		if err != nil {
+			return nil, err
+		}
+		out.EncryptedNote = &encryptedNote
+	}
+
+	return &out, nil
 }
 
 // UnmarshalPIIData ...

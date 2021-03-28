@@ -1,7 +1,6 @@
 package proofofaddress
 
 import (
-	"log"
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -19,9 +18,7 @@ type ProfileDataProofOfAddressDoc struct {
 
 // Encrypt ...
 func (pdata ProfileDataProofOfAddressDoc) Encrypt(m *encryption.Manager, userID user.ID) (*common.EncryptedProfileData, error) {
-
-	log.Printf("%#v: ", pdata)
-	return &common.EncryptedProfileData{
+	out := common.EncryptedProfileData{
 		ID:        pdata.ID,
 		Kind:      pdata.Kind(),
 		Status:    pdata.Status,
@@ -29,7 +26,23 @@ func (pdata ProfileDataProofOfAddressDoc) Encrypt(m *encryption.Manager, userID 
 		CreatedAt: pdata.CreatedAt,
 		UpdatedAt: pdata.UpdatedAt,
 		SealedAt:  pdata.SealedAt,
-	}, nil
+	}
+
+	if pdata.Note != "" {
+		dekH := encryption.NewDEK()
+		dek := encryption.NewEncryptor(dekH)
+
+		noteData := []byte(pdata.Note)
+		encryptedNote, err := dek.Encrypt(noteData, []byte(userID))
+		if err != nil {
+			return nil, err
+		}
+
+		out.DataEncryptionKey = encryption.GetEncryptedKeyBytes(dekH, m.Encryptor)
+		out.EncryptedNote = &encryptedNote
+	}
+
+	return &out, nil
 }
 
 // Kind the kind of profile data

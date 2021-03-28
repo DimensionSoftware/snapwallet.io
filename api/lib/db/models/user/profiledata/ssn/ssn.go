@@ -61,7 +61,7 @@ func (pdata ProfileDataSSN) Encrypt(m *encryption.Manager, userID user.ID) (*com
 		return nil, err
 	}
 
-	return &common.EncryptedProfileData{
+	out := common.EncryptedProfileData{
 		ID:                pdata.ID,
 		Kind:              pdata.Kind(),
 		Status:            pdata.Status,
@@ -69,5 +69,16 @@ func (pdata ProfileDataSSN) Encrypt(m *encryption.Manager, userID user.ID) (*com
 		SealedAt:          pdata.SealedAt,
 		DataEncryptionKey: encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		EncryptedData:     &encryptedData,
-	}, nil
+	}
+
+	if pdata.Note != "" {
+		noteData := []byte(pdata.Note)
+		encryptedNote, err := dek.Encrypt(noteData, []byte(userID))
+		if err != nil {
+			return nil, err
+		}
+		out.EncryptedNote = &encryptedNote
+	}
+
+	return &out, nil
 }
