@@ -19,6 +19,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
+	"github.com/khoerling/flux/api/lib/remedymanager"
 	"github.com/khoerling/flux/api/lib/server"
 	plaid2 "github.com/plaid/plaid-go/plaid"
 )
@@ -126,22 +127,26 @@ func InitializeServer() (server.Server, error) {
 	pubSubPublisher := jobpublisher.PubSubPublisher{
 		PubSub: pubsubManager,
 	}
+	remedymanagerManager := &remedymanager.Manager{
+		Db: dbDb,
+	}
 	serverServer := server.Server{
-		GrpcServer:   grpcServer,
-		Sendgrid:     sendgridClient,
-		Twilio:       gotwilioTwilio,
-		TwilioConfig: twilioConfig,
-		Firestore:    client,
-		FileManager:  filemanagerManager,
-		Db:           dbDb,
-		Wyre:         wyreClient,
-		WyreManager:  wyreManager,
-		Plaid:        plaidClient,
-		JwtSigner:    jwtSigner,
-		JwtVerifier:  jwtVerifier,
-		AuthManager:  authManager,
-		Pusher:       pusherManager,
-		JobPublisher: pubSubPublisher,
+		GrpcServer:    grpcServer,
+		Sendgrid:      sendgridClient,
+		Twilio:        gotwilioTwilio,
+		TwilioConfig:  twilioConfig,
+		Firestore:     client,
+		FileManager:   filemanagerManager,
+		Db:            dbDb,
+		Wyre:          wyreClient,
+		WyreManager:   wyreManager,
+		Plaid:         plaidClient,
+		JwtSigner:     jwtSigner,
+		JwtVerifier:   jwtVerifier,
+		AuthManager:   authManager,
+		Pusher:        pusherManager,
+		JobPublisher:  pubSubPublisher,
+		RemedyManager: remedymanagerManager,
 	}
 	return serverServer, nil
 }
@@ -241,22 +246,26 @@ func InitializeDevServer() (server.Server, error) {
 		Pusher:      pusherManager,
 		WyreManager: wyreManager,
 	}
+	remedymanagerManager := &remedymanager.Manager{
+		Db: dbDb,
+	}
 	serverServer := server.Server{
-		GrpcServer:   grpcServer,
-		Sendgrid:     sendgridClient,
-		Twilio:       gotwilioTwilio,
-		TwilioConfig: twilioConfig,
-		Firestore:    client,
-		FileManager:  filemanagerManager,
-		Db:           dbDb,
-		Wyre:         wyreClient,
-		WyreManager:  wyreManager,
-		Plaid:        plaidClient,
-		JwtSigner:    jwtSigner,
-		JwtVerifier:  jwtVerifier,
-		AuthManager:  authManager,
-		Pusher:       pusherManager,
-		JobPublisher: inProcessPublisher,
+		GrpcServer:    grpcServer,
+		Sendgrid:      sendgridClient,
+		Twilio:        gotwilioTwilio,
+		TwilioConfig:  twilioConfig,
+		Firestore:     client,
+		FileManager:   filemanagerManager,
+		Db:            dbDb,
+		Wyre:          wyreClient,
+		WyreManager:   wyreManager,
+		Plaid:         plaidClient,
+		JwtSigner:     jwtSigner,
+		JwtVerifier:   jwtVerifier,
+		AuthManager:   authManager,
+		Pusher:        pusherManager,
+		JobPublisher:  inProcessPublisher,
+		RemedyManager: remedymanagerManager,
 	}
 	return serverServer, nil
 }

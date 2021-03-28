@@ -12,6 +12,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/interfaces/ijobpublisher"
 	proto "github.com/khoerling/flux/api/lib/protocol"
+	"github.com/khoerling/flux/api/lib/remedymanager"
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sfreiberg/gotwilio"
@@ -36,6 +37,7 @@ type Server struct {
 	AuthManager                   *auth.Manager
 	Pusher                        *pusher.Manager
 	JobPublisher                  ijobpublisher.JobPublisher
+	RemedyManager                 *remedymanager.Manager
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"

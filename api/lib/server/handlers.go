@@ -705,9 +705,15 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 		}
 	}
 
+	remediations, err := s.RemedyManager.GetRemediationsProto(profile)
+	if err != nil {
+		return nil, err
+	}
+
 	return &proto.ProfileDataInfo{
-		Profile: profile.GetProfileDataItemInfo(),
-		Wyre:    wyre,
+		Profile:      profile.GetProfileDataItemInfo(),
+		Wyre:         wyre,
+		Remediations: remediations,
 	}, nil
 }
 

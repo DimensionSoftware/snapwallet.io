@@ -16,6 +16,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/interfaces/ijobpublisher"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
+	"github.com/khoerling/flux/api/lib/remedymanager"
 	"github.com/khoerling/flux/api/lib/server"
 	vendorplaid "github.com/plaid/plaid-go/plaid"
 )
@@ -30,6 +31,7 @@ func InitializeServer() (server.Server, error) {
 		wire.Struct(new(server.Server), "*"),
 		wire.Bind(new(ijobpublisher.JobPublisher), new(jobpublisher.PubSubPublisher)),
 		wire.Struct(new(jobpublisher.PubSubPublisher), "*"),
+		wire.Struct(new(remedymanager.Manager), "*"),
 		sendgrid.ProvideSendClientAPIKey,
 		sendgrid.ProvideSendClient,
 		twilio.ProvideTwilioConfig,
@@ -67,6 +69,7 @@ func InitializeDevServer() (server.Server, error) {
 		wire.Struct(new(server.Server), "*"),
 		wire.Bind(new(ijobpublisher.JobPublisher), new(jobpublisher.InProcessPublisher)),
 		wire.Struct(new(jobpublisher.InProcessPublisher), "*"),
+		wire.Struct(new(remedymanager.Manager), "*"),
 		sendgrid.ProvideSendClientAPIKey,
 		sendgrid.ProvideSendClient,
 		twilio.ProvideTwilioConfig,
