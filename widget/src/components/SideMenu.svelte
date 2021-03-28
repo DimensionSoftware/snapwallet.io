@@ -1,7 +1,7 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
-  import { focusFirstInput } from '../util'
+  import { focusFirstInput, onKeysPressed } from '../util'
 
   export let isExpanded: boolean = false
 
@@ -23,7 +23,13 @@
     isExpanded = false
     focusFirstInput()
   }
+  function handleClose(e) {
+    // close if esc pressed
+    if (onKeysPressed(e, ['Escape'])) close()
+  }
 </script>
+
+<svelte:window on:keydown={handleClose} />
 
 <div
   class="container"
