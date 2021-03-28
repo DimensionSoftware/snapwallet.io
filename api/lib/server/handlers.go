@@ -954,6 +954,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 					now = time.Now()
 					legalName.Status = newStatus
 					legalName.UpdatedAt = &now
+					legalName.Note = pf.Note
 
 					_, err := s.Db.SaveProfileData(ctx, nil, userID, legalName)
 					if err != nil {
@@ -974,6 +975,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 					now = time.Now()
 					email.Status = newStatus
 					email.UpdatedAt = &now
+					email.Note = pf.Note
 
 					_, err := s.Db.SaveProfileData(ctx, nil, userID, email)
 					if err != nil {
@@ -994,6 +996,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 					now = time.Now()
 					phone.Status = newStatus
 					phone.UpdatedAt = &now
+					phone.Note = pf.Note
 
 					_, err := s.Db.SaveProfileData(ctx, nil, userID, phone)
 					if err != nil {
@@ -1010,6 +1013,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 					now = time.Now()
 					dob.Status = newStatus
 					dob.UpdatedAt = &now
+					dob.Note = pf.Note
 
 					_, err := s.Db.SaveProfileData(ctx, nil, userID, dob)
 					if err != nil {
@@ -1026,6 +1030,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 					now = time.Now()
 					ssn.Status = newStatus
 					ssn.UpdatedAt = &now
+					ssn.Note = pf.Note
 
 					_, err := s.Db.SaveProfileData(ctx, nil, userID, ssn)
 					if err != nil {
@@ -1042,6 +1047,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 					now = time.Now()
 					addr.Status = newStatus
 					addr.UpdatedAt = &now
+					addr.Note = pf.Note
 
 					_, err := s.Db.SaveProfileData(ctx, nil, userID, addr)
 					if err != nil {
@@ -1058,6 +1064,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 					now = time.Now()
 					govtid.Status = newStatus
 					govtid.UpdatedAt = &now
+					govtid.Note = pf.Note
 
 					_, err := s.Db.SaveProfileData(ctx, nil, userID, govtid)
 					if err != nil {
