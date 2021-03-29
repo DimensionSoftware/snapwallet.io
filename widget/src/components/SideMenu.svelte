@@ -113,7 +113,7 @@
     z-index: 101;
     position: relative;
     right: -0.9rem;
-    top: 0.2rem;
+    top: 0.1rem;
     cursor: pointer;
   }
   // not-hamburger hamburger toggle + fx
