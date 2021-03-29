@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
@@ -6,8 +7,19 @@
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { formatLocaleCurrency } from '../util'
+  import type { WyreTransfer, WyreTransfers } from 'api-client'
+  import { pop } from 'svelte-spa-router'
 
-  const transactions = []
+  $: transfers = []
+
+  onMount(async () => {
+    const res = await window.API.fluxWyreGetTransfers()
+    transfers = res.transfers
+  })
+
+  const close = () => {
+    pop()
+  }
 </script>
 
 <ModalContent>
@@ -15,27 +27,13 @@
     <ModalHeader>Transactions</ModalHeader>
     <div class="line-items">
       <ol>
-        {#each transactions as transaction}
+        {#each transfers as transfer, i}
           <li>
-            {#if transaction.isBuy}
-              <div class="line-item muted">
-                <div>From</div>
-                <div>source</div>
-              </div>
-              <div class="line-item muted">
-                <div>To</div>
-                <div>to deets</div>
-              </div>
-            {:else}
-              <div class="line-item muted">
-                <div>From</div>
-                <div>from deets</div>
-              </div>
-              <div class="line-item muted">
-                <div>To</div>
-                <div>destination</div>
-              </div>
-            {/if}
+            <span>{transfer.createdAt}</span>
+            <span>{transfer.sourceCurrency}</span>
+            <span>{transfer.destCurrency}</span>
+            <span>{transfer.destAmount}</span>
+            <span>{transfer.status}</span>
           </li>
         {/each}
       </ol>
@@ -49,7 +47,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={close}>OK</Button>
+    <Button on:click={close}>Back</Button>
   </ModalFooter>
 </ModalContent>
 
