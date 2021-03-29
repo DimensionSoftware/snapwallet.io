@@ -2,13 +2,14 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { focusFirstInput, onKeysPressed } from '../util'
+  import { userStore } from '../stores/UserStore'
 
   export let isExpanded: boolean = false
 
   function logout() {
-    window.AUTH_MANAGER.logout()
-    push(Routes.ROOT)
     close()
+    // yield to ui animations
+    setTimeout(() => window.AUTH_MANAGER.logout(), 100)
   }
   function login() {
     push(Routes.SEND_OTP)
@@ -28,7 +29,7 @@
     if (onKeysPressed(e, ['Escape'])) close()
   }
 
-  const isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
+  $: isLoggedIn = $userStore.isLoggedIn
 </script>
 
 <svelte:window on:keydown={handleClose} />
@@ -94,10 +95,9 @@
 <aside class:active={isExpanded}>
   <nav>
     <a on:click={_ => go(Routes.ROOT)}>Buy Crypto Assets</a>
-    <a on:click={_ => go(Routes.SEND_PAYMENT)}>Make a Donation</a>
     <a class="hr" on:click={_ => go(Routes.TRANSACTIONS)}>My Transactions</a>
     <a on:click={_ => go(Routes.PROFILE)}>My Profile</a>
-    {#if window.AUTH_MANAGER.viewerIsLoggedIn()}
+    {#if isLoggedIn}
       <a class="hr" on:click={logout}>Logout</a>
     {:else}
       <a class="hr" on:click={login}>Login</a>

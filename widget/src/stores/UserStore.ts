@@ -15,19 +15,21 @@ const initialAddress = {
 }
 
 function createStore() {
-  const { subscribe, update } = writable({
-    emailAddress: '',
-    firstName: '',
-    lastName: '',
-    socialSecurityNumber: '',
-    birthDate: '',
-    phoneNumber: '',
-    // Used for routing to last position
-    // when auth kicks in.
-    lastKnownRoute: Routes.ROOT,
-    flags: {} as ViewerFlags,
-    address: { ...initialAddress },
-  })
+  const defaultUser = {
+      emailAddress: '',
+      firstName: '',
+      lastName: '',
+      socialSecurityNumber: '',
+      birthDate: '',
+      phoneNumber: '',
+      // Used for routing to last position
+      // when auth kicks in.
+      lastKnownRoute: Routes.ROOT,
+      flags: {} as ViewerFlags,
+      address: { ...initialAddress },
+      isLoggedIn: false,
+    },
+    { subscribe, update } = writable(defaultUser)
 
   return {
     subscribe,
@@ -54,6 +56,9 @@ function createStore() {
     },
     clearAddress: () => {
       update(s => ({ ...s, address: { ...initialAddress } }))
+    },
+    setIsLoggedIn: (isLoggedIn: boolean) => {
+      update(s => (isLoggedIn ? { ...s, isLoggedIn } : defaultUser))
     },
   }
 }

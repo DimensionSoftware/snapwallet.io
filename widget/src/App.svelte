@@ -32,6 +32,25 @@
   export let theme: object
   export let focus: boolean
 
+  // auth bits
+  window.addEventListener('logout', () => {
+    Logger.debug('viewer has logged out')
+    userStore.setIsLoggedIn(false)
+    push(Routes.ROOT)
+    toaster.pop({
+      msg: 'You have been securely logged out',
+      error: true,
+    })
+  })
+  window.addEventListener('prelogout', () => {
+    const expirationEpoch = window.AUTH_MANAGER.getSessionExpiration()
+    const expirationDate = new Date(expirationEpoch)
+    // TODO: use ^^ for countdown input
+    Logger.debug(`viewer will be logged out at: ${expirationDate}`)
+    // TODO pop inactive session dialog up
+    // TODO either reactivate session via getAccessToken() or logout()
+  })
+
   // Handler for routing condition failure
   const routeConditionsFailed = (event: any): boolean => {
     Logger.debug(
