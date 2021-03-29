@@ -23,7 +23,7 @@ jobs:
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
           popd
 
-          sudo apt-get install -y nodejs-legacy
+          sudo apt-get install -y nodejs
 
           curl https://firebase.tools/bin/linux/latest -o firebase
           chmod a+x firebase
