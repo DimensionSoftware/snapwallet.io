@@ -52,7 +52,7 @@
     viewBox="0 0 200 200"
   >
     <g
-      stroke-width={isExpanded ? 5 : isLoggedIn ? 4 : 2}
+      stroke-width={isExpanded ? 5 : isLoggedIn ? 4 : 3}
       stroke-linecap="round"
     >
       <path
