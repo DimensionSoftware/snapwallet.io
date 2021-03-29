@@ -23,4 +23,5 @@ mv docs/_book web_dist/docs/guide
 
 mkdir -p web_dist/docs/api
 cp api/lib/swagger/swagger-ui.html web_dist/docs/api/index.html
-
+sed -i.bak 's/\/swagger\.json/https:\/\/api.snapwallet.io\/swagger\.json/g' web_dist/docs/api/index.html
+rm web_dist/docs/api/*.bak
