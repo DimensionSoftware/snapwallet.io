@@ -22,6 +22,7 @@ jobs:
           echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
           popd
+          curl -O https://firebase.tools/bin/linux/latest
 
           bin/build-web
 
