@@ -16,16 +16,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy Firebase Hosting Web Tree
+      - name: Build & Deploy Firebase Hosting Web Tree
         run: |
           pushd /tmp
           echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
           popd
 
-          curl -sL https://firebase.tools | bash
-
           bin/build-web
-          firebase deploy --only hosting
+
+          ./firebase-tools-linux deploy --only hosting
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
