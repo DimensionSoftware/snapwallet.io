@@ -12,7 +12,6 @@ on:
 
 jobs:
   deploy-web: 
-    needs: test
     name: Build/Deploy Web
     runs-on: ubuntu-latest
     steps:
