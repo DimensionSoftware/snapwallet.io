@@ -22,5 +22,5 @@ mkdir -p web_dist/docs
 mv docs/_book web_dist/docs/guide
 
 mkdir -p web_dist/docs/api
-cp -rf api/lib/swagger/swagger-ui.html web_dist/docs/api/
+cp -rf api/lib/swagger/swagger-ui.html web_dist/docs/api/index.html
 
