@@ -106,6 +106,7 @@
 
       if (!phoneVerificationOnly) {
         window.AUTH_MANAGER.login(resp.tokens)
+        userStore.setIsLoggedIn(true)
         Logger.debug('Logged in')
         window.tryInitializePusher()
       }

@@ -83,7 +83,8 @@
     &.success {
       display: flex;
       align-items: center;
-      :global(span):before {
+      :global(span:before) {
+        border-color: var(--theme-success-color)!important;
         background: var(--theme-success-color);
       }
       & > :global(.icon) {

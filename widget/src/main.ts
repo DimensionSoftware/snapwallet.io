@@ -1,15 +1,18 @@
 import App from './App.svelte'
 import { AuthManager, genAPIClient } from './auth'
 import { PusherUtil } from './util/pusher_util'
+import { userStore } from './stores/UserStore'
 
 // Auth
 window.AUTH_MANAGER = new AuthManager()
 window.AUTH_MANAGER.watch()
 window.API = genAPIClient(window.AUTH_MANAGER)
-window.AUTH_MANAGER.addEventListeners()
 
 // Pusher
 PusherUtil.setup()
+
+// Handle user
+userStore.setIsLoggedIn(window.AUTH_MANAGER.viewerIsLoggedIn())
 
 const queryParams = new URLSearchParams(window.location.search)
 const config = JSON.parse(queryParams.get('config'))

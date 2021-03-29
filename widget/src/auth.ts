@@ -212,24 +212,6 @@ export class AuthManager {
       }
     }, 30 * 1000)
   }
-
-  public addEventListeners = () => {
-    // a test
-    window.addEventListener('logout', () => {
-      Logger.debug('viewer has logged out')
-    })
-
-    window.addEventListener('prelogout', () => {
-      const expirationEpoch = this.getSessionExpiration()
-      const expirationDate = new Date(expirationEpoch)
-      // TODO: use ^^ for countdown input
-
-      Logger.debug(`viewer will be logged out at: ${expirationDate}`)
-
-      // TODO pop inactive session dialog up
-      // TODO either reactivate session via getAccessToken() or logout()
-    })
-  }
 }
 
 export class FluxBearerAuthentication implements SecurityAuthentication {

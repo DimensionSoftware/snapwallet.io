@@ -2,13 +2,14 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { focusFirstInput, onKeysPressed } from '../util'
+  import { userStore } from '../stores/UserStore'
 
   export let isExpanded: boolean = false
 
   function logout() {
-    window.AUTH_MANAGER.logout()
-    push(Routes.ROOT)
     close()
+    // yield to ui animations
+    setTimeout(() => window.AUTH_MANAGER.logout(), 100)
   }
   function login() {
     push(Routes.SEND_OTP)
@@ -27,6 +28,8 @@
     // close if esc pressed
     if (onKeysPressed(e, ['Escape'])) close()
   }
+
+  $: isLoggedIn = $userStore.isLoggedIn
 </script>
 
 <svelte:window on:keydown={handleClose} />
@@ -48,7 +51,10 @@
     height="50"
     viewBox="0 0 200 200"
   >
-    <g stroke-width="4" stroke-linecap="round">
+    <g
+      stroke-width={isExpanded ? 5 : isLoggedIn ? 4 : 3}
+      stroke-linecap="round"
+    >
       <path
         d="M72 82.286h28.75"
         fill="#009100"
@@ -89,10 +95,9 @@
 <aside class:active={isExpanded}>
   <nav>
     <a on:click={_ => go(Routes.ROOT)}>Buy Crypto Assets</a>
-    <a on:click={_ => go(Routes.SEND_PAYMENT)}>Make a Donation</a>
     <a class="hr" on:click={_ => go(Routes.TRANSACTIONS)}>My Transactions</a>
     <a on:click={_ => go(Routes.PROFILE)}>My Profile</a>
-    {#if window.AUTH_MANAGER.viewerIsLoggedIn()}
+    {#if isLoggedIn}
       <a class="hr" on:click={logout}>Logout</a>
     {:else}
       <a class="hr" on:click={login}>Login</a>
@@ -108,7 +113,7 @@
     z-index: 101;
     position: relative;
     right: -0.9rem;
-    top: 0.2rem;
+    top: 0.1rem;
     cursor: pointer;
   }
   // not-hamburger hamburger toggle + fx
@@ -133,7 +138,7 @@
     transform-origin: 35% 63%;
   }
   path:nth-child(4) {
-    stroke-dasharray: 19 299;
+    stroke-dasharray: 10 299;
   }
   path:nth-child(5) {
     transform-origin: 61% 52%;
@@ -185,15 +190,6 @@
       &.hr {
         margin-top: 2rem;
         position: relative;
-        &:before {
-          content: '';
-          position: absolute;
-          left: 0;
-          width: 50px;
-          margin-top: -1rem;
-          height: 1px;
-          background-color: rgba(0, 0, 0, 0.1);
-        }
       }
     }
     &.active {

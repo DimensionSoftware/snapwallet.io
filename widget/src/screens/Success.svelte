@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { pop } from 'svelte-spa-router'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
@@ -11,6 +12,8 @@
   import { ParentMessenger } from '../util/parent_messenger'
 
   $: ({ intent, wyrePreview } = $transactionStore)
+  if (!wyrePreview) pop() // guard
+
   $: ({ sourceCurrency, destCurrency: destinationCurrency } = wyrePreview)
   $: isBuy = intent === TransactionIntents.BUY
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
@@ -46,7 +49,6 @@
     margin-bottom: 0.5rem;
   }
   .text-center {
-    text-align: center;
-    width: 100%;
+    margin: 0 1rem;
   }
 </style>

@@ -8,6 +8,7 @@
   import SendOTP from './screens/SendOTP.svelte'
   import NotFound from './screens/NotFound.svelte'
   import Profile from './screens/Profile.svelte'
+  import Transactions from './screens/Transactions.svelte'
   import Address from './screens/Address.svelte'
   import VerifyOTP from './screens/VerifyOTP.svelte'
   import Overview from './screens/Overview.svelte'
@@ -30,6 +31,25 @@
   export let apiKey: string
   export let theme: object
   export let focus: boolean
+
+  // auth bits
+  window.addEventListener('logout', () => {
+    Logger.debug('viewer has logged out')
+    userStore.setIsLoggedIn(false)
+    push(Routes.ROOT)
+    toaster.pop({
+      msg: 'You have been securely logged out',
+      error: true,
+    })
+  })
+  window.addEventListener('prelogout', () => {
+    const expirationEpoch = window.AUTH_MANAGER.getSessionExpiration()
+    const expirationDate = new Date(expirationEpoch)
+    // TODO: use ^^ for countdown input
+    Logger.debug(`viewer will be logged out at: ${expirationDate}`)
+    // TODO pop inactive session dialog up
+    // TODO either reactivate session via getAccessToken() or logout()
+  })
 
   // Handler for routing condition failure
   const routeConditionsFailed = (event: any): boolean => {
@@ -92,6 +112,9 @@
     }),
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),
+    }),
+    [Routes.TRANSACTIONS]: wrap({
+      ...authedRouteOptions(Transactions),
     }),
     [Routes.PLAID_LINK]: wrap({
       ...authedRouteOptions(PlaidWidget),
@@ -230,6 +253,12 @@
     --theme-ease-out-back: #{$easeOutBack};
     --theme-ease-in-expo: #{$easeInExpo};
     --theme-ease-out-expo: #{$easeOutExpo};
+  }
+
+  :global(a) {
+    color: var(--theme-color);
+    position: relative;
+    text-decoration: underline;
   }
 
   #modal {
