@@ -1,0 +1,17 @@
+{
+  "name": "docs",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "honkit": "honkit",
+    "build": "honkit build book _book",
+    "serve": "honkit serve book _book",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "UNLICENSED",
+  "dependencies": {
+    "honkit": "^3.6.19"
+  }
+}
