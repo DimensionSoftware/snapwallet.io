@@ -3,6 +3,10 @@
 rm -rf web_dist
 mkdir -p web_dist
 
+pushd api/client
+npm i
+popd
+
 pushd widget
 npm i
 npm run build
@@ -16,3 +20,7 @@ npm run build
 popd
 mkdir -p web_dist/docs
 mv docs/_book web_dist/docs/guide
+
+mkdir -p web_dist/docs/api
+cp -rf api/lib/swagger/swagger-ui.html web_dist/docs/api/
+
