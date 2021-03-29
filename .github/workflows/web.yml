@@ -22,10 +22,10 @@ jobs:
           echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
           popd
-          curl -O https://firebase.tools/bin/linux/latest
+          curl https://firebase.tools/bin/linux/latest -o firebase
 
           bin/build-web
 
-          ./firebase-tools-linux deploy --only hosting
+          ./firebase deploy --only hosting
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
