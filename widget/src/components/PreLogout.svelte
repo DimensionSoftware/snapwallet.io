@@ -10,6 +10,7 @@
   // for countdown timer
   let _timer = null
   $: expiresAfter = 0
+  $: expiresAfterResolution = 'minutes'
 
   const logout = () => {
       // close, yielding animations
@@ -37,10 +38,21 @@
     countdown = () => {
       const diff: number =
           +new Date(window.AUTH_MANAGER.getSessionExpiration()) - +new Date(),
-        minutes = Math.round(diff / 1000 / 60)
-      expiresAfter = minutes < 0 ? 0 : minutes
+        seconds = Math.round(diff / 1000),
+        minutes = Math.round(seconds / 60)
+      // set ui
+      expiresAfter = seconds < 0 ? 0 : seconds > 59 ? minutes : seconds,
+      expiresAfterResolution =
+        seconds > 59
+          ? minutes > 1
+            ? 'minutes'
+            : 'minute'
+          : seconds > 1
+          ? 'seconds'
+          : 'second'
     }
 
+  // component lifecycle events
   onMount(() => {
     countdown()
     _timer = setInterval(countdown, 1000)
@@ -63,7 +75,7 @@
     <h3>Stay Signed In?</h3>
     <p>
       You will be securely signed out in <big>{expiresAfter}</big>
-      {expiresAfter > 1 ? 'minutes' : 'minute'}.
+      {expiresAfterResolution}
     </p>
     <div class="flex">
       <button on:click={logout} class="logout">Logout</button>
@@ -104,7 +116,7 @@
         .continue {
           cursor: pointer;
           font-size: 1rem;
-          margin-left: 0.5rem;
+          margin-left: 0.25rem;
           color: var(--theme-text-color);
           background: transparent;
           border: none;
@@ -114,7 +126,7 @@
           margin-right: 0.5rem;
           background: var(--theme-color);
           font-weight: 500;
-          padding: 0.25rem 1rem;
+          padding: 0.4rem 1rem;
           color: var(--theme-color-inverse);
           border: none;
         }
