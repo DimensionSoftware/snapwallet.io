@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { pop } from 'svelte-spa-router'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'

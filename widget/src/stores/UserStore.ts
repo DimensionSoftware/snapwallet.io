@@ -1,8 +1,13 @@
 import type { UserFlags } from 'api-client'
 import { writable } from 'svelte/store'
-import { Routes } from '../constants'
+import { Routes, UserProfileFieldTypes } from '../constants'
 
 type ViewerFlags = UserFlags & { hasEmail: boolean; hasPhone: boolean }
+type VirtualProfile = {
+  fullName?: string
+  socialSecurityNumber?: string
+  birthDate?: string
+}
 
 const initialAddress = {
   street1: '',
@@ -28,11 +33,39 @@ function createStore() {
       flags: {} as ViewerFlags,
       address: { ...initialAddress },
       isLoggedIn: false,
+      virtual: {} as VirtualProfile,
+      isProfileComplete: false,
     },
     { subscribe, update } = writable(defaultUser)
 
   return {
     subscribe,
+    fetchUserProfile: async () => {
+      let { profile: userProfile } = await window.API.fluxViewerProfileData()
+      const virtual = { fullName: '', birthDate: '', socialSecurityNumber: '' }
+      userProfile.forEach(item => {
+        if (item.kind === UserProfileFieldTypes.LEGAL_NAME) {
+          virtual.fullName = [...new Array(item.length)].join('*')
+        }
+
+        if (item.kind === UserProfileFieldTypes.DATE_OF_BIRTH) {
+          virtual.birthDate = [...new Array(item.length)].join('*')
+        }
+
+        if (item.kind === UserProfileFieldTypes.US_SSN) {
+          virtual.socialSecurityNumber = [...new Array(item.length)].join('*')
+        }
+      })
+
+      let isProfileComplete = Boolean(
+        virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
+      )
+
+      update(s => ({ ...s, virtual, isProfileComplete }))
+    },
+    setVirtual: (virtual: VirtualProfile) => {
+      update(s => ({ ...s, virtual }))
+    },
     setPhoneNumber: (phoneNumber: string) => {
       update(s => ({ ...s, phoneNumber }))
     },
