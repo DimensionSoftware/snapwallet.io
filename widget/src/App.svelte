@@ -176,14 +176,8 @@
       }
 
       // show toast
-      const isWyreErr =
-        reason instanceof String
-          ? reason.match(/wyre.APIError.*Message:.(.+)?"/)
-          : false
       toaster.pop({
-        msg: isWyreErr
-          ? isWyreErr[0]
-          : reason?.body?.message || body?.message || msg,
+        msg: reason?.body?.message || body?.message || msg,
         error: true,
       })
     }
