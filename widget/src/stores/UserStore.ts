@@ -3,10 +3,32 @@ import { writable } from 'svelte/store'
 import { Routes, UserProfileFieldTypes } from '../constants'
 
 type ViewerFlags = UserFlags & { hasEmail: boolean; hasPhone: boolean }
+
 type VirtualProfile = {
   fullName?: string
   socialSecurityNumber?: string
   birthDate?: string
+}
+
+type UserStoreState = {
+  emailAddress: string
+  firstName: string
+  lastName: string
+  socialSecurityNumber: string
+  phoneNumber: string
+  lastKnownRoute: Routes
+  flags: ViewerFlags
+  address: {
+    street1: string
+    street2: string
+    city: string
+    state: string
+    postalCode: string
+    country: string
+  }
+  isLoggedIn: boolean
+  virtual: VirtualProfile
+  isProfileComplete: boolean
 }
 
 const initialAddress = {
@@ -16,7 +38,6 @@ const initialAddress = {
   state: '',
   postalCode: '',
   country: '',
-  phoneNumber: '',
 }
 
 function createStore() {
@@ -40,7 +61,7 @@ function createStore() {
       } as VirtualProfile,
       isProfileComplete: false,
     },
-    { subscribe, update } = writable(defaultUser)
+    { subscribe, update } = writable<UserStoreState>(defaultUser)
 
   return {
     subscribe,
