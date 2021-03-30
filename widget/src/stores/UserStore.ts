@@ -8,6 +8,14 @@ type VirtualProfile = {
   fullName?: string
   socialSecurityNumber?: string
   birthDate?: string
+  address?: {
+    street1: string
+    street2?: string
+    country: string
+    city: string
+    state: string
+    postalCode: string
+  }
 }
 
 type UserStoreState = {
@@ -59,6 +67,7 @@ function createStore() {
         fullName: '',
         birthDate: '',
         socialSecurityNumber: '',
+        address: initialAddress,
       },
       isProfileComplete: false,
     },
@@ -81,6 +90,17 @@ function createStore() {
 
         if (item.kind === UserProfileFieldTypes.US_SSN) {
           virtual.socialSecurityNumber = '***-**-****'
+        }
+
+        if (item.kind === UserProfileFieldTypes.FULL_ADDRESS) {
+          virtual.address = {
+            street1: '***** ***********',
+            street2: '**** ***',
+            country: '**',
+            city: '********',
+            state: '**',
+            postalCode: '*****',
+          }
         }
       })
 
