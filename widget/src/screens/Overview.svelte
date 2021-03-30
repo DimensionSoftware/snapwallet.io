@@ -7,7 +7,7 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
   import { TransactionIntents } from '../types'
-  import { pop, push } from 'svelte-spa-router'
+  import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { ParentMessenger } from '../util/parent_messenger'
   import { faLock } from '@fortawesome/free-solid-svg-icons'
