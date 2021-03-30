@@ -30,3 +30,4 @@ jobs:
           npx firebase-tools deploy --only hosting
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          API_BASE_URL: https://api.snapwallet.io
