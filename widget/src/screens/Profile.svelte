@@ -41,7 +41,10 @@
         socialSecurityNumber,
       ].join('')
 
-      if (!minFieldFilled) return focus(0)
+      if (!minFieldFilled) {
+        isSaving = false
+        return focus(0)
+      }
 
       const [mm, dd, yyyy] = birthDate.split('-')
 
