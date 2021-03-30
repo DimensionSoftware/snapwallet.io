@@ -13,7 +13,7 @@ import { Logger, parseJwt } from './util'
 export class AuthManager {
   // to avoid cycle
   private readonly unauthenticatedAPI = genAPIClient()
-  private readonly prelogoutThreshold = 60 * 1000
+  private readonly prelogoutThreshold = 5 * 60 * 1000
 
   private sessionExpiresAt = 0
 
