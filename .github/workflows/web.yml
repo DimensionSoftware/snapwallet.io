@@ -31,3 +31,4 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           API_BASE_URL: https://api.snapwallet.io
+          DEBUG: 'flux:*'
