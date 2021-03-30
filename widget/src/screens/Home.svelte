@@ -104,6 +104,7 @@
 
       if (hasWyrePaymentMethods && hasWyreAccount)
         nextRoute = Routes.CHECKOUT_OVERVIEW
+      else if ($userStore.isProfileComplete) nextRoute = Routes.ADDRESS
       else if (!hasWyrePaymentMethods) nextRoute = Routes.PLAID_LINK
       return
     }
@@ -128,6 +129,7 @@
     getInitialPrices()
     getNextPath()
     const priceInterval = priceStore.pollPrices()
+    if (window.AUTH_MANAGER.viewerIsLoggedIn()) userStore.fetchUserProfile()
     return () => clearInterval(priceInterval)
   })
 </script>
@@ -175,7 +177,12 @@
             <b slot="step">Verify Identity</b>
           </VStep>
         {:else}
-          <VStep onClick={() => push(Routes.PROFILE)}>
+          <VStep
+            onClick={() =>
+              push(
+                $userStore.isProfileComplete ? Routes.ADDRESS : Routes.PROFILE,
+              )}
+          >
             <span slot="icon">
               <FaIcon data={faIdCard} />
             </span>
