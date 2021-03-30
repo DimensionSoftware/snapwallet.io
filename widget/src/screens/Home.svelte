@@ -77,7 +77,10 @@
           source: $transactionStore.selectedSourcePaymentMethod?.id,
           sourceAmount: $transactionStore.sourceAmount,
           // TODO: get this from app config wallets
-          dest: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK',
+          dest:
+            $transactionStore.sourceCurrency.ticker !== 'BTC'
+              ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
+              : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU',
           destCurrency: $transactionStore.destinationCurrency?.ticker,
         })
 
