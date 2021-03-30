@@ -4,6 +4,7 @@
   import FaIcon from 'svelte-awesome'
   import { faLock } from '@fortawesome/free-solid-svg-icons'
   import Toast from './components/Toast.svelte'
+  import PreLogout from './components/PreLogout.svelte'
   import Home from './screens/Home.svelte'
   import SendOTP from './screens/SendOTP.svelte'
   import NotFound from './screens/NotFound.svelte'
@@ -33,23 +34,21 @@
   export let theme: object
   export let focus: boolean
 
+  $: isPreLogout = false
+
   // auth bits
   window.addEventListener('logout', () => {
     Logger.debug('viewer has logged out')
     userStore.setIsLoggedIn(false)
     push(Routes.ROOT)
     toaster.pop({
-      msg: 'You have been securely logged out',
+      msg: 'You have been securely logged out.',
       error: true,
     })
   })
   window.addEventListener('prelogout', () => {
-    const expirationEpoch = window.AUTH_MANAGER.getSessionExpiration()
-    const expirationDate = new Date(expirationEpoch)
-    // TODO: use ^^ for countdown input
-    Logger.debug(`viewer will be logged out at: ${expirationDate}`)
-    // TODO pop inactive session dialog up
-    // TODO either reactivate session via getAccessToken() or logout()
+    Logger.debug('viewer is prelogout')
+    isPreLogout = true
   })
 
   // Handler for routing condition failure
@@ -172,8 +171,8 @@
         ($location as Routes) !== Routes.VERIFY_OTP
       ) {
         // expired session, so-- automagically logout
-        // - handle re-routing elsewhere
-        return window.AUTH_MANAGER.logout()
+        window.AUTH_MANAGER.logout()
+        push(Routes.ROOT)
       }
 
       // show toast
@@ -194,9 +193,15 @@
 <svelte:window on:keydown={onKeyDown} on:mousedown={onMouseDown} />
 
 <div id="modal">
-  <div id="modal-body">
+  <div id="modal-body" class:blur={isPreLogout}>
     <Router on:conditionsFailed={routeConditionsFailed} {routes} />
     <Toast />
+    {#if isPreLogout}
+      <PreLogout
+        onClosed={() => (isPreLogout = false)}
+        isVisible={isPreLogout}
+      />
+    {/if}
   </div>
   <FaIcon class="lock" data={faLock} />
 </div>
@@ -310,6 +315,11 @@
     animation: scaleIn 0.25s var(--theme-ease-out-back);
     // Used by toast
     position: relative;
+    &.blur {
+      :global(.modal-content) {
+        filter: blur(5px);
+      }
+    }
   }
 
   @media screen and (max-width: 450px) {
