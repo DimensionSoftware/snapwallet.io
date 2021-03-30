@@ -39,6 +39,7 @@
   // auth bits
   window.addEventListener('logout', () => {
     Logger.debug('viewer has logged out')
+    isPreLogout = false
     userStore.setIsLoggedIn(false)
     push(Routes.ROOT)
     toaster.pop({
