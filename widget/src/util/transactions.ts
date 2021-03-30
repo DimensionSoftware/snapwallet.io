@@ -1,6 +1,7 @@
 export const exportTransactionsAsCSV = (transactions: any[]) => {
   const rows = transactions
-    .filter(txn => txn)
+    // TODO: allow only completed txns
+    // .filter(txn => txn.status === 'COMPLETED')
     .map(txn => [
       txn.id,
       txn.createdAt,
