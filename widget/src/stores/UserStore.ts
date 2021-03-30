@@ -48,12 +48,13 @@ function createStore() {
           virtual.fullName = [...new Array(item.length)].join('*')
         }
 
+        // these fields must always be the same length, so--
         if (item.kind === UserProfileFieldTypes.DATE_OF_BIRTH) {
-          virtual.birthDate = [...new Array(item.length)].join('*')
+          virtual.birthDate = '**/**/****'
         }
 
         if (item.kind === UserProfileFieldTypes.US_SSN) {
-          virtual.socialSecurityNumber = [...new Array(item.length)].join('*')
+          virtual.socialSecurityNumber = '***-**-***'
         }
       })
 

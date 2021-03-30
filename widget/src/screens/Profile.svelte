@@ -70,6 +70,9 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Tell Us About You</ModalHeader>
+    {#if $userStore.isProfileComplete}
+      <h5>Your profile was received.  Update any detail:</h5>
+    {/if}
     <Label label="Full Name">
       <Input
         inputmode="text"
@@ -130,4 +133,10 @@
 
 <style lang="scss">
   @import '../styles/_vars.scss';
+  :global(.modal-header + label) {
+    margin-top: 10%;
+  }
+  h5 {
+    margin-left: .25rem;
+  }
 </style>
