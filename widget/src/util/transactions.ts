@@ -8,6 +8,7 @@ export const exportTransactionsAsCSV = (transactions: any[]) => {
       txn.sourceAmount,
       txn.destCurrency,
       txn.destAmount,
+      txn.dest,
       txn.status,
     ])
   // Add CSV headers
@@ -18,6 +19,7 @@ export const exportTransactionsAsCSV = (transactions: any[]) => {
     'Source Amount',
     'Destination Currency',
     'Destination Amount',
+    'Destination',
     'Status',
   ])
   const dataURI =
