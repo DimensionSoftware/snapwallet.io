@@ -9,6 +9,7 @@ on:
       - 'widget/**'
       - 'docs/**'
       - 'api/lib/swagger/swagger-ui.html'
+      - 'api/client/**'
 
 jobs:
   deploy-web: 
