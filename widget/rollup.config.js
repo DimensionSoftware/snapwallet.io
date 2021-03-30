@@ -46,7 +46,7 @@ export default {
     sourcemap: !production,
     format: 'iife',
     name: 'app',
-    file: 'public/widget/build/bundle.js',
+    file: 'dist/build/bundle.js',
   },
   plugins: [
     svelteSVG(),

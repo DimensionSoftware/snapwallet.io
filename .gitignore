@@ -103,9 +103,6 @@ dist
 # TernJS port file
 .tern-port
 
-# Svelte builds
-/**/public/build/
-/**/public/widget/build/
 
 .DS_Store
 .*.swp

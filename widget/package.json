@@ -2,7 +2,7 @@
   "name": "svelte-app",
   "version": "1.0.0",
   "scripts": {
-    "build": "rollup -c",
+    "build": "rollup -c && cp public/index.html dist/ && cp -r public/widget dist/",
     "dev": "HOST=0.0.0.0 rollup -c -w",
     "start": "sirv public",
     "format": "./node_modules/.bin/prettier --write . --config .prettierrc --ignore-path .prettierignore",

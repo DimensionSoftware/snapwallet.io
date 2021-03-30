@@ -11,8 +11,7 @@ pushd widget
 npm i
 npm run build
 popd
-mkdir -p web_dist/widget
-cp -r widget/public/* web_dist/widget/
+mv widget/dist web_dist/widget
 
 pushd docs
 npm i

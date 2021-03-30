@@ -1,2 +1,4 @@
 /cypress/screenshots/
 /cypress/videos/
+/dist/
+/public/build/
