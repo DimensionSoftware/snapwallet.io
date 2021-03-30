@@ -9,6 +9,9 @@
   import { formatLocaleCurrency } from '../util'
   import type { WyreTransfer, WyreTransfers } from 'api-client'
   import { pop } from 'svelte-spa-router'
+  import { exportTransactionsAsCSV } from '../util/transactions'
+  import FaIcon from 'svelte-awesome'
+  import { faFileDownload } from '@fortawesome/free-solid-svg-icons'
 
   $: transfers = []
 
@@ -25,6 +28,12 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Transactions</ModalHeader>
+    <div
+      style="cursor:pointer;"
+      on:click={() => exportTransactionsAsCSV(transfers)}
+    >
+      <FaIcon data={faFileDownload} />
+    </div>
     <div class="line-items">
       <ol>
         {#each transfers as transfer, i}
