@@ -56,6 +56,7 @@
     max-height: 100px;
     background-color: var(--theme-info-color);
     color: white;
+    font-weight: 500;
     &.error {
       background-color: var(--theme-color);
     }

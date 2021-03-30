@@ -134,7 +134,7 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Enter Your Code</ModalHeader>
-    <div in:fly={{ y: 25, duration: 300 }}>
+    <div class="code" in:fly={{ y: 25, duration: 300 }}>
       <Label label="Your Code">
         <Input
           id="code"
@@ -176,6 +176,9 @@
 
 <style lang="scss">
   @import '../styles/_vars.scss';
+  .code {
+    margin-top: 10%;
+  }
   .resend {
     display: flex;
     justify-content: center;

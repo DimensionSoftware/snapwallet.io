@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { fly } from 'svelte/transition'
   import { faUniversity } from '@fortawesome/free-solid-svg-icons'
   import { createEventDispatcher } from 'svelte'
   import { push } from 'svelte-spa-router'
@@ -73,8 +74,8 @@
     {:else if !allPaymentMethods.length && !isLoadingPaymentMethods}
       <p class="help">{copy.unavailable}</p>
     {:else}
-      {#each allPaymentMethods as pm (pm.id)}
-        <div class="card-vertical-margin">
+      {#each allPaymentMethods as pm, i (pm.id)}
+        <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * i }}>
           <IconCard
             label={pm.name}
             icon={faUniversity}

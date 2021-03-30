@@ -21,11 +21,11 @@
   <ModalBody>
     <ModalHeader hideBackButton>Success</ModalHeader>
     <div class="icon-box">
-      <FaIcon scale="4.5" data={faCheckCircle} />
+      <FaIcon scale="5" data={faCheckCircle} />
     </div>
     <div class="text-center">
-      <p>You're {cryptoTicker} checkout was successful!</p>
-      <p>Please allow up to 5 business days for your purchase to complete.</p>
+      <p>Your {cryptoTicker} checkout is confirmed!</p>
+      <p>Please allow up to five (5) business days for your purchase to complete.</p>
     </div>
   </ModalBody>
   <ModalFooter>
