@@ -36,8 +36,9 @@
     },
     countdown = () => {
       const diff: number =
-        +new Date(window.AUTH_MANAGER.getSessionExpiration()) - +new Date()
-      expiresAfter = Math.round(diff / 1000 / 60)
+          +new Date(window.AUTH_MANAGER.getSessionExpiration()) - +new Date(),
+        minutes = Math.round(diff / 1000 / 60)
+      expiresAfter = minutes < 0 ? 0 : minutes
     }
 
   onMount(() => {
