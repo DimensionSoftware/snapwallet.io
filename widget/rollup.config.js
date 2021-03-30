@@ -9,6 +9,8 @@ import css from 'rollup-plugin-css-only'
 import replace from '@rollup/plugin-replace'
 import dotenv from 'dotenv'
 import svelteSVG from 'rollup-plugin-svelte-svg'
+import { nanoid } from 'nanoid'
+import { writeFileSync } from 'fs'
 
 // Dotenv will also pick up api .env if path not defined
 dotenv.config({ path: './.env' })
@@ -40,13 +42,25 @@ function serve() {
   }
 }
 
+const BuildID = nanoid()
+const jsBundleName = production ? `bundle.${BuildID}.js` : 'bundle.js'
+const cssBundleName = production ? `bundle.${BuildID}.css` : 'bundle.css'
+
+if (production) {
+  writeFileSync('dist/info.json', JSON.stringify({
+    jsBundleName,
+    cssBundleName,
+  }))
+}
+
 export default {
   input: 'src/main.ts',
   output: {
     sourcemap: !production,
     format: 'iife',
-    name: 'app',
-    file: production ? 'dist/build/bundle.js' : 'public/build/bundle.js',
+    name: 'snap',
+    dir: production ? 'dist' : 'public/build',
+    entryFileNames: jsBundleName,
   },
   plugins: [
     svelteSVG(),
@@ -77,7 +91,7 @@ export default {
     }),
     // we'll extract any component CSS out into
     // a separate file - better for performance
-    css({ output: 'bundle.css' }),
+    css({ output: cssBundleName }),
 
     // If you have external dependencies installed from
     // npm, you'll most likely need these plugins. In
