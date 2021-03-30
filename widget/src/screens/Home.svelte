@@ -66,9 +66,12 @@
 
   const handleNextStep = async () => {
     const { sourceAmount } = $transactionStore
+
+    // guards
     if (!sourceAmount || !isValidNumber(sourceAmount))
-      // focus input
       return document.querySelector('input')?.focus()
+    if (!$transactionStore.selectedSourcePaymentMethod)
+      throw new Error('Select a Payment Method:')
 
     if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
       try {
