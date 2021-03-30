@@ -21,7 +21,7 @@
 
   let isFileTypeSelectorOpen = false
   let isUploadingFile = false
-  let fileType = ''
+  let fileType = FileUploadTypes.US_DRIVER_LICENSE
   let fileEl: HTMLInputElement
   let selectedFileURI: string = ''
   let selectedFileName: string = ''
@@ -107,7 +107,13 @@
       <IconCard
         blend
         icon={iconCardProps.icon}
-        on:click={() => (isFileTypeSelectorOpen = true)}
+        on:click={() => {
+          // Can't change this once one doc side is uploaded
+          if (fileIds.length && minimumFiles >= 1) {
+            return
+          }
+          isFileTypeSelectorOpen = true
+        }}
         label={iconCardProps.label}
       />
     </div>
@@ -143,8 +149,10 @@
       }}
     />
   </ModalBody>
-  <Button disabled={!fileType} on:click={handleNextStep}
-    >{isUploadingFile ? 'Uploading...' : 'Upload'}</Button
+  <Button
+    isLoading={isUploadingFile}
+    disabled={!fileType}
+    on:click={handleNextStep}>{isUploadingFile ? 'Uploading' : 'Upload'}</Button
   >
 </ModalContent>
 
