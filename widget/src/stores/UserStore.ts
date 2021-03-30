@@ -41,7 +41,7 @@ function createStore() {
   return {
     subscribe,
     fetchUserProfile: async () => {
-      let { profile: userProfile } = await window.API.fluxViewerProfileData()
+      const { profile: userProfile } = await window.API.fluxViewerProfileData()
       const virtual = { fullName: '', birthDate: '', socialSecurityNumber: '' }
       userProfile.forEach(item => {
         if (item.kind === UserProfileFieldTypes.LEGAL_NAME) {
