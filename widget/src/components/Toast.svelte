@@ -2,6 +2,7 @@
   import { toaster } from '../stores/ToastStore'
   import { fade, fly } from 'svelte/transition'
   import { backOut } from 'svelte/easing'
+  import { capitalize } from '../util'
 
   $: success = Boolean($toaster?.success)
   $: warning = Boolean($toaster?.warning)
@@ -25,7 +26,7 @@
       }}
       out:fade={{ duration: 500 }}
     >
-      {$toaster?.msg}
+      {capitalize($toaster?.msg)}
     </div>
   {/if}
 </div>

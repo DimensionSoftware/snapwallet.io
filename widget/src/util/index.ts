@@ -107,4 +107,6 @@ export const dropEndingZeros = (str: string): string => {
   return str.replace(/\.0+0?$/g, '')
 }
 
+export const capitalize = (s: string) => s[0].toUpperCase() + s.substr(1)
+
 export const isEmbedded = window.location.search.indexOf('config=') !== -1
