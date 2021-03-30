@@ -19,12 +19,12 @@ jobs:
       - uses: actions/checkout@v2
       - name: Build & Deploy Firebase Hosting Web Tree
         run: |
+          bin/build-web
+
           pushd /tmp
           echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
           popd
-
-          bin/build-web
 
           npx firebase-tools deploy --only hosting
         env:
