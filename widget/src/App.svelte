@@ -24,6 +24,7 @@
   import SendOtp from './screens/SendOTP.svelte'
   import VerifyOtp from './screens/VerifyOTP.svelte'
   import Success from './screens/Success.svelte'
+  import { transactionStore } from './stores/TransactionStore'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -121,6 +122,7 @@
     }),
     [Routes.CHECKOUT_OVERVIEW]: wrap({
       ...authedRouteOptions(Overview),
+      conditions: [isJWTValid, () => Boolean($transactionStore.wyrePreview)],
     }),
     [Routes.ADDRESS]: wrap({
       ...authedRouteOptions(Address),

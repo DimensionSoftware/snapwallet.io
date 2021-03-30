@@ -15,8 +15,6 @@
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
-  if (!wyrePreview) pop() // guard
-
   $: ({
     id: txnId,
     dest,
