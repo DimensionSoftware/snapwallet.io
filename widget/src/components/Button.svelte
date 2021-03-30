@@ -5,7 +5,7 @@
   export let isLoading: boolean = false
 </script>
 
-<button {disabled} class:isLoading on:click={() => dispatch('click')}>
+<button disabled={disabled || isLoading} class:isLoading on:click={() => dispatch('click')}>
   <div class="lds-circle"><div /></div>
   <slot /></button
 >
