@@ -1,4 +1,4 @@
-export const exportTransactionsAsCSV = (transactions: any[]) => {
+export const transactionsAsDataURI = (transactions: any[]) => {
   const rows = transactions
     // TODO: allow only completed txns
     // .filter(txn => txn.status === 'COMPLETED')
@@ -27,5 +27,5 @@ export const exportTransactionsAsCSV = (transactions: any[]) => {
   ])
   const dataURI =
     'data:text/csv;charset=utf-8,' + rows.map(e => e.join(',')).join('\n')
-  window.location.href = encodeURI(dataURI)
+  return encodeURI(dataURI)
 }

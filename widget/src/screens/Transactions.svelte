@@ -9,15 +9,17 @@
   import { formatLocaleCurrency } from '../util'
   import type { WyreTransfer, WyreTransfers } from 'api-client'
   import { pop } from 'svelte-spa-router'
-  import { exportTransactionsAsCSV } from '../util/transactions'
+  import { transactionsAsDataURI } from '../util/transactions'
   import FaIcon from 'svelte-awesome'
   import { faFileDownload } from '@fortawesome/free-solid-svg-icons'
 
   $: transfers = []
+  $: csvURI = ''
 
   onMount(async () => {
     const res = await window.API.fluxWyreGetTransfers()
     transfers = res.transfers
+    csvURI = transactionsAsDataURI(transfers)
   })
 
   const close = () => {
@@ -28,12 +30,13 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Transactions</ModalHeader>
-    <div
-      style="cursor:pointer;"
-      on:click={() => exportTransactionsAsCSV(transfers)}
+    <a
+      href={csvURI}
+      download={`snap_txn_history_${new Date().toISOString()}.csv`}
+      target="_blank"
     >
       <FaIcon data={faFileDownload} />
-    </div>
+    </a>
     <div class="line-items">
       <ol>
         {#each transfers as transfer, i}
