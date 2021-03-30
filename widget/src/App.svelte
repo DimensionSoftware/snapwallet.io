@@ -151,9 +151,11 @@
     ...theme,
   })
 
-  // Override theme css variables
   onMount(() => {
+    // pre-fetch user
+    if (window.AUTH_MANAGER.viewerIsLoggedIn()) userStore.fetchUserProfile()
     if (focus) setTimeout(() => document.getElementById('amount')?.focus(), 350)
+    // Override theme css variables
     Object.entries(theme).forEach(([k, v]) => {
       k = k.replace(/[A-Z]/g, (k, i) =>
         i === 0 ? k.toLowerCase() : `-${k.toLowerCase()}`,

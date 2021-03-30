@@ -128,9 +128,8 @@
   onMount(() => {
     getInitialPrices()
     getNextPath()
-    const priceInterval = priceStore.pollPrices()
-    if (window.AUTH_MANAGER.viewerIsLoggedIn()) userStore.fetchUserProfile()
-    return () => clearInterval(priceInterval)
+    // cleanup
+    return () => clearInterval(priceStore.pollPrices())
   })
 </script>
 
