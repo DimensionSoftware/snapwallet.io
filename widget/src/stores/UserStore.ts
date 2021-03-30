@@ -15,6 +15,7 @@ type UserStoreState = {
   firstName: string
   lastName: string
   socialSecurityNumber: string
+  birthDate: string
   phoneNumber: string
   lastKnownRoute: Routes
   flags: ViewerFlags
