@@ -33,7 +33,11 @@ function createStore() {
       flags: {} as ViewerFlags,
       address: { ...initialAddress },
       isLoggedIn: false,
-      virtual: {} as VirtualProfile,
+      virtual: {
+        fullName: '',
+        birthDate: '',
+        socialSecurityNumber: '',
+      } as VirtualProfile,
       isProfileComplete: false,
     },
     { subscribe, update } = writable(defaultUser)
@@ -42,7 +46,7 @@ function createStore() {
     subscribe,
     fetchUserProfile: async () => {
       const { profile: userProfile } = await window.API.fluxViewerProfileData()
-      const virtual = { fullName: '', birthDate: '', socialSecurityNumber: '' }
+      const virtual: VirtualProfile = {}
       userProfile.forEach(item => {
         if (item.kind === UserProfileFieldTypes.LEGAL_NAME) {
           virtual.fullName = [...new Array(item.length)].join('*')
