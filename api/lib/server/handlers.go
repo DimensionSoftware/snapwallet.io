@@ -284,6 +284,14 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 }
 
+func generateTransferMessage(to *mail.Email, t *wyre.Transfer) *mail.SGMailV3 {
+	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
+	subject := fmt.Sprintf("Transfer %s has been initiated", t.ID)
+	plainTextContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
+	htmlContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+}
+
 // PlaidCreateLinkToken is an rpc handler
 func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreateLinkTokenRequest) (*proto.PlaidCreateLinkTokenResponse, error) {
 
@@ -1252,6 +1260,14 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 		return nil, err
 
 	}
+
+	// send email
+	msg := generateTransferMessage(mail.NewEmail("Customer", *u.Email), t)
+	_, err = s.Sendgrid.Send(msg)
+	if err != nil {
+		return nil, err
+	}
+
 	// TODO: store info in db about xfer
 	fmt.Printf("WYRE TRANSFER RESP: %#v", t)
 
