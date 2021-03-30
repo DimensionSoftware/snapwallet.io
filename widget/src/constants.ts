@@ -79,3 +79,10 @@ export enum PusherServerMessages {
 }
 
 export enum PusherClientMessages {}
+
+export enum UserProfileFieldTypes {
+  EMAIL = 'K_EMAIL',
+  LEGAL_NAME = 'K_LEGAL_NAME',
+  DATE_OF_BIRTH = 'K_DATE_OF_BIRTH',
+  US_SSN = 'K_US_SSN',
+}
