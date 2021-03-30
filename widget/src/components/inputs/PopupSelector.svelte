@@ -2,7 +2,7 @@
   import { createEventDispatcher } from 'svelte'
   import { onKeysPressed } from '../../util'
   import { scale } from 'svelte/transition'
-  import { expoOut, expoIn } from 'svelte/easing'
+  import { expoOut } from 'svelte/easing'
 
   const dispatch = createEventDispatcher()
 

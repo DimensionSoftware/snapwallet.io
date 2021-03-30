@@ -52,7 +52,7 @@
     viewBox="0 0 200 200"
   >
     <g
-      stroke-width={isExpanded ? 5 : isLoggedIn ? 4 : 3}
+      stroke-width={isExpanded ? 5 : isLoggedIn ? 8 : 4}
       stroke-linecap="round"
     >
       <path
@@ -113,7 +113,7 @@
     z-index: 101;
     position: relative;
     right: -0.9rem;
-    top: 0.1rem;
+    top: 0.15rem;
     cursor: pointer;
   }
   // not-hamburger hamburger toggle + fx
@@ -222,11 +222,6 @@
           transition: transform 1s var(--theme-ease-out-expo);
         }
       }
-    }
-    hr {
-      opacity: 0.1;
-      height: 1px;
-      margin: 1.5rem 0;
     }
   }
 </style>

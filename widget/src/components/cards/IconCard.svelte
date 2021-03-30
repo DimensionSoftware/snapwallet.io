@@ -72,24 +72,24 @@
 
   .badge {
     border-radius: 0.5rem;
-    padding: 0 0.25rem;
+    padding: 0 0.5rem;
     margin-right: 1rem;
     font-size: 0.75rem;
 
     &.success {
-      color: var(--theme-success-color);
+      color: var(--theme-text-color);
       border: 1px solid var(--theme-success-color);
       background-color: lighten($success, 35%);
     }
 
     &.warning {
-      color: var(--theme-warning-color);
+      color: var(--theme-text-color);
       border: 1px solid var(--theme-warning-color);
       background-color: lighten($warning, 35%);
     }
 
     &.error {
-      color: var(--theme-error-color);
+      color: var(--theme-text-color);
       border: 1px solid var(--theme-error-color);
       background-color: lighten($error, 35%);
     }

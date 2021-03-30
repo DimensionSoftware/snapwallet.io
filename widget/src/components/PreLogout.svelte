@@ -83,7 +83,7 @@
     left: 0;
     font-size: 1.2rem;
     z-index: 101;
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(200, 200, 200, 0.7);
     article {
       position: relative;
       margin: 0;
@@ -103,6 +103,7 @@
         justify-content: start;
         .continue {
           cursor: pointer;
+          font-size: 1rem;
           margin-left: 0.5rem;
           color: var(--theme-text-color);
           background: transparent;

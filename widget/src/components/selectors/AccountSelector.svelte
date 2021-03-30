@@ -97,4 +97,7 @@
 
 <style lang="scss">
   @import '../../styles/selectors.scss';
+  h5 {
+    margin-bottom: -0.5rem;
+  }
 </style>
