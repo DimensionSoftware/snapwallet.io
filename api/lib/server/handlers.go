@@ -1261,13 +1261,6 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 
 	}
 
-	// send email
-	msg := generateTransferMessage(mail.NewEmail("Customer", *u.Email), t)
-	_, err = s.Sendgrid.Send(msg)
-	if err != nil {
-		return nil, err
-	}
-
 	// TODO: store info in db about xfer
 	fmt.Printf("WYRE TRANSFER RESP: %#v", t)
 
@@ -1301,11 +1294,18 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	t, err := s.Wyre.ConfirmTransfer(wyreAccount.SecretKey, wyre.ConfirmTransferRequest{
 		TransferId: req.TransferId,
 	})
-
 	if err != nil {
 		return nil, err
 
 	}
+
+	// send email
+	msg := generateTransferMessage(mail.NewEmail("Customer", *u.Email), t)
+	_, err = s.Sendgrid.Send(msg)
+	if err != nil {
+		return nil, err
+	}
+
 	// TODO: store info in db about xfer
 	fmt.Printf("Wyre transfer confirmation response: %#v", t)
 
