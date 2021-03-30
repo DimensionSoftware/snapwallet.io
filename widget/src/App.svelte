@@ -17,7 +17,7 @@
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes, APIErrors } from './constants'
-  import { authedRouteOptions, isJWTValid, Logger, onEscPressed } from './util'
+  import { authedRouteOptions, capitalize, isJWTValid, Logger, onEscPressed } from './util'
   import { ParentMessenger } from './util/parent_messenger'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
@@ -180,7 +180,7 @@
 
       // show toast
       toaster.pop({
-        msg: reason?.body?.message || body?.message || msg,
+        msg: capitalize(reason?.body?.message || body?.message || reason?.message || msg),
         error: true,
       })
     }
