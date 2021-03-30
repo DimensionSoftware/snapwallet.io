@@ -50,11 +50,11 @@ function createStore() {
 
         // these fields must always be the same length, so--
         if (item.kind === UserProfileFieldTypes.DATE_OF_BIRTH) {
-          virtual.birthDate = '**/**/****'
+          virtual.birthDate = '**-**-****'
         }
 
         if (item.kind === UserProfileFieldTypes.US_SSN) {
-          virtual.socialSecurityNumber = '***-**-***'
+          virtual.socialSecurityNumber = '***-**-****'
         }
       })
 
