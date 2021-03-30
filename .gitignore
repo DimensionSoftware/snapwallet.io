@@ -105,6 +105,7 @@ dist
 
 # Svelte builds
 /**/public/build/
+/**/public/widget/build/
 
 .DS_Store
 .*.swp
