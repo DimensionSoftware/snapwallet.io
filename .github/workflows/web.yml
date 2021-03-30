@@ -10,6 +10,7 @@ on:
       - 'docs/**'
       - 'api/lib/swagger/swagger-ui.html'
       - 'api/client/**'
+      - 'bin/build-web'
 
 jobs:
   deploy-web: 
