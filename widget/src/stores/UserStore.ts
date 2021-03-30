@@ -58,7 +58,7 @@ function createStore() {
         fullName: '',
         birthDate: '',
         socialSecurityNumber: '',
-      } as VirtualProfile,
+      },
       isProfileComplete: false,
     },
     { subscribe, update } = writable<UserStoreState>(defaultUser)
