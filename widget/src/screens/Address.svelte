@@ -140,33 +140,39 @@
       <Input
         id="autocomplete"
         defaultValue={$userStore.address.street1}
-        placeholder="Street 1"
+        placeholder={$userStore.virtual?.address?.street1 || 'Street 1'}
       />
     </Label>
     <Label label="Street 2">
       <Input
-        placeholder="Street 2"
+        placeholder={$userStore.virtual?.address?.street2 || 'Street 2'}
         defaultValue={$userStore.address.street2}
         on:change={e => (address.street2 = e.detail)}
       />
     </Label>
     <Label label="City">
-      <Input placeholder="City" defaultValue={$userStore.address.city} />
+      <Input
+        placeholder={$userStore.virtual?.address?.city || 'City'}
+        defaultValue={$userStore.address.city}
+      />
     </Label>
     <div class="inline-inputs">
       <Label label="Country" style="margin-right:1rem;">
         <Input
-          placeholder="Country"
+          placeholder={$userStore.virtual?.address?.country || 'Country'}
           defaultValue={$userStore.address.country}
         />
       </Label>
       <Label class="state" label="State">
-        <Input placeholder="State" defaultValue={$userStore.address.state} />
+        <Input
+          placeholder={$userStore.virtual?.address?.state || 'State'}
+          defaultValue={$userStore.address.state}
+        />
       </Label>
     </div>
     <Label label="Postal Code">
       <Input
-        placeholder="Postal Code"
+        placeholder={$userStore.virtual?.address?.postalCode || 'Postal Code'}
         defaultValue={$userStore.address.postalCode}
       />
     </Label>
