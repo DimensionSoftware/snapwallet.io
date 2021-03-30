@@ -34,18 +34,22 @@
           thingie.focus()
         }
 
-      // validate inputs
-      if (!firstName || !lastName?.length) return focus(0)
-      if (!birthDate) return focus(1)
-      if (!socialSecurityNumber) return focus(2)
+      const minFieldFilled = [
+        firstName,
+        lastName,
+        birthDate,
+        socialSecurityNumber,
+      ].join('')
+
+      if (!minFieldFilled) return focus(0)
 
       const [mm, dd, yyyy] = birthDate.split('-')
 
       await window.API.fluxSaveProfileData({
-        ssn: socialSecurityNumber,
-        dateOfBirth: `${yyyy}-${mm}-${dd}`,
+        ...(socialSecurityNumber && { ssn: socialSecurityNumber }),
+        ...(birthDate && { dateOfBirth: `${yyyy}-${mm}-${dd}` }),
         // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
-        legalName: `${firstName} ${lastName}`,
+        ...(firstName && lastName && { legalName: `${firstName} ${lastName}` }),
       })
       setTimeout(() => push(Routes.ADDRESS), 1000)
     } finally {
@@ -63,7 +67,7 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Tell Us About You</ModalHeader>
-    <Label label={fullName || 'Full Name'}>
+    <Label label="Full Name">
       <Input
         inputmode="text"
         autocapitalize="true"
@@ -71,7 +75,7 @@
         required
         autofocus
         type="text"
-        placeholder="Your Full Name"
+        placeholder={$userStore.virtual?.fullName || 'Your Full Name'}
         defaultValue={fullName}
         pattern={`[\\w\\s]+`}
         on:change={e => {
@@ -88,7 +92,7 @@
         autocomplete="bday"
         required
         type="text"
-        placeholder="mm-dd-yyyy"
+        placeholder={$userStore.virtual?.birthDate || 'mm-dd-yyyy'}
         pattern={`[\\d]{2}-[\\d]{2}-[\\d]{4}`}
         mask={Masks.US_DATE}
         defaultValue={$userStore.birthDate}
@@ -104,7 +108,7 @@
         autocomplete="on"
         required
         type="text"
-        placeholder="xxx-xx-xxxx"
+        placeholder={$userStore.virtual?.socialSecurityNumber || 'xxx-xx-xxxx'}
         pattern={`[\\d]{3}-[\\d]{2}-[\\d]{4}`}
         mask={Masks.SSN}
         defaultValue={$userStore.socialSecurityNumber}
