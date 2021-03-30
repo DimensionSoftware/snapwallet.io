@@ -4,22 +4,24 @@ export const exportTransactionsAsCSV = (transactions: any[]) => {
     .map(txn => [
       txn.id,
       txn.createdAt,
+      txn.source,
       txn.sourceCurrency,
       txn.sourceAmount,
+      txn.dest,
       txn.destCurrency,
       txn.destAmount,
-      txn.dest,
       txn.status,
     ])
   // Add CSV headers
   rows.unshift([
     'ID',
     'Created Timestamp',
+    'Source',
     'Source Currency',
     'Source Amount',
+    'Destination',
     'Destination Currency',
     'Destination Amount',
-    'Destination',
     'Status',
   ])
   const dataURI =
