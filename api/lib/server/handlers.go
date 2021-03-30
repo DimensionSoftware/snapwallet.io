@@ -1313,6 +1313,10 @@ func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto
 		}
 	}
 
+	if wyreAccount == nil {
+		return &proto.WyreTransfers{}, nil
+	}
+
 	history, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey)
 	if err != nil {
 		return nil, err
