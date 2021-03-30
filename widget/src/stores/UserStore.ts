@@ -58,7 +58,7 @@ function createStore() {
         }
       })
 
-      let isProfileComplete = Boolean(
+      const isProfileComplete = Boolean(
         virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
       )
 
