@@ -110,6 +110,7 @@
     // Authenticated
     [Routes.SUCCESS]: wrap({
       ...authedRouteOptions(Success),
+      conditions: [isJWTValid, () => Boolean($transactionStore.wyrePreview)],
     }),
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),

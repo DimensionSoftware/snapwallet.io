@@ -12,7 +12,6 @@
   import { ParentMessenger } from '../util/parent_messenger'
 
   $: ({ intent, wyrePreview } = $transactionStore)
-  if (!wyrePreview) pop() // guard
 
   $: ({ sourceCurrency, destCurrency: destinationCurrency } = wyrePreview)
   $: isBuy = intent === TransactionIntents.BUY
@@ -50,5 +49,6 @@
   }
   .text-center {
     margin: 0 1rem;
+    text-align: center;
   }
 </style>
