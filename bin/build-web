@@ -12,7 +12,7 @@ npm i
 npm run build
 popd
 mkdir -p web_dist/widget
-cp -r widget/public/* web_dist/widget/
+cp -r widget/public/widget/ web_dist/widget/
 
 pushd docs
 npm i
