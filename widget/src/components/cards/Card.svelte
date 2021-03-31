@@ -14,7 +14,6 @@
     width: 100%;
     border-radius: 0.5rem;
     cursor: pointer;
-    background-color: var(--theme-color-inverse);
     display: flex;
   }
 </style>
