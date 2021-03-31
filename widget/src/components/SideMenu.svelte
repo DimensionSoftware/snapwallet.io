@@ -1,7 +1,11 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
-  import { focusFirstInput, onKeysPressed } from '../util'
+  import {
+    cachePrimaryPaymentMethodID,
+    focusFirstInput,
+    onKeysPressed,
+  } from '../util'
   import { userStore } from '../stores/UserStore'
 
   export let isExpanded: boolean = false
@@ -9,7 +13,10 @@
   function logout() {
     close()
     // yield to ui animations
-    setTimeout(() => window.AUTH_MANAGER.logout(), 100)
+    setTimeout(() => {
+      window.AUTH_MANAGER.logout()
+      cachePrimaryPaymentMethodID('')
+    }, 100)
   }
   function login() {
     push(Routes.SEND_OTP)
