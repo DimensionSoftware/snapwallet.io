@@ -14,7 +14,7 @@
   import { Routes } from '../constants'
   import { Masks } from '../types'
   import { unMaskValue } from '../masks'
-  import { fly } from 'svelte/transition'
+  import { fade } from 'svelte/transition'
 
   export let phoneVerificationOnly: boolean = false
 
@@ -78,7 +78,7 @@
       {/if}
     </ModalHeader>
     {#if !phoneVerificationOnly && (!$userStore.flags?.hasEmail || !isUsingPhoneNumber)}
-      <div class="email" in:fly={{ y: 15, duration: 300 }}>
+      <div class="email" in:fade={{ duration: 300 }}>
         <Label label="Your Email">
           <Input
             inputmode="email"
@@ -105,7 +105,7 @@
         {/if}
       </div>
     {:else}
-      <div class="phone" in:fly={{ y: 15, duration: 300 }}>
+      <div class="phone" in:fade={{ duration: 300 }}>
         <Label label="Your Phone Number">
           <Input
             inputmode="phone"
@@ -149,7 +149,8 @@
 
 <style lang="scss">
   @import '../styles/_vars.scss';
-  .email, .phone {
+  .email,
+  .phone {
     margin-top: 10%;
   }
   .link {
