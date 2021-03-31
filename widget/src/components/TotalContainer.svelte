@@ -17,6 +17,5 @@
   .total-container {
     color: var(--theme-text-color);
     font-weight: normal;
-    font-size: 0.9rem;
   }
 </style>

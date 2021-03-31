@@ -96,6 +96,7 @@
   .crypto-icon {
     position: relative;
     height: 33px;
+    left: -4px;
     transition: 0.15s $easeOutBack 0.05s;
     :global(svg) {
       position: relative;
@@ -121,7 +122,7 @@
     align-items: center;
     flex-direction: row;
     height: 100%;
-    margin-left: 1rem;
+    margin-left: .4rem;
     font-size: 1.5em;
     color: var(--theme-text-color);
     span {
