@@ -123,6 +123,12 @@
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),
     }),
+    [Routes.PROFILE_UPDATE]: wrap({
+      ...authedRouteOptions(Profile),
+      props: {
+        isUpdateScreen: true,
+      },
+    }),
     [Routes.PROFILE_STATUS]: wrap({
       ...authedRouteOptions(ProfileStatus),
     }),
@@ -138,6 +144,12 @@
     }),
     [Routes.ADDRESS]: wrap({
       ...authedRouteOptions(Address),
+    }),
+    [Routes.ADDRESS_UPDATE]: wrap({
+      ...authedRouteOptions(Address),
+      props: {
+        isUpdateScreen: true,
+      },
     }),
     [Routes.FILE_UPLOAD]: wrap({
       ...authedRouteOptions(FileUpload),
