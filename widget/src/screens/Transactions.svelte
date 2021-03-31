@@ -74,14 +74,16 @@
     {/if}
   </ModalBody>
   <ModalFooter>
-    <Button on:click={() => csvElement?.click()}>
-      <div style="display:flex;justify-content:center;align-items:center;">
-        Download
-        <div style="display:flex;justify-content:center;margin-left:0.5rem;">
-          <FaIcon data={faFileDownload} />
+    {#if transfers?.length}
+      <Button on:click={() => csvElement?.click()}>
+        <div style="display:flex;justify-content:center;align-items:center;">
+          Download
+          <div style="display:flex;justify-content:center;margin-left:0.5rem;">
+            <FaIcon data={faFileDownload} />
+          </div>
         </div>
-      </div>
-    </Button>
+      </Button>
+    {/if}
   </ModalFooter>
 </ModalContent>
 
