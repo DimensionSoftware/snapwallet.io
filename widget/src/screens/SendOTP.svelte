@@ -122,7 +122,7 @@
             }}
           />
         </Label>
-        {#if $userStore.flags?.hasPhone}
+        {#if $userStore.flags?.hasPhone && !$userStore.flags?.hasEmail}
           <div class="link">
             <a
               on:click={() => {
