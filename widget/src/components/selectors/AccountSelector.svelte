@@ -11,6 +11,7 @@
   import IconCard from '../cards/IconCard.svelte'
   import PopupSelector from '../inputs/PopupSelector.svelte'
   import { paymentMethodStore } from '../../stores/PaymentMethodStore'
+  import { cachePrimaryPaymentMethodID } from '../../util'
   const dispatch = createEventDispatcher()
 
   export let visible = false
@@ -87,6 +88,7 @@
               : 'success'}
             on:click={() => {
               transactionStore.setSelectedSourcePaymentMethod(pm)
+              cachePrimaryPaymentMethodID(pm.id)
               dispatch('close')
             }}
           />
