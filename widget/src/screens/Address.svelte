@@ -14,6 +14,8 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { onMount } from 'svelte'
 
+  export let isUpdateScreen: boolean = false
+
   let isSubmittingProfile = false
   let autocomplete: google.maps.places.Autocomplete
 
@@ -113,7 +115,8 @@
         address: $userStore.address,
       })
       setTimeout(() => {
-        if (!$userStore.flags?.hasPhone) push(Routes.PROFILE_SEND_SMS)
+        if (isUpdateScreen) push(Routes.PROFILE_STATUS)
+        else if (!$userStore.flags?.hasPhone) push(Routes.PROFILE_SEND_SMS)
         else if (!$userStore.flags.hasWyreAccount) push(Routes.FILE_UPLOAD)
         else if ($transactionStore.sourceAmount) push(Routes.CHECKOUT_OVERVIEW)
         else push(Routes.ROOT)
@@ -181,8 +184,8 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={handleNextStep}
-      >{isSubmittingProfile ? 'Saving...' : 'Save'}</Button
+    <Button isLoading={isSubmittingProfile} on:click={handleNextStep}
+      >{isSubmittingProfile ? 'Saving' : 'Save'}</Button
     >
   </ModalFooter>
 </ModalContent>

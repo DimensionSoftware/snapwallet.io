@@ -15,6 +15,8 @@
 
   import { push } from 'svelte-spa-router'
 
+  export let isUpdateScreen: boolean = false
+
   $: fullName = `${$userStore.firstName} ${$userStore.lastName}`.trim()
   let isSaving = false
 
@@ -56,7 +58,8 @@
       })
       setTimeout(() => {
         userStore.clearProfile()
-        push(Routes.ADDRESS)
+        let nextRoute = isUpdateScreen ? Routes.PROFILE_STATUS : Routes.ADDRESS
+        push(nextRoute)
       }, 1000)
     } finally {
       setTimeout(() => (isSaving = false), 1000)

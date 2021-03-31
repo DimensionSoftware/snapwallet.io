@@ -22,7 +22,7 @@
       <FaIcon scale="3" data={faUserCircle} />
     </div>
     <ul class="vertical-stepper">
-      <VStep onClick={() => push(Routes.PROFILE)}>
+      <VStep onClick={() => push(Routes.PROFILE_UPDATE)}>
         <span slot="icon">
           <FaIcon data={faIdCard} />
         </span>
@@ -31,7 +31,7 @@
           Personal information used for verification purposes.
         </div>
       </VStep>
-      <VStep onClick={() => push(Routes.ADDRESS)}>
+      <VStep onClick={() => push(Routes.ADDRESS_UPDATE)}>
         <span slot="icon">
           <FaIcon data={faHome} />
         </span>
