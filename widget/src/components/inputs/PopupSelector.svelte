@@ -48,7 +48,6 @@
   @import '../../styles/_vars.scss';
   @import '../../styles/animations.scss';
   .popup-selector {
-    padding: 1rem;
     display: flex;
     flex-direction: column;
     width: 100%;
@@ -59,6 +58,7 @@
     bottom: 0;
     left: 0;
     right: 0;
+    padding-top: .5rem;
     background-color: white;
     box-shadow: 0px -5px 10px 7px var(--theme-shadow-color);
     animation: slideUp 0.2s $easeOutExpo forwards;
@@ -67,6 +67,7 @@
   .popup-selector-header {
     display: flex;
     height: 50px;
+    padding: 0 1rem;
     width: 100%;
     justify-content: space-between;
     align-items: center;

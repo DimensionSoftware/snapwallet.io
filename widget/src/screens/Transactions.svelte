@@ -36,18 +36,10 @@
   })
 </script>
 
-<ModalContent>
+<ModalContent fullscreen>
   <ModalBody>
     <ModalHeader>Transactions</ModalHeader>
     {#if transfers?.length > 0}
-      <a
-        hidden
-        bind:this={csvElement}
-        class="csv-link"
-        href={csvURI}
-        download={csvFileName}
-        target="_blank"><span /></a
-      >
       <div class="line-items">
         {#each transfers as transfer, i}
           <div
@@ -130,6 +122,7 @@
     display: flex;
     justify-content: space-between;
     padding-bottom: 2rem;
+    margin: 0.5rem 0 0 0.5rem;
   }
   .line {
     height: 1px;
@@ -146,6 +139,7 @@
     width: 100%;
     align-self: center;
     margin-top: 0.5rem;
+    padding: 0.5rem 0.5rem 0 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

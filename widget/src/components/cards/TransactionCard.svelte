@@ -52,6 +52,9 @@
       h5 {
         margin: 0;
       }
+      h4{
+        line-height: 1.15rem;
+      }
       h5 {
         font-weight: 500;
       }
