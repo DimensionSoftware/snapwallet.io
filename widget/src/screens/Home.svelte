@@ -139,6 +139,7 @@
 
   // Select last used pm when request completes.
   paymentMethodStore.subscribe(({ wyrePaymentMethods }) => {
+    if ($transactionStore.selectedSourcePaymentMethod) return
     const primaryPaymentMethodID = getPrimaryPaymentMethodID()
     if (!primaryPaymentMethodID) return
     const primaryPaymentMethod = wyrePaymentMethods.find(
