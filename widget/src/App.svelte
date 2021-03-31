@@ -17,7 +17,13 @@
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
   import { Routes, APIErrors } from './constants'
-  import { authedRouteOptions, capitalize, isJWTValid, Logger, onEscPressed } from './util'
+  import {
+    authedRouteOptions,
+    capitalize,
+    isJWTValid,
+    Logger,
+    onEscPressed,
+  } from './util'
   import { ParentMessenger } from './util/parent_messenger'
   import { userStore } from './stores/UserStore'
   import { toaster } from './stores/ToastStore'
@@ -26,6 +32,7 @@
   import VerifyOtp from './screens/VerifyOTP.svelte'
   import Success from './screens/Success.svelte'
   import { transactionStore } from './stores/TransactionStore'
+  import { paymentMethodStore } from './stores/PaymentMethodStore'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -153,7 +160,10 @@
 
   onMount(() => {
     // pre-fetch user
-    if (window.AUTH_MANAGER.viewerIsLoggedIn()) userStore.fetchUserProfile()
+    if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
+      userStore.fetchUserProfile()
+      paymentMethodStore.fetchWyrePaymentMethods()
+    }
     if (focus) setTimeout(() => document.getElementById('amount')?.focus(), 350)
     // Override theme css variables
     Object.entries(theme).forEach(([k, v]) => {
@@ -180,7 +190,9 @@
 
       // show toast
       toaster.pop({
-        msg: capitalize(reason?.body?.message || body?.message || reason?.message || msg),
+        msg: capitalize(
+          reason?.body?.message || body?.message || reason?.message || msg,
+        ),
         error: true,
       })
     }
