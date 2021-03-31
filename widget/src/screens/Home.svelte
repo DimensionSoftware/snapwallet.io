@@ -315,7 +315,7 @@
   .dst-currency {
     position: absolute;
     left: 1rem;
-    bottom: 1rem;
+    bottom: 1.35rem;
     z-index: 5;
     font-size: 0.8rem;
   }
