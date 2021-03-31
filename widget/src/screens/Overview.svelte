@@ -72,7 +72,7 @@
     <ModalHeader>{screenTitle}</ModalHeader>
     <div class="checkout-item-box">
       <div class="checkout-item-icon">
-        <Icon size="80" />
+        <Icon height="75" width="75" size="75" />
       </div>
       <div class="checkout-item-name">
         {dropEndingZeros(cryptoAmount.toFixed(cryptoPrecision))}
@@ -80,7 +80,6 @@
       </div>
     </div>
     <div class="line-items">
-      <h4>Overview</h4>
       {#if $transactionStore.selectedSourcePaymentMethod}
         {#if isBuy}
           <div class="line-item muted">
@@ -192,7 +191,7 @@
       justify-content: space-between;
       align-items: center;
       &.muted {
-        color: $textColor4;
+        color: --var(--theme-color-muted);
         font-weight: 300;
       }
     }
