@@ -122,9 +122,7 @@
     </Label>
     <Label
       label="Social Security Number"
-      error={$userStore.profileRemediations[
-        UserProfileFieldTypes.US_GOVT_DOCUMENT
-      ]}
+      error={$userStore.profileRemediations[UserProfileFieldTypes.US_SSN]}
     >
       <Input
         inputmode="text"
