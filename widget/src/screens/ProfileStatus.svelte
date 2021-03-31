@@ -11,6 +11,8 @@
   } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
   import VStep from '../components/VStep.svelte'
+  import { push } from 'svelte-spa-router'
+  import { Routes } from '../constants'
 </script>
 
 <ModalContent>
@@ -20,7 +22,7 @@
       <FaIcon scale="3" data={faUserCircle} />
     </div>
     <ul class="vertical-stepper">
-      <VStep>
+      <VStep onClick={() => push(Routes.PROFILE)}>
         <span slot="icon">
           <FaIcon data={faIdCard} />
         </span>
@@ -29,7 +31,7 @@
           Personal information used for verification purposes.
         </div>
       </VStep>
-      <VStep>
+      <VStep onClick={() => push(Routes.ADDRESS)}>
         <span slot="icon">
           <FaIcon data={faHome} />
         </span>
@@ -38,7 +40,7 @@
           Up to date residential address information used for verification.
         </div>
       </VStep>
-      <VStep>
+      <VStep onClick={() => push(Routes.PROFILE_SEND_SMS)}>
         <span slot="icon">
           <FaIcon data={faMailBulk} />
         </span>
@@ -65,6 +67,5 @@
 
   .description {
     min-height: 60px;
-    cursor: pointer;
   }
 </style>
