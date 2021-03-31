@@ -10,7 +10,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { onEnterPressed } from '../util'
-  import { Routes } from '../constants'
+  import { Routes, UserProfileFieldTypes } from '../constants'
   import { Masks } from '../types'
 
   import { push } from 'svelte-spa-router'
@@ -78,7 +78,10 @@
     {:else}
       <h5 />
     {/if}
-    <Label label="Full Name">
+    <Label
+      label="Full Name"
+      error={$userStore.profileRemediations[UserProfileFieldTypes.LEGAL_NAME]}
+    >
       <Input
         inputmode="text"
         autocapitalize="true"
@@ -96,7 +99,12 @@
         }}
       />
     </Label>
-    <Label label="Birthdate">
+    <Label
+      label="Birthdate"
+      error={$userStore.profileRemediations[
+        UserProfileFieldTypes.DATE_OF_BIRTH
+      ]}
+    >
       <Input
         inputmode="text"
         autocapitalize="true"
@@ -112,7 +120,12 @@
         }}
       />
     </Label>
-    <Label label="Social Security Number">
+    <Label
+      label="Social Security Number"
+      error={$userStore.profileRemediations[
+        UserProfileFieldTypes.US_GOVT_DOCUMENT
+      ]}
+    >
       <Input
         inputmode="text"
         autocapitalize="true"
