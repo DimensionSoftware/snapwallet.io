@@ -186,6 +186,7 @@
       </div>
       <div style="display:flex;flex-direction:column;height:5rem;">
         <Label label="Amount">
+          <span class="dst-currency">$</span>
           <Input
             id="amount"
             pattern={`[\\d,\\.]+`}
@@ -293,6 +294,16 @@
     display: flex;
     flex-direction: column;
     height: 5rem;
+  }
+  .dst-currency {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 5;
+    font-size: .8rem;
+  }
+  :global(#amount) {
+    text-indent: 1.55rem;
   }
 
   .vertical-stepper {
