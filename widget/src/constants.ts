@@ -46,6 +46,7 @@ export const supportedCurrencyPairs = {
 
 export const JWT_REFRESH_TOKEN_KEY = '__SNAP_REFRESH'
 export const JWT_ACCESS_TOKEN_KEY = '__SNAP_ACCESS'
+export const CACHED_PRIMARY_PAYMENT_METHOD_KEY = '__SNAP_PRIMARY_PM_ID'
 
 export enum Routes {
   ROOT = '/',
