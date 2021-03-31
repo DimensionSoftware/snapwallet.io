@@ -271,13 +271,7 @@
   <ModalFooter>
     <Button isLoading={isCreatingTxnPreview} on:click={handleNextStep}>
       <div style="display:flex;justify-content:center;align-items:center;">
-        <span style="margin-right:0.75rem;">
-          {#if isCreatingTxnPreview}
-            Checking Out
-          {:else}
-            Checkout
-          {/if}
-        </span>
+        <span style="margin-right:0.75rem;">Checkout</span>
         <FaIcon data={faLock} />
       </div>
     </Button>
