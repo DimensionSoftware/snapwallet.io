@@ -38,6 +38,7 @@ type UserStoreState = {
   isLoggedIn: boolean
   virtual: VirtualProfile
   isProfileComplete: boolean
+  profileRemediations: { [k: string]: string }
 }
 
 const initialAddress = {
@@ -70,13 +71,17 @@ function createStore() {
         address: initialAddress,
       },
       isProfileComplete: false,
+      profileRemediations: {},
     },
     { subscribe, update } = writable<UserStoreState>(defaultUser)
 
   return {
     subscribe,
     fetchUserProfile: async () => {
-      const { profile: userProfile } = await window.API.fluxViewerProfileData()
+      const {
+        profile: userProfile,
+        remediations = [],
+      } = await window.API.fluxViewerProfileData()
       const virtual: VirtualProfile = {}
       userProfile.forEach(item => {
         if (item.kind === UserProfileFieldTypes.LEGAL_NAME) {
@@ -108,7 +113,17 @@ function createStore() {
         virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
       )
 
-      update(s => ({ ...s, virtual, isProfileComplete }))
+      let profileRemediations = {}
+      remediations.forEach(r => {
+        profileRemediations[r.kind] = r.note
+      })
+
+      update(s => ({
+        ...s,
+        virtual,
+        isProfileComplete,
+        profileRemediations,
+      }))
     },
     setVirtual: (virtual: VirtualProfile) => {
       update(s => ({ ...s, virtual }))
