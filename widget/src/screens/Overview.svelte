@@ -72,7 +72,7 @@
     <ModalHeader>{screenTitle}</ModalHeader>
     <div class="checkout-item-box">
       <div class="checkout-item-icon">
-        <Icon height="75" width="75" size="75" />
+        <Icon size="75" />
       </div>
       <div class="checkout-item-name">
         {dropEndingZeros(cryptoAmount.toFixed(cryptoPrecision))}
@@ -182,7 +182,7 @@
   .line-items {
     width: 90%;
     align-self: center;
-    margin-top: 1rem;
+    margin-top: 4rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
