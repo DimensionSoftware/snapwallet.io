@@ -33,6 +33,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import VStep from '../components/VStep.svelte'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
+  import { toaster } from '../stores/ToastStore'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
@@ -71,7 +72,16 @@
   }
 
   const handleNextStep = async () => {
-    const { sourceAmount } = $transactionStore
+    const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore
+    if (
+      selectedSourcePaymentMethod &&
+      selectedSourcePaymentMethod?.status !== 'ACTIVE'
+    ) {
+      return toaster.pop({
+        msg: 'Please select an active payment method.',
+        error: true,
+      })
+    }
 
     // guards
     if (!sourceAmount || !isValidNumber(sourceAmount))
