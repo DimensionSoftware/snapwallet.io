@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { push } from 'svelte-spa-router'
+  import { Routes } from '../constants'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
@@ -13,6 +15,12 @@
   $: ({ sourceCurrency, destCurrency: destinationCurrency } = wyrePreview)
   $: isBuy = intent === TransactionIntents.BUY
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
+
+  const done = () => {
+    ParentMessenger.exit()
+    // if within a model, let that close first
+    setTimeout(() => push(Routes.ROOT), 250)
+  }
 </script>
 
 <ModalContent>
@@ -59,7 +67,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={ParentMessenger.exit}>Done</Button>
+    <Button on:click={done}>Done</Button>
   </ModalFooter>
 </ModalContent>
 
