@@ -57,11 +57,13 @@ export enum Routes {
   PROFILE_VERIFY_SMS = '/profile-verify-sms',
   PROFILE = '/profile',
   PROFILE_STATUS = '/profile-status',
+  PROFILE_UPDATE = '/profile-update',
   SEND_OTP = '/send-otp',
   VERIFY_OTP = '/verify-otp',
   PLAID_LINK = '/link-bank',
   CHECKOUT_OVERVIEW = '/checkout-overview',
   ADDRESS = '/address',
+  ADDRESS_UPDATE = '/address-update',
   FILE_UPLOAD = '/file-upload',
   SUCCESS = '/success',
 }
