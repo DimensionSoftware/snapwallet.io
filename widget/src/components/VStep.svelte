@@ -20,6 +20,7 @@
 
 <style lang="scss">
   @import '../styles/_vars.scss';
+  @import '../styles/animations.scss';
   li {
     position: relative;
     padding-left: 1.25rem;
@@ -41,12 +42,12 @@
       position: absolute;
       left: -4px;
       z-index: 1;
-      top: 3px;
+      top: 4px;
     }
     div {
       display: inline-block;
     }
-    // marker
+    // marker dot
     .default-icon:before {
       content: '';
       border: 4px solid $textColor4;
@@ -86,6 +87,7 @@
       :global(.total-container) {
         font-weight: bold;
       }
+      // connecting line
       &:after {
         background-color: var(--theme-success-color);
         background: linear-gradient(
@@ -95,6 +97,7 @@
         );
         width: 2px;
       }
+      // hide the dot
       :global(span:before) {
         display: none;
         border-color: var(--theme-success-color) !important;

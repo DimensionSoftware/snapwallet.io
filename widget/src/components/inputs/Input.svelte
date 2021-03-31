@@ -106,6 +106,7 @@
       &:valid {
         border-bottom: 1px solid lighten($themeColor, 25%);
       }
+      // .bg is the input surround
       ~ .bg {
         position: absolute;
         content: '';
@@ -114,7 +115,6 @@
         left: -1px;
         right: -1px;
         border-radius: 0.9em;
-        background: linear-gradient(transparent, var(--theme-color));
         opacity: 0;
         transform: scale(0);
         transition: opacity 0.5s ease-out, left 0s ease-out 0.51s,
@@ -143,6 +143,7 @@
       &:required {
         box-shadow: none;
       }
+      // .fx is the subtle bottom line
       & + .fx {
         position: absolute;
         left: 0;
@@ -167,7 +168,7 @@
         right: -5px;
         bottom: -4px;
         background: $themeColor;
-        opacity: 0.075;
+        opacity: 0.125;
         transform: scale(1);
         transition: none;
       }
