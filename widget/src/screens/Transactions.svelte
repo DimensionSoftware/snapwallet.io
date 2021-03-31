@@ -17,6 +17,7 @@
   $: transfers = []
   $: csvURI = ''
   $: loading = true
+  let csvElement: HTMLElement
 
   onMount(async () => {
     // TODO move transfers into store?
@@ -30,20 +31,18 @@
   })
 </script>
 
-<ModalContent fillHeight>
+<ModalContent>
   <ModalBody>
     <ModalHeader>Transactions</ModalHeader>
     {#if transfers?.length > 0}
       <a
+        hidden
+        bind:this={csvElement}
         class="csv-link"
         href={csvURI}
-        title="Download a CSV"
         download={`snap_txn_history_${new Date().toISOString()}.csv`}
-        target="_blank"
+        target="_blank"><span /></a
       >
-        <FaIcon data={faFileDownload} />
-        <span>Download Transactions</span>
-      </a>
       <div class="line-items">
         {#each transfers as transfer, i}
           <div
@@ -74,6 +73,16 @@
       </a>
     {/if}
   </ModalBody>
+  <ModalFooter>
+    <Button on:click={() => csvElement?.click()}>
+      <div style="display:flex;justify-content:center;align-items:center;">
+        Download
+        <div style="display:flex;justify-content:center;margin-left:0.5rem;">
+          <FaIcon data={faFileDownload} />
+        </div>
+      </div>
+    </Button>
+  </ModalFooter>
 </ModalContent>
 
 <style lang="scss">
@@ -124,7 +133,7 @@
   .line-items {
     width: 100%;
     align-self: center;
-    margin-top: 1rem;
+    margin-top: 0.5rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
