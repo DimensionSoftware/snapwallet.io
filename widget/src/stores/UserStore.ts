@@ -137,6 +137,15 @@ function createStore() {
     clearAddress: () => {
       update(s => ({ ...s, address: { ...initialAddress } }))
     },
+    clearProfile: () => {
+      update(s => ({
+        ...s,
+        firstName: '',
+        lastName: '',
+        socialSecurityNumber: '',
+        birthDate: '',
+      }))
+    },
     setIsLoggedIn: (isLoggedIn: boolean) => {
       update(s => (isLoggedIn ? { ...s, isLoggedIn } : defaultUser))
     },

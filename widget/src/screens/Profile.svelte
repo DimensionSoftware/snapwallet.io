@@ -54,7 +54,10 @@
         // TODO: capture fullname somewhere for full accuracy? or reprocessing later?
         ...(firstName && lastName && { legalName: `${firstName} ${lastName}` }),
       })
-      setTimeout(() => push(Routes.ADDRESS), 1000)
+      setTimeout(() => {
+        userStore.clearProfile()
+        push(Routes.ADDRESS)
+      }, 1000)
     } finally {
       setTimeout(() => (isSaving = false), 1000)
     }
