@@ -1,17 +1,8 @@
 import nodeDebug from 'debug'
 import * as Icons from './icons'
-import { JWT_ACCESS_TOKEN_KEY, JWT_REFRESH_TOKEN_KEY } from '../constants'
+import { CACHED_PRIMARY_PAYMENT_METHOD_KEY } from '../constants'
 
 export const CryptoIcons = Icons
-
-import {
-  FluxApi,
-  createConfiguration,
-  ServerConfiguration,
-  SecurityAuthentication,
-  RequestContext,
-} from 'api-client'
-import { FluxBearerAuthentication } from '../auth'
 
 // pure fns
 // ---------
@@ -110,3 +101,20 @@ export const dropEndingZeros = (str: string): string => {
 export const capitalize = (s: string) => s[0].toUpperCase() + s.substr(1)
 
 export const isEmbedded = window.location.search.indexOf('config=') !== -1
+
+export const cachePrimaryPaymentMethodID = (pmId: string) => {
+  try {
+    window.localStorage.setItem(CACHED_PRIMARY_PAYMENT_METHOD_KEY, pmId)
+  } catch (e) {
+    Logger.warn('Could not cache pm id', e)
+  }
+}
+
+export const getPrimaryPaymentMethodID = (): string => {
+  try {
+    return window.localStorage.getItem(CACHED_PRIMARY_PAYMENT_METHOD_KEY)
+  } catch (e) {
+    Logger.warn('Could not get cached pm id', e)
+    return ''
+  }
+}
