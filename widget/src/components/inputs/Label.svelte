@@ -1,12 +1,18 @@
 <script lang="ts">
   export let hidden: boolean = false
   export let label: string = ''
+  export let error: string = ''
 </script>
 
 {#if !hidden}
   <label class={$$props.class} style={$$props.style}>
     <span class="input-label">{label}</span>
     <slot />
+    <div class="error-help">
+      {#if error}
+        {error}
+      {/if}
+    </div>
   </label>
 {/if}
 
@@ -33,5 +39,10 @@
   }
   :global(label .input-container > input) {
     padding-top: 1.5em !important;
+  }
+  .error-help {
+    color: var(--theme-error-color) !important;
+    font-size: 0.5rem;
+    padding: 0.4em;
   }
 </style>
