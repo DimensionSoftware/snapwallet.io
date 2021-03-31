@@ -1,9 +1,14 @@
 <script lang="ts">
   import { isEmbedded } from '../util'
   export let animation: string = 'left'
+  export let fillHeight: boolean = false
 </script>
 
-<div class="modal-content {animation}" style={`bottom: ${isEmbedded ? '5.5em' : '4.5em'}`}>
+<div
+  class="modal-content {animation}"
+  class:fillHeight
+  style={`bottom: ${isEmbedded ? '5.5em' : '4.5em'}`}
+>
   <slot />
 </div>
 
@@ -37,5 +42,8 @@
     top: 1em;
     left: 1em;
     right: 1em;
+  }
+  .fillHeight {
+    height: 94%;
   }
 </style>

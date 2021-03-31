@@ -16,20 +16,21 @@
 
   $: transfers = []
   $: csvURI = ''
+  $: loading = true
 
   onMount(async () => {
     // TODO move transfers into store?
-    const res = await window.API.fluxWyreGetTransfers()
-    transfers = res.transfers
+    try {
+      const res = await window.API.fluxWyreGetTransfers()
+      transfers = res.transfers
+    } finally {
+      setTimeout(() => (loading = false), 1000)
+    }
     csvURI = transactionsAsDataURI(transfers)
   })
-
-  const close = () => {
-    pop()
-  }
 </script>
 
-<ModalContent>
+<ModalContent fillHeight>
   <ModalBody>
     <ModalHeader>Transactions</ModalHeader>
     {#if transfers?.length > 0}
@@ -65,15 +66,14 @@
           </div>
         </div>
       </div>
+    {:else if loading}
+      <h4 style="text-align: center;">Getting Your Transactions...</h4>
     {:else}
       <a on:click={_ => push(Routes.ROOT)}>
         <h4 style="text-align: center;">Start Your First Transaction</h4>
       </a>
     {/if}
   </ModalBody>
-  <ModalFooter>
-    <Button on:click={close}>Back</Button>
-  </ModalFooter>
 </ModalContent>
 
 <style lang="scss">
