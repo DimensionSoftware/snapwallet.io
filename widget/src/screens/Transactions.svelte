@@ -17,7 +17,12 @@
   $: transfers = []
   $: csvURI = ''
   $: loading = true
+  $: csvFileName = getFileName()
   let csvElement: HTMLElement
+
+  const getFileName = () => {
+    return `snap_txn_history_${new Date().toISOString()}.csv`
+  }
 
   onMount(async () => {
     // TODO move transfers into store?
@@ -40,7 +45,7 @@
         bind:this={csvElement}
         class="csv-link"
         href={csvURI}
-        download={`snap_txn_history_${new Date().toISOString()}.csv`}
+        download={csvFileName}
         target="_blank"><span /></a
       >
       <div class="line-items">
@@ -75,7 +80,12 @@
   </ModalBody>
   <ModalFooter>
     {#if transfers?.length}
-      <Button on:click={() => csvElement?.click()}>
+      <Button
+        on:click={() => {
+          csvFileName = getFileName()
+          csvElement?.click()
+        }}
+      >
         <div style="display:flex;justify-content:center;align-items:center;">
           Download
           <div style="display:flex;justify-content:center;margin-left:0.5rem;">
