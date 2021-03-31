@@ -103,7 +103,7 @@
   <nav>
     <a on:click={_ => go(Routes.ROOT)}>Buy Crypto Assets</a>
     <a class="hr" on:click={_ => go(Routes.TRANSACTIONS)}>My Transactions</a>
-    <a on:click={_ => go(Routes.PROFILE)}>My Profile</a>
+    <a on:click={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
     {#if isLoggedIn}
       <a class="hr" on:click={logout}>Logout</a>
     {:else}
