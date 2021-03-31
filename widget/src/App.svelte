@@ -33,6 +33,7 @@
   import Success from './screens/Success.svelte'
   import { transactionStore } from './stores/TransactionStore'
   import { paymentMethodStore } from './stores/PaymentMethodStore'
+  import ProfileStatus from './screens/ProfileStatus.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -121,6 +122,9 @@
     }),
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),
+    }),
+    [Routes.PROFILE_STATUS]: wrap({
+      ...authedRouteOptions(ProfileStatus),
     }),
     [Routes.TRANSACTIONS]: wrap({
       ...authedRouteOptions(Transactions),

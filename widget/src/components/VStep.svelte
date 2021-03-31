@@ -16,6 +16,7 @@
   <div class="step">
     <slot name="step" />
   </div>
+  <slot name="info" />
 </li>
 
 <style lang="scss">

@@ -56,6 +56,7 @@ export enum Routes {
   PROFILE_SEND_SMS = '/profile-send-sms',
   PROFILE_VERIFY_SMS = '/profile-verify-sms',
   PROFILE = '/profile',
+  PROFILE_STATUS = '/profile-status',
   SEND_OTP = '/send-otp',
   VERIFY_OTP = '/verify-otp',
   PLAID_LINK = '/link-bank',
