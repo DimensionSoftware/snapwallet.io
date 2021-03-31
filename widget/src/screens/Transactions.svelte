@@ -145,6 +145,7 @@
     justify-content: flex-start;
     overflow: hidden;
     overflow-y: scroll;
+    scrollbar-width: thin;
     & > .line-item {
       display: flex;
       justify-content: space-between;
