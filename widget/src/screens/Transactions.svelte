@@ -40,6 +40,14 @@
   <ModalBody>
     <ModalHeader>Transactions</ModalHeader>
     {#if transfers?.length > 0}
+      <a
+        hidden
+        bind:this={csvElement}
+        class="csv-link"
+        href={csvURI}
+        download={csvFileName}
+        target="_blank"
+      />
       <div class="line-items">
         {#each transfers as transfer, i}
           <div
