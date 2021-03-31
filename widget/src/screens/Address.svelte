@@ -9,7 +9,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { Logger, onEnterPressed } from '../util'
-  import { Routes } from '../constants'
+  import { Routes, UserProfileFieldTypes } from '../constants'
   import type { Address } from 'api-client'
   import { transactionStore } from '../stores/TransactionStore'
   import { onMount } from 'svelte'
@@ -136,7 +136,10 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Where do you live?</ModalHeader>
-    <Label label="Street 1">
+    <Label
+      label="Street 1"
+      error={$userStore.profileRemediations[UserProfileFieldTypes.FULL_ADDRESS]}
+    >
       <Input
         id="autocomplete"
         defaultValue={$userStore.address.street1}
