@@ -76,6 +76,13 @@ export const authedRouteOptions = (component: any) => ({
   component,
 })
 
+export const formatDate = (apiDate: string) => {
+  console.log('date', apiDate)
+  const options = { year: 'numeric', month: 'numeric', day: 'numeric' },
+    date = new Date(Date.parse(apiDate))
+  return date.toLocaleDateString(date.getTimezoneOffset(), options)
+}
+
 export const formatLocaleCurrency = (ticker: string, amount: number) => {
   amount = isValidNumber(amount) ? amount : 0
   const locale =
