@@ -11,7 +11,12 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import { onMount } from 'svelte'
-  import { focusFirstInput, isValidNumber, onEnterPressed } from '../util'
+  import {
+    focusFirstInput,
+    getPrimaryPaymentMethodID,
+    isValidNumber,
+    onEnterPressed,
+  } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
   import {
@@ -27,6 +32,7 @@
   import CryptoSelector from '../components/selectors/CryptoSelector.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import VStep from '../components/VStep.svelte'
+  import { paymentMethodStore } from '../stores/PaymentMethodStore'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
@@ -130,6 +136,18 @@
       setTimeout(() => (isLoadingPrices = false), 250)
     }
   }
+
+  // Select last used pm when request completes.
+  paymentMethodStore.subscribe(({ wyrePaymentMethods }) => {
+    const primaryPaymentMethodID = getPrimaryPaymentMethodID()
+    if (!primaryPaymentMethodID) return
+    const primaryPaymentMethod = wyrePaymentMethods.find(
+      pm => pm.id === primaryPaymentMethodID,
+    )
+    if (primaryPaymentMethod) {
+      transactionStore.setSelectedSourcePaymentMethod(primaryPaymentMethod)
+    }
+  })
 
   onMount(() => {
     getInitialPrices()
