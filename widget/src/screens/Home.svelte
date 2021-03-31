@@ -38,6 +38,7 @@
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
+  let isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
 
   $: ({
     sourceCurrency,
@@ -84,10 +85,13 @@
     }
 
     // guards
-    if (!sourceAmount || !isValidNumber(sourceAmount))
-      return document.querySelector('input')?.focus()
-    if (!$transactionStore.selectedSourcePaymentMethod)
-      throw new Error('Select a Payment Method:')
+    if (!sourceAmount || !isValidNumber(sourceAmount)) {
+      document.querySelector('input')?.focus()
+      throw new Error('Input an Amount in USD')
+    }
+    // if they're not logged in, forward them instead to login
+    if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod)
+      throw new Error('Select a Payment Method')
 
     if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
       try {
@@ -115,7 +119,7 @@
   // Find the next path based on user data
   const getNextPath = async () => {
     // TODO: move this request somewhere sane
-    if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
+    if (isLoggedIn) {
       const { flags = {}, user = {} } = await window.API.fluxViewerData()
       userStore.setFlags({
         ...flags,
