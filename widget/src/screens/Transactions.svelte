@@ -1,22 +1,24 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { fly } from 'svelte/transition'
+  import { pop, push } from 'svelte-spa-router'
+  import FaIcon from 'svelte-awesome'
+  import { faFileDownload } from '@fortawesome/free-solid-svg-icons'
+  import { formatLocaleCurrency } from '../util'
+  import { Routes } from '../constants'
+  import { transactionsAsDataURI } from '../util/transactions'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
-  import { transactionStore } from '../stores/TransactionStore'
-  import { formatLocaleCurrency } from '../util'
-  import type { WyreTransfer, WyreTransfers } from 'api-client'
-  import { pop } from 'svelte-spa-router'
-  import { transactionsAsDataURI } from '../util/transactions'
-  import FaIcon from 'svelte-awesome'
-  import { faFileDownload } from '@fortawesome/free-solid-svg-icons'
+  import TransactionCard from '../components/cards/TransactionCard.svelte'
 
   $: transfers = []
   $: csvURI = ''
 
   onMount(async () => {
+    // TODO move transfers into store?
     const res = await window.API.fluxWyreGetTransfers()
     transfers = res.transfers
     csvURI = transactionsAsDataURI(transfers)
@@ -30,33 +32,44 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Transactions</ModalHeader>
-    <a
-      href={csvURI}
-      download={`snap_txn_history_${new Date().toISOString()}.csv`}
-      target="_blank"
-    >
-      <FaIcon data={faFileDownload} />
-    </a>
-    <div class="line-items">
-      <ol>
+    {#if transfers?.length > 0}
+      <a
+        class="csv-link"
+        href={csvURI}
+        title="Download a CSV"
+        download={`snap_txn_history_${new Date().toISOString()}.csv`}
+        target="_blank"
+      >
+        <FaIcon data={faFileDownload} />
+        <span>Download Transactions</span>
+      </a>
+      <div class="line-items">
         {#each transfers as transfer, i}
-          <li>
-            <span>{transfer.createdAt}</span>
-            <span>{transfer.sourceCurrency}</span>
-            <span>{transfer.destCurrency}</span>
-            <span>{transfer.destAmount}</span>
-            <span>{transfer.status}</span>
-          </li>
+          <div
+            style="margin-bottom: 1rem;"
+            in:fly={{ y: 25, duration: 50 * i }}
+          >
+            <TransactionCard transaction={transfer} />
+          </div>
         {/each}
-      </ol>
-      <div class="line dashed" />
-      <div class="line-item">
-        <div><b>Total</b></div>
-        <div>
-          <!-- {formatLocaleCurrency(fiatTicker, total)} -->
+        <div class="line dashed" />
+        <div class="total">
+          <b>Total</b>
+          <div>
+            {formatLocaleCurrency(
+              transfers[0].sourceCurrency,
+              transfers.reduce((prev, cur) => {
+                return prev + cur.sourceAmount
+              }, 0),
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    {:else}
+      <a on:click={_ => push(Routes.ROOT)}>
+        <h4 style="text-align: center;">Start Your First Transaction</h4>
+      </a>
+    {/if}
   </ModalBody>
   <ModalFooter>
     <Button on:click={close}>Back</Button>
@@ -66,7 +79,15 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
-
+  .csv-link {
+    display: flex;
+    align-items: center;
+    margin: 0 0 0 0.3rem;
+    text-decoration: none;
+    :global(svg) {
+      margin-right: 0.5rem;
+    }
+  }
   .checkout-item-box {
     width: 100%;
     display: flex;
@@ -84,6 +105,11 @@
     }
   }
 
+  .total {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 2rem;
+  }
   .line {
     height: 1px;
     max-height: 1px;
@@ -96,12 +122,14 @@
   }
 
   .line-items {
-    width: 90%;
+    width: 100%;
     align-self: center;
     margin-top: 1rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    overflow: hidden;
+    overflow-y: scroll;
     & > .line-item {
       display: flex;
       justify-content: space-between;
