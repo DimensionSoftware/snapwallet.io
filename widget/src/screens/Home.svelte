@@ -206,7 +206,7 @@
       <ul class="vertical-stepper">
         {#if flags?.hasWyreAccount}
           <VStep success>
-            <span name="icon">
+            <span slot="icon">
               <FaIcon data={faCheck} />
             </span>
             <b slot="step">Verify Identity</b>
@@ -226,11 +226,16 @@
         {/if}
         <VStep
           disabled={!flags?.hasWyreAccount}
+          success={$transactionStore.selectedSourcePaymentMethod}
           onClick={() =>
             flags?.hasWyreAccount && (paymentSelectorVisible = true)}
         >
           <span slot="icon">
-            <FaIcon data={faUniversity} />
+            <FaIcon
+              data={!$transactionStore.selectedSourcePaymentMethod
+                ? faUniversity
+                : faCheck}
+            />
           </span>
           <b slot="step">
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
@@ -243,7 +248,15 @@
             {/if}
           </b>
         </VStep>
-        <VStep>
+        <VStep success={!!$transactionStore.sourceAmount}>
+          <span
+            class:default-icon={!$transactionStore.sourceAmount}
+            slot="icon"
+          >
+            {#if $transactionStore.sourceAmount}
+              <FaIcon data={faCheck} />
+            {/if}
+          </span>
           <b slot="step">
             <TotalContainer />
           </b>
@@ -300,7 +313,7 @@
     left: 1rem;
     bottom: 1rem;
     z-index: 5;
-    font-size: .8rem;
+    font-size: 0.8rem;
   }
   :global(#amount) {
     text-indent: 1.55rem;

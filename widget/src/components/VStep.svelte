@@ -26,15 +26,15 @@
     margin-left: 1rem;
     margin-top: 0.75rem;
     // icon surround
-    :global(span):before {
+    :global(span.default-icon):before {
       position: absolute;
       content: '';
-      background: darken($modalBackground, 3%);
+      background: var(--theme-text-color);
       border-radius: 50%;
-      height: 30px;
-      width: 30px;
-      left: -11px;
-      top: -4px;
+      height: 8px;
+      width: 8px;
+      left: 0;
+      top: 8px;
       z-index: 1;
     }
     > :global(span > svg) {
@@ -67,13 +67,13 @@
     }
     &:after {
       position: absolute;
-      width: 1px;
+      width: 2px;
       left: 4px;
       top: -1.25rem;
       opacity: 0.3;
       height: 120%;
       content: '';
-      background-color: $textColor4;
+      background-color: var(--theme-text-color-4);
       background-position: 0 0;
       background-size: 200% 200%;
       border-color: inherit;
@@ -83,8 +83,21 @@
     &.success {
       display: flex;
       align-items: center;
+      :global(.total-container) {
+        font-weight: bold;
+      }
+      &:after {
+        background-color: var(--theme-success-color);
+        background: linear-gradient(
+          to bottom,
+          var(--theme-text-color-4),
+          var(--theme-success-color)
+        );
+        width: 2px;
+      }
       :global(span:before) {
-        border-color: var(--theme-success-color)!important;
+        display: none;
+        border-color: var(--theme-success-color) !important;
         background: var(--theme-success-color);
       }
       & > :global(.icon) {
