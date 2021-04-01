@@ -163,7 +163,7 @@
     }}
     headerTitle="Select a Document Type"
   >
-    <div>
+    <div style="padding:0 1.5rem;">
       <div style="margin-bottom:1rem;margin-top:1rem;">
         <IconCard
           icon={faPassport}
