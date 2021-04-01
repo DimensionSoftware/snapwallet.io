@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { WyreTransfer } from 'api-client'
   import { formatDate, capitalize, formatLocaleCurrency } from '../../util'
+  import Badge from '../Badge.svelte'
   export let transaction: WyreTransfer
 
   const status = transaction.status.toLowerCase(),
@@ -25,14 +26,13 @@
   </div>
 </div>
 {#if badgeText}
-  <div
-    class="badge"
-    class:error={badgeType === 'error'}
-    class:success={badgeType === 'success'}
-    class:warning={badgeType === 'pending'}
+  <Badge
+    error={badgeType === 'error'}
+    success={badgeType === 'success'}
+    warning={badgeType === 'pending'}
   >
     {badgeText}
-  </div>
+  </Badge>
 {/if}
 
 <style lang="scss">
@@ -61,30 +61,6 @@
       &.right {
         text-align: right;
       }
-    }
-  }
-
-  .badge {
-    border-radius: 0.5rem;
-    padding: 0 0.5rem;
-    font-size: 0.75rem;
-    float: left;
-    &.success {
-      color: var(--theme-text-color);
-      border: 1px solid var(--theme-success-color);
-      background-color: var(--theme-success-color);
-    }
-
-    &.warning {
-      color: var(--theme-text-color);
-      border: 1px solid var(--theme-warning-color);
-      background-color: var(--theme-warning-color);
-    }
-
-    &.error {
-      color: var(--theme-text-color);
-      border: 1px solid var(--theme-error-color);
-      background-color: var(--theme-error-color);
     }
   }
 </style>
