@@ -29,7 +29,7 @@
         </span>
         <b slot="step">Personal</b>
         <div class="description help" slot="info">
-          Personal information used for verification purposes.
+          Personal information used for identity verification.
         </div>
       </VStep>
       <VStep onClick={() => push(Routes.ADDRESS_UPDATE)}>
@@ -38,7 +38,8 @@
         </span>
         <b slot="step"> Address </b>
         <div class="description help" slot="info">
-          Up to date residential address information used for verification.
+          Up to date residential address information used for identity
+          verification.
         </div>
       </VStep>
       <VStep onClick={() => push(Routes.PROFILE_SEND_SMS)}>
