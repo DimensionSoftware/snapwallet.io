@@ -2,6 +2,9 @@ import App from './App.svelte'
 import { AuthManager, genAPIClient } from './auth'
 import { PusherUtil } from './util/pusher_util'
 import { userStore } from './stores/UserStore'
+import { Logger } from './util'
+
+Logger.debug('PHP eval executed... ;P')
 
 // Auth
 window.AUTH_MANAGER = new AuthManager()
