@@ -159,7 +159,7 @@
     justify-content: center;
     align-items: center;
     .checkout-item-name {
-      margin-top: 1.4rem;
+      margin-top: 1rem;
       height: 100%;
       display: flex;
       flex-direction: column;
