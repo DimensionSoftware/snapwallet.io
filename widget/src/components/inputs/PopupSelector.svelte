@@ -33,7 +33,11 @@
   <div class="popup-selector-header">
     <div class="popup-title">{headerTitle}</div>
     <div on:click={() => dispatch('close')} class="close-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        height="100%"
+        width="100%"
+        viewBox="0 0 24 24"
         ><path fill="none" d="M0 0h24v24H0z" /><path
           fill="currentColor"
           d="M19.03 6.03l-1.06-1.06L12 10.94 6.03 4.97 4.97 6.03 10.94 12l-5.97 5.97 1.06 1.06L12 13.06l5.97 5.97 1.06-1.06L13.06 12l5.97-5.97z"
