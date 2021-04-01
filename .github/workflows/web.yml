@@ -32,4 +32,4 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           API_BASE_URL: https://api.snapwallet.io
           WIDGET_URL: https://snapwallet.io/widget
-          DEBUG: 'flux:*'
+          DEBUG: 'flux:error,flux:warn,flux:info'
