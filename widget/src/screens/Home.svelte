@@ -178,9 +178,7 @@
 
 <ModalContent animation="right">
   <ModalBody>
-    <ModalHeader hideBackButton>
-      Buy {destinationCurrency.name}
-    </ModalHeader>
+    <ModalHeader hideBackButton>Checkout</ModalHeader>
     <div class="cryptocurrencies-container">
       <div class="dst-container">
         <Label>
@@ -273,7 +271,9 @@
   <ModalFooter>
     <Button isLoading={isCreatingTxnPreview} on:click={handleNextStep}>
       <div style="display:flex;justify-content:center;align-items:center;">
-        <span style="margin-right:0.75rem;">Checkout</span>
+        <span style="margin-right:0.75rem;">
+          {isCreatingTxnPreview ? 'Previewing' : 'Preview'}
+        </span>
         <FaIcon data={faLock} />
       </div>
     </Button>
