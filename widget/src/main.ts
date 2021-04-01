@@ -30,6 +30,14 @@ const app = new App({
       // color: '#7f8c8d',
       // colorDarkened: '#2c3e50',
       // colorLightened: '#95a5a6',
+      // Coinbase theme
+      // modalBackground: '#070F15',
+      // color: '#2187FF',
+      // textColor: '#fff',
+      // colorInverse: '#263543',
+      // warningColor: '#FFBD4A',
+      // successColor: '#83E068',
+      // errorColor: '#E7693C',
     },
   },
 })
