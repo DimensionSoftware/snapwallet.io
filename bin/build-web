@@ -17,7 +17,9 @@ pushd init
 npm i
 npm run build
 popd
-mv init/dist web_dist/widget/dist
+mkdir -p web_dist/widget/dist
+mv init/dist/index.js web_dist/widget/dist/bundle.js
+mv init/dist/index.d.ts web_dist/widget/dist/bundle.d.ts
 
 pushd docs
 npm i
