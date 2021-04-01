@@ -71,8 +71,8 @@
   <ModalBody>
     <ModalHeader>{screenTitle}</ModalHeader>
     <div class="checkout-item-box">
-      <div class="checkout-item-icon">
-        <Icon size="75" />
+      <div style="width:30%;" class="checkout-item-icon">
+        <Icon size="100%" height="100%" width="100%" viewBox="-4 -4 40 40" />
       </div>
       <div class="checkout-item-name">
         {dropEndingZeros(cryptoAmount.toFixed(cryptoPrecision))}
@@ -182,7 +182,7 @@
   .line-items {
     width: 90%;
     align-self: center;
-    margin-top: 4rem;
+    margin-top: 2.5rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
