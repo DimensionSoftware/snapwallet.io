@@ -30,7 +30,9 @@
         {badgeText}
       </Badge>
     {/if}
-    <FaIcon data={faChevronRight} />
+    <div class="chevron-right">
+      <FaIcon height="1rem" width="1rem" data={faChevronRight} />
+    </div>
   </div>
 </Card>
 
@@ -69,6 +71,12 @@
         }
       }
     } */
+  }
+
+  .chevron-right {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
   }
 
   :global(.icon-card-badge) {
