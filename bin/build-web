@@ -3,16 +3,19 @@
 rm -rf web_dist
 mkdir -p web_dist
 
+# programmable widget api
 pushd api/client
 npm i
 popd
 
+# sandbox "/widget" demo
 pushd widget
 npm i
 npm run build
 popd
 mv widget/dist web_dist/widget
 
+# production bootstrap'able bundle
 pushd init
 npm i
 npm run build
@@ -21,6 +24,15 @@ mkdir -p web_dist/widget/dist
 mv init/dist/index.js web_dist/widget/dist/bundle.js
 mv init/dist/index.d.ts web_dist/widget/dist/bundle.d.ts
 
+# snapwallet.io
+pushd web
+npm i
+npm run build
+popd
+mv web/build/assets web/build/prerendered/.
+mv web/build/prerendered/* web_dist/.
+
+# docs: api + getting started examples
 pushd docs
 npm i
 npm run build
