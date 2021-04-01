@@ -47,7 +47,7 @@
         </span>
         <b slot="step"> Contact </b>
         <div class="description help" slot="info">
-          Contact information used for verification and security.
+          Contact information used for verification, communication and security.
         </div>
       </VStep>
       <VStep onClick={() => push(Routes.FILE_UPLOAD)}>
