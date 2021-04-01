@@ -81,6 +81,7 @@
   <ModalFooter>
     {#if transfers?.length}
       <Button
+        title="Download Transactions as CSV"
         on:click={() => {
           csvFileName = getFileName()
           csvElement?.click()

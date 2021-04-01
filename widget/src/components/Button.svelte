@@ -3,9 +3,10 @@
   const dispatch = createEventDispatcher()
   export let disabled: boolean = false
   export let isLoading: boolean = false
+  export let title: string = ''
 </script>
 
-<button disabled={disabled || isLoading} class:isLoading on:click={() => dispatch('click')}>
+<button disabled={disabled || isLoading} class:isLoading on:click={() => dispatch('click')} {title}>
   <div class="lds-circle"><div /></div>
   <slot /></button
 >
