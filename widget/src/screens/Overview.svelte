@@ -12,6 +12,7 @@
   import { ParentMessenger } from '../util/parent_messenger'
   import { faLock } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
+  import { onMount } from 'svelte'
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
@@ -53,6 +54,21 @@
     }
   }
 
+  // TODO: get valid date (expiresAt)
+  let secondsUntilExpiration = 600
+
+  let formattedExpiration
+  $: {
+    const d = new Date(0)
+    d.setSeconds(secondsUntilExpiration)
+    const mins = d.getMinutes()
+    if (mins > 1) {
+      formattedExpiration = `${mins.toString()}m ${d.getSeconds().toString()}s`
+    } else {
+      formattedExpiration = `${d.getSeconds().toString()}s`
+    }
+  }
+
   const handleConfirmation = async () => {
     try {
       isConfirmingTxn = true
@@ -65,6 +81,13 @@
       isConfirmingTxn = false
     }
   }
+
+  onMount(() => {
+    const interval = setInterval(() => {
+      secondsUntilExpiration--
+    }, 1000)
+    return () => clearInterval(interval)
+  })
 </script>
 
 <ModalContent fullscreen>
@@ -127,6 +150,12 @@
         </div>
       {/if}
       <div class="line dashed" />
+      <div class="line-item muted">
+        <div>Time Remaining</div>
+        <div>
+          {formattedExpiration}
+        </div>
+      </div>
       <div class="line-item">
         <div><b>Total</b></div>
         <div>
@@ -193,7 +222,7 @@
       justify-content: space-between;
       align-items: center;
       &.muted {
-        color: --var(--theme-color-muted);
+        color: var(--theme-color-muted);
         font-weight: 300;
       }
     }
