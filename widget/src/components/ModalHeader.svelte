@@ -44,6 +44,7 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
+    color: var(--theme-text-color);
     & > .modal-header-title {
       @include flex-align-center();
       flex: 3;

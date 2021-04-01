@@ -79,7 +79,7 @@
       z-index: 2;
       margin: 0;
       color: var(--theme-textColor);
-      background-color: #fff;
+      background-color: var(--theme-color-inverse);
       outline: none;
       width: 100%;
       appearance: none;

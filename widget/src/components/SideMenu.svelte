@@ -134,6 +134,7 @@
     transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1),
       stroke-dasharray 300ms cubic-bezier(0.4, 0, 0.2, 1),
       stroke-dashoffset 300ms cubic-bezier(0.4, 0, 0.2, 1);
+    stroke: var(--theme-text-color);
   }
   path:nth-child(1) {
     transform-origin: 36% 40%;

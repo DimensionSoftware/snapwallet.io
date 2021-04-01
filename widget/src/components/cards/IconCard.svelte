@@ -79,19 +79,19 @@
     &.success {
       color: var(--theme-text-color);
       border: 1px solid var(--theme-success-color);
-      background-color: lighten($success, 35%);
+      background-color: var(--theme-success-color);
     }
 
     &.warning {
       color: var(--theme-text-color);
       border: 1px solid var(--theme-warning-color);
-      background-color: lighten($warning, 35%);
+      background-color: var(--theme-warning-color);
     }
 
     &.error {
       color: var(--theme-text-color);
       border: 1px solid var(--theme-error-color);
-      background-color: lighten($error, 35%);
+      background-color: var(--theme-error-color);
     }
   }
 </style>
