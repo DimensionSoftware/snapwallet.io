@@ -4,6 +4,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import {
+    faFolder,
     faHome,
     faIdCard,
     faMailBulk,
@@ -47,6 +48,15 @@
         <b slot="step"> Contact </b>
         <div class="description help" slot="info">
           Contact information used for verification and security.
+        </div>
+      </VStep>
+      <VStep onClick={() => push(Routes.FILE_UPLOAD)}>
+        <span slot="icon">
+          <FaIcon data={faFolder} />
+        </span>
+        <b slot="step"> Documents </b>
+        <div class="description help" slot="info">
+          Documents used for verifying your identity or residence.
         </div>
       </VStep>
     </ul>
