@@ -29,7 +29,7 @@
         </span>
         <b slot="step">Personal</b>
         <div class="description help" slot="info">
-          Personal information used for identity verification.
+          Personal identity information used for verification purposes.
         </div>
       </VStep>
       <VStep onClick={() => push(Routes.ADDRESS_UPDATE)}>
