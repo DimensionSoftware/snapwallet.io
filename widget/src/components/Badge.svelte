@@ -21,19 +21,19 @@
     float: left;
     &.success {
       color: var(--theme-text-color);
-      border: 1px solid var(--theme-success-color);
+      /* border: 1px solid var(--theme-success-color); */
       background-color: var(--theme-success-color);
     }
 
     &.warning {
       color: var(--theme-text-color);
-      border: 1px solid var(--theme-warning-color);
+      /* border: 1px solid var(--theme-warning-color); */
       background-color: var(--theme-warning-color);
     }
 
     &.error {
       color: var(--theme-text-color);
-      border: 1px solid var(--theme-error-color);
+      /* border: 1px solid var(--theme-error-color); */
       background-color: var(--theme-error-color);
     }
   }
