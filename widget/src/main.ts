@@ -34,6 +34,8 @@ const app = new App({
       // modalBackground: '#070F15',
       // color: '#2187FF',
       // textColor: '#fff',
+      // TODO: handle numbers in theme vars
+      // 'text-color-3': '#fff',
       // colorInverse: '#263543',
       // warningColor: '#FFBD4A',
       // successColor: '#83E068',
