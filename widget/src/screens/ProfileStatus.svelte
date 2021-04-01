@@ -19,7 +19,7 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader onBack={() => push(Routes.ROOT)}>Profile</ModalHeader>
-    <div style="padding-left:1rem;font-weight:bold;">
+    <div style="padding:0 0.5rem;font-weight:bold;">
       <FaIcon scale="3" data={faUserCircle} />
     </div>
     <ul class="vertical-stepper">
@@ -71,9 +71,8 @@
 
   .vertical-stepper {
     margin-top: 0.5rem;
-    margin-left: 1rem;
     list-style: none;
-    padding: 0;
+    padding: 0 0.5rem;
   }
 
   .description {
