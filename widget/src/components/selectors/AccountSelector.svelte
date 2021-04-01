@@ -61,7 +61,7 @@
   on:close={() => dispatch('close')}
 >
   <div class="scroll selector-container">
-    <h5>{copy.sectionOneTitle}</h5>
+    <h5 style="margin-bottom:1rem;">{copy.sectionOneTitle}</h5>
     <div class="card-vertical-margin">
       <IconCard
         icon={faUniversity}
@@ -69,7 +69,7 @@
         label="Bank Account"
       />
     </div>
-    <h5 style="margin-top:2rem">{copy.sectionTwoTitle}</h5>
+    <h5 style="margin-top:2rem;margin-bottom:1rem;">{copy.sectionTwoTitle}</h5>
     {#if !allPaymentMethods.length && isLoadingPaymentMethods}
       <p class="help">Retrieving Payment Methods...</p>
     {:else if !allPaymentMethods.length && !isLoadingPaymentMethods}
