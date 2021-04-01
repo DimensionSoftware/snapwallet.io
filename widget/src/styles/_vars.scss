@@ -19,7 +19,7 @@ $textColorMuted: $textColor2;
 // NOTE: avoid linear gradient for react native safeview embedding
 // - solid catch;  let's eventually make a RN theme and/or toggle
 // $modalBackground: #f0f0f0;
-$modalBackground: linear-gradient(#f0f0f0, #fff);
+$modalBackground: linear-gradient(#eee, #fff);
 $modalContainerBackgroundColor: radial-gradient(circle closest-corner at 50% 40%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.55) 100%);
 
 $shadowColor: rgba(0, 0, 0, 0.123);

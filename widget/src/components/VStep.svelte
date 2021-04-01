@@ -71,7 +71,7 @@
     &:after {
       position: absolute;
       width: 2px;
-      left: 4px;
+      left: 3px;
       top: -1.25rem;
       opacity: 0.3;
       height: 120%;
