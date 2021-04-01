@@ -40,10 +40,10 @@ export const Logger = (() => {
   } catch {
     console.warn('Unable to enable logger. Incognito?')
   }
-  const error = nodeDebug('flux:error')
-  const warn = nodeDebug('flux:warn')
-  const debug = nodeDebug('flux:debug')
-  const info = nodeDebug('flux:info')
+  const error = nodeDebug('SnapWallet:error')
+  const warn = nodeDebug('SnapWallet:warn')
+  const debug = nodeDebug('SnapWallet:debug')
+  const info = nodeDebug('SnapWallet:info')
 
   return {
     error,
