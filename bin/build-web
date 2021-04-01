@@ -14,8 +14,9 @@ popd
 mv widget/dist web_dist/widget
 
 pushd init
+export WIDGET_URL=https://snapwallet.io/widget
 npm i
-WIDGET_URL=https://snapwallet.io/widget/ npm run build
+npm run build
 popd
 mv init/dist web_dist/widget/dist
 
