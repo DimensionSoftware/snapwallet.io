@@ -228,7 +228,9 @@
       />
     {/if}
   </div>
-  <FaIcon class="lock" data={faLock} />
+  <div class="lock">
+    <FaIcon scale="3" data={faLock} />
+  </div>
 </div>
 
 <svelte:head>
@@ -352,6 +354,9 @@
       border-radius: 0;
       height: 100%;
       width: 100%;
+    }
+    .lock {
+      display: none;
     }
   }
 </style>
