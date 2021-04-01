@@ -70,7 +70,7 @@
   @import '../styles/text.scss';
 
   .vertical-stepper {
-    margin-top: 2.5rem;
+    margin-top: 0.5rem;
     margin-left: 1rem;
     list-style: none;
     padding: 0;
@@ -78,5 +78,7 @@
 
   .description {
     min-height: 60px;
+    margin-left: 0.55rem;
+    font-size: 0.85rem;
   }
 </style>

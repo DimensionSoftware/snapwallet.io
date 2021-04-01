@@ -67,7 +67,7 @@
   }
 </script>
 
-<ModalContent>
+<ModalContent fullscreen>
   <ModalBody>
     <ModalHeader>{screenTitle}</ModalHeader>
     <div class="checkout-item-box">
@@ -183,6 +183,7 @@
     width: 90%;
     align-self: center;
     margin-top: 2.5rem;
+    padding: 0 0.2rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
