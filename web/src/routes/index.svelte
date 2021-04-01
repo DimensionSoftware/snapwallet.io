@@ -3,7 +3,12 @@
 </script>
 
 <script lang="ts">
-  import Counter from '$lib/Counter.svelte'
+  const config = {
+    theme: {
+      color: 'yellow',
+      textColor: 'blue',
+    }
+  }
 </script>
 
 <main>
@@ -26,10 +31,11 @@
   </div>
   <div class="col" style="margin: 0 auto;">
     <iframe
+      title="Snap Wallet"
       frameborder="0"
       height="608px"
       width="360px"
-      src="https://snapwallet.io/widget"
+      src={`https://snapwallet.io/widget?config=${JSON.stringify(config)}`}
     />
   </div>
 </main>
