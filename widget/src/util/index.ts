@@ -77,7 +77,7 @@ export const authedRouteOptions = (component: any) => ({
 })
 
 export const formatDate = (apiDate: string) => {
-  console.log('date', apiDate)
+  Logger.debug('date', apiDate)
   const options = { year: 'numeric', month: 'numeric', day: 'numeric' },
     date = new Date(Date.parse(apiDate))
   return date.toLocaleDateString(date.getTimezoneOffset(), options)
