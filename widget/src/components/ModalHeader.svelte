@@ -2,16 +2,16 @@
   import { pop } from 'svelte-spa-router'
   import FaIcon from 'svelte-awesome'
   import { faChevronLeft } from '@fortawesome/free-solid-svg-icons'
-  import { ParentMessenger } from '../util/parent_messenger'
   import SideMenu from './SideMenu.svelte'
 
+  export let onBack: () => any = undefined
   export let hideRightAction = false
   export let hideBackButton = false
 </script>
 
 <div class="modal-header">
   <div
-    on:click={pop}
+    on:click={onBack ? onBack : pop}
     class:hidden={hideBackButton}
     class="modal-header-back-button"
   >
