@@ -52,6 +52,8 @@
     flex-direction: column;
     width: 100%;
     border-radius: 1rem;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
     z-index: 1000;
     position: absolute;
     top: 1.5rem;
