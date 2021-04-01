@@ -3,6 +3,7 @@
   import FaIcon from 'svelte-awesome'
   import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
   import { createEventDispatcher } from 'svelte'
+  import Badge from '../Badge.svelte'
   const dispatch = createEventDispatcher()
 
   export let icon
@@ -20,14 +21,14 @@
       <div class="label">{label}</div>
     </div>
     {#if badgeText}
-      <div
-        class="badge"
-        class:error={badgeType === 'error'}
-        class:success={badgeType === 'success'}
-        class:warning={badgeType === 'warning'}
+      <Badge
+        class="icon-card-badge"
+        error={badgeType === 'error'}
+        success={badgeType === 'success'}
+        warning={badgeType === 'warning'}
       >
         {badgeText}
-      </div>
+      </Badge>
     {/if}
     <FaIcon data={faChevronRight} />
   </div>
@@ -70,28 +71,8 @@
     } */
   }
 
-  .badge {
-    border-radius: 0.5rem;
-    padding: 0 0.5rem;
+  :global(.icon-card-badge) {
+    color: red;
     margin-right: 1rem;
-    font-size: 0.75rem;
-
-    &.success {
-      color: var(--theme-text-color);
-      border: 1px solid var(--theme-success-color);
-      background-color: var(--theme-success-color);
-    }
-
-    &.warning {
-      color: var(--theme-text-color);
-      border: 1px solid var(--theme-warning-color);
-      background-color: var(--theme-warning-color);
-    }
-
-    &.error {
-      color: var(--theme-text-color);
-      border: 1px solid var(--theme-error-color);
-      background-color: var(--theme-error-color);
-    }
   }
 </style>
