@@ -194,7 +194,7 @@
       flex-direction: column;
       justify-content: flex-start;
       font-weight: bold;
-      font-size: 1.3rem;
+      font-size: 1.5rem;
     }
   }
 
@@ -221,6 +221,13 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      &:first-child, &:nth-child(2) {
+        font-size: 1.1rem;
+        margin-bottom: .25rem;
+      }
+      & > div:first-child {
+        font-weight: 500;
+      }
       &.muted {
         color: var(--theme-color-muted);
         font-weight: 300;

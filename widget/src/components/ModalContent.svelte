@@ -32,7 +32,7 @@
   }
   .right {
     transform: translateX(-100%);
-    animation: slideInRight 0.2s var(--theme-ease-out-expo) forwards;
+    animation: slideInRight 0.4s var(--theme-ease-out-expo) forwards;
   }
   .left {
     animation: slideInLeft 0.25s var(--theme-ease-out-back) forwards;

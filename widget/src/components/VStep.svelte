@@ -64,6 +64,8 @@
     }
     // line
     &:first-child:after {
+      margin-top: -1rem;
+      height: 200%;
       background: linear-gradient(transparent, var(--theme-text-color-4));
     }
     &:after {
@@ -89,8 +91,8 @@
       }
       // connecting line
       &:first-child:after {
-        height: 300%;
-        top: -3rem;
+        margin-top: -1rem;
+        height: 200%;
         background: linear-gradient(transparent, var(--theme-success-color));
       }
       &:last-child:after {

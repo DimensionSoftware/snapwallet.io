@@ -51,6 +51,7 @@
       font-weight: bold;
       font-size: 1.2rem;
       text-align: center;
+      text-transform: capitalize;
     }
     & > .modal-header-right-action {
       @include flex-align-center();

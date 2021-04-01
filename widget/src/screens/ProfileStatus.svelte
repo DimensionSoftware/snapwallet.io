@@ -79,6 +79,5 @@
   .description {
     min-height: 60px;
     margin-left: 0.55rem;
-    font-size: 0.85rem;
   }
 </style>

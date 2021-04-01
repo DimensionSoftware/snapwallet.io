@@ -1,6 +1,6 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
-  import { fly } from 'svelte/transition'
+  import { fade } from 'svelte/transition'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -134,7 +134,7 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Enter Your Code</ModalHeader>
-    <div class="code" in:fly={{ y: 25, duration: 300 }}>
+    <div class="code" in:fade={{ duration: 300 }}>
       <Label label="Your Code">
         <Input
           id="code"
