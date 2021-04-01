@@ -40,7 +40,7 @@ const app = new App({
       // warningColor: '#FFBD4A',
       // successColor: '#83E068',
       // errorColor: '#E7693C',
-      ...config.theme,
+      ...config?.theme,
     },
   },
 })
