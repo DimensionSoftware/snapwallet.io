@@ -81,10 +81,7 @@
     {:else}
       <h5 />
     {/if}
-    <Label
-      label="Full Name"
-      error={$userStore.profileRemediations[UserProfileFieldTypes.LEGAL_NAME]}
-    >
+    <Label label="Full Name">
       <Input
         inputmode="text"
         autocapitalize="true"
@@ -102,12 +99,7 @@
         }}
       />
     </Label>
-    <Label
-      label="Birthdate"
-      error={$userStore.profileRemediations[
-        UserProfileFieldTypes.DATE_OF_BIRTH
-      ]}
-    >
+    <Label label="Birthdate">
       <Input
         inputmode="text"
         autocapitalize="true"
@@ -123,10 +115,7 @@
         }}
       />
     </Label>
-    <Label
-      label="Social Security Number"
-      error={$userStore.profileRemediations[UserProfileFieldTypes.US_SSN]}
-    >
+    <Label label="Social Security Number">
       <Input
         inputmode="text"
         autocapitalize="true"
