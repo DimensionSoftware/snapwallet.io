@@ -25,6 +25,8 @@ export enum TransactionIntents {
 export enum FileUploadTypes {
   US_PASSPORT = 'GI_US_PASSPORT',
   US_DRIVER_LICENSE = 'GI_US_DRIVING_LICENSE',
+  ACH_AUTHORIZATION_FORM = 'ACH_AUTHZ_FORM',
+  PROOF_OF_ADDRESS = 'PROOF_OF_ADDRESS',
 }
 
 export type RemediationGroups = {
