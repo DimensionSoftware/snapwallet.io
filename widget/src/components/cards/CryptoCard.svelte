@@ -60,11 +60,12 @@
       left: -2px;
       bottom: 0;
       border-radius: 0.5rem;
+      opacity: .5;
       background: linear-gradient(
         to right,
-        rgba($themeColor, 0.02),
-        rgba($themeColor, 0.3),
-        rgba($themeColor, 0.02)
+        transparent,
+        var(--theme-color-lightened),
+        transparent,
       );
       transform: scale(0);
       transition: transform 0.2s $easeOutExpo;
@@ -78,8 +79,9 @@
         transform: scale(1.05);
         transition: none;
         &:before {
-          background: $themeColor;
-          animation: currency 0.3s $easeOutBack, background 0s ease-out 0.3s;
+          background: var(--theme-color);
+          animation: currency 0.3s var(--theme-ease-out-back),
+            background 0s ease-out 0.3s;
           top: -1px;
           right: -1px;
           left: -1px;
@@ -93,7 +95,7 @@
     position: relative;
     height: 33px;
     left: -4px;
-    transition: 0.15s $easeOutBack 0.05s;
+    transition: 0.15s var(--theme-ease-out-back) 0.05s;
     :global(svg) {
       position: relative;
       z-index: 2;
@@ -107,7 +109,10 @@
       left: 0;
       bottom: 0;
       border-radius: 100%;
-      background: linear-gradient($themeColor, lighten($themeColor, 25%));
+      background: linear-gradient(
+        var(--theme-color),
+        var(--theme-color-lightened)
+      );
     }
   }
 

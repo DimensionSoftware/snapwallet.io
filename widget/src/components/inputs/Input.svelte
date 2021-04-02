@@ -96,14 +96,14 @@
       font-size: 1.8em;
       color: var(--theme-input-text-color);
       border: none;
-      border-bottom: 1px solid lighten($themeColor, 50%);
+      border-bottom: 1px solid var(--theme-color-lightened);
       outline: none;
       width: 100%;
       transform: scale(1);
       transition-duration: 0.3s;
       transition-property: transform;
       &:valid {
-        border-bottom: 1px solid lighten($themeColor, 25%);
+        border-bottom: 1px solid var(--theme-color-lightened);
       }
       // .bg is the input surround
       ~ .bg {
@@ -152,7 +152,7 @@
         background: linear-gradient(
           to right,
           transparent,
-          $themeColor,
+          var(--theme-color),
           transparent
         );
         z-index: 11;
@@ -166,8 +166,8 @@
         top: -4px;
         right: -5px;
         bottom: -4px;
-        background: $themeColor;
-        opacity: 0.125;
+        background: var(--theme-color);
+        opacity: 0.5;
         transform: scale(1);
         transition: none;
       }
