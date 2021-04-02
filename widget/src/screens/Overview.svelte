@@ -222,7 +222,7 @@
       justify-content: space-between;
       align-items: center;
       &:first-child, &:nth-child(2) {
-        font-size: 1.1rem;
+        font-size: 1.2rem;
         margin-bottom: .25rem;
       }
       & > div:first-child {

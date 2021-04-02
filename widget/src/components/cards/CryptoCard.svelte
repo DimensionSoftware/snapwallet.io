@@ -86,10 +86,6 @@
           bottom: 0;
         }
       }
-      small {
-        transform: translateX(-1px);
-        transition: transform cubic-bezier(0.23, 1.2, 0.32, 1) 0.35s;
-      }
     }
   }
 

@@ -148,7 +148,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        height: 1px;
+        height: 2px;
         background: linear-gradient(
           to right,
           transparent,

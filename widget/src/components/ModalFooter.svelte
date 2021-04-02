@@ -22,6 +22,7 @@
     align-items: center;
     justify-content: flex-end;
     padding: 0 initial;
+    height: 85px;
     span {
       cursor: pointer;
       margin-top: 0.5rem;
