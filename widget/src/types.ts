@@ -1,3 +1,5 @@
+import type { ProfileDataItemRemediation } from 'api-client'
+
 export enum TransactionMediums {
   ACH = 'ach',
   BLOCKCHAIN = 'blockchain',
@@ -23,4 +25,11 @@ export enum TransactionIntents {
 export enum FileUploadTypes {
   US_PASSPORT = 'GI_US_PASSPORT',
   US_DRIVER_LICENSE = 'GI_US_DRIVING_LICENSE',
+}
+
+export type RemediationGroups = {
+  personal: ProfileDataItemRemediation[]
+  address: ProfileDataItemRemediation[]
+  contact: ProfileDataItemRemediation[]
+  document: ProfileDataItemRemediation[]
 }
