@@ -3,8 +3,7 @@
 </script>
 
 <script lang="ts">
-import { onMount } from "svelte";
-
+  import { onMount } from 'svelte'
 
   const domain = 'https://snapwallet.io',
     config = {
@@ -22,7 +21,7 @@ import { onMount } from "svelte";
   onMount(async () => {
     // do once dammit
     ifr.src = src
-	});
+  })
 </script>
 
 <main>
