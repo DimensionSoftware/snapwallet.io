@@ -13,7 +13,7 @@ module.exports = {
 		// specifying a different adapter
 		adapter: node(),
 		paths: {
-			assets: '/assets',
+			assets: '/',
 			base: '/',
 		},
 

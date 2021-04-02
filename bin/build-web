@@ -29,7 +29,7 @@ pushd web
 npm i
 npm run build
 popd
-mv web/build/assets web/build/prerendered/.
+mv web/build/assets/* web/build/prerendered/.
 mv web/build/prerendered/* web_dist/.
 
 # docs: api + getting started examples
