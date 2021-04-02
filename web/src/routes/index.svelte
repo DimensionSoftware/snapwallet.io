@@ -12,7 +12,7 @@
         inputTextColor: '#333',
       },
     }
-    const src = `${domain}/widget/?config='${encodeURI(JSON.stringify(config))}'`
+  const src = `${domain}/widget/?config='${encodeURI(JSON.stringify(config))}'`
 </script>
 
 <main>
@@ -34,13 +34,15 @@
     </div>
   </div>
   <div class="col wallet" style="margin: 0 auto;">
-    <iframe
-      title="Snap Wallet"
-      frameborder="0"
-      height="608px"
-      width="360px"
-      src={src}
-    />
+    {#key true}
+      <iframe
+        title="Snap Wallet"
+        frameborder="0"
+        height="608px"
+        width="360px"
+        {src}
+      />
+    {/key}
   </div>
 </main>
 
@@ -104,6 +106,8 @@
     border-radius: 20px;
     top: -20%;
     right: -20%;
+    opacity: 0;
+    animation: fadeIn 0.15s ease-out forwards 0.25s;
   }
   @media (min-width: 480px) {
     h1,
