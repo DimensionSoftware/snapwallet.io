@@ -8,6 +8,7 @@ on:
       - '.github/workflows/web.yml'
       - 'widget/**'
       - 'docs/**'
+      - 'web/**'
       - 'api/lib/swagger/swagger-ui.html'
       - 'api/client/**'
       - 'bin/build-web'
