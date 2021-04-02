@@ -120,7 +120,7 @@ class Snap {
   }
 
   private generateURL = () => {
-    const qs = `?config=${this.configToQueryString()}`
+    const qs = `?init=1&config=${this.configToQueryString()}`
     return `${this.baseURL}/${qs}#/`
   }
 }
