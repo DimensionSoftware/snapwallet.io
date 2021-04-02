@@ -25,7 +25,7 @@
 </script>
 
 <main>
-  <div class="col">
+  <div class="intro col">
     <h1>Snap Wallet</h1>
     <h2>Connect Crypto to Your Idea, Simply.</h2>
     <article>
@@ -84,37 +84,35 @@
         }
       }
     }
-  }
-  h1,
-  h2 {
-    font-size: 2rem;
-    font-weight: 500;
-    line-height: 1.1;
-    margin: 0.5rem 0;
-  }
-  h2 {
-    margin: 2rem 0 0.75rem 0;
-    font-size: 1.25rem;
-  }
-  a {
-    color: $textColor;
-    text-decoration: none;
-    white-space: nowrap;
-    margin-bottom: 1rem;
-  }
-  article {
-    font-size: 1.1rem;
-    margin: 0;
-    line-height: 1.35;
-    max-width: 50%;
-  }
-  iframe {
-    position: relative;
-    border-radius: 20px;
-    top: -20%;
-    right: -20%;
-    opacity: 0;
-    animation: fadeIn 0.15s ease-out forwards 0.25s;
+    h1,
+    h2 {
+      font-size: 2rem;
+      font-weight: 500;
+      line-height: 1.1;
+      margin: 0.5rem 0;
+    }
+    h2 {
+      margin: 2rem 0 0.75rem 0;
+      font-size: 1.25rem;
+    }
+    a {
+      color: $textColor;
+      text-decoration: none;
+      white-space: nowrap;
+      margin-bottom: 1rem;
+    }
+    article {
+      font-size: 1.1rem;
+      margin: 0;
+      line-height: 1.35;
+      max-width: 50%;
+    }
+    iframe {
+      position: relative;
+      border-radius: 20px;
+      top: -20%;
+      right: -20%;
+    }
   }
   @media (min-width: 480px) {
     h1,
@@ -127,14 +125,32 @@
   }
 
   // responsive
-  @media screen and (max-width: 450px) {
-    body {
+  @media (max-width: 375px) {
+    :global(body) {
+      overflow-y: scroll;
+      main {
+        padding: 0;
+      }
+    }
+  }
+  @media (max-width: 850px) {
+    :global(body) {
       overflow-y: scroll;
       main {
         flex-direction: column;
+        > .col {
+          max-width: 100%;
+        }
+        .intro {
+          padding-left: 2rem;
+          padding-right: 1rem;
+          article {
+            max-width: none;
+          }
+        }
         .wallet {
           max-width: inherit;
-          margin-top: 5rem;
+          padding-top: 5rem;
           iframe {
             top: inherit;
             right: inherit;
