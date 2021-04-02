@@ -139,10 +139,7 @@
 <ModalContent>
   <ModalBody>
     <ModalHeader>Where do you live?</ModalHeader>
-    <Label
-      label="Street 1"
-      error={$userStore.profileRemediations[UserProfileFieldTypes.FULL_ADDRESS]}
-    >
+    <Label label="Street 1">
       <Input
         id="autocomplete"
         defaultValue={$userStore.address.street1}
