@@ -72,3 +72,27 @@ export const reducePersonalInfoFields = (
   }
   return `${message} Fields include ${fields.join(', ')}.`
 }
+
+export const reduceDocumentFields = (
+  remediations: ProfileDataItemRemediation[],
+) => {
+  let message = 'One or more of your documents require an update.'
+  let fields = []
+
+  remediations.forEach(r => {
+    if (UserProfileFieldTypes.ACH_AUTH_FORM === r.kind)
+      fields.push('ACH authorization')
+    if (UserProfileFieldTypes.PROOF_OF_ADDRESS_DOC === r.kind)
+      fields.push('proof of address')
+    if (UserProfileFieldTypes.US_GOVT_DOCUMENT === r.kind)
+      fields.push('U.S. government ID')
+  })
+
+  // An unsupported field made it here.
+  if (!fields.length) return `${message} Please contact support.`
+  if (fields.length >= 2) {
+    const fIdx = fields.length - 1
+    fields[fIdx] = `and ${fields[fIdx]}`
+  }
+  return `${message} Documents include ${fields.join(', ')}.`
+}
