@@ -123,7 +123,7 @@
     align-items: center;
     flex-direction: row;
     height: 100%;
-    margin-left: .4rem;
+    margin-left: 0.4rem;
     font-size: 1.5em;
     color: var(--theme-text-color);
     span {

@@ -49,10 +49,11 @@ const app = new App({
       // successColor: '#83E068',
       // errorColor: '#E7693C',
       ...{
-        modalBackground: '#333',
+        // dark "snap" theme
+        modalBackground: '#222',
         modalPopupBackground: '#444',
-        color: '#888',
-        colorLightened: '#999',
+        color: 'rgb(100,100,100)',
+        colorLightened: 'rgba(100,100,100,.8)',
         colorInverse: '#ddd',
         textColor: '#fff',
         inputTextColor: '#333',
