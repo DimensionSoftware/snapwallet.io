@@ -1,14 +1,16 @@
-<script context="module">
+<script context="module" lang="ts">
   export const prerender = true
 </script>
 
 <script lang="ts">
-  const config = {
-    theme: {
-      color: 'yellow',
-      textColor: 'blue',
+  const domain = 'https://snapwallet.io',
+    config = {
+      theme: {
+        modalBackground: '#333',
+        color: '#fff',
+        textColor: '#fff',
+      },
     }
-  }
 </script>
 
 <main>
@@ -21,10 +23,10 @@
       single line of code.
     </article>
     <div class="buttons col">
-      <a class="button" href="https://snapwallet.io/docs/guide" target="_blank"
+      <a class="button" href={`${domain}/docs/guide`} target="_blank"
         >Get Started</a
       >
-      <a href="https://api.snapwallet.io/swagger" target="_blank"
+      <a href={`https://api.snapwallet.io/swagger`} target="_blank"
         >API Documentation</a
       >
     </div>
@@ -35,7 +37,7 @@
       frameborder="0"
       height="608px"
       width="360px"
-      src={`https://snapwallet.io/widget?config=${JSON.stringify(config)}`}
+      src={`${domain}/widget?config=${encodeURI(JSON.stringify(config))}`}
     />
   </div>
 </main>

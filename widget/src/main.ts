@@ -18,7 +18,7 @@ PusherUtil.setup()
 userStore.setIsLoggedIn(window.AUTH_MANAGER.viewerIsLoggedIn())
 
 const queryParams = new URLSearchParams(window.location.search)
-const config = JSON.parse(queryParams.get('config'))
+const config = JSON.parse(decodeURI(queryParams.get('config')))
 
 const app = new App({
   target: document.body,
