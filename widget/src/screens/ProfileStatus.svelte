@@ -27,12 +27,7 @@
   let addressMessage =
     'Up to date residential address information used for identity verification.'
 
-  $: remediationGroups = {
-    personal: [],
-    address: [],
-    contact: [],
-    document: [],
-  }
+  $: remediationGroups = groupRemediations($userStore.profileRemediations)
 
   $: {
     isPersonalInfoError = remediationGroups.personal.length > 0
@@ -45,12 +40,13 @@
         'An address update is required. Please provide your current residential address.'
   }
 
-  userStore.subscribe(us => {
-    remediationGroups = groupRemediations(us.profileRemediations)
-  })
+  const getLatestProfile = async () => {
+    await userStore.fetchUserProfile()
+    remediationGroups = groupRemediations($userStore.profileRemediations)
+  }
 
   onMount(() => {
-    userStore.fetchUserProfile()
+    getLatestProfile()
   })
 </script>
 
