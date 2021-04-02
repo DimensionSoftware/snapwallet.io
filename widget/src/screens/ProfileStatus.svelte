@@ -17,7 +17,11 @@
   import { Routes } from '../constants'
   import { onMount } from 'svelte'
   import { userStore } from '../stores/UserStore'
-  import { groupRemediations, reducePersonalInfoFields } from '../util/profiles'
+  import {
+    groupRemediations,
+    reduceDocumentFields,
+    reducePersonalInfoFields,
+  } from '../util/profiles'
 
   let isPersonalInfoError = false
   let personalInfoMessage =
@@ -26,6 +30,14 @@
   let isAddressError = false
   let addressMessage =
     'Up to date residential address information used for identity verification.'
+
+  let isContactError = false
+  let contactMessage =
+    'Contact information used for verification, communication and security.'
+
+  let isDocumentError = false
+  let documentMessage =
+    'Documents used for verifying your identity or residence.'
 
   $: remediationGroups = groupRemediations($userStore.profileRemediations)
 
@@ -38,6 +50,17 @@
     if (isAddressError)
       addressMessage =
         'An address update is required. Please provide your current residential address.'
+
+    isContactError = remediationGroups.contact.length > 0
+    if (isContactError) {
+      contactMessage =
+        'One or more contacts is insufficient. Please update your contact information.'
+    }
+
+    isDocumentError = remediationGroups.document.length > 0
+    if (isDocumentError) {
+      documentMessage = reduceDocumentFields(remediationGroups.document)
+    }
   }
 
   const getLatestProfile = async () => {
@@ -76,21 +99,23 @@
         </div>
       </VStep>
       <VStep onClick={() => push(Routes.PROFILE_SEND_SMS)}>
-        <span slot="icon">
-          <FaIcon data={faMailBulk} />
+        <span class:error={isContactError} slot="icon">
+          <FaIcon
+            data={isPersonalInfoError ? faExclamationCircle : faMailBulk}
+          />
         </span>
         <b slot="step"> Contact </b>
         <div class="description help" slot="info">
-          Contact information used for verification, communication and security.
+          {contactMessage}
         </div>
       </VStep>
       <VStep onClick={() => push(Routes.FILE_UPLOAD)}>
-        <span slot="icon">
-          <FaIcon data={faFolder} />
+        <span class:error={isDocumentError} slot="icon">
+          <FaIcon data={isDocumentError ? faExclamationCircle : faFolder} />
         </span>
         <b slot="step"> Documents </b>
         <div class="description help" slot="info">
-          Documents used for verifying your identity or residence.
+          {documentMessage}
         </div>
       </VStep>
     </ul>
