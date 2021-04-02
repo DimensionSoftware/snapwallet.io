@@ -13,6 +13,7 @@
   import { faClock, faLock } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
   import { onMount } from 'svelte'
+  import { toaster } from '../stores/ToastStore'
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
@@ -85,6 +86,13 @@
   onMount(() => {
     const interval = setInterval(() => {
       secondsUntilExpiration--
+      if (secondsUntilExpiration <= 0) {
+        toaster.pop({
+          msg: 'Your preview has expired. Please create a new preview.',
+          error: true,
+        })
+        push(Routes.ROOT)
+      }
     }, 1000)
     return () => clearInterval(interval)
   })
