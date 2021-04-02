@@ -4,6 +4,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import {
+    faExclamationCircle,
     faFolder,
     faHome,
     faIdCard,
@@ -14,6 +15,43 @@
   import VStep from '../components/VStep.svelte'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
+  import { onMount } from 'svelte'
+  import { userStore } from '../stores/UserStore'
+  import { groupRemediations, reducePersonalInfoFields } from '../util/profiles'
+
+  let isPersonalInfoError = false
+  let personalInfoMessage =
+    'Personal identity information used for verification purposes.'
+
+  let isAddressError = false
+  let addressMessage =
+    'Up to date residential address information used for identity verification.'
+
+  $: remediationGroups = {
+    personal: [],
+    address: [],
+    contact: [],
+    document: [],
+  }
+
+  $: {
+    isPersonalInfoError = remediationGroups.personal.length > 0
+    if (isPersonalInfoError)
+      personalInfoMessage = reducePersonalInfoFields(remediationGroups.personal)
+
+    isAddressError = remediationGroups.address.length > 0
+    if (isAddressError)
+      addressMessage =
+        'An address update is required. Please provide your current residential address.'
+  }
+
+  userStore.subscribe(us => {
+    remediationGroups = groupRemediations(us.profileRemediations)
+  })
+
+  onMount(() => {
+    userStore.fetchUserProfile()
+  })
 </script>
 
 <ModalContent>
@@ -24,22 +62,21 @@
     </div>
     <ul class="vertical-stepper">
       <VStep onClick={() => push(Routes.PROFILE_UPDATE)}>
-        <span slot="icon">
-          <FaIcon data={faIdCard} />
+        <span class:error={isPersonalInfoError} slot="icon">
+          <FaIcon data={isPersonalInfoError ? faExclamationCircle : faIdCard} />
         </span>
         <b slot="step">Personal</b>
         <div class="description help" slot="info">
-          Personal identity information used for verification purposes.
+          {personalInfoMessage}
         </div>
       </VStep>
       <VStep onClick={() => push(Routes.ADDRESS_UPDATE)}>
-        <span slot="icon">
-          <FaIcon data={faHome} />
+        <span class:error={isAddressError} slot="icon">
+          <FaIcon data={isPersonalInfoError ? faExclamationCircle : faHome} />
         </span>
         <b slot="step"> Address </b>
         <div class="description help" slot="info">
-          Up to date residential address information used for identity
-          verification.
+          {addressMessage}
         </div>
       </VStep>
       <VStep onClick={() => push(Routes.PROFILE_SEND_SMS)}>
