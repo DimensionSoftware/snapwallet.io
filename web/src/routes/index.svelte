@@ -1,5 +1,6 @@
 <script context="module" lang="ts">
   export const prerender = true
+  let n = 0
 </script>
 
 <script lang="ts">
@@ -13,6 +14,7 @@
       },
     }
     const src = `${domain}/widget/?config='${encodeURI(JSON.stringify(config))}'`
+    n = n + 1
 </script>
 
 <main>
@@ -34,13 +36,15 @@
     </div>
   </div>
   <div class="col wallet" style="margin: 0 auto;">
-    <iframe
-      title="Snap Wallet"
-      frameborder="0"
-      height="608px"
-      width="360px"
-      src={src}
-    />
+    {#if n >= 2}
+      <iframe
+        title="Snap Wallet"
+        frameborder="0"
+        height="608px"
+        width="360px"
+        src={src}
+      />
+    {/if}
   </div>
 </main>
 
