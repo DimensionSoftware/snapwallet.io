@@ -54,8 +54,8 @@ export const isDocumentInfo = (kind: ProfileDataItemKind): boolean => {
 export const reducePersonalInfoFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  let message = 'Your personal information requires an update.'
-  let fields = []
+  const message = 'Your personal information requires an update.'
+  const fields = []
 
   remediations.forEach(r => {
     if (UserProfileFieldTypes.LEGAL_NAME === r.kind) fields.push('legal name')
@@ -66,18 +66,24 @@ export const reducePersonalInfoFields = (
 
   // An unsupported field made it here.
   if (!fields.length) return `${message} Please contact support.`
-  if (fields.length >= 2) {
+
+  let fieldMsg = fields[0]
+  if (fields.length > 2) {
     const fIdx = fields.length - 1
     fields[fIdx] = `and ${fields[fIdx]}`
+    fieldMsg = fields.join(', ')
   }
-  return `${message} Fields include ${fields.join(', ')}.`
+  if (fields.length === 2) {
+    fieldMsg = `${fields[0]} and ${fields[1]}`
+  }
+  return `${message} Fields include ${fieldMsg}.`
 }
 
 export const reduceDocumentFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  let message = 'One or more of your documents require an update.'
-  let fields = []
+  const message = 'One or more of your documents require an update.'
+  const fields = []
 
   remediations.forEach(r => {
     if (UserProfileFieldTypes.ACH_AUTH_FORM === r.kind)
@@ -90,9 +96,15 @@ export const reduceDocumentFields = (
 
   // An unsupported field made it here.
   if (!fields.length) return `${message} Please contact support.`
-  if (fields.length >= 2) {
+
+  let fieldMsg = fields[0]
+  if (fields.length > 2) {
     const fIdx = fields.length - 1
     fields[fIdx] = `and ${fields[fIdx]}`
+    fieldMsg = fields.join(', ')
   }
-  return `${message} Documents include ${fields.join(', ')}.`
+  if (fields.length === 2) {
+    fieldMsg = `${fields[0]} and ${fields[1]}`
+  }
+  return `${message} Documents include ${fieldMsg}.`
 }
