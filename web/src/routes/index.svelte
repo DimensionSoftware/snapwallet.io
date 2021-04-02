@@ -42,12 +42,12 @@
       >
     </div>
     <!-- Features, Advantages, Benefits -->
-    <ul>
+    <!--ul>
       <li>Fast</li>
       <li>Secure</li>
       <li>Embeddable</li>
       <li>Customs pay in USD; you receive your preferred currency</li>
-    </ul>
+    </ul-->
   </div>
   <div class="col wallet" style="margin: 0 auto;">
     <iframe
