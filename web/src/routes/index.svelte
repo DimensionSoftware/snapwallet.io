@@ -41,6 +41,13 @@
         >API Documentation</a
       >
     </div>
+    <!-- Features, Advantages, Benefits -->
+    <ul>
+      <li>Fast</li>
+      <li>Secure</li>
+      <li>Embeddable</li>
+      <li>Customs pay in USD; you receive your preferred currency</li>
+    </ul>
   </div>
   <div class="col wallet" style="margin: 0 auto;">
     <iframe
