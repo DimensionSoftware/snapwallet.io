@@ -99,7 +99,6 @@
   iframe {
     position: relative;
     border-radius: 20px;
-    border: 1px solid rgba($textColor, 0.4);
     top: -20%;
     right: -20%;
   }
