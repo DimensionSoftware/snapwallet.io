@@ -87,7 +87,7 @@ export const reduceDocumentFields = (
 
   remediations.forEach(r => {
     if (UserProfileFieldTypes.ACH_AUTH_FORM === r.kind)
-      fields.push('ACH authorization')
+      fields.push('bank authorization form')
     if (UserProfileFieldTypes.PROOF_OF_ADDRESS_DOC === r.kind)
       fields.push('proof of address')
     if (UserProfileFieldTypes.US_GOVT_DOCUMENT === r.kind)
