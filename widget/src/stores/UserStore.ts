@@ -1,4 +1,4 @@
-import type { UserFlags } from 'api-client'
+import { ProfileDataItemRemediation, UserFlags } from 'api-client'
 import { writable } from 'svelte/store'
 import { Routes, UserProfileFieldTypes } from '../constants'
 
@@ -38,7 +38,7 @@ type UserStoreState = {
   isLoggedIn: boolean
   virtual: VirtualProfile
   isProfileComplete: boolean
-  profileRemediations: { [k: string]: string }
+  profileRemediations: ProfileDataItemRemediation[]
 }
 
 const initialAddress = {
@@ -71,7 +71,7 @@ function createStore() {
         address: initialAddress,
       },
       isProfileComplete: false,
-      profileRemediations: {},
+      profileRemediations: [],
     },
     { subscribe, update } = writable<UserStoreState>(defaultUser)
 
@@ -113,16 +113,11 @@ function createStore() {
         virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
       )
 
-      let profileRemediations = {}
-      remediations.forEach(r => {
-        profileRemediations[r.kind] = r.note
-      })
-
       update(s => ({
         ...s,
         virtual,
         isProfileComplete,
-        profileRemediations,
+        profileRemediations: remediations,
       }))
     },
     setVirtual: (virtual: VirtualProfile) => {
