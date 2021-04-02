@@ -105,7 +105,6 @@
       font-size: 1.1rem;
       margin: 0;
       line-height: 1.35;
-      max-width: 50%;
     }
     iframe {
       position: relative;
@@ -151,6 +150,7 @@
         .wallet {
           max-width: inherit;
           padding-top: 5rem;
+          padding-bottom: 2rem;
           iframe {
             top: inherit;
             right: inherit;
