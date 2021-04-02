@@ -38,7 +38,7 @@
       frameborder="0"
       height="608px"
       width="360px"
-      src={`${domain}/widget?config='${encodeURI(JSON.stringify(config))}'`}
+      src={`${domain}/widget/?config='${encodeURI(JSON.stringify(config))}'`}
     />
   </div>
 </main>
