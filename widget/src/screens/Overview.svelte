@@ -10,7 +10,7 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { ParentMessenger } from '../util/parent_messenger'
-  import { faLock } from '@fortawesome/free-solid-svg-icons'
+  import { faClock, faLock } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
   import { onMount } from 'svelte'
 
@@ -104,6 +104,15 @@
     </div>
     <div class="line-items">
       {#if $transactionStore.selectedSourcePaymentMethod}
+        <div class="line-item muted warning">
+          <div>Expires In</div>
+          <div style="display:flex;justify-content:center;align-items:center;">
+            <FaIcon data={faClock} />
+            <div style="margin-right:0.35rem;" />
+            {formattedExpiration}
+          </div>
+        </div>
+        <div class="line dashed" />
         {#if isBuy}
           <div class="line-item muted">
             <div>From</div>
@@ -150,12 +159,6 @@
         </div>
       {/if}
       <div class="line dashed" />
-      <div class="line-item muted">
-        <div>Time Remaining</div>
-        <div>
-          {formattedExpiration}
-        </div>
-      </div>
       <div class="line-item">
         <div><b>Total</b></div>
         <div>
