@@ -12,6 +12,7 @@
         inputTextColor: '#333',
       },
     }
+    const src = `${domain}/widget/?config='${encodeURI(JSON.stringify(config))}'`
 </script>
 
 <main>
@@ -38,7 +39,7 @@
       frameborder="0"
       height="608px"
       width="360px"
-      src={`${domain}/widget/?config='${encodeURI(JSON.stringify(config))}'`}
+      src={src}
     />
   </div>
 </main>
