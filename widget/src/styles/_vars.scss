@@ -11,6 +11,7 @@ $themeFont: 'Helvetica Neue', Arial, sans-serif;
 $headingFont: 'Impact', 'Fira Sans Condensed';
 
 // colors
+$inputTextColor: #333;
 $textColor: #333;
 $textColor2: lighten($textColor, 10%);
 $textColor3: lighten($textColor, 20%);
@@ -20,10 +21,10 @@ $textColorMuted: $textColor2;
 // - solid catch;  let's eventually make a RN theme and/or toggle
 // $modalBackground: #f0f0f0;
 $modalBackground: linear-gradient(#eee, #fff);
+$modalPopupBackground: linear-gradient(#ddd, #eee);
 $modalContainerBackgroundColor: radial-gradient(circle closest-corner at 50% 40%, rgba(0,0,0,0.4) 60%, rgba(0,0,0,0.55) 100%);
 
 $shadowColor: rgba(0, 0, 0, 0.123);
-$buttonShadowColor: rgba($themeColor, 0.2);
 
 $success: #2ce5b7;
 $error: #ff3f34;

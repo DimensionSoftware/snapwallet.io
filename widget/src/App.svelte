@@ -268,19 +268,20 @@
     --heading-font: #{$headingFont};
 
     // colors
+    --theme-input-text-color: #{inputTextColor};
     --theme-text-color: #{$textColor};
     --theme-text-color-2: #{$textColor2};
     --theme-text-color-3: #{$textColor3};
     --theme-text-color-4: #{$textColor4};
     --theme-text-color-muted: #{$textColorMuted};
     --theme-modal-background: #{$modalBackground};
+    --theme-modal-popup-background: #{$modalPopupBackground};
     --theme-modal-container-background-color: #{$modalContainerBackgroundColor};
     --theme-shadow-color: #{$shadowColor};
     --theme-success-color: #{$success};
     --theme-error-color: #{$error};
     --theme-warning-color: #{$warning};
     --theme-info-color: #{$info};
-    --theme-button-shadow-color: #{$buttonShadowColor};
 
     // easing
     --theme-ease-bounce: #{$bounce};

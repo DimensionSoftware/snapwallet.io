@@ -62,9 +62,9 @@
       border-radius: 0.5rem;
       background: linear-gradient(
         to right,
-        rgba($themeColor, 0.01),
-        rgba($themeColor, 0.1),
-        rgba($themeColor, 0.01)
+        rgba($themeColor, 0.02),
+        rgba($themeColor, 0.3),
+        rgba($themeColor, 0.02)
       );
       transform: scale(0);
       transition: transform 0.2s $easeOutExpo;

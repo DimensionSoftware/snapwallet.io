@@ -27,7 +27,7 @@
     color: white;
     cursor: pointer;
     text-transform: uppercase;
-    box-shadow: 0 0 0 0 $themeColor, 0 6px 6px var(--theme-button-shadow-color);
+    box-shadow: 0 0 0 0 var(--theme-color), 0 6px 6px var(--theme-shadow-color);
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
@@ -52,8 +52,8 @@
       transition: opacity 0.3s ease-in 0.1s;
     }
     &:hover {
-      box-shadow: 0 0 0 1px $themeColor,
-        0 8px 6px var(--theme-button-shadow-color);
+      box-shadow: 0 0 0 1px var(--theme-color),
+        0 8px 6px var(--theme-shadow-color);
       transition: none;
       &:before {
         opacity: 0.3;
@@ -62,12 +62,12 @@
     &:active,
     &:focus {
       background: var(--theme-color-lightened);
-      box-shadow: 0 0 0 1px $themeColor,
-        0 6px 6px var(--theme-button-shadow-color);
+      box-shadow: 0 0 0 1px var(--theme-color),
+        0 6px 6px var(--theme-shadow-color);
       text-shadow: 0 1px 0 --var(--theme-text-color);
       transition: none;
       animation: infocus 0.35s;
-      animation-timing-function: $easeOutBack;
+      animation-timing-function: var(--theme-ease-out-back);
       &:before {
         opacity: 0.08;
         transition: none;

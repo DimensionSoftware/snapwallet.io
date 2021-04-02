@@ -192,6 +192,7 @@
       position: relative;
       display: block;
       margin: 1rem 0;
+      color: var(--theme-text-color);
       font-size: 1.25rem;
       transform: translateX(50px);
       transition: transform 0s ease-out 0.6s;

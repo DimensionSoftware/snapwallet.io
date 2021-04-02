@@ -78,7 +78,6 @@
       position: relative;
       z-index: 2;
       margin: 0;
-      color: var(--theme-textColor);
       background-color: var(--theme-color-inverse);
       outline: none;
       width: 100%;
@@ -95,7 +94,7 @@
       padding: 1.6em 5px 15px 5px !important;
       vertical-align: middle;
       font-size: 1.8em;
-      color: var(--theme-text-color);
+      color: var(--theme-input-text-color);
       border: none;
       border-bottom: 1px solid lighten($themeColor, 50%);
       outline: none;
@@ -136,7 +135,7 @@
       }
       &:focus {
         cursor: text;
-        color: var(--theme-text-color);
+        color: var(--theme-input-text-color);
         transition: none;
       }
 

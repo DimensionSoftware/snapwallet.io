@@ -9,6 +9,7 @@
         modalBackground: '#333',
         color: '#fff',
         textColor: '#fff',
+        inputTextColor: '#333',
       },
     }
 </script>
