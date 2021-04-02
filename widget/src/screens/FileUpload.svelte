@@ -6,8 +6,10 @@
   import IconCard from '../components/cards/IconCard.svelte'
   import {
     faFileImage,
+    faHome,
     faIdCard,
     faPassport,
+    faUniversity,
   } from '@fortawesome/free-solid-svg-icons'
   import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import Button from '../components/Button.svelte'
@@ -16,6 +18,7 @@
   import { transactionStore } from '../stores/TransactionStore'
   import type { UsGovernmentIdDocumentInputKind } from 'api-client'
   import { FileUploadTypes } from '../types'
+  import { fly } from 'svelte/transition'
 
   const allowedFileTypes = 'image/png,image/jpeg,image/jpg,application/pdf'
 
@@ -52,11 +55,21 @@
         }, 800)
       }
       if (fileIds.length >= minimumFiles) {
+        const isGovId = [
+          FileUploadTypes.US_DRIVER_LICENSE,
+          FileUploadTypes.US_PASSPORT,
+        ].includes(fileType)
+        const isACHForm = FileUploadTypes.ACH_AUTHORIZATION_FORM === fileType
+        const isProofOfAddress = FileUploadTypes.PROOF_OF_ADDRESS === fileType
         const profileResponse = await window.API.fluxSaveProfileData({
-          usGovernmentIdDoc: {
-            kind: fileType as UsGovernmentIdDocumentInputKind,
-            fileIds,
-          },
+          ...(isProofOfAddress && { proofOfAddressDoc: { fileIds } }),
+          ...(isACHForm && { achAuthorizationFormDoc: { fileIds } }),
+          ...(isGovId && {
+            usGovernmentIdDoc: {
+              kind: fileType as UsGovernmentIdDocumentInputKind,
+              fileIds,
+            },
+          }),
         })
         setTimeout(() => {
           Logger.debug(profileResponse.wyre)
@@ -78,23 +91,32 @@
 
   const openFileBrowser = () => fileEl.click()
 
-  const getSelectorProps = ft => {
-    if (ft === FileUploadTypes.US_PASSPORT)
-      return {
-        icon: faPassport,
-        label: 'Passport',
-      }
+  const SELECTOR_OPTIONS = {
+    [FileUploadTypes.US_PASSPORT]: {
+      icon: faPassport,
+      label: 'Passport',
+    },
+    [FileUploadTypes.US_DRIVER_LICENSE]: {
+      icon: faIdCard,
+      label: 'Drivers License',
+    },
+    [FileUploadTypes.ACH_AUTHORIZATION_FORM]: {
+      icon: faUniversity,
+      label: 'Bank Authorization Form',
+    },
+    [FileUploadTypes.PROOF_OF_ADDRESS]: {
+      icon: faHome,
+      label: 'Proof of Address',
+    },
+  }
 
-    if (ft === FileUploadTypes.US_DRIVER_LICENSE)
-      return {
-        icon: faIdCard,
-        label: 'Drivers License',
+  const getSelectorProps = fileType => {
+    return (
+      SELECTOR_OPTIONS[fileType] || {
+        icon: faFileImage,
+        label: 'Document Type',
       }
-
-    return {
-      icon: faFileImage,
-      label: 'Document Type',
-    }
+    )
   }
 
   $: iconCardProps = getSelectorProps(fileType)
@@ -163,25 +185,23 @@
     }}
     headerTitle="Select a Document Type"
   >
-    <div style="padding:0 1.5rem;">
-      <div style="margin-bottom:1rem;margin-top:1rem;">
-        <IconCard
-          icon={faPassport}
-          on:click={selectFileType(FileUploadTypes.US_PASSPORT)}
-          label="Passport"
-        />
-      </div>
-      <IconCard
-        icon={faIdCard}
-        on:click={selectFileType(FileUploadTypes.US_DRIVER_LICENSE)}
-        label="Drivers License"
-      />
+    <div class="scroll selector-container">
+      {#each Object.entries(SELECTOR_OPTIONS) as [optionFileType, options], i}
+        <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * i }}>
+          <IconCard
+            icon={options.icon}
+            on:click={selectFileType(optionFileType)}
+            label={options.label}
+          />
+        </div>
+      {/each}
     </div>
   </PopupSelector>
 {/if}
 
 <style lang="scss">
   @import '../styles/_vars.scss';
+  @import '../styles/selectors.scss';
 
   // TODO: make drop-able on desktop
   .dropzone {
