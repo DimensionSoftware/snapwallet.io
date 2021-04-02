@@ -91,7 +91,7 @@
       </VStep>
       <VStep onClick={() => push(Routes.ADDRESS_UPDATE)}>
         <span class:error={isAddressError} slot="icon">
-          <FaIcon data={isPersonalInfoError ? faExclamationCircle : faHome} />
+          <FaIcon data={isAddressError ? faExclamationCircle : faHome} />
         </span>
         <b slot="step"> Address </b>
         <div class="description help" slot="info">
@@ -100,9 +100,7 @@
       </VStep>
       <VStep onClick={() => push(Routes.PROFILE_SEND_SMS)}>
         <span class:error={isContactError} slot="icon">
-          <FaIcon
-            data={isPersonalInfoError ? faExclamationCircle : faMailBulk}
-          />
+          <FaIcon data={isContactError ? faExclamationCircle : faMailBulk} />
         </span>
         <b slot="step"> Contact </b>
         <div class="description help" slot="info">
