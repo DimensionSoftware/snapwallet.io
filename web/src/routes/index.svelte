@@ -32,7 +32,7 @@
       >
     </div>
   </div>
-  <div class="col" style="margin: 0 auto;">
+  <div class="col wallet" style="margin: 0 auto;">
     <iframe
       title="Snap Wallet"
       frameborder="0"
@@ -89,6 +89,8 @@
   a {
     color: $textColor;
     text-decoration: none;
+    white-space: nowrap;
+    margin-bottom: 1rem;
   }
   article {
     font-size: 1.1rem;
@@ -109,6 +111,24 @@
     }
     article {
       max-width: none;
+    }
+  }
+
+  // responsive
+  @media screen and (max-width: 450px) {
+    body {
+      overflow-y: scroll;
+      main {
+        flex-direction: column;
+        .wallet {
+          max-width: inherit;
+          margin-top: 5rem;
+          iframe {
+            top: inherit;
+            right: inherit;
+          }
+        }
+      }
     }
   }
 </style>
