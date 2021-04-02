@@ -22,14 +22,15 @@
     align-items: center;
     justify-content: flex-end;
     padding: 0 initial;
-    height: 85px;
+    height: 50px;
     span {
       cursor: pointer;
-      margin-top: 0.5rem;
+      margin-top: 0.25rem;
+      height: 0.3rem;
       font-size: 0.9rem;
     }
     .hidden {
-      visibility: hidden;
+      display: none;
       cursor: initial;
     }
   }
