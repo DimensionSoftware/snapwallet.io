@@ -159,7 +159,7 @@
       <div class="line-item">
         <div><b>Total</b></div>
         <div>
-          {formatLocaleCurrency(fiatTicker, total)}
+          <b>{formatLocaleCurrency(fiatTicker, total)}</b>
         </div>
       </div>
     </div>
@@ -221,13 +221,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      &:first-child, &:nth-child(2) {
+      /* &:first-child,
+      &:nth-child(2) {
         font-size: 1.2rem;
-        margin-bottom: .25rem;
+        margin-bottom: 0.25rem;
       }
       & > div:first-child {
         font-weight: 500;
-      }
+      } */
       &.muted {
         color: var(--theme-color-muted);
         font-weight: 300;
