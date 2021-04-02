@@ -65,7 +65,7 @@
     left: 0;
     right: 0;
     padding-top: 0.5rem;
-    background-color: var(--theme-modal-popup-background);
+    background: var(--theme-modal-popup-background);
     box-shadow: 0px -5px 10px 7px var(--theme-shadow-color);
     animation: slideUp 0.2s $easeOutExpo forwards;
   }
