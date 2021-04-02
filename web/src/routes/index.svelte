@@ -3,6 +3,9 @@
 </script>
 
 <script lang="ts">
+import { onMount } from "svelte";
+
+
   const domain = 'https://snapwallet.io',
     config = {
       theme: {
@@ -13,6 +16,13 @@
       },
     }
   const src = `${domain}/widget/?config='${encodeURI(JSON.stringify(config))}'`
+
+  let ifr
+
+  onMount(async () => {
+    // do once dammit
+    ifr.src = src
+	});
 </script>
 
 <main>
@@ -34,15 +44,13 @@
     </div>
   </div>
   <div class="col wallet" style="margin: 0 auto;">
-    {#key true}
-      <iframe
-        title="Snap Wallet"
-        frameborder="0"
-        height="608px"
-        width="360px"
-        {src}
-      />
-    {/key}
+    <iframe
+      title="Snap Wallet"
+      frameborder="0"
+      height="608px"
+      width="360px"
+      bind:this={ifr}
+    />
   </div>
 </main>
 
