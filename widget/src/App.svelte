@@ -34,6 +34,8 @@
   import { transactionStore } from './stores/TransactionStore'
   import { paymentMethodStore } from './stores/PaymentMethodStore'
   import ProfileStatus from './screens/ProfileStatus.svelte'
+  import type { ProductType } from './types'
+  import Product from './screens/Product.svelte'
 
   // Querystring provided props, see main.ts.
   export let appName: string
@@ -41,6 +43,7 @@
   export let apiKey: string
   export let theme: object
   export let focus: boolean
+  export let product: ProductType
 
   $: isPreLogout = false
 
@@ -99,6 +102,13 @@
     }
 
   const routes = {
+    // TODO: make this a dynamic root when product exists
+    ['/product']: wrap({
+      component: Product as any,
+      props: {
+        product,
+      },
+    }),
     [Routes.ROOT]: wrap({
       component: Home as any,
       props: { appName, intent, apiKey },
