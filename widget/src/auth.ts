@@ -224,9 +224,13 @@ export class FluxBearerAuthentication implements SecurityAuthentication {
 
   public async applySecurityAuthentication(context: RequestContext) {
     const token = await this.manager.getAccessToken()
+
     if (token) {
       context.setHeaderParam('Authorization', `Bearer ${token}`)
+      return
     }
+
+    throw new Error('route needs authentication but no token was provided by the auth manager')
   }
 }
 
