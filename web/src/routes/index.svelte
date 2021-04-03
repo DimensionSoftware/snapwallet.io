@@ -39,7 +39,7 @@
     <h2>
       Simply Connect Crypto to Your 
       {#if Typewriter}
-        <Typewriter loop interval={100}>
+        <Typewriter loop interval={50} delay={2000}>
           <span>Idea</span>
           <span>App</span>
           <span>Company</span>
