@@ -12,20 +12,20 @@
     ],
     "headers": [
       {
-        "source": "/widget/dist/init.js",
-        "headers": [
-          {
-            "key": "cache-control",
-            "value": "max-age=30"
-          }
-        ]
-      },
-      {
         "source": "**/*.@(js|css|jpg|jpeg|gif|png)",
         "headers": [
           {
             "key": "cache-control",
             "value": "max-age=31557600"
+          }
+        ]
+      },
+      {
+        "source": "/widget/dist/init.js",
+        "headers": [
+          {
+            "key": "cache-control",
+            "value": "max-age=30"
           }
         ]
       }
