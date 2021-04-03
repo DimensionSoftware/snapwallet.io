@@ -1,9 +1,9 @@
 <script context="module" lang="ts">
-  import Typewriter from 'svelte-typewriter'
   export const prerender = true
 </script>
 
 <script lang="ts">
+  let Typewriter: any
   import { onMount } from 'svelte'
   const domain = 'https://snapwallet.io'
 
@@ -11,6 +11,7 @@
 
   onMount(async () => {
     await import('flux-init')
+    Typewriter = (await import('svelte-typewriter')).default
 
     const SnapWallet = new (window as any).Snap({
       appName: 'Snap Wallet',
@@ -36,13 +37,18 @@
   <div class="intro col">
     <h1>Snap Wallet</h1>
     <h2>
-      Simply Connect Crypto to Your <Typewriter loop interval={100}>
-        <span>Idea</span>
-        <span>App</span>
-        <span>Company</span>
-        <span>Site</span>
-        <span>Donations</span>
-      </Typewriter>
+      Simply Connect Crypto to Your 
+      {#if Typewriter}
+        <Typewriter loop interval={100}>
+          <span>Idea</span>
+          <span>App</span>
+          <span>Company</span>
+          <span>Site</span>
+          <span>Donations</span>
+        </Typewriter>
+      {:else}
+        Idea
+      {/if}
     </h2>
     <article>
       The "Add Money" button for Crypto Currency, Snap Wallet offers a fully
