@@ -28,7 +28,7 @@ jobs:
           export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
           popd
 
-          npx firebase-tools deploy -c firebase.deploy.json --only hosting
+          npx firebase-tools -c firebase.deploy.json deploy --only hosting
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           API_BASE_URL: https://api.snapwallet.io
