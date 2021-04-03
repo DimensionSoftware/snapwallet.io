@@ -69,12 +69,7 @@
         </video>
       {/if}
       {#if product.imageURL && !product.videoURL}
-        <img
-          alt={product.title}
-          class="nft-image"
-          style=""
-          src={product.imageURL}
-        />
+        <img alt={product.title} class="nft-image" src={product.imageURL} />
       {/if}
       <ul class="vertical-stepper">
         {#if flags?.hasWyreAccount}
