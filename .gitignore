@@ -111,3 +111,4 @@ dist
 // web output dist
 /web_dist/
 /.firebase/
+/firebase.deploy.json

@@ -70,7 +70,7 @@
 <svelte:head>
   <script
     defer
-    src={`https://snapwallet.io/widget/dist/bundle.js?ts=${Date.now()}`}
+    src={`https://snapwallet.io/widget/dist/init.js`}
     type="text/javascript"></script>
 </svelte:head>
 
