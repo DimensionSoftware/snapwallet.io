@@ -10,9 +10,10 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { ParentMessenger } from '../util/parent_messenger'
-  import { faLock } from '@fortawesome/free-solid-svg-icons'
+  import { faClock, faLock } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
   import { onMount } from 'svelte'
+  import { toaster } from '../stores/ToastStore'
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
@@ -85,6 +86,13 @@
   onMount(() => {
     const interval = setInterval(() => {
       secondsUntilExpiration--
+      if (secondsUntilExpiration <= 0) {
+        toaster.pop({
+          msg: 'Your preview has expired. Please create a new preview.',
+          error: true,
+        })
+        push(Routes.ROOT)
+      }
     }, 1000)
     return () => clearInterval(interval)
   })
@@ -104,6 +112,15 @@
     </div>
     <div class="line-items">
       {#if $transactionStore.selectedSourcePaymentMethod}
+        <div class="line-item muted warning">
+          <div>Expires In</div>
+          <div style="display:flex;justify-content:center;align-items:center;">
+            <FaIcon data={faClock} />
+            <div style="margin-right:0.35rem;" />
+            {formattedExpiration}
+          </div>
+        </div>
+        <div class="line dashed" />
         {#if isBuy}
           <div class="line-item muted">
             <div>From</div>
@@ -150,16 +167,10 @@
         </div>
       {/if}
       <div class="line dashed" />
-      <div class="line-item muted">
-        <div>Time Remaining</div>
-        <div>
-          {formattedExpiration}
-        </div>
-      </div>
       <div class="line-item">
         <div><b>Total</b></div>
         <div>
-          {formatLocaleCurrency(fiatTicker, total)}
+          <b>{formatLocaleCurrency(fiatTicker, total)}</b>
         </div>
       </div>
     </div>
@@ -221,13 +232,14 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      &:first-child, &:nth-child(2) {
+      /* &:first-child,
+      &:nth-child(2) {
         font-size: 1.2rem;
-        margin-bottom: .25rem;
+        margin-bottom: 0.25rem;
       }
       & > div:first-child {
         font-weight: 500;
-      }
+      } */
       &.muted {
         color: var(--theme-color-muted);
         font-weight: 300;
