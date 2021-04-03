@@ -13,8 +13,9 @@
         textColor: '#fff',
         inputTextColor: '#333',
       },
+      nonce: Date.now(),
     }
-  const src = `${domain}/widget/?config='${encodeURI(JSON.stringify(config))}'`
+  const src = `${domain}/widget/?config='${encodeURIComponent(JSON.stringify(config))}'`
 
   let ifr
 

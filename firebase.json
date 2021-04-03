@@ -9,22 +9,6 @@
       "firebase.json",
       "**/.*",
       "**/node_modules/**"
-    ],
-    "headers": [ {
-      "source": "widget/",
-      "headers": [ {
-        "key": "cache-control",
-        "value": "max-age=10"
-      } ]
-    } ],
-    "redirects": [ {
-      "source": "/widget/bundle.css",
-      "destination": "/widget/build/bundle.somehash.css",
-      "type": 301
-    }, {
-      "source": "/widget/bundle.js",
-      "destination": "/widget/build/bundle.somehash.js",
-      "type": 302
-    } ]
+    ]
   }
 }
