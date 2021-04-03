@@ -39,7 +39,7 @@
     <h2>
       Simply Connect Crypto to Your 
       {#if Typewriter}
-        <Typewriter loop interval={100}>
+        <Typewriter loop interval={50} delay={2000}>
           <span>Idea</span>
           <span>App</span>
           <span>Company</span>
@@ -51,9 +51,8 @@
       {/if}
     </h2>
     <article>
-      The "Add Money" button for Crypto Currency, Snap Wallet offers a fully
-      configurable, gorgeous interface that delights your customers with a
-      single line of code.
+      The "Add Money" button for Crypto Currency, a fully
+      configurable, gorgeous interface that delights customers.
     </article>
     <div class="buttons col">
       <a class="button" href={`${domain}/docs/guide`} target="_blank"
