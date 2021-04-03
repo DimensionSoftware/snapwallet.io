@@ -40,7 +40,7 @@
     <h2>
       Simply Connect Crypto to Your 
       {#if Typewriter}
-        <Typewriter loop interval={50} delay={2000}>
+        <Typewriter interval={50} loop={1800}>
           <span>Idea</span>
           <span>App</span>
           <span>Company</span>
@@ -53,7 +53,7 @@
     </h2>
     <article>
       The "Add Money" button for Crypto Currency, a fully
-      configurable, gorgeous interface that delights customers.
+      configurable, gorgeous wallet that delights customers.
     </article>
     <div class="buttons col">
       <a class="button" href={`${domain}/docs/guide`} target="_blank"
@@ -94,7 +94,7 @@
       position: relative;
       max-width: 50%;
       .buttons {
-        margin: 5rem 0 0;
+        margin: 3rem 0 0;
         max-width: 100%;
         .button {
           display: inline-block;
