@@ -3,6 +3,8 @@
 </script>
 
 <script lang="ts">
+import Snap from 'flux-init';
+
   import { onMount } from 'svelte'
   const domain = 'https://www.snapwallet.io'
 
