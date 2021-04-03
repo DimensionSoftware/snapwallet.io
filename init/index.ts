@@ -123,7 +123,7 @@ class Snap {
 
   generateURL = (config?: IConfig) => {
     config && this.setConfig(config)
-    const qs = `?init=1&ts=${Date.now()}&config=${this.configToQueryString()}`
+    const qs = `?ts=${Date.now()}&config=${this.configToQueryString()}`
     return `${this.baseURL}/${qs}#/`
   }
 

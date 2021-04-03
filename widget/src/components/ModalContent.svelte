@@ -1,14 +1,9 @@
 <script lang="ts">
-  import { isEmbedded } from '../util'
   export let animation: string = 'left'
   export let fullscreen: boolean = false
 </script>
 
-<div
-  class="modal-content {animation}"
-  class:fullscreen
-  style={`bottom: ${isEmbedded ? '5.5em' : '4.5em'}`}
->
+<div class="modal-content {animation}" class:fullscreen>
   <slot />
 </div>
 
@@ -42,6 +37,7 @@
     top: 1em;
     left: 1em;
     right: 1em;
+    bottom: 4.5rem;
     &.fullscreen {
       left: 0;
       right: 0;

@@ -107,8 +107,6 @@ export const dropEndingZeros = (str: string): string => {
 
 export const capitalize = (s: string) => s[0].toUpperCase() + s.substr(1)
 
-export const isEmbedded = window.location.search.indexOf('init=') !== -1
-
 export const cachePrimaryPaymentMethodID = (pmId: string) => {
   try {
     window.localStorage.setItem(CACHED_PRIMARY_PAYMENT_METHOD_KEY, pmId)
