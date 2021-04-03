@@ -9,9 +9,9 @@
   let ifr: HTMLIFrameElement
 
   onMount(async () => {
-    const { default: Snap } = await import('flux-init')
+    await import('flux-init')
 
-    const SnapWallet = new Snap({
+    const SnapWallet = new (window as any).Snap({
       appName: 'Snap Wallet',
       intent: 'buy',
       wallets: [],
