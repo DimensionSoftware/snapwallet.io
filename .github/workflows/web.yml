@@ -6,6 +6,7 @@ on:
       - master
     paths:
       - '.github/workflows/web.yml'
+      - 'firebase.json'
       - 'widget/**'
       - 'docs/**'
       - 'web/**'
