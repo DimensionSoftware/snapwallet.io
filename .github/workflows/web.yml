@@ -29,6 +29,7 @@ jobs:
           popd
 
           cp firebase.deploy.json firebase.json
+          cat firebase.json
           npx firebase-tools deploy --only hosting
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
