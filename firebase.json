@@ -10,6 +10,13 @@
       "**/.*",
       "**/node_modules/**"
     ],
+    "headers": [ {
+      "source": "widget/",
+      "headers": [ {
+        "key": "cache-control",
+        "value": "max-age=10"
+      } ]
+    } ],
     "redirects": [ {
       "source": "/widget/bundle.css",
       "destination": "/widget/build/bundle.somehash.css",
