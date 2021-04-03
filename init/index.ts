@@ -117,15 +117,16 @@ class Snap {
     )
   }
 
+  generateURL = (config?: IConfig) => {
+    config && this.setConfig(config)
+    const qs = `?init=1&ts=${Date.now()}&config=${this.configToQueryString()}`
+    return `${this.baseURL}/${qs}#/`
+  }
+
   private handleMessage = (event: any) => {
     const { data = '{}' } = event
     const msg = JSON.parse(data)
     this.onMessage && this.onMessage(msg)
-  }
-
-  private generateURL = () => {
-    const qs = `?init=1&ts=${Date.now()}&config=${this.configToQueryString()}`
-    return `${this.baseURL}/${qs}#/`
   }
 }
 
