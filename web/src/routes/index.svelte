@@ -1,27 +1,30 @@
 <script context="module" lang="ts">
   export const prerender = true
+
+  declare global {
+    interface Window {
+      Snap: any
+    }
+  }
 </script>
 
 <script lang="ts">
   import { onMount } from 'svelte'
+  const domain = 'https://www.snapwallet.io'
 
-  const domain = 'https://snapwallet.io',
-    config = {
+  let ifr: HTMLIFrameElement
+
+  onMount(async () => {
+    const SnapWallet = new window.Snap({
       theme: {
         modalBackground: '#333',
         color: '#fff',
         textColor: '#fff',
         inputTextColor: '#333',
       },
-      nonce: Date.now(),
-    }
-  const src = `${domain}/widget/?config=${encodeURIComponent(JSON.stringify(config))}`
+    })
 
-  let ifr
-
-  onMount(async () => {
-    // do once dammit
-    ifr.src = src
+    ifr.src = SnapWallet.generateURL()
   })
 </script>
 
@@ -60,6 +63,13 @@
     />
   </div>
 </main>
+
+<svelte:head>
+  <script
+    defer
+    src={`https://snapwallet.io/widget/dist/bundle.js?ts=${Date.now()}`}
+    type="text/javascript"></script>
+</svelte:head>
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
