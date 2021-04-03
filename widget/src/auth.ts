@@ -119,7 +119,6 @@ export class AuthManager {
         refreshToken: token,
       })
       const resp = await this.tokenExchangePromise
-      this.tokenExchangePromise = null
 
       this.setCurrentAccessToken(resp.tokens.accessToken)
       this.setCurrentRefreshToken(resp.tokens.refreshToken)
@@ -132,6 +131,8 @@ export class AuthManager {
         throw new Error('refresh token claims lacks an expiration')
       }
       this.sessionExpiresAt = parseInt(parsed.exp) * 1000
+
+      this.tokenExchangePromise = null
     } else {
       await this.tokenExchangePromise
     }
