@@ -28,6 +28,24 @@
             "value": "max-age=30"
           }
         ]
+      },
+      {
+        "source": "/widget/global.css",
+        "headers": [
+          {
+            "key": "cache-control",
+            "value": "max-age=30"
+          }
+        ]
+      },
+      {
+        "source": "**/favicon.@(ico|png)",
+        "headers": [
+          {
+            "key": "cache-control",
+            "value": "max-age=86400"
+          }
+        ]
       }
     ],
     "rewrites": [],
