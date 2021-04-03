@@ -15,7 +15,7 @@
       },
       nonce: Date.now(),
     }
-  const src = `${domain}/widget/?config='${encodeURIComponent(JSON.stringify(config))}'`
+  const src = `${domain}/widget/?config=${encodeURIComponent(JSON.stringify(config))}`
 
   let ifr
 
