@@ -33,6 +33,7 @@ pushd web
 npm i
 npm run build
 popd
+mkdir -p web/build/prerendered
 mv web/build/assets/* web/build/prerendered/.
 mv web/build/prerendered/* web_dist/.
 
