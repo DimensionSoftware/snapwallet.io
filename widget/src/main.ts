@@ -45,31 +45,7 @@ const app = new App({
     },
     theme: {
       /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */
-      // color: '#7f8c8d',
-      // colorDarkened: '#2c3e50',
-      // colorLightened: '#95a5a6',
-      // Coinbase theme
-      // modalBackground: '#070F15',
-      // color: '#2187FF',
-      // textColor: '#fff',
-      // TODO: handle numbers in theme vars
-      // 'text-color-3': '#fff',
-      // colorInverse: '#263543',
-      // warningColor: '#FFBD4A',
-      // successColor: '#83E068',
-      // errorColor: '#E7693C',
-      // ...{
-      //   // dark "snap" theme
-      //   modalBackground: '#222',
-      //   modalPopupBackground: '#444',
-      //   color: 'rgb(100,100,100)',
-      //   colorLightened: 'rgba(100,100,100,.8)',
-      //   colorInverse: '#ddd',
-      //   textColor: '#fff',
-      //   inputTextColor: '#333',
-      //   infoColor: '#74b9ff',
-      // },
-      ...config?.theme,
+      ...config?.theme || {},
     },
   },
 })
