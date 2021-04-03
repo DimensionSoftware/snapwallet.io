@@ -10,5 +10,14 @@
       "**/.*",
       "**/node_modules/**"
     ]
-  }
+  },
+  "headers": [
+    {
+      "source": "/widget/dist/init.js",
+      "headers": [ {
+        "key": "cache-control",
+        "value": "max-age=10"
+      } ]
+    }
+  ]
 }
