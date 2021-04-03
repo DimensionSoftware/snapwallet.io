@@ -43,6 +43,7 @@
   export let apiKey: string
   export let theme: object
   export let focus: boolean
+  export let hideClose: boolean
   export let product: ProductType
 
   $: isPreLogout = false
@@ -227,7 +228,7 @@
 
 <svelte:window on:keydown={onKeyDown} on:mousedown={onMouseDown} />
 
-<div id="modal">
+<div id="modal" class:hide-close={hideClose}>
   <div id="modal-body" class:blur={isPreLogout}>
     <Router on:conditionsFailed={routeConditionsFailed} {routes} />
     <Toast />

@@ -26,6 +26,7 @@ interface IConfig {
   appName: string
   intent: UserIntent
   focus: boolean
+  hideClose: boolean
   theme?: { [cssProperty: string]: string }
 }
 
@@ -40,6 +41,7 @@ class Snap {
   intent: UserIntent = 'buy'
   baseURL: string = _ENV.WIDGET_URL
   focus: boolean = true
+  hideClose: boolean = false
   theme?: { [cssProperty: string]: string }
 
   constructor(args: IConfig) {
@@ -52,6 +54,7 @@ class Snap {
     this.appName = config.appName || this.appName
     this.intent = config.intent || this.intent
     this.focus = config.focus ?? this.focus
+    this.hideClose = config.hideClose ?? this.hideClose
     this.theme = config.theme || this.theme
   }
 
@@ -62,6 +65,7 @@ class Snap {
         appName: this.appName,
         intent: this.intent,
         focus: this.focus,
+        hideClose: this.hideClose,
         theme: this.theme,
       })
     )
