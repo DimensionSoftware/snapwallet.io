@@ -33,6 +33,15 @@ const app = new App({
     intent: config?.intent,
     focus: config?.focus,
     wallets: config?.wallets || [],
+    product: {
+      imageURL:
+        'https://lh3.googleusercontent.com/NpXUf_nwxn9yhHk_1AwFxRE7Mg2Lb7_rZoxKRuhf5Tca9MKm0Fh1MXuUAlJNJooO34l6YX3d-2MEZ1kpZvQ18JtrQbQw8CHnBdnRUV8=s992',
+      // videoURL:
+      //   'https://storage.opensea.io/files/cf469112444efdc46e076504b471c229.mp4',
+      destinationAmount: 0.0651,
+      destinationTicker: 'ETH',
+      title: 'Ecomi Card 1.0 (Cryptocircuits)',
+    },
     theme: {
       /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */
       // color: '#7f8c8d',
@@ -48,16 +57,17 @@ const app = new App({
       // warningColor: '#FFBD4A',
       // successColor: '#83E068',
       // errorColor: '#E7693C',
-      ...{
-        // dark "snap" theme
-        modalBackground: '#222',
-        modalPopupBackground: '#444',
-        color: 'rgb(100,100,100)',
-        colorLightened: 'rgba(100,100,100,.8)',
-        colorInverse: '#ddd',
-        textColor: '#fff',
-        inputTextColor: '#333',
-      },
+      // ...{
+      //   // dark "snap" theme
+      //   modalBackground: '#222',
+      //   modalPopupBackground: '#444',
+      //   color: 'rgb(100,100,100)',
+      //   colorLightened: 'rgba(100,100,100,.8)',
+      //   colorInverse: '#ddd',
+      //   textColor: '#fff',
+      //   inputTextColor: '#333',
+      //   infoColor: '#74b9ff',
+      // },
       ...config?.theme,
     },
   },
