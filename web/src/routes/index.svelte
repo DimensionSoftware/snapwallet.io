@@ -17,8 +17,11 @@
   onMount(async () => {
     const SnapWallet = new window.Snap({
       theme: {
-        modalBackground: '#333',
-        color: '#fff',
+        modalBackground: '#222',
+        modalPopupBackground: '#444',
+        color: 'rgb(100,100,100)',
+        colorLightened: 'rgba(100,100,100,.8)',
+        colorInverse: '#ddd',
         textColor: '#fff',
         inputTextColor: '#333',
       },
