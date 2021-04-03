@@ -26,6 +26,7 @@ interface IConfig {
   appName: string
   intent: UserIntent
   focus: boolean
+  theme?: { [cssProperty: string]: string }
 }
 
 class Snap {
@@ -39,6 +40,7 @@ class Snap {
   intent: UserIntent = 'buy'
   baseURL: string = _ENV.WIDGET_URL
   focus: boolean = true
+  theme?: { [cssProperty: string]: string }
 
   constructor(args: IConfig) {
     this.setConfig(args)
@@ -50,6 +52,7 @@ class Snap {
     this.appName = config.appName || this.appName
     this.intent = config.intent || this.intent
     this.focus = config.focus ?? this.focus
+    this.theme = config.theme || this.theme
   }
 
   configToQueryString = () => {
@@ -59,6 +62,7 @@ class Snap {
         appName: this.appName,
         intent: this.intent,
         focus: this.focus,
+        theme: this.theme,
       })
     )
   }
@@ -113,15 +117,16 @@ class Snap {
     )
   }
 
+  generateURL = (config?: IConfig) => {
+    config && this.setConfig(config)
+    const qs = `?init=1&ts=${Date.now()}&config=${this.configToQueryString()}`
+    return `${this.baseURL}/${qs}#/`
+  }
+
   private handleMessage = (event: any) => {
     const { data = '{}' } = event
     const msg = JSON.parse(data)
     this.onMessage && this.onMessage(msg)
-  }
-
-  private generateURL = () => {
-    const qs = `?init=1&config=${this.configToQueryString()}`
-    return `${this.baseURL}/${qs}#/`
   }
 }
 
