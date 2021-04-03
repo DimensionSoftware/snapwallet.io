@@ -14,13 +14,15 @@ const BuildID = nanoid()
 const initBundleName = `init.${BuildID}.js`
 const initBundlePath = `/widget/dist/${initBundleName}`
 const firebaseHostingConfig = {
-  redirects: [
-    {
-      source: `/widget/dist/init.js`,
-      destination: initBundlePath,
-      type: 302,
-    }
-  ]
+  hosting: {
+    redirects: [
+      {
+        source: `/widget/dist/init.js`,
+        destination: initBundlePath,
+        type: 302,
+      }
+    ]
+  }
 }
 
 writeFileSync('dist/info.json', JSON.stringify({
