@@ -3,15 +3,14 @@
 </script>
 
 <script lang="ts">
-  import Snap from 'flux-init'
-
   import { onMount } from 'svelte'
   const domain = 'https://www.snapwallet.io'
 
   let ifr: HTMLIFrameElement
 
   onMount(async () => {
-    await import('flux-init')
+    const { default: Snap } = await import('flux-init')
+
     const SnapWallet = new Snap({
       appName: 'Snap Wallet',
       intent: 'buy',
