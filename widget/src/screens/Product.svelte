@@ -64,8 +64,8 @@
     <div class="container">
       <b class="nft-title">{product.title}</b>
       {#if product.videoURL}
-        <video loop autoplay muted class="nft-video">
-          <source src={product.videoURL} type="video/mp4" />
+        <video loop playsinline autoplay muted class="nft-video">
+          <source src={product.videoURL} />
         </video>
       {/if}
       {#if product.imageURL && !product.videoURL}
