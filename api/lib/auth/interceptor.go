@@ -43,6 +43,7 @@ func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req i
 
 	claims, err := verifier.ParseAndVerify(ctx, TokenKindAccess, accessToken)
 	if err != nil {
+		log.Printf("%#v\n", err)
 		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 	log.Printf("claims --> %+v", claims)

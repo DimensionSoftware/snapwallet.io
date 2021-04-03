@@ -1296,7 +1296,6 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	})
 	if err != nil {
 		return nil, err
-
 	}
 
 	// send email
