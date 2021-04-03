@@ -60,7 +60,7 @@
 
 <ModalContent>
   <ModalBody>
-    <ModalHeader hideBackButton>Buying</ModalHeader>
+    <ModalHeader isProductCheckout hideBackButton>Buying</ModalHeader>
     <div class="container">
       <b class="nft-title">{product.title}</b>
       {#if product.videoURL}

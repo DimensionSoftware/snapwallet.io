@@ -9,6 +9,7 @@
   import { userStore } from '../stores/UserStore'
 
   export let isExpanded: boolean = false
+  export let isProductCheckout: boolean = false
 
   function logout() {
     close()
@@ -101,7 +102,9 @@
 </div>
 <aside class:active={isExpanded}>
   <nav>
-    <a on:click={_ => go(Routes.ROOT)}>Buy Crypto Assets</a>
+    <a on:click={_ => go(Routes.ROOT)}
+      >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
+    >
     <a class="hr" on:click={_ => go(Routes.TRANSACTIONS)}>My Transactions</a>
     <a on:click={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
     {#if isLoggedIn}

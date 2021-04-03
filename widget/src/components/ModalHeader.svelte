@@ -7,6 +7,7 @@
   export let onBack: () => any = undefined
   export let hideRightAction = false
   export let hideBackButton = false
+  export let isProductCheckout = false
 </script>
 
 <div class="modal-header">
@@ -22,7 +23,7 @@
   </div>
   <div class:hidden={hideRightAction} class="modal-header-right-action">
     <slot name="right">
-      <SideMenu />
+      <SideMenu {isProductCheckout} />
     </slot>
   </div>
 </div>
