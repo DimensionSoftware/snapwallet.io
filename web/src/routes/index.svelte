@@ -4,7 +4,7 @@
 
 <script lang="ts">
   import { onMount } from 'svelte'
-  const domain = 'https://www.snapwallet.io'
+  const domain = 'https://snapwallet.io'
 
   let ifr: HTMLIFrameElement
 
@@ -44,7 +44,7 @@
       <a class="button" href={`${domain}/docs/guide`} target="_blank"
         >Get Started</a
       >
-      <a href={`https://api.snapwallet.io/swagger`} target="_blank"
+      <a href={`https://snapwallet.io/docs/api`} target="_blank"
         >API Documentation</a
       >
     </div>
