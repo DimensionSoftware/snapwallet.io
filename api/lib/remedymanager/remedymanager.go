@@ -16,9 +16,9 @@ type Manager struct {
 func (m Manager) GetRemediationsProto(userID user.ID, profile profiledata.ProfileDatas) ([]*proto.ProfileDataItemRemediation, error) {
 	var out []*proto.ProfileDataItemRemediation
 
-	for _, remediation := range buildSubmitRemediationsForMissing(profile) {
-		out = append(out, remediation)
-	}
+	//for _, remediation := range buildSubmitRemediationsForMissing(profile) {
+	//	out = append(out, remediation)
+	//}
 
 	for _, remediation := range buildRemediationsForInvalid(profile) {
 		out = append(out, remediation)
