@@ -15,6 +15,8 @@ const initBundleName = `init.${BuildID}.js`
 const initBundlePath = `/widget/dist/${initBundleName}`
 const firebaseHostingConfig = {
   hosting: {
+    headers: [],
+    rewrites: [],
     redirects: [
       {
         source: `/widget/dist/init.js`,
