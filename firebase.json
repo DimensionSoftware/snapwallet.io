@@ -21,7 +21,7 @@
         ]
       },
       {
-        "source": "/widget/dist/init.js",
+        "source": "widget/dist/init.js",
         "headers": [
           {
             "key": "cache-control",
@@ -30,7 +30,7 @@
         ]
       },
       {
-        "source": "/widget/global.css",
+        "source": "widget/global.css",
         "headers": [
           {
             "key": "cache-control",
