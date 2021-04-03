@@ -35,3 +35,12 @@ export type RemediationGroups = {
   contact: ProfileDataItemRemediation[]
   document: ProfileDataItemRemediation[]
 }
+
+export type ProductType = {
+  imageURL?: string
+  videoURL?: string
+  title: string
+  destinationAmount: number
+  destinationTicker: string
+  destinationAddress: string
+}
