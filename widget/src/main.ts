@@ -40,6 +40,7 @@ const app = new App({
       //   'https://storage.opensea.io/files/cf469112444efdc46e076504b471c229.mp4',
       destinationAmount: 0.0651,
       destinationTicker: 'ETH',
+      destinationAddress: '0xf636B6aA45C554139763Ad926407C02719bc22f7',
       title: 'Ecomi Card 1.0 (Cryptocircuits)',
     },
     theme: {
