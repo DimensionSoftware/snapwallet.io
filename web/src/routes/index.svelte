@@ -1,4 +1,5 @@
 <script context="module" lang="ts">
+  import Typewriter from 'svelte-typewriter'
   export const prerender = true
 </script>
 
@@ -34,7 +35,15 @@
 <main>
   <div class="intro col">
     <h1>Snap Wallet</h1>
-    <h2>Connect Crypto to Your Idea, Simply.</h2>
+    <h2>
+      Simply Connect Crypto to Your <Typewriter loop interval={100}>
+        <span>Idea</span>
+        <span>App</span>
+        <span>Company</span>
+        <span>Site</span>
+        <span>Donations</span>
+      </Typewriter>
+    </h2>
     <article>
       The "Add Money" button for Crypto Currency, Snap Wallet offers a fully
       configurable, gorgeous interface that delights your customers with a
@@ -108,6 +117,9 @@
     h2 {
       margin: 2rem 0 0.75rem 0;
       font-size: 1.25rem;
+      :global(div) {
+        display: inline-block;
+      }
     }
     a {
       color: $textColor;
