@@ -1,11 +1,5 @@
 <script context="module" lang="ts">
   export const prerender = true
-
-  declare global {
-    interface Window {
-      Snap: any
-    }
-  }
 </script>
 
 <script lang="ts">
@@ -15,7 +9,12 @@
   let ifr: HTMLIFrameElement
 
   onMount(async () => {
-    const SnapWallet = new window.Snap({
+    await import('flux-init')
+    const SnapWallet = new Snap({
+      appName: 'Snap Wallet',
+      intent: 'buy',
+      wallets: [],
+      focus: true,
       theme: {
         modalBackground: '#222',
         modalPopupBackground: '#444',
@@ -66,13 +65,6 @@
     />
   </div>
 </main>
-
-<svelte:head>
-  <script
-    defer
-    src={`https://snapwallet.io/widget/dist/bundle.js?ts=${Date.now()}`}
-    type="text/javascript"></script>
-</svelte:head>
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
