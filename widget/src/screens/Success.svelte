@@ -67,7 +67,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:click={done}>Done</Button>
+    <Button on:mousedown={done}>Done</Button>
   </ModalFooter>
 </ModalContent>
 

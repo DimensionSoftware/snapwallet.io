@@ -14,14 +14,14 @@
 <div class="intent-selector-container">
   <div class="intent-selector">
     <div
-      on:click={() => isSell && onClick()}
+      on:mousedown={() => isSell && onClick()}
       class:active={!isSell}
       class="buy-toggle"
     >
       Buy
     </div>
     <div
-      on:click={() => !isSell && onClick()}
+      on:mousedown={() => !isSell && onClick()}
       class:active={isSell}
       class="sell-toggle"
     >

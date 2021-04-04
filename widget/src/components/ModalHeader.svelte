@@ -12,7 +12,7 @@
 
 <div class="modal-header">
   <div
-    on:click={onBack ? onBack : pop}
+    on:mousedown={onBack ? onBack : pop}
     class:hidden={hideBackButton}
     class="modal-header-back-button"
   >

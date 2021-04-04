@@ -269,7 +269,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isCreatingTxnPreview} on:click={handleNextStep}>
+    <Button isLoading={isCreatingTxnPreview} on:mousedown={handleNextStep}>
       <div style="display:flex;justify-content:center;align-items:center;">
         <span style="margin-right:0.75rem;">
           {isCreatingTxnPreview ? 'Previewing' : 'Preview'}

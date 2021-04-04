@@ -73,7 +73,7 @@
     {:else if loading}
       <h4 style="text-align: center;">Getting Your Transactions...</h4>
     {:else}
-      <a on:click={_ => push(Routes.ROOT)}>
+      <a on:mousedown={_ => push(Routes.ROOT)}>
         <h4 style="text-align: center;">Start Your First Transaction</h4>
       </a>
     {/if}
@@ -82,7 +82,7 @@
     {#if transfers?.length}
       <Button
         title="Download Transactions as CSV"
-        on:click={() => {
+        on:mousedown={() => {
           csvFileName = getFileName()
           csvElement?.click()
         }}

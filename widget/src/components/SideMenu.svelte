@@ -45,7 +45,7 @@
 <div
   class="container"
   class:active={isExpanded}
-  on:click={_ => {
+  on:mousedown={_ => {
     if (isExpanded) {
       close()
     } else {
@@ -102,15 +102,15 @@
 </div>
 <aside class:active={isExpanded}>
   <nav>
-    <a on:click={_ => go(Routes.ROOT)}
+    <a on:mousedown={_ => go(Routes.ROOT)}
       >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
     >
-    <a class="hr" on:click={_ => go(Routes.TRANSACTIONS)}>My Transactions</a>
-    <a on:click={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
+    <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}>My Transactions</a>
+    <a on:mousedown={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
     {#if isLoggedIn}
-      <a class="hr" on:click={logout}>Logout</a>
+      <a class="hr" on:mousedown={logout}>Logout</a>
     {:else}
-      <a class="hr" on:click={login}>Login</a>
+      <a class="hr" on:mousedown={login}>Login</a>
     {/if}
   </nav>
 </aside>

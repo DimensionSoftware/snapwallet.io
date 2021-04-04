@@ -181,7 +181,7 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isSubmittingProfile} on:click={handleNextStep}
+    <Button isLoading={isSubmittingProfile} on:mousedown={handleNextStep}
       >{isSubmittingProfile ? 'Saving' : 'Save'}</Button
     >
   </ModalFooter>

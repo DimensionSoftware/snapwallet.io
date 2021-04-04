@@ -62,7 +62,7 @@
       </select>
     </label>
   </ModalBody>
-  <button on:click={handleNextStep}>Plz give me now</button>
+  <button on:mousedown={handleNextStep}>Plz give me now</button>
 </ModalContent>
 
 <style lang="scss">

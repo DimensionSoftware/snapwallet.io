@@ -78,8 +78,8 @@
       {expiresAfterResolution}
     </p>
     <div class="flex">
-      <button on:click={logout} class="logout">Logout</button>
-      <button on:click={cont} class="continue">Continue</button>
+      <button on:mousedown={logout} class="logout">Logout</button>
+      <button on:mousedown={cont} class="continue">Continue</button>
     </div>
   </article>
 </div>

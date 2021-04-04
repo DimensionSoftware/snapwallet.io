@@ -95,7 +95,7 @@
         {#if $userStore.flags?.hasEmail}
           <div class="link">
             <a
-              on:click={() => {
+              on:mousedown={() => {
                 isUsingPhoneNumber = true
                 // clear so verify doesn't use this value
                 userStore.setEmailAddress('')
@@ -125,7 +125,7 @@
         {#if $userStore.flags?.hasPhone && !$userStore.flags?.hasEmail}
           <div class="link">
             <a
-              on:click={() => {
+              on:mousedown={() => {
                 isUsingPhoneNumber = false
                 // clear so verify doesn't use this value
                 userStore.setPhoneNumber('')
@@ -137,7 +137,7 @@
     {/if}
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isMakingRequest} on:click={handleNextStep}>
+    <Button isLoading={isMakingRequest} on:mousedown={handleNextStep}>
       {#if isMakingRequest}
         Sending Code...
       {:else}

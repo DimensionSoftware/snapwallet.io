@@ -6,7 +6,12 @@
   export let title: string = ''
 </script>
 
-<button disabled={disabled || isLoading} class:isLoading on:click={() => dispatch('click')} {title}>
+<button
+  disabled={disabled || isLoading}
+  class:isLoading
+  on:mousedown={() => dispatch('click')}
+  {title}
+>
   <div class="lds-circle"><div /></div>
   <slot /></button
 >
