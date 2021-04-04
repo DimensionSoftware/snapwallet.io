@@ -86,7 +86,7 @@
             badgeType={['OPEN', 'PENDING'].includes(pm.status)
               ? 'warning'
               : 'success'}
-            on:mousedown={() => {
+            on:click={() => {
               transactionStore.setSelectedSourcePaymentMethod(pm)
               cachePrimaryPaymentMethodID(pm.id)
               dispatch('close')
