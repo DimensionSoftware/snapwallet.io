@@ -66,7 +66,6 @@
     }
     &:active,
     &:focus {
-      background: var(--theme-color-lightened);
       box-shadow: 0 0 0 1px var(--theme-color),
         0 6px 6px var(--theme-shadow-color);
       text-shadow: 0 1px 0 --var(--theme-text-color);
