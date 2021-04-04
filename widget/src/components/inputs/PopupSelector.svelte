@@ -60,10 +60,11 @@
     border-bottom-left-radius: 0;
     z-index: 1000;
     position: absolute;
-    top: 1.5rem;
+    top: 1rem;
     bottom: 0;
     left: 0;
     right: 0;
+    padding-top: 0.5rem;
     background: var(--theme-modal-popup-background);
     animation: slideUp 0.2s $easeOutExpo forwards;
   }
