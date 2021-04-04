@@ -148,7 +148,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        height: 2px;
+        height: 1px;
         background: linear-gradient(
           to right,
           transparent,
@@ -166,7 +166,7 @@
         top: -4px;
         right: -5px;
         bottom: -4px;
-        background: var(--theme-color);
+        background: var(--theme-color-lightened);
         opacity: 0.5;
         transform: scale(1);
         transition: none;
