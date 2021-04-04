@@ -16,6 +16,7 @@
     getPrimaryPaymentMethodID,
     isValidNumber,
     onEnterPressed,
+    focus,
   } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
@@ -86,7 +87,7 @@
 
     // guards
     if (!sourceAmount || !isValidNumber(sourceAmount)) {
-      document.querySelector('input')?.focus()
+      focus(document.querySelector('input'))
       throw new Error('Input an Amount in USD')
     }
     if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod)

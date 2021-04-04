@@ -9,7 +9,7 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed } from '../util'
+  import { Logger, onEnterPressed, focus } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
   import type { OneTimePasscodeVerifyResponse } from 'api-client'
@@ -32,7 +32,7 @@
     Logger.debug('Verifying using OTP code:', code)
     const emailOrPhone = $userStore.phoneNumber || $userStore.emailAddress
     if (!(code?.length > 5) || !emailOrPhone) {
-      document.getElementById('code').focus()
+      focus(document.getElementById('code'))
 
       toaster.pop({
         msg: 'Check for your code and try again!',

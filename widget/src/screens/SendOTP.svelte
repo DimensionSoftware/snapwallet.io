@@ -10,7 +10,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { toaster } from '../stores/ToastStore'
-  import { Logger, onEnterPressed } from '../util'
+  import { Logger, onEnterPressed, focus } from '../util'
   import { Routes } from '../constants'
   import { Masks } from '../types'
   import { unMaskValue } from '../masks'
@@ -28,12 +28,12 @@
       if (!phoneVerificationOnly && !isUsingPhoneNumber) {
         let emailIsValid = vld8.isEmail($userStore.emailAddress)
         if (!emailIsValid)
-          return (document.querySelector('input[type="email"]') as any).focus()
+          return focus(document.querySelector('input[type="email"]'))
       } else {
         const rawPhone = unMaskValue($userStore.phoneNumber, Masks.PHONE)
         let isPhoneValid = vld8.isMobilePhone(rawPhone)
         if (!isPhoneValid)
-          return (document.querySelector('input[type="tel"]') as any).focus()
+          return focus(document.querySelector('input[type="tel"]'))
       }
 
       isMakingRequest = true

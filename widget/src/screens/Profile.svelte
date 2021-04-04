@@ -9,7 +9,7 @@
   import Input from '../components/inputs/Input.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { onEnterPressed } from '../util'
+  import { onEnterPressed, focus as focusElement } from '../util'
   import { Routes, UserProfileFieldTypes } from '../constants'
   import { Masks } from '../types'
 
@@ -33,7 +33,7 @@
           const thingie = document.querySelectorAll('input[type="text"]')[
             ndx
           ] as any
-          thingie.focus()
+          focusElement(thingie)
         }
 
       const minFieldFilled = [

@@ -6,11 +6,12 @@ export const CryptoIcons = Icons
 
 // pure fns
 // ---------
+export const focus = (e: HTMLElement, duration = 150) => {
+  setTimeout(() => e?.focus(), duration)
+}
+
 export const focusFirstInput = (duration = 400) => {
-  setTimeout(
-    () => document.querySelector('input:first-child')?.focus(),
-    duration,
-  )
+  focus(document.querySelector('input:first-child'), duration)
 }
 
 export const onEnterPressed = (e, cb) => {

@@ -2,6 +2,7 @@
   import { onMount, afterUpdate, createEventDispatcher } from 'svelte'
   import type { Masks } from '../../types'
   import { withMaskOnInput, isValidMaskInput } from '../../masks'
+  import { focus } from '../../util'
 
   const dispatch = createEventDispatcher()
   export let type: string = 'text'
@@ -19,7 +20,7 @@
   let isActive: boolean = Boolean(defaultValue)
 
   onMount(function () {
-    setTimeout(() => document.querySelector('input[autofocus]')?.focus(), 200)
+    focus(document.querySelector('input[autofocus]'), 200)
   })
 </script>
 

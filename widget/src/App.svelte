@@ -23,6 +23,7 @@
     isJWTValid,
     Logger,
     onEscPressed,
+    focus as focusElement,
   } from './util'
   import { ParentMessenger } from './util/parent_messenger'
   import { userStore } from './stores/UserStore'
@@ -191,7 +192,7 @@
       userStore.fetchUserProfile()
       paymentMethodStore.fetchWyrePaymentMethods()
     }
-    if (focus) setTimeout(() => document.getElementById('amount')?.focus(), 350)
+    if (focus) focusElement(document.getElementById('amount'), 350)
     // Override theme css variables
     Object.entries(theme).forEach(([k, v]) => {
       k = k.replace(/[A-Z]/g, (k, i) =>
