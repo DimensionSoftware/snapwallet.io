@@ -9,7 +9,7 @@
 <button
   disabled={disabled || isLoading}
   class:isLoading
-  on:mousedown={() => dispatch('click')}
+  on:mousedown={() => dispatch('mousedown')}
   {title}
 >
   <div class="lds-circle"><div /></div>

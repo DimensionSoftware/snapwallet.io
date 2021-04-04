@@ -12,7 +12,7 @@
 </script>
 
 <div
-  on:click={() => {
+  on:mousedown={() => {
     const { destinationCurrency, sourceCurrency } = $transactionStore
     if ($transactionStore.intent === TransactionIntents.BUY) {
       transactionStore.setCurrencies({
@@ -25,7 +25,7 @@
         sourceCurrency: crypto,
       })
     }
-    dispatch('click')
+    dispatch('mousedown')
   }}
   class="crypto-card"
 >

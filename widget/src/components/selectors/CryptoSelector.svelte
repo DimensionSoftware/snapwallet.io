@@ -46,7 +46,7 @@
         >
           <Label>
             <CryptoCard
-              on:click={() => dispatch('close')}
+              on:mousedown={() => dispatch('close')}
               crypto={cryptoCurrency}
             />
           </Label>
@@ -60,7 +60,7 @@
         >
           <Label>
             <CryptoCard
-              on:click={() => dispatch('close')}
+              on:mousedown={() => dispatch('close')}
               crypto={cryptoCurrency}
             />
           </Label>
