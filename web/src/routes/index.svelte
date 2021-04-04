@@ -38,7 +38,7 @@
   <div class="intro col">
     <h1>Snap Wallet</h1>
     <h2>
-      Simply Connect Crypto to Your 
+      Connect Crypto to Your 
       {#if Typewriter}
         <Typewriter interval={50} loop={1800}>
           <span>Idea</span>
@@ -87,7 +87,6 @@
   $textColor: #333;
   main {
     display: flex;
-    padding: 1em;
     max-width: 960px;
     margin: 15% auto 0;
     .col {
@@ -121,7 +120,7 @@
       margin: 0.5rem 0;
     }
     h2 {
-      margin: 2rem 0 0.75rem 0;
+      margin: 2rem 0 .35rem;
       font-size: 1.25rem;
       :global(div) {
         display: inline-block;
