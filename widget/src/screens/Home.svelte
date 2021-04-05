@@ -178,8 +178,10 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent animation="right">
+  <ModalHeader hideBackButton
+    >{isBuy ? 'Buy' : 'Sell'} {destinationCurrency.ticker}</ModalHeader
+  >
   <ModalBody>
-    <ModalHeader hideBackButton>Checkout</ModalHeader>
     <div class="cryptocurrencies-container">
       <div class="dst-container">
         <Label>
