@@ -66,10 +66,10 @@
     isPreLogout = true
   })
 
-  window.addEventListener('blur', () => {
+  window.addEventListener('blurry', () => {
     isBlurred = true
   })
-  window.addEventListener('unblur', () => {
+  window.addEventListener('unblurry', () => {
     isBlurred = false
   })
 

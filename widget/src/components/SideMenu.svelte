@@ -42,7 +42,7 @@
   $: isLoggedIn = $userStore.isLoggedIn
   $: {
     setTimeout(
-      () => window.dispatchEvent(new Event(isExpanded ? 'blur' : 'unblur')),
+      () => window.dispatchEvent(new Event(isExpanded ? 'blurry' : 'unblurry')),
       isExpanded ? 0 : slow ? 300 : 150,
     )
   }

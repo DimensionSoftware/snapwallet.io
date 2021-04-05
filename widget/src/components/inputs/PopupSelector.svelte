@@ -12,10 +12,10 @@
   // lifecycle events
   onMount(() => {
     // XXX could use svelte's dispatcher
-    window.dispatchEvent(new Event('blur'))
+    window.dispatchEvent(new Event('blurry'))
   })
   onDestroy(() => {
-    window.dispatchEvent(new Event('unblur'))
+    window.dispatchEvent(new Event('unblurry'))
   })
 
   function handleClose(e: Event) {
