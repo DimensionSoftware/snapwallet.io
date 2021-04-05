@@ -64,17 +64,15 @@
     }
     // line
     &:first-child:after {
-      margin-top: -1rem;
-      height: 200%;
       background: linear-gradient(transparent, var(--theme-text-color-4));
     }
     &:after {
       position: absolute;
       width: 2px;
       left: 3px;
-      top: -1.25rem;
+      top: -20px;
       opacity: 0.3;
-      height: 120%;
+      height: calc(100% + 12px);
       content: '';
       background-color: var(--theme-text-color-4);
       background-position: 0 0;
