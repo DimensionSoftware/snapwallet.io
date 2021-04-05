@@ -86,6 +86,7 @@
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
+  @import '../../../widget/src/styles/_vars.scss';
   $textColor: #333;
   main {
     display: flex;
@@ -147,6 +148,8 @@
     }
     :global(iframe.loaded) {
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+      transition: box-shadow 1s $easeOutExpo 0.25s;
+      will-change: box-shadow;
     }
   }
   @media (min-width: 480px) {
