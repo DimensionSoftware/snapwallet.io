@@ -74,15 +74,17 @@
     bottom: 0;
     left: 0;
     right: 0;
-    padding-top: 0.5rem;
     background: var(--theme-modal-popup-background);
     animation: slideUp 0.2s $easeOutExpo forwards;
   }
 
   .popup-selector-header {
     display: flex;
+    background: var(--theme-modal-background);
+    border-top-right-radius: 1rem;
+    border-top-left-radius: 1rem;
     height: 50px;
-    padding: 0 1rem;
+    padding: 1rem;
     width: 100%;
     justify-content: space-between;
     align-items: center;
@@ -95,8 +97,10 @@
   }
 
   .close-icon {
-    width: 25px;
-    height: 25px;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 100%;
+    padding: .3rem;
     display: flex;
     justify-content: center;
     align-items: center;
