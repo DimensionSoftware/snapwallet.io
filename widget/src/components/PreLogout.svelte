@@ -109,6 +109,7 @@
       }
       p {
         font-size: 0.9rem;
+        margin: .24rem 0 1.75rem;
       }
       .flex {
         display: flex;

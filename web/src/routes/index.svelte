@@ -31,6 +31,7 @@
     })
 
     ifr.src = SnapWallet.generateURL()
+    ifr.classList.add('loaded')
   })
 </script>
 
@@ -38,7 +39,7 @@
   <div class="intro col">
     <h1>Snap Wallet</h1>
     <h2>
-      Connect Crypto to Your 
+      Connect Crypto to Your
       {#if Typewriter}
         <Typewriter interval={50} loop={1800}>
           <span>Idea</span>
@@ -53,8 +54,8 @@
       {/if}
     </h2>
     <article>
-      The "Add Money" button for Crypto Currency, a fully
-      configurable, gorgeous wallet that delights customers.
+      The "Add Money" button for Crypto Currency, a fully configurable, gorgeous
+      wallet that delights customers.
     </article>
     <div class="buttons col">
       <a class="button" href={`${domain}/docs/guide`} target="_blank"
@@ -121,7 +122,7 @@
       margin: 0.5rem 0;
     }
     h2 {
-      margin: 2rem 0 .35rem;
+      margin: 2rem 0 0.35rem;
       font-size: 1.25rem;
       :global(div) {
         display: inline-block;
@@ -139,7 +140,9 @@
       line-height: 1.35;
     }
     iframe {
-      box-shadow: 0 0 25px rgba(0,0,0,.4);
+      &.loaded {
+        box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+      }
       position: relative;
       border-radius: 20px;
       top: -20%;
