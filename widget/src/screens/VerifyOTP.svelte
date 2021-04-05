@@ -132,8 +132,8 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent>
+  <ModalHeader>Enter Your Code</ModalHeader>
   <ModalBody>
-    <ModalHeader>Enter Your Code</ModalHeader>
     <div class="code" in:fade={{ duration: 300 }}>
       <Label label="Your Code">
         <Input

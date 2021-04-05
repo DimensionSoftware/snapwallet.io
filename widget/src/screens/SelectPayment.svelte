@@ -24,8 +24,8 @@
 </script>
 
 <ModalContent>
+  <ModalHeader hideRightAction>Payment Method</ModalHeader>
   <ModalBody>
-    <ModalHeader hideRightAction>Payment Method</ModalHeader>
     <IconCard on:mousedown|once={onACHClicked} label="Bank Account">
       <div class="icon-slot-container" slot="icon">
         <FaIcon data={faUniversity} />

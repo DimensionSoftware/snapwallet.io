@@ -74,8 +74,8 @@
 </script>
 
 <ModalContent>
+  <ModalHeader onBack={() => push(Routes.ROOT)}>Profile</ModalHeader>
   <ModalBody>
-    <ModalHeader onBack={() => push(Routes.ROOT)}>Profile</ModalHeader>
     <div style="padding:0 0.5rem;font-weight:bold;">
       <FaIcon scale="3" data={faUserCircle} />
     </div>

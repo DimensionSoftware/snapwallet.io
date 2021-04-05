@@ -123,8 +123,8 @@
 </script>
 
 <ModalContent>
+  <ModalHeader>Verify Identity</ModalHeader>
   <ModalBody>
-    <ModalHeader>Verify Identity</ModalHeader>
     <div style="margin-top:1rem;margin-bottom:0.75rem;">
       <IconCard
         blend

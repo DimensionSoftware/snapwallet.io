@@ -24,8 +24,8 @@
 </script>
 
 <ModalContent>
+  <ModalHeader hideBackButton>Success</ModalHeader>
   <ModalBody>
-    <ModalHeader hideBackButton>Success</ModalHeader>
     <div class="icon-box">
       <svg
         id="successAnimation"

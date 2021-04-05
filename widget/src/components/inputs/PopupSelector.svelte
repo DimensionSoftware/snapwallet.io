@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount, onDestroy } from 'svelte'
   import { createEventDispatcher } from 'svelte'
   import { onKeysPressed } from '../../util'
   import { scale } from 'svelte/transition'
@@ -7,6 +8,15 @@
   const dispatch = createEventDispatcher()
 
   export let headerTitle: string
+
+  // lifecycle events
+  onMount(() => {
+    // XXX could use svelte's dispatcher
+    window.dispatchEvent(new Event('blur'))
+  })
+  onDestroy(() => {
+    window.dispatchEvent(new Event('unblur'))
+  })
 
   function handleClose(e: Event) {
     if (onKeysPressed(e, ['Escape'])) {

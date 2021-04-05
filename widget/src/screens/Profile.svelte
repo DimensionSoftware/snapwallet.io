@@ -74,8 +74,8 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent>
+  <ModalHeader>Tell Us About You</ModalHeader>
   <ModalBody>
-    <ModalHeader>Tell Us About You</ModalHeader>
     {#if $userStore.isProfileComplete}
       <h5>Your profile was received. Update any detail:</h5>
     {:else}

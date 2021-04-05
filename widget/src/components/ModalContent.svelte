@@ -37,7 +37,7 @@
     top: 1em;
     left: 1em;
     right: 1em;
-    bottom: 4.5rem;
+    bottom: 8.5rem;
     &.fullscreen {
       left: 0;
       right: 0;

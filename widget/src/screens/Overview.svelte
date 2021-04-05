@@ -99,8 +99,8 @@
 </script>
 
 <ModalContent fullscreen>
+  <ModalHeader>{screenTitle}</ModalHeader>
   <ModalBody>
-    <ModalHeader>{screenTitle}</ModalHeader>
     <div class="checkout-item-box">
       <div style="width:30%;" class="checkout-item-icon">
         <Icon size="100%" height="100%" width="100%" viewBox="-4 -4 40 40" />

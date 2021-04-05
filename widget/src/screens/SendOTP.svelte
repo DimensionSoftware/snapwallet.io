@@ -69,14 +69,14 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent>
+  <ModalHeader>
+    {#if phoneVerificationOnly}
+      Phone Verification
+    {:else}
+      Login or Sign Up
+    {/if}
+  </ModalHeader>
   <ModalBody>
-    <ModalHeader>
-      {#if phoneVerificationOnly}
-        Phone Verification
-      {:else}
-        Login or Sign Up
-      {/if}
-    </ModalHeader>
     {#if !phoneVerificationOnly && (!$userStore.flags?.hasEmail || !isUsingPhoneNumber)}
       <div class="email" in:fade={{ duration: 300 }}>
         <Label label="Your Email">

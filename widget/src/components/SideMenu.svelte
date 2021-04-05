@@ -38,6 +38,12 @@
   }
 
   $: isLoggedIn = $userStore.isLoggedIn
+  $: {
+    setTimeout(
+      () => window.dispatchEvent(new Event(isExpanded ? 'blur' : 'unblur')),
+      isExpanded ? 0 : 250,
+    )
+  }
 </script>
 
 <svelte:window on:keydown={handleClose} />
@@ -105,7 +111,8 @@
     <a on:mousedown={_ => go(Routes.ROOT)}
       >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
     >
-    <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}>My Transactions</a>
+    <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}>My Transactions</a
+    >
     <a on:mousedown={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
     {#if isLoggedIn}
       <a class="hr" on:mousedown={logout}>Logout</a>

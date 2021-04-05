@@ -137,8 +137,8 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent>
+  <ModalHeader>Where do you live?</ModalHeader>
   <ModalBody>
-    <ModalHeader>Where do you live?</ModalHeader>
     <Label label="Street 1">
       <Input
         id="autocomplete"

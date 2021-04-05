@@ -37,8 +37,8 @@
 </script>
 
 <ModalContent fullscreen>
+  <ModalHeader>My Transactions</ModalHeader>
   <ModalBody>
-    <ModalHeader>My Transactions</ModalHeader>
     {#if transfers?.length > 0}
       <a
         hidden

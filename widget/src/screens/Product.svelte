@@ -59,8 +59,8 @@
 </script>
 
 <ModalContent>
+  <ModalHeader isProductCheckout hideBackButton>Buying</ModalHeader>
   <ModalBody>
-    <ModalHeader isProductCheckout hideBackButton>Buying</ModalHeader>
     <div class="container">
       <b class="nft-title">{product.title}</b>
       {#if product.videoURL}

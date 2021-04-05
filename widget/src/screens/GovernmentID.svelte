@@ -35,9 +35,9 @@
 </script>
 
 <ModalContent>
-  <ModalBody>
-    <ModalHeader hideBackButton>CITIZEN?: gonna need to see some ID</ModalHeader
+    <ModalHeader hideBackButton>Your ID</ModalHeader
     >
+  <ModalBody>
     <label label="Upload US Government ID (Front)">
       <strong>Upload US Government ID (Front)</strong><br />
       <input type="file" bind:this={fileEl} />

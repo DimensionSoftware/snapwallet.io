@@ -48,6 +48,7 @@
   export let product: ProductType
 
   $: isPreLogout = false
+  $: isBlurred = false
 
   // auth bits
   window.addEventListener('logout', () => {
@@ -63,6 +64,13 @@
   window.addEventListener('prelogout', () => {
     Logger.debug('viewer is prelogout')
     isPreLogout = true
+  })
+
+  window.addEventListener('blur', () => {
+    isBlurred = true
+  })
+  window.addEventListener('unblur', () => {
+    isBlurred = false
   })
 
   // Handler for routing condition failure
@@ -230,7 +238,7 @@
 <svelte:window on:keydown={onKeyDown} on:mousedown={onMouseDown} />
 
 <div id="modal" class:hide-close={hideClose}>
-  <div id="modal-body" class:blur={isPreLogout}>
+  <div id="modal-body" class:blur={isPreLogout || isBlurred}>
     <Router on:conditionsFailed={routeConditionsFailed} {routes} />
     <Toast />
     {#if isPreLogout}
@@ -355,9 +363,19 @@
     animation: scaleIn 0.25s var(--theme-ease-out-back);
     // Used by toast
     position: relative;
+    :global(.modal-content .modal-body),
+    :global(.modal-content .modal-header-title),
+    :global(.modal-content .modal-header-back-button),
+    :global(.modal-content .modal-footer) {
+      transition: filter 0.1s;
+    }
     &.blur {
-      :global(.modal-content) {
-        filter: blur(5px);
+      :global(.modal-content .modal-body),
+      :global(.modal-content .modal-header-title),
+      :global(.modal-content .modal-header-back-button),
+      :global(.modal-content .modal-footer) {
+        filter: blur(12px) contrast(80%);
+        transition: none;
       }
     }
   }
