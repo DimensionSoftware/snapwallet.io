@@ -2,6 +2,7 @@
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
+  import ModalFooter from '../components/ModalFooter.svelte'
   import { Logger, fileToBase64 } from '../util'
   import IconCard from '../components/cards/IconCard.svelte'
   import {
@@ -171,11 +172,14 @@
       }}
     />
   </ModalBody>
-  <Button
-    isLoading={isUploadingFile}
-    disabled={!fileType}
-    on:click={handleNextStep}>{isUploadingFile ? 'Uploading' : 'Upload'}</Button
-  >
+  <ModalFooter>
+    <Button
+      isLoading={isUploadingFile}
+      disabled={!fileType}
+      on:click={handleNextStep}
+      >{isUploadingFile ? 'Uploading' : 'Upload'}</Button
+    >
+  </ModalFooter>
 </ModalContent>
 
 {#if isFileTypeSelectorOpen}
