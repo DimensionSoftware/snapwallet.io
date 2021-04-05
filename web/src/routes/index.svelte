@@ -42,6 +42,7 @@
       {#if Typewriter}
         <Typewriter interval={50} loop={1800}>
           <span>Idea</span>
+          <span>NFT</span>
           <span>App</span>
           <span>Company</span>
           <span>Site</span>
