@@ -5,7 +5,7 @@
 </script>
 
 <li
-  on:mousedown={onClick}
+  on:click={onClick}
   class:success
   class:disabled
   style={onClick ? 'cursor: pointer' : ''}
