@@ -65,6 +65,8 @@
     // line
     &:first-child:after {
       background: linear-gradient(transparent, var(--theme-text-color-4));
+      top: -40px;
+      height: calc(100% + 32px);
     }
     &:after {
       position: absolute;
