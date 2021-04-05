@@ -86,8 +86,8 @@
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
-  @import '../../../widget/src/styles/_vars.scss';
   $textColor: #333;
+  $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   main {
     display: flex;
     max-width: 960px;
