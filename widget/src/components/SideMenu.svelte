@@ -187,14 +187,14 @@
   // menu
   aside {
     position: absolute;
-    background: var(--theme-modal-background);
-    top: 0;
-    left: -0.5rem;
+    background: var(--theme-modal-popup-background);
+    top: -1rem;
+    left: -1rem;
     right: -0.5rem;
-    bottom: 0;
+    bottom: -0.5rem;
     width: 125%;
-    height: 125%;
-    padding: 25% 2rem 0;
+    height: 150%;
+    padding: 25% 1rem 0 3rem;
     transform: translateX(105%);
     transition: transform 0.35s var(--theme-ease-in-expo);
     z-index: 100;
