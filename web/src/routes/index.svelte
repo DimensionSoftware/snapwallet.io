@@ -31,7 +31,7 @@
     })
 
     ifr.src = SnapWallet.generateURL()
-    ifr.classList.add('loaded')
+    // ifr.classList.add('loaded')
   })
 </script>
 
