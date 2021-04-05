@@ -140,13 +140,13 @@
       line-height: 1.35;
     }
     iframe {
-      &.loaded {
-        box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-      }
       position: relative;
       border-radius: 20px;
       top: -20%;
       right: -20%;
+    }
+    :global(iframe.loaded) {
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
     }
   }
   @media (min-width: 480px) {
