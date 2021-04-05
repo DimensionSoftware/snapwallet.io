@@ -10,6 +10,7 @@
 
   export let isExpanded: boolean = false
   export let isProductCheckout: boolean = false
+  let slow: boolean = false
 
   function logout() {
     close()
@@ -28,20 +29,21 @@
     close()
   }
 
-  function close() {
+  function close(isSlow = false) {
+    slow = isSlow
     isExpanded = false
     focusFirstInput()
   }
   function handleClose(e) {
     // close if esc pressed
-    if (onKeysPressed(e, ['Escape'])) close()
+    if (onKeysPressed(e, ['Escape'])) close(true)
   }
 
   $: isLoggedIn = $userStore.isLoggedIn
   $: {
     setTimeout(
       () => window.dispatchEvent(new Event(isExpanded ? 'blur' : 'unblur')),
-      isExpanded ? 0 : 250,
+      isExpanded ? 0 : slow ? 300 : 150,
     )
   }
 </script>
@@ -53,7 +55,7 @@
   class:active={isExpanded}
   on:mousedown={_ => {
     if (isExpanded) {
-      close()
+      close(true)
     } else {
       isExpanded = !isExpanded
     }
@@ -205,7 +207,7 @@
       color: var(--theme-text-color);
       font-size: 1.25rem;
       transform: translateX(50px);
-      transition: transform 0s ease-out 0.6s;
+      transition: transform 0s ease-out 0.5s;
       &.hr {
         margin-top: 2rem;
         position: relative;

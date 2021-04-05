@@ -367,7 +367,8 @@
     :global(.modal-content .modal-header-title),
     :global(.modal-content .modal-header-back-button),
     :global(.modal-content .modal-footer) {
-      transition: filter 0.1s;
+      will-change: transition;
+      transition: filter 0.2s;
     }
     &.blur {
       :global(.modal-content .modal-body),
