@@ -91,8 +91,6 @@
       }
       // connecting line
       &:first-child:after {
-        margin-top: -1rem;
-        height: 200%;
         background: linear-gradient(transparent, var(--theme-success-color));
       }
       &:last-child:after {
