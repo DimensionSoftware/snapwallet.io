@@ -30,8 +30,10 @@
       },
     })
 
+    ifr.onload = () => {
+      ifr.classList.add('loaded')
+    }
     ifr.src = SnapWallet.generateURL()
-    // ifr.classList.add('loaded')
   })
 </script>
 
@@ -148,7 +150,7 @@
     }
     :global(iframe.loaded) {
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-      transition: box-shadow 1s $easeOutExpo 0.25s;
+      transition: box-shadow .8s $easeOutExpo 0.1s;
       will-change: box-shadow;
     }
   }
