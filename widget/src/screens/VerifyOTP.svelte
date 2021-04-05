@@ -183,7 +183,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 0.8rem;
+    font-size: 0.95rem;
     margin-top: 0.35rem;
     & > a {
       margin-left: 0.25em;
