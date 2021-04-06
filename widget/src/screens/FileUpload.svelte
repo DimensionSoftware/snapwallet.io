@@ -22,6 +22,8 @@
   import { FileUploadTypes } from '../types'
   import { fly } from 'svelte/transition'
 
+  export let isUpdatingFiles: boolean = false
+
   const allowedFileTypes = 'image/png,image/jpeg,image/jpg,application/pdf'
 
   let isFileTypeSelectorOpen = false
@@ -77,7 +79,9 @@
           Logger.debug(profileResponse.wyre)
           if (profileResponse.wyre) userStore.setProfilePending()
           const wyreApproved = profileResponse.wyre?.status === 'APPROVED'
-          if (wyreApproved && $transactionStore.sourceAmount)
+          if (isUpdatingFiles)
+            push(Routes.PROFILE_STATUS)
+          else if (wyreApproved && $transactionStore.sourceAmount)
             push(Routes.CHECKOUT_OVERVIEW)
           else push(Routes.ROOT)
         }, 800)

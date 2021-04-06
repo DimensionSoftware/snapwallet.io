@@ -117,7 +117,7 @@
       </VStep>
       <VStep
         title="Edit Your Documents"
-        onClick={() => push(Routes.FILE_UPLOAD)}
+        onClick={() => push(Routes.FILE_UPLOAD_UPDATE)}
       >
         <span class:error={isDocumentError} slot="icon">
           <FaIcon data={isDocumentError ? faExclamationCircle : faFolder} />

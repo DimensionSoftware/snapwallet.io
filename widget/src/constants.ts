@@ -65,6 +65,7 @@ export enum Routes {
   ADDRESS = '/address',
   ADDRESS_UPDATE = '/address-update',
   FILE_UPLOAD = '/file-upload',
+  FILE_UPLOAD_UPDATE = '/file-upload-update',
   SUCCESS = '/success',
 }
 
