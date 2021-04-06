@@ -8,6 +8,7 @@
   } from '../util'
   import { userStore } from '../stores/UserStore'
   import { transactionsStore } from '../stores/TransactionsStore'
+  import { transactionStore } from '../stores/TransactionStore'
 
   export let isExpanded: boolean = false
   export let isProductCheckout: boolean = false
@@ -19,6 +20,7 @@
     setTimeout(() => {
       window.AUTH_MANAGER.logout()
       cachePrimaryPaymentMethodID('')
+      transactionStore.setSelectedSourcePaymentMethod(null)
     }, 100)
   }
   function login() {
