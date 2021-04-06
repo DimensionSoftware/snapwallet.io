@@ -363,7 +363,6 @@
     width: 360px;
     height: 608px;
     background: var(--theme-modal-background);
-    padding: 1rem;
     border-radius: 1rem;
     overflow: hidden;
     display: flex;
