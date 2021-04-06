@@ -103,7 +103,7 @@
   })
 </script>
 
-<ModalContent fullscreen>
+<ModalContent>
   <ModalHeader>{screenTitle}</ModalHeader>
   <ModalBody>
     <div class="checkout-item-box">
@@ -226,7 +226,7 @@
   }
 
   .line-items {
-    width: 90%;
+    width: 100%;
     align-self: center;
     margin-top: 2.5rem;
     padding: 0 0.2rem;
