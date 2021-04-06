@@ -20,8 +20,8 @@
       focus: true,
       hideClose: true,
       theme: {
-        modalBackground: '#222',
-        modalPopupBackground: '#333',
+        modalBackground: 'rgba(40,40,40,.8)',
+        modalPopupBackground: 'rgba(50,50,50,.85)',
         color: 'rgb(100,100,100)',
         colorLightened: 'rgba(100,100,100,.8)',
         colorInverse: '#fff',
