@@ -91,6 +91,8 @@ export const reducePersonalInfoFields = (
 export const reduceDocumentFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
+  if (!remediations?.length)
+    return 'Documents used for verifying your identity and residence.'
   const message = 'One or more of your documents require an update.'
   const fields = []
 
