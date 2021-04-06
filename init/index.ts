@@ -20,6 +20,15 @@ interface IWallet {
   address?: string
 }
 
+interface IProduct {
+  imageURL?: string
+  videoURL?: string
+  destinationAmount: number
+  destinationTicker: string
+  destinationAddress: string
+  title: string
+}
+
 interface IConfig {
   onMessage?: (e: any) => any
   wallets: IWallet[]
@@ -28,6 +37,7 @@ interface IConfig {
   focus: boolean
   hideClose: boolean
   theme?: { [cssProperty: string]: string }
+  product?: IProduct
 }
 
 class Snap {
@@ -43,6 +53,7 @@ class Snap {
   focus: boolean = true
   hideClose: boolean = false
   theme?: { [cssProperty: string]: string }
+  product?: IProduct
 
   constructor(args: IConfig) {
     this.setConfig(args)
@@ -56,6 +67,7 @@ class Snap {
     this.focus = config.focus ?? this.focus
     this.hideClose = config.hideClose ?? this.hideClose
     this.theme = config.theme || this.theme
+    this.product = config.product
   }
 
   configToQueryString = () => {
@@ -67,6 +79,7 @@ class Snap {
         focus: this.focus,
         hideClose: this.hideClose,
         theme: this.theme,
+        product: this.product,
       })
     )
   }

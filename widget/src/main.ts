@@ -34,6 +34,7 @@ const app = new App({
     focus: config?.focus,
     hideClose: config?.hideClose,
     wallets: config?.wallets || [],
+    product: config?.product,
     // product: {
     //   // imageURL:
     //   //   'https://lh3.googleusercontent.com/NpXUf_nwxn9yhHk_1AwFxRE7Mg2Lb7_rZoxKRuhf5Tca9MKm0Fh1MXuUAlJNJooO34l6YX3d-2MEZ1kpZvQ18JtrQbQw8CHnBdnRUV8=s992',
