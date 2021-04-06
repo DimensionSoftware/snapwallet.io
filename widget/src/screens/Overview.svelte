@@ -213,10 +213,10 @@
     height: 1px;
     max-height: 1px;
     width: 100%;
-    border-bottom: 0.5px solid $textColor4;
+    border-bottom: 0.5px solid var(--theme-text-color);
     margin: 0.5rem 0 0.5rem 0;
     &.dashed {
-      border-bottom: 0.7px dashed $textColor4;
+      border-bottom: 0.7px dashed var(--theme-text-color);
     }
   }
 
