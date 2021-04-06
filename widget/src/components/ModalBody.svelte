@@ -1,4 +1,8 @@
-<div class="modal-body">
+<script lang="ts">
+  export let fullscreen: boolean = false
+</script>
+
+<div class="modal-body" class:fullscreen>
   <slot />
 </div>
 
@@ -6,9 +10,13 @@
   .modal-body {
     height: 100%;
     width: 100%;
-    padding: 0 0.25rem;
     display: flex;
     flex-direction: column;
-    flex: 1;
+    overflow: hidden;
+    overflow-y: scroll;
+    padding: 0 1rem 0 1rem;
+    &.fullscreen {
+      padding: 0;
+    }
   }
 </style>
