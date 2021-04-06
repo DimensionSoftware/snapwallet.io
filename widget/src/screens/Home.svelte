@@ -234,7 +234,7 @@
                 Please add a payment method below.
               {/if}
             </div>
-          </VStep>            
+          </VStep>
         {:else}
           <VStep
             onClick={() =>
@@ -253,7 +253,8 @@
           disabled={!flags?.hasWyreAccount}
           success={$transactionStore.selectedSourcePaymentMethod}
           onClick={() =>
-            flags?.hasWyreAccount && (paymentSelectorVisible = true)}
+            ($userStore.isProfilePending || flags?.hasWyreAccount) &&
+            (paymentSelectorVisible = true)}
         >
           <span slot="icon">
             <FaIcon
