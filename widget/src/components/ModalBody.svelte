@@ -12,7 +12,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden !important;
     overflow-y: scroll;
     padding: 1rem 1rem 0 1rem;
     &.fullscreen {
