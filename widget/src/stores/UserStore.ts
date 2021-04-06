@@ -120,14 +120,14 @@ function createStore() {
         virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
       )
 
-      const isKYCPending = wyre?.status === 'OPEN'
+      const isProfilePending = wyre?.status === 'OPEN'
 
       update(s => ({
         ...s,
         virtual,
+        isProfilePending,
         isProfileComplete,
         profileRemediations: remediations,
-        ...(isKYCPending && { isProfilePending: true }),
       }))
     },
     setVirtual: (virtual: VirtualProfile) => {
