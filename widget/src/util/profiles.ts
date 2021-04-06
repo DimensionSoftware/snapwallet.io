@@ -181,7 +181,10 @@ export const getMissingFieldMessages = (profileItems: {
 
   Object.entries(sections).forEach(([sectionName, section]) => {
     section.missing = getDiff(section.required, section.submitted)
-    section.isComplete = section.submitted.size === section.required.size
+    section.isComplete =
+      // User hasn't submitted anything for this section
+      section.submitted.size === 0 ||
+      section.submitted.size === section.required.size
     if (!section.isComplete) {
       const remediations = [...section.missing].map(m => ({
         kind: m,
