@@ -13,8 +13,9 @@
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import TransactionCard from '../components/cards/TransactionCard.svelte'
+  import { transactionsStore } from '../stores/TransactionsStore'
 
-  $: transfers = []
+  $: transfers = $transactionsStore
   $: csvURI = ''
   $: loading = true
   $: csvFileName = getFileName()
@@ -25,13 +26,7 @@
   }
 
   onMount(async () => {
-    // TODO move transfers into store?
-    try {
-      const res = await window.API.fluxWyreGetTransfers()
-      transfers = res.transfers
-    } finally {
-      setTimeout(() => (loading = false), 1000)
-    }
+    await transactionsStore.fetchUserTransactions()
     csvURI = transactionsAsDataURI(transfers)
   })
 </script>
