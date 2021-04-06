@@ -252,7 +252,7 @@
         {/if}
         <VStep
           title="Select Your Payment Method"
-          disabled={!flags?.hasWyreAccount}
+          disabled={!$userStore.isProfilePending || !flags?.hasWyreAccount}
           success={$transactionStore.selectedSourcePaymentMethod}
           onClick={() =>
             ($userStore.isProfilePending || flags?.hasWyreAccount) &&
