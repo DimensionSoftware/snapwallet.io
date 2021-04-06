@@ -9,6 +9,7 @@
   import { userStore } from '../stores/UserStore'
   import { transactionsStore } from '../stores/TransactionsStore'
   import { transactionStore } from '../stores/TransactionStore'
+  import { ParentMessenger } from '../util/parent_messenger'
 
   export let isExpanded: boolean = false
   export let isProductCheckout: boolean = false
@@ -132,6 +133,13 @@
     {:else}
       <a class="hr" on:mousedown={login}>Login</a>
     {/if}
+    <a
+      class="hr"
+      on:mousedown={() => {
+        push(Routes.ROOT)
+        ParentMessenger.exit()
+      }}>Exit</a
+    >
   </nav>
 </aside>
 
