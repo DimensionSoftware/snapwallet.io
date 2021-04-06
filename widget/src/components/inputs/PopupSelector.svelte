@@ -80,7 +80,7 @@
 
   .popup-selector-header {
     display: flex;
-    background: var(--theme-modal-background);
+    /* background: var(--theme-modal-background); */
     border-top-right-radius: 1rem;
     border-top-left-radius: 1rem;
     height: 50px;
