@@ -266,10 +266,10 @@
     src="https://js.pusher.com/7.0/pusher.min.js"
     on:load={window.tryInitializePusher}></script>
   <script
-    async
+    defer
     src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
   <script
-    async
+    defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDr7FQk1bZV4Zght87YNUgCv5P4cg_1DIs&libraries=places"></script>
 </svelte:head>
 
