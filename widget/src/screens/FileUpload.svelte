@@ -17,6 +17,7 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { transactionStore } from '../stores/TransactionStore'
+  import { userStore } from '../stores/UserStore'
   import type { UsGovernmentIdDocumentInputKind } from 'api-client'
   import { FileUploadTypes } from '../types'
   import { fly } from 'svelte/transition'
@@ -74,6 +75,8 @@
         })
         setTimeout(() => {
           Logger.debug(profileResponse.wyre)
+          if (profileResponse.wyre)
+            userStore.setProfilePending()
           const wyreApproved = profileResponse.wyre?.status === 'APPROVED'
           if (wyreApproved && $transactionStore.sourceAmount)
             push(Routes.CHECKOUT_OVERVIEW)

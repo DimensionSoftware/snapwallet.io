@@ -38,6 +38,7 @@ type UserStoreState = {
   isLoggedIn: boolean
   virtual: VirtualProfile
   isProfileComplete: boolean
+  isProfilePending: boolean
   profileRemediations: ProfileDataItemRemediation[]
 }
 
@@ -71,6 +72,7 @@ function createStore() {
         address: initialAddress,
       },
       isProfileComplete: false,
+      isProfilePending: false,
       profileRemediations: [],
     },
     { subscribe, update, set } = writable<UserStoreState>(defaultUser)
@@ -78,10 +80,14 @@ function createStore() {
   return {
     subscribe,
     reset: () => set(defaultUser),
+    setProfilePending: (isProfilePending: boolean = true) => {
+      update(s => ({ ...s, isProfilePending }))
+    },
     fetchUserProfile: async () => {
       const {
         profile: userProfile,
         remediations = [],
+        wyre,
       } = await window.API.fluxViewerProfileData()
       const virtual: VirtualProfile = {}
       userProfile.forEach(item => {
@@ -114,11 +120,14 @@ function createStore() {
         virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
       )
 
+      const isKYCPending = wyre?.status === 'OPEN'
+
       update(s => ({
         ...s,
         virtual,
         isProfileComplete,
         profileRemediations: remediations,
+        ...(isKYCPending && { isProfilePending: true }),
       }))
     },
     setVirtual: (virtual: VirtualProfile) => {
