@@ -2,22 +2,25 @@ import type { WyrePaymentMethod } from 'api-client'
 import { writable } from 'svelte/store'
 import { IAsset, TransactionIntents, TransactionMediums } from '../types'
 
+const initialState = {
+  intent: TransactionIntents.BUY,
+  inMedium: TransactionMediums.ACH,
+  outMedium: TransactionMediums.BLOCKCHAIN,
+  sourceId: null,
+  sourceCurrency: { name: 'USD', ticker: 'USD' },
+  destinationCurrency: { name: 'Bitcoin', ticker: 'BTC' },
+  sourceAmount: 0.0,
+  destinationAmount: 0.0,
+  selectedSourcePaymentMethod: null,
+  wyrePreview: null,
+}
+
 const createStore = () => {
-  const { subscribe, update } = writable({
-    intent: TransactionIntents.BUY,
-    inMedium: TransactionMediums.ACH,
-    outMedium: TransactionMediums.BLOCKCHAIN,
-    sourceId: null,
-    sourceCurrency: { name: 'USD', ticker: 'USD' },
-    destinationCurrency: { name: 'Bitcoin', ticker: 'BTC' },
-    sourceAmount: 0.0,
-    destinationAmount: 0.0,
-    selectedSourcePaymentMethod: null,
-    wyrePreview: null,
-  })
+  const { subscribe, update, set } = writable(initialState)
 
   return {
     subscribe,
+    reset: () => set(initialState),
     setSelectedSourcePaymentMethod: (
       selectedSourcePaymentMethod: WyrePaymentMethod,
     ) => {

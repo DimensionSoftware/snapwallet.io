@@ -20,7 +20,8 @@
     setTimeout(() => {
       window.AUTH_MANAGER.logout()
       cachePrimaryPaymentMethodID('')
-      transactionStore.setSelectedSourcePaymentMethod(null)
+      transactionStore.reset()
+      userStore.reset()
     }, 100)
   }
   function login() {

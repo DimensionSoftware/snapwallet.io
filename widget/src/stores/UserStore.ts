@@ -73,10 +73,11 @@ function createStore() {
       isProfileComplete: false,
       profileRemediations: [],
     },
-    { subscribe, update } = writable<UserStoreState>(defaultUser)
+    { subscribe, update, set } = writable<UserStoreState>(defaultUser)
 
   return {
     subscribe,
+    reset: () => set(defaultUser),
     fetchUserProfile: async () => {
       const {
         profile: userProfile,
