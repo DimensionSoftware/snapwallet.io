@@ -120,7 +120,7 @@ function createStore() {
         virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
       )
 
-      const isProfilePending = wyre?.status === 'OPEN'
+      const isProfilePending = wyre?.status === 'OPEN' && !remediations?.length
 
       update(s => ({
         ...s,
