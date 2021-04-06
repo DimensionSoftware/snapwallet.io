@@ -38,6 +38,9 @@
     left: 1em;
     right: 1em;
     bottom: 8.5rem;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
     &.fullscreen {
       left: 0;
       right: 0;

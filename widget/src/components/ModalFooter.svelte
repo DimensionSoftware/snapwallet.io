@@ -3,7 +3,7 @@
   export let hideClose = false
 </script>
 
-<div class="modal-footer">
+<div class="modal-footer" style={`height: ${hideClose ? 85 : 105}px`}>
   <slot />
   <span
     class:hidden={hideClose}
@@ -20,9 +20,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-end;
+    justify-content: flex-start;
     padding: 0 initial;
-    height: 50px;
+    height: 210px;
     span {
       cursor: pointer;
       font-size: 0.9rem;

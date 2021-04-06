@@ -2,10 +2,12 @@
   export let success: boolean = false
   export let disabled: boolean = false
   export let onClick: () => {}
+  export let title: string
 </script>
 
 <li
   on:click={onClick}
+  {title}
   class:success
   class:disabled
   style={onClick ? 'cursor: pointer' : ''}
@@ -37,6 +39,7 @@
       width: 8px;
       left: 0;
       top: 8px;
+      opacity: 1;
       z-index: 1;
     }
     > :global(span > svg) {
@@ -59,12 +62,13 @@
       left: 0;
       right: 0;
       bottom: 0;
+      opacity: 1;
       top: 8px;
       z-index: 1;
     }
     // line
     &:first-child:after {
-      background: linear-gradient(transparent, var(--theme-text-color-4));
+      background: linear-gradient(transparent, var(--theme-text-color));
       top: -40px;
       height: calc(100% + 32px);
     }
@@ -76,16 +80,28 @@
       opacity: 0.3;
       height: calc(100% + 12px);
       content: '';
-      background-color: var(--theme-text-color-4);
+      background-color: var(--theme-text-color);
       background-position: 0 0;
       background-size: 200% 200%;
       border-color: inherit;
       border-width: 0;
       outline: 0;
     }
+    :global(span:before) {
+      background: var(--theme-color);
+      position: absolute;
+      content: '';
+      border-radius: 50%;
+      opacity: .15;
+      height: 26px;
+      width: 26px;
+      left: -9px;
+      top: -1px;
+    }
     &.success {
       display: flex;
       align-items: center;
+      animation: scaleIn 0.3s ease-out;
       :global(.total-container) {
         font-weight: bold;
       }
@@ -107,8 +123,7 @@
       }
       // hide the dot
       :global(span:before) {
-        display: none;
-        border-color: var(--theme-success-color) !important;
+        opacity: 0.15;
         background: var(--theme-success-color);
       }
       & > :global(.icon) {
