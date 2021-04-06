@@ -11,7 +11,7 @@
     <br />
     <button id="buy-button">Buy Crypto</button>
 
-    <script src="./dist/index.js"></script>
+    <script src="https://snapwallet.io/widget/dist/init.js"></script>
     <script>
       const snap = new Snap({
         appName: 'Example App',
