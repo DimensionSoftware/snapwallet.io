@@ -1,9 +1,16 @@
 import type {
+  ProfileDataItemInfo,
   ProfileDataItemKind,
   ProfileDataItemRemediation,
 } from 'api-client'
 import { UserProfileFieldTypes } from '../constants'
 import type { RemediationGroups } from '../types'
+
+/**
+ * Get difference between two Sets
+ */
+const getDiff = (required, submitted) =>
+  new Set([...required].filter(x => !submitted.has(x)))
 
 export const groupRemediations = (
   remediations: ProfileDataItemRemediation[],
@@ -125,4 +132,107 @@ export const reduceContactFields = (
   if (!remediations.length)
     return 'Contact information used for verification, communication and security.'
   return 'One or more contacts is insufficient. Please update your contact information.'
+}
+
+/**
+ * Find missing fields and reduce a message for the user.
+ */
+export const getMissingFieldMessages = (profileItems: {
+  [k: string]: ProfileDataItemInfo
+}) => {
+  const sections = {
+    personal: {
+      required: new Set(getRequiredPersonalFields()),
+      submitted: new Set(),
+      missing: new Set(),
+      isComplete: false,
+      message: '',
+    },
+    address: {
+      required: new Set(getRequiredAddressFields()),
+      submitted: new Set(),
+      missing: new Set(),
+      isComplete: false,
+      message: '',
+    },
+    contact: {
+      required: new Set(getRequiredContactFields()),
+      submitted: new Set(),
+      missing: new Set(),
+      isComplete: false,
+      message: '',
+    },
+    document: {
+      required: new Set(getRequiredDocumentFields()),
+      submitted: new Set(),
+      missing: new Set(),
+      isComplete: false,
+      message: '',
+    },
+  }
+
+  Object.values(profileItems).forEach(pi => {
+    Object.values(sections).forEach(section => {
+      if (section.required.has(pi.kind as UserProfileFieldTypes)) {
+        section.submitted.add(pi.kind)
+      }
+    })
+  })
+
+  Object.entries(sections).forEach(([sectionName, section]) => {
+    section.missing = getDiff(section.required, section.submitted)
+    section.isComplete = section.submitted.size === section.required.size
+    if (!section.isComplete) {
+      const remediations = [...section.missing].map(m => ({
+        kind: m,
+      })) as ProfileDataItemInfo[]
+
+      if (sectionName === 'personal') {
+        section.message = reducePersonalInfoFields(remediations)
+      }
+      if (sectionName === 'address') {
+        section.message = reduceAddressFields(remediations)
+      }
+      if (sectionName === 'contact') {
+        section.message = reduceContactFields(remediations)
+      }
+      if (sectionName === 'document') {
+        section.message = reduceDocumentFields(remediations)
+      }
+    }
+  })
+
+  return sections
+}
+
+/**
+ * The required personal fields for a complete profile.
+ */
+export const getRequiredPersonalFields = () => {
+  return [
+    UserProfileFieldTypes.LEGAL_NAME,
+    UserProfileFieldTypes.DATE_OF_BIRTH,
+    UserProfileFieldTypes.US_SSN,
+  ]
+}
+
+/**
+ * The required address fields for a complete profile.
+ */
+export const getRequiredAddressFields = () => {
+  return [UserProfileFieldTypes.FULL_ADDRESS]
+}
+
+/**
+ * The required contact fields for a complete profile.
+ */
+export const getRequiredContactFields = () => {
+  return [UserProfileFieldTypes.EMAIL, UserProfileFieldTypes.PHONE]
+}
+
+/**
+ * The required document fields for a complete profile.
+ */
+export const getRequiredDocumentFields = () => {
+  return [UserProfileFieldTypes.US_GOVT_DOCUMENT]
 }
