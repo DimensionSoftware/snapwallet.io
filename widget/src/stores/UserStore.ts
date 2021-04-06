@@ -1,4 +1,8 @@
-import { ProfileDataItemRemediation, UserFlags } from 'api-client'
+import type {
+  ProfileDataItemInfo,
+  ProfileDataItemRemediation,
+  UserFlags,
+} from 'api-client'
 import { writable } from 'svelte/store'
 import { Routes, UserProfileFieldTypes } from '../constants'
 
@@ -40,6 +44,7 @@ type UserStoreState = {
   isProfileComplete: boolean
   isProfilePending: boolean
   profileRemediations: ProfileDataItemRemediation[]
+  profileItems: { [k: string]: ProfileDataItemInfo }
 }
 
 const initialAddress = {
@@ -74,6 +79,7 @@ function createStore() {
       isProfileComplete: false,
       isProfilePending: false,
       profileRemediations: [],
+      profileItems: {},
     },
     { subscribe, update, set } = writable<UserStoreState>(defaultUser)
 
@@ -90,7 +96,9 @@ function createStore() {
         wyre,
       } = await window.API.fluxViewerProfileData()
       const virtual: VirtualProfile = {}
+      const profileItems = {}
       userProfile.forEach(item => {
+        profileItems[item.kind] = item
         if (item.kind === UserProfileFieldTypes.LEGAL_NAME) {
           virtual.fullName = [...new Array(item.length)].join('*')
         }
@@ -125,6 +133,7 @@ function createStore() {
       update(s => ({
         ...s,
         virtual,
+        profileItems,
         isProfilePending,
         isProfileComplete,
         profileRemediations: remediations,
