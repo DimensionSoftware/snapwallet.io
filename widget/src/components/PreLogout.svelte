@@ -3,6 +3,8 @@
   import { scale } from 'svelte/transition'
   import { expoOut } from 'svelte/easing'
   import { focusFirstInput, onKeysPressed } from '../util'
+  import { userStore } from '../stores/UserStore'
+  import { transactionStore } from '../stores/TransactionStore'
 
   export let isVisible: boolean = false
   export let onClosed: Function
@@ -15,7 +17,11 @@
   const logout = () => {
       // close, yielding animations
       close()
-      setTimeout(() => window.AUTH_MANAGER.logout(), 100)
+      setTimeout(() => {
+        window.AUTH_MANAGER.logout()
+        transactionStore.reset()
+        userStore.reset()
+      }, 100)
     },
     cont = () => {
       // refresh token and close

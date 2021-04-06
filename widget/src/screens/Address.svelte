@@ -130,11 +130,10 @@
   }
 
   const onKeyDown = (e: Event) => {
-      // Stop "Save" from occurring when enter 
-      // is clicked during google autocomplete
-      const addressVal = Object.values($userStore.address).join('')
-      if (addressVal.length)
-        onEnterPressed(e, handleNextStep)
+    // Stop "Save" from occurring when enter
+    // is clicked during google autocomplete
+    const addressVal = Object.values($userStore.address).join('')
+    if (addressVal.length) onEnterPressed(e, handleNextStep)
   }
 </script>
 

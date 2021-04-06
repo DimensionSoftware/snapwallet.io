@@ -221,6 +221,8 @@
       ) {
         // expired session, so-- automagically logout
         window.AUTH_MANAGER.logout()
+        transactionStore.reset()
+        userStore.reset()
         push(Routes.ROOT)
       }
 
