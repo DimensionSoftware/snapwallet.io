@@ -7,6 +7,7 @@
     onKeysPressed,
   } from '../util'
   import { userStore } from '../stores/UserStore'
+  import { transactionsStore } from '../stores/TransactionsStore'
 
   export let isExpanded: boolean = false
   export let isProductCheckout: boolean = false
@@ -41,10 +42,16 @@
 
   $: isLoggedIn = $userStore.isLoggedIn
   $: {
+    // open/close
     setTimeout(
       () => window.dispatchEvent(new Event(isExpanded ? 'blurry' : 'unblurry')),
       isExpanded ? 0 : slow ? 300 : 150,
     )
+
+    if (isExpanded) {
+      // cache transactions
+      transactionsStore.fetchUserTransactions()
+    }
   }
 </script>
 
