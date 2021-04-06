@@ -27,6 +27,7 @@
 
   onMount(async () => {
     await transactionsStore.fetchUserTransactions()
+    loading = false
     csvURI = transactionsAsDataURI(transfers)
   })
 </script>
