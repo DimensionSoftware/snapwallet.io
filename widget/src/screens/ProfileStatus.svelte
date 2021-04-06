@@ -23,7 +23,7 @@
     reducePersonalInfoFields,
     reduceAddressFields,
     reduceContactFields,
-    getMissingFieldMessages
+    getMissingFieldMessages,
   } from '../util/profiles'
 
   let remediationGroups = groupRemediations($userStore.profileRemediations)
@@ -67,8 +67,16 @@
         title="Edit Your Profile"
         onClick={() => push(Routes.PROFILE_UPDATE)}
       >
-        <span class:info={!missingInfo.personal.isComplete} class:error={isPersonalInfoError} slot="icon">
-          <FaIcon data={!missingInfo.personal.isComplete || isPersonalInfoError ? faExclamationCircle : faIdCard} />
+        <span
+          class:info={!missingInfo.personal.isComplete}
+          class:error={isPersonalInfoError}
+          slot="icon"
+        >
+          <FaIcon
+            data={!missingInfo.personal.isComplete || isPersonalInfoError
+              ? faExclamationCircle
+              : faIdCard}
+          />
         </span>
         <b slot="step">Personal</b>
         <div class="description help" slot="info">
@@ -79,8 +87,16 @@
         title="Edit Your Address"
         onClick={() => push(Routes.ADDRESS_UPDATE)}
       >
-        <span class:info={!missingInfo.address.isComplete} class:error={isAddressError} slot="icon">
-          <FaIcon data={!missingInfo.address.isComplete || isAddressError ? faExclamationCircle : faHome} />
+        <span
+          class:info={!missingInfo.address.isComplete}
+          class:error={isAddressError}
+          slot="icon"
+        >
+          <FaIcon
+            data={!missingInfo.address.isComplete || isAddressError
+              ? faExclamationCircle
+              : faHome}
+          />
         </span>
         <b slot="step"> Address </b>
         <div class="description help" slot="info">
@@ -91,8 +107,16 @@
         title="Edit Your Contact"
         onClick={() => push(Routes.PROFILE_SEND_SMS)}
       >
-        <span class:info={!missingInfo.contact.isComplete} class:error={isContactError} slot="icon">
-          <FaIcon data={!missingInfo.contact.isComplete || isContactError ? faExclamationCircle : faMailBulk} />
+        <span
+          class:info={!missingInfo.contact.isComplete}
+          class:error={isContactError}
+          slot="icon"
+        >
+          <FaIcon
+            data={!missingInfo.contact.isComplete || isContactError
+              ? faExclamationCircle
+              : faMailBulk}
+          />
         </span>
         <b slot="step"> Contact </b>
         <div class="description help" slot="info">
@@ -103,8 +127,16 @@
         title="Edit Your Documents"
         onClick={() => push(Routes.FILE_UPLOAD_UPDATE)}
       >
-        <span class:info={!missingInfo.document.isComplete} class:error={isDocumentError} slot="icon">
-          <FaIcon data={!missingInfo.document.isComplete || isDocumentError ? faExclamationCircle : faFolder} />
+        <span
+          class:info={!missingInfo.document.isComplete}
+          class:error={isDocumentError}
+          slot="icon"
+        >
+          <FaIcon
+            data={!missingInfo.document.isComplete || isDocumentError
+              ? faExclamationCircle
+              : faFolder}
+          />
         </span>
         <b slot="step"> Documents </b>
         <div class="description help" slot="info">
