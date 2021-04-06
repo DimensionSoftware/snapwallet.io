@@ -229,6 +229,7 @@
         window.AUTH_MANAGER.logout()
         transactionStore.reset()
         userStore.reset()
+        paymentMethodStore.reset()
         push(Routes.ROOT)
       }
 

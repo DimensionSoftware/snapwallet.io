@@ -9,6 +9,7 @@
   import { userStore } from '../stores/UserStore'
   import { transactionsStore } from '../stores/TransactionsStore'
   import { transactionStore } from '../stores/TransactionStore'
+  import { paymentMethodStore } from '../stores/PaymentMethodStore'
   import { ParentMessenger } from '../util/parent_messenger'
 
   export let isExpanded: boolean = false
@@ -23,6 +24,7 @@
       cachePrimaryPaymentMethodID('')
       transactionStore.reset()
       userStore.reset()
+      paymentMethodStore.reset()
       push(Routes.ROOT)
     }, 100)
   }

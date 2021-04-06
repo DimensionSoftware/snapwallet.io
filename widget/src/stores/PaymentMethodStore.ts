@@ -5,7 +5,7 @@ const createStore = () => {
     wyrePaymentMethods: [],
   })
 
-  const { subscribe, update } = store
+  const { subscribe, update, set } = store
 
   const fetchWyrePaymentMethods = async () => {
     const {
@@ -16,6 +16,7 @@ const createStore = () => {
 
   return {
     subscribe,
+    reset: () => set({ wyrePaymentMethods: [] }),
     fetchWyrePaymentMethods,
   }
 }

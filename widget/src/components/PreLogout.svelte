@@ -5,6 +5,7 @@
   import { focusFirstInput, onKeysPressed } from '../util'
   import { userStore } from '../stores/UserStore'
   import { transactionStore } from '../stores/TransactionStore'
+  import { paymentMethodStore } from '..stores/PaymentMethodStore'
 
   export let isVisible: boolean = false
   export let onClosed: Function
@@ -21,6 +22,8 @@
         window.AUTH_MANAGER.logout()
         transactionStore.reset()
         userStore.reset()
+        paymentMethodStore.reset()
+        
       }, 100)
     },
     cont = () => {
