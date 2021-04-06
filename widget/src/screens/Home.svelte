@@ -90,9 +90,14 @@
     // guards
     if (!sourceAmount || !isValidNumber(sourceAmount)) {
       focus(document.querySelector('input'))
-      throw new Error('Input an Amount in USD')
+      throw new Error('Input an amount in USD')
     }
-    if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod) {
+    // Only do this when the user has a Wyre account
+    if (
+      isLoggedIn &&
+      (flags?.hasWyreAccount || $userStore.isProfilePending) &&
+      !$transactionStore.selectedSourcePaymentMethod
+    ) {
       paymentSelectorVisible = true
       return
     }
