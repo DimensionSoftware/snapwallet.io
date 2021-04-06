@@ -108,7 +108,7 @@
   <ModalBody>
     <div class="checkout-item-box">
       <div style="width:30%;" class="checkout-item-icon">
-        <Icon size="100%" height="100%" width="100%" viewBox="-4 -4 40 40" />
+        <Icon size="100%" height="100%" width="100%" viewBox="-4 0 40 40" />
       </div>
       <div class="checkout-item-name">
         {dropEndingZeros(cryptoAmount.toFixed(cryptoPrecision))}
@@ -197,7 +197,6 @@
   @import '../styles/animations.scss';
 
   .checkout-item-box {
-    margin-top: 0.5rem;
     width: 100%;
     display: flex;
     flex-direction: column;
