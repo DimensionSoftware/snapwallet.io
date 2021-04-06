@@ -92,11 +92,10 @@
       focus(document.querySelector('input'))
       throw new Error('Input an Amount in USD')
     }
-    if (isLoggedIn && !$userStore.profileIsPending && !flags?.hasWyreAccount)
-      return push(Routes.PROFILE)
-    if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod)
+    if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod) {
       paymentSelectorVisible = true
-    return
+      return
+    }
     // if they're not logged in, forward them instead to login
     if (!isLoggedIn) return push(Routes.SEND_OTP)
 
