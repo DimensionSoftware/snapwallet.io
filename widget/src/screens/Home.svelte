@@ -25,6 +25,8 @@
     faIdCard,
     faLock,
     faUniversity,
+    faSpinner,
+    faExclamationCircle,
   } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
   import { TransactionIntents } from '../types'
@@ -220,6 +222,19 @@
             </span>
             <b slot="step">Verify Identity</b>
           </VStep>
+        {:else if $userStore.isProfilePending}
+          <VStep>
+            <span slot="icon">
+              <FaIcon data={faExclamationCircle} />
+            </span>
+            <b slot="step">Reviewing Identity</b>
+            <div class="description help" slot="info">
+              We're reviewing your identity.
+              {#if !$paymentMethodStore.wyrePaymentMethods?.length}
+                Please add a payment method below.
+              {/if}
+            </div>
+          </VStep>            
         {:else}
           <VStep
             onClick={() =>
@@ -251,6 +266,8 @@
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
             {#if $transactionStore.selectedSourcePaymentMethod}
               {$transactionStore.selectedSourcePaymentMethod.name}
+            {:else if isBuy && !$paymentMethodStore.wyrePaymentMethods?.length}
+              Add Payment Method
             {:else if isBuy}
               Select Payment Method
             {:else}
@@ -329,5 +346,9 @@
     margin-top: 2rem;
     list-style: none;
     padding: 0;
+  }
+
+  .description {
+    margin-left: 0.55rem;
   }
 </style>
