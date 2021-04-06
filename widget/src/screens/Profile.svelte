@@ -133,8 +133,10 @@
     </Label>
   </ModalBody>
   <ModalFooter>
-    <Button disabled={isSaving} isLoading={isSaving} on:mousedown={handleNextStep}
-      >{isSaving ? 'Saving' : 'Save'}</Button
+    <Button
+      disabled={isSaving}
+      isLoading={isSaving}
+      on:mousedown={handleNextStep}>{isSaving ? 'Saving' : 'Save'}</Button
     >
   </ModalFooter>
 </ModalContent>
