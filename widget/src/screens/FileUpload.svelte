@@ -176,7 +176,7 @@
     <Button
       isLoading={isUploadingFile}
       disabled={!fileType}
-      on:click={handleNextStep}
+      on:mousedown={handleNextStep}
       >{isUploadingFile ? 'Uploading' : 'Upload'}</Button
     >
   </ModalFooter>
