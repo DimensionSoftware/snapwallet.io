@@ -34,16 +34,22 @@
 
 <ModalContent fullscreen>
   <ModalHeader>My Transactions</ModalHeader>
-  <ModalBody>
+  <ModalBody fullscreen>
     {#if transfers?.length > 0}
       <a
-        hidden
         bind:this={csvElement}
         class="csv-link"
         href={csvURI}
         download={csvFileName}
         target="_blank"
-      />
+      >
+      <div style="display:flex;justify-content:center;align-items:center;">
+        Download
+        <div style="display:flex;justify-content:center;margin-left:0.5rem;">
+          <FaIcon data={faFileDownload} />
+        </div>
+      </div> 
+      </a>
       <div class="line-items">
         {#each transfers as transfer, i}
           <div
@@ -74,36 +80,17 @@
       </a>
     {/if}
   </ModalBody>
-  <ModalFooter>
-    {#if transfers?.length}
-      <Button
-        title="Download Transactions as CSV"
-        on:mousedown={() => {
-          csvFileName = getFileName()
-          csvElement?.click()
-        }}
-      >
-        <div style="display:flex;justify-content:center;align-items:center;">
-          Download
-          <div style="display:flex;justify-content:center;margin-left:0.5rem;">
-            <FaIcon data={faFileDownload} />
-          </div>
-        </div>
-      </Button>
-    {/if}
-  </ModalFooter>
 </ModalContent>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
-  :global(.modal-body) {
-    height: 100%;
-    max-height: calc(100% - 10.25rem);
-  }
   .csv-link {
     display: flex;
+    min-height: 40px;
     align-items: center;
+    justify-content: flex-start;
+    padding-left: 1rem;
     margin: 0 0 0 0.3rem;
     text-decoration: none;
     :global(svg) {
