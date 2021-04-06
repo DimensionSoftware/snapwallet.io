@@ -1,7 +1,5 @@
 # Buy Use Case
 
-
-so bro just...
 ```html
 <!DOCTYPE html5>
 <html>
@@ -40,7 +38,4 @@ so bro just...
     </script>
   </body>
 </html>
-
-
 ```
-
