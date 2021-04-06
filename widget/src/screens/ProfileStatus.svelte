@@ -25,11 +25,11 @@
 
   let isPersonalInfoError = false
   let personalInfoMessage =
-    'Personal identity information used for verification purposes.'
+    'Identity information used for verification purposes.'
 
   let isAddressError = false
   let addressMessage =
-    'Up to date residential address information used for identity verification.'
+    'Residential address used for identity verification.'
 
   let isContactError = false
   let contactMessage =
@@ -37,7 +37,7 @@
 
   let isDocumentError = false
   let documentMessage =
-    'Documents used for verifying your identity or residence.'
+    'Documents used for verifying your identity and residence.'
 
   $: remediationGroups = groupRemediations($userStore.profileRemediations)
 
@@ -80,7 +80,7 @@
       <FaIcon scale="3" data={faUserCircle} />
     </div>
     <ul class="vertical-stepper">
-      <VStep onClick={() => push(Routes.PROFILE_UPDATE)}>
+      <VStep title="Edit Your Profile" onClick={() => push(Routes.PROFILE_UPDATE)}>
         <span class:error={isPersonalInfoError} slot="icon">
           <FaIcon data={isPersonalInfoError ? faExclamationCircle : faIdCard} />
         </span>
@@ -89,7 +89,7 @@
           {personalInfoMessage}
         </div>
       </VStep>
-      <VStep onClick={() => push(Routes.ADDRESS_UPDATE)}>
+      <VStep title="Edit Your Address" onClick={() => push(Routes.ADDRESS_UPDATE)}>
         <span class:error={isAddressError} slot="icon">
           <FaIcon data={isAddressError ? faExclamationCircle : faHome} />
         </span>
@@ -98,7 +98,7 @@
           {addressMessage}
         </div>
       </VStep>
-      <VStep onClick={() => push(Routes.PROFILE_SEND_SMS)}>
+      <VStep title="Edit Your Contact" onClick={() => push(Routes.PROFILE_SEND_SMS)}>
         <span class:error={isContactError} slot="icon">
           <FaIcon data={isContactError ? faExclamationCircle : faMailBulk} />
         </span>
@@ -107,7 +107,7 @@
           {contactMessage}
         </div>
       </VStep>
-      <VStep onClick={() => push(Routes.FILE_UPLOAD)}>
+      <VStep title="Edit Your Documents" onClick={() => push(Routes.FILE_UPLOAD)}>
         <span class:error={isDocumentError} slot="icon">
           <FaIcon data={isDocumentError ? faExclamationCircle : faFolder} />
         </span>

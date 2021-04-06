@@ -232,6 +232,7 @@
           </VStep>
         {/if}
         <VStep
+          title="Select Your Payment Method"
           disabled={!flags?.hasWyreAccount}
           success={$transactionStore.selectedSourcePaymentMethod}
           onClick={() =>

@@ -2,10 +2,11 @@
   export let hidden: boolean = false
   export let label: string = ''
   export let error: string = ''
+  export let fx: boolean = true
 </script>
 
 {#if !hidden}
-  <label class={$$props.class} style={$$props.style}>
+  <label class:fx={fx} class={$$props.class} style={$$props.style}>
     <span class="input-label">{label}</span>
     <slot />
     <div class="error-help">

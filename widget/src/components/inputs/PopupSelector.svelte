@@ -37,7 +37,7 @@
 <svelte:window on:keydown={handleClose} on:click={handleClose} />
 
 <div
-  out:scale={{ opacity: 0, start: 1.15, duration: 150, easing: expoOut }}
+  out:scale={{ opacity: 0, start: 1.15, duration: 175, easing: expoOut }}
   class="popup-selector"
 >
   <div class="popup-selector-header">
@@ -75,7 +75,7 @@
     left: 0;
     right: 0;
     background: var(--theme-modal-popup-background);
-    animation: slideUp 0.2s $easeOutExpo forwards;
+    animation: slideUp 0.25s $easeOutExpo forwards;
   }
 
   .popup-selector-header {
@@ -100,7 +100,7 @@
     width: 2rem;
     height: 2rem;
     border-radius: 100%;
-    padding: .3rem;
+    padding: 0.3rem;
     display: flex;
     justify-content: center;
     align-items: center;
