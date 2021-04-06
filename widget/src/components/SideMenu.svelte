@@ -48,8 +48,8 @@
       isExpanded ? 0 : slow ? 300 : 150,
     )
 
-    if (isExpanded) {
-      // cache transactions
+    if (isExpanded && window.AUTH_MANAGER.viewerIsLoggedIn()) {
+      // pre-cache transactions
       transactionsStore.fetchUserTransactions()
     }
   }
