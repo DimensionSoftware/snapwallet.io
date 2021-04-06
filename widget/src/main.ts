@@ -32,7 +32,6 @@ const app = new App({
     appName: config?.appName,
     intent: config?.intent,
     focus: config?.focus,
-    hideClose: config?.hideClose,
     wallets: config?.wallets || [],
     product: config?.product,
     // product: {

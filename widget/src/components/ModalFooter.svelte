@@ -1,17 +1,5 @@
-<script lang="ts">
-  import { ParentMessenger } from '../util/parent_messenger'
-  export let hideClose = false
-</script>
-
 <div class="modal-footer">
   <slot />
-  <!-- <span
-    class:hidden={hideClose}
-    on:click={ParentMessenger.exit}
-    class="modal-header-right-action"
-  >
-    Close
-  </span> -->
 </div>
 
 <style lang="scss">
@@ -34,8 +22,5 @@
       display: none;
       cursor: initial;
     }
-  }
-  :global(#modal.hide-close) .modal-footer > span {
-    display: none;
   }
 </style>

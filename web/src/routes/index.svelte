@@ -18,7 +18,6 @@
       intent: 'buy',
       wallets: [],
       focus: true,
-      hideClose: true,
       theme: {
         modalBackground: 'rgba(40,40,40,.8)',
         modalPopupBackground: 'rgba(50,50,50,.95)',
