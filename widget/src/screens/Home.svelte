@@ -92,8 +92,10 @@
       focus(document.querySelector('input'))
       throw new Error('Input an Amount in USD')
     }
+    if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod && !$userStore.isProfilePending && !flags?.hasWyreAccount)
+      throw new Error('Please verify your identity')
     if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod)
-      throw new Error('Select a Payment Method')
+      throw new Error('Select a payment method')
     // if they're not logged in, forward them instead to login
     if (!isLoggedIn) return push(Routes.SEND_OTP)
 
