@@ -5,7 +5,7 @@
 </script>
 
 <div
-  class={`badge ${$$props.class}`.trim()}
+  class={`badge ${$$props.class || ''}`.trim()}
   class:success
   class:warning
   class:error
