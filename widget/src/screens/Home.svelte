@@ -179,8 +179,8 @@
   onMount(() => {
     getInitialPrices()
     getNextPath()
-    // cleanup
-    return () => clearInterval(priceStore.pollPrices())
+    const interval = priceStore.pollPrices()
+    return () => clearInterval(interval)
   })
 </script>
 

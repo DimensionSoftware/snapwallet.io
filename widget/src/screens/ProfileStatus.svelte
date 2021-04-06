@@ -67,8 +67,12 @@
     remediationGroups = groupRemediations($userStore.profileRemediations)
   }
 
+  const pollProfile = () => setInterval(getLatestProfile, 30_000)
+
   onMount(() => {
     getLatestProfile()
+    const interval = pollProfile()
+    return () => clearInterval(interval)
   })
 </script>
 
