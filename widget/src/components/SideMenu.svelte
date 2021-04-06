@@ -22,6 +22,7 @@
       cachePrimaryPaymentMethodID('')
       transactionStore.reset()
       userStore.reset()
+      push(Routes.ROOT)
     }, 100)
   }
   function login() {
