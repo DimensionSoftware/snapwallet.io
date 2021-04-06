@@ -48,9 +48,6 @@
     &.paddingSmall {
       padding: 0.5rem;
     }
-    &.blend {
-      background-color: var(--theme-modal-background);
-    }
     & > .content-container {
       height: 100%;
       width: 100%;
