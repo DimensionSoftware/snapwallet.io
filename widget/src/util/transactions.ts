@@ -29,3 +29,9 @@ export const transactionsAsDataURI = (transactions: any[]) => {
     'data:text/csv;charset=utf-8,' + rows.map(e => e.join(',')).join('\n')
   return encodeURI(dataURI)
 }
+
+export const computeTransactionExpiration = (expiresAt?: string) => {
+  const expiration = new Date(expiresAt) as any
+  const now = new Date() as any
+  return (expiration - now) / 1000
+}
