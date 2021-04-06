@@ -161,5 +161,6 @@
   .description {
     min-height: 60px;
     margin-left: 0.55rem;
+    color: var(--theme-text-color) !important;
   }
 </style>
