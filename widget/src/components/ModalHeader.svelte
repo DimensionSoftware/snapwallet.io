@@ -46,6 +46,8 @@
     justify-content: space-evenly;
     align-items: center;
     color: var(--theme-text-color);
+    // Match this with body and footer
+    padding: 1rem 1rem 0 1rem;
     & > .modal-header-title {
       @include flex-align-center();
       flex: 3;
