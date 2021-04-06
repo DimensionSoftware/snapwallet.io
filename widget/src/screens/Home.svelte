@@ -92,7 +92,12 @@
       focus(document.querySelector('input'))
       throw new Error('Input an Amount in USD')
     }
-    if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod && !$userStore.isProfilePending && !flags?.hasWyreAccount)
+    if (
+      isLoggedIn &&
+      !$transactionStore.selectedSourcePaymentMethod &&
+      !$userStore.isProfilePending &&
+      !flags?.hasWyreAccount
+    )
       throw new Error('Please verify your identity')
     if (isLoggedIn && !$transactionStore.selectedSourcePaymentMethod)
       throw new Error('Select a payment method')
