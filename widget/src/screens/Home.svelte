@@ -359,5 +359,6 @@
 
   .description {
     margin-left: 0.55rem;
+    color: var(--theme-text-color);
   }
 </style>
