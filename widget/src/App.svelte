@@ -177,9 +177,9 @@
     [Routes.FILE_UPLOAD_UPDATE]: wrap({
       ...authedRouteOptions(FileUpload),
       props: {
-        isUpdatingFiles: true
-      }
-    }),    
+        isUpdatingFiles: true,
+      },
+    }),
     [Routes.PROFILE_SEND_SMS]: wrap({
       ...authedRouteOptions(SendOtp),
       props: {
