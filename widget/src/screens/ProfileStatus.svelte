@@ -21,46 +21,23 @@
     groupRemediations,
     reduceDocumentFields,
     reducePersonalInfoFields,
+    reduceAddressFields,
+    reduceContactFields
   } from '../util/profiles'
 
-  let isPersonalInfoError = false
-  let personalInfoMessage =
-    'Identity information used for verification purposes.'
+  let remediationGroups = groupRemediations($userStore.profileRemediations)
 
-  let isAddressError = false
-  let addressMessage = 'Residential address used for identity verification.'
+  $: isPersonalInfoError = remediationGroups.personal.length > 0
+  $: personalInfoMessage = reducePersonalInfoFields(remediationGroups.personal)
 
-  let isContactError = false
-  let contactMessage =
-    'Contact information used for verification, communication and security.'
+  $: isAddressError = remediationGroups.address.length > 0
+  $: addressMessage = reduceAddressFields(remediationGroups.address)
 
-  let isDocumentError = false
-  let documentMessage =
-    'Documents used for verifying your identity and residence.'
+  $: isContactError = remediationGroups.contact.length > 0
+  $: contactMessage = reduceContactFields(remediationGroups.contact)
 
-  $: remediationGroups = groupRemediations($userStore.profileRemediations)
-
-  $: {
-    isPersonalInfoError = remediationGroups.personal.length > 0
-    if (isPersonalInfoError)
-      personalInfoMessage = reducePersonalInfoFields(remediationGroups.personal)
-
-    isAddressError = remediationGroups.address.length > 0
-    if (isAddressError)
-      addressMessage =
-        'An address update is required. Please provide your current residential address.'
-
-    isContactError = remediationGroups.contact.length > 0
-    if (isContactError) {
-      contactMessage =
-        'One or more contacts is insufficient. Please update your contact information.'
-    }
-
-    isDocumentError = remediationGroups.document.length > 0
-    if (isDocumentError) {
-      documentMessage = reduceDocumentFields(remediationGroups.document)
-    }
-  }
+  $: isDocumentError = remediationGroups.document.length > 0
+  $: documentMessage = reduceDocumentFields(remediationGroups.document)
 
   const getLatestProfile = async () => {
     await userStore.fetchUserProfile()
