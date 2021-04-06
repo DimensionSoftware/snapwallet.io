@@ -112,16 +112,9 @@
     }
 
   const routes = {
-    // TODO: make this a dynamic root when product exists
-    ['/product']: wrap({
-      component: Product as any,
-      props: {
-        product,
-      },
-    }),
     [Routes.ROOT]: wrap({
-      component: Home as any,
-      props: { appName, intent, apiKey },
+      component: (product ? Product : Home) as any,
+      props: { appName, intent, apiKey, product },
     }),
     [Routes.SELECT_PAYMENT]: wrap({
       component: SelectPayment as any,
