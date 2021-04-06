@@ -21,7 +21,7 @@ func WyreTransferToProto(t *Transfer) *proto.WyreTransfer {
 		Blockhash:      t.BlockchainTx.Blockhash,
 		NetworkTxId:    t.BlockchainTx.NetworkTxID,
 		Status:         t.Status,
-		CreatedAt:      time.Unix(t.CreatedAt, 0).Format(time.RFC3339),
-		ExpiresAt:      time.Unix(t.ExpiresAt, 0).Format(time.RFC3339),
+		CreatedAt:      time.Unix(t.CreatedAt/1000, 0).Format(time.RFC3339),
+		ExpiresAt:      time.Unix(t.ExpiresAt/1000, 0).Format(time.RFC3339),
 	}
 }
