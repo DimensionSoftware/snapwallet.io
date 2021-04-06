@@ -35,8 +35,7 @@
 </script>
 
 <ModalContent>
-    <ModalHeader hideBackButton>Your ID</ModalHeader
-    >
+  <ModalHeader hideBackButton>Your ID</ModalHeader>
   <ModalBody>
     <label label="Upload US Government ID (Front)">
       <strong>Upload US Government ID (Front)</strong><br />

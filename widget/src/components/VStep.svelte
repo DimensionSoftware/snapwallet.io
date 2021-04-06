@@ -92,7 +92,7 @@
       position: absolute;
       content: '';
       border-radius: 50%;
-      opacity: .15;
+      opacity: 0.15;
       height: 26px;
       width: 26px;
       left: -9px;

@@ -14,7 +14,7 @@
   import FaIcon from 'svelte-awesome'
   import { onMount } from 'svelte'
   import { toaster } from '../stores/ToastStore'
-  import {computeTransactionExpiration} from '../util/transactions'
+  import { computeTransactionExpiration } from '../util/transactions'
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
@@ -27,7 +27,7 @@
     destCurrency: destinationCurrency,
     exchangeRate: txnExchangeRate,
     fees,
-    expiresAt
+    expiresAt,
   } = wyrePreview)
 
   $: isBuy = intent === TransactionIntents.BUY
@@ -57,7 +57,9 @@
     }
   }
 
-  let secondsUntilExpiration = computeTransactionExpiration($transactionStore.wyrePreview?.expiresAt)
+  let secondsUntilExpiration = computeTransactionExpiration(
+    $transactionStore.wyrePreview?.expiresAt,
+  )
 
   let formattedExpiration
   $: {
@@ -86,7 +88,9 @@
 
   onMount(() => {
     const interval = setInterval(() => {
-      secondsUntilExpiration = computeTransactionExpiration($transactionStore.wyrePreview?.expiresAt)
+      secondsUntilExpiration = computeTransactionExpiration(
+        $transactionStore.wyrePreview?.expiresAt,
+      )
       if (secondsUntilExpiration <= 0) {
         toaster.pop({
           msg: 'Your preview has expired. Please create a new preview.',

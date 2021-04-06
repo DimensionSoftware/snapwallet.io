@@ -60,12 +60,12 @@
       left: -2px;
       bottom: 0;
       border-radius: 0.5rem;
-      opacity: .5;
+      opacity: 0.5;
       background: linear-gradient(
         to right,
         transparent,
         var(--theme-color-lightened),
-        transparent,
+        transparent
       );
       transform: scale(0);
       transition: transform 0.2s $easeOutExpo;

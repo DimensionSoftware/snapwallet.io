@@ -47,11 +47,14 @@ const jsBundleName = production ? `bundle.${BuildID}.js` : 'bundle.js'
 const cssBundleName = production ? `bundle.${BuildID}.css` : 'bundle.css'
 
 if (production) {
-  writeFileSync('dist/info.json', JSON.stringify({
-    buildID: BuildID,
-    jsBundleName,
-    cssBundleName,
-  }))
+  writeFileSync(
+    'dist/info.json',
+    JSON.stringify({
+      buildID: BuildID,
+      jsBundleName,
+      cssBundleName,
+    }),
+  )
 }
 
 export default {

@@ -46,7 +46,7 @@ const app = new App({
     },
     theme: {
       /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */
-      ...config?.theme || {},
+      ...(config?.theme || {}),
     },
   },
 })

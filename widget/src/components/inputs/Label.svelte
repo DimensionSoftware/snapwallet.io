@@ -6,7 +6,7 @@
 </script>
 
 {#if !hidden}
-  <label class:fx={fx} class={$$props.class} style={$$props.style}>
+  <label class:fx class={$$props.class} style={$$props.style}>
     <span class="input-label">{label}</span>
     <slot />
     <div class="error-help">

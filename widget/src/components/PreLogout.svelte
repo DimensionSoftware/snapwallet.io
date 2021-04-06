@@ -41,15 +41,15 @@
         seconds = Math.round(diff / 1000),
         minutes = Math.round(seconds / 60)
       // set ui
-      expiresAfter = seconds < 0 ? 0 : seconds > 59 ? minutes : seconds,
-      expiresAfterResolution =
-        seconds > 59
-          ? minutes > 1
-            ? 'minutes'
-            : 'minute'
-          : seconds > 1
-          ? 'seconds'
-          : 'second'
+      ;(expiresAfter = seconds < 0 ? 0 : seconds > 59 ? minutes : seconds),
+        (expiresAfterResolution =
+          seconds > 59
+            ? minutes > 1
+              ? 'minutes'
+              : 'minute'
+            : seconds > 1
+            ? 'seconds'
+            : 'second')
     }
 
   // component lifecycle events
@@ -109,7 +109,7 @@
       }
       p {
         font-size: 0.9rem;
-        margin: .24rem 0 1.75rem;
+        margin: 0.24rem 0 1.75rem;
       }
       .flex {
         display: flex;

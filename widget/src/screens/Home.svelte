@@ -191,7 +191,9 @@
           />
         </Label>
       </div>
-      <div style="display:flex;flex-direction:column;height:5rem;margin-top: -1rem;">
+      <div
+        style="display:flex;flex-direction:column;height:5rem;margin-top: -1rem;"
+      >
         <Label label="Amount">
           <span class="dst-currency">$</span>
           <Input
