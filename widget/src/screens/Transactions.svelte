@@ -78,26 +78,24 @@
       </a>
     {/if}
   </ModalBody>
-    <ModalFooter>
-      {#if transfers?.length}
-        <Button
-          title="Download Transactions as CSV"
-          on:mousedown={() => {
-            csvFileName = getFileName()
-            csvElement?.click()
-          }}
-        >
-          <div style="display:flex;justify-content:center;align-items:center;">
-            Download
-            <div
-              style="display:flex;justify-content:center;margin-left:0.5rem;"
-            >
-              <FaIcon data={faFileDownload} />
-            </div>
+  <ModalFooter>
+    {#if transfers?.length}
+      <Button
+        title="Download Transactions as CSV"
+        on:mousedown={() => {
+          csvFileName = getFileName()
+          csvElement?.click()
+        }}
+      >
+        <div style="display:flex;justify-content:center;align-items:center;">
+          Download
+          <div style="display:flex;justify-content:center;margin-left:0.5rem;">
+            <FaIcon data={faFileDownload} />
           </div>
-        </Button>
-      {/if}
-    </ModalFooter>
+        </div>
+      </Button>
+    {/if}
+  </ModalFooter>
 </ModalContent>
 
 <style lang="scss">

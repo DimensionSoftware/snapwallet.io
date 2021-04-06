@@ -21,7 +21,7 @@
       hideClose: true,
       theme: {
         modalBackground: 'rgba(40,40,40,.8)',
-        modalPopupBackground: 'rgba(50,50,50,.85)',
+        modalPopupBackground: 'rgba(50,50,50,.95)',
         color: 'rgb(100,100,100)',
         colorLightened: 'rgba(100,100,100,.8)',
         colorInverse: '#fff',
