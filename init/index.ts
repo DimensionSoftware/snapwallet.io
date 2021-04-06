@@ -67,7 +67,7 @@ class Snap {
     this.focus = config.focus ?? this.focus
     this.hideClose = config.hideClose ?? this.hideClose
     this.theme = config.theme || this.theme
-    this.product = config.product
+    this.product = config.product || this.product
   }
 
   configToQueryString = () => {
