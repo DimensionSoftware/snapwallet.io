@@ -37,6 +37,7 @@
 <svelte:window on:keydown={handleClose} on:click={handleClose} />
 
 <div
+  out:scale={{ opacity: 0, start: 1.15, duration: 150, easing: expoOut }}
   class="popup-selector"
 >
   <div class="popup-selector-header">

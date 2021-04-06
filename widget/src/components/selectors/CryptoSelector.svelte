@@ -44,7 +44,7 @@
           in:fly={{ y: 25, duration: 250 + 50 * (i + 1) }}
           style="margin: 0.5rem 0"
         >
-          <Label>
+          <Label fx={false}>
             <CryptoCard
               on:mousedown={() => dispatch('close')}
               crypto={cryptoCurrency}

@@ -184,7 +184,7 @@
   <ModalBody>
     <div class="cryptocurrencies-container">
       <div class="dst-container">
-        <Label>
+        <Label fx={false}>
           <CryptoCard
             on:mousedown={() => (cryptoSelectorVisible = true)}
             crypto={isBuy ? destinationCurrency : sourceCurrency}

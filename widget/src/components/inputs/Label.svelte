@@ -27,7 +27,7 @@
     font-size: 0.7rem;
     font-weight: 600;
     margin-bottom: 1.25em;
-    &:active {
+    &.fx:active {
       animation: focus 0.16s;
     }
     span {

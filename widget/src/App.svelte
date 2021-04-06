@@ -368,14 +368,14 @@
     :global(.modal-content .modal-header-back-button),
     :global(.modal-content .modal-footer) {
       will-change: transition;
-      transition: filter 0.2s;
+      transition: filter 0.3s;
     }
     &.blur {
       :global(.modal-content .modal-body),
       :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-back-button),
       :global(.modal-content .modal-footer) {
-        filter: blur(12px) contrast(80%);
+        filter: blur(8px) contrast(120%);
         transition: none;
       }
     }
