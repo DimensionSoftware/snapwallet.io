@@ -136,7 +136,9 @@
     <a
       class="hr"
       on:mousedown={() => {
-        push(Routes.ROOT)
+        if (isExpanded) {
+          close(true)
+        }
         ParentMessenger.exit()
       }}>Exit</a
     >
