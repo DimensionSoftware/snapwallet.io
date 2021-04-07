@@ -223,6 +223,19 @@
         </Label>
       </div>
       <ul class="vertical-stepper">
+        <VStep success={!!$transactionStore.sourceAmount}>
+          <span
+            class:default-icon={!$transactionStore.sourceAmount}
+            slot="icon"
+          >
+            {#if $transactionStore.sourceAmount}
+              <FaIcon data={faCheck} />
+            {/if}
+          </span>
+          <b slot="step">
+            <TotalContainer />
+          </b>
+        </VStep>
         {#if flags?.hasWyreAccount}
           <VStep success>
             <span slot="icon">
@@ -282,19 +295,6 @@
             {:else}
               Select Bank Account
             {/if}
-          </b>
-        </VStep>
-        <VStep success={!!$transactionStore.sourceAmount}>
-          <span
-            class:default-icon={!$transactionStore.sourceAmount}
-            slot="icon"
-          >
-            {#if $transactionStore.sourceAmount}
-              <FaIcon data={faCheck} />
-            {/if}
-          </span>
-          <b slot="step">
-            <TotalContainer />
           </b>
         </VStep>
       </ul>
