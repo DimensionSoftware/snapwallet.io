@@ -149,7 +149,7 @@
     }
     :global(iframe.loaded) {
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-      transition: box-shadow .8s $easeOutExpo 0.1s;
+      transition: box-shadow 0.8s $easeOutExpo 0.1s;
       will-change: box-shadow;
     }
   }

@@ -21,7 +21,7 @@
 <style lang="scss">
   .exchange-rate-container {
     position: absolute;
-    bottom: -2rem;
+    bottom: -1.5rem;
     right: 0.5rem;
     font-size: 0.85rem;
     z-index: 2;

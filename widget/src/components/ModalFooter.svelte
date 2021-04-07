@@ -12,7 +12,7 @@
     align-items: center;
     justify-content: flex-end;
     // Match with body and header
-    padding: 0 1rem 1rem 1rem;
+    padding: 0 1rem 2rem 1rem;
     span {
       cursor: pointer;
       font-size: 0.9rem;

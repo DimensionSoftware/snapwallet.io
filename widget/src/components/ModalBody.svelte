@@ -14,6 +14,7 @@
     flex-direction: column;
     overflow: hidden !important;
     overflow-y: scroll;
+    scrollbar-width: thin;
     padding: 1rem 1rem 0 1rem;
     &.fullscreen {
       padding: 0;

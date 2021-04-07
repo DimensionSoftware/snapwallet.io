@@ -65,15 +65,13 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    border-radius: 1rem;
-    border-bottom-right-radius: 0;
-    border-bottom-left-radius: 0;
     z-index: 1000;
     position: absolute;
-    top: 1rem;
+    top: 0;
     bottom: 0;
     left: 0;
     right: 0;
+    padding-top: 0.5rem;
     background: var(--theme-modal-popup-background);
     animation: slideUp 0.25s $easeOutExpo forwards;
   }
@@ -81,8 +79,6 @@
   .popup-selector-header {
     display: flex;
     /* background: var(--theme-modal-background); */
-    border-top-right-radius: 1rem;
-    border-top-left-radius: 1rem;
     height: 50px;
     padding: 1rem;
     width: 100%;
@@ -100,6 +96,7 @@
     width: 2rem;
     height: 2rem;
     border-radius: 100%;
+    background: var(--theme-modal-popup-background);
     padding: 0.3rem;
     display: flex;
     justify-content: center;

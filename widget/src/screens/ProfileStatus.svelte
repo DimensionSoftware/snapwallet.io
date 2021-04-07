@@ -59,7 +59,7 @@
 <ModalContent>
   <ModalHeader onBack={() => push(Routes.ROOT)}>Profile</ModalHeader>
   <ModalBody>
-    <div style="padding:0 0.5rem;font-weight:bold;">
+    <div style="padding:0 0 0 0.3rem;font-weight:bold;">
       <FaIcon scale="3" data={faUserCircle} />
     </div>
     <ul class="vertical-stepper">
@@ -162,5 +162,6 @@
     min-height: 60px;
     margin-left: 0.55rem;
     color: var(--theme-text-color) !important;
+    opacity: 0.85;
   }
 </style>

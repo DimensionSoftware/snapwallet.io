@@ -136,7 +136,6 @@
       <a class="hr" on:mousedown={login}>Login</a>
     {/if}
     <a
-      class="hr"
       on:mousedown={() => {
         if (isExpanded) {
           close(true)
@@ -232,7 +231,7 @@
       transform: translateX(50px);
       transition: transform 0s ease-out 0.5s;
       &.hr {
-        margin-top: 2rem;
+        margin-top: 3rem;
         position: relative;
       }
     }
