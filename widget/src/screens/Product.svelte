@@ -28,23 +28,76 @@
   let isPaymentSelectorVisible = false
 
   $: ({ flags } = $userStore)
-
+  $: nextRoute = Routes.PROFILE
   $: priceMap = $priceStore.prices[`USD_${product.destinationTicker}`]
   $: exchangeRate = priceMap[product.destinationTicker]
 
-  const fetchPreview = async () => {
-    try {
-      isPreviewing = true
-      const txn = await window.API.fluxWyreCreateTransfer({
-        dest: product?.destinationAddress,
-        destCurrency: product?.destinationTicker,
-        source: $transactionStore.selectedSourcePaymentMethod?.id,
-        // TODO: make this optional at the API level
-        sourceAmount: 0,
+  const handleNextStep = async () => {
+    const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore,
+      isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
+    // if they're not logged in, forward them instead to login
+    if (!isLoggedIn) return push(Routes.SEND_OTP)
+
+    if (
+      selectedSourcePaymentMethod &&
+      selectedSourcePaymentMethod?.status !== 'ACTIVE'
+    ) {
+      return toaster.pop({
+        msg: 'Please select an active payment method.',
+        error: true,
       })
-    } finally {
-      isPreviewing = false
     }
+
+    // Only do this when the user has a Wyre account
+    if (
+      isLoggedIn &&
+      (flags?.hasWyreAccount || $userStore.isProfilePending) &&
+      !$transactionStore.selectedSourcePaymentMethod
+    ) {
+      paymentSelectorVisible = true
+      return
+    }
+
+    if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
+      try {
+        isPreviewing = true
+        const preview = await window.API.fluxWyreCreateTransfer({
+          source: $transactionStore.selectedSourcePaymentMethod?.id,
+          destAmount: product.destinationAmount,
+          dest: product.destinationAddress,
+          destCurrency: product.destinationTicker,
+        })
+
+        transactionStore.setWyrePreview(preview)
+      } finally {
+        isPreviewing = false
+      }
+    }
+
+    push(nextRoute)
+  }
+
+  // Find the next path based on user data
+  const getNextPath = async () => {
+    const isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
+    if (isLoggedIn) {
+      const { flags = {}, user = {} } = await window.API.fluxViewerData()
+      userStore.setFlags({
+        ...flags,
+        hasEmail: Boolean(user.email),
+        hasPhone: Boolean(user.phone),
+      })
+      const { hasWyrePaymentMethods, hasWyreAccount } = flags
+
+      if (hasWyrePaymentMethods && hasWyreAccount)
+        nextRoute = Routes.CHECKOUT_OVERVIEW
+      else if ($userStore.isProfileComplete) nextRoute = Routes.ADDRESS
+      else if (flags?.hasWyreAccount && !hasWyrePaymentMethods)
+        nextRoute = Routes.PLAID_LINK
+      return
+    }
+
+    nextRoute = Routes.SEND_OTP
   }
 
   // TODO: prefetch or something
@@ -52,9 +105,23 @@
     await priceStore.fetchPrices()
   }
 
+  const getViewer = async () => {
+    const isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
+    if (isLoggedIn) {
+      const { flags = {}, user = {} } = await window.API.fluxViewerData()
+      userStore.setFlags({
+        ...flags,
+        hasEmail: Boolean(user.email),
+        hasPhone: Boolean(user.phone),
+      })
+    }
+  }
+
   onMount(() => {
+    getViewer()
     getPrices()
     const interval = priceStore.pollPrices()
+    getNextPath()
     return clearInterval(interval)
   })
 </script>
@@ -135,7 +202,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isPreviewing}>
+    <Button on:mousedown={handleNextStep} isLoading={isPreviewing}>
       <div class="btn-content">
         <span class="btn-text">Preview</span>
         <FaIcon data={faLock} />
