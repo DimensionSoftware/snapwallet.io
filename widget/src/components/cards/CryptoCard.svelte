@@ -33,7 +33,8 @@
     <svelte:component this={CryptoIcons[crypto.ticker.toUpperCase()]} />
   </div>
   <div class="crypto-name">
-    <span>{crypto.ticker}</span> <small>{crypto.name}</small>
+    <span>{crypto.ticker}</span>
+    <small style="text-transform:capitalize;">{crypto.name}</small>
   </div>
   <div class="crypto-arrow"><FaIcon data={faChevronRight} /></div>
 </div>
