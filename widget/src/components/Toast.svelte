@@ -9,7 +9,7 @@
   $: error = Boolean($toaster?.error)
 </script>
 
-<div class="toast-wrapper">
+<div class="toast-wrapper" title="Click to Dismiss" on:click={toaster.dismiss}>
   {#if $toaster}
     <div
       class="toast-item"
@@ -24,7 +24,7 @@
         opacity: 0.1,
         easing: backOut,
       }}
-      out:fade={{ duration: 500 }}
+      out:fade={{ duration: 250 }}
     >
       {capitalize($toaster?.msg)}
     </div>
@@ -42,9 +42,10 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    z-index: 2;
+    z-index: 9999;
     // Don't overlay top of modal
     height: 0px;
+    cursor: pointer;
   }
 
   .toast-item {
@@ -57,7 +58,7 @@
     max-height: 100px;
     color: white;
     font-weight: 500;
-    z-index: 999;
+    z-index: 9999;
     &:before {
       background: linear-gradient(
         to right,
