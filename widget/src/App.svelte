@@ -318,6 +318,9 @@
   :global(a) {
     color: var(--theme-color);
     position: relative;
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   #modal {
