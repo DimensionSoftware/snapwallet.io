@@ -154,6 +154,9 @@
     [Routes.CHECKOUT_OVERVIEW]: wrap({
       ...authedRouteOptions(Overview),
       conditions: [isJWTValid, () => Boolean($transactionStore.wyrePreview)],
+      props: {
+        product,
+      },
     }),
     [Routes.ADDRESS]: wrap({
       ...authedRouteOptions(Address),
