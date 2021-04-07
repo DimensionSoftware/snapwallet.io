@@ -7,8 +7,8 @@
   import { userStore } from '../../stores/UserStore'
 
   export let isBuy: boolean = true
-  export let paymentSelectorVisible: boolean = false
   export let onClick
+  export let description
 
   $: ({ flags } = $userStore)
 </script>
@@ -38,4 +38,21 @@
       Select Bank Account
     {/if}
   </b>
+  <div class:hidden={!description} class="description help" slot="info">
+    {description}
+  </div>
 </VStep>
+
+<style lang="scss">
+  @import '../../styles/_vars.scss';
+  @import '../../styles/text.scss';
+  .description {
+    min-height: 60px;
+    margin-left: 0.55rem;
+    color: var(--theme-text-color) !important;
+    opacity: 0.85;
+  }
+  .hidden {
+    display: none;
+  }
+</style>

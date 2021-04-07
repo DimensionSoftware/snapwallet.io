@@ -61,8 +61,7 @@ export const isDocumentInfo = (kind: ProfileDataItemKind): boolean => {
 export const reducePersonalInfoFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  if (!remediations.length)
-    return 'Identity information used for verification purposes.'
+  if (!remediations.length) return 'Identity is used for verification.'
   const message = 'Your personal information requires an update.'
   const fields = []
 
@@ -91,8 +90,7 @@ export const reducePersonalInfoFields = (
 export const reduceDocumentFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  if (!remediations?.length)
-    return 'Documents used for verifying your identity and residence.'
+  if (!remediations?.length) return 'Documents verify your person.'
   const message = 'One or more of your documents require an update.'
   const fields = []
 
@@ -123,16 +121,14 @@ export const reduceDocumentFields = (
 export const reduceAddressFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  if (!remediations.length)
-    return 'Residential address used for identity verification.'
+  if (!remediations.length) return 'Residence is used for verification.'
   return 'An address update is required. Please provide your current residential address.'
 }
 
 export const reduceContactFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  if (!remediations.length)
-    return 'Contact information used for verification, communication and security.'
+  if (!remediations.length) return 'Used for communication and security.'
   return 'One or more contacts is insufficient. Please update your contact information.'
 }
 

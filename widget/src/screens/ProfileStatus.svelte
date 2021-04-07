@@ -3,6 +3,8 @@
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
+  import PaymentSelector from '../components/selectors/PaymentSelector.svelte'
+  import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import {
     faExclamationCircle,
     faFolder,
@@ -26,6 +28,7 @@
     getMissingFieldMessages,
   } from '../util/profiles'
 
+  let paymentSelectorVisible = false
   let remediationGroups = groupRemediations($userStore.profileRemediations)
 
   $: isPersonalInfoError = remediationGroups.personal.length > 0
@@ -83,6 +86,10 @@
           {missingInfo.personal.message || personalInfoMessage}
         </div>
       </VStep>
+      <PaymentSelector
+        onClick={() => (paymentSelectorVisible = true)}
+        description="Payment used for buying and selling"
+      />
       <VStep
         title="Edit Your Address"
         onClick={() => push(Routes.ADDRESS_UPDATE)}
@@ -147,6 +154,10 @@
   </ModalBody>
   <ModalFooter />
 </ModalContent>
+
+{#if paymentSelectorVisible}
+  <AccountSelector visible on:close={() => (paymentSelectorVisible = false)} />
+{/if}
 
 <style lang="scss">
   @import '../styles/_vars.scss';
