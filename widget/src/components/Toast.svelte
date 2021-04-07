@@ -18,9 +18,9 @@
       class:error
       in:fly={{
         delay: 0,
-        duration: 300,
+        duration: 250,
         x: 0,
-        y: 50,
+        y: 25,
         opacity: 0.1,
         easing: backOut,
       }}

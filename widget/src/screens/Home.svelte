@@ -82,6 +82,7 @@
       selectedSourcePaymentMethod &&
       selectedSourcePaymentMethod?.status !== 'ACTIVE'
     ) {
+      paymentSelectorVisible = true
       return toaster.pop({
         msg: 'Please select an active payment method.',
         error: true,
