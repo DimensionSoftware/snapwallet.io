@@ -23,7 +23,6 @@
         transactionStore.reset()
         userStore.reset()
         paymentMethodStore.reset()
-        
       }, 100)
     },
     cont = () => {

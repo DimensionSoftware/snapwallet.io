@@ -43,12 +43,12 @@
         download={csvFileName}
         target="_blank"
       >
-      <div style="display:flex;justify-content:center;align-items:center;">
-        Download
-        <div style="display:flex;justify-content:center;margin-left:0.5rem;">
-          <FaIcon data={faFileDownload} />
+        <div style="display:flex;justify-content:center;align-items:center;">
+          Download
+          <div style="display:flex;justify-content:center;margin-left:0.5rem;">
+            <FaIcon data={faFileDownload} />
+          </div>
         </div>
-      </div> 
       </a>
       <div class="line-items">
         {#each transfers as transfer, i}
