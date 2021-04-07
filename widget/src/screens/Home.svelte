@@ -31,6 +31,7 @@
   import FaIcon from 'svelte-awesome'
   import { TransactionIntents } from '../types'
   import ExchangeRate from '../components/ExchangeRate.svelte'
+  import PaymentSelector from '../components/selectors/PaymentSelector.svelte'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import CryptoSelector from '../components/selectors/CryptoSelector.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
@@ -269,34 +270,12 @@
             <b slot="step"> Verify Identity </b>
           </VStep>
         {/if}
-        <VStep
-          title="Select Your Payment Method"
-          disabled={!$userStore.isProfilePending && !flags?.hasWyreAccount}
-          success={$transactionStore.selectedSourcePaymentMethod}
+        <PaymentSelector
+          {isBuy}
           onClick={() =>
             ($userStore.isProfilePending || flags?.hasWyreAccount) &&
             (paymentSelectorVisible = true)}
-        >
-          <span slot="icon">
-            <FaIcon
-              data={!$transactionStore.selectedSourcePaymentMethod
-                ? faUniversity
-                : faCheck}
-            />
-          </span>
-          <b slot="step">
-            <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
-            {#if $transactionStore.selectedSourcePaymentMethod}
-              {$transactionStore.selectedSourcePaymentMethod.name}
-            {:else if isBuy && !$paymentMethodStore.wyrePaymentMethods?.length}
-              Add Payment Method
-            {:else if isBuy}
-              Select Payment Method
-            {:else}
-              Select Bank Account
-            {/if}
-          </b>
-        </VStep>
+        />
       </ul>
     </div>
   </ModalBody>
