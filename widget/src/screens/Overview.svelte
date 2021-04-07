@@ -16,6 +16,8 @@
   import { toaster } from '../stores/ToastStore'
   import { computeTransactionExpiration } from '../util/transactions'
 
+  export let product
+
   $: ({ intent, wyrePreview } = $transactionStore)
 
   $: ({
@@ -106,16 +108,33 @@
 <ModalContent>
   <ModalHeader>{screenTitle}</ModalHeader>
   <ModalBody>
+    {#if product}
+      <div class="nft-container">
+        {#if product.videoURL}
+          <video loop playsinline autoplay muted class="nft-video">
+            <source src={product.videoURL} />
+          </video>
+        {:else if product.imageURL && !product.videoURL}
+          <img alt={product.title} class="nft-image" src={product.imageURL} />
+        {/if}
+      </div>
+    {/if}
     <div class="checkout-item-box">
-      <div style="width:30%;" class="checkout-item-icon">
-        <Icon size="100%" height="100%" width="100%" viewBox="-4 0 40 40" />
-      </div>
-      <div class="checkout-item-name">
-        {dropEndingZeros(cryptoAmount.toFixed(cryptoPrecision))}
-        {cryptoTicker}
-      </div>
+      {#if !product}
+        <div style="width:30%;" class="checkout-item-icon">
+          <Icon size="100%" height="100%" width="100%" viewBox="-4 0 40 40" />
+        </div>
+        <div class="checkout-item-name">
+          {dropEndingZeros(cryptoAmount.toFixed(cryptoPrecision))}
+          {cryptoTicker}
+        </div>
+      {:else}
+        <div class="nft-title">
+          {product.title}
+        </div>
+      {/if}
     </div>
-    <div class="line-items">
+    <div class="line-items" class:is-product={Boolean(product)}>
       {#if $transactionStore.selectedSourcePaymentMethod}
         <div class="line-item muted warning">
           <div>Expires In</div>
@@ -232,22 +251,37 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+    &.is-product {
+      margin-top: 1rem;
+    }
     & > .line-item {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      /* &:first-child,
-      &:nth-child(2) {
-        font-size: 1.2rem;
-        margin-bottom: 0.25rem;
-      }
-      & > div:first-child {
-        font-weight: 500;
-      } */
       &.muted {
         color: var(--theme-color-muted);
         font-weight: 300;
       }
+    }
+  }
+
+  .nft-title {
+    margin-top: 1rem;
+    font-weight: bold;
+  }
+
+  .nft-container {
+    height: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    .nft-video {
+      height: 100%;
+    }
+    .nft-image {
+      height: 100%;
     }
   }
 </style>
