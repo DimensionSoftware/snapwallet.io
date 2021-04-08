@@ -99,8 +99,6 @@
       top: -1px;
     }
     &.success {
-      display: flex;
-      align-items: center;
       animation: scaleIn 0.3s ease-out;
       :global(.total-container) {
         font-weight: bold;
@@ -134,12 +132,12 @@
       }
     }
     &.disabled {
-      cursor: auto !important;
       :global(b) {
         font-weight: normal;
       }
     }
     .step {
+      white-space: nowrap;
       margin-left: 0.5rem;
       top: -1px;
       position: relative;

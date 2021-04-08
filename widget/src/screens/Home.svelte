@@ -13,7 +13,6 @@
   import { onMount } from 'svelte'
   import {
     focusFirstInput,
-    getPrimaryPaymentMethodID,
     isValidNumber,
     onEnterPressed,
     focus,
@@ -24,8 +23,6 @@
     faCheck,
     faIdCard,
     faLock,
-    faUniversity,
-    faSpinner,
     faExclamationCircle,
   } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
@@ -165,19 +162,6 @@
       setTimeout(() => (isLoadingPrices = false), 250)
     }
   }
-
-  // Select last used pm when request completes.
-  paymentMethodStore.subscribe(({ wyrePaymentMethods }) => {
-    if ($transactionStore.selectedSourcePaymentMethod) return
-    const primaryPaymentMethodID = getPrimaryPaymentMethodID()
-    if (!primaryPaymentMethodID) return
-    const primaryPaymentMethod = wyrePaymentMethods.find(
-      pm => pm.id === primaryPaymentMethodID,
-    )
-    if (primaryPaymentMethod) {
-      transactionStore.setSelectedSourcePaymentMethod(primaryPaymentMethod)
-    }
-  })
 
   onMount(() => {
     getInitialPrices()

@@ -168,9 +168,8 @@
     list-style: none;
     padding: 0 0.5rem;
   }
-
   .description {
-    min-height: 60px;
+    min-height: 2.5rem;
     margin-left: 0.55rem;
     color: var(--theme-text-color) !important;
     opacity: 0.85;
