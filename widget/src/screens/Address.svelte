@@ -67,7 +67,15 @@
   }
 
   onMount(() => {
-    initAutoComplete()
+    const waitForGoogle = () => {
+      if (window.google?.maps) {
+        initAutoComplete()
+      } else {
+        setTimeout(waitForGoogle, 100)
+      }
+    }
+    // wait for address api to load (since we're 'defer')
+    waitForGoogle()
   })
 
   function fillInAddress() {
