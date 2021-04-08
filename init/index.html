@@ -18,9 +18,14 @@
         ],
         onMessage: (msg) => {
           const closeEvents = [snap.events.EXIT, snap.events.SUCCESS]
-          if (closeEvents.includes(msg.event)) {
-            console.log('Message Data', msg.data)
-            snap.closeWeb()
+          switch (msg.event) {
+            case snap.events.EXIT:
+            case snap.events.SUCCESS:
+              snap.closeWeb()
+              break
+            case snap.events.RESIZE:
+              // resize iframe/viewport happened
+              break
           }
         },
       })

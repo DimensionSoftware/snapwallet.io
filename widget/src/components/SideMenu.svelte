@@ -231,7 +231,7 @@
       transform: translateX(50px);
       transition: transform 0s ease-out 0.5s;
       &.hr {
-        margin-top: 3rem;
+        margin-top: 2.5rem;
         position: relative;
       }
     }

@@ -1,6 +1,6 @@
 import nodeDebug from 'debug'
 import * as Icons from './icons'
-import { CACHED_PRIMARY_PAYMENT_METHOD_KEY } from '../constants'
+import { ParentMessages, CACHED_PRIMARY_PAYMENT_METHOD_KEY } from '../constants'
 
 export const CryptoIcons = Icons
 
@@ -139,4 +139,12 @@ export const getPrimaryPaymentMethodID = (): string => {
     Logger.warn('Could not get cached pm id', e)
     return ''
   }
+}
+
+export const resizeWidget = (height: number) => {
+  window.dispatchEvent(
+    new CustomEvent(ParentMessages.RESIZE, {
+      detail: { height: `${height}px` },
+    }),
+  )
 }

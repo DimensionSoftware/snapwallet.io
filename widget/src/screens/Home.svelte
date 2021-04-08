@@ -16,6 +16,7 @@
     isValidNumber,
     onEnterPressed,
     focus,
+    resizeWidget,
   } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
@@ -158,6 +159,7 @@
   onMount(() => {
     getInitialPrices()
     getNextPath()
+    resizeWidget(525)
     const interval = priceStore.pollPrices()
     return () => clearInterval(interval)
   })

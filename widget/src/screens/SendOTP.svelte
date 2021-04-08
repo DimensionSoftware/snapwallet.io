@@ -1,6 +1,8 @@
 <script lang="ts">
-  import vld8 from 'validator'
+  import { fade } from 'svelte/transition'
+  import { onMount } from 'svelte'
   import { push } from 'svelte-spa-router'
+  import vld8 from 'validator'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -10,11 +12,14 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { toaster } from '../stores/ToastStore'
-  import { Logger, onEnterPressed, focus } from '../util'
+  import { Logger, onEnterPressed, focus, resizeWidget } from '../util'
   import { Routes } from '../constants'
   import { Masks } from '../types'
   import { unMaskValue } from '../masks'
-  import { fade } from 'svelte/transition'
+
+  onMount(() => {
+    resizeWidget(425)
+  })
 
   export let phoneVerificationOnly: boolean = false
 

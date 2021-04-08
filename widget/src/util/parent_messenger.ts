@@ -35,6 +35,19 @@ export const ParentMessenger = (() => {
   }
 
   /**
+   * User exited application (clicked X)
+   * Sends user ID to parent for reference.
+   */
+  const resize = size => {
+    send({
+      event: ParentMessages.RESIZE,
+      data: {
+        size,
+      },
+    })
+  }
+
+  /**
    * User successfully completed a transaction.
    * Sends user ID and transaction to parent for reference.
    */
@@ -51,6 +64,7 @@ export const ParentMessenger = (() => {
 
   return {
     exit,
+    resize,
     success,
   }
 })()

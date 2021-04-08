@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import { push } from 'svelte-spa-router'
   import { fade } from 'svelte/transition'
   import ModalBody from '../components/ModalBody.svelte'
@@ -9,7 +10,7 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed, focus } from '../util'
+  import { Logger, onEnterPressed, focus, resizeWidget } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
   import type { OneTimePasscodeVerifyResponse } from 'api-client'
@@ -19,6 +20,10 @@
   let code = ''
   let isMakingRequest = false
   let isSendingCode = false
+
+  onMount(() => {
+    resizeWidget(425)
+  })
 
   const resendCode = async () => {
     Logger.debug('Resending email')

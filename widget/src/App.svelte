@@ -16,7 +16,7 @@
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
-  import { Routes, APIErrors } from './constants'
+  import { Routes, APIErrors, ParentMessages } from './constants'
   import {
     authedRouteOptions,
     capitalize,
@@ -50,7 +50,7 @@
   $: isBlurred = false
 
   // auth bits
-  window.addEventListener('logout', () => {
+  window.addEventListener('logout', _ => {
     Logger.debug('viewer has logged out')
     isPreLogout = false
     userStore.setIsLoggedIn(false)
@@ -60,17 +60,31 @@
       error: true,
     })
   })
-  window.addEventListener('prelogout', () => {
+  window.addEventListener('prelogout', _ => {
     Logger.debug('viewer is prelogout')
     isPreLogout = true
   })
 
-  window.addEventListener('blurry', () => {
+  window.addEventListener('blurry', _ => {
     isBlurred = true
   })
-  window.addEventListener('unblurry', () => {
+  window.addEventListener('unblurry', _ => {
     isBlurred = false
   })
+
+  // screen height events
+  const HEIGHT = '608px' // default screen height
+  let height: string = HEIGHT,
+    lastLocation: string = null
+  window.addEventListener(ParentMessages.RESIZE, (event: Event) => {
+    // respond to custom screen heights
+    height = event.detail?.height || HEIGHT
+  })
+  $: {
+    // reset screen height at every change
+    if (lastLocation !== $location) height = HEIGHT
+    lastLocation = $location
+  }
 
   // Handler for routing condition failure
   const routeConditionsFailed = (event: any): boolean => {
@@ -252,7 +266,11 @@
 <svelte:window on:keydown={onKeyDown} on:mousedown={onMouseDown} />
 
 <div id="modal">
-  <div id="modal-body" class:blur={isPreLogout || isBlurred}>
+  <div
+    id="modal-body"
+    style={`height: ${height}`}
+    class:blur={isPreLogout || isBlurred}
+  >
     <Router on:conditionsFailed={routeConditionsFailed} {routes} />
     <Toast />
     {#if isPreLogout}
@@ -370,7 +388,8 @@
 
   #modal-body {
     width: 360px;
-    height: 608px;
+    transition: height 0.3s var(--theme-ease-out-back);
+    will-change: height;
     background: var(--theme-modal-background);
     border-radius: 1rem;
     overflow: hidden;
@@ -383,7 +402,7 @@
     :global(.modal-content .modal-header-title),
     :global(.modal-content .modal-header-back-button),
     :global(.modal-content .modal-footer) {
-      will-change: transition;
+      will-change: filter;
       transition: filter 0.3s;
     }
     &.blur {
