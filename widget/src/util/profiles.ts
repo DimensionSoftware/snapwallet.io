@@ -128,7 +128,7 @@ export const reduceAddressFields = (
 export const reduceContactFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  if (!remediations.length) return 'Used for communication and security.'
+  if (!remediations.length) return 'Communication and security'
   return 'One or more contacts is insufficient. Please update your contact information.'
 }
 

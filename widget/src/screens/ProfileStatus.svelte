@@ -8,6 +8,7 @@
   import {
     faExclamationCircle,
     faFolder,
+    faCheck,
     faHome,
     faIdCard,
     faMailBulk,
@@ -26,6 +27,7 @@
     reduceAddressFields,
     reduceContactFields,
     getMissingFieldMessages,
+    isContactInfo,
   } from '../util/profiles'
 
   let paymentSelectorVisible = false
@@ -69,6 +71,7 @@
       <VStep
         title="Edit Your Profile"
         onClick={() => push(Routes.PROFILE_UPDATE)}
+        success={$userStore.isProfileComplete}
       >
         <span
           class:info={!missingInfo.personal.isComplete}
@@ -76,7 +79,9 @@
           slot="icon"
         >
           <FaIcon
-            data={!missingInfo.personal.isComplete || isPersonalInfoError
+            data={$userStore.isProfileComplete
+              ? faCheck
+              : !missingInfo.personal.isComplete || isPersonalInfoError
               ? faExclamationCircle
               : faIdCard}
           />
@@ -88,31 +93,12 @@
       </VStep>
       <PaymentSelector
         onClick={() => (paymentSelectorVisible = true)}
-        description="Payment used for buying and selling"
+        description="Payment to buy and sell"
       />
-      <VStep
-        title="Edit Your Address"
-        onClick={() => push(Routes.ADDRESS_UPDATE)}
-      >
-        <span
-          class:info={!missingInfo.address.isComplete}
-          class:error={isAddressError}
-          slot="icon"
-        >
-          <FaIcon
-            data={!missingInfo.address.isComplete || isAddressError
-              ? faExclamationCircle
-              : faHome}
-          />
-        </span>
-        <b slot="step"> Address </b>
-        <div class="description help" slot="info">
-          {missingInfo.address.message || addressMessage}
-        </div>
-      </VStep>
       <VStep
         title="Edit Your Contact"
         onClick={() => push(Routes.PROFILE_SEND_SMS)}
+        success={missingInfo.contact.isComplete}
       >
         <span
           class:info={!missingInfo.contact.isComplete}
@@ -120,7 +106,9 @@
           slot="icon"
         >
           <FaIcon
-            data={!missingInfo.contact.isComplete || isContactError
+            data={missingInfo.contact.isComplete
+              ? faCheck
+              : !missingInfo.contact.isComplete || isContactError
               ? faExclamationCircle
               : faMailBulk}
           />
@@ -131,8 +119,32 @@
         </div>
       </VStep>
       <VStep
+        title="Edit Your Address"
+        onClick={() => push(Routes.ADDRESS_UPDATE)}
+        success={missingInfo.address.isComplete}
+      >
+        <span
+          class:info={!missingInfo.address.isComplete}
+          class:error={isAddressError}
+          slot="icon"
+        >
+          <FaIcon
+            data={missingInfo.address.isComplete
+              ? faCheck
+              : !missingInfo.address.isComplete || isAddressError
+              ? faExclamationCircle
+              : faHome}
+          />
+        </span>
+        <b slot="step"> Address </b>
+        <div class="description help" slot="info">
+          {missingInfo.address.message || addressMessage}
+        </div>
+      </VStep>
+      <VStep
         title="Edit Your Documents"
         onClick={() => push(Routes.FILE_UPLOAD_UPDATE)}
+        success={missingInfo.document.isComplete}
       >
         <span
           class:info={!missingInfo.document.isComplete}
@@ -140,7 +152,9 @@
           slot="icon"
         >
           <FaIcon
-            data={!missingInfo.document.isComplete || isDocumentError
+            data={missingInfo.document.isComplete
+              ? faCheck
+              : !missingInfo.document.isComplete || isDocumentError
               ? faExclamationCircle
               : faFolder}
           />

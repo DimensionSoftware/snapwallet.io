@@ -109,14 +109,11 @@
       }
       &:last-child:after {
         background: var(--theme-success-color);
+        background: linear-gradient(var(--theme-success-color), transparent);
       }
       &:after {
         background-color: var(--theme-success-color);
-        background: linear-gradient(
-          to bottom,
-          var(--theme-text-color-4),
-          var(--theme-success-color)
-        );
+        background: var(--theme-success-color);
         width: 2px;
       }
       // hide the dot
