@@ -72,6 +72,9 @@
       top: -40px;
       height: calc(100% + 32px);
     }
+    &:last-child:after {
+      background: linear-gradient(var(--theme-text-color), transparent);
+    }
     &:after {
       position: absolute;
       width: 2px;

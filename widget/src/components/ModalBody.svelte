@@ -15,7 +15,7 @@
     overflow: hidden !important;
     overflow-y: scroll;
     scrollbar-width: thin;
-    padding: 1rem 1rem 0 1rem;
+    padding: 1rem 1.25rem 0 1.25rem;
     &.fullscreen {
       padding: 0;
     }
