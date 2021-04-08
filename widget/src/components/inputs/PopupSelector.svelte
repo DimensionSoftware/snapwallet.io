@@ -74,6 +74,9 @@
     padding-top: 0.5rem;
     background: var(--theme-modal-popup-background);
     animation: slideUp 0.25s $easeOutExpo forwards;
+    &:after {
+      @include bottom-shadow;
+    }
   }
 
   .popup-selector-header {

@@ -148,5 +148,8 @@
         font-weight: 300;
       }
     }
+    &:after {
+      @include bottom-shadow;
+    }
   }
 </style>
