@@ -137,11 +137,11 @@
     <div class="line-items" class:is-product={Boolean(product)}>
       {#if $transactionStore.selectedSourcePaymentMethod}
         <div class="line-item muted warning">
-          <div>Price Exipres</div>
+          <div>Price Expires</div>
           <div style="display:flex;justify-content:center;align-items:center;">
             <FaIcon data={faClock} />
             <div style="margin-right:0.35rem;" />
-            {formattedExpiration}
+            <b>{formattedExpiration}</b>
           </div>
         </div>
         <div class="line dashed" />
