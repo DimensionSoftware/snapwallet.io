@@ -1,6 +1,7 @@
 <script lang="ts">
   //@ts-ignore
   import human from 'humanparser'
+  import { blur } from 'svelte/transition'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -10,7 +11,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { onEnterPressed, focus as focusElement } from '../util'
-  import { Routes, UserProfileFieldTypes } from '../constants'
+  import { Routes } from '../constants'
   import { Masks } from '../types'
 
   import { push } from 'svelte-spa-router'
@@ -77,9 +78,11 @@
   <ModalHeader>Tell Us About You</ModalHeader>
   <ModalBody>
     {#if $userStore.isProfileComplete}
-      <h5>Your profile was received. Update any detail:</h5>
+      <h5 in:blur={{ duration: 300 }}>
+        Your profile was received. Update details:
+      </h5>
     {:else}
-      <h5 />
+      <h5>&nbsp;</h5>
     {/if}
     <Label label="Full Name">
       <Input
@@ -144,6 +147,7 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
   h5 {
+    margin-top: 0;
     margin-left: 0.25rem;
   }
 </style>

@@ -1,10 +1,6 @@
 <script lang="ts">
-  import ModalBody from '../components/ModalBody.svelte'
-  import ModalContent from '../components/ModalContent.svelte'
-  import ModalHeader from '../components/ModalHeader.svelte'
-  import ModalFooter from '../components/ModalFooter.svelte'
-  import { Logger, fileToBase64 } from '../util'
-  import IconCard from '../components/cards/IconCard.svelte'
+  import { fly, blur } from 'svelte/transition'
+  import { push } from 'svelte-spa-router'
   import {
     faFileImage,
     faHome,
@@ -12,15 +8,19 @@
     faPassport,
     faUniversity,
   } from '@fortawesome/free-solid-svg-icons'
+  import type { UsGovernmentIdDocumentInputKind } from 'api-client'
+  import ModalBody from '../components/ModalBody.svelte'
+  import ModalContent from '../components/ModalContent.svelte'
+  import ModalHeader from '../components/ModalHeader.svelte'
+  import ModalFooter from '../components/ModalFooter.svelte'
+  import { Logger, fileToBase64 } from '../util'
+  import IconCard from '../components/cards/IconCard.svelte'
   import PopupSelector from '../components/inputs/PopupSelector.svelte'
   import Button from '../components/Button.svelte'
-  import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { transactionStore } from '../stores/TransactionStore'
   import { userStore } from '../stores/UserStore'
-  import type { UsGovernmentIdDocumentInputKind } from 'api-client'
   import { FileUploadTypes } from '../types'
-  import { fly } from 'svelte/transition'
 
   export let isUpdatingFiles: boolean = false
 
@@ -131,6 +131,13 @@
 <ModalContent>
   <ModalHeader>Verify Identity</ModalHeader>
   <ModalBody>
+    {#if $userStore.isProfileComplete}
+      <h5 in:blur={{ duration: 300 }}>
+        Your document was received. Update any:
+      </h5>
+    {:else}
+      <h5>&nbsp;</h5>
+    {/if}
     <div style="margin-top:1rem;margin-bottom:0.75rem;">
       <IconCard
         blend
@@ -196,7 +203,10 @@
   >
     <div class="scroll selector-container">
       {#each Object.entries(SELECTOR_OPTIONS) as [optionFileType, options], i}
-        <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * i }}>
+        <div
+          in:fly={{ y: 25, duration: 250 + 50 * (i + 1) }}
+          class="card-vertical-margin"
+        >
           <IconCard
             icon={options.icon}
             on:click={selectFileType(optionFileType)}
@@ -217,7 +227,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
     height: 60%;
     width: 100%;
     border: 1px dashed var(--theme-color);
