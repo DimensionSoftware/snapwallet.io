@@ -128,15 +128,7 @@
 
   // Find the next path based on user data
   const getNextPath = async () => {
-    // TODO: move this request somewhere sane
-    const isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
-    if (isLoggedIn) {
-      const { flags = {}, user = {} } = await window.API.fluxViewerData()
-      userStore.setFlags({
-        ...flags,
-        hasEmail: Boolean(user.email),
-        hasPhone: Boolean(user.phone),
-      })
+    if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
       const { hasWyrePaymentMethods, hasWyreAccount } = flags
 
       if (hasWyrePaymentMethods && hasWyreAccount)
