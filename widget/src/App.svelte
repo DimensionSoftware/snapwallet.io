@@ -333,7 +333,8 @@
     }
   }
 
-  #modal {
+  #modal,
+  :global(#plaid-link-iframe-1) {
     position: absolute;
     z-index: 1;
     left: 0;
@@ -342,7 +343,7 @@
     bottom: 0;
     width: 100%;
     height: 100%;
-    overflow: hidden;
+    overflow: hidden !important;
     background: var(--theme-modal-container-background-color);
     opacity: 0;
     animation: backgroundFadeIn 1s ease-out forwards;
