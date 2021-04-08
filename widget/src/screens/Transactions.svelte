@@ -10,8 +10,6 @@
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
-  import Button from '../components/Button.svelte'
-  import ModalFooter from '../components/ModalFooter.svelte'
   import TransactionCard from '../components/cards/TransactionCard.svelte'
   import { transactionsStore } from '../stores/TransactionsStore'
 
@@ -44,10 +42,10 @@
         target="_blank"
       >
         <div style="display:flex;justify-content:center;align-items:center;">
-          Download
           <div style="display:flex;justify-content:center;margin-left:0.5rem;">
             <FaIcon data={faFileDownload} />
           </div>
+          Download
         </div>
       </a>
       <div class="line-items">
@@ -87,10 +85,8 @@
   @import '../styles/animations.scss';
   .csv-link {
     display: flex;
-    min-height: 40px;
     align-items: center;
-    justify-content: flex-start;
-    padding-left: 1rem;
+    justify-content: center;
     margin: 0 0 0 0.3rem;
     text-decoration: none;
     :global(svg) {

@@ -39,7 +39,7 @@
   }
 
   .modal-header {
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     height: 2.75rem;
     width: 100%;
     display: flex;

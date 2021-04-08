@@ -77,10 +77,26 @@ export const authedRouteOptions = (component: any) => ({
   component,
 })
 
-export const formatDate = (apiDate: string) => {
+export const isValidDate = (d: Date) => {
+  return d instanceof Date && !isNaN(+d)
+}
+
+export const formatHumanDate = (apiDate: string) =>
+  formatDate(apiDate, {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+  })
+
+export const formatDate = (
+  apiDate: string,
+  options = { year: 'numeric', month: 'numeric', day: 'numeric' },
+) => {
   Logger.debug('date', apiDate)
-  const options = { year: 'numeric', month: 'numeric', day: 'numeric' },
-    date = new Date(Date.parse(apiDate))
+  const date = new Date(Date.parse(apiDate))
   return date.toLocaleDateString(date.getTimezoneOffset(), options)
 }
 

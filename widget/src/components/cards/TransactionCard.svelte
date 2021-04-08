@@ -1,6 +1,11 @@
 <script lang="ts">
   import type { WyreTransfer } from 'api-client'
-  import { formatDate, capitalize, formatLocaleCurrency } from '../../util'
+  import {
+    formatHumanDate,
+    formatDate,
+    capitalize,
+    formatLocaleCurrency,
+  } from '../../util'
   import Badge from '../Badge.svelte'
   export let transaction: WyreTransfer
 
@@ -13,7 +18,9 @@
 <div class="container">
   <div class="content-container">
     <h4>{label}</h4>
-    <h5>{formatDate(transaction.createdAt)}</h5>
+    <h5 title={formatHumanDate(transaction.createdAt)}>
+      {formatDate(transaction.createdAt)}
+    </h5>
   </div>
   <div class="content-container right">
     <h4>{transaction.destAmount}</h4>
