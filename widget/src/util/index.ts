@@ -142,15 +142,9 @@ export const getPrimaryPaymentMethodID = (): string => {
 }
 
 export const resizeWidget = (height: number) => {
-  if (isMobile()) return // guard
   window.dispatchEvent(
     new CustomEvent(ParentMessages.RESIZE, {
       detail: { height: `${height}px` },
     }),
   )
-}
-
-export const isMobile = () => {
-  const width = screen?.width
-  return width < 480
 }

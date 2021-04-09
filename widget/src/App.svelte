@@ -21,7 +21,6 @@
     authedRouteOptions,
     capitalize,
     isJWTValid,
-    isMobile,
     Logger,
     onEscPressed,
     focus as focusElement,
@@ -79,12 +78,12 @@
     lastLocation: string = null
   window.addEventListener(ParentMessages.RESIZE, (event: Event) => {
     // respond to custom screen heights
-    height = isMobile() ? '100%' : event.detail?.height || HEIGHT
+    height = event.detail?.height || HEIGHT
     ParentMessenger.resize(height)
   })
   $: {
     // reset screen height at every change
-    if (lastLocation !== $location) height = isMobile() ? '100%' : HEIGHT
+    if (lastLocation !== $location) height = HEIGHT
     lastLocation = $location
   }
 
@@ -422,7 +421,7 @@
   @media screen and (max-width: 450px) {
     #modal-body {
       border-radius: 0;
-      height: 100%;
+      height: 100% !important;
       width: 100%;
     }
     .lock {
