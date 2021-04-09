@@ -104,7 +104,6 @@
   @import '../../../widget/src/styles/animations.scss';
   $textColor: #333;
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
-  $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
   main {
     display: flex;
     max-width: 960px;
@@ -162,7 +161,7 @@
       border-radius: 20px;
       top: -20%;
       right: -20%;
-      transition: height 0.3s $easeOutBack;
+      transition: height 0.29s $easeOutExpo;
       will-change: height;
     }
     :global(iframe.loaded) {
