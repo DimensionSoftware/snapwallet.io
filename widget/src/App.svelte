@@ -79,6 +79,7 @@
   window.addEventListener(ParentMessages.RESIZE, (event: Event) => {
     // respond to custom screen heights
     height = event.detail?.height || HEIGHT
+    ParentMessenger.resize(height)
   })
   $: {
     // reset screen height at every change
