@@ -32,6 +32,7 @@ $modalContainerBackgroundColor: radial-gradient(
 );
 
 $shadowColor: rgba(0, 0, 0, 0.123);
+$shadowBottomColor: $themeColorInverse;
 
 $success: #2ce5b7;
 $error: #ff3f34;
@@ -58,5 +59,5 @@ $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   right: 0;
   bottom: -1.5rem;
   height: 5px;
-  box-shadow: 0 0 30px 50px var(--theme-color-inverse);
+  box-shadow: 0 0 30px 50px var(--theme-shadow-bottom-color);
 }

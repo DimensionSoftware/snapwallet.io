@@ -37,6 +37,7 @@
         modalPopupBackground: 'rgba(50,50,50,.95)',
         color: 'rgb(100,100,100)',
         colorLightened: 'rgba(100,100,100,.8)',
+        shadowBottomColor: 'rgba(0,0,0,.25)',
         colorInverse: '#fff',
         textColor: '#fff',
         inputTextColor: '#333',

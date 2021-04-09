@@ -331,6 +331,7 @@
     --theme-modal-popup-background: #{$modalPopupBackground};
     --theme-modal-container-background-color: #{$modalContainerBackgroundColor};
     --theme-shadow-color: #{$shadowColor};
+    --theme-shadow-bottom-color: #{$shadowBottomColor};
     --theme-success-color: #{$success};
     --theme-error-color: #{$error};
     --theme-warning-color: #{$warning};
