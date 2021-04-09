@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
-  import { pop, push } from 'svelte-spa-router'
+  import { push } from 'svelte-spa-router'
   import FaIcon from 'svelte-awesome'
   import { faFileDownload } from '@fortawesome/free-solid-svg-icons'
   import { formatLocaleCurrency } from '../util'
@@ -52,7 +52,7 @@
         {#each transfers as transfer, i}
           <div
             style="margin-bottom: 1rem;"
-            in:fly={{ y: 25, duration: 50 * i }}
+            in:fly={{ y: 25, duration: 350 + 50 * i }}
           >
             <TransactionCard transaction={transfer} />
           </div>
@@ -84,10 +84,11 @@
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
   .csv-link {
+    max-width: 50%;
+    margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin: 0 0 0 0.3rem;
     text-decoration: none;
     :global(svg) {
       margin-right: 0.5rem;

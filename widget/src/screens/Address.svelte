@@ -153,7 +153,7 @@
   <ModalBody>
     {#if $userStore.isProfileComplete}
       <h5 in:blur={{ duration: 300 }}>
-        Your address was received. Update details:
+        Your address was received. Update any detail:
       </h5>
     {:else}
       <h5>&nbsp;</h5>
