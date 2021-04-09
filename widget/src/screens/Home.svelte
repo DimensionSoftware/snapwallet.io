@@ -61,7 +61,6 @@
     : selectedDestinationPrice
 
   $: fakePrice = 1_000
-  $: nextRoute = Routes.PROFILE
   $: isCreatingTxnPreview = false
 
   const animateRandomPrice = () => {
@@ -74,6 +73,7 @@
   }
 
   const handleNextStep = async () => {
+    getNextPath()
     const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore,
       isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
     if (
@@ -104,6 +104,7 @@
     // if they're not logged in, forward them instead to login
     if (!isLoggedIn) return push(Routes.SEND_OTP)
 
+    const nextRoute = getNextPath()
     if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
       try {
         isCreatingTxnPreview = true
@@ -123,13 +124,13 @@
         isCreatingTxnPreview = false
       }
     }
-
     push(nextRoute)
   }
 
   // Find the next path based on user data
-  const getNextPath = async () => {
+  const getNextPath = () => {
     if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
+      let nextRoute = Routes.PROFILE
       const { hasWyrePaymentMethods, hasWyreAccount } = flags
 
       if (hasWyrePaymentMethods && hasWyreAccount)
@@ -137,10 +138,9 @@
       else if ($userStore.isProfileComplete) nextRoute = Routes.ADDRESS
       else if (flags?.hasWyreAccount && !hasWyrePaymentMethods)
         nextRoute = Routes.PLAID_LINK
-      return
+      return nextRoute
     }
-
-    nextRoute = Routes.SEND_OTP
+    return Routes.SEND_OTP
   }
 
   const onKeyDown = (e: Event) => {
@@ -157,9 +157,9 @@
   }
 
   onMount(() => {
+    resizeWidget(525)
     getInitialPrices()
     getNextPath()
-    resizeWidget(525)
     const interval = priceStore.pollPrices()
     return () => clearInterval(interval)
   })
