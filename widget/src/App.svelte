@@ -406,6 +406,10 @@
     :global(.modal-content .modal-footer) {
       will-change: filter;
       transition: filter 0.3s;
+      backface-visibility: hidden;
+      perspective: 1000;
+      transform: translate3d(0, 0, 0);
+      transform: translateZ(0);
     }
     &.blur {
       :global(.modal-content .modal-body),
