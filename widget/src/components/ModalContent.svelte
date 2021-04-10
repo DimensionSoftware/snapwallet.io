@@ -38,4 +38,11 @@
     height: 100%;
     overflow: hidden;
   }
+
+  @media (max-width: 480px) {
+    .left {
+      transform: none;
+      animation: none;
+    }
+  }
 </style>
