@@ -49,7 +49,7 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	dbDb := &db.Db{
+	dbDb := &firebase_db.Db{
 		Firestore:         client,
 		EncryptionManager: manager,
 	}

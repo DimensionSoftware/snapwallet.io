@@ -41,7 +41,7 @@ func LookupUserFromIncomingContext(ctx context.Context, db *db.Db) (*user.User, 
 }
 
 // RequireUserFromIncomingContext requires a user from the incoming context and will a throw an error if the lookup fails
-func RequireUserFromIncomingContext(ctx context.Context, db *db.Db) (*user.User, error) {
+func RequireUserFromIncomingContext(ctx context.Context, db db.Db) (*user.User, error) {
 	u, err := LookupUserFromIncomingContext(ctx, db)
 	if err != nil {
 		return nil, err

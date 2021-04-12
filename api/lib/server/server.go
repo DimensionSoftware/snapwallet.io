@@ -28,7 +28,7 @@ type Server struct {
 	TwilioConfig                  *twilio.Config
 	Firestore                     *firestore.Client
 	FileManager                   *filemanager.Manager
-	Db                            *db.Db
+	Db                            db.Db
 	Wyre                          *wyre.Client
 	WyreManager                   *wyre.Manager
 	Plaid                         *plaid.Client
