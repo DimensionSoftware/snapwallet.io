@@ -19,12 +19,39 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 		mdAuthorization     *[]string
 		expectedStatus      *status.Status
 	}{
+		// Public Routes
 		{
 			fullMethod:          "/Flux/PricingData",
 			mdAuthorizationDesc: "unset",
 			mdAuthorization:     nil,
 			expectedStatus:      nil,
 		},
+		{
+			fullMethod:          "/Flux/OneTimePasscode",
+			mdAuthorizationDesc: "unset",
+			mdAuthorization:     nil,
+			expectedStatus:      nil,
+		},
+		{
+			fullMethod:          "/Flux/OneTimePasscodeVerify",
+			mdAuthorizationDesc: "unset",
+			mdAuthorization:     nil,
+			expectedStatus:      nil,
+		},
+
+		{
+			fullMethod:          "/Flux/WyreWebhook",
+			mdAuthorizationDesc: "unset",
+			mdAuthorization:     nil,
+			expectedStatus:      nil,
+		},
+		{
+			fullMethod:          "/Flux/TokenExchange",
+			mdAuthorizationDesc: "unset",
+			mdAuthorization:     nil,
+			expectedStatus:      nil,
+		},
+		// Test token header edge cases
 		{
 			fullMethod:          "/Flux/ViewerData",
 			mdAuthorizationDesc: "empty array",
@@ -79,6 +106,7 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 			},
 			expectedStatus: status.New(codes.Unauthenticated, "token is invalid or expired"),
 		},
+		// Secure Routes
 		{
 			fullMethod:          "/Flux/ViewerData",
 			mdAuthorizationDesc: "unset",
@@ -109,6 +137,8 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 				ctx = metadata.NewIncomingContext(ctx, metadata.MD{
 					"authorization": *tc.mdAuthorization,
 				})
+			} else {
+				ctx = metadata.NewIncomingContext(ctx, metadata.MD{})
 			}
 
 			ctx, err = v.authenticateMethod(ctx, tc.fullMethod)
