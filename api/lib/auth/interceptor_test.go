@@ -93,6 +93,8 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 		},
 	}
 
+	ctx := context.Background()
+
 	for _, tc := range tt {
 		tc := tc
 		t.Run(fmt.Sprintf("%s given %s auth should have status %s and message %s", tc.fullMethod, tc.mdAuthorizationDesc, tc.expectedStatus.Code().String(), tc.expectedStatus.Message()), func(t *testing.T) {
@@ -101,7 +103,6 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 			a := assert.New(t)
 			v := JwtVerifier{}
 
-			ctx := context.Background()
 			var err error
 
 			if tc.mdAuthorization != nil {
