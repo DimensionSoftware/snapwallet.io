@@ -11,40 +11,51 @@ import (
 )
 
 // AuthenticationInterceptor handles jwt authentication
-func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (response interface{}, err error) {
-	log.Printf("authentication --> %s", info.FullMethod)
+func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
+	var err error
 
-	if RPCPublicWhitelist[info.FullMethod] {
+	ctx, err = verifier.authenticateMethod(ctx, info.FullMethod)
+	if err != nil {
+		return nil, err
+	}
+
+	return handler(ctx, req)
+}
+
+func (verifier JwtVerifier) authenticateMethod(ctx context.Context, fullMethod string) (context.Context, error) {
+	log.Printf("authentication --> %s", fullMethod)
+
+	if RPCPublicWhitelist[fullMethod] {
 		log.Printf("success ✅ (public route)")
-		return handler(ctx, req)
+		return ctx, nil
 	}
 
 	log.Printf("secure route")
 
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return ctx, status.Errorf(codes.Unauthenticated, "authentication not set")
 	}
 
 	values := md["authorization"]
 	if len(values) == 0 {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return ctx, status.Errorf(codes.Unauthenticated, "authentication not set")
 	}
 	authorization := values[0]
 
 	expectedPrefix := "Bearer "
 	if len(authorization) <= len(expectedPrefix) {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return ctx, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 	if authorization[:len(expectedPrefix)] != expectedPrefix {
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return ctx, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 	accessToken := authorization[len(expectedPrefix):]
 
 	claims, err := verifier.ParseAndVerify(ctx, TokenKindAccess, accessToken)
 	if err != nil {
 		log.Printf("%#v\n", err)
-		return nil, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return ctx, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
 	}
 	log.Printf("claims --> %+v", claims)
 
@@ -55,5 +66,5 @@ func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req i
 	// Last but super important, execute the handler so that the actualy gRPC request is also performed
 	// send updated md to context
 	ctx = metadata.NewIncomingContext(ctx, md)
-	return handler(ctx, req)
+	return ctx, nil
 }
