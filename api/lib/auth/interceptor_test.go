@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -16,12 +17,10 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 		expectedStatus *status.Status
 	}{
 		{
-			desc:           "tc 1",
 			fullMethod:     "/Flux/PricingData",
 			expectedStatus: nil,
 		},
 		{
-			desc:           "tc 2",
 			fullMethod:     "/Flux/ViewerData",
 			expectedStatus: status.New(codes.Unauthenticated, "authentication not set"),
 		},
@@ -29,7 +28,7 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 
 	for _, tc := range tt {
 		tc := tc
-		t.Run(tc.desc, func(t *testing.T) {
+		t.Run(fmt.Sprintf("%s should have status %s and message %s", tc.fullMethod, tc.expectedStatus.Code().String(), tc.expectedStatus.Message()), func(t *testing.T) {
 			t.Parallel()
 
 			a := assert.New(t)
