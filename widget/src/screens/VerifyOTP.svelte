@@ -14,6 +14,7 @@
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
   import type { OneTimePasscodeVerifyResponse } from 'api-client'
+  import { paymentMethodStore } from '../stores/PaymentMethodStore'
 
   export let phoneVerificationOnly: boolean = false
 
@@ -111,6 +112,9 @@
 
       if (!phoneVerificationOnly) {
         window.AUTH_MANAGER.login(resp.tokens)
+        userStore.fetchFlags()
+        userStore.fetchUserProfile()
+        paymentMethodStore.fetchWyrePaymentMethods()
         userStore.setIsLoggedIn(true)
         Logger.debug('Logged in')
         window.tryInitializePusher()
