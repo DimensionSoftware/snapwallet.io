@@ -3,6 +3,7 @@ package server
 import (
 	"bytes"
 	"context"
+	"errors"
 	"fmt"
 	"log"
 	"strings"
@@ -1257,8 +1258,13 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 
 	t, err := s.Wyre.CreateTransfer(wyreAccount.SecretKey, wyreReq)
 	if err != nil {
-		return nil, err
+		var wyreErr wyre.APIError
+		if errors.As(err, &wyreErr) {
+			return nil, status.Errorf(codes.Unknown, wyreErr.Message)
+		}
 
+		log.Printf("unknown wyre error: %#v", err)
+		return nil, status.Error(codes.Unknown, "Unknown error while contacting wyre.")
 	}
 
 	// TODO: store info in db about xfer
