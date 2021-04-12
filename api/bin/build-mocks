@@ -1,0 +1,2 @@
+#!/bin/bash -xeu
+mkdir -p lib/db/mock_db && mockgen -source lib/db/db.go > lib/db/mock_db/mock_db.go
