@@ -19,6 +19,8 @@ func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req i
 		return nil, err
 	}
 
+	// Last but super important, execute the handler so that the actualy gRPC request is also performed
+	// send updated md to context
 	return handler(ctx, req)
 }
 
@@ -45,17 +47,17 @@ func (verifier JwtVerifier) authenticateMethod(ctx context.Context, fullMethod s
 
 	expectedPrefix := "Bearer "
 	if len(authorization) <= len(expectedPrefix) {
-		return ctx, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return ctx, status.Errorf(codes.Unauthenticated, "authentication not set")
 	}
 	if authorization[:len(expectedPrefix)] != expectedPrefix {
-		return ctx, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return ctx, status.Errorf(codes.Unauthenticated, "authentication not set")
 	}
 	accessToken := authorization[len(expectedPrefix):]
 
 	claims, err := verifier.ParseAndVerify(ctx, TokenKindAccess, accessToken)
 	if err != nil {
 		log.Printf("%#v\n", err)
-		return ctx, status.Errorf(codes.Unauthenticated, codes.Unauthenticated.String())
+		return ctx, status.Errorf(codes.Unauthenticated, "token is invalid or expired")
 	}
 	log.Printf("claims --> %+v", claims)
 
@@ -63,8 +65,6 @@ func (verifier JwtVerifier) authenticateMethod(ctx context.Context, fullMethod s
 
 	log.Printf("authentication success ✅")
 
-	// Last but super important, execute the handler so that the actualy gRPC request is also performed
-	// send updated md to context
 	ctx = metadata.NewIncomingContext(ctx, md)
 	return ctx, nil
 }
