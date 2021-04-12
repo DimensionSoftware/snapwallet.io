@@ -216,13 +216,7 @@
       userStore.fetchUserProfile()
       paymentMethodStore.fetchWyrePaymentMethods()
       // set user flags up, non-blocking
-      window.API.fluxViewerData().then(({ flags = {}, user = {} }) => {
-        userStore.setFlags({
-          ...flags,
-          hasEmail: Boolean(user.email),
-          hasPhone: Boolean(user.phone),
-        })
-      })
+      userStore.fetchFlags()
     }
     // Override theme css variables
     Object.entries(theme).forEach(([k, v]) => {
