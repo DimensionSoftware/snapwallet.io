@@ -108,12 +108,7 @@
   const getViewer = async () => {
     const isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
     if (isLoggedIn) {
-      const { flags = {}, user = {} } = await window.API.fluxViewerData()
-      userStore.setFlags({
-        ...flags,
-        hasEmail: Boolean(user.email),
-        hasPhone: Boolean(user.phone),
-      })
+      await userStore.fetchFlags()
     }
   }
 
