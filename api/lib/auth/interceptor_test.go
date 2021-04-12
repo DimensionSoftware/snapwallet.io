@@ -51,6 +51,19 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 			mdAuthorization:     nil,
 			expectedStatus:      nil,
 		},
+		// Secure Routes
+		{
+			fullMethod:          "/Flux/ViewerData",
+			mdAuthorizationDesc: "unset",
+			mdAuthorization:     nil,
+			expectedStatus:      status.New(codes.Unauthenticated, "authentication not set"),
+		},
+		{
+			fullMethod:          "/Flux/ViewerProfileData",
+			mdAuthorizationDesc: "unset",
+			mdAuthorization:     nil,
+			expectedStatus:      status.New(codes.Unauthenticated, "authentication not set"),
+		},
 		// Test token header edge cases
 		{
 			fullMethod:          "/Flux/ViewerData",
@@ -105,19 +118,6 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 				"Bearer foobar",
 			},
 			expectedStatus: status.New(codes.Unauthenticated, "token is invalid or expired"),
-		},
-		// Secure Routes
-		{
-			fullMethod:          "/Flux/ViewerData",
-			mdAuthorizationDesc: "unset",
-			mdAuthorization:     nil,
-			expectedStatus:      status.New(codes.Unauthenticated, "authentication not set"),
-		},
-		{
-			fullMethod:          "/Flux/ViewerProfileData",
-			mdAuthorizationDesc: "unset",
-			mdAuthorization:     nil,
-			expectedStatus:      status.New(codes.Unauthenticated, "authentication not set"),
 		},
 	}
 
