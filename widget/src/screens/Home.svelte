@@ -92,6 +92,12 @@
       focus(document.querySelector('input'))
       throw new Error('Input an amount in USD')
     }
+
+    if (sourceAmount < 0.01) {
+      focus(document.querySelector('input'))
+      throw new Error('The minimum trade amount is $0.01')
+    }
+
     // Only do this when the user has a Wyre account
     if (
       isLoggedIn &&
