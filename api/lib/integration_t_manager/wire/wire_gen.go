@@ -6,10 +6,14 @@
 package wire
 
 import (
+	"github.com/golang/mock/gomock"
+	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db/firebase_db"
+	"github.com/khoerling/flux/api/lib/db/mock_db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integration_t_manager"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
+	"testing"
 )
 
 // Injectors from wire.go:
@@ -39,4 +43,16 @@ func InitializeTestManager() (integration_t_manager.Manager, error) {
 		Db: db,
 	}
 	return integration_t_managerManager, nil
+}
+
+func InitializeMockDBJwtVerifier(t *testing.T) auth.JwtVerifier {
+	privateKey := auth.ProvideTestJwtPrivateKey()
+	publicKey := auth.ProvideJwtPublicKey(privateKey)
+	controller := gomock.NewController(t)
+	mockDb := mock_db.NewMockDb(controller)
+	jwtVerifier := auth.JwtVerifier{
+		PublicKey: publicKey,
+		Db:        mockDb,
+	}
+	return jwtVerifier
 }

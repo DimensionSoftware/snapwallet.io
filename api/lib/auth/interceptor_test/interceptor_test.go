@@ -1,17 +1,18 @@
-package auth
+package interceptor_test
 
 import (
 	"context"
 	"fmt"
 	"testing"
 
+	"github.com/khoerling/flux/api/lib/integration_t_manager/wire"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 )
 
-func Test_JwtVerifier_authenticateMethod(t *testing.T) {
+func Test_JwtVerifier_AuthenticateMethod(t *testing.T) {
 	tt := []struct {
 		desc                string
 		fullMethod          string
@@ -128,10 +129,10 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 		t.Run(fmt.Sprintf("%s given %s auth should have status %s and message %s", tc.fullMethod, tc.mdAuthorizationDesc, tc.expectedStatus.Code().String(), tc.expectedStatus.Message()), func(t *testing.T) {
 			t.Parallel()
 
-			a := assert.New(t)
-			v := JwtVerifier{}
-
 			var err error
+			a := assert.New(t)
+
+			v := wire.InitializeMockDBJwtVerifier(t)
 
 			if tc.mdAuthorization != nil {
 				ctx = metadata.NewIncomingContext(ctx, metadata.MD{
@@ -141,7 +142,7 @@ func Test_JwtVerifier_authenticateMethod(t *testing.T) {
 				ctx = metadata.NewIncomingContext(ctx, metadata.MD{})
 			}
 
-			ctx, err = v.authenticateMethod(ctx, tc.fullMethod)
+			ctx, err = v.AuthenticateMethod(ctx, tc.fullMethod)
 			if tc.expectedStatus == nil {
 				a.NoError(err)
 			} else {

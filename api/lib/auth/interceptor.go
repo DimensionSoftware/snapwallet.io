@@ -14,7 +14,7 @@ import (
 func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error) {
 	var err error
 
-	ctx, err = verifier.authenticateMethod(ctx, info.FullMethod)
+	ctx, err = verifier.AuthenticateMethod(ctx, info.FullMethod)
 	if err != nil {
 		return nil, err
 	}
@@ -24,7 +24,7 @@ func (verifier JwtVerifier) AuthenticationInterceptor(ctx context.Context, req i
 	return handler(ctx, req)
 }
 
-func (verifier JwtVerifier) authenticateMethod(ctx context.Context, fullMethod string) (context.Context, error) {
+func (verifier JwtVerifier) AuthenticateMethod(ctx context.Context, fullMethod string) (context.Context, error) {
 	log.Printf("authentication --> %s", fullMethod)
 
 	if RPCPublicWhitelist[fullMethod] {
