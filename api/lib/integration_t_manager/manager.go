@@ -1,4 +1,4 @@
-package integration_t_manage
+package integration_t_manager
 
 import "github.com/khoerling/flux/api/lib/db"
 

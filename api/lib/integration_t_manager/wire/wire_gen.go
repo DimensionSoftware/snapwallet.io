@@ -6,7 +6,7 @@
 package wire
 
 import (
-	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/db/firebase_db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integration_t_manager"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
@@ -31,12 +31,12 @@ func InitializeTestManager() (integration_t_manager.Manager, error) {
 	if err != nil {
 		return integration_t_manager.Manager{}, err
 	}
-	dbDb := &db.Db{
+	db := firebase_db.Db{
 		Firestore:         client,
 		EncryptionManager: manager,
 	}
 	integration_t_managerManager := integration_t_manager.Manager{
-		Db: dbDb,
+		Db: db,
 	}
 	return integration_t_managerManager, nil
 }
