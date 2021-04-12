@@ -12,7 +12,7 @@ import (
 type Manager struct {
 	*JwtSigner
 	*JwtVerifier
-	*db.Db
+	db.Db
 }
 
 func (m Manager) NewTokenMaterial(now time.Time, userID user.ID, parentRefreshTokenID string) (*proto.TokenMaterial, error) {

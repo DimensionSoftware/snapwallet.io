@@ -14,13 +14,13 @@ type InnerJobPublisher interface {
 }
 
 type Manager struct {
-	*db.Db
+	db.Db
 	Pusher       *pusher.Manager
 	WyreManager  *wyre.Manager
 	JobPublisher InnerJobPublisher
 }
 
-func (m Manager) GetDb() *db.Db {
+func (m Manager) GetDb() db.Db {
 	return m.Db
 }
 

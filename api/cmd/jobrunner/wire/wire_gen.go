@@ -6,7 +6,7 @@
 package wire
 
 import (
-	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/db/firebase_db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/filemanager"
 	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
@@ -40,7 +40,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
-	dbDb := &db.Db{
+	db := firebase_db.Db{
 		Firestore:         client,
 		EncryptionManager: manager,
 	}
@@ -75,13 +75,13 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	}
 	filemanagerManager := &filemanager.Manager{
 		BucketHandle:      bucketHandle,
-		Db:                dbDb,
+		Db:                db,
 		EncryptionManager: manager,
 	}
 	wyreManager := &wyre.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
-		Db:          dbDb,
+		Db:          db,
 		Plaid:       plaidClient,
 		FileManager: filemanagerManager,
 	}
@@ -96,7 +96,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		PubSub: pubsubManager,
 	}
 	jobmanagerManager := jobmanager.Manager{
-		Db:           dbDb,
+		Db:           db,
 		Pusher:       pusherManager,
 		WyreManager:  wyreManager,
 		JobPublisher: pubSubPublisher,
@@ -121,7 +121,7 @@ func InitializeDevJobManager() (jobmanager.Manager, error) {
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
-	dbDb := &db.Db{
+	db := firebase_db.Db{
 		Firestore:         client,
 		EncryptionManager: manager,
 	}
@@ -156,23 +156,23 @@ func InitializeDevJobManager() (jobmanager.Manager, error) {
 	}
 	filemanagerManager := &filemanager.Manager{
 		BucketHandle:      bucketHandle,
-		Db:                dbDb,
+		Db:                db,
 		EncryptionManager: manager,
 	}
 	wyreManager := &wyre.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
-		Db:          dbDb,
+		Db:          db,
 		Plaid:       plaidClient,
 		FileManager: filemanagerManager,
 	}
 	inProcessPublisher := jobpublisher.InProcessPublisher{
-		Db:          dbDb,
+		Db:          db,
 		Pusher:      pusherManager,
 		WyreManager: wyreManager,
 	}
 	jobmanagerManager := jobmanager.Manager{
-		Db:           dbDb,
+		Db:           db,
 		Pusher:       pusherManager,
 		WyreManager:  wyreManager,
 		JobPublisher: inProcessPublisher,

@@ -28,7 +28,7 @@ type APIHost string
 type Manager struct {
 	APIHost     APIHost
 	Wyre        *Client
-	Db          *db.Db
+	Db          db.Db
 	Plaid       *plaid.Client
 	FileManager *filemanager.Manager
 }

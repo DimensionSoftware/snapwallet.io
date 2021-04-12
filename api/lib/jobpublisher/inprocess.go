@@ -13,7 +13,7 @@ import (
 )
 
 type InProcessPublisher struct {
-	*db.Db
+	db.Db
 	Pusher      *pusher.Manager
 	WyreManager *wyre.Manager
 }

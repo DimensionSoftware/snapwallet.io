@@ -10,7 +10,7 @@ import (
 
 // manages user profile remedies
 type Manager struct {
-	Db *db.Db
+	Db db.Db
 }
 
 func (m Manager) GetRemediationsProto(userID user.ID, profile profiledata.ProfileDatas) ([]*proto.ProfileDataItemRemediation, error) {

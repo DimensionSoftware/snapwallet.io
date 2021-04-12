@@ -105,7 +105,7 @@ const (
 // JwtVerifier manages the verification of our jwt
 type JwtVerifier struct {
 	PublicKey JwtPublicKey
-	*db.Db
+	db.Db
 }
 
 // ParseAndVerify parses and verifies a raw jwt token and returns the claims if successful

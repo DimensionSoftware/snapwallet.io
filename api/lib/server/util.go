@@ -28,7 +28,7 @@ func GetUserIDFromIncomingContext(ctx context.Context) user.ID {
 }
 
 // LookupUserFromIncomingContext attempts to lookup the user from the incoming context
-func LookupUserFromIncomingContext(ctx context.Context, db *db.Db) (*user.User, error) {
+func LookupUserFromIncomingContext(ctx context.Context, db db.Db) (*user.User, error) {
 	userID := GetUserIDFromIncomingContext(ctx)
 
 	u, err := db.GetUserByID(ctx, nil, user.ID(userID))

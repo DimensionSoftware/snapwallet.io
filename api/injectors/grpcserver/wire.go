@@ -4,6 +4,7 @@ import (
 	"github.com/google/wire"
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/db/firebase_db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/filemanager"
 	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
@@ -50,7 +51,8 @@ func InitializeServer() (server.Server, error) {
 		wire.Struct(new(auth.JwtVerifier), "*"),
 		encryption.ProvideConfig,
 		encryption.NewManager,
-		wire.Struct(new(db.Db), "*"),
+		wire.Bind(new(db.Db), new(firebase_db.Db)),
+		wire.Struct(new(firebase_db.Db), "*"),
 		wyre.ProvideAPIHost,
 		wire.Struct(new(wyre.Manager), "*"),
 		wire.Struct(new(pusher.Manager), "*"),
@@ -88,7 +90,8 @@ func InitializeDevServer() (server.Server, error) {
 		wire.Struct(new(auth.JwtVerifier), "*"),
 		encryption.ProvideConfig,
 		encryption.NewManager,
-		wire.Struct(new(db.Db), "*"),
+		wire.Bind(new(db.Db), new(firebase_db.Db)),
+		wire.Struct(new(firebase_db.Db), "*"),
 		wyre.ProvideAPIHost,
 		wire.Struct(new(wyre.Manager), "*"),
 		wire.Struct(new(pusher.Manager), "*"),

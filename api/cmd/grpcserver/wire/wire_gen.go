@@ -7,7 +7,7 @@ package wire
 
 import (
 	"github.com/khoerling/flux/api/lib/auth"
-	"github.com/khoerling/flux/api/lib/db"
+	"github.com/khoerling/flux/api/lib/db/firebase_db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/filemanager"
 	"github.com/khoerling/flux/api/lib/integrations/cloudstorage"
@@ -49,13 +49,13 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	dbDb := &firebase_db.Db{
+	db := firebase_db.Db{
 		Firestore:         client,
 		EncryptionManager: manager,
 	}
 	jwtVerifier := &auth.JwtVerifier{
 		PublicKey: publicKey,
-		Db:        dbDb,
+		Db:        db,
 	}
 	grpcServer := server.ProvideGrpcServer(jwtVerifier)
 	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
@@ -74,7 +74,7 @@ func InitializeServer() (server.Server, error) {
 	}
 	filemanagerManager := &filemanager.Manager{
 		BucketHandle:      bucketHandle,
-		Db:                dbDb,
+		Db:                db,
 		EncryptionManager: manager,
 	}
 	wyreConfig, err := wyre.ProvideWyreConfig()
@@ -97,7 +97,7 @@ func InitializeServer() (server.Server, error) {
 	wyreManager := &wyre.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
-		Db:          dbDb,
+		Db:          db,
 		Plaid:       plaidClient,
 		FileManager: filemanagerManager,
 	}
@@ -107,7 +107,7 @@ func InitializeServer() (server.Server, error) {
 	authManager := &auth.Manager{
 		JwtSigner:   jwtSigner,
 		JwtVerifier: jwtVerifier,
-		Db:          dbDb,
+		Db:          db,
 	}
 	pusherConfig, err := pusher.ProviderPusherConfig()
 	if err != nil {
@@ -128,7 +128,7 @@ func InitializeServer() (server.Server, error) {
 		PubSub: pubsubManager,
 	}
 	remedymanagerManager := &remedymanager.Manager{
-		Db: dbDb,
+		Db: db,
 	}
 	serverServer := server.Server{
 		GrpcServer:    grpcServer,
@@ -137,7 +137,7 @@ func InitializeServer() (server.Server, error) {
 		TwilioConfig:  twilioConfig,
 		Firestore:     client,
 		FileManager:   filemanagerManager,
-		Db:            dbDb,
+		Db:            db,
 		Wyre:          wyreClient,
 		WyreManager:   wyreManager,
 		Plaid:         plaidClient,
@@ -173,13 +173,13 @@ func InitializeDevServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	dbDb := &db.Db{
+	db := firebase_db.Db{
 		Firestore:         client,
 		EncryptionManager: manager,
 	}
 	jwtVerifier := &auth.JwtVerifier{
 		PublicKey: publicKey,
-		Db:        dbDb,
+		Db:        db,
 	}
 	grpcServer := server.ProvideGrpcServer(jwtVerifier)
 	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
@@ -198,7 +198,7 @@ func InitializeDevServer() (server.Server, error) {
 	}
 	filemanagerManager := &filemanager.Manager{
 		BucketHandle:      bucketHandle,
-		Db:                dbDb,
+		Db:                db,
 		EncryptionManager: manager,
 	}
 	wyreConfig, err := wyre.ProvideWyreConfig()
@@ -221,7 +221,7 @@ func InitializeDevServer() (server.Server, error) {
 	wyreManager := &wyre.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
-		Db:          dbDb,
+		Db:          db,
 		Plaid:       plaidClient,
 		FileManager: filemanagerManager,
 	}
@@ -231,7 +231,7 @@ func InitializeDevServer() (server.Server, error) {
 	authManager := &auth.Manager{
 		JwtSigner:   jwtSigner,
 		JwtVerifier: jwtVerifier,
-		Db:          dbDb,
+		Db:          db,
 	}
 	pusherConfig, err := pusher.ProviderPusherConfig()
 	if err != nil {
@@ -242,12 +242,12 @@ func InitializeDevServer() (server.Server, error) {
 		Pusher: pusherClient,
 	}
 	inProcessPublisher := jobpublisher.InProcessPublisher{
-		Db:          dbDb,
+		Db:          db,
 		Pusher:      pusherManager,
 		WyreManager: wyreManager,
 	}
 	remedymanagerManager := &remedymanager.Manager{
-		Db: dbDb,
+		Db: db,
 	}
 	serverServer := server.Server{
 		GrpcServer:    grpcServer,
@@ -256,7 +256,7 @@ func InitializeDevServer() (server.Server, error) {
 		TwilioConfig:  twilioConfig,
 		Firestore:     client,
 		FileManager:   filemanagerManager,
-		Db:            dbDb,
+		Db:            db,
 		Wyre:          wyreClient,
 		WyreManager:   wyreManager,
 		Plaid:         plaidClient,

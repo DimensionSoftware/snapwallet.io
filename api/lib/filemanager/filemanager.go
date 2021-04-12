@@ -19,7 +19,7 @@ import (
 // Manager manages files
 type Manager struct {
 	*storage.BucketHandle
-	*db.Db
+	db.Db
 	EncryptionManager *encryption.Manager
 }
 
