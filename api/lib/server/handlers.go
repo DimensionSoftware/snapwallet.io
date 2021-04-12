@@ -1258,7 +1258,7 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 
 	t, err := s.Wyre.CreateTransfer(wyreAccount.SecretKey, wyreReq)
 	if err != nil {
-		var wyreErr wyre.APIError
+		var wyreErr *wyre.APIError
 		if errors.As(err, &wyreErr) {
 			return nil, status.Errorf(codes.Unknown, wyreErr.Message)
 		}
