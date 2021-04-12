@@ -157,6 +157,15 @@ function createStore() {
     setFlags: (flags: ViewerFlags) => {
       update(s => ({ ...s, flags }))
     },
+    fetchFlags: async () => {
+      const { flags: userFlags, user } = await window.API.fluxViewerData()
+      const flags = {
+        ...userFlags,
+        hasEmail: Boolean(user.email),
+        hasPhone: Boolean(user.phone),
+      }
+      update(s => ({ ...s, flags }))
+    },
     setFullAddress: (address: any) => {
       update(s => ({
         ...s,
