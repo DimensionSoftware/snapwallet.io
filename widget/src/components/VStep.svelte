@@ -135,6 +135,7 @@
       :global(b) {
         font-weight: normal;
       }
+      cursor: auto !important;
     }
     .step {
       white-space: nowrap;
