@@ -149,6 +149,9 @@
     [Routes.SUCCESS]: wrap({
       ...authedRouteOptions(Success),
       conditions: [isJWTValid, () => Boolean($transactionStore.wyrePreview)],
+      props: {
+        product,
+      },
     }),
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),

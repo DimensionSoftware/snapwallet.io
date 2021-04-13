@@ -10,9 +10,15 @@
   import { TransactionIntents } from '../types'
   import { ParentMessenger } from '../util/parent_messenger'
 
+  export let product
+
   $: ({ intent, wyrePreview } = $transactionStore)
 
-  $: ({ sourceCurrency, destCurrency: destinationCurrency } = wyrePreview)
+  $: ({
+    sourceCurrency,
+    destCurrency: destinationCurrency,
+    destAmount: destinationAmount,
+  } = wyrePreview)
   $: isBuy = intent === TransactionIntents.BUY
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
 
@@ -60,7 +66,18 @@
       </svg>
     </div>
     <div class="text-center">
-      <p>Your <b>{cryptoTicker}</b> checkout is confirmed!</p>
+      {#if product}
+        <p>
+          You have successfully confirmed your transfer of <b
+            >{destinationAmount} {cryptoTicker}</b
+          > for
+        </p>
+        <p>
+          <b>{product.title}</b>
+        </p>
+      {:else}
+        <p>Your <b>{cryptoTicker}</b> checkout is confirmed!</p>
+      {/if}
       <p>
         Please allow up to five (5) business days for your purchase to complete.
       </p>
