@@ -82,9 +82,12 @@
     ParentMessenger.resize(height)
   })
   $: {
-    // reset screen height at every change
-    if (lastLocation !== $location) height = HEIGHT
-    lastLocation = $location
+    if (lastLocation !== $location) {
+      // reset screen height at every change
+      height = HEIGHT
+      ParentMessenger.resize(height) // iframe
+      lastLocation = $location
+    }
   }
 
   // Handler for routing condition failure
