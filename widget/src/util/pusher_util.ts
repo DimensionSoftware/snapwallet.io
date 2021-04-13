@@ -10,12 +10,9 @@ const handleWyrePaymentMethodUpdates = data => {
 
 const handleWyreAccountUpdates = async data => {
   Logger.debug(data)
-  const { flags = {}, user = {} } = await window.API.fluxViewerData()
-  userStore.setFlags({
-    ...flags,
-    hasEmail: Boolean(user.email),
-    hasPhone: Boolean(user.phone),
-  })
+  await userStore.fetchFlags()
+  userStore.fetchUserProfile()
+  paymentMethodStore.fetchWyrePaymentMethods()
 }
 
 const tryInitializePusher = () => {
