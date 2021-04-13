@@ -137,13 +137,18 @@
     }
     h1,
     h2 {
+      white-space: nowrap;
       font-size: 2rem;
-      font-weight: 500;
       line-height: 1.1;
       margin: 0.5rem 0;
     }
+    h1 {
+      font-weight: 500;
+      margin-bottom: 0.25rem;
+    }
     h2 {
-      margin: 2rem 0 0.35rem;
+      margin: 0 0 1.75rem;
+      font-weight: 500;
       font-size: 1.25rem;
       :global(div) {
         display: inline-block;
