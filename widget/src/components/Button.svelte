@@ -28,15 +28,15 @@
     border-radius: 0.5rem;
     border: none;
     border-top: none;
-    border-bottom: 1px solid var(--theme-color-darkened);
-    color: white;
+    color: var(--theme-button-text-color);
     cursor: pointer;
     text-transform: uppercase;
     box-shadow: 0 0 0 0 var(--theme-color), 0 6px 6px var(--theme-shadow-color);
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
-    transition: background 0.3s ease-in 0.1s, box-shadow 0.3s ease-in 0.123s;
+    transition: background 0.3s ease-in 0.1s;
+    z-index: 10;
     // gloss fix
     &:before {
       position: absolute;
@@ -54,6 +54,8 @@
       );
       white-space: nowrap;
       border-radius: 0.5em 0.5em 6em 6em/0.1em 0.1em 1em 1em;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
       transition: opacity 0.3s ease-in 0.1s;
     }
     &:hover {
@@ -107,8 +109,7 @@
         height: 32px;
         margin: 8px;
         border-radius: 50%;
-        background: rgba(#fff, 0.8);
-        background: radial-gradient(rgba(#fff, 0.5), #fff);
+        background: var(--theme-button-text-color);
         animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
       }
     }
