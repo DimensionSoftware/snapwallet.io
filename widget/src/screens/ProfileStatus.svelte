@@ -71,20 +71,20 @@
       <VStep
         title="Edit Your Profile"
         onClick={() => push(Routes.PROFILE_UPDATE)}
-        success={$userStore.isProfileComplete}
+        success={missingInfo.personal.isComplete}
       >
         <span
-          class:info={!missingInfo.personal.isComplete}
+          class:info={!missingInfo.personal.isValid}
           class:error={isPersonalInfoError}
           slot="icon"
         >
-          <FaIcon
-            data={$userStore.isProfileComplete
-              ? faCheck
-              : !missingInfo.personal.isComplete || isPersonalInfoError
-              ? faExclamationCircle
-              : faIdCard}
-          />
+          {#if missingInfo.personal.isComplete}
+            <FaIcon data={faCheck} />
+          {:else if !missingInfo.personal.isValid || isPersonalInfoError}
+            <FaIcon data={faExclamationCircle} />
+          {:else}
+            <FaIcon data={faIdCard} />
+          {/if}
         </span>
         <b slot="step">Personal</b>
         <div class="description help" slot="info">
@@ -101,17 +101,17 @@
         success={missingInfo.contact.isComplete}
       >
         <span
-          class:info={!missingInfo.contact.isComplete}
+          class:info={!missingInfo.contact.isValid}
           class:error={isContactError}
           slot="icon"
         >
-          <FaIcon
-            data={missingInfo.contact.isComplete
-              ? faCheck
-              : !missingInfo.contact.isComplete || isContactError
-              ? faExclamationCircle
-              : faMailBulk}
-          />
+          {#if missingInfo.contact.isComplete}
+            <FaIcon data={faCheck} />
+          {:else if !missingInfo.contact.isValid || isContactError}
+            <FaIcon data={faExclamationCircle} />
+          {:else}
+            <FaIcon data={faMailBulk} />
+          {/if}
         </span>
         <b slot="step"> Contact </b>
         <div class="description help" slot="info">
@@ -124,17 +124,17 @@
         success={missingInfo.address.isComplete}
       >
         <span
-          class:info={!missingInfo.address.isComplete}
+          class:info={!missingInfo.address.isValid}
           class:error={isAddressError}
           slot="icon"
         >
-          <FaIcon
-            data={missingInfo.address.isComplete
-              ? faCheck
-              : !missingInfo.address.isComplete || isAddressError
-              ? faExclamationCircle
-              : faHome}
-          />
+          {#if missingInfo.address.isComplete}
+            <FaIcon data={faCheck} />
+          {:else if !missingInfo.address.isValid || isAddressError}
+            <FaIcon data={faExclamationCircle} />
+          {:else}
+            <FaIcon data={faHome} />
+          {/if}
         </span>
         <b slot="step"> Address </b>
         <div class="description help" slot="info">
@@ -147,17 +147,17 @@
         success={missingInfo.document.isComplete}
       >
         <span
-          class:info={!missingInfo.document.isComplete}
+          class:info={!missingInfo.document.isValid}
           class:error={isDocumentError}
           slot="icon"
         >
-          <FaIcon
-            data={missingInfo.document.isComplete
-              ? faCheck
-              : !missingInfo.document.isComplete || isDocumentError
-              ? faExclamationCircle
-              : faFolder}
-          />
+          {#if missingInfo.document.isComplete}
+            <FaIcon data={faCheck} />
+          {:else if !missingInfo.document.isComplete || isDocumentError}
+            <FaIcon data={faExclamationCircle} />
+          {:else}
+            <FaIcon data={faFolder} />
+          {/if}
         </span>
         <b slot="step"> Documents </b>
         <div class="description help" slot="info">
