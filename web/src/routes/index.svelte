@@ -190,15 +190,15 @@
   // responsive
   @media (max-width: 375px) {
     :global(body) {
-      overflow-y: scroll;
+      overflow-y: scroll !important;
       main {
         padding: 0;
       }
     }
   }
-  @media (max-width: 850px) {
+  @media (max-width: 1024px) {
     :global(body) {
-      overflow-y: scroll;
+      overflow-y: scroll !important;
       main {
         flex-direction: column;
         > .col {
