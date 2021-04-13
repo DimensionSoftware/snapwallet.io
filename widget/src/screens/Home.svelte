@@ -257,13 +257,7 @@
         {/if}
         <PaymentSelector
           {isBuy}
-          onClick={() => {
-            if ($userStore.isProfilePending || flags?.hasWyreAccount) {
-              paymentSelectorVisible = true
-            } else {
-              push(Routes.PROFILE_STATUS)
-            }
-          }}
+          onClick={() => (paymentSelectorVisible = true)}
         />
       </ul>
     </div>
