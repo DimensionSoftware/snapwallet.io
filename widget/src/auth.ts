@@ -230,9 +230,10 @@ export class FluxBearerAuthentication implements SecurityAuthentication {
       return
     }
 
-    throw new Error(
+    Logger.warn(
       'route needs authentication but no token was provided by the auth manager',
     )
+    throw new Error('Please login and try again.')
   }
 }
 
