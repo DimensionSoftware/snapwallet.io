@@ -194,6 +194,7 @@
     align-items: center;
     font-size: 0.95rem;
     margin-top: 0.35rem;
+    color: var(--theme-text-color);
     & > a {
       margin-left: 0.25em;
     }

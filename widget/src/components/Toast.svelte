@@ -60,11 +60,7 @@
     font-weight: 500;
     z-index: 9999;
     &:before {
-      background: linear-gradient(
-        to right,
-        var(--theme-color),
-        var(--theme-color-darkened)
-      );
+      background: var(--theme-color);
       content: '';
       position: absolute;
       opacity: 0.98;
@@ -75,18 +71,10 @@
       z-index: -1;
     }
     &.error:before {
-      background: linear-gradient(
-        to right,
-        var(--theme-color),
-        var(--theme-color-darkened)
-      );
+      background: var(--theme-color);
     }
     &.warning:before {
-      background: linear-gradient(
-        to right,
-        var(--theme-color),
-        var(--theme-color-darkened)
-      );
+      background: var(--theme-color);
     }
     &.success:before {
       background-color: var(--theme-success-color);

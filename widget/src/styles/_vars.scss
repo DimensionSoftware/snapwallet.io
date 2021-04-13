@@ -2,7 +2,6 @@
 // so each import does not redefine the variables
 
 // theme
-$themeColor: #ffc600;
 $themeColor: #485460;
 $themeColorInverse: white;
 $themeColorDarkened: darken($themeColor, 10%);
@@ -13,10 +12,12 @@ $headingFont: 'Impact', 'Fira Sans Condensed';
 // colors
 $inputTextColor: #333;
 $textColor: #333;
+$badgeTextColor: $textColor;
 $textColor2: rgba($textColor, 0.9);
 $textColor3: rgba($textColor, 0.7);
 $textColor4: rgba($textColor, 0.5);
 $textColorMuted: $textColor2;
+$buttonTextColor: $themeColorInverse;
 // NOTE: avoid linear gradient for react native safeview embedding
 // - solid catch;  let's eventually make a RN theme and/or toggle
 // $modalBackground: #f0f0f0;

@@ -85,6 +85,7 @@
   @import '../styles/animations.scss';
   .csv-link {
     max-width: 50%;
+    color: var(--theme-text-color);
     margin: 0 auto;
     display: flex;
     align-items: center;
