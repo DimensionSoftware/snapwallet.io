@@ -165,18 +165,16 @@
       margin: 0;
       line-height: 1.35;
     }
-    iframe {
+    :global(iframe) {
       position: relative;
       border-radius: 20px;
       top: -20%;
       right: -20%;
-      transition: height 0.3s $easeOutBack;
-      will-change: height;
     }
     :global(iframe.loaded) {
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-      transition: box-shadow 0.8s $easeOutExpo 0.1s;
-      will-change: box-shadow;
+      transition: box-shadow 0.8s $easeOutExpo 0.1s, height 0.3s $easeOutBack;
+      will-change: box-shadow, height;
     }
   }
   @media (min-width: 480px) {
