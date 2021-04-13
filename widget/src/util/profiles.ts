@@ -144,6 +144,7 @@ export const getMissingFieldMessages = (profileItems: {
       submitted: new Set(),
       missing: new Set(),
       isComplete: false,
+      isValid: false,
       message: '',
     },
     address: {
@@ -151,6 +152,7 @@ export const getMissingFieldMessages = (profileItems: {
       submitted: new Set(),
       missing: new Set(),
       isComplete: false,
+      isValid: false,
       message: '',
     },
     contact: {
@@ -158,6 +160,7 @@ export const getMissingFieldMessages = (profileItems: {
       submitted: new Set(),
       missing: new Set(),
       isComplete: false,
+      isValid: false,
       message: '',
     },
     document: {
@@ -165,6 +168,7 @@ export const getMissingFieldMessages = (profileItems: {
       submitted: new Set(),
       missing: new Set(),
       isComplete: false,
+      isValid: false,
       message: '',
     },
   }
@@ -179,11 +183,11 @@ export const getMissingFieldMessages = (profileItems: {
 
   Object.entries(sections).forEach(([sectionName, section]) => {
     section.missing = getDiff(section.required, section.submitted)
-    section.isComplete =
+    section.isComplete = section.submitted.size === section.required.size
+    section.isValid =
       // User hasn't submitted anything for this section
-      section.submitted.size === 0 ||
-      section.submitted.size === section.required.size
-    if (!section.isComplete) {
+      section.submitted.size === 0 || section.isComplete
+    if (!section.isValid) {
       const remediations = [...section.missing].map(m => ({
         kind: m,
       })) as ProfileDataItemInfo[]
