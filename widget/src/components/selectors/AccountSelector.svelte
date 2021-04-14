@@ -94,6 +94,7 @@
           />
         </div>
       {/each}
+      <div class="spacer" />
     {/if}
   </div>
 </PopupSelector>

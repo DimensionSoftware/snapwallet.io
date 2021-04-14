@@ -355,7 +355,9 @@
       text-decoration: underline;
     }
   }
-
+  :global(.spacer) {
+    margin-top: 1.5rem;
+  }
   #modal,
   :global(#plaid-link-iframe-1) {
     position: absolute;

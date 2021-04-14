@@ -61,5 +61,6 @@ $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   right: 0;
   bottom: -1.5rem;
   height: 5px;
+  z-index: 10;
   box-shadow: 0 0 30px 50px var(--theme-shadow-bottom-color);
 }
