@@ -141,6 +141,7 @@
 
       if (hasWyrePaymentMethods && hasWyreAccount)
         nextRoute = Routes.CHECKOUT_OVERVIEW
+      // TODO: handle all possible cases properly
       else if ($userStore.isProfileComplete) nextRoute = Routes.ADDRESS
       else if (flags?.hasWyreAccount && !hasWyrePaymentMethods)
         nextRoute = Routes.PLAID_LINK
