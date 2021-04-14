@@ -14,10 +14,12 @@ const createStore = ()  => {
    }
 }
 
+const pagesize = 30
+
 async function rFetchUserTransfers(startingAtPage = 0): Promise<WyreTransfer[]> {
   const { transfers } = await window.API.fluxWyreGetTransfers(startingAtPage.toString())
 
-  if (transfers.length) {
+  if (transfers.length === pagesize) {
     return transfers.concat((await rFetchUserTransfers(startingAtPage + 1)))
   }
 
