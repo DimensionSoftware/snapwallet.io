@@ -24,7 +24,7 @@
     position: relative;
     min-height: 50px;
     width: 100%;
-    background: var(--theme-color);
+    background: var(--theme-button-color);
     border-radius: 0.5rem;
     border: none;
     border-top: none;
@@ -92,7 +92,7 @@
     }
     &.isLoading {
       .lds-circle {
-        opacity: 1;
+        visibility: visible;
       }
     }
     .lds-circle {
@@ -101,7 +101,7 @@
       top: 0;
       display: inline-block;
       transform: translateZ(1px);
-      opacity: 0;
+      visibility: hidden;
       transition: opacity 0.2s ease-out;
       > div {
         display: inline-block;

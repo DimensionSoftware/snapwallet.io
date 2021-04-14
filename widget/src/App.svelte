@@ -328,6 +328,7 @@
     --theme-text-color-3: #{$textColor3};
     --theme-text-color-4: #{$textColor4};
     --theme-text-color-muted: #{$textColorMuted};
+    --theme-button-color: #{$buttonColor};
     --theme-button-text-color: #{$buttonTextColor};
     --theme-modal-background: #{$modalBackground};
     --theme-modal-popup-background: #{$modalPopupBackground};
