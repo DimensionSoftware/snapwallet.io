@@ -251,7 +251,7 @@
     margin-top: 0.5rem;
     height: 60%;
     width: 100%;
-    border: 1px dashed var(--theme-color);
+    border: 1px dashed var(--theme-text-color);
     cursor: pointer;
     font-weight: 600;
   }
