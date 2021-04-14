@@ -63,7 +63,7 @@
       background: var(--theme-color);
       content: '';
       position: absolute;
-      opacity: 0.98;
+      opacity: 0.9;
       top: 0;
       bottom: 0;
       left: 0;

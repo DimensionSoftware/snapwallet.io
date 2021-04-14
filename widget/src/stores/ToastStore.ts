@@ -9,6 +9,7 @@ function createToast() {
     },
     dismiss = () => {
       // dismiss toast early
+      window.dispatchEvent(new Event('unblurryHeader'))
       clearTimer()
       set(null)
       _timer = null
@@ -20,6 +21,7 @@ function createToast() {
     pop: ({ msg = '', error = false, warning = false, success = false }) => {
       set({ msg, error, warning, success })
       clearTimer()
+      window.dispatchEvent(new Event('blurryHeader'))
       _timer = setTimeout(() => {
         dismiss()
       }, 4000)

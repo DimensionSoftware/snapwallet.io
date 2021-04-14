@@ -48,6 +48,7 @@
 
   $: isPreLogout = false
   $: isBlurred = false
+  $: isHeaderBlurred = false
 
   // auth bits
   window.addEventListener('logout', _ => {
@@ -65,6 +66,13 @@
     isPreLogout = true
   })
 
+  // blurry fx
+  window.addEventListener('blurryHeader', _ => {
+    isHeaderBlurred = true
+  })
+  window.addEventListener('unblurryHeader', _ => {
+    isHeaderBlurred = false
+  })
   window.addEventListener('blurry', _ => {
     isBlurred = true
   })
@@ -271,6 +279,7 @@
     id="modal-body"
     style={`height: ${height}`}
     class:blur={isPreLogout || isBlurred}
+    class:blur-header={isHeaderBlurred}
   >
     <Router on:conditionsFailed={routeConditionsFailed} {routes} />
     <Toast />
@@ -415,6 +424,15 @@
       perspective: 1000;
       transform: translate3d(0, 0, 0);
       transform: translateZ(0);
+    }
+    &.blur-header {
+      :global(.modal-content .modal-header-title),
+      :global(.modal-content .modal-header-title),
+      :global(.modal-content .modal-header-right-action svg),
+      :global(.modal-content .modal-header-back-button) {
+        filter: blur(20px) contrast(150%);
+        transition: none;
+      }
     }
     &.blur {
       :global(.modal-content .modal-body),
