@@ -137,7 +137,7 @@
 <ModalContent>
   <ModalHeader>
     {#if missingInfo.document.isComplete}
-      Step Complete
+      Identity Completed
     {:else}
       Verify Identity
     {/if}
@@ -156,7 +156,7 @@
         </h5>
       </div>
     {:else}
-      <h5 in:blur={{ duration: 300 }}>Upload your first document</h5>
+      <h5 in:blur={{ duration: 300 }}>Upload one of:</h5>
     {/if}
     <div style="margin-top:1rem;margin-bottom:0.75rem;">
       <IconCard

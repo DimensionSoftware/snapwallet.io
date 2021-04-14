@@ -62,7 +62,7 @@ export const reducePersonalInfoFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
   if (!remediations.length) return 'Identity is used for verification.'
-  const message = 'Your personal information requires an update.'
+  const message = 'Your personal information requires an update'
   const fields = []
 
   remediations.forEach(r => {
@@ -84,7 +84,7 @@ export const reducePersonalInfoFields = (
   if (fields.length === 2) {
     fieldMsg = `${fields[0]} and ${fields[1]}`
   }
-  return `${message} Fields include ${fieldMsg}.`
+  return `${message}: ${fieldMsg}.`
 }
 
 export const reduceDocumentFields = (
@@ -129,7 +129,7 @@ export const reduceContactFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
   if (!remediations.length) return 'Communication and security'
-  return 'One or more contacts is insufficient. Please update your contact information.'
+  return 'Please update your contact information.'
 }
 
 /**

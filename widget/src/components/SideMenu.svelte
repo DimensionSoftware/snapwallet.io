@@ -258,13 +258,14 @@
       margin: 1rem 0 0 0;
       :global(svg) {
         opacity: 0;
-        transition: opacity 0s ease-in .8s;
+        transform: translateX(-2px);
+        transition: transform 0s ease-in 0.8s, opacity 0s ease-in 0.8s;
       }
     }
     nav a {
       position: relative;
       display: block;
-      margin: -.1rem 0 0 1rem !important;
+      margin: -0.1rem 0 0 1rem !important;
       color: var(--theme-text-color);
       font-size: 1.35rem;
       transform: translateX(50px);
@@ -275,60 +276,61 @@
       }
     }
     &.active {
-      transition: transform 0.2s var(--theme-ease-out-expo);
+      transition: transform 0.2s var(--theme-ease-out-expo) 0.05s;
       transform: translateX(0);
       nav > div :global(svg) {
         opacity: 1;
+        transform: translateX(0);
         &:nth-child(0) {
-          transition: opacity 0.4s ease-out;
+          transition: transform 0.8s ease-out 0.3s, opacity 0.8s ease-out 0.1s;
         }
         &:nth-child(1) {
-          transition: opacity 0.5s ease-out;
+          transition: transform 0.7s ease-out 0.3s, opacity 0.7s ease-out 0.1s;
         }
         &:nth-child(2) {
-          transition: opacity 0.6s ease-out;
+          transition: transform 0.6s ease-out 0.3s, opacity 0.6s ease-out 0.1s;
         }
         &:nth-child(3) {
-          transition: opacity 0.7s ease-out;
+          transition: transform 0.5s ease-out 0.3s, opacity 0.5s ease-out 0.1s;
         }
         &:nth-child(4) {
-          transition: opacity .8s ease-out;
+          transition: transform 0.4s ease-out 0.3s, opacity 0.4s ease-out 0.1s;
         }
         &:nth-child(5) {
-          transition: opacity .9s ease-out;
+          transition: transform 0.3s ease-out 0.3s, opacity 0.3s ease-out 0.1s;
         }
         &:nth-child(6) {
-          transition: opacity 1.0s ease-out;
+          transition: transform 0.2s ease-out 0.3s, opacity 0.2s ease-out 0.1s;
         }
         &:nth-child(7) {
-          transition: opacity 1.1s ease-out;
+          transition: transform 0.1s ease-out 0.3s, opacity 0.1s ease-out 0.1s;
         }
       }
       nav a {
         transform: translateX(0);
         &:nth-child(0) {
-          transition: transform 0.3s var(--theme-ease-out-expo);
-        }
-        &:nth-child(1) {
-          transition: transform 0.4s var(--theme-ease-out-expo);
-        }
-        &:nth-child(2) {
-          transition: transform 0.5s var(--theme-ease-out-expo);
-        }
-        &:nth-child(3) {
           transition: transform 0.6s var(--theme-ease-out-expo);
         }
-        &:nth-child(4) {
+        &:nth-child(1) {
           transition: transform 0.7s var(--theme-ease-out-expo);
         }
-        &:nth-child(5) {
+        &:nth-child(2) {
           transition: transform 0.8s var(--theme-ease-out-expo);
         }
-        &:nth-child(6) {
+        &:nth-child(3) {
           transition: transform 0.9s var(--theme-ease-out-expo);
         }
-        &:nth-child(7) {
+        &:nth-child(4) {
           transition: transform 1s var(--theme-ease-out-expo);
+        }
+        &:nth-child(5) {
+          transition: transform 1.1s var(--theme-ease-out-expo);
+        }
+        &:nth-child(6) {
+          transition: transform 1.2s var(--theme-ease-out-expo);
+        }
+        &:nth-child(7) {
+          transition: transform 1.3s var(--theme-ease-out-expo);
         }
       }
     }
