@@ -16,7 +16,6 @@ export class AuthManager {
   private readonly prelogoutThreshold = 5 * 60 * 1000
 
   private sessionExpiresAt = 0
-  private locked = false
 
   constructor() {
     const parsed = this.parseRefreshTokenClaims()
@@ -116,7 +115,6 @@ export class AuthManager {
         return
       }
 
-      this.locked = true
       this.tokenExchangePromise = this.unauthenticatedAPI.fluxTokenExchange({
         refreshToken: token,
       })
@@ -135,7 +133,6 @@ export class AuthManager {
       this.sessionExpiresAt = parseInt(parsed.exp) * 1000
 
       this.tokenExchangePromise = null
-      this.locked = false
     } else {
       await this.tokenExchangePromise
     }
@@ -144,11 +141,6 @@ export class AuthManager {
   // returns '' if token is non-refreshable or completely expired
   // if refreshable and expired: we will refresh the token before returning it
   public async getAccessToken(): Promise<string> {
-    if (this.locked) {
-      await delay(30)
-      return this.getAccessToken()
-    }
-
     if (this.accessTokenIsExpired()) {
       if (this.refreshTokenIsExpired()) {
         return ''
@@ -162,7 +154,6 @@ export class AuthManager {
 
   // for first time (unrefreshed, interactive) login to populate access/refresh tokens
   public login(tokens: TokenMaterial) {
-    this.locked = true
     this.setCurrentAccessToken(tokens.accessToken)
     this.setCurrentRefreshToken(tokens.refreshToken)
 
@@ -174,16 +165,13 @@ export class AuthManager {
       throw new Error('refresh token claims lacks an expiration')
     }
     this.sessionExpiresAt = parseInt(parsed.exp) * 1000
-    this.locked = false
   }
 
   public logout() {
-    this.locked = true
     this.setCurrentAccessToken('')
     this.setCurrentRefreshToken('')
     this.sessionExpiresAt = 0
     window.dispatchEvent(new Event('logout'))
-    this.locked = false
   }
 
   public viewerIsLoggedIn(): boolean {
@@ -262,11 +250,4 @@ export function genAPIClient(authManager?: AuthManager): FluxApi {
 
 function addEpochBuffer(epoch: number): number {
   return epoch + 5 * 1000
-}
-
-
-async function delay(t: number): Promise<void> {
-  return new Promise(function(resolve) { 
-      setTimeout(resolve, t)
-  });
 }
