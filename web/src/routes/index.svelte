@@ -49,7 +49,7 @@
       theme: {
         modalBackground: 'rgb(28, 28, 40)',
         modalPopupBackground: 'rgb(40, 41, 61, .95)',
-        color: 'rgba(0,0,0,.9)',
+        color: '#555770',
         badgeTextColor: '#333',
         colorLightened: 'rgba(5,5,5,.8)',
         shadowBottomColor: 'rgba(0,0,0,.25)',
