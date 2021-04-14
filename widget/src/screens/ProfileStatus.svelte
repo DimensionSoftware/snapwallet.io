@@ -189,4 +189,11 @@
     color: var(--theme-text-color) !important;
     opacity: 0.85;
   }
+  :global(span.info) {
+    &:before {
+      opacity: 0.9 !important;
+      background: var(--theme-info-color) !important;
+    }
+    color: var(--text-color) !important;
+  }
 </style>

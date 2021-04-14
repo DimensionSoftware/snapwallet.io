@@ -39,7 +39,7 @@
       width: 8px;
       left: 0;
       top: 8px;
-      opacity: 1;
+      opacity: 0.8;
       z-index: 1;
     }
     > :global(span > svg) {
@@ -91,18 +91,20 @@
       outline: 0;
     }
     :global(span:before) {
-      background: var(--theme-color);
+      background: var(--theme-modal-background);
       position: absolute;
       content: '';
       border-radius: 50%;
-      opacity: 0.15;
+      opacity: 0.25;
       height: 26px;
       width: 26px;
       left: -9px;
       top: -1px;
+      z-index: 1;
     }
     &.success {
       animation: scaleIn 0.3s ease-out;
+      z-index: 1;
       :global(.total-container) {
         font-weight: bold;
       }
@@ -121,7 +123,7 @@
       }
       // hide the dot
       :global(span:before) {
-        opacity: 0.15;
+        opacity: 0.25;
         background: var(--theme-success-color);
       }
       & > :global(.icon) {
