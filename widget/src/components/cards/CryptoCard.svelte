@@ -5,6 +5,7 @@
   import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
   import { TransactionIntents } from '../../types'
   import { CryptoIcons } from '../../util'
+  import { ParentMessenger } from '../../util/parent_messenger'
 
   export let crypto
 
@@ -25,6 +26,7 @@
         sourceCurrency: crypto,
       })
     }
+    ParentMessenger.currencySelected(crypto)
     dispatch('mousedown')
   }}
   class="crypto-card"
