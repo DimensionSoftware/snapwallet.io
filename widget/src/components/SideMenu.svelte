@@ -1,5 +1,14 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
+  import FaIcon from 'svelte-awesome'
+  import {
+    faLock,
+    faExchangeAlt,
+    faList,
+    faSignOutAlt,
+    faSignInAlt,
+    faUserCircle,
+  } from '@fortawesome/free-solid-svg-icons'
   import { Routes } from '../constants'
   import {
     cachePrimaryPaymentMethodID,
@@ -124,25 +133,46 @@
 </div>
 <aside class:active={isExpanded}>
   <nav>
-    <a on:mousedown={_ => go(Routes.ROOT)}
-      >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
-    >
-    <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}>My Transactions</a
-    >
-    <a on:mousedown={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
+    <div>
+      <FaIcon data={faExchangeAlt} />
+      <a on:mousedown={_ => go(Routes.ROOT)}
+        >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
+      >
+    </div>
+    <div />
+    <div>
+      <FaIcon data={faList} />
+      <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}
+        >My Transactions</a
+      >
+    </div>
+    <div>
+      <FaIcon data={faUserCircle} />
+      <a on:mousedown={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
+    </div>
+    <div />
     {#if isLoggedIn}
-      <a class="hr" on:mousedown={logout}>Logout</a>
+      <div>
+        <FaIcon data={faSignOutAlt} />
+        <a class="hr" on:mousedown={logout}>Logout</a>
+      </div>
     {:else}
-      <a class="hr" on:mousedown={login}>Login</a>
+      <div>
+        <FaIcon data={faSignInAlt} />
+        <a class="hr" on:mousedown={login}>Login</a>
+      </div>
     {/if}
-    <a
-      on:mousedown={() => {
-        if (isExpanded) {
-          close(true)
-        }
-        ParentMessenger.exit()
-      }}>Exit</a
-    >
+    <div>
+      <FaIcon data={faLock} />
+      <a
+        on:mousedown={() => {
+          if (isExpanded) {
+            close(true)
+          }
+          ParentMessenger.exit()
+        }}>Exit</a
+      >
+    </div>
   </nav>
 </aside>
 
@@ -222,12 +252,21 @@
     transform: translateX(105%);
     transition: transform 0.35s var(--theme-ease-in-expo);
     z-index: 100;
+    nav > div {
+      display: flex;
+      align-items: center;
+      margin: 1rem 0 0 0;
+      :global(svg) {
+        opacity: 0;
+        transition: opacity 0s ease-in .8s;
+      }
+    }
     nav a {
       position: relative;
       display: block;
-      margin: 1rem 0;
+      margin: -.1rem 0 0 1rem !important;
       color: var(--theme-text-color);
-      font-size: 1.25rem;
+      font-size: 1.35rem;
       transform: translateX(50px);
       transition: transform 0s ease-out 0.5s;
       &.hr {
@@ -238,6 +277,33 @@
     &.active {
       transition: transform 0.2s var(--theme-ease-out-expo);
       transform: translateX(0);
+      nav > div :global(svg) {
+        opacity: 1;
+        &:nth-child(0) {
+          transition: opacity 0.4s ease-out;
+        }
+        &:nth-child(1) {
+          transition: opacity 0.5s ease-out;
+        }
+        &:nth-child(2) {
+          transition: opacity 0.6s ease-out;
+        }
+        &:nth-child(3) {
+          transition: opacity 0.7s ease-out;
+        }
+        &:nth-child(4) {
+          transition: opacity .8s ease-out;
+        }
+        &:nth-child(5) {
+          transition: opacity .9s ease-out;
+        }
+        &:nth-child(6) {
+          transition: opacity 1.0s ease-out;
+        }
+        &:nth-child(7) {
+          transition: opacity 1.1s ease-out;
+        }
+      }
       nav a {
         transform: translateX(0);
         &:nth-child(0) {
