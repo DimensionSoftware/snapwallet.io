@@ -2,7 +2,7 @@ import type { WyreTransfer, WyreTransfers } from 'api-client'
 import { writable } from 'svelte/store'
 import { reducePersonalInfoFields } from '../util/profiles'
 
-const createStore = ()  => {
+const createStore = () => {
   const { subscribe, update } = writable<WyreTransfer[]>([])
   return {
     subscribe,
@@ -11,16 +11,20 @@ const createStore = ()  => {
       update(_ => txns)
       return txns
     },
-   }
+  }
 }
 
 const pagesize = 30
 
-async function rFetchUserTransfers(startingAtPage = 0): Promise<WyreTransfer[]> {
-  const { transfers } = await window.API.fluxWyreGetTransfers(startingAtPage.toString())
+async function rFetchUserTransfers(
+  startingAtPage = 0,
+): Promise<WyreTransfer[]> {
+  const { transfers } = await window.API.fluxWyreGetTransfers(
+    startingAtPage.toString(),
+  )
 
   if (transfers.length === pagesize) {
-    return transfers.concat((await rFetchUserTransfers(startingAtPage + 1)))
+    return transfers.concat(await rFetchUserTransfers(startingAtPage + 1))
   }
 
   return []
