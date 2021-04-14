@@ -123,7 +123,7 @@
       }
       // hide the dot
       :global(span:before) {
-        opacity: 0.25;
+        opacity: 0.9;
         background: var(--theme-success-color);
       }
       & > :global(.icon) {
@@ -131,6 +131,10 @@
       }
       &:before {
         border: 4px solid var(--theme-success-color) !important;
+      }
+
+      & > :global(span > svg) {
+        color: var(--theme-color-inverse);
       }
     }
     &.disabled {
