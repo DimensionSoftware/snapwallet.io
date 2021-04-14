@@ -2,6 +2,8 @@
   import { fly, blur } from 'svelte/transition'
   import { push } from 'svelte-spa-router'
   import {
+    faCheck,
+    faExclamationCircle,
     faFileImage,
     faHome,
     faIdCard,
@@ -21,6 +23,8 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { userStore } from '../stores/UserStore'
   import { FileUploadTypes } from '../types'
+  import { getMissingFieldMessages } from '../util/profiles'
+  import FaIcon from 'svelte-awesome'
 
   export let isUpdatingFiles: boolean = false
 
@@ -46,6 +50,8 @@
       browseTitle = 'Select Document (Back)'
     }
   }
+
+  $: missingInfo = getMissingFieldMessages($userStore.profileItems)
 
   const handleNextStep = async () => {
     try {
@@ -129,14 +135,28 @@
 </script>
 
 <ModalContent>
-  <ModalHeader>Verify Identity</ModalHeader>
-  <ModalBody>
-    {#if $userStore.isProfileComplete}
-      <h5 in:blur={{ duration: 300 }}>
-        Your document was received. Update any:
-      </h5>
+  <ModalHeader>
+    {#if missingInfo.document.isComplete}
+      Step Complete
     {:else}
-      <h5>&nbsp;</h5>
+      Verify Identity
+    {/if}
+  </ModalHeader>
+  <ModalBody>
+    {#if missingInfo.document.submitted.size}
+      <div style="display:flex;align-items:center;">
+        <span style="margin-right:0.5rem;">
+          <FaIcon
+            data={!missingInfo.document.isValid ? faExclamationCircle : faCheck}
+          />
+        </span>
+        <h5 in:blur={{ duration: 300 }}>
+          {missingInfo.document.submitted.size}
+          {missingInfo.document.submitted.size > 1 ? 'Documents' : 'Document'} Uploaded
+        </h5>
+      </div>
+    {:else}
+      <h5 in:blur={{ duration: 300 }}>Upload your first document</h5>
     {/if}
     <div style="margin-top:1rem;margin-bottom:0.75rem;">
       <IconCard
