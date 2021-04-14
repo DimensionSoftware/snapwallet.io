@@ -64,3 +64,12 @@ $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   z-index: 10;
   box-shadow: 0 0 30px 30px var(--theme-shadow-bottom-color);
 }
+
+::-moz-selection {
+  color: $themeColorInverse;
+  background: $themeColor;
+}
+::selection {
+  color: $themeColorInverse;
+  background: $themeColor;
+}
