@@ -133,7 +133,7 @@
       if (e.target !== document.body) onEscPressed(e, ParentMessenger.exit)
     },
     onMouseDown = (e: MouseEvent) => {
-      if ((e.target as Element).id === 'modal') ParentMessenger.exit()
+      if ((e.target as Element)?.id === 'modal') ParentMessenger.exit()
     }
 
   const routes = {

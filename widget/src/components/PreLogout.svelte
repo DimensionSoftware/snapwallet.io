@@ -41,7 +41,7 @@
     },
     shouldClose = (e: MouseEvent) => {
       // dismiss if clicked outside content
-      if ((e.target as HTMLElement).id === 'prelogout' && isVisible) close()
+      if ((e.target as HTMLElement)?.id === 'prelogout' && isVisible) close()
     },
     countdown = () => {
       const diff: number =
