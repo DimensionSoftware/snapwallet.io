@@ -1,4 +1,5 @@
 import { ParentMessages } from '../constants'
+import type { IAsset } from '../types'
 
 /**
  * Util module for sending parent application messages
@@ -62,9 +63,24 @@ export const ParentMessenger = (() => {
     })
   }
 
+  /**
+   * Used for demo purposes. Alert the parent of the selected currency.
+   */
+  const currencySelected = (currency: IAsset) => {
+    const userID = window.AUTH_MANAGER.viewerUserID()
+    send({
+      event: ParentMessages.DEMO_CURRENCY_SELECTED,
+      data: {
+        userID,
+        currency,
+      },
+    })
+  }
+
   return {
     exit,
     resize,
     success,
+    currencySelected,
   }
 })()

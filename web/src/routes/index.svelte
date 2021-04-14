@@ -13,20 +13,6 @@
     await import('flux-init')
     Typewriter = (await import('svelte-typewriter')).default
 
-    // respond to widget events
-    window.addEventListener(
-      'message',
-      ({ data }) => {
-        if (data) {
-          const payload = JSON.parse(data)
-          // resize
-          if (payload.event === '__SNAP_RESIZE')
-            ifr?.height = payload.data?.size
-        }
-      },
-      false,
-    )
-
     const SnapWallet = new (window as any).Snap({
       appName: 'Snap Wallet',
       intent: 'buy',
@@ -61,6 +47,30 @@
         inputTextColor: '#333',
       },
     })
+
+    // respond to widget events
+    window.addEventListener(
+      'message',
+      ({ data: msg }) => {
+        if (!msg) return
+        try {
+          const { event, data } = JSON.parse(msg)
+          if (event === SnapWallet.events.RESIZE && data && ifr) {
+            ifr.height = data.size
+          }
+
+          // TODO: remove if lame
+          if (event === SnapWallet.events.DEMO_CURRENCY_SELECTED && data) {
+            if (data.currency.ticker.toUpperCase() === 'WBTC') {
+              window.document.body.style.background = '#fafafa'
+            } else window.document.body.style.background = data.currency.color
+          }
+        } catch (e) {
+          console.warn('Unable to parse message', msg, e)
+        }
+      },
+      false,
+    )
 
     ifr.onload = () => {
       ifr.classList.add('loaded')

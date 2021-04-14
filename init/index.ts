@@ -43,7 +43,9 @@ class Snap {
   IFRAME_ID = '__SNAP_IFRAME'
   events = {
     EXIT: '__SNAP_EXIT',
+    SUCCESS: '__SNAP_SUCCESS',
     RESIZE: '__SNAP_RESIZE',
+    DEMO_CURRENCY_SELECTED: '__SNAP_DEMO_CURRENCY_SELECTED',
   }
   onMessage = (e: any) => {}
   wallets: IWallet[] = []
