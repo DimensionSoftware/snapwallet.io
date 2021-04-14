@@ -204,6 +204,10 @@ export class AuthManager {
       }
 
       if (this.refreshTokenIsExpired()) {
+        Logger.warn(
+          'auth watcher is logging out user due to expired refresh token',
+        )
+
         this.logout()
         return
       } else {
