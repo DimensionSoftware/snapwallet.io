@@ -1338,7 +1338,7 @@ func (s *Server) WyreGetTransfers(ctx context.Context, req *proto.WyreGetTransfe
 		return &proto.WyreTransfers{}, nil
 	}
 
-	history, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey, req.Page)
+	history, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey, req.Page*20, 20)
 	if err != nil {
 		return nil, err
 	}
