@@ -10,6 +10,7 @@
   export let isBuy: boolean = true
   export let onClick
   export let description
+  export let disabled: boolean | null = null
 
   $: ({ flags } = $userStore)
 
@@ -29,7 +30,9 @@
 
 <VStep
   title="Select Your Payment Method"
-  disabled={!$userStore.isProfilePending && !flags?.hasWyreAccount}
+  disabled={disabled !== null
+    ? disabled
+    : !$userStore.isProfilePending && !flags?.hasWyreAccount}
   success={$transactionStore.selectedSourcePaymentMethod}
   {onClick}
 >
