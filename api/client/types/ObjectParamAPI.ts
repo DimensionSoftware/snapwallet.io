@@ -173,6 +173,12 @@ export interface FluxApiFluxWyreGetTransferRequest {
 }
 
 export interface FluxApiFluxWyreGetTransfersRequest {
+    /**
+     * 
+     * @type string
+     * @memberof FluxApifluxWyreGetTransfers
+     */
+    page?: string
 }
 
 export interface FluxApiFluxWyreWebhookRequest {
@@ -335,7 +341,7 @@ export class ObjectFluxApi {
      * @param param the request object
      */
     public fluxWyreGetTransfers(param: FluxApiFluxWyreGetTransfersRequest, options?: Configuration): Promise<WyreTransfers> {
-        return this.api.fluxWyreGetTransfers( options).toPromise();
+        return this.api.fluxWyreGetTransfers(param.page,  options).toPromise();
     }
 	
     /**

@@ -715,9 +715,11 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
+     * @param page 
      */
-    public async fluxWyreGetTransfers(options?: Configuration): Promise<RequestContext> {
+    public async fluxWyreGetTransfers(page?: string, options?: Configuration): Promise<RequestContext> {
 		let config = options || this.configuration;
+		
 		
 		// Path Params
     	const localVarPath = '/wyre/transfers';
@@ -727,6 +729,9 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
         // Query Params
+        if (page !== undefined) {
+        	requestContext.setQueryParam("page", ObjectSerializer.serialize(page, "string", "int64"));
+        }
 	
 		// Header Params
 	

@@ -432,9 +432,10 @@ export class ObservableFluxApi {
     }
 	
     /**
+     * @param page 
      */
-    public fluxWyreGetTransfers(options?: Configuration): Observable<WyreTransfers> {
-    	const requestContextPromise = this.requestFactory.fluxWyreGetTransfers(options);
+    public fluxWyreGetTransfers(page?: string, options?: Configuration): Observable<WyreTransfers> {
+    	const requestContextPromise = this.requestFactory.fluxWyreGetTransfers(page, options);
 
 		// build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);

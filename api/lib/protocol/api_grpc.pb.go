@@ -67,7 +67,7 @@ type FluxClient interface {
 	WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
 	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
 	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
-	WyreGetTransfers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyreTransfers, error)
+	WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -232,7 +232,7 @@ func (c *fluxClient) WyreGetTransfer(ctx context.Context, in *WyreGetTransferReq
 	return out, nil
 }
 
-func (c *fluxClient) WyreGetTransfers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyreTransfers, error) {
+func (c *fluxClient) WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error) {
 	out := new(WyreTransfers)
 	err := c.cc.Invoke(ctx, "/Flux/WyreGetTransfers", in, out, opts...)
 	if err != nil {
@@ -311,7 +311,7 @@ type FluxServer interface {
 	WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransfer, error)
 	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransfer, error)
 	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error)
-	WyreGetTransfers(context.Context, *emptypb.Empty) (*WyreTransfers, error)
+	WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -377,7 +377,7 @@ func (UnimplementedFluxServer) WyreConfirmTransfer(context.Context, *WyreConfirm
 func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfer not implemented")
 }
-func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *emptypb.Empty) (*WyreTransfers, error) {
+func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfers not implemented")
 }
 func (UnimplementedFluxServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error) {
@@ -688,7 +688,7 @@ func _Flux_WyreGetTransfer_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _Flux_WyreGetTransfers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(WyreGetTransfersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -700,7 +700,7 @@ func _Flux_WyreGetTransfers_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/Flux/WyreGetTransfers",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FluxServer).WyreGetTransfers(ctx, req.(*emptypb.Empty))
+		return srv.(FluxServer).WyreGetTransfers(ctx, req.(*WyreGetTransfersRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

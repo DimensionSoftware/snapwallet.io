@@ -1317,7 +1317,7 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	return wyre.WyreTransferToProto(t), nil
 }
 
-func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto.WyreTransfers, error) {
+func (s *Server) WyreGetTransfers(ctx context.Context, req *proto.WyreGetTransfersRequest) (*proto.WyreTransfers, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
 		return nil, err
@@ -1338,7 +1338,7 @@ func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto
 		return &proto.WyreTransfers{}, nil
 	}
 
-	history, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey)
+	history, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey, req.Page)
 	if err != nil {
 		return nil, err
 	}

@@ -346,6 +346,10 @@ message WyreGetTransferRequest {
   string transfer_id = 1;
 }
 
+message WyreGetTransfersRequest {
+  int64 page = 1;
+}
+
 message WyreTransfer {
   string id = 1;
   string source = 2;
@@ -509,7 +513,7 @@ service Flux {
     };
   }
 
-  rpc WyreGetTransfers(google.protobuf.Empty) returns (WyreTransfers) {
+  rpc WyreGetTransfers(WyreGetTransfersRequest) returns (WyreTransfers) {
     option (google.api.http) = {
       get: "/wyre/transfers"
     };

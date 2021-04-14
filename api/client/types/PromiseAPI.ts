@@ -204,9 +204,10 @@ export class PromiseFluxApi {
     }
 	
     /**
+     * @param page 
      */
-    public fluxWyreGetTransfers(options?: Configuration): Promise<WyreTransfers> {
-    	const result = this.api.fluxWyreGetTransfers(options);
+    public fluxWyreGetTransfers(page?: string, options?: Configuration): Promise<WyreTransfers> {
+    	const result = this.api.fluxWyreGetTransfers(page, options);
         return result.toPromise();
     }
 	
