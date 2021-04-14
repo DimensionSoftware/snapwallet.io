@@ -135,9 +135,11 @@ export const reduceContactFields = (
 /**
  * Find missing fields and reduce a message for the user.
  */
-export const getMissingFieldMessages = (profileItems: {
-  [k: string]: ProfileDataItemInfo
-}) => {
+export const getMissingFieldMessages = (
+  profileItems: {
+    [k: string]: ProfileDataItemInfo
+  } = {},
+) => {
   const sections = {
     personal: {
       required: new Set(getRequiredPersonalFields()),
@@ -172,6 +174,8 @@ export const getMissingFieldMessages = (profileItems: {
       message: '',
     },
   }
+
+  if (!Object.values(profileItems).length) return sections
 
   Object.values(profileItems).forEach(pi => {
     Object.values(sections).forEach(section => {
