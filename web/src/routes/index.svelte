@@ -215,7 +215,7 @@
         .wallet {
           max-width: inherit;
           padding-top: 5rem;
-          padding-bottom: 2rem;
+          padding-bottom: 5rem;
           iframe {
             top: inherit;
             right: inherit;

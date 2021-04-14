@@ -80,7 +80,7 @@
       }
     }
     &:disabled {
-      animation: none;
+      animation: infocus 0.75s;
       background: var(--theme-color);
       cursor: not-allowed;
       text-shadow: none;

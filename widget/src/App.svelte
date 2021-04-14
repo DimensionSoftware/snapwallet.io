@@ -414,6 +414,7 @@
     animation: scaleIn 0.25s var(--theme-ease-out-back);
     // Used by toast
     position: relative;
+    :global(.popup-selector-header),
     :global(.modal-content .modal-body),
     :global(.modal-content .modal-header-title),
     :global(.modal-content .modal-header-back-button),
@@ -426,6 +427,7 @@
       transform: translateZ(0);
     }
     &.blur-header {
+      :global(.popup-selector-header),
       :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-right-action svg),
