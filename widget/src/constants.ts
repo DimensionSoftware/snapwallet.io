@@ -77,6 +77,7 @@ export enum ParentMessages {
   EXIT = '__SNAP_EXIT',
   RESIZE = '__SNAP_RESIZE',
   SUCCESS = '__SNAP_SUCCESS',
+  DEMO_CURRENCY_SELECTED = '__SNAP_DEMO_CURRENCY_SELECTED',
 }
 
 export enum PusherServerMessages {
