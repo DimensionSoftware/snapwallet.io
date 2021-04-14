@@ -68,9 +68,9 @@
     }
     &:active,
     &:focus {
-      box-shadow: 0 0 0 1px var(--theme-color),
+      box-shadow: 0 0 0 1px var(--theme-button-color),
         0 6px 6px var(--theme-shadow-color);
-      text-shadow: 0 1px 0 --var(--theme-text-color);
+      text-shadow: 0 1px 0 --var(--theme-button-text-color);
       transition: none;
       animation: infocus 0.35s;
       animation-timing-function: var(--theme-ease-out-back);
@@ -81,7 +81,7 @@
     }
     &:disabled {
       animation: infocus 0.75s;
-      background: var(--theme-color);
+      background: var(--theme-button-color);
       cursor: not-allowed;
       text-shadow: none;
       opacity: 0.83;
