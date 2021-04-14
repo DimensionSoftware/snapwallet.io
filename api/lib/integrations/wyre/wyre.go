@@ -432,13 +432,13 @@ func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*Tran
 // GetTransferHistory gets a history of transfers in the wyre system
 // https://docs.sendwyre.com/docs/transfer-history
 // GET https://api.sendwyre.com/v3/transfers
-func (c Client) GetTransferHistory(token string, position int64) (*GetTransferHistoryResponse, error) {
+func (c Client) GetTransferHistory(token string, offset int64) (*GetTransferHistoryResponse, error) {
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).
 		SetResult(GetTransferHistoryResponse{}).
 		EnableTrace().
-		SetQueryParam("position", fmt.Sprintf("%d", position)).
+		SetQueryParam("offset", fmt.Sprintf("%d", offset)).
 		Get("/v3/transfers")
 	if err != nil {
 		return nil, err
