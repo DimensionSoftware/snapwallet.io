@@ -267,7 +267,7 @@
     nav div a {
       position: relative;
       display: block;
-      margin: -0.1rem 0 0 1rem !important;
+      margin: -0.1rem 0 0 1.25rem !important;
       color: var(--theme-text-color);
       font-size: 1.35rem;
       font-weight: 500;

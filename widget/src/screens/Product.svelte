@@ -228,15 +228,19 @@
       margin-bottom: 1rem;
     }
     .nft-video {
+      position: relative;
+      z-index: 1;
       height: 50%;
     }
     .nft-image {
+      position: relative;
+      z-index: 1;
       height: 50%;
     }
   }
 
   .vertical-stepper {
-    margin-top: 0.5rem;
+    margin-top: 1.75rem;
     list-style: none;
     padding: 0 0.5rem;
   }
