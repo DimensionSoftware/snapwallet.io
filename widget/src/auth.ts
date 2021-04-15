@@ -130,7 +130,7 @@ export class AuthManager {
         }
 
         Logger.debug('Running token exchange')
-        await this.tokenExchange(refresh)
+        return (await this.tokenExchange(refresh))[0]
       } else {
         return access
       }
