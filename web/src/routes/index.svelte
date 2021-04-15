@@ -18,32 +18,18 @@
       intent: 'buy',
       wallets: [],
       focus: true,
-      // theme: {
-      //   modalBackground: 'rgba(40,40,40,.9)',
-      //   modalPopupBackground: 'rgba(50,50,50,.95)',
-      //   color: 'rgba(0,0,0,.9)',
-      //   badgeTextColor: '#333',
-      //   colorLightened: 'rgba(5,5,5,.8)',
-      //   shadowBottomColor: 'rgba(0,0,0,.25)',
-      //   colorInverse: '#fff',
-      //   buttonColor: '#fffc00',
-      //   buttonTextColor: '#000',
-      //   successColor: '#fffc00',
-      //   textColor: '#fff',
-      //   inputTextColor: '#333',
-      // },
       theme: {
-        modalBackground: 'rgb(28, 28, 40)',
-        modalPopupBackground: 'rgb(40, 41, 61, .95)',
-        color: '#555770',
+        modalBackground: 'rgba(40,40,40,.9)',
+        modalPopupBackground: 'rgba(50,50,50,.95)',
+        color: 'rgba(0,0,0,.9)',
         badgeTextColor: '#333',
         colorLightened: 'rgba(5,5,5,.8)',
         shadowBottomColor: 'rgba(0,0,0,.25)',
         colorInverse: '#fff',
-        buttonColor: 'rgb(172, 93, 217)',
-        successColor: 'rgb(0, 211, 149)',
-        warningColor: 'rgb(253, 221, 72)',
-        textColor: '#e4f0fb',
+        buttonColor: '#fffc00',
+        buttonTextColor: '#000',
+        successColor: '#fffc00',
+        textColor: '#fff',
         inputTextColor: '#333',
       },
     })
@@ -60,11 +46,11 @@
           }
 
           // TODO: remove if lame
-          if (event === SnapWallet.events.DEMO_CURRENCY_SELECTED && data) {
-            if (data.currency.ticker.toUpperCase() === 'WBTC') {
-              window.document.body.style.background = '#fafafa'
-            } else window.document.body.style.background = data.currency.color
-          }
+          // if (event === SnapWallet.events.DEMO_CURRENCY_SELECTED && data) {
+          //   if (data.currency.ticker.toUpperCase() === 'WBTC') {
+          //     window.document.body.style.background = '#fafafa'
+          //   } else window.document.body.style.background = data.currency.color
+          // }
         } catch (e) {
           console.warn('Unable to parse message', msg, e)
         }
