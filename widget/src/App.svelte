@@ -253,6 +253,7 @@
         reason?.body?.code === APIErrors.UNAUTHORIZED &&
         ($location as Routes) !== Routes.VERIFY_OTP
       ) {
+        Logger.debug('Logout called from onunhandledrejection because of:', e)
         // expired session, so-- automagically logout
         window.AUTH_MANAGER.logout()
         transactionStore.reset()

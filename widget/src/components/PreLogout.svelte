@@ -2,7 +2,7 @@
   import { onMount, onDestroy } from 'svelte'
   import { scale } from 'svelte/transition'
   import { expoOut } from 'svelte/easing'
-  import { focusFirstInput, onKeysPressed } from '../util'
+  import { focusFirstInput, Logger, onKeysPressed } from '../util'
   import { userStore } from '../stores/UserStore'
   import { transactionStore } from '../stores/TransactionStore'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
@@ -19,6 +19,7 @@
       // close, yielding animations
       close()
       setTimeout(() => {
+        Logger.debug('Logout called from PreLogout')
         window.AUTH_MANAGER.logout()
         transactionStore.reset()
         userStore.reset()

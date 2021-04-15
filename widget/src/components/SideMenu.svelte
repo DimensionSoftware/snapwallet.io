@@ -13,6 +13,7 @@
   import {
     cachePrimaryPaymentMethodID,
     focusFirstInput,
+    Logger,
     onKeysPressed,
   } from '../util'
   import { userStore } from '../stores/UserStore'
@@ -29,6 +30,7 @@
     close()
     // yield to ui animations
     setTimeout(() => {
+      Logger.debug('Logout called from SideMenu')
       window.AUTH_MANAGER.logout()
       cachePrimaryPaymentMethodID('')
       transactionStore.reset()
