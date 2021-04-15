@@ -32,6 +32,7 @@ export class AuthManager {
   private tokenExchangePromise?: Promise<TokenExchangeResponse>
 
   private setCurrentAccessToken(newToken: string) {
+    Logger.debug('New current access token being set...', newToken)
     if (newToken) {
       window.localStorage.setItem(JWT_ACCESS_TOKEN_KEY, newToken)
     } else {
@@ -39,6 +40,7 @@ export class AuthManager {
     }
   }
   private setCurrentRefreshToken(newToken: string) {
+    Logger.debug('New current refresh token being set...', newToken)
     if (newToken) {
       window.localStorage.setItem(JWT_REFRESH_TOKEN_KEY, newToken)
     } else {
@@ -181,7 +183,10 @@ export class AuthManager {
     if (!parsed.exp) {
       throw new Error('refresh token claims lacks an expiration')
     }
+
+    Logger.debug('Setting sessionExpiresAt in login')
     this.sessionExpiresAt = parseInt(parsed.exp) * 1000
+    Logger.debug('Finished setting sessionExpiresAt in login')
   }
 
   public logout() {
