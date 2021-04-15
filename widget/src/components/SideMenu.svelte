@@ -248,7 +248,7 @@
     bottom: -0.5rem;
     width: 125%;
     height: 150%;
-    padding: 25% 1rem 0 3rem;
+    padding: 25% 1rem 0 4rem;
     transform: translateX(105%);
     transition: transform 0.35s var(--theme-ease-in-expo);
     z-index: 100;
@@ -260,7 +260,7 @@
       transition: transform 0s ease-out 0.5s;
       :global(svg) {
         opacity: 0;
-        transform: translateX(-2px);
+        transform: translateX(-5px);
         transition: transform 0s ease-in 0.7s, opacity 0s ease-in 0.7s;
       }
     }
@@ -270,6 +270,7 @@
       margin: -0.1rem 0 0 1rem !important;
       color: var(--theme-text-color);
       font-size: 1.35rem;
+      font-weight: 500;
       &.hr {
         margin-top: 2.5rem;
         position: relative;
@@ -279,31 +280,31 @@
       transition: transform 0.2s var(--theme-ease-out-expo);
       transform: translateX(0);
       nav > div :global(svg) {
-        opacity: 1;
+        opacity: 0.9;
         transform: translateX(0);
         &:nth-child(0) {
-          transition: transform 0.7s ease-out 0.27s, opacity 0.7s ease-out 0.27s;
+          transition: transform 0.5s ease-out 0.27s, opacity 0.5s ease-out 0.27s;
         }
         &:nth-child(1) {
-          transition: transform 0.6s ease-out 0.26s, opacity 0.6s ease-out 0.26s;
+          transition: transform 0.5s ease-out 0.27s, opacity 0.5s ease-out 0.27s;
         }
         &:nth-child(2) {
-          transition: transform 0.5s ease-out 0.25s, opacity 0.5s ease-out 0.25s;
+          transition: transform 0.4s ease-out 0.26s, opacity 0.4s ease-out 0.26s;
         }
         &:nth-child(3) {
-          transition: transform 0.4s ease-out 0.24s, opacity 0.4s ease-out 0.24s;
+          transition: transform 0.4s ease-out 0.26s, opacity 0.4s ease-out 0.26s;
         }
         &:nth-child(4) {
-          transition: transform 0.3s ease-out 0.23s, opacity 0.3s ease-out 0.23s;
+          transition: transform 0.3s ease-out 0.25s, opacity 0.3s ease-out 0.25s;
         }
         &:nth-child(5) {
-          transition: transform 0.2s ease-out 0.22s, opacity 0.2s ease-out 0.22s;
+          transition: transform 0.3s ease-out 0.25s, opacity 0.3s ease-out 0.25s;
         }
         &:nth-child(6) {
-          transition: transform 0.1s ease-out 0.21s, opacity 0.1s ease-out 0.21s;
+          transition: transform 0.2s ease-out 0.24s, opacity 0.2s ease-out 0.24s;
         }
         &:nth-child(7) {
-          transition: transform 0s ease-out 0.2s, opacity 0s ease-out 0.2s;
+          transition: transform 0.2s ease-out 0.24s, opacity 0.2s ease-out 0.24s;
         }
       }
       nav > div {

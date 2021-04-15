@@ -72,12 +72,15 @@
     }
     &.error:before {
       background: var(--theme-error-color);
+      background: var(--theme-modal-background);
     }
     &.warning:before {
       background: var(--theme-warning-color);
+      background: var(--theme-modal-background);
     }
     &.success:before {
       background-color: var(--theme-success-color);
+      background: var(--theme-modal-background);
     }
   }
 </style>
