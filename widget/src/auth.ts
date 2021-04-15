@@ -73,7 +73,7 @@ export class AuthManager {
   private tokenIsExpiredSoon(token: string): boolean {
     const parsed = this.parseTokenClaims(token)
     if (!parsed) {
-      Logger.debug('parseRefreshTokenClaims returned empty parsed value')
+      Logger.debug('parseTokenClaims returned empty parsed value')
       return true
     }
 
@@ -83,9 +83,9 @@ export class AuthManager {
       return true
     }
 
-    const refreshTokenExpiresAt = exp * 100
+    const tokenExpiresAt = exp * 1000
 
-    return Date.now() + this.prelogoutThreshold > refreshTokenExpiresAt
+    return Date.now() + this.prelogoutThreshold > tokenExpiresAt
   }
 
   // exchanges and updates tokens -- and makes sure only one is in flight at a time to not violate RTR
