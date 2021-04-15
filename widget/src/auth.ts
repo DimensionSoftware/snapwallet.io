@@ -71,6 +71,7 @@ export class AuthManager {
   private parseAccessTokenClaims(): { [k: string]: any } | null {
     const token = this.getCurrentAccessToken()
     if (!token) {
+      Logger.debug('getCurrentAccessToken returned empty token')
       return null
     }
 
@@ -86,11 +87,13 @@ export class AuthManager {
   private accessTokenIsExpired(): boolean {
     const parsed = this.parseAccessTokenClaims()
     if (!parsed) {
+      Logger.debug('parseAccessTokenClaims returned empty parsed value')
       return true
     }
 
     const exp = parseInt(parsed.exp)
     if (isNaN(exp)) {
+      Logger.debug('exp is NaN', 'original:', parsed.exp, 'parsed:', exp)
       return true
     }
 
@@ -110,19 +113,26 @@ export class AuthManager {
   // exchanges and updates tokens -- and makes sure only one is in flight at a time to not violate RTR
   private async tokenExchange(): Promise<void> {
     if (!this.tokenExchangePromise) {
+      Logger.debug('No tokenExchangePromise found')
       const token = this.getCurrentRefreshToken()
       if (!token) {
+        Logger.debug('getRefreshToken returned empty token')
         return
       }
 
+      Logger.debug('Setting token exchange promise')
       this.tokenExchangePromise = this.unauthenticatedAPI.fluxTokenExchange({
         refreshToken: token,
       })
+      Logger.debug('Awaiting token exchange promise')
       const resp = await this.tokenExchangePromise
 
+      Logger.debug('Setting current access token', resp.tokens.accessToken)
       this.setCurrentAccessToken(resp.tokens.accessToken)
+      Logger.debug('Setting current refresh token', resp.tokens.refreshToken)
       this.setCurrentRefreshToken(resp.tokens.refreshToken)
 
+      Logger.debug('Parsing refresh token claims')
       const parsed = this.parseRefreshTokenClaims()
       if (!parsed) {
         throw new Error('could not parse refresh token claims')
@@ -130,10 +140,14 @@ export class AuthManager {
       if (!parsed.exp) {
         throw new Error('refresh token claims lacks an expiration')
       }
-      this.sessionExpiresAt = parseInt(parsed.exp) * 1000
 
+      this.sessionExpiresAt = parseInt(parsed.exp) * 1000
+      Logger.debug('Set session expires at to', this.sessionExpiresAt)
+
+      Logger.debug('Nullifying tokenExchangePromise')
       this.tokenExchangePromise = null
     } else {
+      Logger.debug('Awaiting an existing tokenExchangePromise')
       await this.tokenExchangePromise
     }
   }
@@ -142,9 +156,12 @@ export class AuthManager {
   // if refreshable and expired: we will refresh the token before returning it
   public async getAccessToken(): Promise<string> {
     if (this.accessTokenIsExpired()) {
+      Logger.debug('Access token is expired')
       if (this.refreshTokenIsExpired()) {
+        Logger.debug('Refresh token is expired')
         return ''
       } else {
+        Logger.debug('Running token exchange')
         await this.tokenExchange()
       }
     }
@@ -168,13 +185,17 @@ export class AuthManager {
   }
 
   public logout() {
+    Logger.debug('Logout was called. Resetting access and refresh tokens.')
     this.setCurrentAccessToken('')
     this.setCurrentRefreshToken('')
+    Logger.debug('Clearing session expires at.')
     this.sessionExpiresAt = 0
+    Logger.debug('Dispatching logout event.')
     window.dispatchEvent(new Event('logout'))
   }
 
   public viewerIsLoggedIn(): boolean {
+    Logger.debug('viewerIsLoggedIn called')
     return !this.refreshTokenIsExpired()
   }
 
