@@ -83,6 +83,10 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
+  h4,
+  a {
+    color: var(--theme-text-color);
+  }
   .csv-link {
     max-width: 50%;
     color: var(--theme-text-color);
@@ -134,7 +138,7 @@
     width: 100%;
     align-self: center;
     margin-top: 0.5rem;
-    padding: 0.5rem 1rem 0 1rem;
+    padding: 0.5rem 1.5rem 0 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

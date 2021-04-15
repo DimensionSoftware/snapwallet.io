@@ -247,7 +247,7 @@
     width: 100%;
     align-self: center;
     margin-top: 2.5rem;
-    padding: 0 0.2rem;
+    padding: 0 0.7rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
