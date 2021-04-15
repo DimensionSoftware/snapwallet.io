@@ -367,6 +367,17 @@
   :global(.spacer) {
     margin-top: 1.5rem;
   }
+  #modal:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    opacity: 0;
+    background: var(--theme-modal-container-background-color);
+    animation: backgroundFadeIn 1s ease-out forwards;
+  }
   #modal,
   :global(#plaid-link-iframe-1) {
     position: absolute;
@@ -378,9 +389,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden !important;
-    background: var(--theme-modal-container-background-color);
-    opacity: 0;
-    animation: backgroundFadeIn 1s ease-out forwards;
+    opacity: 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -388,6 +397,8 @@
     font-family: var(--theme-font);
     font-size: 1rem;
     line-height: 1.5rem;
+    opacity: 0;
+    animation: backgroundFadeIn 0.2s ease-out forwards;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -411,7 +422,6 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    animation: scaleIn 0.25s var(--theme-ease-out-back);
     // Used by toast
     position: relative;
     :global(.popup-selector-header),
