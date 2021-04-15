@@ -27,7 +27,7 @@ async function rFetchUserTransfers(
     return transfers.concat(await rFetchUserTransfers(startingAtPage + 1))
   }
 
-  return []
+  return transfers || []
 }
 
 export const transactionsStore = createStore()
