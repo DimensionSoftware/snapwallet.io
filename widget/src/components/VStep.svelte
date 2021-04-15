@@ -39,7 +39,7 @@
       width: 8px;
       left: 0;
       top: 8px;
-      opacity: 0.8;
+      opacity: 0.5;
       z-index: 1;
     }
     > :global(span > svg) {
@@ -123,7 +123,7 @@
       }
       // hide the dot
       :global(span:before) {
-        opacity: 0.9;
+        opacity: 0.5;
         background: var(--theme-success-color);
       }
       & > :global(.icon) {

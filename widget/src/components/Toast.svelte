@@ -56,14 +56,14 @@
     width: 100%;
     min-height: 60px;
     max-height: 100px;
-    color: white;
+    color: var(--theme-text-color);
     font-weight: 500;
     z-index: 9999;
     &:before {
       background: var(--theme-color);
       content: '';
       position: absolute;
-      opacity: 0.9;
+      opacity: 0.05;
       top: 0;
       bottom: 0;
       left: 0;
@@ -71,10 +71,10 @@
       z-index: -1;
     }
     &.error:before {
-      background: var(--theme-color);
+      background: var(--theme-error-color);
     }
     &.warning:before {
-      background: var(--theme-color);
+      background: var(--theme-warning-color);
     }
     &.success:before {
       background-color: var(--theme-success-color);
