@@ -91,7 +91,7 @@ func NewRefreshTokenClaims(now time.Time, userID user.ID) jwt.StandardClaims {
 		Audience:  string(TokenKindRefresh),
 		Subject:   string(userID),
 		IssuedAt:  now.Unix(),
-		ExpiresAt: now.Add(1 * time.Hour).Unix(),
+		ExpiresAt: now.Add(20 * time.Minute).Unix(),
 	}
 }
 

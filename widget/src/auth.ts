@@ -35,7 +35,7 @@ export class AuthManager {
       return data.split(':') as [string, string]
     }
 
-    return [null, null]
+    return ['', '']
   }
 
   private parseTokenClaims(token: string): { [k: string]: any } | null {
