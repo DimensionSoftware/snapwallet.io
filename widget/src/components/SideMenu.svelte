@@ -61,7 +61,7 @@
     // open/close
     setTimeout(
       () => window.dispatchEvent(new Event(isExpanded ? 'blurry' : 'unblurry')),
-      isExpanded ? 0 : slow ? 300 : 150,
+      isExpanded ? 75 : slow ? 300 : 150,
     )
 
     if (isExpanded && window.AUTH_MANAGER.viewerIsLoggedIn()) {
@@ -256,81 +256,81 @@
       display: flex;
       align-items: center;
       margin: 1rem 0 0 0;
+      transform: translateX(50px);
+      transition: transform 0s ease-out 0.5s;
       :global(svg) {
         opacity: 0;
         transform: translateX(-2px);
-        transition: transform 0s ease-in 0.8s, opacity 0s ease-in 0.8s;
+        transition: transform 0s ease-in 0.7s, opacity 0s ease-in 0.7s;
       }
     }
-    nav a {
+    nav div a {
       position: relative;
       display: block;
       margin: -0.1rem 0 0 1rem !important;
       color: var(--theme-text-color);
       font-size: 1.35rem;
-      transform: translateX(50px);
-      transition: transform 0s ease-out 0.5s;
       &.hr {
         margin-top: 2.5rem;
         position: relative;
       }
     }
     &.active {
-      transition: transform 0.2s var(--theme-ease-out-expo) 0.05s;
+      transition: transform 0.2s var(--theme-ease-out-expo);
       transform: translateX(0);
       nav > div :global(svg) {
         opacity: 1;
         transform: translateX(0);
         &:nth-child(0) {
-          transition: transform 0.8s ease-out 0.3s, opacity 0.8s ease-out 0.1s;
+          transition: transform 0.7s ease-out 0.27s, opacity 0.7s ease-out 0.27s;
         }
         &:nth-child(1) {
-          transition: transform 0.7s ease-out 0.3s, opacity 0.7s ease-out 0.1s;
+          transition: transform 0.6s ease-out 0.26s, opacity 0.6s ease-out 0.26s;
         }
         &:nth-child(2) {
-          transition: transform 0.6s ease-out 0.3s, opacity 0.6s ease-out 0.1s;
+          transition: transform 0.5s ease-out 0.25s, opacity 0.5s ease-out 0.25s;
         }
         &:nth-child(3) {
-          transition: transform 0.5s ease-out 0.3s, opacity 0.5s ease-out 0.1s;
+          transition: transform 0.4s ease-out 0.24s, opacity 0.4s ease-out 0.24s;
         }
         &:nth-child(4) {
-          transition: transform 0.4s ease-out 0.3s, opacity 0.4s ease-out 0.1s;
+          transition: transform 0.3s ease-out 0.23s, opacity 0.3s ease-out 0.23s;
         }
         &:nth-child(5) {
-          transition: transform 0.3s ease-out 0.3s, opacity 0.3s ease-out 0.1s;
+          transition: transform 0.2s ease-out 0.22s, opacity 0.2s ease-out 0.22s;
         }
         &:nth-child(6) {
-          transition: transform 0.2s ease-out 0.3s, opacity 0.2s ease-out 0.1s;
+          transition: transform 0.1s ease-out 0.21s, opacity 0.1s ease-out 0.21s;
         }
         &:nth-child(7) {
-          transition: transform 0.1s ease-out 0.3s, opacity 0.1s ease-out 0.1s;
+          transition: transform 0s ease-out 0.2s, opacity 0s ease-out 0.2s;
         }
       }
-      nav a {
+      nav > div {
         transform: translateX(0);
         &:nth-child(0) {
-          transition: transform 0.6s var(--theme-ease-out-expo);
+          transition: transform 0.5s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(1) {
-          transition: transform 0.7s var(--theme-ease-out-expo);
+          transition: transform 0.6s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(2) {
-          transition: transform 0.8s var(--theme-ease-out-expo);
+          transition: transform 0.7s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(3) {
-          transition: transform 0.9s var(--theme-ease-out-expo);
+          transition: transform 0.8s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(4) {
-          transition: transform 1s var(--theme-ease-out-expo);
+          transition: transform 0.9s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(5) {
-          transition: transform 1.1s var(--theme-ease-out-expo);
+          transition: transform 1s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(6) {
-          transition: transform 1.2s var(--theme-ease-out-expo);
+          transition: transform 1.1s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(7) {
-          transition: transform 1.3s var(--theme-ease-out-expo);
+          transition: transform 1.2s var(--theme-ease-out-expo) 0.1s;
         }
       }
     }
