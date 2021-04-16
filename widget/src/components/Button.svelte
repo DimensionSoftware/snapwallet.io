@@ -1,12 +1,14 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
+  export let id: string
   export let disabled: boolean = false
   export let isLoading: boolean = false
   export let title: string = ''
 </script>
 
 <button
+  {id}
   disabled={disabled || isLoading}
   class:isLoading
   on:mousedown={() => dispatch('mousedown')}

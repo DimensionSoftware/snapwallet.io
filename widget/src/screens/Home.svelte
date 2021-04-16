@@ -296,6 +296,9 @@
   @import '../styles/_vars.scss';
   @import '../styles/text.scss';
 
+  .cryptocurrencies-container {
+    padding: 0 0.5rem;
+  }
   .dst-container {
     margin-top: 2rem;
     margin-left: 0.5rem;
