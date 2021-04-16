@@ -3,6 +3,7 @@ import QR from 'qr-creator'
 declare global {
   var _ENV: {
     WIDGET_URL: string
+    API_BASE_URL: string
   }
 }
 
