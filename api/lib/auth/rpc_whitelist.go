@@ -8,4 +8,5 @@ var RPCPublicWhitelist = map[string]bool{
 	"/Flux/WyreWebhook":           true,
 	"/Flux/TokenExchange":         true,
 	"/Flux/WidgetGetShortUrl":     true,
+	"/Flux/Goto":                  true,
 }
