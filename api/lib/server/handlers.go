@@ -3,11 +3,14 @@ package server
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
 	"strings"
 	"time"
+
+	"crypto/sha256"
 
 	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
@@ -31,11 +34,13 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
+	"github.com/khoerling/flux/api/lib/db/models/widgetconfig"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
 	"github.com/lithammer/shortuuid/v3"
+	"github.com/teris-io/shortid"
 )
 
 // https://api.sendwyre.com/v3/rates?as=priced
@@ -1315,6 +1320,31 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	fmt.Printf("Wyre transfer confirmation response: %#v", t)
 
 	return wyre.WyreTransferToProto(t), nil
+}
+
+func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetConfig) (*proto.WidgetGetShortUrlResponse, error) {
+	configJsonBytes, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	id := fmt.Sprintf("WIDGET_CONFIG_%x", sha256.Sum256(configJsonBytes))
+	shortID, err := shortid.Generate()
+	if err != nil {
+		return nil, err
+	}
+
+	record := widgetconfig.Config{
+		ID:      widgetconfig.ID(id),
+		ShortID: widgetconfig.ShortID(shortID),
+		Config:  req,
+	}
+	log.Printf("stub: need to store: %#v\n", record)
+	// todo .. store this shit
+
+	return &proto.WidgetGetShortUrlResponse{
+		Url: fmt.Sprintf("%s/g/%s", s.WyreManager.APIHost, record.ShortID),
+	}, nil
 }
 
 func (s *Server) WyreGetTransfers(ctx context.Context, req *proto.WyreGetTransfersRequest) (*proto.WyreTransfers, error) {
