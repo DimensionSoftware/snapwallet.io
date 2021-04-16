@@ -74,17 +74,19 @@ class Snap {
     this.product = config.product || this.product
   }
 
+  getConfig = (): IConfig => {
+    return {
+      wallets: this.wallets,
+      appName: this.appName,
+      intent: this.intent,
+      focus: this.focus,
+      theme: this.theme,
+      product: this.product,
+    }
+  }
+
   configToQueryString = () => {
-    return encodeURIComponent(
-      JSON.stringify({
-        wallets: this.wallets,
-        appName: this.appName,
-        intent: this.intent,
-        focus: this.focus,
-        theme: this.theme,
-        product: this.product,
-      })
-    )
+    return encodeURIComponent(JSON.stringify(this.getConfig()))
   }
 
   openWeb = (config?: IConfig) => {
