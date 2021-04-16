@@ -83,14 +83,6 @@ export class PromiseFluxApi {
     }
 	
     /**
-     * @param id 
-     */
-    public fluxGoto(id: string, options?: Configuration): Promise<GotoResponse> {
-    	const result = this.api.fluxGoto(id, options);
-        return result.toPromise();
-    }
-	
-    /**
      * Will cause your email or phone to receive a one time passcode. This can be used in the verify step to obtain a token for login
      * Post email or phone in exchange for a one time passcode
      * @param body 

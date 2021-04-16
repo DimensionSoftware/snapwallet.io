@@ -8,7 +8,6 @@ import {isCodeInRange} from '../util';
 
 import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
-import { GotoResponse } from '../models/GotoResponse';
 import { InlineResponse200 } from '../models/InlineResponse200';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
@@ -130,40 +129,6 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         if (authMethod) {
             await authMethod.applySecurityAuthentication(requestContext);
         }
-
-        return requestContext;
-    }
-
-    /**
-     * @param id 
-     */
-    public async fluxGoto(id: string, options?: Configuration): Promise<RequestContext> {
-		let config = options || this.configuration;
-		
-        // verify required parameter 'id' is not null or undefined
-        if (id === null || id === undefined) {
-            throw new RequiredError('Required parameter id was null or undefined when calling fluxGoto.');
-        }
-
-		
-		// Path Params
-    	const localVarPath = '/g/{id}'
-            .replace('{' + 'id' + '}', encodeURIComponent(String(id)));
-
-		// Make Request Context
-    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
-        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
-
-        // Query Params
-	
-		// Header Params
-	
-		// Form Params
-
-
-		// Body Params
-
-        // Apply auth methods
 
         return requestContext;
     }
@@ -952,43 +917,6 @@ export class FluxApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "any", ""
             ) as any;
-            return body;
-        }
-
-        let body = response.body || "";
-    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
-    }
-			
-    /**
-     * Unwraps the actual response sent by the server from the response context and deserializes the response content
-     * to the expected objects
-     *
-     * @params response Response returned by the server for a request to fluxGoto
-     * @throws ApiException if the response code was not in [200, 299]
-     */
-     public async fluxGoto(response: ResponseContext): Promise<GotoResponse > {
-        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
-        if (isCodeInRange("200", response.httpStatusCode)) {
-            const body: GotoResponse = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "GotoResponse", ""
-            ) as GotoResponse;
-            return body;
-        }
-        if (isCodeInRange("0", response.httpStatusCode)) {
-            const body: RpcStatus = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "RpcStatus", ""
-            ) as RpcStatus;
-            throw new ApiException<RpcStatus>(0, body);
-        }
-
-        // Work around for missing responses in specification, e.g. for petstore.yaml
-        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
-            const body: GotoResponse = ObjectSerializer.deserialize(
-                ObjectSerializer.parse(await response.body.text(), contentType),
-                "GotoResponse", ""
-            ) as GotoResponse;
             return body;
         }
 

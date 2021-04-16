@@ -573,9 +573,5 @@ service Flux {
   // If the file is not of an image mime type, you will get an InvalidArguments error
   rpc GetImage(GetImageRequest) returns (GetImageResponse) {}
 
-  rpc Goto(GotoRequest) returns (GotoResponse) {
-    option (google.api.http) = {
-      get: "/g/{id}"
-    };
-  }
+  rpc Goto(GotoRequest) returns (GotoResponse) {}
 }

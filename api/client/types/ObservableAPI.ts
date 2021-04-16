@@ -115,28 +115,6 @@ export class ObservableFluxApi {
     }
 	
     /**
-     * @param id 
-     */
-    public fluxGoto(id: string, options?: Configuration): Observable<GotoResponse> {
-    	const requestContextPromise = this.requestFactory.fluxGoto(id, options);
-
-		// build promise chain
-    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    	for (let middleware of this.configuration.middleware) {
-    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
-    	}
-
-    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-	    	pipe(mergeMap((response: ResponseContext) => {
-	    		let middlewarePostObservable = of(response);
-	    		for (let middleware of this.configuration.middleware) {
-	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-	    		}
-	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxGoto(rsp)));
-	    	}));
-    }
-	
-    /**
      * Will cause your email or phone to receive a one time passcode. This can be used in the verify step to obtain a token for login
      * Post email or phone in exchange for a one time passcode
      * @param body 
