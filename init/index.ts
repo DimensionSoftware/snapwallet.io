@@ -147,6 +147,13 @@ class Snap {
     const msg = JSON.parse(data)
     this.onMessage && this.onMessage(msg)
   }
+
+  private genAPIClient = (): FluxApi => {
+    const config = createConfiguration({
+      baseServer: new ServerConfiguration(_ENV.API_BASE_URL, {}),
+    })
+    return new FluxApi(config)
+  }
 }
 
 ;(globalThis as any).Snap = Snap
