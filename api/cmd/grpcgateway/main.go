@@ -63,6 +63,8 @@ func run() error {
 	mux.HandlePath("POST", "/upload", uploadFileHandler(ctx, client))
 	// GetImage thumbnailer translator for grpc (accept multipart on frontend)
 	mux.HandlePath("GET", "/viewer/images/{fileID}/{mode}/{width}/{height}", getImageHandler(ctx, client))
+	// Goto redirector
+	mux.HandlePath("GET", "/g/{id}", gotoHandler(ctx, client))
 
 	return http.ListenAndServe(apiPort(), allowCORS(mux))
 }
@@ -179,6 +181,45 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 		}
 
 		w.Write(out)
+	}
+}
+
+func gotoHandler(ctx context.Context, flux proto.FluxClient) runtime.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		id := pathParams["id"]
+		if id == "" {
+			http.Error(w, "goto ID cannot be blank", http.StatusNotFound)
+		}
+
+		resp, err := flux.Goto(ctx, &proto.GotoRequest{
+			Id: id,
+		})
+		if err != nil {
+			resp := map[string]interface{}{}
+
+			status, ok := status.FromError(err)
+			if ok {
+				resp["code"] = status.Code()
+				resp["message"] = status.Message()
+			} else {
+				log.Println(err)
+				resp["code"] = codes.Unknown
+				resp["message"] = "An unknown error occurred."
+			}
+
+			out, err := json.Marshal(&resp)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+
+			http.Error(w, string(out), runtime.HTTPStatusFromCode(resp["code"].(codes.Code)))
+			return
+		}
+
+		w.Header().Add("location", resp.Location)
+		w.WriteHeader(http.StatusTemporaryRedirect)
 	}
 }
 
