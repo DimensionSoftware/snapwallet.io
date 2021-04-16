@@ -145,6 +145,12 @@ class Snap {
     return `${this.baseURL}/${qs}#/`
   }
 
+  getShortURL = async (config?: IConfig): Promise<string> => {
+    config && this.setConfig(config)
+    const res = await this.API.fluxWidgetGetShortUrl(this.getConfig())
+    return res.url!
+  }
+
   private handleMessage = (event: any) => {
     const { data = '{}' } = event
     const msg = JSON.parse(data)
