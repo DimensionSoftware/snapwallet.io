@@ -48,7 +48,7 @@
   <article>
     <h2>NFT Checkout</h2>
     <div class="flex">
-      <video loop autoplay muted class="nft-video svelte-1pit40i"
+      <video loop playsinline autoplay muted
         ><source
           src="https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4"
           class="svelte-1pit40i"
@@ -59,7 +59,12 @@
           Easily checkout with any NFT. Your loot is automagically added to your
           Collection.
         </p>
-        <Button id="buy-button">Buy Crypto</Button>
+        <div>
+          <h3>The Crown</h3>
+          <small>by Patrick Mahomes</small>
+          <h4>$0,98</h4>
+          <Button id="buy-button">Buy</Button>
+        </div>
         <div class="qr">
           <canvas id="qr-canvas" />
         </div>
@@ -98,6 +103,15 @@
         font-size: 2rem;
         font-weight: bold;
       }
+      h3 {
+        margin: 0.5rem 0 0 0;
+      }
+      small {
+        margin: 0 0 0 0.1rem;
+      }
+      h4 {
+        margin: 1.5rem 0 2rem 0;
+      }
       p {
         font-size: 1.25rem;
         line-height: 1.75rem;
@@ -106,6 +120,9 @@
       }
       video {
         max-width: 50%;
+      }
+      :global(button) {
+        font-size: 1rem;
       }
       .qr {
         position: absolute;
