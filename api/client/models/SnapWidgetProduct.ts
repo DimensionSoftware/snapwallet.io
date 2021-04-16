@@ -19,6 +19,7 @@ export class SnapWidgetProduct {
     'destinationTicker'?: string;
     'destinationAddress'?: string;
     'title'?: string;
+    'author'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -56,6 +57,12 @@ export class SnapWidgetProduct {
         {
             "name": "title",
             "baseName": "title",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "author",
+            "baseName": "author",
             "type": "string",
             "format": ""
         }    ];
