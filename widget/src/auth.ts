@@ -22,7 +22,7 @@ export class AuthManager {
     if (access && refresh) {
       Logger.debug('New access token being set...', access)
       Logger.debug('New refresh token being set...', refresh)
-      window.localStorage.setItem(JWT_TOKENS_KEY, [access, refresh].join(":"))
+      window.localStorage.setItem(JWT_TOKENS_KEY, [access, refresh].join(':'))
     } else {
       window.localStorage.removeItem(JWT_TOKENS_KEY)
     }
@@ -79,7 +79,13 @@ export class AuthManager {
 
     const exp = parseInt(parsed.exp)
     if (isNaN(exp)) {
-      Logger.debug('refresh exp is NaN', 'original:', parsed.exp, 'parsed:', exp)
+      Logger.debug(
+        'refresh exp is NaN',
+        'original:',
+        parsed.exp,
+        'parsed:',
+        exp,
+      )
       return true
     }
 
@@ -186,7 +192,13 @@ export class AuthManager {
 
     const exp = parseInt(parsed.exp)
     if (isNaN(exp)) {
-      Logger.debug('refresh exp is NaN', 'original:', parsed.exp, 'parsed:', exp)
+      Logger.debug(
+        'refresh exp is NaN',
+        'original:',
+        parsed.exp,
+        'parsed:',
+        exp,
+      )
       return 0
     }
 

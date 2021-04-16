@@ -1,8 +1,10 @@
 import QR from 'qr-creator'
+import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
 declare global {
   var _ENV: {
     WIDGET_URL: string
+    API_BASE_URL: string
   }
 }
 
@@ -55,9 +57,11 @@ class Snap {
   focus: boolean = true
   theme?: { [cssProperty: string]: string }
   product?: IProduct
+  private API: FluxApi
 
   constructor(args: IConfig) {
     this.setConfig(args)
+    this.API = this.genAPIClient()
   }
 
   setConfig = (config: IConfig) => {
@@ -70,17 +74,19 @@ class Snap {
     this.product = config.product || this.product
   }
 
+  getConfig = (): IConfig => {
+    return {
+      wallets: this.wallets,
+      appName: this.appName,
+      intent: this.intent,
+      focus: this.focus,
+      theme: this.theme,
+      product: this.product,
+    }
+  }
+
   configToQueryString = () => {
-    return encodeURIComponent(
-      JSON.stringify({
-        wallets: this.wallets,
-        appName: this.appName,
-        intent: this.intent,
-        focus: this.focus,
-        theme: this.theme,
-        product: this.product,
-      })
-    )
+    return encodeURIComponent(JSON.stringify(this.getConfig()))
   }
 
   openWeb = (config?: IConfig) => {
@@ -118,11 +124,11 @@ class Snap {
     // TODO: add RN WV launch logic
   }
 
-  createQR = (qrOpts: QROptions, config?: IConfig) => {
-    config && this.setConfig(config)
+  createQR = async (qrOpts: QROptions, config?: IConfig) => {
+    const text = await this.getShortURL(config)
     QR.render(
       {
-        text: this.generateURL(),
+        text,
         radius: 0.5, // 0.0 to 0.5
         ecLevel: 'H', // L, M, Q, H
         fill: qrOpts.foregroundColor || '#485460',
@@ -139,10 +145,23 @@ class Snap {
     return `${this.baseURL}/${qs}#/`
   }
 
+  getShortURL = async (config?: IConfig): Promise<string> => {
+    config && this.setConfig(config)
+    const res = await this.API.fluxWidgetGetShortUrl(this.getConfig())
+    return res.url!
+  }
+
   private handleMessage = (event: any) => {
     const { data = '{}' } = event
     const msg = JSON.parse(data)
     this.onMessage && this.onMessage(msg)
+  }
+
+  private genAPIClient = (): FluxApi => {
+    const config = createConfiguration({
+      baseServer: new ServerConfiguration(_ENV.API_BASE_URL, {}),
+    })
+    return new FluxApi(config)
   }
 }
 
