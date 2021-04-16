@@ -1358,6 +1358,8 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 				DestinationAmount:  req.Product.DestinationAmount,
 				DestinationTicker:  req.Product.DestinationTicker,
 				DestinationAddress: req.Product.DestinationAddress,
+				Title:              req.Product.Title,
+				Author:             req.Product.Author,
 			},
 		},
 	}

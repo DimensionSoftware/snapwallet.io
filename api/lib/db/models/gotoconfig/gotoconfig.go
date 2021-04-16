@@ -33,4 +33,5 @@ type SnapWidgetProduct struct {
 	DestinationTicker  string  `json:"destinationTicker,omitempty" firestore:"destinationTicker,omitempty"`
 	DestinationAddress string  `json:"destinationAddress,omitempty" firestore:"destinationAddress,omitempty"`
 	Title              string  `json:"title,omitempty" firestore:"title,omitempty"`
+	Author             string  `json:"author,omitempty" firestore:"author,omitempty"`
 }

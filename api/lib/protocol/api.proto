@@ -383,6 +383,7 @@ message SnapWidgetProduct {
   string destination_ticker = 4;
   string destination_address = 5;
   string title = 6;
+  string author = 7;
 }
 
 message SnapWidgetConfig {

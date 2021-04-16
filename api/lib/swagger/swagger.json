@@ -1087,6 +1087,9 @@
         },
         "title": {
           "type": "string"
+        },
+        "author": {
+          "type": "string"
         }
       }
     },
