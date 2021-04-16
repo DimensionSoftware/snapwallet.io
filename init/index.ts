@@ -124,11 +124,11 @@ class Snap {
     // TODO: add RN WV launch logic
   }
 
-  createQR = (qrOpts: QROptions, config?: IConfig) => {
-    config && this.setConfig(config)
+  createQR = async (qrOpts: QROptions, config?: IConfig) => {
+    const text = await this.getShortURL(config)
     QR.render(
       {
-        text: this.generateURL(),
+        text,
         radius: 0.5, // 0.0 to 0.5
         ecLevel: 'H', // L, M, Q, H
         fill: qrOpts.foregroundColor || '#485460',
