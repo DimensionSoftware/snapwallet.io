@@ -21,6 +21,9 @@ export * from './ProfileDataItemStatus';
 export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
+export * from './SnapWidgetConfig';
+export * from './SnapWidgetProduct';
+export * from './SnapWidgetWallet';
 export * from './ThirdPartyUserAccount';
 export * from './TokenExchangeRequest';
 export * from './TokenExchangeResponse';
@@ -31,6 +34,7 @@ export * from './UsGovernmentIdDocumentInputKind';
 export * from './User';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
+export * from './WidgetGetShortUrlResponse';
 export * from './WyreConfirmTransferRequest';
 export * from './WyreCreateTransferRequest';
 export * from './WyrePaymentMethod';
@@ -62,6 +66,9 @@ import { ProfileDataItemStatus } from './ProfileDataItemStatus';
 import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
+import { SnapWidgetConfig } from './SnapWidgetConfig';
+import { SnapWidgetProduct } from './SnapWidgetProduct';
+import { SnapWidgetWallet } from './SnapWidgetWallet';
 import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
 import { TokenExchangeRequest } from './TokenExchangeRequest';
 import { TokenExchangeResponse } from './TokenExchangeResponse';
@@ -72,6 +79,7 @@ import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKi
 import { User } from './User';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
+import { WidgetGetShortUrlResponse } from './WidgetGetShortUrlResponse';
 import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
 import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
 import { WyrePaymentMethod } from './WyrePaymentMethod';
@@ -126,6 +134,9 @@ let typeMap: {[index: string]: any} = {
     "ProtobufAny": ProtobufAny,
     "RpcStatus": RpcStatus,
     "SaveProfileDataRequest": SaveProfileDataRequest,
+    "SnapWidgetConfig": SnapWidgetConfig,
+    "SnapWidgetProduct": SnapWidgetProduct,
+    "SnapWidgetWallet": SnapWidgetWallet,
     "ThirdPartyUserAccount": ThirdPartyUserAccount,
     "TokenExchangeRequest": TokenExchangeRequest,
     "TokenExchangeResponse": TokenExchangeResponse,
@@ -135,6 +146,7 @@ let typeMap: {[index: string]: any} = {
     "User": User,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
+    "WidgetGetShortUrlResponse": WidgetGetShortUrlResponse,
     "WyreConfirmTransferRequest": WyreConfirmTransferRequest,
     "WyreCreateTransferRequest": WyreCreateTransferRequest,
     "WyrePaymentMethod": WyrePaymentMethod,

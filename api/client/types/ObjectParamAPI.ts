@@ -25,6 +25,9 @@ import { ProfileDataItemStatus } from '../models/ProfileDataItemStatus';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
 import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
+import { SnapWidgetConfig } from '../models/SnapWidgetConfig';
+import { SnapWidgetProduct } from '../models/SnapWidgetProduct';
+import { SnapWidgetWallet } from '../models/SnapWidgetWallet';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
 import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
@@ -35,6 +38,7 @@ import { UsGovernmentIdDocumentInputKind } from '../models/UsGovernmentIdDocumen
 import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WidgetGetShortUrlResponse } from '../models/WidgetGetShortUrlResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
@@ -134,6 +138,15 @@ export interface FluxApiFluxViewerDataRequest {
 }
 
 export interface FluxApiFluxViewerProfileDataRequest {
+}
+
+export interface FluxApiFluxWidgetGetShortUrlRequest {
+    /**
+     * 
+     * @type SnapWidgetConfig
+     * @memberof FluxApifluxWidgetGetShortUrl
+     */
+    body: SnapWidgetConfig
 }
 
 export interface FluxApiFluxWyreConfirmTransferRequest {
@@ -307,6 +320,13 @@ export class ObjectFluxApi {
      */
     public fluxViewerProfileData(param: FluxApiFluxViewerProfileDataRequest, options?: Configuration): Promise<ProfileDataInfo> {
         return this.api.fluxViewerProfileData( options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWidgetGetShortUrl(param: FluxApiFluxWidgetGetShortUrlRequest, options?: Configuration): Promise<WidgetGetShortUrlResponse> {
+        return this.api.fluxWidgetGetShortUrl(param.body,  options).toPromise();
     }
 	
     /**

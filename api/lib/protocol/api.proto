@@ -371,6 +371,33 @@ message WyreTransfers {
   repeated WyreTransfer transfers = 1;
 }
 
+message SnapWidgetWallet {
+  string asset = 1;
+  string address = 2;
+}
+
+message SnapWidgetProduct {
+  string image_URL = 1;
+  string video_URL = 2;
+  double destination_amount = 3;
+  string destination_ticker = 4;
+  string destination_address = 5;
+  string title = 6;
+}
+
+message SnapWidgetConfig {
+  string app_name = 1;
+  repeated SnapWidgetWallet wallets = 2;
+  string intent = 3;
+  bool focus = 4;
+  map<string,string> theme = 5;
+  SnapWidgetProduct product = 6;
+}
+
+message WidgetGetShortUrlResponse {
+  string url = 1;
+}
+
 service Flux {
   // Get viewer data
   //
@@ -516,6 +543,13 @@ service Flux {
   rpc WyreGetTransfers(WyreGetTransfersRequest) returns (WyreTransfers) {
     option (google.api.http) = {
       get: "/wyre/transfers"
+    };
+  }
+
+  rpc WidgetGetShortUrl(SnapWidgetConfig) returns (WidgetGetShortUrlResponse) {
+    option (google.api.http) = {
+      post: "/widget/short-url"
+      body: "*"
     };
   }
 

@@ -25,6 +25,9 @@ import { ProfileDataItemStatus } from '../models/ProfileDataItemStatus';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
 import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
+import { SnapWidgetConfig } from '../models/SnapWidgetConfig';
+import { SnapWidgetProduct } from '../models/SnapWidgetProduct';
+import { SnapWidgetWallet } from '../models/SnapWidgetWallet';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
 import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
@@ -35,6 +38,7 @@ import { UsGovernmentIdDocumentInputKind } from '../models/UsGovernmentIdDocumen
 import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WidgetGetShortUrlResponse } from '../models/WidgetGetShortUrlResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
@@ -168,6 +172,14 @@ export class PromiseFluxApi {
      */
     public fluxViewerProfileData(options?: Configuration): Promise<ProfileDataInfo> {
     	const result = this.api.fluxViewerProfileData(options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param body 
+     */
+    public fluxWidgetGetShortUrl(body: SnapWidgetConfig, options?: Configuration): Promise<WidgetGetShortUrlResponse> {
+    	const result = this.api.fluxWidgetGetShortUrl(body, options);
         return result.toPromise();
     }
 	
