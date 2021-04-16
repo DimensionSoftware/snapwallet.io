@@ -188,7 +188,8 @@ func gotoHandler(ctx context.Context, flux proto.FluxClient) runtime.HandlerFunc
 	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
 		id := pathParams["id"]
 		if id == "" {
-			http.Error(w, "goto ID cannot be blank", http.StatusNotFound)
+			http.Error(w, "{\"code\":5,\"message\":\"goto ID not found\"}", http.StatusNotFound)
+			return
 		}
 
 		resp, err := flux.Goto(ctx, &proto.GotoRequest{
