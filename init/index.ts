@@ -56,6 +56,7 @@ class Snap {
   focus: boolean = true
   theme?: { [cssProperty: string]: string }
   product?: IProduct
+  private API: FluxApi
 
   constructor(args: IConfig) {
     this.setConfig(args)
