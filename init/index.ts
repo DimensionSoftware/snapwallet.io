@@ -61,6 +61,7 @@ class Snap {
 
   constructor(args: IConfig) {
     this.setConfig(args)
+    this.API = this.genAPIClient()
   }
 
   setConfig = (config: IConfig) => {
