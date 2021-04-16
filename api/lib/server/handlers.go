@@ -1335,16 +1335,19 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 		return nil, err
 	}
 
-	record := gotoconfig.Config{
+	g := gotoconfig.Config{
 		ID:      gotoconfig.ID(id),
 		ShortID: gotoconfig.ShortID(shortID),
 		Config:  req,
 	}
-	log.Printf("stub: need to store: %#v\n", record)
-	// todo .. store this shit
+
+	err = s.Db.SaveGotoConfig(ctx, nil, &g)
+	if err != nil {
+		return nil, err
+	}
 
 	return &proto.WidgetGetShortUrlResponse{
-		Url: fmt.Sprintf("%s/g/%s", s.WyreManager.APIHost, record.ShortID),
+		Url: fmt.Sprintf("%s/g/%s", s.WyreManager.APIHost, g.ShortID),
 	}, nil
 }
 
