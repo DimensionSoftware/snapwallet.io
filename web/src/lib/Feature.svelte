@@ -1,46 +1,50 @@
 <script lang="ts">
   import { onMount } from 'svelte'
+  import { formatLocaleCurrency } from '../../../widget/src/util'
   import Button from '../../../widget/src/components/Button.svelte'
+
+  // init
+  let nftSnap
+  const nftConfig = {
+    appName: 'NFT Checkout',
+    focus: true,
+    product: {
+      // imageURL:
+      //   'https://lh3.googleusercontent.com/NpXUf_nwxn9yhHk_1AwFxRE7Mg2Lb7_rZoxKRuhf5Tca9MKm0Fh1MXuUAlJNJooO34l6YX3d-2MEZ1kpZvQ18JtrQbQw8CHnBdnRUV8=s992',
+      videoURL:
+        'https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4',
+      destinationAmount: 0.04,
+      destinationTicker: 'ETH',
+      destinationAddress: '0xf636B6aA45C554139763Ad926407C02719bc22f7',
+      title: 'The Crown',
+      author: 'Patrick Mahomes',
+    },
+    wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
+    onMessage: msg => {
+      const closeEvents = [snap.events.EXIT, snap.events.SUCCESS]
+      switch (msg.event) {
+        case snap.events.EXIT:
+        case snap.events.SUCCESS:
+          snap.closeWeb()
+          break
+        case snap.events.RESIZE:
+          // resize iframe/viewport happened
+          break
+      }
+    },
+  }
 
   onMount(async () => {
     await import('flux-init')
-    const snap = new Snap({
-      appName: 'NFT Checkout',
-      focus: true,
-      product: {
-        // imageURL:
-        //   'https://lh3.googleusercontent.com/NpXUf_nwxn9yhHk_1AwFxRE7Mg2Lb7_rZoxKRuhf5Tca9MKm0Fh1MXuUAlJNJooO34l6YX3d-2MEZ1kpZvQ18JtrQbQw8CHnBdnRUV8=s992',
-        videoURL:
-          'https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4',
-        destinationAmount: 0.0004,
-        destinationTicker: 'ETH',
-        destinationAddress: '0xf636B6aA45C554139763Ad926407C02719bc22f7',
-        title: 'The Crown (Patrick Mahomes)',
-      },
-      wallets: [
-        { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
-      ],
-      onMessage: msg => {
-        const closeEvents = [snap.events.EXIT, snap.events.SUCCESS]
-        switch (msg.event) {
-          case snap.events.EXIT:
-          case snap.events.SUCCESS:
-            snap.closeWeb()
-            break
-          case snap.events.RESIZE:
-            // resize iframe/viewport happened
-            break
-        }
-      },
-    })
+    const nftSnap = new Snap(nftConfig)
 
     // Open using a button
     const btn = document.getElementById('buy-section')
-    btn.onclick = snap.openWeb
+    btn.onclick = nftSnap.openWeb
 
     // Open using a QR code
     const canvas = document.getElementById('qr-canvas')
-    snap.createQR({ element: canvas, pixelSize: 200 })
+    nftSnap.createQR({ element: canvas, pixelSize: 200 })
   })
 </script>
 
@@ -60,9 +64,16 @@
           Collection.
         </p>
         <div>
-          <h3>The Crown</h3>
-          <small>by Patrick Mahomes</small>
-          <h4>$0,98</h4>
+          <h3>{nftConfig.product.title}</h3>
+          <small>by {nftConfig.product.author}</small>
+          <h4>
+            {typeof navigator !== 'undefined'
+              ? formatLocaleCurrency(
+                  nftConfig.product.destinationTicker,
+                  nftConfig.product.destinationAmount,
+                )
+              : '0'}
+          </h4>
           <Button id="buy-button">Buy</Button>
         </div>
         <div class="qr">
@@ -119,6 +130,8 @@
         margin: -0.25rem 0 1.5rem;
       }
       video {
+        min-height: 400px;
+        min-width: 400px;
         max-width: 50%;
       }
       :global(button) {

@@ -125,7 +125,8 @@
   <ModalHeader isProductCheckout hideBackButton>Buying</ModalHeader>
   <ModalBody>
     <div class="container">
-      <b class="nft-title">{product.title}</b>
+      <h3 class="nft-title">{product.title}</h3>
+      <small class="nft-title">by {product.author}</small>
       {#if product.videoURL}
         <video loop playsinline autoplay muted class="nft-video">
           <source src={product.videoURL} />
@@ -225,7 +226,11 @@
     justify-content: flex-start;
     align-items: center;
     .nft-title {
-      margin-bottom: 1rem;
+      margin: 0;
+      & + small {
+        margin-bottom: 1rem;
+        display: block;
+      }
     }
     .nft-video {
       position: relative;

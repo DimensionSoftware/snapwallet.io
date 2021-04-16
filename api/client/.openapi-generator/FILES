@@ -16,6 +16,7 @@ models/ChangeViewerEmailRequest.ts
 models/ChangeViewerPhoneRequest.ts
 models/DocumentInput.ts
 models/GetImageResponse.ts
+models/GotoResponse.ts
 models/ImageProcessingMode.ts
 models/InlineResponse200.ts
 models/LifecycleStatus.ts
@@ -35,6 +36,9 @@ models/ProfileDataItemStatus.ts
 models/ProtobufAny.ts
 models/RpcStatus.ts
 models/SaveProfileDataRequest.ts
+models/SnapWidgetConfig.ts
+models/SnapWidgetProduct.ts
+models/SnapWidgetWallet.ts
 models/ThirdPartyUserAccount.ts
 models/TokenExchangeRequest.ts
 models/TokenExchangeResponse.ts
@@ -45,6 +49,7 @@ models/UsGovernmentIdDocumentInputKind.ts
 models/User.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
+models/WidgetGetShortUrlResponse.ts
 models/WyreConfirmTransferRequest.ts
 models/WyreCreateTransferRequest.ts
 models/WyrePaymentMethod.ts

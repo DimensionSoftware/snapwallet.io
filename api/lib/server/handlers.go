@@ -3,11 +3,15 @@ package server
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
+	"net/url"
 	"strings"
 	"time"
+
+	"crypto/sha256"
 
 	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
@@ -17,6 +21,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/disintegration/imaging"
+	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
 	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -36,6 +41,7 @@ import (
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
 	"github.com/lithammer/shortuuid/v3"
+	"github.com/teris-io/shortid"
 )
 
 // https://api.sendwyre.com/v3/rates?as=priced
@@ -1315,6 +1321,82 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	fmt.Printf("Wyre transfer confirmation response: %#v", t)
 
 	return wyre.WyreTransferToProto(t), nil
+}
+
+func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetConfig) (*proto.WidgetGetShortUrlResponse, error) {
+	configJsonBytes, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	id := fmt.Sprintf("WIDGET_CONFIG_%x", sha256.Sum256(configJsonBytes))
+	shortID, err := shortid.Generate()
+	if err != nil {
+		return nil, err
+	}
+
+	var wallets []gotoconfig.SnapWidgetWallet
+	for _, reqWallet := range req.Wallets {
+		wallets = append(wallets, gotoconfig.SnapWidgetWallet{
+			Asset:   reqWallet.Asset,
+			Address: reqWallet.Address,
+		})
+	}
+
+	g := gotoconfig.Config{
+		ID:      gotoconfig.ID(id),
+		ShortID: gotoconfig.ShortID(shortID),
+		Config: gotoconfig.SnapWidgetConfig{
+			AppName: req.AppName,
+			Wallets: wallets,
+			Intent:  req.Intent,
+			Focus:   req.Focus,
+			Theme:   req.Theme,
+			Product: gotoconfig.SnapWidgetProduct{
+				ImageURL:           req.Product.Image_URL,
+				VideoURL:           req.Product.Video_URL,
+				DestinationAmount:  req.Product.DestinationAmount,
+				DestinationTicker:  req.Product.DestinationTicker,
+				DestinationAddress: req.Product.DestinationAddress,
+			},
+		},
+	}
+
+	err = s.Db.SaveGotoConfig(ctx, nil, &g)
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WidgetGetShortUrlResponse{
+		Url: fmt.Sprintf("%s/g/%s", s.WyreManager.APIHost, g.ShortID),
+	}, nil
+}
+
+func (s *Server) Goto(ctx context.Context, req *proto.GotoRequest) (*proto.GotoResponse, error) {
+	// lookup by shortid
+	g, err := s.Db.GetGotoConfigByShortID(ctx, gotoconfig.ShortID(req.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	if g == nil {
+		return nil, status.Errorf(codes.NotFound, "goto ID not found")
+
+	}
+
+	configJsonBytes, err := json.Marshal(g.Config)
+	if err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	params.Add("config", string(configJsonBytes))
+	params.Add("ts", fmt.Sprintf("%d", time.Now().Unix()))
+
+	return &proto.GotoResponse{
+		Location: "https://snapwallet.io/widget?" + params.Encode(),
+	}, nil
+
 }
 
 func (s *Server) WyreGetTransfers(ctx context.Context, req *proto.WyreGetTransfersRequest) (*proto.WyreTransfers, error) {

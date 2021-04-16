@@ -391,6 +391,38 @@
         ]
       }
     },
+    "/widget/short-url": {
+      "post": {
+        "operationId": "Flux_WidgetGetShortUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WidgetGetShortUrlResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SnapWidgetConfig"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/wyre/hooks/{hookId}": {
       "post": {
         "operationId": "Flux_WyreWebhook",
@@ -747,6 +779,14 @@
         }
       }
     },
+    "GotoResponse": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string"
+        }
+      }
+    },
     "ImageProcessingMode": {
       "type": "string",
       "enum": [
@@ -997,6 +1037,70 @@
       "description": "request",
       "title": "SaveProfileDataRequest"
     },
+    "SnapWidgetConfig": {
+      "type": "object",
+      "properties": {
+        "appName": {
+          "type": "string"
+        },
+        "wallets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SnapWidgetWallet"
+          }
+        },
+        "intent": {
+          "type": "string"
+        },
+        "focus": {
+          "type": "boolean"
+        },
+        "theme": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "product": {
+          "$ref": "#/definitions/SnapWidgetProduct"
+        }
+      }
+    },
+    "SnapWidgetProduct": {
+      "type": "object",
+      "properties": {
+        "imageURL": {
+          "type": "string"
+        },
+        "videoURL": {
+          "type": "string"
+        },
+        "destinationAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "destinationTicker": {
+          "type": "string"
+        },
+        "destinationAddress": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        }
+      }
+    },
+    "SnapWidgetWallet": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
     "ThirdPartyUserAccount": {
       "type": "object",
       "properties": {
@@ -1125,6 +1229,14 @@
       },
       "description": "response",
       "title": "ViewerDataResponse"
+    },
+    "WidgetGetShortUrlResponse": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
     },
     "WyreConfirmTransferRequest": {
       "type": "object",

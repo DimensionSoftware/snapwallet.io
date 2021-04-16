@@ -68,6 +68,7 @@ type FluxClient interface {
 	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
 	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
 	WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error)
+	WidgetGetShortUrl(ctx context.Context, in *SnapWidgetConfig, opts ...grpc.CallOption) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -78,6 +79,7 @@ type FluxClient interface {
 	//
 	// If the file is not of an image mime type, you will get an InvalidArguments error
 	GetImage(ctx context.Context, in *GetImageRequest, opts ...grpc.CallOption) (*GetImageResponse, error)
+	Goto(ctx context.Context, in *GotoRequest, opts ...grpc.CallOption) (*GotoResponse, error)
 }
 
 type fluxClient struct {
@@ -241,6 +243,15 @@ func (c *fluxClient) WyreGetTransfers(ctx context.Context, in *WyreGetTransfersR
 	return out, nil
 }
 
+func (c *fluxClient) WidgetGetShortUrl(ctx context.Context, in *SnapWidgetConfig, opts ...grpc.CallOption) (*WidgetGetShortUrlResponse, error) {
+	out := new(WidgetGetShortUrlResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WidgetGetShortUrl", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fluxClient) UploadFile(ctx context.Context, in *UploadFileRequest, opts ...grpc.CallOption) (*UploadFileResponse, error) {
 	out := new(UploadFileResponse)
 	err := c.cc.Invoke(ctx, "/Flux/UploadFile", in, out, opts...)
@@ -253,6 +264,15 @@ func (c *fluxClient) UploadFile(ctx context.Context, in *UploadFileRequest, opts
 func (c *fluxClient) GetImage(ctx context.Context, in *GetImageRequest, opts ...grpc.CallOption) (*GetImageResponse, error) {
 	out := new(GetImageResponse)
 	err := c.cc.Invoke(ctx, "/Flux/GetImage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) Goto(ctx context.Context, in *GotoRequest, opts ...grpc.CallOption) (*GotoResponse, error) {
+	out := new(GotoResponse)
+	err := c.cc.Invoke(ctx, "/Flux/Goto", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -312,6 +332,7 @@ type FluxServer interface {
 	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransfer, error)
 	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error)
 	WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error)
+	WidgetGetShortUrl(context.Context, *SnapWidgetConfig) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -322,6 +343,7 @@ type FluxServer interface {
 	//
 	// If the file is not of an image mime type, you will get an InvalidArguments error
 	GetImage(context.Context, *GetImageRequest) (*GetImageResponse, error)
+	Goto(context.Context, *GotoRequest) (*GotoResponse, error)
 	mustEmbedUnimplementedFluxServer()
 }
 
@@ -380,11 +402,17 @@ func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransfer
 func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfers not implemented")
 }
+func (UnimplementedFluxServer) WidgetGetShortUrl(context.Context, *SnapWidgetConfig) (*WidgetGetShortUrlResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WidgetGetShortUrl not implemented")
+}
 func (UnimplementedFluxServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
 }
 func (UnimplementedFluxServer) GetImage(context.Context, *GetImageRequest) (*GetImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetImage not implemented")
+}
+func (UnimplementedFluxServer) Goto(context.Context, *GotoRequest) (*GotoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Goto not implemented")
 }
 func (UnimplementedFluxServer) mustEmbedUnimplementedFluxServer() {}
 
@@ -705,6 +733,24 @@ func _Flux_WyreGetTransfers_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_WidgetGetShortUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SnapWidgetConfig)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WidgetGetShortUrl(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WidgetGetShortUrl",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WidgetGetShortUrl(ctx, req.(*SnapWidgetConfig))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Flux_UploadFile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(UploadFileRequest)
 	if err := dec(in); err != nil {
@@ -737,6 +783,24 @@ func _Flux_GetImage_Handler(srv interface{}, ctx context.Context, dec func(inter
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FluxServer).GetImage(ctx, req.(*GetImageRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_Goto_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GotoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).Goto(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/Goto",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).Goto(ctx, req.(*GotoRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -817,12 +881,20 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Flux_WyreGetTransfers_Handler,
 		},
 		{
+			MethodName: "WidgetGetShortUrl",
+			Handler:    _Flux_WidgetGetShortUrl_Handler,
+		},
+		{
 			MethodName: "UploadFile",
 			Handler:    _Flux_UploadFile_Handler,
 		},
 		{
 			MethodName: "GetImage",
 			Handler:    _Flux_GetImage_Handler,
+		},
+		{
+			MethodName: "Goto",
+			Handler:    _Flux_Goto_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
