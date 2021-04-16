@@ -1,4 +1,5 @@
 import QR from 'qr-creator'
+import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
 declare global {
   var _ENV: {
