@@ -1,38 +1,43 @@
 <script context="module" lang="ts">
+  import Feature from '../lib/Feature.svelte'
   export const prerender = true
 </script>
 
 <script lang="ts">
   let Typewriter: any
   import { onMount } from 'svelte'
+  import { add_attribute } from 'svelte/internal'
   const domain = 'https://snapwallet.io'
 
   let ifr: HTMLIFrameElement
+
+  $: fillColor = '#fffc00'
 
   onMount(async () => {
     await import('flux-init')
     Typewriter = (await import('svelte-typewriter')).default
 
-    const SnapWallet = new (window as any).Snap({
-      appName: 'Snap Wallet',
-      intent: 'buy',
-      wallets: [],
-      focus: true,
-      theme: {
-        modalBackground: 'rgba(40,40,40,.9)',
-        modalPopupBackground: 'rgba(50,50,50,.95)',
-        color: 'rgba(0,0,0,.9)',
-        badgeTextColor: '#333',
-        colorLightened: 'rgba(5,5,5,.8)',
-        shadowBottomColor: 'rgba(0,0,0,.25)',
-        colorInverse: '#fff',
-        buttonColor: '#fffc00',
-        buttonTextColor: '#000',
-        successColor: '#fffc00',
-        textColor: '#fff',
-        inputTextColor: '#333',
-      },
-    })
+    const appName = 'Noir Checkout',
+      SnapWallet = new (window as any).Snap({
+        appName,
+        intent: 'buy',
+        wallets: [],
+        focus: true,
+        theme: {
+          modalBackground: 'rgba(40,40,40,.9)',
+          modalPopupBackground: 'rgba(50,50,50,.95)',
+          color: 'rgba(0,0,0,.9)',
+          badgeTextColor: '#333',
+          colorLightened: 'rgba(5,5,5,.8)',
+          shadowBottomColor: 'rgba(0,0,0,.25)',
+          colorInverse: '#fff',
+          buttonColor: '#fffc00',
+          buttonTextColor: '#000',
+          successColor: '#fffc00',
+          textColor: '#fff',
+          inputTextColor: '#333',
+        },
+      })
 
     // respond to widget events
     window.addEventListener(
@@ -113,6 +118,14 @@
     />
   </div>
 </main>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"
+  ><path
+    fill={fillColor || '#fffc00'}
+    fill-opacity="1"
+    d="M0,256L360,256L720,128L1080,160L1440,0L1440,0L1080,0L720,0L360,0L0,0Z"
+  /></svg
+>
+<Feature />
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
@@ -120,9 +133,13 @@
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
   main {
+    position: relative;
+    z-index: 1;
     display: flex;
     max-width: 960px;
-    margin: 15% auto 0;
+    height: 100vh;
+    margin: 0 auto;
+    transform: translateY(30%);
     .col {
       position: relative;
       max-width: 50%;
@@ -179,7 +196,7 @@
     :global(iframe) {
       position: relative;
       border-radius: 20px;
-      top: -20%;
+      top: -15%;
       right: -20%;
     }
     :global(iframe.loaded) {
@@ -187,6 +204,22 @@
       transition: box-shadow 0.8s $easeOutExpo 0.1s, height 0.3s $easeOutBack;
       will-change: box-shadow, height;
     }
+  }
+
+  svg {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff;
+  }
+  section {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex: 1;
+    background: #fff;
   }
   @media (min-width: 480px) {
     h1,
@@ -207,10 +240,11 @@
       }
     }
   }
-  @media (max-width: 1024px) {
+  @media (max-width: 1000px) {
     :global(body) {
       overflow-y: scroll !important;
       main {
+        transform: translateY(10%);
         flex-direction: column;
         > .col {
           max-width: 100%;
@@ -220,6 +254,7 @@
           padding-right: 1rem;
           article {
             max-width: none;
+            margin-right: 2rem;
           }
         }
         .wallet {
@@ -231,6 +266,9 @@
             right: inherit;
           }
         }
+      }
+      svg {
+        position: fixed;
       }
     }
   }
