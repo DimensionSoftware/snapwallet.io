@@ -8,6 +8,6 @@ type ShortID string
 
 type Config struct {
 	ID      ID          `firestore:"id"`
-	ShortID ShortID     `firestore:"shortId"`
+	ShortID ShortID     `firestore:"shortID"`
 	Config  interface{} `firestore:"config"`
 }

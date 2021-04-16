@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"log"
+	"net/url"
 	"strings"
 	"time"
 
@@ -1349,12 +1350,27 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 
 func (s *Server) Goto(ctx context.Context, req *proto.GotoRequest) (*proto.GotoResponse, error) {
 	// lookup by shortid
-	// IF no record: return not found
-	return nil, status.Errorf(codes.NotFound, "goto ID not found")
+	g, err := s.Db.GetGotoConfigByShortID(ctx, gotoconfig.ShortID(req.Id))
+	if err != nil {
+		return nil, err
+	}
 
-	// ELSE: build url based on config; return as location
+	if g == nil {
+		return nil, status.Errorf(codes.NotFound, "goto ID not found")
+
+	}
+
+	configJsonBytes, err := json.Marshal(g.Config)
+	if err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	params.Add("config", string(configJsonBytes))
+	params.Add("ts", fmt.Sprintf("%d", time.Now().Unix()))
+
 	return &proto.GotoResponse{
-		Location: "http://google.com",
+		Location: "https://snapwallet.io/widget?" + params.Encode(),
 	}, nil
 
 }

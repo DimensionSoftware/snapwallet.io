@@ -12,6 +12,7 @@ import (
 	"github.com/lithammer/shortuuid/v3"
 
 	"cloud.google.com/go/firestore"
+	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/usedrefreshtoken"
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -35,6 +36,45 @@ import (
 type Db struct {
 	Firestore         *firestore.Client
 	EncryptionManager *encryption.Manager
+}
+
+func (db Db) SaveGotoConfig(ctx context.Context, tx *firestore.Transaction, g *gotoconfig.Config) error {
+	var err error
+
+	ref := db.Firestore.Collection("goto-configs").Doc(string(g.ID))
+	if tx == nil {
+		_, err = ref.Set(ctx, g)
+	} else {
+		err = tx.Set(ref, g)
+	}
+
+	return err
+}
+
+func (db Db) GetGotoConfigByShortID(ctx context.Context, shortID gotoconfig.ShortID) (*gotoconfig.Config, error) {
+	var err error
+
+	table := db.Firestore.Collection("goto-configs")
+
+	records, err := table.
+		Where("shortID", "==", shortID).
+		Limit(1).
+		Documents(ctx).
+		GetAll()
+	if err != nil {
+		return nil, err
+	}
+	if len(records) == 1 {
+		var g gotoconfig.Config
+		err := records[0].DataTo(&g)
+		if err != nil {
+			return nil, err
+		}
+
+		return &g, nil
+	}
+
+	return nil, nil
 }
 
 // CreateOneTimePasscode stores a record of a one-time-password request for verification later
