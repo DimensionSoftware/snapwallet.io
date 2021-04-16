@@ -21,8 +21,10 @@
     "prepare": "npm run build"
   },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^18.0.0",
     "@rollup/plugin-replace": "^2.4.1",
     "@rollup/plugin-typescript": "^8.2.0",
+    "api-client": "file://../api/client",
     "dotenv": "^8.2.0",
     "rollup": "^2.40.0",
     "rollup-plugin-node-resolve": "^5.2.0",
