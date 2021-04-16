@@ -7,6 +7,7 @@ import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
 import { DocumentInput } from '../models/DocumentInput';
 import { GetImageResponse } from '../models/GetImageResponse';
+import { GotoResponse } from '../models/GotoResponse';
 import { ImageProcessingMode } from '../models/ImageProcessingMode';
 import { InlineResponse200 } from '../models/InlineResponse200';
 import { LifecycleStatus } from '../models/LifecycleStatus';
@@ -66,6 +67,15 @@ export interface FluxApiFluxChangeViewerPhoneRequest {
      * @memberof FluxApifluxChangeViewerPhone
      */
     body: ChangeViewerPhoneRequest
+}
+
+export interface FluxApiFluxGotoRequest {
+    /**
+     * 
+     * @type string
+     * @memberof FluxApifluxGoto
+     */
+    id: string
 }
 
 export interface FluxApiFluxOneTimePasscodeRequest {
@@ -233,6 +243,13 @@ export class ObjectFluxApi {
      */
     public fluxChangeViewerPhone(param: FluxApiFluxChangeViewerPhoneRequest, options?: Configuration): Promise<any> {
         return this.api.fluxChangeViewerPhone(param.body,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxGoto(param: FluxApiFluxGotoRequest, options?: Configuration): Promise<GotoResponse> {
+        return this.api.fluxGoto(param.id,  options).toPromise();
     }
 	
     /**

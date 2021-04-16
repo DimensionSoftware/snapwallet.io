@@ -16,6 +16,7 @@ models/ChangeViewerEmailRequest.ts
 models/ChangeViewerPhoneRequest.ts
 models/DocumentInput.ts
 models/GetImageResponse.ts
+models/GotoResponse.ts
 models/ImageProcessingMode.ts
 models/InlineResponse200.ts
 models/LifecycleStatus.ts

@@ -1347,6 +1347,18 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 	}, nil
 }
 
+func (s *Server) Goto(ctx context.Context, req *proto.GotoRequest) (*proto.GotoResponse, error) {
+	// lookup by shortid
+	// IF no record: return not found
+	return nil, status.Errorf(codes.NotFound, "goto ID not found")
+
+	// ELSE: build url based on config; return as location
+	return &proto.GotoResponse{
+		Location: "http://google.com",
+	}, nil
+
+}
+
 func (s *Server) WyreGetTransfers(ctx context.Context, req *proto.WyreGetTransfersRequest) (*proto.WyreTransfers, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {

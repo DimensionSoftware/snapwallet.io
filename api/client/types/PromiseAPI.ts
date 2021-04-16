@@ -7,6 +7,7 @@ import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
 import { DocumentInput } from '../models/DocumentInput';
 import { GetImageResponse } from '../models/GetImageResponse';
+import { GotoResponse } from '../models/GotoResponse';
 import { ImageProcessingMode } from '../models/ImageProcessingMode';
 import { InlineResponse200 } from '../models/InlineResponse200';
 import { LifecycleStatus } from '../models/LifecycleStatus';
@@ -78,6 +79,14 @@ export class PromiseFluxApi {
      */
     public fluxChangeViewerPhone(body: ChangeViewerPhoneRequest, options?: Configuration): Promise<any> {
     	const result = this.api.fluxChangeViewerPhone(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param id 
+     */
+    public fluxGoto(id: string, options?: Configuration): Promise<GotoResponse> {
+    	const result = this.api.fluxGoto(id, options);
         return result.toPromise();
     }
 	

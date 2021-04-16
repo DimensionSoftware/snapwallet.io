@@ -141,6 +141,36 @@
         ]
       }
     },
+    "/g/{id}": {
+      "get": {
+        "operationId": "Flux_Goto",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GotoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/plaid/connect-bank-accounts": {
       "post": {
         "summary": "Post chosen bank info from plaid in order to create a new ACH pyment method in wyre",
@@ -776,6 +806,14 @@
         "height": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "GotoResponse": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string"
         }
       }
     },

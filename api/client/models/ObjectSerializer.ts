@@ -3,6 +3,7 @@ export * from './ChangeViewerEmailRequest';
 export * from './ChangeViewerPhoneRequest';
 export * from './DocumentInput';
 export * from './GetImageResponse';
+export * from './GotoResponse';
 export * from './ImageProcessingMode';
 export * from './InlineResponse200';
 export * from './LifecycleStatus';
@@ -48,6 +49,7 @@ import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from './ChangeViewerPhoneRequest';
 import { DocumentInput } from './DocumentInput';
 import { GetImageResponse } from './GetImageResponse';
+import { GotoResponse } from './GotoResponse';
 import { ImageProcessingMode } from './ImageProcessingMode';
 import { InlineResponse200 } from './InlineResponse200';
 import { LifecycleStatus } from './LifecycleStatus';
@@ -120,6 +122,7 @@ let typeMap: {[index: string]: any} = {
     "ChangeViewerPhoneRequest": ChangeViewerPhoneRequest,
     "DocumentInput": DocumentInput,
     "GetImageResponse": GetImageResponse,
+    "GotoResponse": GotoResponse,
     "InlineResponse200": InlineResponse200,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,

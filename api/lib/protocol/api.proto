@@ -398,6 +398,14 @@ message WidgetGetShortUrlResponse {
   string url = 1;
 }
 
+message GotoRequest {
+  string id = 1;
+}
+
+message GotoResponse {
+  string location = 1;
+}
+
 service Flux {
   // Get viewer data
   //
@@ -564,4 +572,10 @@ service Flux {
   //
   // If the file is not of an image mime type, you will get an InvalidArguments error
   rpc GetImage(GetImageRequest) returns (GetImageResponse) {}
+
+  rpc Goto(GotoRequest) returns (GotoResponse) {
+    option (google.api.http) = {
+      get: "/g/{id}"
+    };
+  }
 }
