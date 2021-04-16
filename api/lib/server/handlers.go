@@ -20,6 +20,7 @@ import (
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/disintegration/imaging"
+	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
 	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -34,7 +35,6 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
-	"github.com/khoerling/flux/api/lib/db/models/widgetconfig"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
@@ -1334,9 +1334,9 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 		return nil, err
 	}
 
-	record := widgetconfig.Config{
-		ID:      widgetconfig.ID(id),
-		ShortID: widgetconfig.ShortID(shortID),
+	record := gotoconfig.Config{
+		ID:      gotoconfig.ID(id),
+		ShortID: gotoconfig.ShortID(shortID),
 		Config:  req,
 	}
 	log.Printf("stub: need to store: %#v\n", record)
