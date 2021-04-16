@@ -1335,10 +1335,31 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 		return nil, err
 	}
 
+	var wallets []gotoconfig.SnapWidgetWallet
+	for _, reqWallet := range req.Wallets {
+		wallets = append(wallets, gotoconfig.SnapWidgetWallet{
+			Asset:   reqWallet.Asset,
+			Address: reqWallet.Address,
+		})
+	}
+
 	g := gotoconfig.Config{
 		ID:      gotoconfig.ID(id),
 		ShortID: gotoconfig.ShortID(shortID),
-		Config:  req,
+		Config: gotoconfig.SnapWidgetConfig{
+			AppName: req.AppName,
+			Wallets: wallets,
+			Intent:  req.Intent,
+			Focus:   req.Focus,
+			Theme:   req.Theme,
+			Product: gotoconfig.SnapWidgetProduct{
+				ImageURL:           req.Product.Image_URL,
+				VideoURL:           req.Product.Video_URL,
+				DestinationAmount:  req.Product.DestinationAmount,
+				DestinationTicker:  req.Product.DestinationTicker,
+				DestinationAddress: req.Product.DestinationAddress,
+			},
+		},
 	}
 
 	err = s.Db.SaveGotoConfig(ctx, nil, &g)
