@@ -42,7 +42,8 @@ const app = new App({
     //   destinationAmount: 0.0004,
     //   destinationTicker: 'ETH',
     //   destinationAddress: '0xf636B6aA45C554139763Ad926407C02719bc22f7',
-    //   title: 'The Crown (Patrick Mahomes)',
+    //   title: 'The Crown',
+    //   author: 'Patrick Mahomes',
     // },
     theme: {
       /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */

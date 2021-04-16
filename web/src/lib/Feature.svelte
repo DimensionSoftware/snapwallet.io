@@ -60,9 +60,16 @@
           Collection.
         </p>
         <div>
-          <h3>The Crown</h3>
-          <small>by Patrick Mahomes</small>
-          <h4>$0,98</h4>
+          <h3>{nftConfig.product.title}</h3>
+          <small>by {nftConfig.product.author}</small>
+          <h4>
+            {typeof navigator !== 'undefined'
+              ? formatLocaleCurrency(
+                  nftConfig.product.destinationTicker,
+                  nftConfig.product.destinationAmount,
+                )
+              : '0'}
+          </h4>
           <Button id="buy-button">Buy</Button>
         </div>
         <div class="qr">
