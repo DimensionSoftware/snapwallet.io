@@ -1,3 +1,4 @@
+import { getContext } from 'svelte'
 import nodeDebug from 'debug'
 import * as Icons from './icons'
 import { ParentMessages, CACHED_PRIMARY_PAYMENT_METHOD_KEY } from '../constants'
@@ -141,10 +142,10 @@ export const getPrimaryPaymentMethodID = (): string => {
   }
 }
 
-export const resizeWidget = (height: number) => {
+export const resizeWidget = (height: number, appName: string) => {
   window.dispatchEvent(
     new CustomEvent(ParentMessages.RESIZE, {
-      detail: { height: `${height}px` },
+      detail: { height: `${height}px`, appName },
     }),
   )
 }

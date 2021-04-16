@@ -10,7 +10,7 @@
   import { priceStore } from '../stores/PriceStore'
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
-  import { onMount } from 'svelte'
+  import { getContext, onMount } from 'svelte'
   import {
     focusFirstInput,
     isValidNumber,
@@ -163,8 +163,9 @@
     }
   }
 
+  const appName: string = getContext('appName')
   onMount(() => {
-    resizeWidget(525)
+    resizeWidget(525, appName)
     getInitialPrices()
     getNextPath()
     const interval = priceStore.pollPrices()

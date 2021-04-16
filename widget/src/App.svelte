@@ -223,6 +223,7 @@
   setContext('theme', {
     ...theme,
   })
+  setContext('appName', appName)
 
   onMount(() => {
     // pre-fetch user

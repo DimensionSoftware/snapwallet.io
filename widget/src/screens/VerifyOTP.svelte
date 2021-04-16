@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
+  import { getContext, onMount } from 'svelte'
   import { push } from 'svelte-spa-router'
   import { fade } from 'svelte/transition'
   import ModalBody from '../components/ModalBody.svelte'
@@ -22,8 +22,9 @@
   let isMakingRequest = false
   let isSendingCode = false
 
+  const appName: string = getContext('appName')
   onMount(() => {
-    resizeWidget(425)
+    resizeWidget(425, appName)
   })
 
   const resendCode = async () => {

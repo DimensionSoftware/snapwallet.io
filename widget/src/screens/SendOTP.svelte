@@ -1,6 +1,6 @@
 <script lang="ts">
   import { fade } from 'svelte/transition'
-  import { onMount } from 'svelte'
+  import { getContext, onMount } from 'svelte'
   import { push } from 'svelte-spa-router'
   import vld8 from 'validator'
   import ModalBody from '../components/ModalBody.svelte'
@@ -17,8 +17,9 @@
   import { Masks } from '../types'
   import { unMaskValue } from '../masks'
 
+  const appName: string = getContext('appName')
   onMount(() => {
-    resizeWidget(425)
+    resizeWidget(425, appName)
   })
 
   export let phoneVerificationOnly: boolean = false
