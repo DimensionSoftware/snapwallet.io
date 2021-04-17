@@ -8,6 +8,7 @@
     faSignOutAlt,
     faSignInAlt,
     faUserCircle,
+    faShoppingCart,
   } from '@fortawesome/free-solid-svg-icons'
   import { Routes } from '../constants'
   import {
@@ -136,7 +137,7 @@
 <aside class:active={isExpanded}>
   <nav>
     <div>
-      <FaIcon data={faExchangeAlt} />
+      <FaIcon data={isProductCheckout ? faShoppingCart : faExchangeAlt} />
       <a on:mousedown={_ => go(Routes.ROOT)}
         >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
       >
