@@ -64,7 +64,7 @@
           width="25px"
           title="Get Started with NFT Checkout!"
           alt="Made"
-          src="/static/made.svg"
+          src="/made.svg"
         />
       </a>
     </h2>
@@ -110,7 +110,7 @@
       width="25px"
       title="Get Started with NFT Checkout!"
       alt="Made"
-      src="/static/made.svg"
+      src="/made.svg"
     />
   </a>
 </section>
