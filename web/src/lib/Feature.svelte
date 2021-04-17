@@ -21,13 +21,13 @@
     },
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
     onMessage: msg => {
-      const closeEvents = [snap.events.EXIT, snap.events.SUCCESS]
       switch (msg.event) {
-        case snap.events.EXIT:
-        case snap.events.SUCCESS:
-          snap.closeWeb()
+        case nftSnap.events.EXIT:
+        case nftSnap.events.SUCCESS:
+          nftSnap.closeWeb()
           break
-        case snap.events.RESIZE:
+        case nftSnap.events.RESIZE:
+        default:
           // resize iframe/viewport happened
           break
       }
