@@ -3,8 +3,6 @@
   import { formatLocaleCurrency } from '../../../widget/src/util'
   import Button from '../../../widget/src/components/Button.svelte'
 
-  // init
-  let nftSnap
   const nftConfig = {
     appName: 'NFT Checkout',
     focus: true,
@@ -20,23 +18,25 @@
       author: 'Patrick Mahomes',
     },
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
-    onMessage: msg => {
-      switch (msg.event) {
-        case nftSnap.events.EXIT:
-        case nftSnap.events.SUCCESS:
-          nftSnap.closeWeb()
-          break
-        case nftSnap.events.RESIZE:
-        default:
-          // resize iframe/viewport happened
-          break
-      }
-    },
   }
 
   onMount(async () => {
     await import('flux-init')
-    const nftSnap = new Snap(nftConfig)
+    const nftSnap = new Snap({
+      ...nftConfig,
+      onMessage: msg => {
+        switch (msg.event) {
+          case nftSnap.events.EXIT:
+          case nftSnap.events.SUCCESS:
+            nftSnap.closeWeb()
+            break
+          case nftSnap.events.RESIZE:
+          default:
+            // resize iframe/viewport happened
+            break
+        }
+      },
+    })
 
     // Open using a button
     const btn = document.getElementById('buy-section')
