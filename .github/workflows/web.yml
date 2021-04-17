@@ -8,6 +8,7 @@ on:
       - '.github/workflows/web.yml'
       - 'firebase.json'
       - 'widget/**'
+      - 'init/**'
       - 'docs/**'
       - 'web/**'
       - 'api/lib/swagger/swagger-ui.html'
