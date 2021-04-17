@@ -44,7 +44,7 @@
 
     // Open using a QR code
     const canvas = document.getElementById('qr-canvas')
-    nftSnap.createQR({ element: canvas, pixelSize: 200 })
+    nftSnap.createQR({ element: canvas, pixelSize: 100 })
   })
 </script>
 
