@@ -172,17 +172,17 @@
     opacity: 0;
   }
   #successAnimation.animated {
-    animation: 0.9s var(--theme-ease-out-expo) 0s 1 both scaleAnimation;
+    animation: 1s ease-out 0s 1 both scaleAnimation;
     #successAnimationCircle {
       animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle,
-        0.3s ease 0.9s 1 both fadeOut;
+        0.3s linear 0.9s 1 both fadeOut;
     }
     #successAnimationCheck {
       animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck,
-        0.3s ease 0.9s 1 both fadeOut;
+        0.3s linear 0.9s 1 both fadeOut;
     }
     #successAnimationResult {
-      animation: 0.3s var(--theme-ease-out-back) 0.8s both fadeIn;
+      animation: 0.3s linear 0.9s both fadeIn;
     }
   }
 </style>
