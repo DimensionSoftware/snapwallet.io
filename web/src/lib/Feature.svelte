@@ -27,9 +27,10 @@
       onMessage: msg => {
         switch (msg.event) {
           case nftSnap.events.EXIT:
-          case nftSnap.events.SUCCESS:
             nftSnap.closeWeb()
             break
+          case nftSnap.events.SUCCESS:
+            console.log('Success!', msg)
           case nftSnap.events.RESIZE:
           default:
             // resize iframe/viewport happened
