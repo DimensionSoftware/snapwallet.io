@@ -51,7 +51,23 @@
 
 <section id="buy-section">
   <article>
-    <h2>NFT Checkout</h2>
+    <h2>
+      NFT Checkout
+      <a
+        class="docs-link"
+        href="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+        target="_blank"
+      >
+        <img
+          className="glyph"
+          height="25px"
+          width="25px"
+          title="Get Started with NFT Checkout!"
+          alt="Made"
+          src="/static/made.svg"
+        />
+      </a>
+    </h2>
     <div class="flex">
       <video loop playsinline autoplay muted
         ><source
@@ -83,6 +99,20 @@
       </div>
     </div>
   </article>
+  <a
+    class="docs-link"
+    href="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+    target="_blank"
+  >
+    <img
+      className="glyph"
+      height="25px"
+      width="25px"
+      title="Get Started with NFT Checkout!"
+      alt="Made"
+      src="/static/made.svg"
+    />
+  </a>
 </section>
 
 <style lang="scss">
@@ -101,6 +131,9 @@
     flex-direction: column;
     padding: 10rem 10rem 10rem;
     margin-bottom: 0.25rem;
+    .docs-link {
+      margin: 1rem auto 0;
+    }
     article {
       position: relative;
       padding: 3rem;
@@ -143,10 +176,26 @@
         bottom: -0.25rem;
         left: 0;
         #qr-canvas {
-          max-height: 100px;
+          height: 100px;
+          width: 100px;
           border: 0.5rem solid #fff;
         }
       }
+    }
+    a {
+      position: relative;
+      text-decoration: none;
+      text-align: center;
+      z-index: 1;
+      img {
+        margin: 0 0 0.25rem 1rem;
+        display: inline-block;
+        vertical-align: middle;
+      }
+    }
+    .docs-link {
+      margin: 1.5rem 0 0 0;
+      color: #222;
     }
   }
   @media (max-width: 1000px) {
