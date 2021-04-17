@@ -152,9 +152,13 @@ class Snap {
   }
 
   private handleMessage = (event: any) => {
-    const { data = '{}' } = event
-    const msg = JSON.parse(data)
-    this.onMessage && this.onMessage(msg)
+    try {
+      const { data = '{}' } = event
+      const msg = JSON.parse(data)
+      this.onMessage && this.onMessage(msg)
+    } catch (e) {
+      console.error('SnapWallet:error', 'unable to parse message', e)
+    }
   }
 
   private genAPIClient = (): FluxApi => {
