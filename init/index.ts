@@ -157,7 +157,7 @@ class Snap {
       const msg = JSON.parse(data)
       this.onMessage && this.onMessage(msg)
     } catch (e) {
-      console.error('SnapWallet:error', 'unable to parse message', e)
+      console.error('SnapWallet:error', 'unable to parse message:', event, e)
     }
   }
 
