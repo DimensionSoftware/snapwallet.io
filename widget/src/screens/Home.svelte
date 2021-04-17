@@ -141,10 +141,9 @@
 
       if (hasWyrePaymentMethods && hasWyreAccount)
         nextRoute = Routes.CHECKOUT_OVERVIEW
-      // TODO: handle all possible cases properly
+      else if (!hasWyrePaymentMethods) nextRoute = Routes.PLAID_LINK
       else if ($userStore.isProfileComplete) nextRoute = Routes.ADDRESS
-      else if (flags?.hasWyreAccount && !hasWyrePaymentMethods)
-        nextRoute = Routes.PLAID_LINK
+      else nextRoute = Routes.PROFILE_STATUS
       return nextRoute
     }
     return Routes.SEND_OTP
