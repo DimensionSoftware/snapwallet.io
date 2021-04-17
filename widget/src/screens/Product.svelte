@@ -122,11 +122,10 @@
 </script>
 
 <ModalContent>
-  <ModalHeader isProductCheckout hideBackButton>Buying</ModalHeader>
+  <ModalHeader isProductCheckout hideBackButton>{product.title}</ModalHeader>
   <ModalBody>
     <div class="container">
-      <h3 class="nft-title">{product.title}</h3>
-      <small class="nft-title">by {product.author}</small>
+      <h4 class="nft-title">by {product.author}</h4>
       {#if product.videoURL}
         <video loop playsinline autoplay muted class="nft-video">
           <source src={product.videoURL} />
@@ -200,7 +199,7 @@
   <ModalFooter>
     <Button on:mousedown={handleNextStep} isLoading={isPreviewing}>
       <div class="btn-content">
-        <span class="btn-text">Preview</span>
+        <span class="btn-text">Preview Buy</span>
         <FaIcon data={faLock} />
       </div>
     </Button>
@@ -226,11 +225,7 @@
     justify-content: flex-start;
     align-items: center;
     .nft-title {
-      margin: 0;
-      & + small {
-        margin-bottom: 1rem;
-        display: block;
-      }
+      margin: 0 0 1rem;
     }
     .nft-video {
       position: relative;

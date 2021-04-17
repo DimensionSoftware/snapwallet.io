@@ -41,6 +41,7 @@ export type ProductType = {
   imageURL?: string
   videoURL?: string
   title: string
+  author?: string
   destinationAmount: number
   destinationTicker: string
   destinationAddress: string
