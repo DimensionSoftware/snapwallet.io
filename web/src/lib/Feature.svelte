@@ -21,13 +21,13 @@
     },
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
     onMessage: msg => {
-      const closeEvents = [snap.events.EXIT, snap.events.SUCCESS]
       switch (msg.event) {
-        case snap.events.EXIT:
-        case snap.events.SUCCESS:
-          snap.closeWeb()
+        case nftSnap.events.EXIT:
+        case nftSnap.events.SUCCESS:
+          nftSnap.closeWeb()
           break
-        case snap.events.RESIZE:
+        case nftSnap.events.RESIZE:
+        default:
           // resize iframe/viewport happened
           break
       }
@@ -44,7 +44,7 @@
 
     // Open using a QR code
     const canvas = document.getElementById('qr-canvas')
-    nftSnap.createQR({ element: canvas, pixelSize: 200 })
+    nftSnap.createQR({ element: canvas, pixelSize: 100 })
   })
 </script>
 
