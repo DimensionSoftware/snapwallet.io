@@ -1364,7 +1364,7 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 		},
 	}
 
-	err = s.Db.SaveGotoConfig(ctx, nil, &g)
+	err = s.Db.SaveGotoConfig(ctx, &g)
 	if err != nil {
 		return nil, err
 	}

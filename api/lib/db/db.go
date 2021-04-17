@@ -38,17 +38,23 @@ type Db struct {
 	EncryptionManager *encryption.Manager
 }
 
-func (db Db) SaveGotoConfig(ctx context.Context, tx *firestore.Transaction, g *gotoconfig.Config) error {
-	var err error
-
+// will not save if item is already existing
+func (db Db) SaveGotoConfig(ctx context.Context, g *gotoconfig.Config) error {
 	ref := db.Firestore.Collection("goto-configs").Doc(string(g.ID))
-	if tx == nil {
-		_, err = ref.Set(ctx, g)
-	} else {
-		err = tx.Set(ref, g)
-	}
 
-	return err
+	return db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		_, err := tx.Get(ref)
+
+		if status.Code(err) == codes.NotFound {
+			err = tx.Set(ref, g)
+			if err != nil {
+				return err
+			}
+			return nil
+		}
+
+		return err
+	})
 }
 
 func (db Db) GetGotoConfigByShortID(ctx context.Context, shortID gotoconfig.ShortID) (*gotoconfig.Config, error) {
