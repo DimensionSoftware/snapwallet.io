@@ -38,17 +38,41 @@ type Db struct {
 	EncryptionManager *encryption.Manager
 }
 
-func (db Db) SaveGotoConfig(ctx context.Context, tx *firestore.Transaction, g *gotoconfig.Config) error {
-	var err error
-
+// will not save if item is already existing; returns short id of immutable first item
+func (db Db) SaveGotoConfig(ctx context.Context, g *gotoconfig.Config) (gotoconfig.ShortID, error) {
 	ref := db.Firestore.Collection("goto-configs").Doc(string(g.ID))
-	if tx == nil {
-		_, err = ref.Set(ctx, g)
-	} else {
-		err = tx.Set(ref, g)
+
+	var out gotoconfig.ShortID
+
+	err := db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		existingDoc, err := tx.Get(ref)
+		if status.Code(err) == codes.NotFound {
+			err = tx.Set(ref, g)
+			if err != nil {
+				return err
+			}
+
+			out = g.ShortID
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+
+		var existingG gotoconfig.Config
+		err = existingDoc.DataTo(&existingG)
+		if err != nil {
+			return err
+		}
+
+		out = existingG.ShortID
+		return nil
+	})
+	if err != nil {
+		return "", err
 	}
 
-	return err
+	return out, nil
 }
 
 func (db Db) GetGotoConfigByShortID(ctx context.Context, shortID gotoconfig.ShortID) (*gotoconfig.Config, error) {

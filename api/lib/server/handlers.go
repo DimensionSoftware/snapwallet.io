@@ -1364,13 +1364,13 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 		},
 	}
 
-	err = s.Db.SaveGotoConfig(ctx, nil, &g)
+	shortid, err := s.Db.SaveGotoConfig(ctx, &g)
 	if err != nil {
 		return nil, err
 	}
 
 	return &proto.WidgetGetShortUrlResponse{
-		Url: fmt.Sprintf("%s/g/%s", s.WyreManager.APIHost, g.ShortID),
+		Url: fmt.Sprintf("%s/g/%s", s.WyreManager.APIHost, shortid),
 	}, nil
 }
 
