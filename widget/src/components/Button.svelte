@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
-  export let id: string
+  export let id
   export let disabled: boolean = false
   export let isLoading: boolean = false
   export let title: string = ''

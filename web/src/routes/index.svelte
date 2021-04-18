@@ -1,12 +1,11 @@
 <script context="module" lang="ts">
-  import Feature from '../lib/Feature.svelte'
   export const prerender = true
 </script>
 
 <script lang="ts">
   let Typewriter: any
   import { onMount } from 'svelte'
-  import { add_attribute } from 'svelte/internal'
+  import NFT from '$lib/features/NFT.svelte'
   const domain = 'https://snapwallet.io'
 
   let ifr: HTMLIFrameElement
@@ -51,11 +50,14 @@
           }
 
           // TODO: remove if lame
-          // if (event === SnapWallet.events.DEMO_CURRENCY_SELECTED && data) {
-          //   if (data.currency.ticker.toUpperCase() === 'WBTC') {
-          //     window.document.body.style.background = '#fafafa'
-          //   } else window.document.body.style.background = data.currency.color
-          // }
+          if (event === SnapWallet.events.DEMO_CURRENCY_SELECTED && data) {
+            const color =
+              data.currency.ticker.toUpperCase() === 'WBTC'
+                ? '#fafafa'
+                : data.currency.color
+            fillColor = color
+            window.document.body.style.background = color
+          }
         } catch (e) {
           console.warn('Unable to parse message', msg, e)
         }
@@ -135,7 +137,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     d="M0,256L360,256L720,128L1080,160L1440,0L1440,0L1080,0L720,0L360,0L0,0Z"
   /></svg
 >
-<Feature />
+<NFT />
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
