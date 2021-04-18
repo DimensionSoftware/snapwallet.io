@@ -87,13 +87,13 @@
   window.addEventListener(ParentMessages.RESIZE, (event: Event) => {
     // respond to custom screen heights
     height = event.detail?.height || HEIGHT
-    ParentMessenger.resize(height)
+    ParentMessenger.resize(height, appName)
   })
   $: {
     if (lastLocation !== $location) {
       // reset screen height at every change
       height = HEIGHT
-      ParentMessenger.resize(height) // iframe
+      ParentMessenger.resize(height, appName) // iframe
       lastLocation = $location
     }
   }

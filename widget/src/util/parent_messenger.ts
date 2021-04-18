@@ -39,11 +39,12 @@ export const ParentMessenger = (() => {
    * User exited application (clicked X)
    * Sends user ID to parent for reference.
    */
-  const resize = size => {
+  const resize = (height, appName) => {
     send({
       event: ParentMessages.RESIZE,
       data: {
-        size,
+        height,
+        appName,
       },
     })
   }

@@ -47,7 +47,7 @@
         try {
           const { event, data } = JSON.parse(msg)
           if (event === SnapWallet.events.RESIZE && data && ifr) {
-            if (appName === data.appName) ifr.height = data.size
+            if (appName === data.appName) ifr.height = data.height
           }
 
           // TODO: remove if lame
