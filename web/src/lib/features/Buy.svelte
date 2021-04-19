@@ -63,7 +63,7 @@
 
 <Feature
   docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
-  title="On & Offramp"
+  title="Fiat On & Offramp"
 >
   <div slot="left">
     <iframe
@@ -83,7 +83,7 @@
         <li>Fast</li>
         <li>Secure</li>
         <li>Embeddable</li>
-        <li>Pay in USD, receive your preferred currency</li>
+        <li>Pay in fiat, receive your preferred crypto currency</li>
       </ul>
     </div>
   </div>
