@@ -70,23 +70,8 @@ class Snap {
     this.API = this.genAPIClient()
   }
 
-  // Reset configuration to initial
-  resetConfig = () => {
-    Object.assign(this, this.originalConfig)
-  }
-
-  // Update configuration without overwriting properties
   setConfig = (config: IConfig) => {
-    this.onMessage = config.onMessage || this.onMessage
-    this.wallets = config.wallets || this.wallets
-    this.appName = config.appName || this.appName
-    this.intent = config.intent || this.intent
-    this.focus = config.focus ?? this.focus
-    this.theme = config.theme || this.theme
-    this.product = config.product || this.product
-    this.sourceAmount = config.sourceAmount || this.sourceAmount
-    this.defaultDestinationAsset =
-      config.defaultDestinationAsset || this.defaultDestinationAsset
+    Object.assign(this, { ...this.originalConfig, ...config })
   }
 
   getConfig = (): IConfig => {
