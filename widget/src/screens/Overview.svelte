@@ -15,8 +15,9 @@
   import { onMount } from 'svelte'
   import { toaster } from '../stores/ToastStore'
   import { computeTransactionExpiration } from '../util/transactions'
+  import { configStore } from '../stores/ConfigStore'
 
-  export let product
+  $: ({ product } = $configStore)
 
   $: ({ intent, wyrePreview } = $transactionStore)
 

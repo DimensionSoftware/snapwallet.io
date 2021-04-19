@@ -4,7 +4,6 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
-  import type { ProductType } from '../types'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import {
@@ -21,8 +20,10 @@
   import VStep from '../components/VStep.svelte'
   import { userStore } from '../stores/UserStore'
   import { transactionStore } from '../stores/TransactionStore'
+  import { configStore } from '../stores/ConfigStore'
+  import { toaster } from '../stores/ToastStore'
 
-  export let product: ProductType
+  $: ({ product } = $configStore)
 
   let isPreviewing = false
   let isPaymentSelectorVisible = false
@@ -54,7 +55,7 @@
       (flags?.hasWyreAccount || $userStore.isProfilePending) &&
       !$transactionStore.selectedSourcePaymentMethod
     ) {
-      paymentSelectorVisible = true
+      isPaymentSelectorVisible = true
       return
     }
 
@@ -122,7 +123,7 @@
 </script>
 
 <ModalContent>
-  <ModalHeader isProductCheckout hideBackButton>{product.title}</ModalHeader>
+  <ModalHeader hideBackButton>{product.title}</ModalHeader>
   <ModalBody>
     <div class="container">
       <h4 class="nft-title">by {product.author}</h4>

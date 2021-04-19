@@ -9,8 +9,9 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { TransactionIntents } from '../types'
   import { ParentMessenger } from '../util/parent_messenger'
+  import { configStore } from '../stores/ConfigStore'
 
-  export let product
+  $: ({ product } = $configStore)
 
   $: ({ intent, wyrePreview } = $transactionStore)
 

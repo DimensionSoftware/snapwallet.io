@@ -15,6 +15,7 @@
   import { Routes } from '../constants'
   import type { OneTimePasscodeVerifyResponse } from 'api-client'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
+  import { configStore } from '../stores/ConfigStore'
 
   export let phoneVerificationOnly: boolean = false
 
@@ -22,9 +23,8 @@
   let isMakingRequest = false
   let isSendingCode = false
 
-  const appName: string = getContext('appName')
   onMount(() => {
-    resizeWidget(425, appName)
+    resizeWidget(425, configStore.appName)
   })
 
   const resendCode = async () => {

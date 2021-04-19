@@ -46,3 +46,9 @@ export type ProductType = {
   destinationTicker: string
   destinationAddress: string
 }
+
+export type WalletType = {
+  asset: string
+  address: string
+  default?: boolean
+}

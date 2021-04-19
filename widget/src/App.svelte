@@ -35,16 +35,8 @@
   import { transactionStore } from './stores/TransactionStore'
   import { paymentMethodStore } from './stores/PaymentMethodStore'
   import ProfileStatus from './screens/ProfileStatus.svelte'
-  import type { ProductType } from './types'
   import Product from './screens/Product.svelte'
-
-  // Querystring provided props, see main.ts.
-  export let appName: string
-  export let intent: 'buy' | 'sell'
-  export let apiKey: string
-  export let theme: object
-  export let focus: boolean
-  export let product: ProductType
+  import { configStore } from './stores/ConfigStore'
 
   $: isPreLogout = false
   $: isBlurred = false
@@ -87,13 +79,13 @@
   window.addEventListener(ParentMessages.RESIZE, (event: Event) => {
     // respond to custom screen heights
     height = event.detail?.height || HEIGHT
-    ParentMessenger.resize(height, appName)
+    ParentMessenger.resize(height, $configStore.appName)
   })
   $: {
     if (lastLocation !== $location) {
       // reset screen height at every change
       height = HEIGHT
-      ParentMessenger.resize(height, appName) // iframe
+      ParentMessenger.resize(height, $configStore.appName) // iframe
       lastLocation = $location
     }
   }
@@ -138,15 +130,13 @@
 
   const routes = {
     [Routes.ROOT]: wrap({
-      component: (product ? Product : Home) as any,
-      props: { appName, intent, apiKey, product },
+      component: ($configStore.product ? Product : Home) as any,
     }),
     [Routes.SELECT_PAYMENT]: wrap({
       component: SelectPayment as any,
     }),
     [Routes.SEND_OTP]: wrap({
       component: SendOTP as any,
-      props: { appName, intent, apiKey },
       conditions: [() => !isJWTValid()],
     }),
     [Routes.VERIFY_OTP]: wrap({
@@ -157,9 +147,6 @@
     [Routes.SUCCESS]: wrap({
       ...authedRouteOptions(Success),
       conditions: [isJWTValid, () => Boolean($transactionStore.wyrePreview)],
-      props: {
-        product,
-      },
     }),
     [Routes.PROFILE]: wrap({
       ...authedRouteOptions(Profile),
@@ -182,9 +169,6 @@
     [Routes.CHECKOUT_OVERVIEW]: wrap({
       ...authedRouteOptions(Overview),
       conditions: [isJWTValid, () => Boolean($transactionStore.wyrePreview)],
-      props: {
-        product,
-      },
     }),
     [Routes.ADDRESS]: wrap({
       ...authedRouteOptions(Address),
@@ -221,9 +205,8 @@
 
   // Set theme context so theme can be used in JS also
   setContext('theme', {
-    ...theme,
+    ...$configStore.theme,
   })
-  setContext('appName', appName)
 
   onMount(() => {
     // pre-fetch user
@@ -234,7 +217,7 @@
       userStore.fetchFlags()
     }
     // Override theme css variables
-    Object.entries(theme).forEach(([k, v]) => {
+    Object.entries($configStore.theme).forEach(([k, v]) => {
       k = k.replace(/[A-Z]/g, (k, i) =>
         i === 0 ? k.toLowerCase() : `-${k.toLowerCase()}`,
       )
@@ -242,8 +225,7 @@
     })
 
     // handle viewer focus
-    if (focus) focusElement(document.getElementById('amount'), 350)
-
+    if ($configStore.focus) focusElement(document.getElementById('amount'), 350)
     // Centralized error handler
     window.onunhandledrejection = e => {
       Logger.error(e)

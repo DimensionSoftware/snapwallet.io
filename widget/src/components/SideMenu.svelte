@@ -22,9 +22,10 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
   import { ParentMessenger } from '../util/parent_messenger'
+  import { configStore } from '../stores/ConfigStore'
 
   export let isExpanded: boolean = false
-  export let isProductCheckout: boolean = false
+  let isProductCheckout: boolean = Boolean($configStore.product)
   let slow: boolean = false
 
   function logout() {
