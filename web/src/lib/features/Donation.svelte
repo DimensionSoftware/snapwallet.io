@@ -7,6 +7,8 @@
     appName: 'Donation',
     focus: true,
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
+    sourceAmount: undefined,
+    defaultDestinationAsset: undefined,
     theme: {
       badgeTextColor: '#333',
       inputColor: '#333',
