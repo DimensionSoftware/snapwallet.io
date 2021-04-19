@@ -218,7 +218,7 @@
       sca => {
         return (
           sca.ticker.toLowerCase() ===
-          $configStore?.defaultDestinationAsset.toLowerCase()
+          $configStore.defaultDestinationAsset?.toLowerCase()
         )
       },
     )
