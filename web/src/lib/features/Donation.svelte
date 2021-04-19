@@ -25,6 +25,10 @@
     return () => snap.openWeb({ sourceAmount })
   }
 
+  const donateAsset = defaultDestinationAsset => {
+    return () => snap.openWeb({ defaultDestinationAsset })
+  }
+
   onMount(async () => {
     await import('flux-init')
     snap = new (window as any).Snap({
@@ -57,12 +61,12 @@
 >
   <div class="relative" slot="left">
     <p>Accept Crypto Donations & Tips, Simply.</p>
-    <div on:mousedown={snap.openWeb}>
+    <div>
       <h3>Donate</h3>
       <small>to Snap Wallet</small>
       <aside>
-        <Button>Send BTC</Button>
-        <Button>Send ETH</Button>
+        <Button on:mousedown={donateAsset('btc')}>Send BTC</Button>
+        <Button on:mousedown={donateAsset('eth')}>Send ETH</Button>
       </aside>
     </div>
   </div>
