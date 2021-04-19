@@ -1,21 +1,35 @@
 <script lang="ts">
   export let title
   export let docLink
+  export let right
 </script>
 
 <section>
   <article>
-    <h2>
-      {title}
-      <a class="docs-link" href={docLink} target="_blank">
-        <img
-          height="25px"
-          width="25px"
-          title="Get Started with NFT Checkout!"
-          alt="Made"
-          src="/made.svg"
-        />
-      </a>
+    <h2 class:right>
+      {#if right}
+        <a class="docs-link" href={docLink} target="_blank">
+          <img
+            height="25px"
+            width="25px"
+            title="Get Started with Code Snippets!"
+            alt="Made"
+            src="/made.svg"
+          />
+        </a>
+        {title}
+      {:else}
+        {title}
+        <a class="docs-link" href={docLink} target="_blank">
+          <img
+            height="25px"
+            width="25px"
+            title="Get Started with Code Snippets!"
+            alt="Made"
+            src="/made.svg"
+          />
+        </a>
+      {/if}
     </h2>
     <div class="flex">
       <slot name="left" />
@@ -24,15 +38,6 @@
       </div>
     </div>
   </article>
-  <a class="docs-link" href={docLink} target="_blank">
-    <img
-      height="25px"
-      width="25px"
-      title="Get Started with NFT Checkout!"
-      alt="Made"
-      src="/made.svg"
-    />
-  </a>
 </section>
 
 <style lang="scss">
@@ -49,8 +54,7 @@
     background: white;
     display: flex;
     flex-direction: column;
-    padding: 10rem 10rem 10rem;
-    margin-bottom: 0.25rem;
+    padding: 10rem 10rem 0;
     .docs-link {
       margin: 1rem auto 0;
     }
@@ -60,8 +64,13 @@
       border-radius: 2rem;
       background: #f6f6f6;
       max-width: 800px;
+      width: 100%;
       margin: 0 auto;
       h2 {
+        &.right {
+          right: 0.75rem;
+          left: inherit;
+        }
         position: absolute;
         top: -5rem;
         left: 0.75rem;
@@ -75,7 +84,7 @@
       text-align: center;
       z-index: 1;
       img {
-        margin: 0 0 0.25rem 1rem;
+        margin: 0 1rem 0.25rem 1rem;
         display: inline-block;
         vertical-align: middle;
       }

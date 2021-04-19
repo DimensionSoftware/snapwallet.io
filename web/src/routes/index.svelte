@@ -6,6 +6,8 @@
   let Typewriter: any
   import { onMount } from 'svelte'
   import NFT from '$lib/features/NFT.svelte'
+  import Donation from '$lib/features/Donation.svelte'
+  import Footer from '$lib/Footer.svelte'
   const domain = 'https://snapwallet.io'
 
   let ifr: HTMLIFrameElement
@@ -138,6 +140,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
   /></svg
 >
 <NFT />
+<Donation />
+<Footer />
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
