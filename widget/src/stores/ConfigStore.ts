@@ -5,6 +5,7 @@ type ConfigStoreState = {
   apiKey: string
   appName: string
   sourceAmount: number
+  defaultDestinationAsset?: string
   wallets: WalletType[]
   focus: boolean
   intent: 'buy'
@@ -17,6 +18,7 @@ function createStore() {
     apiKey: '',
     appName: '',
     sourceAmount: 0,
+    defaultDestinationAsset: undefined,
     wallets: [],
     focus: false,
     intent: 'buy',
