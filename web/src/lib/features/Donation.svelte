@@ -7,8 +7,6 @@
     appName: 'Donation',
     focus: true,
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
-    sourceAmount: undefined,
-    defaultDestinationAsset: undefined,
     theme: {
       badgeTextColor: '#333',
       inputColor: '#333',
@@ -24,11 +22,13 @@
   let snap: any = {}
 
   const donateUSDAmount = sourceAmount => {
-    return () => snap.openWeb({ ...config, sourceAmount })
+    snap.defaultDestinationAsset = undefined
+    return () => snap.openWeb({ sourceAmount })
   }
 
   const donateAsset = defaultDestinationAsset => {
-    return () => snap.openWeb({ ...config, defaultDestinationAsset })
+    snap.sourceAmount = undefined
+    return () => snap.openWeb({ defaultDestinationAsset })
   }
 
   onMount(async () => {
