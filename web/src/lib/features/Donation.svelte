@@ -19,11 +19,11 @@
     },
   }
 
+  let snap: any = {}
+
   const donateUSDAmount = sourceAmount => {
     return () => snap.openWeb({ sourceAmount })
   }
-
-  let snap: any = {}
 
   onMount(async () => {
     await import('flux-init')
