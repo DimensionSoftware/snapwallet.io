@@ -27,6 +27,7 @@
           warningColor: '#FFBD4A',
           successColor: '#83E068',
           errorColor: '#E7693C',
+          shadowBottomColor: 'rgba(0,0,0,.35)',
         },
       })
 
