@@ -63,13 +63,19 @@
   </div>
   <div class="relative" slot="right">
     <p>&nbsp;</p>
-    <div on:mousedown={snap.openWeb}>
+    <div>
       <h3>Tip</h3>
       <small>to Snap Wallet</small>
       <aside>
-        <Button>$1</Button>
-        <Button>$5</Button>
-        <Button>$10</Button>
+        <Button on:mousedown={() => snap.openWeb({ sourceAmount: 1.0 })}
+          >$1</Button
+        >
+        <Button on:mousedown={() => snap.openWeb({ sourceAmount: 5.0 })}
+          >$5</Button
+        >
+        <Button on:mousedown={() => snap.openWeb({ sourceAmount: 10.0 })}
+          >$10</Button
+        >
       </aside>
     </div>
   </div>
