@@ -52,6 +52,7 @@ class Snap {
     DEMO_CURRENCY_SELECTED: '__SNAP_DEMO_CURRENCY_SELECTED',
   }
   onMessage = (e: any) => {}
+  private originalConfig: IConfig
   wallets: IWallet[] = []
   appName: string = 'Snap Wallet'
   intent: UserIntent = 'buy'
@@ -65,9 +66,16 @@ class Snap {
 
   constructor(args: IConfig) {
     this.setConfig(args)
+    this.originalConfig = this.getConfig()
     this.API = this.genAPIClient()
   }
 
+  // Reset configuration to initial
+  resetConfig = () => {
+    Object.assign(this, this.originalConfig)
+  }
+
+  // Update configuration without overwriting properties
   setConfig = (config: IConfig) => {
     this.onMessage = config.onMessage || this.onMessage
     this.wallets = config.wallets || this.wallets
