@@ -211,7 +211,9 @@
               const val = Number(e.detail)
               transactionStore.setSourceAmount(val, selectedDestinationPrice)
             }}
-            defaultValue={sourceAmount}
+            defaultValue={sourceAmount
+              ? sourceAmount
+              : $configStore.sourceAmount}
             required
             type="number"
             inputmode="number"
