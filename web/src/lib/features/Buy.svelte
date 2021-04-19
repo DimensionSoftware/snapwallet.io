@@ -41,16 +41,6 @@
           if (event === Wallet.events.RESIZE && data && ifr) {
             if (appName === data.appName) ifr.height = data.height
           }
-
-          // TODO: remove if lame
-          if (event === Wallet.events.DEMO_CURRENCY_SELECTED && data) {
-            const color =
-              data.currency.ticker.toUpperCase() === 'WBTC'
-                ? '#fafafa'
-                : data.currency.color
-            fillColor = color
-            window.document.body.style.background = color
-          }
         } catch (e) {
           console.warn('Unable to parse message', msg, e)
         }

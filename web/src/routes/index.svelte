@@ -53,14 +53,14 @@
           }
 
           // TODO: remove if lame
-          if (event === SnapWallet.events.DEMO_CURRENCY_SELECTED && data) {
-            const color =
-              data.currency.ticker.toUpperCase() === 'WBTC'
-                ? '#fafafa'
-                : data.currency.color
-            fillColor = color
-            window.document.body.style.background = color
-          }
+          // if (event === SnapWallet.events.DEMO_CURRENCY_SELECTED && data) {
+          //   const color =
+          //     data.currency.ticker.toUpperCase() === 'WBTC'
+          //       ? '#fafafa'
+          //       : data.currency.color
+          //   fillColor = color
+          //   window.document.body.style.background = color
+          // }
         } catch (e) {
           console.warn('Unable to parse message', msg, e)
         }
