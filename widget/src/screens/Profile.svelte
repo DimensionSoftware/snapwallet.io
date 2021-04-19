@@ -49,6 +49,10 @@
         return focus(0)
       }
 
+      const isEighteen = Date.now() - Number(new Date(birthDate)) >= 5.676e11
+
+      if (!isEighteen) throw new Error('You must be 18 years of age or older')
+
       const [mm, dd, yyyy] = birthDate.split('-')
 
       await window.API.fluxSaveProfileData({
