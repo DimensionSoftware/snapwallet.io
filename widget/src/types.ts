@@ -9,6 +9,7 @@ export interface IAsset {
   name: string
   ticker: string
   color: string
+  popular?: boolean
 }
 
 export enum Masks {
