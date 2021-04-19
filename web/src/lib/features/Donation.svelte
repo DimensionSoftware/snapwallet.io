@@ -22,13 +22,17 @@
   let snap: any = {}
 
   const donateUSDAmount = sourceAmount => {
-    snap.defaultDestinationAsset = undefined
-    return () => snap.openWeb({ sourceAmount })
+    return () => {
+      snap.resetConfig()
+      snap.openWeb({ sourceAmount })
+    }
   }
 
   const donateAsset = defaultDestinationAsset => {
-    snap.sourceAmount = undefined
-    return () => snap.openWeb({ defaultDestinationAsset })
+    return () => {
+      snap.resetConfig()
+      snap.openWeb({ defaultDestinationAsset })
+    }
   }
 
   onMount(async () => {
