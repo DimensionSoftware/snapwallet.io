@@ -40,6 +40,7 @@ interface IConfig {
   sourceAmount?: number
   theme?: { [cssProperty: string]: string }
   product?: IProduct
+  defaultDestinationAsset?: string
 }
 
 class Snap {
@@ -59,6 +60,7 @@ class Snap {
   theme?: { [cssProperty: string]: string }
   sourceAmount?: number
   product?: IProduct
+  defaultDestinationAsset?: string
   private API: FluxApi
 
   constructor(args: IConfig) {
@@ -75,6 +77,8 @@ class Snap {
     this.theme = config.theme || this.theme
     this.product = config.product || this.product
     this.sourceAmount = config.sourceAmount || this.sourceAmount
+    this.defaultDestinationAsset =
+      config.defaultDestinationAsset || this.defaultDestinationAsset
   }
 
   getConfig = (): IConfig => {
@@ -86,6 +90,7 @@ class Snap {
       theme: this.theme,
       product: this.product,
       sourceAmount: this.sourceAmount,
+      defaultDestinationAsset: this.defaultDestinationAsset,
     }
   }
 
