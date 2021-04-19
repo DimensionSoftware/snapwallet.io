@@ -1352,16 +1352,21 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 			Intent:  req.Intent,
 			Focus:   req.Focus,
 			Theme:   req.Theme,
-			Product: gotoconfig.SnapWidgetProduct{
-				ImageURL:           req.Product.Image_URL,
-				VideoURL:           req.Product.Video_URL,
-				DestinationAmount:  req.Product.DestinationAmount,
-				DestinationTicker:  req.Product.DestinationTicker,
-				DestinationAddress: req.Product.DestinationAddress,
-				Title:              req.Product.Title,
-				Author:             req.Product.Author,
-			},
 		},
+	}
+
+	if req.Product != nil {
+		swc := g.Config.(gotoconfig.SnapWidgetConfig)
+
+		swc.Product = gotoconfig.SnapWidgetProduct{
+			ImageURL:           req.Product.Image_URL,
+			VideoURL:           req.Product.Video_URL,
+			DestinationAmount:  req.Product.DestinationAmount,
+			DestinationTicker:  req.Product.DestinationTicker,
+			DestinationAddress: req.Product.DestinationAddress,
+			Title:              req.Product.Title,
+			Author:             req.Product.Author,
+		}
 	}
 
 	shortid, err := s.Db.SaveGotoConfig(ctx, &g)
