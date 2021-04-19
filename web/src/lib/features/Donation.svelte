@@ -18,6 +18,11 @@
       colorLightened: 'rgba(247,127,26,.5)',
     },
   }
+
+  const donateUSDAmount = sourceAmount => {
+    return () => snap.openWeb({ sourceAmount })
+  }
+
   let snap: any = {}
 
   onMount(async () => {
@@ -67,15 +72,9 @@
       <h3>Tip</h3>
       <small>to Snap Wallet</small>
       <aside>
-        <Button on:mousedown={() => snap.openWeb({ sourceAmount: 1.0 })}
-          >$1</Button
-        >
-        <Button on:mousedown={() => snap.openWeb({ sourceAmount: 5.0 })}
-          >$5</Button
-        >
-        <Button on:mousedown={() => snap.openWeb({ sourceAmount: 10.0 })}
-          >$10</Button
-        >
+        <Button on:mousedown={donateUSDAmount(1.0)}>$1</Button>
+        <Button on:mousedown={donateUSDAmount(5.0)}>$5</Button>
+        <Button on:mousedown={donateUSDAmount(10.0)}>$10</Button>
       </aside>
     </div>
   </div>
