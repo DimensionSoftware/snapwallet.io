@@ -16,7 +16,12 @@
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
-  import { Routes, APIErrors, ParentMessages } from './constants'
+  import {
+    Routes,
+    APIErrors,
+    ParentMessages,
+    SUPPORTED_CRYPTOCURRENCY_ASSETS,
+  } from './constants'
   import {
     authedRouteOptions,
     capitalize,
@@ -209,6 +214,19 @@
   })
 
   onMount(() => {
+    const defaultDestinationAsset = SUPPORTED_CRYPTOCURRENCY_ASSETS.find(
+      sca => {
+        return (
+          sca.ticker.toLowerCase() ===
+          $configStore?.defaultDestinationAsset.toLowerCase()
+        )
+      },
+    )
+
+    if (defaultDestinationAsset) {
+      transactionStore.setDestinationCurrency(defaultDestinationAsset)
+    }
+
     // pre-fetch user
     if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
       userStore.fetchUserProfile()
