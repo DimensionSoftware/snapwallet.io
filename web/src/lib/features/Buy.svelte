@@ -23,7 +23,7 @@
           color: '#2187FF',
           textColor: '#fff',
           colorInverse: '#fff',
-          buttonColor: '#263543',
+          buttonColor: '#2187FF',
           warningColor: '#FFBD4A',
           successColor: '#83E068',
           errorColor: '#E7693C',
