@@ -7,29 +7,7 @@
 <section>
   <article>
     <h2 class:right>
-      {#if right}
-        <a class="docs-link" href={docLink} target="_blank">
-          <img
-            height="25px"
-            width="25px"
-            title="Get Started with Code Snippets!"
-            alt="Made"
-            src="/made.svg"
-          />
-        </a>
-        {title}
-      {:else}
-        {title}
-        <a class="docs-link" href={docLink} target="_blank">
-          <img
-            height="25px"
-            width="25px"
-            title="Get Started with Code Snippets!"
-            alt="Made"
-            src="/made.svg"
-          />
-        </a>
-      {/if}
+      {title}
     </h2>
     <div class="flex">
       <slot name="left" />
@@ -38,6 +16,17 @@
       </div>
     </div>
   </article>
+  <a class="bottom docs-link" href={docLink} target="_blank">
+    Get Started with a Code Sample
+    <br />
+    <img
+      height="25px"
+      width="25px"
+      title="Get Started with Code Snippets!"
+      alt="Made"
+      src="/made.svg"
+    />
+  </a>
 </section>
 
 <style lang="scss">
@@ -93,6 +82,13 @@
     .docs-link {
       margin: 1.5rem 0 0 0;
       color: #222;
+      &.bottom {
+        display: block;
+        margin: 1.5rem auto 0;
+        img {
+          margin: 0.5rem 0;
+        }
+      }
     }
   }
   @media (max-width: 1000px) {

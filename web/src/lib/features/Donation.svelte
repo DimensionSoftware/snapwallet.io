@@ -55,7 +55,6 @@
 </script>
 
 <Feature
-  right
   docLink="https://snapwallet.io/docs/guide/use-cases/donate.html"
   title="Donations & Tips"
 >
