@@ -163,10 +163,12 @@
       setTimeout(animateRandomPrice, 275)
       await priceStore.fetchPrices()
       // Auto input source amount after awaiting prices
-      transactionStore.setSourceAmount(
-        $configStore.sourceAmount,
-        selectedDestinationPrice,
-      )
+      if (!$transactionStore.sourceAmount) {
+        transactionStore.setSourceAmount(
+          $configStore.sourceAmount,
+          selectedDestinationPrice,
+        )
+      }
     } finally {
       setTimeout(() => (isLoadingPrices = false), 250)
     }
