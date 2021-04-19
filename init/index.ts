@@ -37,6 +37,7 @@ interface IConfig {
   appName: string
   intent: UserIntent
   focus: boolean
+  sourceAmount?: number
   theme?: { [cssProperty: string]: string }
   product?: IProduct
 }
@@ -56,6 +57,7 @@ class Snap {
   baseURL: string = _ENV.WIDGET_URL
   focus: boolean = true
   theme?: { [cssProperty: string]: string }
+  sourceAmount?: number
   product?: IProduct
   private API: FluxApi
 
@@ -72,6 +74,7 @@ class Snap {
     this.focus = config.focus ?? this.focus
     this.theme = config.theme || this.theme
     this.product = config.product || this.product
+    this.sourceAmount = config.sourceAmount || this.sourceAmount
   }
 
   getConfig = (): IConfig => {
@@ -82,6 +85,7 @@ class Snap {
       focus: this.focus,
       theme: this.theme,
       product: this.product,
+      sourceAmount: this.sourceAmount,
     }
   }
 
