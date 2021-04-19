@@ -187,7 +187,7 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
   .code {
-    margin-top: 10%;
+    margin: 10% 0.5rem 0 0.5rem;
   }
   .resend {
     display: flex;

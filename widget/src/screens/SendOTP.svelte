@@ -157,7 +157,7 @@
   @import '../styles/_vars.scss';
   .email,
   .phone {
-    margin-top: 10%;
+    margin: 10% 0.5rem 0 0.5rem;
   }
   .link {
     display: flex;

@@ -1,7 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import Feature from '../Feature.svelte'
-  import { formatLocaleCurrency } from '../../../../widget/src/util'
   import Button from '../../../../widget/src/components/Button.svelte'
 
   const config = {
@@ -51,6 +50,7 @@
 </script>
 
 <Feature
+  right
   docLink="https://snapwallet.io/docs/guide/use-cases/donate.html"
   title="Donations & Tips"
 >
@@ -107,6 +107,7 @@
     margin: 1.5rem 0 2rem 0;
   }
   p {
+    white-space: nowrap;
     font-size: 1.25rem;
     line-height: 1.75rem;
     padding: 0;

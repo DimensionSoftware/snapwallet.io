@@ -48,6 +48,7 @@
   }
   .relative {
     position: relative;
+    width: 50%;
   }
   section {
     --theme-button-color: #fff600;
@@ -73,7 +74,7 @@
         }
         position: absolute;
         top: -5rem;
-        left: 0.75rem;
+        left: 1rem;
         font-size: 2rem;
         font-weight: bold;
       }

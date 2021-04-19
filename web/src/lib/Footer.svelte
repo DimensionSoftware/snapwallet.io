@@ -58,4 +58,10 @@
       }
     }
   }
+  @media (max-width: 1000px) {
+    footer,
+    hr {
+      display: none !important;
+    }
+  }
 </style>

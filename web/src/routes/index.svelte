@@ -7,6 +7,7 @@
   import { onMount } from 'svelte'
   import NFT from '$lib/features/NFT.svelte'
   import Donation from '$lib/features/Donation.svelte'
+  import Buy from '$lib/features/Buy.svelte'
   import Footer from '$lib/Footer.svelte'
   const domain = 'https://snapwallet.io'
 
@@ -114,13 +115,6 @@ Hey, you-- join us!  https://dimensionsoftware.com
         >API Documentation</a
       > -->
     </div>
-    <!-- Features, Advantages, Benefits -->
-    <!--ul>
-      <li>Fast</li>
-      <li>Secure</li>
-      <li>Embeddable</li>
-      <li>Customs pay in USD; you receive your preferred currency</li>
-    </ul-->
   </div>
   <div class="col wallet" style="margin: 0 auto;">
     <iframe
@@ -141,6 +135,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
 >
 <NFT />
 <Donation />
+<Buy />
 <Footer />
 
 <style lang="scss">
