@@ -1,0 +1,19 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+
+const inputFile = process.argv[2]
+const lines = fs.readFileSync(inputFile).toString().split('\n')
+
+const out = []
+
+for (const line of lines) {
+  const [ k, v ] = line.split(/=(.*)/)
+  if (!k) {
+    continue
+  }
+
+  out.push(k + ': ' + JSON.stringify(v || ''))
+}
+
+console.log(out.join('\n'))

@@ -45,8 +45,9 @@ jobs:
           popd
 
           bin/get-snap-env-secret --project silken-phalanx-305703 > snap-env
+          bin/env2yaml snap-env > snap-env-yaml
 
-          bin/deploy-jobrunner --project silken-phalanx-305703 --env-vars-file snap-env
+          bin/deploy-jobrunner --project silken-phalanx-305703 --env-vars-file snap-env-yaml
         working-directory: api
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
