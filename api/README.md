@@ -113,3 +113,5 @@ bin/load-snap-env-secret --project silken-phalanx-305703 --data-file=secrets/.en
 ```
 bin/get-active-versions-from-snap-env-secret --project silken-phalanx-305703 | xargs -n1 bin/delete-snap-env-version
 ```
+
+.
