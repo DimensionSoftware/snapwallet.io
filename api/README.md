@@ -106,5 +106,10 @@ job message examples
 ### load up dev env from local into cloud secret in correct project env
 
 ```
-gcloud secrets --project silken-phalanx-305703 update snap-env --data-file=secrets/.env.dev
+bin/load-snap-env-secret --project silken-phalanx-305703 --data-file=secrets/.env.dev
+```
+
+### cleanup old versions
+```
+bin/get-active-versions-from-snap-env-secret --project silken-phalanx-305703 | xargs -n1 bin/delete-snap-env-version
 ```

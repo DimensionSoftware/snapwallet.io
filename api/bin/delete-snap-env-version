@@ -1,0 +1,3 @@
+#!/bin/bash -xeu
+
+gcloud secrets versions destroy --quiet --secret snap-env $@
