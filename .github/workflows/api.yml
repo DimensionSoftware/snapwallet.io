@@ -24,13 +24,6 @@ jobs:
           . .env.ci
           make test
         working-directory: api
-      # - name: Archive production artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: dist-without-markdown
-      #     path: |
-      #       dist
-      #       !dist/**/*.md
   deploy-jobrunner: 
     needs: test
     name: Build/Deploy JobRunner

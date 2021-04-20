@@ -99,3 +99,12 @@ job message examples
 ```
 {"kind": "CREATE_WYRE_ACCOUNT_FOR_USER", "relatedIDs": ["<user_id>"]}
 ```
+
+
+## secrets management
+
+### load up dev env from local into cloud secret in correct project env
+
+```
+gcloud secrets --project silken-phalanx-305703 update snap-env --data-file=secrets/.env.dev
+```
