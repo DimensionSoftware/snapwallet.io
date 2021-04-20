@@ -34,7 +34,15 @@ metadata:
 spec:
   template:
     spec:
+      containerConcurrency: 5
+      timeoutSeconds: 300
       containers:
       - image: ${JSON.stringify(image)}
+        ports:
+        - containerPort: 5100
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 512Mi
         env:
 ${outyamlenv.join('\n')}`)
