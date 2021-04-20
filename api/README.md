@@ -115,3 +115,8 @@ bin/get-active-versions-from-snap-env-secret --project silken-phalanx-305703 | x
 ```
 
 .
+
+## USEFUL
+
+
+https://ahmet.im/blog/mastering-cloud-run-environment-variables/
