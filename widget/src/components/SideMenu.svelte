@@ -143,7 +143,7 @@
         >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
       >
     </div>
-    <div />
+    <br />
     <div>
       <FaIcon data={faList} />
       <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}
@@ -154,7 +154,7 @@
       <FaIcon data={faUserCircle} />
       <a on:mousedown={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
     </div>
-    <div />
+    <br />
     {#if isLoggedIn}
       <div>
         <FaIcon data={faSignOutAlt} />
