@@ -90,7 +90,7 @@ export const formatHumanDate = (apiDate: string) =>
     day: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  })
+  } as any)
 
 export const formatDate = (
   apiDate: string,
@@ -98,7 +98,10 @@ export const formatDate = (
 ) => {
   Logger.debug('date', apiDate)
   const date = new Date(Date.parse(apiDate))
-  return date.toLocaleDateString(date.getTimezoneOffset(), options)
+  return date.toLocaleDateString(
+    date.getTimezoneOffset() as any,
+    options as any,
+  )
 }
 
 export const formatLocaleCurrency = (ticker: string, amount: number) => {
