@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
 </script>
