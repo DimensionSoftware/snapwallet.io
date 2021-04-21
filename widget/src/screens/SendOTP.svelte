@@ -79,7 +79,7 @@
     {#if phoneVerificationOnly}
       Phone Verification
     {:else}
-      Login or Sign Up
+      Send Access Code
     {/if}
   </ModalHeader>
   <ModalBody>

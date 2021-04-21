@@ -1,8 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import Feature from '../Feature.svelte'
-  import { formatLocaleCurrency } from '../../../../widget/src/util'
-  import Button from '../../../../widget/src/components/Button.svelte'
 
   let ifr: HTMLIFrameElement,
     snap: any = {}
@@ -20,6 +18,7 @@
           // Coinbase theme
           modalBackground: '#070F15',
           modalPopupBackground: 'rgba(2,13,19,.85)',
+          colorLightened: 'rgba(102,113,119,.8)',
           color: '#2187FF',
           textColor: '#fff',
           colorInverse: '#fff',
@@ -66,14 +65,15 @@
     />
   </div>
   <div class="relative" slot="right">
+    <br style="margin-top: .5rem;" />
     <p>Buy and Sell Crypto Currency fast, with the best rates & lowest fees.</p>
     <div on:mousedown={snap.openWeb}>
+      <br />
       <h3>Snap Wallet is</h3>
       <ul>
-        <li>Fast</li>
-        <li>Secure</li>
-        <li>Embeddable</li>
-        <li>Pay in fiat, receive your preferred crypto currency</li>
+        <li>&nbsp; Web, iOS & Android</li>
+        <li>&nbsp; Fast, Secure, Embeddable</li>
+        <li>&nbsp; Pay in fiat, receive your preferred crypto currency</li>
       </ul>
     </div>
   </div>
@@ -101,7 +101,7 @@
     margin: 1rem auto 0;
   }
   h3 {
-    margin: 0.5rem 0 0 0;
+    margin: 0.5rem 0 1rem 0;
   }
   small {
     margin: 0 0 0 0.1rem;

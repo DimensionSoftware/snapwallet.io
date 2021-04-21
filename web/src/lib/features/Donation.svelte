@@ -14,8 +14,9 @@
       colorInverse: '#fff',
       buttonColor: 'rgba(247,127,26,1)',
       buttonTextColor: '#fff',
-      successColor: '#fffc00',
+      successColor: 'rgb(247,127,26)',
       colorLightened: 'rgba(247,127,26,.5)',
+      color: 'rgb(247,127,26)',
     },
   }
 
