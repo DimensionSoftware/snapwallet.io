@@ -114,10 +114,10 @@ export const SUPPORTED_CRYPTOCURRENCY_ASSETS = [
   { name: 'Paxos Standard', ticker: 'PAX', color: '#EDE708' },
   { name: 'Stably Dollar', ticker: 'USDS', color: '#EFB914' },
   { name: 'Synthetix', ticker: 'SNX', color: '#EFB914' },
-  { name: 'Tether', ticker: 'USDT', color: '#26A17B' },
+  { name: 'Tether', ticker: 'USDT', color: '#26A17B', popular: true },
   { name: 'UMA', ticker: 'UMA', color: '#FF4A4A' },
   { name: 'USDC', ticker: 'USDC', color: '#2775C9', popular: true },
-  { name: 'Uniswap', ticker: 'UNI', popular: true, color: '#FF007A' },
+  { name: 'Uniswap', ticker: 'UNI', color: '#FF007A' },
   { name: 'Wrapped Bitcoin', ticker: 'WBTC', color: '#323544' },
   { name: 'Yearn.Finance', ticker: 'YFI', color: '#006AE3' },
 ]
