@@ -10,6 +10,9 @@ module.exports = {
     ],
     '^.+\\.ts$': 'ts-jest',
   },
+  moduleNameMapper: {
+    '\\.svg': '<rootDir>/__mocks__/svgrMock.js',
+  },
   moduleFileExtensions: ['js', 'ts', 'svelte'],
   setupFilesAfterEnv: ['<rootDir>setupTests.js'],
 }
