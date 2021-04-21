@@ -17,7 +17,7 @@
     </div>
   </article>
   <a class="bottom docs-link" href={docLink} target="_blank">
-    Get Started with a Code Sample
+    Get Started with an Example
     <br />
     <img
       height="25px"
