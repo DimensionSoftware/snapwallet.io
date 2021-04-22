@@ -14,11 +14,14 @@
   import type { Address } from 'api-client'
   import { transactionStore } from '../stores/TransactionStore'
   import { onMount } from 'svelte'
+  import { getMissingFieldMessages } from '../util/profiles'
 
   export let isUpdateScreen: boolean = false
 
   let isSubmittingProfile = false
   let autocomplete: google.maps.places.Autocomplete
+
+  $: missingInfo = getMissingFieldMessages($userStore.profileItems)
 
   const componentForm = {
     street_number: 'short_name',
@@ -151,7 +154,7 @@
 <ModalContent>
   <ModalHeader>Your Address</ModalHeader>
   <ModalBody>
-    {#if $userStore.isProfileComplete}
+    {#if missingInfo.address.isComplete}
       <h5 in:blur={{ duration: 300 }}>
         Your address was received. Update any detail:
       </h5>
