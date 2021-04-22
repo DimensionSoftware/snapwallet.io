@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
   import Feature from '../Feature.svelte'
   import { formatLocaleCurrency } from '../../../../widget/src/util'
-  import Button from '../../../../widget/src/components/Button.svelte'
+  import Button from '../Button.svelte'
 
   const config = {
     appName: 'NFT Checkout',
@@ -59,7 +59,7 @@
   >
   <div class="relative" slot="right">
     <p>
-      Easily checkout with any NFT. Your loot is automagically added to your
+      Checkout with any NFT. Your loot is automagically added to your
       Collection.
     </p>
     <div on:mousedown={snap.openWeb}>
@@ -85,6 +85,7 @@
   @import '../../../../widget/src/styles/animations.scss';
 
   .relative {
+    padding: 0 0 0 1rem;
     position: relative;
     height: 100%;
     > div {
@@ -121,8 +122,8 @@
   .qr {
     cursor: pointer;
     position: absolute;
-    bottom: -0.25rem;
-    left: 0;
+    bottom: -0.5rem;
+    left: 1rem;
     #qr-canvas {
       height: 100px;
       width: 100px;

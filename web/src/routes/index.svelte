@@ -162,13 +162,15 @@ Hey, you-- join us!  https://dimensionsoftware.com
           font-weight: 600;
           border-radius: 3px;
           background: rgba($textColor, 0.9);
-          color: #fff;
+          background: transparent;
+          border: 1px solid $textColor;
+          color: $textColor;
           padding: 1rem 3rem;
           margin-right: 1.5rem;
           transition: background 0.3s ease-out;
           &:hover {
+            border: 1px solid rgba($textColor, 0.9);
             animation: scaleIn 0.5s ease-out forwards;
-            background: $textColor;
             transition: none;
           }
         }
