@@ -30,33 +30,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy RunSnapJob Cloud Function
-        run: |
-          pushd /tmp
-
-          echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
-
-          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
-          tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
-
-          ./google-cloud-sdk/install.sh --usage-reporting false
-          gcloud auth activate-service-account --key-file gcloud-service-key.json
-
-          popd
-
-          bin/get-snap-env-secret --project silken-phalanx-305703 > snap-env
-          bin/env2yaml snap-env > snap-env-yaml
-
-          bin/deploy-jobrunner --project silken-phalanx-305703 --env-vars-file snap-env-yaml
-        working-directory: api
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      - uses: ./.github/actions/deploy-snap-job
+        with:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
   deploy-api:
     needs: test
     name: Build/Deploy API
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - name: Build/Push Docker Image to GCR
         uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
         with:
