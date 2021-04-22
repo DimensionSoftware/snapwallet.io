@@ -85,7 +85,7 @@ jobs:
           bin/env2knative snap-env snap-api gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }} > snap-knative
           cat snap-knative
 
-          bin/deploy-api --project silken-phalanx-305703 snap-knative
+          bin/deploy-api --project silken-phalanx-305703 --region us-central1	snap-knative
         working-directory: api
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
