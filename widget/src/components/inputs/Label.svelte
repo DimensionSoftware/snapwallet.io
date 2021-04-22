@@ -33,7 +33,7 @@
     }
     span {
       position: absolute;
-      top: 12px;
+      top: 6px;
       margin-left: 15px;
       z-index: 99;
     }
