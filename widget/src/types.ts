@@ -13,7 +13,7 @@ export interface IAsset {
 }
 
 export enum Masks {
-  PHONE = '+x (xxx) xxx-xxxx',
+  PHONE = 'xxx xxx-xxxx',
   SSN = 'xxx-xx-xxxx',
   INTL_DATE = 'xxxx-xx-xx',
   US_DATE = 'xx-xx-xxxx',
@@ -52,4 +52,10 @@ export type WalletType = {
   asset: string
   address: string
   default?: boolean
+}
+
+export interface ICountry {
+  name: string
+  dial_code: string
+  code: string
 }
