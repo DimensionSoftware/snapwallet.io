@@ -2,20 +2,22 @@
   import { createEventDispatcher } from 'svelte'
   import { countries } from '../../util/country'
   import PopupSelector from '../inputs/PopupSelector.svelte'
-  const dispatch = createEventDispatcher()
   import CountryCard from '../cards/CountryCard.svelte'
   import * as Flags from 'svelte-flagicon'
+  import type { ICountry } from '../../types'
 
   export let visible = false
 
-  let filteredCountries = countries
+  let filteredCountries: ICountry[] = Object.values(countries)
   let searchTimeout
+
+  const dispatch = createEventDispatcher()
 
   const searchCountries = val => {
     const searchTerm = val?.toLowerCase()
     if (!searchTerm) {
       clearTimeout(searchTimeout)
-      filteredCountries = countries
+      filteredCountries = Object.values(countries)
       return
     }
     if (searchTimeout) clearTimeout(searchTimeout)
@@ -24,7 +26,7 @@
 
   const debounceSearch = searchTerm => {
     return setTimeout(() => {
-      filteredCountries = countries.filter(c => {
+      filteredCountries = Object.values(countries).filter(c => {
         const terms = [c.name, c.code, c.dial_code].join(',').toLowerCase()
         return terms.includes(searchTerm)
       })
@@ -47,13 +49,17 @@
       />
 
       <h5>Top</h5>
-      <CountryCard>
+      <CountryCard
+        on:click={() => dispatch('select', { country: countries['US'] })}
+      >
         <div style="display:flex;align-items:center;">
           <Flags.Us />
           <span style="margin-left:1rem;">United States</span>
         </div>
       </CountryCard>
-      <CountryCard>
+      <CountryCard
+        on:click={() => dispatch('select', { country: countries['GB'] })}
+      >
         <div style="display:flex;align-items:center;">
           <Flags.Gb />
           <span style="margin-left:1rem;">United Kingdom</span>
@@ -63,7 +69,7 @@
       <h5>Countries</h5>
       {#if filteredCountries.length}
         {#each filteredCountries as country}
-          <CountryCard>
+          <CountryCard on:click={() => dispatch('select', { country })}>
             <div style="display:flex;align-items:center;">
               <svelte:component
                 this={Flags[country.code[0] + country.code[1].toLowerCase()]}
