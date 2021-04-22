@@ -69,6 +69,7 @@
           rgb(247, 127, 26)
         );
         background-clip: text;
+        -webkit-background-clip: text;
         color: transparent;
         font-size: 3rem;
         font-weight: bold;
