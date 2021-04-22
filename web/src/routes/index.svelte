@@ -34,6 +34,7 @@
           shadowBottomColor: 'rgba(0,0,0,.25)',
           colorInverse: '#fff',
           buttonColor: '#fffc00',
+          buttonColor: 'rgb(247, 127, 26)',
           buttonTextColor: '#000',
           successColor: '#fffc00',
           textColor: '#fff',

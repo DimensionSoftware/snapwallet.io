@@ -62,9 +62,15 @@
           left: inherit;
         }
         position: absolute;
-        top: -5rem;
+        top: -8rem;
         left: 1rem;
-        font-size: 2rem;
+        background: linear-gradient(
+          var(--theme-button-color),
+          rgb(247, 127, 26)
+        );
+        background-clip: text;
+        color: transparent;
+        font-size: 3rem;
         font-weight: bold;
       }
     }
