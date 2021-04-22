@@ -23,7 +23,7 @@ for (const line of lines) {
     continue
   }
 
-  outyamlenv.push(`        - name: LOG_LEVEL
+  outyamlenv.push(`        - name: ${k} 
           value: ${JSON.stringify(v)}`)
 }
 
