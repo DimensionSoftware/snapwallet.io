@@ -67,7 +67,7 @@ jobs:
           image_tag: ${{ github.sha }}
           context: ./api
           dockerfile: ./api/Dockerfile
-      - name: Deploy RunSnapJob Cloud Function
+      - name: Deploy Docker Image to CloudRun
         run: |
           pushd /tmp
 
