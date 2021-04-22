@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import Feature from '../Feature.svelte'
-  import Button from '../../../../widget/src/components/Button.svelte'
+  import Button from '../Button.svelte'
 
   const config = {
     appName: 'Donation',

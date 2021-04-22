@@ -73,7 +73,7 @@
       <ul>
         <li>&nbsp; Web, iOS & Android</li>
         <li>&nbsp; Fast, Secure, Embeddable</li>
-        <li>&nbsp; Pay in fiat, receive your preferred crypto currency</li>
+        <li>&nbsp; Pay in fiat, receive crypto currency</li>
       </ul>
     </div>
   </div>
@@ -84,6 +84,7 @@
 
   .relative {
     position: relative;
+    padding: 0 1rem;
     height: 100%;
     > div {
       cursor: pointer;
@@ -94,7 +95,7 @@
     padding: 0;
     li {
       padding: 0;
-      margin: 0.5rem 0 0.5rem 1rem;
+      margin: 0.5rem 0 0.75rem 1rem;
     }
   }
   .docs-link {

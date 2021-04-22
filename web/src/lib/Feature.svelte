@@ -52,7 +52,7 @@
       position: relative;
       padding: 3rem;
       border-radius: 2rem;
-      background: #f6f6f6;
+      background: linear-gradient(#fafafa, #f0f0f0);
       max-width: 800px;
       width: 100%;
       margin: 0 auto;
@@ -62,9 +62,16 @@
           left: inherit;
         }
         position: absolute;
-        top: -5rem;
+        top: -8rem;
         left: 1rem;
-        font-size: 2rem;
+        background: linear-gradient(
+          var(--theme-button-color),
+          rgb(247, 127, 26)
+        );
+        background-clip: text;
+        -webkit-background-clip: text;
+        color: transparent;
+        font-size: 3rem;
         font-weight: bold;
       }
     }
