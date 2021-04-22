@@ -33,11 +33,12 @@
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
-    transition: background 0.2s ease-in 0.05s;
+    transition: border 0.3s ease-in 0.05s;
     z-index: 10;
     &:hover {
       background: var(--theme-button-color);
       border-color: var(--theme-button-color);
+      animation: scaleIn 0.25s ease-out forwards;
       box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.1);
       transition: none;
     }

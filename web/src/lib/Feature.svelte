@@ -52,7 +52,7 @@
       position: relative;
       padding: 3rem;
       border-radius: 2rem;
-      background: linear-gradient(#fcfcfc, #f3f3f3);
+      background: linear-gradient(#fafafa, #f0f0f0);
       max-width: 800px;
       width: 100%;
       margin: 0 auto;
