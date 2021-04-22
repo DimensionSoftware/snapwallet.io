@@ -5,6 +5,8 @@ import type {
 } from 'api-client'
 import { writable } from 'svelte/store'
 import { Routes, UserProfileFieldTypes } from '../constants'
+import type { ICountry } from '../types'
+import { countries } from '../util/country'
 
 type ViewerFlags = UserFlags & { hasEmail: boolean; hasPhone: boolean }
 
@@ -29,6 +31,7 @@ type UserStoreState = {
   socialSecurityNumber: string
   birthDate: string
   phoneNumber: string
+  phoneNumberCountry: ICountry
   lastKnownRoute: Routes
   flags: ViewerFlags
   address: {
@@ -63,6 +66,7 @@ function createStore() {
       lastName: '',
       socialSecurityNumber: '',
       birthDate: '',
+      phoneNumberCountry: countries['US'],
       phoneNumber: '',
       // Used for routing to last position
       // when auth kicks in.
@@ -144,6 +148,9 @@ function createStore() {
     },
     setPhoneNumber: (phoneNumber: string) => {
       update(s => ({ ...s, phoneNumber }))
+    },
+    setPhoneNumberCountry: (phoneNumberCountry: ICountry) => {
+      update(s => ({ ...s, phoneNumberCountry }))
     },
     setEmailAddress: (emailAddress: string) =>
       update(s => ({ ...s, emailAddress })),
