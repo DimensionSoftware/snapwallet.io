@@ -29,7 +29,6 @@ jobs:
     name: Build/Deploy JobRunner
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-snap-job
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
@@ -48,25 +47,6 @@ jobs:
           image_tag: ${{ github.sha }}
           context: ./api
           dockerfile: ./api/Dockerfile
-      - name: Deploy Docker Image to CloudRun
-        run: |
-          pushd /tmp
-
-          echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
-
-          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
-          tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
-
-          ./google-cloud-sdk/install.sh --usage-reporting false
-          gcloud auth activate-service-account --key-file gcloud-service-key.json
-
-          popd
-
-          bin/get-snap-env-secret --project silken-phalanx-305703 > snap-env
-          bin/env2knative snap-env snap-api gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }} > snap-knative
-          cat snap-knative
-
-          bin/deploy-api --project silken-phalanx-305703 --region us-central1	snap-knative
-        working-directory: api
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+      - uses: ./.github/actions/deploy-api
+        with:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
