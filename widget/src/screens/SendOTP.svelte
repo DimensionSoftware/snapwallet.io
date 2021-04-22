@@ -51,7 +51,9 @@
       await window.API.fluxOneTimePasscode({
         emailOrPhone:
           phoneVerificationOnly || isUsingPhoneNumber
-            ? `+${unMaskValue($userStore.phoneNumber, Masks.PHONE)}`
+            ? `${
+                $userStore.phoneNumberCountry.dial_code
+              }${$userStore.phoneNumber.replace(/[^0-9]/g, '')}`
             : $userStore.emailAddress,
       })
 
