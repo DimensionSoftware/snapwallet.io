@@ -82,7 +82,7 @@ jobs:
           popd
 
           bin/get-snap-env-secret --project silken-phalanx-305703 > snap-env
-          bin/env2knative snap-env snap-api gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }} > snap-env-knative
+          bin/env2knative snap-env snap-api gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }} > snap-knative
           cat snap-knative
 
           bin/deploy-api --project silken-phalanx-305703 snap-knative
