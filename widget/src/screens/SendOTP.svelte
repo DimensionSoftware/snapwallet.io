@@ -21,6 +21,7 @@
   import PhoneInput from '../components/inputs/PhoneInput.svelte'
 
   let countrySelectorVisible = false
+  $: isUSPhoneNumber = $userStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   onMount(() => {
     resizeWidget(425, $configStore.appName)
@@ -125,8 +126,8 @@
             autofocus
             required
             type="tel"
-            mask={Masks.PHONE}
-            placeholder="222 333-4444"
+            mask={isUSPhoneNumber ? Masks.PHONE : undefined}
+            placeholder={isUSPhoneNumber ? '222 333-4444' : '222333444'}
             defaultValue={$userStore.phoneNumber}
             on:change={e => {
               userStore.setPhoneNumber(e.detail)
