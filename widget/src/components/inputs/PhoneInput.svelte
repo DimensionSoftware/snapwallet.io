@@ -95,7 +95,7 @@
       border-top-left-radius: 0.5em;
       border-bottom-left-radius: 0.5em;
       text-transform: uppercase;
-      width: 45%;
+      width: 40%;
       padding: 1.6em 0px 15px 12px !important;
       vertical-align: middle;
       color: var(--theme-input-text-color);
@@ -118,7 +118,7 @@
       margin: 0;
       background-color: var(--theme-color-inverse);
       outline: none;
-      width: 55%;
+      width: 60%;
       appearance: none;
       backface-visibility: hidden;
       transform: translateZ(0);
