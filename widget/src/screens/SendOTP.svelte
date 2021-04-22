@@ -17,6 +17,9 @@
   import { Masks } from '../types'
   import { unMaskValue } from '../masks'
   import { configStore } from '../stores/ConfigStore'
+  import CountrySelector from '../components/selectors/CountrySelector.svelte'
+
+  let countrySelectorVisible = false
 
   onMount(() => {
     resizeWidget(425, $configStore.appName)
@@ -111,6 +114,9 @@
         {/if}
       </div>
     {:else}
+      <button on:click={() => (countrySelectorVisible = true)}>
+        Country
+      </button>
       <div class="phone" in:fade={{ duration: 300 }}>
         <Label label="Your Phone Number">
           <Input
@@ -152,6 +158,10 @@
     </Button>
   </ModalFooter>
 </ModalContent>
+
+{#if countrySelectorVisible}
+  <CountrySelector visible on:close={() => (countrySelectorVisible = false)} />
+{/if}
 
 <style lang="scss">
   @import '../styles/_vars.scss';
