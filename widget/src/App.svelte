@@ -306,7 +306,7 @@
     src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
   <script
     defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFLeHLqyCbrY5-RAu739K1r2wazCOd0Qg&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrIHFoF52WJV5iH4-IyPd1CbBRwXXOymw&libraries=places"></script>
 </svelte:head>
 
 <style lang="scss">
