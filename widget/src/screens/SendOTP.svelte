@@ -18,6 +18,7 @@
   import { unMaskValue } from '../masks'
   import { configStore } from '../stores/ConfigStore'
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
+  import PhoneInput from '../components/inputs/PhoneInput.svelte'
 
   let countrySelectorVisible = false
 
@@ -114,12 +115,10 @@
         {/if}
       </div>
     {:else}
-      <button on:click={() => (countrySelectorVisible = true)}>
-        Country
-      </button>
       <div class="phone" in:fade={{ duration: 300 }}>
         <Label label="Your Phone Number">
-          <Input
+          <PhoneInput
+            on:select={() => (countrySelectorVisible = true)}
             inputmode="phone"
             autocapitalize="none"
             autocomplete="on"
@@ -127,7 +126,7 @@
             required
             type="tel"
             mask={Masks.PHONE}
-            placeholder="1 (222) 333-4444"
+            placeholder="222 333-4444"
             defaultValue={$userStore.phoneNumber}
             on:change={e => {
               userStore.setPhoneNumber(e.detail)
@@ -160,7 +159,15 @@
 </ModalContent>
 
 {#if countrySelectorVisible}
-  <CountrySelector visible on:close={() => (countrySelectorVisible = false)} />
+  <CountrySelector
+    visible
+    on:close={() => (countrySelectorVisible = false)}
+    on:select={e => {
+      const { country } = e?.detail
+      country && userStore.setPhoneNumberCountry(country)
+      countrySelectorVisible = false
+    }}
+  />
 {/if}
 
 <style lang="scss">
