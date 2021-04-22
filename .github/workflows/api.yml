@@ -67,9 +67,25 @@ jobs:
           image_tag: ${{ github.sha }}
           context: ./api
           dockerfile: ./api/Dockerfile
-      - name: Deploy Docker Image to CloudRun
-        uses: google-github-actions/deploy-cloudrun@main
-        with:
-          image: gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }}
-          service: snap-api
-          credentials: ${{ secrets.GCP_SA_KEY }}
+      - name: Deploy RunSnapJob Cloud Function
+        run: |
+          pushd /tmp
+
+          echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
+
+          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+          tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+
+          ./google-cloud-sdk/install.sh --usage-reporting false
+          gcloud auth activate-service-account --key-file gcloud-service-key.json
+
+          popd
+
+          bin/get-snap-env-secret --project silken-phalanx-305703 > snap-env
+          bin/env2knative snap-env snap-api gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }} > snap-env-knative
+          cat snap-knative
+
+          bin/deploy-api --project silken-phalanx-305703 snap-knative
+        working-directory: api
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
