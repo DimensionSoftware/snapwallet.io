@@ -4,6 +4,12 @@ inputs:
   GCP_SA_KEY:
     description: service account key
     required: true
+  GCP_PROJECT_ID:
+    description: gcp project id
+    required: true
+  CONTAINER_REPO:
+    description: image repository location
+    required: true
 runs:
   using: composite
   steps:
@@ -22,9 +28,9 @@ runs:
 
         popd
 
-        bin/get-snap-env-secret --project silken-phalanx-305703 > snap-env
-        bin/env2knative snap-env snap-api gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }} > snap-knative
+        bin/get-snap-env-secret --project ${{inputs.GCP_PROJECT_ID}} > snap-env
+        bin/env2knative snap-env snap-api ${{inputs.CONTAINER_REPO}}:${{ github.sha }} > snap-knative
         cat snap-knative
 
-        bin/deploy-api --project silken-phalanx-305703 --region us-central1	snap-knative
+        bin/deploy-api --project ${{inputs.GCP_PROJECT_ID}} --region us-central1	snap-knative
       working-directory: api

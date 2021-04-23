@@ -25,7 +25,7 @@ jobs:
           make test
         working-directory: api
   build-api:
-    name: "[DEV] Build/Push Docker Image"
+    name: "Build/Push Docker Image"
     needs: test
     runs-on: ubuntu-latest
     steps:
@@ -48,6 +48,8 @@ jobs:
       - uses: ./.github/actions/deploy-api
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GCP_PROJECT_ID: silken-phalanx-305703
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
   deploy-jobrunner: 
     needs: test
     name: "[DEV] Build/Deploy JobRunner"
@@ -57,3 +59,4 @@ jobs:
       - uses: ./.github/actions/deploy-snap-job
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
+          GCP_PROJECT_ID: silken-phalanx-305703

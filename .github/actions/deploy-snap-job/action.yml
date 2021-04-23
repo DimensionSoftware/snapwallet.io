@@ -4,6 +4,9 @@ inputs:
   GCP_SA_KEY:
     description: service account key
     required: true
+  GCP_PROJECT_ID:
+    description: gcp project id
+    required: true
 runs:
   using: composite
   steps:
@@ -22,8 +25,8 @@ runs:
 
         popd
 
-        bin/get-snap-env-secret --project silken-phalanx-305703 > snap-env
+        bin/get-snap-env-secret --project ${{inputs.GCP_PROJECT_ID}} > snap-env
         bin/env2yaml snap-env > snap-env-yaml
 
-        bin/deploy-jobrunner --project silken-phalanx-305703 --env-vars-file snap-env-yaml
+        bin/deploy-jobrunner --project ${{inputs.GCP_PROJECT_ID}} --env-vars-file snap-env-yaml
       working-directory: api
