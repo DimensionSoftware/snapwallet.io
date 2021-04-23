@@ -6,6 +6,7 @@
 package wire
 
 import (
+	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/filemanager"
@@ -32,11 +33,11 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
-	config, err := encryption.ProvideConfig()
+	encryptionConfig, err := encryption.ProvideConfig()
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
-	manager, err := encryption.NewManager(config)
+	manager, err := encryption.NewManager(encryptionConfig)
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
@@ -52,7 +53,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	pusherManager := &pusher.Manager{
 		Pusher: pusherClient,
 	}
-	apiHost, err := wyre.ProvideAPIHost()
+	apiHost, err := config.ProvideAPIHost()
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
@@ -113,11 +114,11 @@ func InitializeDevJobManager() (jobmanager.Manager, error) {
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
-	config, err := encryption.ProvideConfig()
+	encryptionConfig, err := encryption.ProvideConfig()
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
-	manager, err := encryption.NewManager(config)
+	manager, err := encryption.NewManager(encryptionConfig)
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}
@@ -133,7 +134,7 @@ func InitializeDevJobManager() (jobmanager.Manager, error) {
 	pusherManager := &pusher.Manager{
 		Pusher: pusherClient,
 	}
-	apiHost, err := wyre.ProvideAPIHost()
+	apiHost, err := config.ProvideAPIHost()
 	if err != nil {
 		return jobmanager.Manager{}, err
 	}

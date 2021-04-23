@@ -2,6 +2,7 @@ package wire
 
 import (
 	"github.com/google/wire"
+	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/filemanager"
@@ -38,7 +39,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		encryption.NewManager,
 		pusher.ProviderPusherConfig,
 		pusher.ProvidePusherClient,
-		wyre.ProvideAPIHost,
+		config.ProvideAPIHost,
 		wyre.ProvideWyreConfig,
 		wyre.NewClient,
 		pubsub.ProvideClient,
@@ -64,7 +65,7 @@ func InitializeDevJobManager() (jobmanager.Manager, error) {
 		encryption.NewManager,
 		pusher.ProviderPusherConfig,
 		pusher.ProvidePusherClient,
-		wyre.ProvideAPIHost,
+		config.ProvideAPIHost,
 		wyre.ProvideWyreConfig,
 		wyre.NewClient,
 	)

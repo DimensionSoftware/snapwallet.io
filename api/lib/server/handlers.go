@@ -1375,7 +1375,7 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 	}
 
 	return &proto.WidgetGetShortUrlResponse{
-		Url: fmt.Sprintf("%s/g/%s", s.WyreManager.APIHost, shortid),
+		Url: fmt.Sprintf("%s/g/%s", s.APIHost, shortid),
 	}, nil
 }
 
@@ -1401,7 +1401,7 @@ func (s *Server) Goto(ctx context.Context, req *proto.GotoRequest) (*proto.GotoR
 	params.Add("ts", fmt.Sprintf("%d", time.Now().Unix()))
 
 	return &proto.GotoResponse{
-		Location: "https://snapwallet.io/widget?" + params.Encode(),
+		Location: string(s.WebHost) + "/widget/?" + params.Encode(),
 	}, nil
 
 }

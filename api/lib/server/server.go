@@ -5,6 +5,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/filemanager"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
@@ -38,6 +39,8 @@ type Server struct {
 	Pusher                        *pusher.Manager
 	JobPublisher                  ijobpublisher.JobPublisher
 	RemedyManager                 *remedymanager.Manager
+	config.APIHost
+	config.WebHost
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"

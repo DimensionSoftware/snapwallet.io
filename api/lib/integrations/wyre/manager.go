@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"os"
 	"time"
 
+	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/db/models/user/plaid/item"
@@ -23,26 +23,12 @@ import (
 
 const apiHostEnvVarName = "API_HOST"
 
-type APIHost string
-
 type Manager struct {
-	APIHost     APIHost
+	APIHost     config.APIHost
 	Wyre        *Client
 	Db          *db.Db
 	Plaid       *plaid.Client
 	FileManager *filemanager.Manager
-}
-
-// ProvideAPIHost ...
-func ProvideAPIHost() (APIHost, error) {
-	apiHost := os.Getenv(apiHostEnvVarName)
-	if apiHost == "" {
-		return "", fmt.Errorf("you must set %s", apiHost)
-	}
-
-	log.Println("🚨 API Host for webhooks set to: ", apiHost)
-
-	return APIHost(apiHost), nil
 }
 
 func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccessToken string, plaidItemID string, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {

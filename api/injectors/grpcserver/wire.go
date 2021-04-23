@@ -3,6 +3,7 @@ package wire
 import (
 	"github.com/google/wire"
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/filemanager"
@@ -51,7 +52,8 @@ func InitializeServer() (server.Server, error) {
 		encryption.ProvideConfig,
 		encryption.NewManager,
 		wire.Struct(new(db.Db), "*"),
-		wyre.ProvideAPIHost,
+		config.ProvideAPIHost,
+		config.ProvideWebHost,
 		wire.Struct(new(wyre.Manager), "*"),
 		wire.Struct(new(pusher.Manager), "*"),
 		pusher.ProviderPusherConfig,
@@ -89,7 +91,8 @@ func InitializeDevServer() (server.Server, error) {
 		encryption.ProvideConfig,
 		encryption.NewManager,
 		wire.Struct(new(db.Db), "*"),
-		wyre.ProvideAPIHost,
+		config.ProvideAPIHost,
+		config.ProvideWebHost,
 		wire.Struct(new(wyre.Manager), "*"),
 		wire.Struct(new(pusher.Manager), "*"),
 		pusher.ProviderPusherConfig,
