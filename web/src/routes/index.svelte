@@ -128,11 +128,18 @@ Hey, you-- join us!  https://dimensionsoftware.com
     />
   </div>
 </main>
+<video
+  loop
+  playsinline
+  autoplay
+  muted
+  src="https://video-previews.elements.envatousercontent.com/h264-video-previews/006e9a98-6b47-4a22-9d9a-643500d6c84e/25055399.mp4"
+/>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"
   ><path
-    fill={fillColor || '#fffc00'}
+    fill="#ffffff"
     fill-opacity="1"
-    d="M0,256L360,256L720,128L1080,160L1440,0L1440,0L1080,0L720,0L360,0L0,0Z"
+    d="M0,320L240,288L480,192L720,160L960,96L1200,192L1440,0L1440,320L1200,320L960,320L720,320L480,320L240,320L0,320Z"
   /></svg
 >
 <NFT />
@@ -221,13 +228,24 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
   }
 
+  video {
+    position: absolute;
+    z-index: 0;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    object-fit: fill;
+    opacity: 0.05;
+  }
   svg {
     position: absolute;
     bottom: 0;
     right: 0;
     left: 0;
     width: 100%;
-    background-color: #fff;
   }
   section {
     position: relative;
