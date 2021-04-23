@@ -38,13 +38,15 @@
     &:hover {
       background: var(--theme-button-color);
       border-color: var(--theme-button-color);
-      animation: scaleIn 0.25s ease-out forwards;
+      transform: scale(1.01);
       box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.1);
       transition: none;
     }
     &:active,
     &:focus {
       transition: none;
+      border-color: var(--theme-button-color);
+      box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1);
       background: var(--theme-button-color);
       animation: infocus 0.35s;
       animation-timing-function: var(--theme-ease-out-back);
