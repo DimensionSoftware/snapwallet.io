@@ -221,7 +221,7 @@
     }}
     headerTitle="Select a Document Type"
   >
-    <div class="scroll selector-container">
+    <div class="scroll-y selector-container">
       {#each Object.entries(SELECTOR_OPTIONS) as [optionFileType, options], i}
         <div
           in:fly={{ y: 25, duration: 250 + 50 * (i + 1) }}

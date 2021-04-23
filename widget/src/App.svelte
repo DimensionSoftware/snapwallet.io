@@ -369,6 +369,15 @@
   :global(.spacer) {
     margin-top: 1.5rem;
   }
+  :global(.scroll-y) {
+    overflow: hidden;
+    overflow-y: scroll;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+  }
   #modal:before {
     content: '';
     position: absolute;

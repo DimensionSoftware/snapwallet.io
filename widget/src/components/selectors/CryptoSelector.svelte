@@ -15,7 +15,7 @@
     on:close={() => dispatch('close')}
     headerTitle="Select Currency"
   >
-    <div class="scroll selector-container">
+    <div class="scroll-y selector-container">
       <h5>Popular</h5>
       {#each SUPPORTED_CRYPTOCURRENCY_ASSETS.filter(c => c.popular) as cryptoCurrency, i (cryptoCurrency.ticker)}
         <div
