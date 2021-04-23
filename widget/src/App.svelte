@@ -374,8 +374,11 @@
     overflow-y: scroll;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    ::-webkit-scrollbar {
+    &::-webkit-scrollbar {
       display: none;
+      background: transparent;
+      height: 0;
+      width: 0;
     }
   }
   #modal:before {
