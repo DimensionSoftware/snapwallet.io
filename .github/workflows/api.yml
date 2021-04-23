@@ -41,7 +41,7 @@ jobs:
           dockerfile: ./api/Dockerfile
   deploy-development-api:
     needs: build-api
-    name: "[DEVELOPMENT] Deploy Dev API"
+    name: "[D] Deploy Dev API"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -52,7 +52,7 @@ jobs:
           CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
   deploy-development-jobrunner: 
     needs: test
-    name: "[DEVELOPMENT] Build/Deploy JobRunner"
+    name: "[D] Build/Deploy JobRunner"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -62,7 +62,7 @@ jobs:
           GCP_PROJECT_ID: silken-phalanx-305703
   deploy-sandbox-api:
     needs: build-api
-    name: "[SANDBOX] Deploy Dev API"
+    name: "[S] Deploy Dev API"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -73,7 +73,7 @@ jobs:
           CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
   deploy-sandbox-jobrunner: 
     needs: test
-    name: "[SANDBOX] Build/Deploy JobRunner"
+    name: "[S] Build/Deploy JobRunner"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
