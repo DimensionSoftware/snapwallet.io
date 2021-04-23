@@ -24,7 +24,7 @@
         opacity: 0.1,
         easing: backOut,
       }}
-      out:fade={{ duration: 250 }}
+      out:fade={{ duration: 100 }}
     >
       {capitalize($toaster?.msg)}
     </div>

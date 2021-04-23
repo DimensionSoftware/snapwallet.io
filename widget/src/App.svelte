@@ -444,7 +444,7 @@
     :global(.modal-content .modal-header-back-button),
     :global(.modal-content .modal-footer) {
       will-change: filter;
-      transition: filter 0.3s;
+      transition: none;
       backface-visibility: hidden;
       perspective: 1000;
       transform: translate3d(0, 0, 0);
@@ -465,7 +465,7 @@
       :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-back-button),
       :global(.modal-content .modal-footer) {
-        filter: blur(15px) contrast(150%);
+        filter: blur(25px) contrast(150%);
         transition: none;
       }
     }
