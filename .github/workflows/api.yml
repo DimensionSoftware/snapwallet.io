@@ -24,23 +24,13 @@ jobs:
           . .env.ci
           make test
         working-directory: api
-  deploy-jobrunner: 
+  build-api:
+    name: "[DEV] Build/Push Docker Image"
     needs: test
-    name: Build/Deploy JobRunner
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/deploy-snap-job
-        with:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
-  deploy-api:
-    needs: test
-    name: Build/Deploy API
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build/Push Docker Image to GCR
-        uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+      - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
         with:
           gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
           registry: gcr.io
@@ -49,6 +39,21 @@ jobs:
           image_tag: ${{ github.sha }}
           context: ./api
           dockerfile: ./api/Dockerfile
+  deploy-api:
+    needs: build-api
+    name: "[DEV] Deploy Dev API"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-api
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+  deploy-jobrunner: 
+    needs: test
+    name: "[DEV] Build/Deploy JobRunner"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-snap-job
+        with:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
