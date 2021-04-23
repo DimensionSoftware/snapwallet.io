@@ -29,6 +29,7 @@ jobs:
     name: Build/Deploy JobRunner
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-snap-job
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
@@ -37,6 +38,7 @@ jobs:
     name: Build/Deploy API
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Build/Push Docker Image to GCR
         uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
         with:
@@ -49,4 +51,4 @@ jobs:
           dockerfile: ./api/Dockerfile
       - uses: ./.github/actions/deploy-api
         with:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
