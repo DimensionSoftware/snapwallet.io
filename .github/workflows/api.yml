@@ -39,9 +39,9 @@ jobs:
           image_tag: ${{ github.sha }}
           context: ./api
           dockerfile: ./api/Dockerfile
-  deploy-api:
+  deploy-development-api:
     needs: build-api
-    name: "[DEV] Deploy Dev API"
+    name: "[DEVELOPMENT] Deploy Dev API"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -50,9 +50,9 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GCP_PROJECT_ID: silken-phalanx-305703
           CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
-  deploy-jobrunner: 
+  deploy-development-jobrunner: 
     needs: test
-    name: "[DEV] Build/Deploy JobRunner"
+    name: "[DEVELOPMENT] Build/Deploy JobRunner"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -60,3 +60,25 @@ jobs:
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
           GCP_PROJECT_ID: silken-phalanx-305703
+  deploy-sandbox-api:
+    needs: build-api
+    name: "[SANDBOX] Deploy Dev API"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-api
+        with:
+          GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY }}
+          GCP_PROJECT_ID: ds-snap-sandbox
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
+  deploy-sandbox-jobrunner: 
+    needs: test
+    name: "[SANDBOX] Build/Deploy JobRunner"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-snap-job
+        with:
+          GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY }} 
+          GCP_PROJECT_ID: ds-snap-sandbox
+
