@@ -2,7 +2,7 @@
   export let fullscreen: boolean = false
 </script>
 
-<div class="modal-body" class:fullscreen>
+<div class="modal-body scroll-y" class:fullscreen>
   <slot />
 </div>
 
@@ -12,9 +12,6 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    overflow: hidden !important;
-    overflow-y: scroll;
-    scrollbar-width: thin;
     padding: 1rem 1.25rem 0 1.25rem;
     &.fullscreen {
       padding: 0;

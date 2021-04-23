@@ -60,7 +60,7 @@
   headerTitle={copy.headerTitle}
   on:close={() => dispatch('close')}
 >
-  <div class="scroll selector-container">
+  <div class="scroll-y selector-container">
     <h5 style="margin-bottom:1rem;">{copy.sectionOneTitle}</h5>
     <div class="card-vertical-margin">
       <IconCard

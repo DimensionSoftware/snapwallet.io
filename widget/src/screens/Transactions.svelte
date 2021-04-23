@@ -48,7 +48,7 @@
           Download
         </div>
       </a>
-      <div class="line-items">
+      <div class="line-items scroll-y">
         {#each transfers as transfer, i}
           <div
             style="margin-bottom: 1rem;"
@@ -142,9 +142,6 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow: hidden;
-    overflow-y: scroll;
-    scrollbar-width: thin;
     & > .line-item {
       display: flex;
       justify-content: space-between;
