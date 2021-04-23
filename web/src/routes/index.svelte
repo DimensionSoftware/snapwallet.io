@@ -128,13 +128,13 @@ Hey, you-- join us!  https://dimensionsoftware.com
     />
   </div>
 </main>
-<video
+<!-- <video
   loop
   playsinline
   autoplay
   muted
   src="https://video-previews.elements.envatousercontent.com/h264-video-previews/006e9a98-6b47-4a22-9d9a-643500d6c84e/25055399.mp4"
-/>
+/> -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"
   ><path
     fill="#ffffff"
