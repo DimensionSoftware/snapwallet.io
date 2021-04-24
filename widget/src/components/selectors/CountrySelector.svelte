@@ -90,9 +90,11 @@
     width: 100%;
     outline: none;
     border: none;
-    border-bottom: 1px solid var(--theme-color-lightened);
+    border-bottom: 1px solid var(--theme-text-color);
+    color: var(--theme-text-color);
     margin-bottom: 0.75rem;
     padding-left: 0;
+    background: var(--theme-modal-popup-background);
   }
   :global(.country-select > .fa-icon) {
     position: relative;
