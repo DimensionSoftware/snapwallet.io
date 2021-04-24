@@ -31,10 +31,16 @@
 
   const debounceSearch = searchTerm => {
     return setTimeout(() => {
-      filteredCountries = Object.values(countries).filter(c => {
-        const terms = [c.name, c.code, c.dial_code].join(',').toLowerCase()
-        return terms.includes(searchTerm)
-      })
+      filteredCountries = Object.values(countries)
+        .filter(c => {
+          const terms = [c.name, c.code, c.dial_code].join(',').toLowerCase()
+          return terms.includes(searchTerm)
+        })
+        .sort(a => {
+          // Sort by the closest text match first
+          if (a.name.toLowerCase().startsWith(searchTerm)) return -1
+          return 1
+        })
     }, 400)
   }
 
