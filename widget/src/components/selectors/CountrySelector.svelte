@@ -5,7 +5,6 @@
   import CountryCard from '../cards/CountryCard.svelte'
   import * as Flags from 'svelte-flagicon'
   import VirtualList from '../VirtualList.svelte'
-  import { focusFirstInput } from '../../util'
 
   export let visible = false
 
@@ -43,10 +42,6 @@
         })
     }, 400)
   }
-
-  onMount(() => {
-    setTimeout(focusFirstInput, 300)
-  })
 </script>
 
 <PopupSelector
