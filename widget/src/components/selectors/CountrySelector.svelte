@@ -1,16 +1,20 @@
 <script lang="ts">
-  import { createEventDispatcher } from 'svelte'
+  import { createEventDispatcher, onMount } from 'svelte'
   import { countries } from '../../util/country'
   import PopupSelector from '../inputs/PopupSelector.svelte'
   import CountryCard from '../cards/CountryCard.svelte'
   import * as Flags from 'svelte-flagicon'
-  import type { ICountry } from '../../types'
+  import VirtualList from '../VirtualList.svelte'
 
   export let visible = false
 
-  let filteredCountries: ICountry[] = Object.values(countries)
+  $: filteredCountries = Object.values(countries)
+
   let isSearching = false
   let searchTimeout
+
+  let listStart
+  let listEnd
 
   const dispatch = createEventDispatcher()
 
@@ -42,7 +46,7 @@
   on:close={() => dispatch('close')}
   headerTitle="Select Country"
 >
-  <div class="scroll-y selector-container">
+  <div class="selector-container">
     <input
       placeholder="Search..."
       class="search-input"
@@ -73,16 +77,21 @@
       <h5>Countries</h5>
     {/if}
     {#if filteredCountries.length}
-      {#each filteredCountries as country}
-        <CountryCard on:click={() => dispatch('select', { country })}>
+      <VirtualList
+        bind:start={listStart}
+        bind:end={listEnd}
+        items={filteredCountries}
+        let:item
+      >
+        <CountryCard on:click={() => dispatch('select', { country: item })}>
           <div style="display:flex;align-items:center;">
             <svelte:component
-              this={Flags[country.code[0] + country.code[1].toLowerCase()]}
+              this={Flags[item.code[0] + item.code[1].toLowerCase()]}
             />
-            <span style="margin-left:1rem;">{country.name}</span>
+            <span style="margin-left:1rem;">{item.name}</span>
           </div>
         </CountryCard>
-      {/each}
+      </VirtualList>
     {:else}
       No countries were found
     {/if}
