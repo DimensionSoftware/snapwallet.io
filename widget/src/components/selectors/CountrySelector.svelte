@@ -34,56 +34,54 @@
   }
 </script>
 
-{#if visible}
-  <PopupSelector
-    on:close={() => dispatch('close')}
-    headerTitle="Select Country"
-  >
-    <div class="scroll-y selector-container">
-      <input
-        placeholder="Search..."
-        class="search-input"
-        on:input={e => {
-          searchCountries(e.target?.value)
-        }}
-      />
+<PopupSelector
+  {visible}
+  on:close={() => dispatch('close')}
+  headerTitle="Select Country"
+>
+  <div class="scroll-y selector-container">
+    <input
+      placeholder="Search..."
+      class="search-input"
+      on:input={e => {
+        searchCountries(e.target?.value)
+      }}
+    />
+    <CountryCard
+      on:click={() => dispatch('select', { country: countries['US'] })}
+    >
+      <div style="display:flex;align-items:center;">
+        <Flags.Us />
+        <span style="margin-left:1rem;">United States</span>
+      </div>
+    </CountryCard>
+    <CountryCard
+      on:click={() => dispatch('select', { country: countries['GB'] })}
+    >
+      <div style="display:flex;align-items:center;">
+        <Flags.Gb />
+        <span style="margin-left:1rem;">United Kingdom</span>
+      </div>
+    </CountryCard>
 
-      <h5>Top</h5>
-      <CountryCard
-        on:click={() => dispatch('select', { country: countries['US'] })}
-      >
-        <div style="display:flex;align-items:center;">
-          <Flags.Us />
-          <span style="margin-left:1rem;">United States</span>
-        </div>
-      </CountryCard>
-      <CountryCard
-        on:click={() => dispatch('select', { country: countries['GB'] })}
-      >
-        <div style="display:flex;align-items:center;">
-          <Flags.Gb />
-          <span style="margin-left:1rem;">United Kingdom</span>
-        </div>
-      </CountryCard>
-
-      <h5>Countries</h5>
-      {#if filteredCountries.length}
-        {#each filteredCountries as country}
-          <CountryCard on:click={() => dispatch('select', { country })}>
-            <div style="display:flex;align-items:center;">
-              <svelte:component
-                this={Flags[country.code[0] + country.code[1].toLowerCase()]}
-              />
-              <span style="margin-left:1rem;">{country.name}</span>
-            </div>
-          </CountryCard>
-        {/each}
-      {:else}
-        No countries were found
-      {/if}
-    </div>
-  </PopupSelector>
-{/if}
+    <h5>Countries</h5>
+    {#if filteredCountries.length}
+      {#each filteredCountries as country}
+        <CountryCard on:click={() => dispatch('select', { country })}>
+          <div style="display:flex;align-items:center;">
+            <svelte:component
+              this={Flags[country.code[0] + country.code[1].toLowerCase()]}
+            />
+            <span style="margin-left:1rem;">{country.name}</span>
+          </div>
+        </CountryCard>
+      {/each}
+    {:else}
+      No countries were found
+    {/if}
+    <div class="spacer" />
+  </div>
+</PopupSelector>
 
 <style lang="scss">
   @import '../../styles/selectors.scss';
@@ -95,5 +93,9 @@
     border-bottom: 1px solid var(--theme-color-lightened);
     margin-bottom: 0.75rem;
     padding-left: 0;
+  }
+  :global(.country-select > .fa-icon) {
+    position: relative;
+    left: -0.4rem;
   }
 </style>
