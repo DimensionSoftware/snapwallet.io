@@ -49,7 +49,7 @@
   on:close={() => dispatch('close')}
   headerTitle="Select Country"
 >
-  <div class="scroll-y selector-container">
+  <div class="selector-container">
     <input
       placeholder="Search..."
       class="search-input"
