@@ -202,7 +202,7 @@ export class AuthManager {
       return 0
     }
 
-    const refreshTokenExpiresAt = exp * 100
+    const refreshTokenExpiresAt = exp * 1000
     return refreshTokenExpiresAt
   }
 
