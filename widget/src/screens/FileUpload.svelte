@@ -142,7 +142,7 @@
       Verify Identity
     {/if}
   </ModalHeader>
-  <ModalBody>
+  <ModalBody padded>
     {#if missingInfo.document.submitted.size}
       <div style="display:flex;align-items:center;">
         <span style="margin-right:0.5rem;">

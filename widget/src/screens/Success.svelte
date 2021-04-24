@@ -32,7 +32,7 @@
 
 <ModalContent>
   <ModalHeader hideBackButton>Success</ModalHeader>
-  <ModalBody>
+  <ModalBody padded>
     <div class="icon-box">
       <svg
         id="successAnimation"

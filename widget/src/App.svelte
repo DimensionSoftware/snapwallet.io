@@ -465,7 +465,7 @@
       :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-back-button),
       :global(.modal-content .modal-footer) {
-        filter: blur(25px) contrast(150%);
+        filter: blur(10px) contrast(150%);
         transition: none;
       }
     }

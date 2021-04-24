@@ -153,7 +153,7 @@
 
 <ModalContent>
   <ModalHeader>Your Address</ModalHeader>
-  <ModalBody>
+  <ModalBody padded>
     {#if missingInfo.address.isComplete}
       <h5 in:blur={{ duration: 300 }}>
         Your address was received. Update any detail:

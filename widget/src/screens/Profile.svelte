@@ -82,7 +82,7 @@
 
 <ModalContent>
   <ModalHeader>Tell Us About You</ModalHeader>
-  <ModalBody>
+  <ModalBody padded>
     {#if $userStore.isProfileComplete}
       <h5 in:blur={{ duration: 300 }}>
         Your profile was received. Update any detail:
