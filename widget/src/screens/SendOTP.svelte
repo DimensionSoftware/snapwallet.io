@@ -125,7 +125,7 @@
             inputmode="phone"
             autocapitalize="none"
             autocomplete="on"
-            autofocus
+            autofocus={!countrySelectorVisible}
             required
             type="tel"
             mask={isUSPhoneNumber ? Masks.PHONE : undefined}
