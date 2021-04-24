@@ -161,6 +161,7 @@
     {/if}
     <div style="margin-top:1rem;margin-bottom:0.75rem;">
       <IconCard
+        title="Select a Document Type"
         blend
         icon={iconCardProps.icon}
         on:click={() => {
@@ -173,7 +174,11 @@
         label={iconCardProps.label}
       />
     </div>
-    <div on:click={openFileBrowser} class="dropzone">
+    <div
+      on:click={openFileBrowser}
+      title="Click to Upload a Document"
+      class="dropzone"
+    >
       {#if selectedFileURI}
         <img
           class="selected-image"
@@ -251,7 +256,6 @@
     align-items: center;
     height: 60%;
     width: auto;
-    margin: 0.5rem;
     border: 1px dashed var(--theme-text-color);
     cursor: pointer;
     font-weight: 600;

@@ -67,6 +67,7 @@
         icon={faUniversity}
         on:click={() => push(Routes.PLAID_LINK)}
         label="Bank Account"
+        title="Connect Your Bank Account"
       />
     </div>
     <h5 style="margin-top:2rem;margin-bottom:1rem;">{copy.sectionTwoTitle}</h5>

@@ -7,6 +7,7 @@
   const dispatch = createEventDispatcher()
 
   export let icon
+  export let title: string
   export let label: string
   export let paddingSmall = false
   export let blend = false
@@ -15,7 +16,7 @@
 </script>
 
 <Card on:click={() => dispatch('click')}>
-  <div class="icon-card-container" class:blend class:paddingSmall>
+  <div {title} class="icon-card-container" class:blend class:paddingSmall>
     <div class="content-container">
       <FaIcon data={icon} />
       <div class="label">{label}</div>
