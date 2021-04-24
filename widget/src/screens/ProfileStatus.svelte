@@ -86,7 +86,7 @@
             <FaIcon data={faIdCard} />
           {/if}
         </span>
-        <b slot="step">Personal</b>
+        <b slot="step">Identity</b>
         <div class="description help" slot="info">
           {missingInfo.personal.message || personalInfoMessage}
         </div>

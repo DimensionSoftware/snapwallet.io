@@ -137,7 +137,7 @@
 <ModalContent>
   <ModalHeader>
     {#if missingInfo.document.isComplete}
-      Identity Completed
+      Identity Received
     {:else}
       Verify Identity
     {/if}
