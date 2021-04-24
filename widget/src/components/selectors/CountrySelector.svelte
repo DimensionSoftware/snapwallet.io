@@ -14,6 +14,7 @@
 
   let listStart
   let listEnd
+  let search
 
   const dispatch = createEventDispatcher()
 
@@ -42,6 +43,9 @@
         })
     }, 400)
   }
+
+  // focus search
+  onMount(() => setTimeout(() => search.focus(), 400))
 </script>
 
 <PopupSelector
@@ -52,6 +56,7 @@
   <div class="selector-container">
     <input
       placeholder="Search..."
+      bind:this={search}
       class="search-input"
       on:input={e => {
         searchCountries(e.target?.value)
