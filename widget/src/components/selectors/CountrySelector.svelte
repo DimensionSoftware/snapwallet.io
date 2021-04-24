@@ -10,7 +10,6 @@
 
   $: filteredCountries = Object.values(countries)
 
-  let isSearching = false
   let searchTimeout
 
   let listStart
@@ -21,7 +20,6 @@
   const searchCountries = val => {
     const searchTerm = val?.toLowerCase()
     if (!searchTerm) {
-      isSearching = false
       clearTimeout(searchTimeout)
       filteredCountries = Object.values(countries)
       return
@@ -32,7 +30,6 @@
 
   const debounceSearch = searchTerm => {
     return setTimeout(() => {
-      isSearching = true
       filteredCountries = Object.values(countries).filter(c => {
         const terms = [c.name, c.code, c.dial_code].join(',').toLowerCase()
         return terms.includes(searchTerm)
@@ -46,7 +43,7 @@
   on:close={() => dispatch('close')}
   headerTitle="Select Country"
 >
-  <div class="selector-container">
+  <div class="scroll-y selector-container">
     <input
       placeholder="Search..."
       class="search-input"
@@ -54,28 +51,6 @@
         searchCountries(e.target?.value)
       }}
     />
-    {#if !isSearching}
-      <CountryCard
-        on:click={() => dispatch('select', { country: countries['US'] })}
-      >
-        <div style="display:flex;align-items:center;">
-          <Flags.Us />
-          <span style="margin-left:1rem;">United States</span>
-        </div>
-      </CountryCard>
-      <CountryCard
-        on:click={() => dispatch('select', { country: countries['GB'] })}
-      >
-        <div style="display:flex;align-items:center;">
-          <Flags.Gb />
-          <span style="margin-left:1rem;">United Kingdom</span>
-        </div>
-      </CountryCard>
-    {/if}
-
-    {#if !isSearching}
-      <h5>Countries</h5>
-    {/if}
     {#if filteredCountries.length}
       <VirtualList
         bind:start={listStart}
