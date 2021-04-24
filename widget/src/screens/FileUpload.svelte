@@ -147,6 +147,7 @@
       <div style="display:flex;align-items:center;">
         <span style="margin-right:0.5rem;">
           <FaIcon
+            scale={0.75}
             data={!missingInfo.document.isValid ? faExclamationCircle : faCheck}
           />
         </span>
@@ -248,9 +249,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 0.5rem;
     height: 60%;
-    width: 100%;
+    width: auto;
+    margin: 0.5rem;
     border: 1px dashed var(--theme-text-color);
     cursor: pointer;
     font-weight: 600;
