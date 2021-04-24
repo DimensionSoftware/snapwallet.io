@@ -45,7 +45,7 @@
   }
 
   onMount(() => {
-    focusFirstInput()
+    setTimeout(focusFirstInput, 300)
   })
 </script>
 
