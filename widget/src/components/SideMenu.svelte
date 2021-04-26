@@ -65,7 +65,7 @@
     // open/close
     setTimeout(
       () => window.dispatchEvent(new Event(isExpanded ? 'blurry' : 'unblurry')),
-      isExpanded ? 75 : slow ? 250 : 175,
+      isExpanded ? 75 : slow ? 300 : 150,
     )
 
     if (isExpanded && window.AUTH_MANAGER.viewerIsLoggedIn()) {
@@ -254,7 +254,7 @@
     height: 150%;
     padding: 25% 1rem 0 4rem;
     transform: translateX(105%);
-    transition: transform 0.25s var(--theme-ease-in-expo);
+    transition: transform 0.35s var(--theme-ease-in-expo);
     z-index: 100;
     nav > div {
       display: flex;

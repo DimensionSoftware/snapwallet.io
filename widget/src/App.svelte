@@ -444,7 +444,7 @@
     :global(.modal-content .modal-header-back-button),
     :global(.modal-content .modal-footer) {
       will-change: filter;
-      transition: none;
+      transition: filter 0.3s;
       backface-visibility: hidden;
       perspective: 1000;
       transform: translate3d(0, 0, 0);
