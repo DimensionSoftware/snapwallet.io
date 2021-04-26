@@ -135,7 +135,7 @@
 
   const routes = {
     [Routes.ROOT]: wrap({
-      component: ($configStore.product ? Product : Home) as any,
+      component: ($configStore.product?.destinationTicker ? Product : Home) as any,
     }),
     [Routes.SELECT_PAYMENT]: wrap({
       component: SelectPayment as any,

@@ -30,8 +30,8 @@
 
   $: ({ flags } = $userStore)
   $: nextRoute = Routes.PROFILE
-  $: priceMap = $priceStore.prices[`USD_${product.destinationTicker}`]
-  $: exchangeRate = priceMap[product.destinationTicker]
+  $: priceMap = $priceStore.prices[`USD_${product.destinationTicker}`] || {}
+  $: exchangeRate = priceMap[product.destinationTicker] || 0
 
   const handleNextStep = async () => {
     const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore,
