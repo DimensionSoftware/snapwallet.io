@@ -201,7 +201,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isConfirmingTxn} on:mousedown={handleConfirmation}>
+    <Button glow isLoading={isConfirmingTxn} on:mousedown={handleConfirmation}>
       <div style="display:flex;justify-content:center;align-items:center;">
         <span style="margin-right:0.75rem;">
           {buttonText}

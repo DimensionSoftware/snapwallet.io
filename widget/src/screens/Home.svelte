@@ -41,6 +41,7 @@
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
+  let glow = false
 
   $: ({
     sourceCurrency,
@@ -210,6 +211,7 @@
             pattern={`[\\d,\\.]+`}
             on:change={e => {
               const val = Number(e.detail)
+              glow = !!val
               transactionStore.setSourceAmount(val, selectedDestinationPrice)
             }}
             defaultValue={sourceAmount
@@ -278,7 +280,11 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isCreatingTxnPreview} on:mousedown={handleNextStep}>
+    <Button
+      {glow}
+      isLoading={isCreatingTxnPreview}
+      on:mousedown={handleNextStep}
+    >
       <div style="display:flex;justify-content:center;align-items:center;">
         <span style="margin-right:0.75rem;">
           {isCreatingTxnPreview ? 'Previewing' : 'Preview'}
