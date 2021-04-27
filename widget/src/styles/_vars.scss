@@ -18,6 +18,7 @@ $textColor3: rgba($textColor, 0.7);
 $textColor4: rgba($textColor, 0.5);
 $textColorMuted: $textColor2;
 $buttonColor: $themeColor;
+$buttonGlowColor: rgba($themeColor, 0.2);
 $buttonTextColor: $themeColorInverse;
 // NOTE: avoid linear gradient for react native safeview embedding
 // - solid catch;  let's eventually make a RN theme and/or toggle

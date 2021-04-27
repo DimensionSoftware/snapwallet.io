@@ -5,11 +5,13 @@
   export let disabled: boolean = false
   export let isLoading: boolean = false
   export let title: string = ''
+  export let glow: boolean = false
 </script>
 
 <button
   {id}
   disabled={disabled || isLoading}
+  class:glow
   class:isLoading
   on:mousedown={() => dispatch('mousedown')}
   {title}
@@ -58,7 +60,7 @@
       border-radius: 0.5em 0.5em 6em 6em/0.1em 0.1em 1em 1em;
       border-top-left-radius: 0.5rem;
       border-top-right-radius: 0.5rem;
-      transition: opacity 0.3s ease-in 0.1s;
+      transition: opacity 0.15s ease-in;
     }
     &:hover {
       box-shadow: 0 0 0 1px var(--theme-color),
@@ -70,6 +72,10 @@
     }
     &:active,
     &:focus {
+      &.glow {
+        animation: infocus 0.35s !important;
+        animation-timing-function: var(--theme-ease-out-back);
+      }
       box-shadow: 0 0 0 1px var(--theme-button-color),
         0 6px 6px var(--theme-shadow-color);
       text-shadow: 0 1px 0 --var(--theme-button-text-color);
@@ -91,6 +97,14 @@
       &:before {
         display: none;
       }
+    }
+    &.glow {
+      &:hover {
+        animation: inherit;
+      }
+      box-shadow: 0 0 0 0 var(--theme-button-glow-color);
+      animation: glow 1.5s linear;
+      animation-iteration-count: infinite;
     }
     &.isLoading {
       .lds-circle {
