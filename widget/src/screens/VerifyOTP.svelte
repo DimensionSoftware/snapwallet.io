@@ -2,6 +2,7 @@
   import { getContext, onMount } from 'svelte'
   import { push } from 'svelte-spa-router'
   import { fade } from 'svelte/transition'
+  import { Masks } from '../types'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -19,9 +20,12 @@
 
   export let phoneVerificationOnly: boolean = false
 
-  let code = ''
+  const inputs = [1, 2, 3, 4, 5, 6]
   let isMakingRequest = false
   let isSendingCode = false
+  let codes = Array(6)
+  let cur = 0
+  let code = ''
 
   onMount(() => {
     resizeWidget(425, configStore.appName)
@@ -39,7 +43,11 @@
     Logger.debug('Verifying using OTP code:', code)
     const emailOrPhone = $userStore.phoneNumber || $userStore.emailAddress
     if (!(code?.length > 5) || !emailOrPhone) {
-      focus(document.getElementById('code'))
+      // reset
+      codes = Array(6)
+      code = ''
+      cur = 0
+      focus(document.getElementById('code-0'))
 
       toaster.pop({
         msg: 'Check for your code and try again!',
@@ -146,23 +154,38 @@
   <ModalBody>
     <div class="code" in:fade={{ duration: 300 }}>
       <Label label="Your Code">
-        <Input
-          id="code"
-          inputmode="numeric"
-          autocapitalize="none"
-          autocomplete="one-time-code"
-          autofocus
-          required
-          type="number"
-          placeholder="123456"
-          defaultValue={code}
-          on:change={e => {
-            code = e.detail
-            if (code.length >= 6) {
-              handleNextStep()
-            }
-          }}
-        />
+        {#each inputs as input, i}
+          <Input
+            id={`code-${i}`}
+            inputmode="numeric"
+            autocapitalize="none"
+            autocomplete="one-time-code"
+            autofocus={i === 0}
+            mask={Masks.CODE}
+            size={1}
+            required
+            type="text"
+            placeholder={i + 1}
+            maxlength="1"
+            autoselect
+            on:change={e => {
+              const num = e.detail
+              if (num.match(/\d/)) {
+                // set or replace current code
+                cur = i
+                codes[cur] = num
+                code = codes.reduce((acc, cur) => acc + cur ?? 0, '')
+                if (code.length === 6) {
+                  handleNextStep()
+                } else {
+                  // next
+                  if (num) cur = cur >= 5 ? 0 : cur + 1
+                  document.getElementById(`code-${cur}`)?.focus()
+                }
+              }
+            }}
+          />
+        {/each}
       </Label>
       <div class="resend" title="Check SPAM">
         Didn't get a code?
@@ -186,6 +209,35 @@
 
 <style lang="scss">
   @import '../styles/_vars.scss';
+  .code {
+    :global(label) {
+      display: flex;
+      flex-direction: row;
+      :global(> span.input-label) {
+        top: -2rem !important;
+        margin-left: 0 !important;
+      }
+      :global(.input-container) {
+        :global(#code-0, #code-1, #code-2, #code-3, #code-4, #code-5) {
+          text-align: center !important;
+          padding: 25px 0 25px 0 !important;
+          border-radius: 0;
+          border-right: 1px solid rgba(0, 0, 0, 0.1);
+          text-indent: 0;
+        }
+        :global(#code-0) {
+          border-top-left-radius: 0.5rem;
+          border-bottom-left-radius: 0.5rem;
+        }
+        :global(#code-5) {
+          border-top-right-radius: 0.5rem;
+          border-bottom-right-radius: 0.5rem;
+          border-right: 0 solid transparent;
+        }
+      }
+    }
+  }
+
   .code {
     margin: 10% 0.5rem 0 0.5rem;
   }
