@@ -1,5 +1,6 @@
 <script>
   import { onMount, tick } from 'svelte'
+  import { fly } from 'svelte/transition'
   import { Logger } from '../util'
   // props
   export let items
@@ -161,10 +162,12 @@
     bind:this={contents}
     style="padding-top: {top}px; padding-bottom: {bottom}px;"
   >
-    {#each visible as row (row.index)}
-      <svelte-virtual-list-row>
-        <slot item={row.data}>Missing template</slot>
-      </svelte-virtual-list-row>
+    {#each visible as row, i (row.index)}
+      <div in:fly={{ y: 25, duration: 250 + 50 * (i + 1) }}>
+        <svelte-virtual-list-row>
+          <slot item={row.data}>Missing template</slot>
+        </svelte-virtual-list-row>
+      </div>
     {/each}
   </svelte-virtual-list-contents>
 </svelte-virtual-list-viewport>
