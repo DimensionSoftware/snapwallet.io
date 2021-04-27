@@ -198,7 +198,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:mousedown={handleNextStep} isLoading={isPreviewing}>
+    <Button glow on:mousedown={handleNextStep} isLoading={isPreviewing}>
       <div class="btn-content">
         <span class="btn-text">Preview Buy</span>
         <FaIcon data={faLock} />
