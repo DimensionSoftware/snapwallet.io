@@ -15,6 +15,18 @@ export const focusFirstInput = (duration = 400) => {
   focus(document.querySelector('input:first-child'), duration)
 }
 
+export const onFocusSelect = node => {
+  const handleFocus = event => {
+    node && typeof node.select === 'function' && node.select()
+  }
+  node.addEventListener('focus', handleFocus)
+  return {
+    destroy() {
+      node.removeEventListener('focus', handleFocus)
+    },
+  }
+}
+
 export const onEnterPressed = (e, cb) => {
   if (onKeysPressed(e, ['Enter'])) cb()
 }
