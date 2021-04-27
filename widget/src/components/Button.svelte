@@ -60,7 +60,7 @@
       border-radius: 0.5em 0.5em 6em 6em/0.1em 0.1em 1em 1em;
       border-top-left-radius: 0.5rem;
       border-top-right-radius: 0.5rem;
-      transition: opacity 0.15s ease-in;
+      transition: opacity 0.1s ease-in;
     }
     &:hover {
       box-shadow: 0 0 0 1px var(--theme-color),
@@ -102,7 +102,7 @@
       &:hover {
         animation: inherit;
       }
-      box-shadow: 0 0 0 0 var(--theme-button-glow-color);
+      box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.5);
       animation: glow 1.5s linear;
       animation-iteration-count: infinite;
     }

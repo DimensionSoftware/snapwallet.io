@@ -36,7 +36,7 @@
           // buttonColor: '#fffc00',
           buttonColor: 'rgb(247, 127, 26)',
           buttonTextColor: '#000',
-          buttonGlowColor: 'rgba(247, 127, 26, .5)',
+          buttonGlowColor: 'rgb(247, 127, 26)',
           // successColor: '#fffc00',
           successColor: 'rgb(247, 127, 26)',
           textColor: '#fff',

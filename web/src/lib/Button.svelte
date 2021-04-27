@@ -41,7 +41,7 @@
            &:hover {
                animation: inherit;
            }
-           box-shadow: 0 0 0 0 var(--theme-button-glow-color);
+           box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), .5);
            animation: glow 1.5s linear;
            animation-iteration-count: infinite;
        }

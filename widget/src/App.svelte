@@ -342,7 +342,7 @@
     --theme-text-color-4: #{$textColor4};
     --theme-text-color-muted: #{$textColorMuted};
     --theme-button-color: #{$buttonColor};
-    --theme-button-glow-color: #{$buttonGlowColor};
+    --theme-button-glow-color: #{toRGB($buttonGlowColor)};
     --theme-button-text-color: #{$buttonTextColor};
     --theme-modal-background: #{$modalBackground};
     --theme-modal-popup-background: #{$modalPopupBackground};

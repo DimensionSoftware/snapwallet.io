@@ -70,10 +70,10 @@
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 8px var(--theme-button-glow-color);
+    box-shadow: 0 0 0 10px rgba(var(--theme-button-glow-color), 0);
   }
   100% {
     transform: scale(0.995);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0);
   }
 }
