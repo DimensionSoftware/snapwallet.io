@@ -2,7 +2,7 @@
   import { onMount, afterUpdate, createEventDispatcher } from 'svelte'
   import type { Masks } from '../../types'
   import { withMaskOnInput, isValidMaskInput } from '../../masks'
-  import { focus } from '../../util'
+  import { focus, onFocusSelect } from '../../util'
 
   const dispatch = createEventDispatcher()
   export let type: string = 'text'
@@ -12,12 +12,16 @@
   export let defaultValue: string | number = ''
   export let autocomplete: string = 'on'
   export let autofocus: boolean
+  export let autoselect: boolean
   export let required: boolean
+  export let maxlength: number
   export let pattern: string = ''
   export let mask: Masks
   export let id: string
 
   let isActive: boolean = Boolean(defaultValue)
+
+  const selectOnFocus = autoselect ? onFocusSelect : _ => {}
 
   onMount(function () {
     focus(document.querySelector('input[autofocus]'), 200)
@@ -33,8 +37,10 @@
     {placeholder}
     {autocomplete}
     {autofocus}
+    {maxlength}
     {pattern}
     {required}
+    use:selectOnFocus
     on:keydown={e => {
       if (mask) {
         const newVal = defaultValue + String.fromCharCode(e.keyCode)
@@ -53,6 +59,7 @@
         }
       }
     }}
+    on:click
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e.target.value)
