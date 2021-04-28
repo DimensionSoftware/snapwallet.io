@@ -42,7 +42,7 @@
     })
 
     // Open using a QR code
-    const canvas = document.getElementById('qr-canvas')
+    const canvas = document.getElementById('nft-qr-canvas')
     snap.createQR({ element: canvas, pixelSize: 100 })
   })
 </script>
@@ -76,7 +76,7 @@
       <Button>Buy</Button>
     </div>
     <div class="qr" on:mousedown={snap.openWeb}>
-      <canvas id="qr-canvas" />
+      <canvas id="nft-qr-canvas" />
     </div>
   </div>
 </Feature>
@@ -124,7 +124,7 @@
     position: absolute;
     bottom: -0.5rem;
     left: 1rem;
-    #qr-canvas {
+    #nft-qr-canvas {
       height: 100px;
       width: 100px;
       border: 0.5rem solid #fff;
