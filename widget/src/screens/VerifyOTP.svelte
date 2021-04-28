@@ -198,6 +198,9 @@
             autoselect
             defaultValue={codes[i]}
             on:keydown={e => {
+              if (isSendingCode || isMakingRequest) {
+                return e.preventDefault()
+              }
               if (e.keyCode === 8) {
                 e.preventDefault()
                 codes[i] = ''
