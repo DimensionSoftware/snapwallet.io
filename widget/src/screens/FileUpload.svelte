@@ -212,6 +212,7 @@
   </ModalBody>
   <ModalFooter>
     <Button
+      glow={selectedFileName !== ''}
       isLoading={isUploadingFile}
       disabled={!fileType}
       on:mousedown={handleNextStep}

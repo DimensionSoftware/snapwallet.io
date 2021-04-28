@@ -6,6 +6,8 @@
   export let isLoading: boolean = false
   export let title: string = ''
   export let glow: boolean = false
+
+  $: if (isLoading) glow = true
 </script>
 
 <button
@@ -53,21 +55,24 @@
       opacity: 0.2;
       background: linear-gradient(
         to bottom,
-        rgba(#fff, 0.2) 0%,
-        rgba(#fff, 0.15) 100%
+        rgba(#fff, 0.3) 0%,
+        rgba(#fff, 0.1) 100%
       );
       white-space: nowrap;
       border-radius: 0.5em 0.5em 6em 6em/0.1em 0.1em 1em 1em;
       border-top-left-radius: 0.5rem;
       border-top-right-radius: 0.5rem;
-      transition: opacity 0.1s ease-in;
+      transform: scale(1);
+      transition: transform 0.1s ease-out, opacity 0.1s ease-in;
     }
     &:hover {
       box-shadow: 0 0 0 1px var(--theme-color),
         0 8px 6px var(--theme-shadow-color);
       transition: none;
       &:before {
-        opacity: 0.3;
+        transform: scale(1.1);
+        transition: none;
+        opacity: 0.2;
       }
     }
     &:active,
@@ -83,7 +88,8 @@
       animation: infocus 0.35s;
       animation-timing-function: var(--theme-ease-out-back);
       &:before {
-        opacity: 0.08;
+        transform: scale(1.1);
+        opacity: 0.15;
         transition: none;
       }
     }
@@ -95,7 +101,8 @@
       opacity: 0.83;
       box-shadow: none;
       &:before {
-        display: none;
+        transform: scale(1);
+        opacity: 0;
       }
     }
     &.glow {

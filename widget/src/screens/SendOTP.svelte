@@ -161,7 +161,11 @@
     {/if}
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isMakingRequest} on:mousedown={handleNextStep}>
+    <Button
+      glow={$userStore.emailAddress.indexOf('@') > -1}
+      isLoading={isMakingRequest}
+      on:mousedown={handleNextStep}
+    >
       {#if isMakingRequest}
         Sending Code...
       {:else}
