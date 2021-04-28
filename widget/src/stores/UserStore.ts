@@ -14,6 +14,7 @@ type VirtualProfile = {
   fullName?: string
   socialSecurityNumber?: string
   birthDate?: string
+  phone?: string
   address?: {
     street1: string
     street2?: string
@@ -79,6 +80,7 @@ function createStore() {
         birthDate: '',
         socialSecurityNumber: '',
         address: initialAddress,
+        phone: '',
       },
       isProfileComplete: false,
       isProfilePending: false,
@@ -125,6 +127,10 @@ function createStore() {
             state: '**',
             postalCode: '*****',
           }
+        }
+
+        if (item.kind === UserProfileFieldTypes.PHONE) {
+          virtual.phone = Array(item.length).fill('*').join('')
         }
       })
 

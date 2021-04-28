@@ -135,7 +135,11 @@
             required
             type="tel"
             mask={isUSPhoneNumber ? Masks.PHONE : undefined}
-            placeholder={isUSPhoneNumber ? '222 333-4444' : '222333444'}
+            placeholder={$userStore.virtual.phone
+              ? $userStore.virtual.phone
+              : isUSPhoneNumber
+              ? '222 333-4444'
+              : '222333444'}
             defaultValue={$userStore.phoneNumber}
             on:change={e => {
               userStore.setPhoneNumber(e.detail)
