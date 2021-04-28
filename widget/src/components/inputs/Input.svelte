@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { onMount, afterUpdate, createEventDispatcher } from 'svelte'
+  import { onMount, createEventDispatcher } from 'svelte'
   import type { Masks } from '../../types'
   import { withMaskOnInput, isValidMaskInput } from '../../masks'
   import { focus, onFocusSelect } from '../../util'
@@ -59,6 +59,7 @@
         }
       }
     }}
+    on:keydown
     on:click
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)

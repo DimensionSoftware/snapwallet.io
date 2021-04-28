@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getContext, onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
   import { push } from 'svelte-spa-router'
   import { fade } from 'svelte/transition'
   import { Masks } from '../types'
@@ -23,13 +23,30 @@
   const inputs = [1, 2, 3, 4, 5, 6]
   let isMakingRequest = false
   let isSendingCode = false
-  let codes = Array(6)
-  let cur = 0
   let code = ''
+
+  $: codes = Array(6)
+  $: cur = 0
 
   onMount(() => {
     resizeWidget(425, configStore.appName)
+    window.addEventListener('paste', handlePaste)
   })
+
+  onDestroy(() => {
+    window.removeEventListener('paste', handlePaste)
+  })
+
+  const handlePaste = e => {
+    const numString = e.clipboardData.getData('Text')
+    if (numString.length >= 6) {
+      numString.split('').forEach((n, idx) => {
+        codes[idx] = n
+      })
+      // submit
+      handleNextStep()
+    }
+  }
 
   const resendCode = async () => {
     Logger.debug('Resending email')
@@ -168,6 +185,23 @@
             placeholder={i + 1}
             maxlength="1"
             autoselect
+            on:keydown={e => {
+              if (e.keyCode === 8) {
+                // backspace over input
+                cur = cur - 1
+                if (cur < 0) cur = 0
+                const el = document.getElementById(`code-${cur}`)
+                el.focus()
+              } else if ([38, 40].includes(e.keyCode)) {
+                // up/down arrows
+                cur = i
+                const el = document.getElementById(`code-${cur}`)
+                let v = parseInt(el.value) || 0
+                if (e.keyCode == 38) v = v >= 9 ? 9 : v + 1
+                if (e.keyCode == 40) v = v <= 0 ? 0 : v - 1
+                el.value = v
+              }
+            }}
             on:change={e => {
               const num = e.detail
               if (num.match(/\d/)) {
