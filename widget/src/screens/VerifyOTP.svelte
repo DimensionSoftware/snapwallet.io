@@ -25,24 +25,28 @@
   let isSendingCode = false
   let code = ''
 
-  $: codes = Array(6)
+  $: codes = Array(6).fill('')
   $: cur = 0
 
   onMount(() => {
-    resizeWidget(425, configStore.appName)
+    resizeWidget(425, $configStore.appName)
     window.addEventListener('paste', handlePaste)
-  })
 
-  onDestroy(() => {
-    window.removeEventListener('paste', handlePaste)
+    return () => {
+      window.removeEventListener('paste', handlePaste)
+    }
   })
 
   const handlePaste = e => {
-    const numString = e.clipboardData.getData('Text')
-    if (numString.length >= 6) {
-      numString.split('').forEach((n, idx) => {
-        codes[idx] = n
-      })
+    e.preventDefault()
+    const numString = e.clipboardData.getData('Text').slice(0, 6)
+    numString.split('').forEach((n, idx) => {
+      codes[idx] = n
+    })
+    code = codes.join('')
+    cur = codes.length > 0 ? codes.length - 1 : 0
+    focus(document.getElementById(`code-${cur}`))
+    if (codes.length >= 6) {
       // submit
       handleNextStep()
     }
@@ -59,15 +63,25 @@
   const verifyOTP = async (): Promise<OneTimePasscodeVerifyResponse> => {
     Logger.debug('Verifying using OTP code:', code)
     const emailOrPhone = $userStore.phoneNumber || $userStore.emailAddress
-    if (!(code?.length > 5) || !emailOrPhone) {
-      // reset
-      codes = Array(6)
-      code = ''
-      cur = 0
-      focus(document.getElementById('code-0'))
 
+    if (!emailOrPhone) {
       toaster.pop({
-        msg: 'Check for your code and try again!',
+        msg: 'Please provide a valid email address and try again.',
+        error: true,
+      })
+
+      setTimeout(() => {
+        codes = Array(6).fill('')
+        code = codes.join('')
+        push(Routes.SEND_OTP)
+      }, 800)
+
+      return
+    }
+
+    if (!(code?.length > 5)) {
+      toaster.pop({
+        msg: 'Please check your code and try again.',
         error: true,
       })
 
@@ -150,9 +164,6 @@
     } catch (e) {
       if (e.body?.code) {
         toaster.pop({ msg: e.body?.message, error: true })
-        setTimeout(() => {
-          push(Routes.SEND_OTP)
-        }, 800)
       }
     } finally {
       setTimeout(() => (isMakingRequest = false), 700)
@@ -185,13 +196,16 @@
             placeholder={i + 1}
             maxlength="1"
             autoselect
+            defaultValue={codes[i]}
             on:keydown={e => {
               if (e.keyCode === 8) {
+                e.preventDefault()
+                codes[i] = ''
+                code = codes.join('')
                 // backspace over input
-                cur = cur - 1
-                if (cur < 0) cur = 0
+                cur = cur < 0 ? 0 : cur - 1
                 const el = document.getElementById(`code-${cur}`)
-                el.focus()
+                el?.focus()
               } else if ([38, 40].includes(e.keyCode)) {
                 // up/down arrows
                 cur = i
@@ -200,22 +214,28 @@
                 if (e.keyCode == 38) v = v >= 9 ? 9 : v + 1
                 if (e.keyCode == 40) v = v <= 0 ? 0 : v - 1
                 el.value = v
+              } else if (e.keyCode === 37) {
+                // Left arrow
+                cur = cur > 0 ? cur - 1 : 0
+                const el = document.getElementById(`code-${cur}`)
+                el?.focus()
+              } else if (e.keyCode === 39) {
+                // Right arrow
+                cur = cur < 5 ? cur + 1 : 5
+                const el = document.getElementById(`code-${cur}`)
+                el?.focus()
               }
             }}
             on:change={e => {
               const num = e.detail
-              if (num.match(/\d/)) {
-                // set or replace current code
-                cur = i
-                codes[cur] = num
-                code = codes.reduce((acc, cur) => acc + cur ?? 0, '')
-                if (code.length === 6) {
-                  handleNextStep()
-                } else {
-                  // next
-                  if (num) cur = cur >= 5 ? 0 : cur + 1
-                  document.getElementById(`code-${cur}`)?.focus()
-                }
+              codes[i] = num
+              code = codes.join('')
+
+              cur = !num ? i : i >= 5 ? 5 : i + 1
+              document.getElementById(`code-${cur}`)?.focus()
+
+              if (code.length === 6) {
+                handleNextStep()
               }
             }}
           />
