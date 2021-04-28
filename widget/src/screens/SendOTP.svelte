@@ -12,7 +12,13 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { toaster } from '../stores/ToastStore'
-  import { Logger, onEnterPressed, focus, resizeWidget } from '../util'
+  import {
+    Logger,
+    onEnterPressed,
+    focus,
+    resizeWidget,
+    focusFirstInput,
+  } from '../util'
   import { Routes } from '../constants'
   import { Masks } from '../types'
   import { unMaskValue } from '../masks'
@@ -164,11 +170,15 @@
 {#if countrySelectorVisible}
   <CountrySelector
     visible
-    on:close={() => (countrySelectorVisible = false)}
+    on:close={() => {
+      countrySelectorVisible = false
+      focusFirstInput()
+    }}
     on:select={e => {
       const { country } = e?.detail
       country && userStore.setPhoneNumberCountry(country)
       countrySelectorVisible = false
+      focusFirstInput()
     }}
   />
 {/if}
