@@ -49,9 +49,9 @@
       },
     })
 
-    // Open using a QR code
-    const canvas = document.getElementById('qr-canvas')
-    snap.createQR({ element: canvas, pixelSize: 100 })
+    // TODO: Open using a QR code
+    // const canvas = document.getElementById('qr-canvas')
+    // snap.createQR({ element: canvas, pixelSize: 100 })
   })
 </script>
 
