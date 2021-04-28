@@ -61,6 +61,7 @@
     }}
     on:keydown
     on:click
+    on:focus={() => dispatch('focus')}
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)
       dispatch('change', e.target.value)

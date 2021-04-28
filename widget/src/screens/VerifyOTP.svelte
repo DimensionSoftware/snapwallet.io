@@ -197,6 +197,9 @@
             maxlength="1"
             autoselect
             defaultValue={codes[i]}
+            on:focus={() => {
+              cur = i
+            }}
             on:keydown={e => {
               if (isSendingCode || isMakingRequest) {
                 return e.preventDefault()
@@ -206,7 +209,7 @@
                 codes[i] = ''
                 code = codes.join('')
                 // backspace over input
-                cur = cur < 0 ? 0 : cur - 1
+                cur = cur <= 0 ? 0 : cur - 1
                 const el = document.getElementById(`code-${cur}`)
                 el?.focus()
               } else if ([38, 40].includes(e.keyCode)) {
