@@ -15,10 +15,10 @@ const (
 )
 
 type Job struct {
-	ID         string   `json:"id"`
-	Kind       Kind     `json:"kind"`
-	Status     Status   `json:"status"`
-	RelatedIDs []string `json:"relatedIDs"`
-	CreatedAt  int64    `json:"createdAt"`
-	UpdatedAt  int64    `json:"updatedAt"`
+	ID         string   `json:"id" firestore:"id"`
+	Kind       Kind     `json:"kind" firestore:"kind"`
+	Status     Status   `json:"status" firestore:"status"`
+	RelatedIDs []string `json:"relatedIDs" firestore:"relatedIDs"`
+	CreatedAt  int64    `json:"createdAt" firestore:"createdAt"`
+	UpdatedAt  int64    `json:"updatedAt" firestore:"updatedAt"`
 }

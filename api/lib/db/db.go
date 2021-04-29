@@ -13,6 +13,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
+	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/usedrefreshtoken"
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -138,6 +139,19 @@ func (db Db) SaveUser(ctx context.Context, tx *firestore.Transaction, u *user.Us
 		_, err = ref.Set(ctx, encryptedUser)
 	} else {
 		err = tx.Set(ref, encryptedUser)
+	}
+
+	return err
+}
+
+func (db Db) SaveJob(ctx context.Context, tx *firestore.Transaction, j *job.Job) error {
+	var err error
+
+	ref := db.Firestore.Collection("jobs").Doc(string(j.ID))
+	if tx == nil {
+		_, err = ref.Set(ctx, j)
+	} else {
+		err = tx.Set(ref, j)
 	}
 
 	return err
