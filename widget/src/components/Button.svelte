@@ -41,8 +41,9 @@
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
-    transition: background 0.3s ease-in 0.1s;
+    transition: none;
     z-index: 10;
+    overflow: hidden;
     // gloss fix
     &:before {
       position: absolute;
@@ -52,7 +53,7 @@
       right: -1px;
       bottom: -1px;
       left: -1px;
-      opacity: 0.2;
+      opacity: 0.3;
       background: linear-gradient(
         to bottom,
         rgba(#fff, 0.3) 0%,
@@ -72,7 +73,7 @@
       &:before {
         transform: scale(1.1);
         transition: none;
-        opacity: 0.2;
+        opacity: 0.4;
       }
     }
     &:active,
@@ -89,7 +90,7 @@
       animation-timing-function: var(--theme-ease-out-back);
       &:before {
         transform: scale(1.1);
-        opacity: 0.15;
+        opacity: 0.3;
         transition: none;
       }
     }
