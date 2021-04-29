@@ -1205,39 +1205,45 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 		if err != nil {
 			return nil, err
 		}
-		if len(accounts) == 0 {
-			return &proto.WyrePaymentMethods{}, nil
+		if len(accounts) > 0 {
+			wyreAccountID = accounts[0].ID
 		}
 
-		wyreAccountID = accounts[0].ID
-	}
-
-	pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccountID)
-	if err != nil {
-		return nil, err
 	}
 
 	var out []*proto.WyrePaymentMethod
-	for _, pm := range pms {
-		out = append(out, &proto.WyrePaymentMethod{
-			LifecyleStatus:        proto.LifecycleStatus_L_CREATED,
-			Id:                    string(pm.ID),
-			Status:                pm.Status,
-			Name:                  pm.Name,
-			Last4:                 pm.Last4,
-			ChargeableCurrencies:  pm.ChargeableCurrencies,
-			DepositableCurrencies: pm.DepositableCurrencies,
-		})
-	}
 
-	if len(out) == 0 {
-		pitems, err := s.Db.GetAllPlaidItems(ctx, nil, u.ID)
+	var pms []*paymentmethod.PaymentMethod
+	if wyreAccountID != "" {
+		pms, err = s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccountID)
 		if err != nil {
 			return nil, err
 		}
 
-		for _, plaidItem := range pitems {
-			log.Printf("Fux %#v\n", plaidItem)
+		for _, pm := range pms {
+			out = append(out, &proto.WyrePaymentMethod{
+				LifecyleStatus:        proto.LifecycleStatus_L_CREATED,
+				Id:                    string(pm.ID),
+				Status:                pm.Status,
+				Name:                  pm.Name,
+				Last4:                 pm.Last4,
+				ChargeableCurrencies:  pm.ChargeableCurrencies,
+				DepositableCurrencies: pm.DepositableCurrencies,
+			})
+		}
+	}
+
+	pitems, err := s.Db.GetAllPlaidItems(ctx, nil, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, plaidItem := range pitems {
+		for _, pm := range pms {
+			if item.ID(pm.PlaidItemID) == plaidItem.ID {
+				continue
+			}
+
 			for _, accountID := range plaidItem.AccountIDs {
 				out = append(out, &proto.WyrePaymentMethod{
 					LifecyleStatus: proto.LifecycleStatus_L_PENDING,
@@ -1247,6 +1253,7 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 				})
 			}
 		}
+
 	}
 
 	return &proto.WyrePaymentMethods{
