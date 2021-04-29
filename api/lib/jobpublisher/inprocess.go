@@ -42,3 +42,13 @@ func (pub InProcessPublisher) PublishJob(ctx context.Context, j *job.Job) error 
 
 	return nil
 }
+
+func (pub InProcessPublisher) MarkJobDone(ctx context.Context, j *job.Job) error {
+	j.Status = job.StatusDone
+
+	return pub.Db.SaveJob(ctx, nil, j)
+}
+
+/*
+	MarkJobDone(context.Context, *job.Job) error
+*/

@@ -11,6 +11,7 @@ import (
 
 type InnerJobPublisher interface {
 	PublishJob(context.Context, *job.Job) error
+	MarkJobDone(context.Context, *job.Job) error
 }
 
 type Manager struct {
