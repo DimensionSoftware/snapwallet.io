@@ -1239,11 +1239,15 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 	}
 
 	for _, plaidItem := range pitems {
+		pmCreated := false
 		for _, pm := range pms {
 			if item.ID(pm.PlaidItemID) == plaidItem.ID {
-				continue
+				pmCreated = true
+				break
 			}
+		}
 
+		if !pmCreated {
 			for _, accountID := range plaidItem.AccountIDs {
 				out = append(out, &proto.WyrePaymentMethod{
 					LifecyleStatus: proto.LifecycleStatus_L_PENDING,
@@ -1253,7 +1257,6 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 				})
 			}
 		}
-
 	}
 
 	return &proto.WyrePaymentMethods{
