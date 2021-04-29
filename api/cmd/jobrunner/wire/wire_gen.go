@@ -94,6 +94,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		PubSub: pubsubClient,
 	}
 	pubSubPublisher := jobpublisher.PubSubPublisher{
+		Db:     dbDb,
 		PubSub: pubsubManager,
 	}
 	jobmanagerManager := jobmanager.Manager{

@@ -18,7 +18,12 @@ type InProcessPublisher struct {
 	WyreManager *wyre.Manager
 }
 
-func (pub InProcessPublisher) PublishJob(_ context.Context, j *job.Job) error {
+func (pub InProcessPublisher) PublishJob(ctx context.Context, j *job.Job) error {
+	err := pub.Db.SaveJob(ctx, nil, j)
+	if err != nil {
+		return err
+	}
+
 	go func() {
 		log.Printf("Job started locally: %#v\n", j)
 

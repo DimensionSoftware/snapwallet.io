@@ -126,6 +126,7 @@ func InitializeServer() (server.Server, error) {
 		PubSub: pubsubClient,
 	}
 	pubSubPublisher := jobpublisher.PubSubPublisher{
+		Db:     dbDb,
 		PubSub: pubsubManager,
 	}
 	remedymanagerManager := &remedymanager.Manager{
