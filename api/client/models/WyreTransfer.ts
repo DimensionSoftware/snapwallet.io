@@ -20,17 +20,15 @@ export class WyreTransfer {
     'destCurrency'?: string;
     'sourceAmount'?: number;
     'destAmount'?: number;
+    'sourceName'?: string;
+    'destName'?: string;
     'message'?: string;
     'exchangeRate'?: number;
     'fees'?: { [key: string]: number; };
-    'totalFees'?: number;
-    'blockhash'?: string;
-    'networkTxId'?: string;
+    'blockchainTxId'?: string;
     'status'?: string;
     'createdAt'?: string;
-    'expiresAt'?: string;
-    'completedAt'?: string;
-    'cancelledAt'?: string;
+    'closedAt'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -78,6 +76,18 @@ export class WyreTransfer {
             "format": "double"
         },
         {
+            "name": "sourceName",
+            "baseName": "sourceName",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "destName",
+            "baseName": "destName",
+            "type": "string",
+            "format": ""
+        },
+        {
             "name": "message",
             "baseName": "message",
             "type": "string",
@@ -96,20 +106,8 @@ export class WyreTransfer {
             "format": "double"
         },
         {
-            "name": "totalFees",
-            "baseName": "totalFees",
-            "type": "number",
-            "format": "double"
-        },
-        {
-            "name": "blockhash",
-            "baseName": "blockhash",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "networkTxId",
-            "baseName": "networkTxId",
+            "name": "blockchainTxId",
+            "baseName": "blockchainTxId",
             "type": "string",
             "format": ""
         },
@@ -126,20 +124,8 @@ export class WyreTransfer {
             "format": ""
         },
         {
-            "name": "expiresAt",
-            "baseName": "expiresAt",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "completedAt",
-            "baseName": "completedAt",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "cancelledAt",
-            "baseName": "cancelledAt",
+            "name": "closedAt",
+            "baseName": "closedAt",
             "type": "string",
             "format": ""
         }    ];

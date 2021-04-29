@@ -358,6 +358,25 @@ message WyreTransfer {
   string dest_currency = 5;
   double source_amount = 6;
   double dest_amount = 7;
+  string source_name = 8;
+  string dest_name = 9;
+  string message = 10;
+  double exchange_rate = 11;
+  map<string, double> fees = 12;
+  string blockchainTxId = 13;
+  string status = 14;
+  string created_at = 15;
+  string closed_at = 16;
+}
+
+message WyreTransferDetail {
+  string id = 1;
+  string source = 2;
+  string dest = 3;
+  string source_currency = 4;
+  string dest_currency = 5;
+  double source_amount = 6;
+  double dest_amount = 7;
   string message = 8;
   double exchange_rate = 9;
   map<string, double> fees = 10;

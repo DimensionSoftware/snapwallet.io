@@ -16,17 +16,15 @@ func WyreTransferToProto(t *Transfer) *proto.WyreTransfer {
 		DestCurrency:   t.DestCurrency,
 		SourceAmount:   t.SourceAmount,
 		DestAmount:     t.DestAmount,
+		SourceName:     t.SourceName,
+		DestName:       t.DestName,
 		Message:        t.Message,
 		ExchangeRate:   t.ExchangeRate,
 		Fees:           t.Fees,
-		TotalFees:      t.TotalFees,
-		Blockhash:      t.BlockchainTx.Blockhash,
-		NetworkTxId:    t.BlockchainTx.NetworkTxID,
 		Status:         t.Status,
+		BlockchainTxId: t.BlockchanTxID,
 		CreatedAt:      formatEpochMSAsRFC3339(t.CreatedAt),
-		ExpiresAt:      formatEpochMSAsRFC3339(t.ExpiresAt),
-		CompletedAt:    formatEpochMSAsRFC3339(t.CompletedAt),
-		CancelledAt:    formatEpochMSAsRFC3339(t.CancelledAt),
+		ClosedAt:       formatEpochMSAsRFC3339(t.ClosedAt),
 	}
 }
 

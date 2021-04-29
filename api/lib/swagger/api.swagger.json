@@ -1228,6 +1228,12 @@
           "type": "number",
           "format": "double"
         },
+        "sourceName": {
+          "type": "string"
+        },
+        "destName": {
+          "type": "string"
+        },
         "message": {
           "type": "string"
         },
@@ -1242,14 +1248,7 @@
             "format": "double"
           }
         },
-        "totalFees": {
-          "type": "number",
-          "format": "double"
-        },
-        "blockhash": {
-          "type": "string"
-        },
-        "networkTxId": {
+        "blockchainTxId": {
           "type": "string"
         },
         "status": {
@@ -1258,13 +1257,7 @@
         "createdAt": {
           "type": "string"
         },
-        "expiresAt": {
-          "type": "string"
-        },
-        "completedAt": {
-          "type": "string"
-        },
-        "cancelledAt": {
+        "closedAt": {
           "type": "string"
         }
       }

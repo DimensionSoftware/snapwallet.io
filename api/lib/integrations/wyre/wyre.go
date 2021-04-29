@@ -87,6 +87,26 @@ type TransferBlockchainTx struct {
 
 type Transfer struct {
 	ID             string             `json:"id"`             // i.e. "TF-4F3HRUYPNFY"
+	CustomID       string             `json:"customId"`       // an optional custom ID to tag the transfer
+	Source         string             `json:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
+	Dest           string             `json:"dest"`           // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
+	SourceAmount   float64            `json:"sourceAmount"`   // i.e. 5
+	DestAmount     float64            `json:"destAmount"`     // i.e. 0.01
+	SourceCurrency string             `json:"sourceCurrency"` // i.e. "USD"
+	DestCurrency   string             `json:"destCurrency"`   // i.e. "BTC"
+	SourceName     string             `json:"sourceName"`     // i.e. "Payment Method TestPaymentMethodApi"
+	DestName       string             `json:"destName"`       // i.e. "Primary Account"
+	Message        string             `json:"message"`        // i.e. "Payment for DorianNakamoto@sendwyre.com"
+	Status         string             `json:"status"`         // i.e. "PENDING"
+	ExchangeRate   float64            `json:"exchangeRate"`   // i.e. 499.00
+	Fees           map[string]float64 `json:"fees"`           // i.e. { "USD": 0.1, "BTC": 0 }
+	BlockchanTxID  string             `json:"blockchainTxId"`
+	CreatedAt      int64              `json:"createdAt"` // i.e. 1541552388000 (epoch)
+	ClosedAt       int64              `json:"closedAt"`  // i.e. 1541552388000 (epoch)
+}
+
+type TransferDetail struct {
+	ID             string             `json:"id"`             // i.e. "TF-4F3HRUYPNFY"
 	Owner          string             `json:"owner"`          // i.e. "account:AC-WYUR7ZZ6UMU"
 	CustomID       string             `json:"customId"`       // an optional custom ID to tag the transfer
 	Source         string             `json:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
