@@ -20,13 +20,17 @@ export class WyreTransfer {
     'destCurrency'?: string;
     'sourceAmount'?: number;
     'destAmount'?: number;
+    'message'?: string;
     'exchangeRate'?: number;
     'fees'?: { [key: string]: number; };
+    'totalFees'?: number;
     'blockhash'?: string;
     'networkTxId'?: string;
     'status'?: string;
     'createdAt'?: string;
     'expiresAt'?: string;
+    'completedAt'?: string;
+    'cancelledAt'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -74,6 +78,12 @@ export class WyreTransfer {
             "format": "double"
         },
         {
+            "name": "message",
+            "baseName": "message",
+            "type": "string",
+            "format": ""
+        },
+        {
             "name": "exchangeRate",
             "baseName": "exchangeRate",
             "type": "number",
@@ -83,6 +93,12 @@ export class WyreTransfer {
             "name": "fees",
             "baseName": "fees",
             "type": "{ [key: string]: number; }",
+            "format": "double"
+        },
+        {
+            "name": "totalFees",
+            "baseName": "totalFees",
+            "type": "number",
             "format": "double"
         },
         {
@@ -112,6 +128,18 @@ export class WyreTransfer {
         {
             "name": "expiresAt",
             "baseName": "expiresAt",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "completedAt",
+            "baseName": "completedAt",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "cancelledAt",
+            "baseName": "cancelledAt",
             "type": "string",
             "format": ""
         }    ];

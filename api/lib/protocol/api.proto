@@ -358,13 +358,17 @@ message WyreTransfer {
   string dest_currency = 5;
   double source_amount = 6;
   double dest_amount = 7;
-  double exchange_rate = 8;
-  map<string, double> fees = 9;
-  string blockhash = 10;
-  string network_tx_id = 11;
-  string status = 12;
-  string created_at = 13;
-  string expires_at = 14;
+  string message = 8;
+  double exchange_rate = 9;
+  map<string, double> fees = 10;
+  double total_fees = 11;
+  string blockhash = 12;
+  string network_tx_id = 13;
+  string status = 14;
+  string created_at = 15;
+  string expires_at = 16;
+  string completed_at = 17;
+  string cancelled_at = 18;
 }
 
 message WyreTransfers {

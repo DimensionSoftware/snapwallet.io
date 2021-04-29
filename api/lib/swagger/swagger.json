@@ -1340,6 +1340,9 @@
           "type": "number",
           "format": "double"
         },
+        "message": {
+          "type": "string"
+        },
         "exchangeRate": {
           "type": "number",
           "format": "double"
@@ -1350,6 +1353,10 @@
             "type": "number",
             "format": "double"
           }
+        },
+        "totalFees": {
+          "type": "number",
+          "format": "double"
         },
         "blockhash": {
           "type": "string"
@@ -1364,6 +1371,12 @@
           "type": "string"
         },
         "expiresAt": {
+          "type": "string"
+        },
+        "completedAt": {
+          "type": "string"
+        },
+        "cancelledAt": {
           "type": "string"
         }
       }
