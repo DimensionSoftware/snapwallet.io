@@ -11,7 +11,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
-	"github.com/khoerling/flux/api/lib/interfaces/ijobpublisher"
+	"github.com/khoerling/flux/api/lib/jobmanager"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"github.com/khoerling/flux/api/lib/remedymanager"
 	"github.com/plaid/plaid-go/plaid"
@@ -37,7 +37,7 @@ type Server struct {
 	JwtVerifier                   *auth.JwtVerifier
 	AuthManager                   *auth.Manager
 	Pusher                        *pusher.Manager
-	JobPublisher                  ijobpublisher.JobPublisher
+	JobPublisher                  jobmanager.IJobPublisher
 	RemedyManager                 *remedymanager.Manager
 	config.APIHost
 	config.WebHost
