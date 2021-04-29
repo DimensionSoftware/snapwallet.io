@@ -1237,6 +1237,7 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 		}
 
 		for _, plaidItem := range pitems {
+			log.Printf("Fux %#v\n", plaidItem)
 			for _, accountID := range plaidItem.AccountIDs {
 				out = append(out, &proto.WyrePaymentMethod{
 					LifecyleStatus: proto.LifecycleStatus_L_PENDING,
