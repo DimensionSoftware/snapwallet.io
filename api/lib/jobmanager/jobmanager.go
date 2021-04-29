@@ -2,6 +2,7 @@ package jobmanager
 
 import (
 	"context"
+	"time"
 
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/db/models/job"
@@ -38,6 +39,7 @@ func (m Manager) GetJobPublisher() IJobPublisher {
 
 func (m Manager) MarkJobDone(ctx context.Context, j *job.Job) error {
 	j.Status = job.StatusDone
+	j.UpdatedAt = time.Now().Unix()
 
 	return m.Db.SaveJob(ctx, nil, j)
 }
