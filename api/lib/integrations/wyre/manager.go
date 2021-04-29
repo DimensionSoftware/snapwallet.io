@@ -21,8 +21,6 @@ import (
 	"github.com/plaid/plaid-go/plaid"
 )
 
-const apiHostEnvVarName = "API_HOST"
-
 type Manager struct {
 	APIHost     config.APIHost
 	Wyre        *Client
