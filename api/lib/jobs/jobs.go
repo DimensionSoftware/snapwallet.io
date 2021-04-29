@@ -15,7 +15,11 @@ import (
 
 // RunSnapJob consumes a Pub/Sub message.
 func RunSnapJob(ctx context.Context, jobManager jobmanager.Manager, j *job.Job) error {
-	var err error
+	err := jobManager.Db.SaveJob(ctx, nil, j)
+	if err != nil {
+		return err
+	}
+
 	switch j.Kind {
 	case job.KindCreateWyreAccountForUser:
 		err = runCreateWyreAccountForUser(ctx, jobManager, j)
@@ -24,7 +28,6 @@ func RunSnapJob(ctx context.Context, jobManager jobmanager.Manager, j *job.Job) 
 	default:
 		err = fmt.Errorf("error: unsupported job kind: %s", j.Kind)
 	}
-
 	if err != nil {
 		return err
 	}
