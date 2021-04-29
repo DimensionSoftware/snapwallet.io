@@ -42,6 +42,7 @@
   let paymentSelectorVisible = false
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
   let glow = false
+  let isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
 
   $: ({
     sourceCurrency,
@@ -76,8 +77,8 @@
 
   const handleNextStep = async () => {
     getNextPath()
-    const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore,
-      isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
+    const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore
+    isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
     if (
       selectedSourcePaymentMethod &&
       selectedSourcePaymentMethod?.status !== 'ACTIVE'
@@ -247,7 +248,7 @@
             <b slot="step">Verify Identity</b>
           </VStep>
         {:else if $userStore.isProfilePending}
-          <VStep>
+          <VStep disabled>
             <span slot="icon">
               <FaIcon data={faExclamationCircle} />
             </span>
@@ -261,6 +262,7 @@
           </VStep>
         {:else}
           <VStep
+            disabled
             onClick={() =>
               push(
                 $userStore.isProfileComplete ? Routes.ADDRESS : Routes.PROFILE,
@@ -287,9 +289,15 @@
     >
       <div style="display:flex;justify-content:center;align-items:center;">
         <span style="margin-right:0.75rem;">
-          {isCreatingTxnPreview ? 'Previewing' : 'Preview'}
+          {isCreatingTxnPreview
+            ? 'Previewing'
+            : isLoggedIn
+            ? 'Preview'
+            : 'Continue'}
         </span>
-        <FaIcon data={faLock} />
+        {#if isLoggedIn}
+          <FaIcon data={faLock} />
+        {/if}
       </div>
     </Button>
   </ModalFooter>
