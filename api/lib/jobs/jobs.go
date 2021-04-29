@@ -29,7 +29,7 @@ func RunSnapJob(ctx context.Context, jobManager jobmanager.Manager, j *job.Job) 
 		return err
 	}
 
-	return jobManager.JobPublisher.MarkJobDone(ctx, j)
+	return jobManager.MarkJobDone(ctx, j)
 }
 
 func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manager, j *job.Job) error {

@@ -21,9 +21,3 @@ func (pub PubSubPublisher) PublishJob(ctx context.Context, j *job.Job) error {
 
 	return pub.PubSub.SendJob(ctx, j)
 }
-
-func (pub PubSubPublisher) MarkJobDone(ctx context.Context, j *job.Job) error {
-	j.Status = job.StatusDone
-
-	return pub.Db.SaveJob(ctx, nil, j)
-}
