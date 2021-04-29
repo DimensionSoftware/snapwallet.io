@@ -695,6 +695,16 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		resp.Wyre = &proto.ThirdPartyUserAccount{
 			LifecyleStatus: proto.LifecycleStatus_L_PENDING,
 		}
+	} else {
+		job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindCreateWyreAccountForUser, job.StatusQueued, string(u.ID))
+		if err != nil {
+			return nil, err
+		}
+		if job != nil {
+			resp.Wyre = &proto.ThirdPartyUserAccount{
+				LifecyleStatus: proto.LifecycleStatus_L_PENDING,
+			}
+		}
 	}
 
 	if len(existingWyreAccounts) > 0 {
@@ -734,6 +744,16 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 				LifecyleStatus: proto.LifecycleStatus_L_CREATED,
 				Status:         wa.Status,
 				// todo: remediations
+			}
+		} else {
+			job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindCreateWyreAccountForUser, job.StatusQueued, string(u.ID))
+			if err != nil {
+				return nil, err
+			}
+			if job != nil {
+				wyre = &proto.ThirdPartyUserAccount{
+					LifecyleStatus: proto.LifecycleStatus_L_PENDING,
+				}
 			}
 		}
 	}

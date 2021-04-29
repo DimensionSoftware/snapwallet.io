@@ -157,6 +157,31 @@ func (db Db) SaveJob(ctx context.Context, tx *firestore.Transaction, j *job.Job)
 	return err
 }
 
+func (db Db) GetJobByKindAndStatusAndRelatedId(ctx context.Context, kind job.Kind, status job.Status, relatedID string) (*job.Job, error) {
+	table := db.Firestore.Collection("jobs").
+		Where("kind", "==", kind).
+		Where("status", "==", status).
+		Where("relatedIDs", "array-contains", relatedID).
+		Documents(ctx)
+
+	snap, err := table.Next()
+	if err == iterator.Done {
+		// not found
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var job job.Job
+	err = snap.DataTo(&job)
+	if err != nil {
+		return nil, err
+	}
+
+	return &job, nil
+}
+
 // SaveFileMetadata saves file metadata
 func (db Db) SaveFileMetadata(ctx context.Context, userID user.ID, md *file.Metadata) error {
 	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("files").Doc(string(md.ID))
