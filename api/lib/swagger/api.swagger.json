@@ -484,7 +484,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/WyreTransfer"
+              "$ref": "#/definitions/WyreTransferDetail"
             }
           },
           "default": {
@@ -516,7 +516,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/WyreTransfer"
+              "$ref": "#/definitions/WyreTransferDetail"
             }
           },
           "default": {
@@ -546,7 +546,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/WyreTransfer"
+              "$ref": "#/definitions/WyreTransferDetail"
             }
           },
           "default": {
@@ -1258,6 +1258,73 @@
           "type": "string"
         },
         "closedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreTransferDetail": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "message": {
+          "type": "string"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "fees": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "totalFees": {
+          "type": "number",
+          "format": "double"
+        },
+        "blockhash": {
+          "type": "string"
+        },
+        "networkTxId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string"
+        },
+        "completedAt": {
+          "type": "string"
+        },
+        "cancelledAt": {
           "type": "string"
         }
       }

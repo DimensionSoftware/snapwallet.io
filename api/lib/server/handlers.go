@@ -291,7 +291,7 @@ func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 }
 
-func generateTransferMessage(to *mail.Email, t *wyre.Transfer) *mail.SGMailV3 {
+func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) *mail.SGMailV3 {
 	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
 	subject := fmt.Sprintf("Transfer %s has been initiated", t.ID)
 	plainTextContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
@@ -1215,7 +1215,7 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 	}, nil
 }
 
-func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTransferRequest) (*proto.WyreTransfer, error) {
+func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTransferRequest) (*proto.WyreTransferDetail, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
 		return nil, err
@@ -1276,10 +1276,10 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 	// TODO: store info in db about xfer
 	fmt.Printf("WYRE TRANSFER RESP: %#v", t)
 
-	return wyre.WyreTransferToProto(t), nil
+	return wyre.WyreTransferDetailToProto(t), nil
 }
 
-func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirmTransferRequest) (*proto.WyreTransfer, error) {
+func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirmTransferRequest) (*proto.WyreTransferDetail, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
 		return nil, err
@@ -1320,7 +1320,7 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	// TODO: store info in db about xfer
 	fmt.Printf("Wyre transfer confirmation response: %#v", t)
 
-	return wyre.WyreTransferToProto(t), nil
+	return wyre.WyreTransferDetailToProto(t), nil
 }
 
 func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetConfig) (*proto.WidgetGetShortUrlResponse, error) {
@@ -1388,7 +1388,6 @@ func (s *Server) Goto(ctx context.Context, req *proto.GotoRequest) (*proto.GotoR
 
 	if g == nil {
 		return nil, status.Errorf(codes.NotFound, "goto ID not found")
-
 	}
 
 	configJsonBytes, err := json.Marshal(g.Config)
@@ -1440,4 +1439,33 @@ func (s *Server) WyreGetTransfers(ctx context.Context, req *proto.WyreGetTransfe
 	return &proto.WyreTransfers{
 		Transfers: out,
 	}, nil
+}
+
+func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransferRequest) (*proto.WyreTransferDetail, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	var wyreAccount *account.Account
+	{
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		if err != nil {
+			return nil, err
+		}
+		if len(accounts) > 0 {
+			wyreAccount = accounts[0]
+		}
+	}
+
+	if wyreAccount == nil {
+		return nil, status.Errorf(codes.FailedPrecondition, "wyre account must exist to retrieve a transfer")
+	}
+
+	t, err := s.Wyre.GetTransfer(wyreAccount.SecretKey, req.TransferId)
+	if err != nil {
+		return nil, err
+	}
+
+	return wyre.WyreTransferDetailToProto(t), nil
 }

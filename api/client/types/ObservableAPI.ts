@@ -47,6 +47,7 @@ import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
 import { WyreTransfer } from '../models/WyreTransfer';
+import { WyreTransferDetail } from '../models/WyreTransferDetail';
 import { WyreTransfers } from '../models/WyreTransfers';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
@@ -374,7 +375,7 @@ export class ObservableFluxApi {
      * @param transferId 
      * @param body 
      */
-    public fluxWyreConfirmTransfer(transferId: string, body: WyreConfirmTransferRequest, options?: Configuration): Observable<WyreTransfer> {
+    public fluxWyreConfirmTransfer(transferId: string, body: WyreConfirmTransferRequest, options?: Configuration): Observable<WyreTransferDetail> {
     	const requestContextPromise = this.requestFactory.fluxWyreConfirmTransfer(transferId, body, options);
 
 		// build promise chain
@@ -396,7 +397,7 @@ export class ObservableFluxApi {
     /**
      * @param body 
      */
-    public fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Observable<WyreTransfer> {
+    public fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Observable<WyreTransferDetail> {
     	const requestContextPromise = this.requestFactory.fluxWyreCreateTransfer(body, options);
 
 		// build promise chain
@@ -439,7 +440,7 @@ export class ObservableFluxApi {
     /**
      * @param transferId 
      */
-    public fluxWyreGetTransfer(transferId: string, options?: Configuration): Observable<WyreTransfer> {
+    public fluxWyreGetTransfer(transferId: string, options?: Configuration): Observable<WyreTransferDetail> {
     	const requestContextPromise = this.requestFactory.fluxWyreGetTransfer(transferId, options);
 
 		// build promise chain

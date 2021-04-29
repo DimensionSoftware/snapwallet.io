@@ -552,21 +552,21 @@ service Flux {
     };
   }
 
-  rpc WyreCreateTransfer(WyreCreateTransferRequest) returns (WyreTransfer) {
+  rpc WyreCreateTransfer(WyreCreateTransferRequest) returns (WyreTransferDetail) {
     option (google.api.http) = {
       post: "/wyre/transfers"
       body: "*"
     };
   }
 
-  rpc WyreConfirmTransfer(WyreConfirmTransferRequest) returns (WyreTransfer) {
+  rpc WyreConfirmTransfer(WyreConfirmTransferRequest) returns (WyreTransferDetail) {
     option (google.api.http) = {
       post: "/wyre/transfers/{transfer_id}/confirm"
       body: "*"
     };
   }
 
-  rpc WyreGetTransfer(WyreGetTransferRequest) returns (WyreTransfer) {
+  rpc WyreGetTransfer(WyreGetTransferRequest) returns (WyreTransferDetail) {
     option (google.api.http) = {
       get: "/wyre/transfers/{transfer_id}"
     };

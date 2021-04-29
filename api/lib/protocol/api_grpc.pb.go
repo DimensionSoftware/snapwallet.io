@@ -64,9 +64,9 @@ type FluxClient interface {
 	SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*ProfileDataInfo, error)
 	WyreWebhook(ctx context.Context, in *WyreWebhookRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	WyreGetPaymentMethods(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyrePaymentMethods, error)
-	WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
-	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
-	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
+	WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
+	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
+	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
 	WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error)
 	WidgetGetShortUrl(ctx context.Context, in *SnapWidgetConfig, opts ...grpc.CallOption) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
@@ -207,8 +207,8 @@ func (c *fluxClient) WyreGetPaymentMethods(ctx context.Context, in *emptypb.Empt
 	return out, nil
 }
 
-func (c *fluxClient) WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
-	out := new(WyreTransfer)
+func (c *fluxClient) WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error) {
+	out := new(WyreTransferDetail)
 	err := c.cc.Invoke(ctx, "/Flux/WyreCreateTransfer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -216,8 +216,8 @@ func (c *fluxClient) WyreCreateTransfer(ctx context.Context, in *WyreCreateTrans
 	return out, nil
 }
 
-func (c *fluxClient) WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
-	out := new(WyreTransfer)
+func (c *fluxClient) WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error) {
+	out := new(WyreTransferDetail)
 	err := c.cc.Invoke(ctx, "/Flux/WyreConfirmTransfer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -225,8 +225,8 @@ func (c *fluxClient) WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTra
 	return out, nil
 }
 
-func (c *fluxClient) WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
-	out := new(WyreTransfer)
+func (c *fluxClient) WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error) {
+	out := new(WyreTransferDetail)
 	err := c.cc.Invoke(ctx, "/Flux/WyreGetTransfer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -328,9 +328,9 @@ type FluxServer interface {
 	SaveProfileData(context.Context, *SaveProfileDataRequest) (*ProfileDataInfo, error)
 	WyreWebhook(context.Context, *WyreWebhookRequest) (*emptypb.Empty, error)
 	WyreGetPaymentMethods(context.Context, *emptypb.Empty) (*WyrePaymentMethods, error)
-	WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransfer, error)
-	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransfer, error)
-	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error)
+	WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransferDetail, error)
+	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransferDetail, error)
+	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransferDetail, error)
 	WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error)
 	WidgetGetShortUrl(context.Context, *SnapWidgetConfig) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
@@ -390,13 +390,13 @@ func (UnimplementedFluxServer) WyreWebhook(context.Context, *WyreWebhookRequest)
 func (UnimplementedFluxServer) WyreGetPaymentMethods(context.Context, *emptypb.Empty) (*WyrePaymentMethods, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetPaymentMethods not implemented")
 }
-func (UnimplementedFluxServer) WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransfer, error) {
+func (UnimplementedFluxServer) WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransferDetail, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateTransfer not implemented")
 }
-func (UnimplementedFluxServer) WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransfer, error) {
+func (UnimplementedFluxServer) WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransferDetail, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreConfirmTransfer not implemented")
 }
-func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error) {
+func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransferDetail, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfer not implemented")
 }
 func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error) {

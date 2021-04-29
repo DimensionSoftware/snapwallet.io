@@ -100,7 +100,7 @@ type Transfer struct {
 	Status         string             `json:"status"`         // i.e. "PENDING"
 	ExchangeRate   float64            `json:"exchangeRate"`   // i.e. 499.00
 	Fees           map[string]float64 `json:"fees"`           // i.e. { "USD": 0.1, "BTC": 0 }
-	BlockchanTxID  string             `json:"blockchainTxId"`
+	BlockchainTxID string             `json:"blockchainTxId"`
 	CreatedAt      int64              `json:"createdAt"` // i.e. 1541552388000 (epoch)
 	ClosedAt       int64              `json:"closedAt"`  // i.e. 1541552388000 (epoch)
 }
@@ -407,11 +407,11 @@ func (c Client) CreateAPIKey(token string, masqueradeAs string, req CreateAPIKey
 // CreateTransfer creates a transfer in the wyre system
 // https://docs.sendwyre.com/docs/create-transfer
 // POST https://api.sendwyre.com/v3/transfers
-func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*Transfer, error) {
+func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*TransferDetail, error) {
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).
-		SetResult(Transfer{}).
+		SetResult(TransferDetail{}).
 		SetBody(req).
 		EnableTrace().
 		Post("/v3/transfers")
@@ -423,18 +423,18 @@ func (c Client) CreateTransfer(token string, req CreateTransferRequest) (*Transf
 		return nil, resp.Error().(*APIError)
 	}
 
-	return resp.Result().(*Transfer), nil
+	return resp.Result().(*TransferDetail), nil
 }
 
 // ConfirmTransfer confirms an existing transfer in the wyre system
 // https://docs.sendwyre.com/docs/confirm-transfer
 // POST https://api.sendwyre.com/v3/transfers/transferId:/confirm
-func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*Transfer, error) {
+func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*TransferDetail, error) {
 	reqURL := fmt.Sprintf("/v3/transfers/%s/confirm", req.TransferId)
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).
-		SetResult(Transfer{}).
+		SetResult(TransferDetail{}).
 		SetBody(req).
 		EnableTrace().
 		Post(reqURL)
@@ -446,7 +446,7 @@ func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*Tran
 		return nil, resp.Error().(*APIError)
 	}
 
-	return resp.Result().(*Transfer), nil
+	return resp.Result().(*TransferDetail), nil
 }
 
 // GetTransferHistory gets a history of transfers in the wyre system
@@ -470,6 +470,28 @@ func (c Client) GetTransferHistory(token string, offset int64, length int64) (*G
 	}
 
 	return resp.Result().(*GetTransferHistoryResponse), nil
+}
+
+// GetTransfer a detailed transfer record from the the wyre system
+// https://docs.sendwyre.com/docs/get-transfer
+// GET https://api.sendwyre.com/v3/transfers/:transferId
+func (c Client) GetTransfer(token string, transferID string) (*TransferDetail, error) {
+	resp, err := c.http.R().
+		SetAuthToken(token).
+		SetError(APIError{}).
+		SetResult(TransferDetail{}).
+		EnableTrace().
+		SetPathParam("transferID", transferID).
+		Get("/v3/transfers/{transferID}")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*TransferDetail), nil
 }
 
 // GetAccount gets an an account from the wyre system
