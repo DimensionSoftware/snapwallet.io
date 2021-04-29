@@ -1230,6 +1230,21 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 		})
 	}
 
+	if len(out) == 0 {
+		pitems, err := s.Db.GetAllPlaidItems(ctx, nil, u.ID)
+		for _, plaidItem := range pitems {
+			for _, accountID := range plaidItem.AccountIDs {
+				out = append(out, &proto.WyrePaymentMethod{
+					LifecyleStatus: proto.LifecycleStatus_L_PENDING,
+					// todo: store name, last4 from plaid so i can make this nicer
+					Name: fmt.Sprintf("Plaid Account ID %s", accountID),
+					//Last4:               "foo",
+				})
+			}
+		}
+
+	}
+
 	return &proto.WyrePaymentMethods{
 		PaymentMethods: out,
 	}, nil
