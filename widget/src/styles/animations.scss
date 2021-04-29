@@ -70,7 +70,7 @@
   }
   70% {
     transform: scale(1);
-    box-shadow: 0 0 0 10px rgba(var(--theme-button-glow-color), 0);
+    box-shadow: 0 0 0 15px rgba(var(--theme-button-glow-color), 0);
   }
   100% {
     transform: scale(0.99);
