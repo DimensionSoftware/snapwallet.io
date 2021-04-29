@@ -1232,6 +1232,10 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 
 	if len(out) == 0 {
 		pitems, err := s.Db.GetAllPlaidItems(ctx, nil, u.ID)
+		if err != nil {
+			return nil, err
+		}
+
 		for _, plaidItem := range pitems {
 			for _, accountID := range plaidItem.AccountIDs {
 				out = append(out, &proto.WyrePaymentMethod{
@@ -1242,7 +1246,6 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 				})
 			}
 		}
-
 	}
 
 	return &proto.WyrePaymentMethods{
