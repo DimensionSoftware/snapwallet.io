@@ -7,7 +7,7 @@ import {
   TokenExchangeResponse,
   TokenMaterial,
 } from 'api-client'
-import { JWT_TOKENS_KEY } from './constants'
+import { JWT_TOKENS_KEY, JWT_TOKENS_LOCK_KEY } from './constants'
 import { Logger, parseJwt } from './util'
 
 export class AuthManager {
@@ -26,6 +26,20 @@ export class AuthManager {
     } else {
       window.localStorage.removeItem(JWT_TOKENS_KEY)
     }
+  }
+
+  private tokenIsLocked(): boolean {
+    return !!window.localStorage.getItem(JWT_TOKENS_LOCK_KEY)
+  }
+
+  private clearTokenLock() {
+    Logger.debug('Token lock cleared')
+    return window.localStorage.removeItem(JWT_TOKENS_LOCK_KEY)
+  }
+
+  private setTokenLock() {
+    Logger.debug('Token lock set')
+    return window.localStorage.setItem(JWT_TOKENS_LOCK_KEY, 'locked')
   }
 
   // returns access, refresh
@@ -136,7 +150,18 @@ export class AuthManager {
         }
 
         Logger.debug('Running token exchange')
-        return (await this.tokenExchange(refresh))[0]
+
+        if (!this.tokenIsLocked()) {
+          this.setTokenLock()
+          const accessToken = (await this.tokenExchange(refresh))[0]
+          this.clearTokenLock()
+          return accessToken
+        } else {
+          // todo, timeout instead of infinite recursion if lock isnt cleared
+          await delay(500)
+          return this.getAccessToken()
+        }
+
       } else {
         return access
       }
@@ -267,4 +292,11 @@ export function genAPIClient(authManager?: AuthManager): FluxApi {
 
 function addEpochBuffer(epoch: number): number {
   return epoch + 5 * 1000
+}
+
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  })
+
 }

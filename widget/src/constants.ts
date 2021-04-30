@@ -45,6 +45,7 @@ export const supportedCurrencyPairs = {
 }
 
 export const JWT_TOKENS_KEY = '__SNAP_TOKENS'
+export const JWT_TOKENS_LOCK_KEY = '__SNAP_TOKENS_LOCK'
 export const CACHED_PRIMARY_PAYMENT_METHOD_KEY = '__SNAP_PRIMARY_PM_ID'
 
 export enum Routes {
