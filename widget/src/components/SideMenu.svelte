@@ -135,7 +135,7 @@
     </g>
   </svg>
 </div>
-<aside class:active={isExpanded}>
+<aside class:closed={!isExpanded} class:active={isExpanded}>
   <nav>
     <div>
       <FaIcon data={isProductCheckout ? faShoppingCart : faExchangeAlt} />
@@ -254,7 +254,6 @@
     height: 150%;
     padding: 25% 1rem 0 4rem;
     transform: translateX(105%);
-    transition: transform 0.35s var(--theme-ease-in-expo);
     z-index: 100;
     nav > div {
       display: flex;
@@ -279,6 +278,9 @@
         margin-top: 2.5rem;
         position: relative;
       }
+    }
+    &.closed {
+      transition: transform 0.35s var(--theme-ease-in-expo);
     }
     &.active {
       transition: transform 0.2s var(--theme-ease-out-expo);

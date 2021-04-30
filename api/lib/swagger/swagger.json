@@ -846,20 +846,43 @@
       "description": "response",
       "title": "OneTimePasscodeVerifyResponse"
     },
+    "PlaidAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "mask": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "subType": {
+          "type": "string"
+        }
+      }
+    },
     "PlaidConnectBankAccountsRequest": {
       "type": "object",
       "properties": {
         "plaidPublicToken": {
           "type": "string"
         },
-        "plaidAccountIds": {
+        "institution": {
+          "$ref": "#/definitions/PlaidInstitution"
+        },
+        "accounts": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/PlaidAccount"
           }
         }
       },
-      "description": "request",
+      "description": "request\nmirrors some elements of https://plaid.com/docs/link/web/#onsuccess",
       "title": "PlaidConnectBankAccountsRequest"
     },
     "PlaidConnectBankAccountsResponse": {
@@ -881,6 +904,17 @@
       },
       "description": "response",
       "title": "PlaidCreateLinkTokenResponse"
+    },
+    "PlaidInstitution": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
     },
     "PricingDataResponse": {
       "type": "object",
