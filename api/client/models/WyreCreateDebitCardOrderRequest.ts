@@ -19,6 +19,7 @@ export class WyreCreateDebitCardOrderRequest {
     'sourceAmount'?: number;
     'country'?: string;
     'amountIncludesFees'?: boolean;
+    'lockFields'?: Array<string>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -57,6 +58,12 @@ export class WyreCreateDebitCardOrderRequest {
             "name": "amountIncludesFees",
             "baseName": "amountIncludesFees",
             "type": "boolean",
+            "format": ""
+        },
+        {
+            "name": "lockFields",
+            "baseName": "lockFields",
+            "type": "Array<string>",
             "format": ""
         }    ];
 

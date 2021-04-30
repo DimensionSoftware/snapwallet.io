@@ -1302,6 +1302,12 @@
         },
         "amountIncludesFees": {
           "type": "boolean"
+        },
+        "lockFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
