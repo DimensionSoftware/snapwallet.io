@@ -1518,3 +1518,21 @@ func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransfer
 
 	return wyre.WyreTransferDetailToProto(t), nil
 }
+
+func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *proto.WyreCreateDebitCardOrderRequest) (*proto.WyreCreateDebitCardOrderResponse, error) {
+	includeFees := req.GetAmountIncludesFees()
+
+	t, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
+		PaymentMethod:      "debit-card",
+		SourceCurrency:     req.GetSourceCurrency(),
+		Country:            req.GetCountry(),
+		SourceAmount:       req.GetSourceAmount(),
+		AmountIncludesFees: &includeFees,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreCreateDebitCardOrderResponse{Reservation: t.Reservation}, nil
+}
