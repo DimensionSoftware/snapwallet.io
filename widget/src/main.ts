@@ -26,7 +26,27 @@ try {
   config = {}
 }
 
-configStore.setInitial(config)
+configStore.setInitial({
+  ...config,
+  sourceAmount: 100.0,
+  defaultDestinationAsset: 'eth',
+  theme: {
+    modalBackground: 'rgba(40,40,40,.9)',
+    modalPopupBackground: 'rgba(50,50,50,.95)',
+    color: 'rgba(0,0,0,.9)',
+    badgeTextColor: '#333',
+    colorLightened: 'rgba(5,5,5,.8)',
+    shadowBottomColor: 'rgba(0,0,0,.25)',
+    colorInverse: '#fff',
+    // buttonColor: '#fffc00',
+    buttonColor: 'rgb(247, 127, 26)',
+    buttonTextColor: '#000',
+    // successColor: '#fffc00',
+    successColor: 'rgb(247, 127, 26)',
+    textColor: '#fff',
+    inputTextColor: '#333',
+  },
+})
 
 const app = new App({
   target: document.body,

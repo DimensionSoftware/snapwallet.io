@@ -559,6 +559,38 @@
         ]
       }
     },
+    "/wyre/transfers/debit-card": {
+      "post": {
+        "operationId": "Flux_WyreCreateWalletOrderReservation",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreCreateDebitCardOrderResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreCreateDebitCardOrderRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/wyre/transfers/{transferId}": {
       "get": {
         "operationId": "Flux_WyreGetTransfer",
@@ -1245,6 +1277,38 @@
       "type": "object",
       "properties": {
         "transferId": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreCreateDebitCardOrderRequest": {
+      "type": "object",
+      "properties": {
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "country": {
+          "type": "string"
+        },
+        "amountIncludesFees": {
+          "type": "boolean"
+        }
+      }
+    },
+    "WyreCreateDebitCardOrderResponse": {
+      "type": "object",
+      "properties": {
+        "reservation": {
           "type": "string"
         }
       }

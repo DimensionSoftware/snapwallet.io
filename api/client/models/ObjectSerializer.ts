@@ -37,6 +37,8 @@ export * from './UserFlags';
 export * from './ViewerDataResponse';
 export * from './WidgetGetShortUrlResponse';
 export * from './WyreConfirmTransferRequest';
+export * from './WyreCreateDebitCardOrderRequest';
+export * from './WyreCreateDebitCardOrderResponse';
 export * from './WyreCreateTransferRequest';
 export * from './WyrePaymentMethod';
 export * from './WyrePaymentMethods';
@@ -84,6 +86,8 @@ import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
 import { WidgetGetShortUrlResponse } from './WidgetGetShortUrlResponse';
 import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
+import { WyreCreateDebitCardOrderRequest } from './WyreCreateDebitCardOrderRequest';
+import { WyreCreateDebitCardOrderResponse } from './WyreCreateDebitCardOrderResponse';
 import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
 import { WyrePaymentMethod } from './WyrePaymentMethod';
 import { WyrePaymentMethods } from './WyrePaymentMethods';
@@ -153,6 +157,8 @@ let typeMap: {[index: string]: any} = {
     "ViewerDataResponse": ViewerDataResponse,
     "WidgetGetShortUrlResponse": WidgetGetShortUrlResponse,
     "WyreConfirmTransferRequest": WyreConfirmTransferRequest,
+    "WyreCreateDebitCardOrderRequest": WyreCreateDebitCardOrderRequest,
+    "WyreCreateDebitCardOrderResponse": WyreCreateDebitCardOrderResponse,
     "WyreCreateTransferRequest": WyreCreateTransferRequest,
     "WyrePaymentMethod": WyrePaymentMethod,
     "WyrePaymentMethods": WyrePaymentMethods,

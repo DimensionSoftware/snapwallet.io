@@ -41,6 +41,8 @@ import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
 import { WidgetGetShortUrlResponse } from '../models/WidgetGetShortUrlResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
+import { WyreCreateDebitCardOrderRequest } from '../models/WyreCreateDebitCardOrderRequest';
+import { WyreCreateDebitCardOrderResponse } from '../models/WyreCreateDebitCardOrderResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
@@ -199,6 +201,14 @@ export class PromiseFluxApi {
      */
     public fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Promise<WyreTransferDetail> {
     	const result = this.api.fluxWyreCreateTransfer(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param body 
+     */
+    public fluxWyreCreateWalletOrderReservation(body: WyreCreateDebitCardOrderRequest, options?: Configuration): Promise<WyreCreateDebitCardOrderResponse> {
+    	const result = this.api.fluxWyreCreateWalletOrderReservation(body, options);
         return result.toPromise();
     }
 	
