@@ -457,6 +457,9 @@ message WidgetGetShortUrlResponse {
 
 message WyreCreateDebitCardOrderResponse {
   string reservation = 1;
+  string orderId = 2;
+  string status = 3;
+  string transferId = 4;
 }
 
 message GotoRequest {
