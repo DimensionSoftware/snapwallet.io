@@ -301,6 +301,16 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	return &account, nil
 }
 
+func (m Manager) CreateWalletOrderReservation(ctx context.Context, userID user.ID, wyreAccountID account.ID) (**WalletOrderReservation, error) {
+	reservation, err := m.Wyre.CreateWalletOrderReservation(CreateWalletOrderReservationRequest{})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &reservation, nil
+}
+
 // GenerateSecretKey ...
 func GenerateSecretKey(n int) string {
 	return (shortuuid.New() + shortuuid.New())[:n]
