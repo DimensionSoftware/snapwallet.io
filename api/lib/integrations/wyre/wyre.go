@@ -694,6 +694,25 @@ type WalletOrderReservationQuote struct {
 	Fees                   map[string]float64 `json:"fees"`
 }
 
+// WalletOrder represents the response object for https://api.sendwyre.com/v3/debitcard/process/partner
+type WalletOrder struct {
+	ID             string  `json:"id"`
+	SourceCurrency string  `json:"sourceCurrency"`
+	DestCurrency   string  `json:"destCurrency"`
+	Dest           string  `json:"dest"`
+	AccountID      string  `json:"accountId"`
+	SourceAmount   float64 `json:"sourceAmount"`
+	DestAmount     float64 `json:"destAmount"`
+	Email          string  `json:"email"`
+	PaymentMethod  string  `json:"paymentMethodName"`
+	WalletType     string  `json:"walletType"`
+	TransferID     string  `json:"transferId"`
+	ErrorMessage   string  `json:"errorMessage"`
+	CreatedAt      int64   `json:"createdAt"`
+	Owner          string  `json:"owner"`
+	Status         string  `json:"status"`
+}
+
 // {"language":"en","compositeType":"","subType":"","errorCode":"accessDenied.invalidSession","exceptionId":"test_TQCJZP","message":"Invalid Session","type":"AccessDeniedException","transient":false}
 
 // APIError represents the error object sent back by the api
