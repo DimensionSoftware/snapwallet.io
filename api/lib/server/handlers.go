@@ -1572,7 +1572,6 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 	}
 
 	// TODO: store the wallet order information
-	// Add endpoint for client to poll Wyre's authcodes endpoint
 	return &proto.WyreCreateDebitCardOrderResponse{
 		Reservation: reservationResponse.Reservation, OrderId: orderResponse.ID,
 		Status:     orderResponse.Status,
