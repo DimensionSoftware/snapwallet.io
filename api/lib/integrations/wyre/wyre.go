@@ -931,7 +931,6 @@ type SubmitAuthTokenResponse struct {
 // Generate SHA256 HMAC signature...
 func GenerateHMACSignature(Secret string, url string, data []byte) (signature *string, err error) {
 	mac := hmac.New(sha256.New, []byte(Secret))
-	// payload, err := json.RawMessage(data).MarshalJSON()
 	if err != nil {
 		return nil, err
 	}
