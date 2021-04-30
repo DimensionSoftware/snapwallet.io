@@ -14,13 +14,36 @@ func (req *PlaidConnectBankAccountsRequest) Validate() error {
 		return status.Errorf(codes.InvalidArgument, "plaid public token must be set")
 	}
 
-	if len(req.PlaidAccountIds) < 1 {
-		return status.Errorf(codes.InvalidArgument, "plaid account ids must be set")
+	if req.Institution == nil {
+		return status.Errorf(codes.InvalidArgument, "plaid institution must be set")
+	}
+	if req.Institution.Id == "" {
+		return status.Errorf(codes.InvalidArgument, "plaid institution id must be set")
+	}
+	if req.Institution.Name == "" {
+		return status.Errorf(codes.InvalidArgument, "plaid institution name must be set")
 	}
 
-	for _, plaidAccountID := range req.PlaidAccountIds {
-		if plaidAccountID == "" {
-			return status.Errorf(codes.InvalidArgument, "Plaid account ids must be non-empty strings")
+	if len(req.Accounts) < 1 {
+		return status.Errorf(codes.InvalidArgument, "plaid accounts must be set")
+	}
+
+	for _, plaidAccount := range req.Accounts {
+		if plaidAccount.Id == "" {
+			return status.Errorf(codes.InvalidArgument, "Plaid account id must be set")
+		}
+		if plaidAccount.Name == "" {
+			return status.Errorf(codes.InvalidArgument, "Plaid account name must be set")
+		}
+		if plaidAccount.Mask == "" {
+			return status.Errorf(codes.InvalidArgument, "Plaid account mask must be set")
+		}
+		if plaidAccount.Type == "" {
+			return status.Errorf(codes.InvalidArgument, "Plaid account type must be set")
+		}
+		if plaidAccount.SubType == "" {
+
+			return status.Errorf(codes.InvalidArgument, "Plaid account subType must be set")
 		}
 	}
 

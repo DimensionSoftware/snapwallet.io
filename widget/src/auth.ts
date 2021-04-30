@@ -161,7 +161,6 @@ export class AuthManager {
           await delay(500)
           return this.getAccessToken()
         }
-
       } else {
         return access
       }
@@ -298,5 +297,4 @@ function delay(ms: number): Promise<void> {
   return new Promise(resolve => {
     setTimeout(resolve, ms)
   })
-
 }

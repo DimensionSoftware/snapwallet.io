@@ -29,7 +29,7 @@ type Manager struct {
 	FileManager *filemanager.Manager
 }
 
-func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccessToken string, plaidItemID string, plaidAccountID string) (*paymentmethod.PaymentMethod, error) {
+func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAccountID account.ID, plaidAccessToken string, plaidItemID item.ID, plaidAccountID item.AccountID) (*paymentmethod.PaymentMethod, error) {
 	wyreAccounts, err := m.Db.GetWyreAccounts(ctx, nil, userID)
 	if err != nil {
 		return nil, err
@@ -44,7 +44,7 @@ func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAc
 		return nil, fmt.Errorf("the wyreAccountID doesn't exist or is not associated with this user")
 	}
 
-	existingPm, err := m.Db.GetWyrePaymentMethodByPlaidAccountID(ctx, userID, wyreAccountID, plaidAccountID)
+	existingPm, err := m.Db.GetWyrePaymentMethodByPlaidAccountID(ctx, userID, wyreAccountID, string(plaidAccountID))
 	if err != nil {
 		return nil, err
 	}
@@ -52,7 +52,7 @@ func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAc
 		return nil, nil
 	}
 
-	resp, err := m.Plaid.CreateProcessorToken(plaidAccessToken, plaidAccountID, "wyre")
+	resp, err := m.Plaid.CreateProcessorToken(plaidAccessToken, string(plaidAccountID), "wyre")
 	if err != nil {
 		return nil, err
 	}
@@ -93,8 +93,8 @@ func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAc
 func (m Manager) CreatePaymentMethodsFromPlaidItem(ctx context.Context, userID user.ID, wyreAccountID account.ID, item *item.Item) ([]*paymentmethod.PaymentMethod, error) {
 	var out []*paymentmethod.PaymentMethod
 
-	for _, accountID := range item.AccountIDs {
-		pm, err := m.CreatePaymentMethod(ctx, userID, wyreAccountID, item.AccessToken, string(item.ID), accountID)
+	for _, account := range item.Accounts {
+		pm, err := m.CreatePaymentMethod(ctx, userID, wyreAccountID, item.AccessToken, item.ID, account.ID)
 		if err != nil {
 			return nil, err
 		}

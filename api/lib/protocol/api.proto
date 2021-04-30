@@ -133,9 +133,24 @@ message TokenMaterial {
 // PlaidConnectBankAccountsRequest
 //
 // request
+// mirrors some elements of https://plaid.com/docs/link/web/#onsuccess
 message PlaidConnectBankAccountsRequest {
   string plaid_public_token = 1;
-  repeated string plaid_account_ids = 2;
+  PlaidInstitution institution = 2;
+  repeated PlaidAccount accounts = 3;
+}
+
+message PlaidInstitution {
+  string id = 1;
+  string name = 2;
+}
+
+message PlaidAccount {
+  string id = 1;
+  string name = 2;
+  string mask = 3;
+  string type = 4;
+  string sub_type = 5;
 }
 
 // PlaidConnectBankAccountsResponse

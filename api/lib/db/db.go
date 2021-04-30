@@ -343,25 +343,18 @@ func (db Db) GetUserByID(ctx context.Context, tx *firestore.Transaction, userID 
 }
 
 // SavePlaidItem ...
-func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, accessToken string, accountIDs []string) (*item.Item, error) {
-	item := item.Item{
-		ID:          itemID,
-		AccountIDs:  accountIDs,
-		AccessToken: accessToken,
-		CreatedAt:   time.Now(),
-	}
-
+func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, item *item.Item) error {
 	encryptedItem, err := item.Encrypt(db.EncryptionManager, userID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	_, err = db.Firestore.Collection("users").Doc(string(userID)).Collection("plaidItems").Doc(string(itemID)).Set(ctx, encryptedItem)
+	_, err = db.Firestore.Collection("users").Doc(string(userID)).Collection("plaidItems").Doc(string(item.ID)).Set(ctx, encryptedItem)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &item, nil
+	return nil
 }
 
 // SaveWyreAccount ...
