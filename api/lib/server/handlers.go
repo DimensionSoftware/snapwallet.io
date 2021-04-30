@@ -1543,7 +1543,7 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		FirstName:      "Cornelius",
 		LastName:       "Dangerfield",
 		Email:          "someone@example.com",
-		PhoneNumber:    "+7608981717",
+		PhoneNumber:    "+17608981717",
 		ReferenceID:    "crypto_moon_lambo",
 		ReservationID:  reservationResponse.Reservation,
 		Address: wyre.WalletOrderAddress{
