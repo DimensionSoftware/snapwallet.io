@@ -207,6 +207,10 @@ type CreateWalletOrderRequest struct {
 	PurchaseAmount    float64              `json:"purchaseAmount"`
 }
 
+type GetWalletOrderAuthorizationsRequest struct {
+	OrderID string `json:"orderId"` // The wallet order ID
+}
+
 type WalletOrderAddress struct {
 	Street1    string `json:"street1"`
 	Street2    string `json:"street2"`
@@ -714,6 +718,14 @@ type WalletOrder struct {
 	Status         string  `json:"status"`
 }
 
+// WalletOrderAuthorizations represents the response object for https://api.sendwyre.com/v3/debitcard/authorization/:orderId
+type WalletOrderAuthorizations struct {
+	WalletOrderID       string `json:"walletOrderId"`       // The wallet order ID
+	SMSNeeded           *bool  `json:"smsNeeded"`           // Determines whether or not sms 2FA is required
+	Card2faNeeded       *bool  `json:"card2faNeeded"`       // Determines whether or not card 2FA is required
+	Authorization3DsURL string `json:"authorization3dsUrl"` // 3ds is not used currently
+}
+
 // {"language":"en","compositeType":"","subType":"","errorCode":"accessDenied.invalidSession","exceptionId":"test_TQCJZP","message":"Invalid Session","type":"AccessDeniedException","transient":false}
 
 // APIError represents the error object sent back by the api
@@ -796,7 +808,7 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 	return resp.Result().(*WalletOrderReservation), nil
 }
 
-// CreateWalletOrderReservation creates a wallet order reservation in Wyre's system
+// CreateWalletOrder creates a wallet order in Wyre's system
 // NOTE: This endpoint uses centralized authentication.
 // https://docs.sendwyre.com/v3/docs/white-label-card-processing-api
 // POST https://api.sendwyre.com/v3/debitcard/process/partner
@@ -837,6 +849,41 @@ func (c Client) CreateWalletOrder(req CreateWalletOrderRequest) (*WalletOrder, e
 	}
 
 	return resp.Result().(*WalletOrder), nil
+}
+
+// GetWalletOrderAuthorizations retrieves required auth mechanisms for a wallet order
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/white-label-card-processing-api
+// POST https://api.sendwyre.com/v3/debitcard/authorization/:orderId
+func (c Client) GetWalletOrderAuthorizations(req GetWalletOrderAuthorizationsRequest) (*WalletOrderAuthorizations, error) {
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/debitcard/authorization/%s?timestamp=%d", req.OrderID, ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, []byte(""))
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(WalletOrderAuthorizations{}).
+		EnableTrace().
+		Get(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*WalletOrderAuthorizations), nil
 }
 
 /*
