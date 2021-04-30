@@ -102,6 +102,11 @@
       top: -1px;
       z-index: 1;
     }
+    :global(span.glow:before) {
+      box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.5);
+      animation: glow 1.5s linear;
+      animation-iteration-count: infinite;
+    }
     &.success {
       animation: scaleIn 0.3s ease-out;
       z-index: 1;
@@ -141,7 +146,6 @@
       :global(b) {
         font-weight: normal;
       }
-      cursor: auto !important;
     }
     .step {
       white-space: nowrap;

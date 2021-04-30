@@ -32,6 +32,7 @@
 
   let paymentSelectorVisible = false
   let remediationGroups = groupRemediations($userStore.profileRemediations)
+  let step
 
   $: isPersonalInfoError = remediationGroups.personal.length > 0
   $: personalInfoMessage = reducePersonalInfoFields(remediationGroups.personal)
@@ -46,6 +47,15 @@
   $: documentMessage = reduceDocumentFields(remediationGroups.document)
 
   $: missingInfo = getMissingFieldMessages($userStore.profileItems)
+  $: step = !missingInfo.personal.isComplete
+    ? 'personal'
+    : !missingInfo.contact.isComplete
+    ? 'contact'
+    : !missingInfo.address.isComplete
+    ? 'address'
+    : !missingInfo.document.isComplete
+    ? 'document'
+    : 'payment'
 
   const getLatestProfile = async () => {
     await userStore.fetchUserProfile()
@@ -72,10 +82,12 @@
         title="Edit Your Profile"
         onClick={() => push(Routes.PROFILE_UPDATE)}
         success={missingInfo.personal.isComplete}
+        disabled={step !== 'personal' && !missingInfo.personal.isComplete}
       >
         <span
           class:info={!missingInfo.personal.isValid}
           class:error={isPersonalInfoError}
+          class:glow={step === 'personal'}
           slot="icon"
         >
           {#if missingInfo.personal.isComplete}
@@ -100,15 +112,18 @@
         title="Edit Your Contact"
         onClick={() => push(Routes.PROFILE_SEND_SMS)}
         success={missingInfo.contact.isComplete}
+        disabled={step !== 'contact' && !missingInfo.contact.isComplete}
       >
         <span
-          class:info={!missingInfo.contact.isValid}
+          class:info={missingInfo.contact.isComplete &&
+            !missingInfo.contact.isValid}
           class:error={isContactError}
+          class:glow={step === 'contact'}
           slot="icon"
         >
           {#if missingInfo.contact.isComplete}
             <FaIcon data={faCheck} />
-          {:else if !missingInfo.contact.isValid || isContactError}
+          {:else if (missingInfo.contact.isComplete && !missingInfo.contact.isValid) || isContactError}
             <FaIcon data={faExclamationCircle} />
           {:else}
             <FaIcon data={faMailBulk} />
@@ -123,10 +138,12 @@
         title="Edit Your Address"
         onClick={() => push(Routes.ADDRESS_UPDATE)}
         success={missingInfo.address.isComplete}
+        disabled={step !== 'address' && !missingInfo.address.isComplete}
       >
         <span
           class:info={!missingInfo.address.isValid}
           class:error={isAddressError}
+          class:glow={step === 'address'}
           slot="icon"
         >
           {#if missingInfo.address.isComplete}
@@ -146,10 +163,12 @@
         title="Edit Your Documents"
         onClick={() => push(Routes.FILE_UPLOAD_UPDATE)}
         success={missingInfo.document.isComplete}
+        disabled={step !== 'document' && !missingInfo.document.isComplete}
       >
         <span
           class:info={!missingInfo.document.isValid}
           class:error={isDocumentError}
+          class:glow={step === 'document'}
           slot="icon"
         >
           {#if missingInfo.document.isComplete}
