@@ -1407,7 +1407,7 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 	if req.Product != nil {
 		swc := g.Config.(gotoconfig.SnapWidgetConfig)
 
-		swc.Product = gotoconfig.SnapWidgetProduct{
+		swc.Product = &gotoconfig.SnapWidgetProduct{
 			ImageURL:           req.Product.Image_URL,
 			VideoURL:           req.Product.Video_URL,
 			DestinationAmount:  req.Product.DestinationAmount,

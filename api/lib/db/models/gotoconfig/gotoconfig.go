@@ -18,7 +18,7 @@ type SnapWidgetConfig struct {
 	Intent  string             `json:"intent,omitempty" firestore:"intent,omitempty"`
 	Focus   bool               `json:"focus,omitempty" firestore:"focus,omitempty"`
 	Theme   map[string]string  `json:"theme,omitempty" firestore:"theme,omitempty"`
-	Product SnapWidgetProduct  `json:"product,omitempty" firestore:"product,omitempty"`
+	Product *SnapWidgetProduct `json:"product,omitempty" firestore:"product,omitempty"`
 }
 
 type SnapWidgetWallet struct {
