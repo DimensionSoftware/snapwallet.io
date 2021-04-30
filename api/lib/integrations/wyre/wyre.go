@@ -927,11 +927,11 @@ type SubmitAuthTokenResponse struct {
 // Generate SHA256 HMAC signature...
 func GenerateHMACSignature(Secret string, url string, data []byte) (signature *string, err error) {
 	mac := hmac.New(sha256.New, []byte(Secret))
-	payload, err := json.RawMessage(data).MarshalJSON()
+	// payload, err := json.RawMessage(data).MarshalJSON()
 	if err != nil {
 		return nil, err
 	}
-	payload = []byte(url + string(payload))
+	payload := append([]byte(url), data...)
 	mac.Write(payload)
 	sig := hex.EncodeToString(mac.Sum(nil))
 	return &sig, nil
