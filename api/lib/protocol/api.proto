@@ -380,6 +380,7 @@ message WyreCreateDebitCardOrderRequest {
   double source_amount = 4;
   string country = 5;
   bool amountIncludesFees = 6;
+  repeated string lockFields = 7;
 }
 
 message WyreTransfer {
