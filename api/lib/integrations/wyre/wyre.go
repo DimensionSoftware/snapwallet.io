@@ -706,7 +706,6 @@ func (c Client) CreatePaymentMethod(token string, req CreatePaymentMethodRequest
 // https://docs.sendwyre.com/v3/docs/wallet-order-reservations
 // POST https://api.sendwyre.com/v3/orders/reserve
 func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationRequest) (*WalletOrderReservation, error) {
-	reqPath := fmt.Sprintf("/v3/orders/reserve?timestamp=%d", time.Now().Unix()*int64(time.Millisecond))
 	req.ReferrerAccountID = c.config.WyreAccountID
 	payload, err := json.Marshal(req)
 
@@ -714,7 +713,11 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 		return nil, err
 	}
 
-	url := fmt.Sprintf("%s%s", c.http.HostURL, reqPath)
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/orders/reserve?timestamp=%d", ts)
+	url := c.http.HostURL + reqPath
 	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
 
 	if err != nil {
