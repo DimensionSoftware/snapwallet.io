@@ -1,9 +1,14 @@
 package wyre
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -173,6 +178,15 @@ type CreateTransferRequest struct {
 	MuteMessages       *bool   `json:"muteMessages,omitempty"`       // When true, disables outbound emails/messages to the destination
 }
 
+type CreateWalletOrderReservationRequest struct {
+	PaymentMethod      string   `json:"paymentMethod"`          // Should be one of "debit-card" or "apple-pay"
+	SourceCurrency     string   `json:"sourceCurrency"`         // The currency (ISO 3166-1 alpha-3) to withdrawal from the payment method
+	Country            string   `json:"country"`                // The country of the user's payment method
+	LockFields         []string `json:"lockFields"`             //  ["amount"]
+	SourceAmount       float64  `json:"sourceAmount,omitempty"` // The amount to withdrawal from the source, in units of sourceCurrency. Only include sourceAmount OR destAmount, not both.
+	AmountIncludesFees *bool    `json:"amountIncludesFees"`     // Determines whether or not the source or dest amount includes fees for this transaction.
+}
+
 type ConfirmTransferRequest struct {
 	TransferId string `json:"transferId"` // The Wyre transfer identifier
 }
@@ -275,6 +289,9 @@ func ProvideWyreConfig() (*Config, error) {
 // NewClient instantiates a new Client
 func NewClient(config *Config) *Client {
 	resty := resty.New()
+
+	// TODO: remove this
+	resty.SetDebug(true)
 
 	if config.EnableProduction {
 		log.Println("🚨 Production Wyre API is activated")
@@ -600,6 +617,48 @@ type PaymentMethod struct {
 	*/
 }
 
+// WalletOrderReservation represents the response object for https://api.sendwyre.com/v3/orders/reserve
+type WalletOrderReservation struct {
+	URL                string                      `json:"url"`
+	Reservation        string                      `json:"reservation"`
+	Amount             float64                     `json:"amount"`
+	SourceCurrency     string                      `json:"sourceCurrency"`
+	DestCurrency       string                      `json:"destCurrency"`
+	Dest               string                      `json:"dest"`
+	ReferrerAccountID  string                      `json:"referrerAccountId"`
+	SourceAmount       float64                     `json:"sourceAmount"`
+	DestAmount         float64                     `json:"destAmount"`
+	AmountIncludesFees *bool                       `json:"amountIncludeFees"`
+	Street1            string                      `json:"street1"`
+	City               string                      `json:"city"`
+	State              string                      `json:"state"`
+	PostalCode         string                      `json:"postalCode"`
+	Country            string                      `json:"country"`
+	FirstName          string                      `json:"firstName"`
+	LastName           string                      `json:"lastName"`
+	Phone              string                      `json:"phone"`
+	Email              string                      `json:"email"`
+	LockFields         []string                    `json:"lockFields"`
+	RedirectURL        string                      `json:"redirectUrl"`
+	FailureRedirectURL string                      `json:"failureRedirectUrl"`
+	PaymentMethod      string                      `json:"paymentMethod"`
+	ReferenceID        string                      `json:"referenceId"`
+	QuoteLockRequest   *bool                       `json:"quoteLockRequest"`
+	Quote              WalletOrderReservationQuote `json:"quote"`
+}
+
+// The Quote struct for a WalletOrderReservation https://api.sendwyre.com/v3/orders/reserve
+type WalletOrderReservationQuote struct {
+	SourceCurrency         string             `json:"sourceCurrency"`
+	SourceAmount           float64            `json:"sourceAmount"`
+	SourceAmountWithouFees float64            `json:"sourceAmountWithoutFees"`
+	DestCurrency           string             `json:"destCurrency"`
+	DestAmount             float64            `json:"destAmount"`
+	ExchangeRate           float64            `json:"exchangeRate"`
+	Equivelancies          map[string]float64 `json:"equivalencies"`
+	Fees                   map[string]float64 `json:"fees"`
+}
+
 // {"language":"en","compositeType":"","subType":"","errorCode":"accessDenied.invalidSession","exceptionId":"test_TQCJZP","message":"Invalid Session","type":"AccessDeniedException","transient":false}
 
 // APIError represents the error object sent back by the api
@@ -637,6 +696,46 @@ func (c Client) CreatePaymentMethod(token string, req CreatePaymentMethodRequest
 	}
 
 	return resp.Result().(*PaymentMethod), nil
+}
+
+// CreateWalletOrderReservation creates a wallet order reservation in Wyre's system
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/wallet-order-reservations
+// POST https://api.sendwyre.com/v3/orders/reserve
+func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationRequest) (*WalletOrderReservation, error) {
+	reqPath := fmt.Sprintf("/v3/orders/reserve?timestamp=%d", time.Now().Unix()*int64(time.Millisecond))
+	payload, err := json.Marshal(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	url := fmt.Sprintf("%s%s", c.http.HostURL, reqPath)
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetHeader("Content-Type", "application/json").
+		SetError(APIError{}).
+		SetResult(WalletOrderReservation{}).
+		SetBody(req).
+		EnableTrace().
+		Post(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*WalletOrderReservation), nil
 }
 
 /*
@@ -823,4 +922,17 @@ func (c Client) SubmitAuthToken(secretKey string) (*SubmitAuthTokenResponse, err
 type SubmitAuthTokenResponse struct {
 	APIKey          string      `json:"apiKey"`
 	AuthenticatedAs interface{} `json:"authenticatedAs"`
+}
+
+// Generate SHA256 HMAC signature...
+func GenerateHMACSignature(Secret string, url string, data []byte) (signature *string, err error) {
+	mac := hmac.New(sha256.New, []byte(Secret))
+	payload, err := json.RawMessage(data).MarshalJSON()
+	if err != nil {
+		return nil, err
+	}
+	payload = []byte(url + string(payload))
+	mac.Write(payload)
+	sig := hex.EncodeToString(mac.Sum(nil))
+	return &sig, nil
 }
