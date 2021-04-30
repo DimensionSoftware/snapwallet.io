@@ -325,6 +325,29 @@ message WyrePaymentMethod {
   repeated string depositable_currencies = 7;
 }
 
+message WyreWalletOrderReservationQuote {
+  string sourceCurrency = 1;
+  string sourceAmount = 2;
+  double sourceAmountWithoutFees = 3;
+  string destCurrency = 4;
+  double destAmount = 5;
+  double exchangeRate = 6;
+  map<string, double> equivelancies = 7;
+  map<string, double> fees = 8;
+}
+
+message WyreWalletOrderReservation {
+  int64 amount = 1;
+	bool amountIncludesFees = 2;
+	repeated string lockFields = 3;
+	string paymentMethod = 4;
+	string referenceId = 5;
+	bool quoteLockRequest = 6;
+  WyreWalletOrderReservationQuote quote = 7;
+}
+
+
+
 message WyrePaymentMethods {
   repeated WyrePaymentMethod payment_methods = 1;
 }
@@ -348,6 +371,15 @@ message WyreGetTransferRequest {
 
 message WyreGetTransfersRequest {
   int64 page = 1;
+}
+
+message WyreCreateDebitCardOrderRequest {
+  string dest = 1;
+  string source_currency = 2;
+  string dest_currency = 3;
+  double source_amount = 4;
+  string country = 5;
+  bool amountIncludesFees = 6;
 }
 
 message WyreTransfer {
@@ -420,6 +452,10 @@ message SnapWidgetConfig {
 
 message WidgetGetShortUrlResponse {
   string url = 1;
+}
+
+message WyreCreateDebitCardOrderResponse {
+  string reservation = 1;
 }
 
 message GotoRequest {
@@ -575,6 +611,13 @@ service Flux {
   rpc WyreGetTransfers(WyreGetTransfersRequest) returns (WyreTransfers) {
     option (google.api.http) = {
       get: "/wyre/transfers"
+    };
+  }
+
+  rpc WyreCreateWalletOrderReservation(WyreCreateDebitCardOrderRequest) returns (WyreCreateDebitCardOrderResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card"
+      body: "*"
     };
   }
 
