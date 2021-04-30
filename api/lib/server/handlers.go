@@ -1525,8 +1525,11 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 	t, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
 		PaymentMethod:      "debit-card",
 		SourceCurrency:     req.GetSourceCurrency(),
+		DestCurrency:       req.GetDestCurrency(),
 		Country:            req.GetCountry(),
 		SourceAmount:       req.GetSourceAmount(),
+		LockFields:         req.GetLockFields(),
+		Dest:               req.GetDest(),
 		AmountIncludesFees: &includeFees,
 	})
 
