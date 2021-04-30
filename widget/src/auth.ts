@@ -39,7 +39,7 @@ export class AuthManager {
 
   private setTokenLock() {
     Logger.debug('Token lock set')
-    return window.localStorage.setItem(JWT_TOKENS_LOCK_KEY, 'locked')
+    return window.localStorage.setItem(JWT_TOKENS_LOCK_KEY, Date.now().toString())
   }
 
   // returns access, refresh
