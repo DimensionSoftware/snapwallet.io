@@ -190,6 +190,10 @@ type CreateWalletOrderReservationRequest struct {
 	Dest               string   `json:"dest"`
 }
 
+type GetWalletOrderReservationRequest struct {
+	ReservationID string `json:"reservationId"` // The wallet order reservation ID
+}
+
 type CreateWalletOrderRequest struct {
 	FirstName         string               `json:"givenName"`              // Card first name
 	LastName          string               `json:"familyName"`             // Card last name
@@ -657,10 +661,13 @@ type PaymentMethod struct {
 	*/
 }
 
+type CreateWalletOrderReservationResponse struct {
+	URL         string `json:"url"`
+	Reservation string `json:"reservation"`
+}
+
 // WalletOrderReservation represents the response object for https://api.sendwyre.com/v3/orders/reserve
 type WalletOrderReservation struct {
-	URL                string                      `json:"url"`
-	Reservation        string                      `json:"reservation"`
 	Amount             float64                     `json:"amount"`
 	SourceCurrency     string                      `json:"sourceCurrency"`
 	DestCurrency       string                      `json:"destCurrency"`
@@ -689,14 +696,14 @@ type WalletOrderReservation struct {
 
 // The Quote struct for a WalletOrderReservation https://api.sendwyre.com/v3/orders/reserve
 type WalletOrderReservationQuote struct {
-	SourceCurrency         string             `json:"sourceCurrency"`
-	SourceAmount           float64            `json:"sourceAmount"`
-	SourceAmountWithouFees float64            `json:"sourceAmountWithoutFees"`
-	DestCurrency           string             `json:"destCurrency"`
-	DestAmount             float64            `json:"destAmount"`
-	ExchangeRate           float64            `json:"exchangeRate"`
-	Equivelancies          map[string]float64 `json:"equivalencies"`
-	Fees                   map[string]float64 `json:"fees"`
+	SourceCurrency          string             `json:"sourceCurrency"`
+	SourceAmount            float64            `json:"sourceAmount"`
+	SourceAmountWithoutFees float64            `json:"sourceAmountWithoutFees"`
+	DestCurrency            string             `json:"destCurrency"`
+	DestAmount              float64            `json:"destAmount"`
+	ExchangeRate            float64            `json:"exchangeRate"`
+	Equivelancies           map[string]float64 `json:"equivalencies"`
+	Fees                    map[string]float64 `json:"fees"`
 }
 
 // WalletOrder represents the response object for https://api.sendwyre.com/v3/debitcard/process/partner
@@ -769,7 +776,7 @@ func (c Client) CreatePaymentMethod(token string, req CreatePaymentMethodRequest
 // NOTE: This endpoint uses centralized authentication.
 // https://docs.sendwyre.com/v3/docs/wallet-order-reservations
 // POST https://api.sendwyre.com/v3/orders/reserve
-func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationRequest) (*WalletOrderReservation, error) {
+func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationRequest) (*CreateWalletOrderReservationResponse, error) {
 	req.ReferrerAccountID = c.config.WyreAccountID
 	payload, err := json.Marshal(req)
 
@@ -792,10 +799,46 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 		SetHeader("X-Api-Signature", *signature).
 		SetHeader("X-Api-Key", c.config.WyreAPIKey).
 		SetError(APIError{}).
-		SetResult(WalletOrderReservation{}).
+		SetResult(CreateWalletOrderReservationResponse{}).
 		SetBody(req).
 		EnableTrace().
 		Post(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*CreateWalletOrderReservationResponse), nil
+}
+
+// CreateWalletOrderReservation creates a wallet order reservation in Wyre's system
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/wallet-order-reservations
+// GET https://api.sendwyre.com/v3/orders/reservation/:reservationId
+func (c Client) GetWalletOrderReservation(req GetWalletOrderReservationRequest) (*WalletOrderReservation, error) {
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/orders/reservation/%s?timestamp=%d", req.ReservationID, ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, []byte(""))
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(WalletOrderReservation{}).
+		SetBody(req).
+		EnableTrace().
+		Get(reqPath)
 
 	if err != nil {
 		return nil, err
