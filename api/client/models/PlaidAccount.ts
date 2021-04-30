@@ -10,42 +10,51 @@
  * Do not edit the class manually.
  */
 
-import { PlaidAccount } from './PlaidAccount';
-import { PlaidInstitution } from './PlaidInstitution';
 import { HttpFile } from '../http/http';
 
-/**
-* request mirrors some elements of https://plaid.com/docs/link/web/#onsuccess
-*/
-export class PlaidConnectBankAccountsRequest {
-    'plaidPublicToken'?: string;
-    'institution'?: PlaidInstitution;
-    'accounts'?: Array<PlaidAccount>;
+export class PlaidAccount {
+    'id'?: string;
+    'name'?: string;
+    'mask'?: string;
+    'type'?: string;
+    'subType'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "plaidPublicToken",
-            "baseName": "plaidPublicToken",
+            "name": "id",
+            "baseName": "id",
             "type": "string",
             "format": ""
         },
         {
-            "name": "institution",
-            "baseName": "institution",
-            "type": "PlaidInstitution",
+            "name": "name",
+            "baseName": "name",
+            "type": "string",
             "format": ""
         },
         {
-            "name": "accounts",
-            "baseName": "accounts",
-            "type": "Array<PlaidAccount>",
+            "name": "mask",
+            "baseName": "mask",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "type",
+            "baseName": "type",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "subType",
+            "baseName": "subType",
+            "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return PlaidConnectBankAccountsRequest.attributeTypeMap;
+        return PlaidAccount.attributeTypeMap;
     }
     
     public constructor() {

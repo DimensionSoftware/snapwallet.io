@@ -13,7 +13,6 @@ require (
 	github.com/disintegration/imaging v1.6.2
 	github.com/go-resty/resty/v2 v2.5.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
-	github.com/golang/protobuf v1.4.3
 	github.com/google/tink/go v1.5.0
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.2.0

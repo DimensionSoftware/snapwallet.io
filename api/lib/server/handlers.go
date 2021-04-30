@@ -257,12 +257,26 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	}
 	log.Printf("Plaid Public Token successfuly exchanged")
 
+	var accounts []item.Account
+	for _, reqAccount := range req.Accounts {
+		accounts = append(accounts, item.Account{
+			ID:      item.AccountID(reqAccount.Id),
+			Name:    reqAccount.Name,
+			Mask:    reqAccount.Mask,
+			Type:    reqAccount.Type,
+			SubType: reqAccount.SubType,
+		})
+	}
+
 	item := item.Item{
 		ID:          item.ID(resp.ItemID),
 		AccessToken: resp.AccessToken,
-		Institution: item.Institution{},
-		Accounts:    []item.Account{},
-		CreatedAt:   time.Now(),
+		Institution: item.Institution{
+			ID:   item.InstitutionID(req.Institution.Id),
+			Name: req.Institution.Name,
+		},
+		Accounts:  accounts,
+		CreatedAt: time.Now(),
 	}
 	err = s.Db.SavePlaidItem(ctx, u.ID, &item)
 	if err != nil {
