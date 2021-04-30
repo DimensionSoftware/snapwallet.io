@@ -57,12 +57,12 @@
               id: metadata.institution.institution_id,
               name: metadata.institution.name,
             },
-            metadata.accounts.map((pa: PlaidAccount) => ({
+            metadata.accounts.map((pa: PlaidSuccessCallbackMetadataAccount) => ({
               id: pa.id,
               name: pa.name,
               mask: pa.mask,
               type: pa.type,
-              subType: pa.subType,
+              subType: pa.subtype,
             })),
           ).then(() => {
             setTimeout(() => push(Routes.ROOT), 700)
