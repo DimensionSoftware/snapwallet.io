@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { WyreDebitCardInfo } from './WyreDebitCardInfo';
 import { HttpFile } from '../http/http';
 
 export class WyreCreateDebitCardOrderRequest {
@@ -17,9 +18,9 @@ export class WyreCreateDebitCardOrderRequest {
     'sourceCurrency'?: string;
     'destCurrency'?: string;
     'sourceAmount'?: number;
-    'country'?: string;
     'amountIncludesFees'?: boolean;
     'lockFields'?: Array<string>;
+    'card'?: WyreDebitCardInfo;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -49,12 +50,6 @@ export class WyreCreateDebitCardOrderRequest {
             "format": "double"
         },
         {
-            "name": "country",
-            "baseName": "country",
-            "type": "string",
-            "format": ""
-        },
-        {
             "name": "amountIncludesFees",
             "baseName": "amountIncludesFees",
             "type": "boolean",
@@ -64,6 +59,12 @@ export class WyreCreateDebitCardOrderRequest {
             "name": "lockFields",
             "baseName": "lockFields",
             "type": "Array<string>",
+            "format": ""
+        },
+        {
+            "name": "card",
+            "baseName": "card",
+            "type": "WyreDebitCardInfo",
             "format": ""
         }    ];
 

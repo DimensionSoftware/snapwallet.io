@@ -1185,9 +1185,6 @@
           "type": "number",
           "format": "double"
         },
-        "country": {
-          "type": "string"
-        },
         "amountIncludesFees": {
           "type": "boolean"
         },
@@ -1196,6 +1193,9 @@
           "items": {
             "type": "string"
           }
+        },
+        "card": {
+          "$ref": "#/definitions/WyreDebitCardInfo"
         }
       }
     },
@@ -1235,6 +1235,35 @@
         "destAmount": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "WyreDebitCardInfo": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "expirationMonth": {
+          "type": "string"
+        },
+        "expirationYear": {
+          "type": "string"
+        },
+        "verificationCode": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/Address"
         }
       }
     },

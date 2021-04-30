@@ -54,6 +54,7 @@ models/WyreConfirmTransferRequest.ts
 models/WyreCreateDebitCardOrderRequest.ts
 models/WyreCreateDebitCardOrderResponse.ts
 models/WyreCreateTransferRequest.ts
+models/WyreDebitCardInfo.ts
 models/WyrePaymentMethod.ts
 models/WyrePaymentMethods.ts
 models/WyreTransfer.ts

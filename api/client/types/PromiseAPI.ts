@@ -44,6 +44,7 @@ import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest
 import { WyreCreateDebitCardOrderRequest } from '../models/WyreCreateDebitCardOrderRequest';
 import { WyreCreateDebitCardOrderResponse } from '../models/WyreCreateDebitCardOrderResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
+import { WyreDebitCardInfo } from '../models/WyreDebitCardInfo';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
 import { WyreTransfer } from '../models/WyreTransfer';
