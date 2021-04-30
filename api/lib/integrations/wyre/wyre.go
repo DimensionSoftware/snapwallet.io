@@ -209,6 +209,7 @@ type CreateWalletOrderRequest struct {
 
 type WalletOrderAddress struct {
 	Street1    string `json:"street1"`
+	Street2    string `json:"street2"`
 	City       string `json:"city"`
 	State      string `json:"state"`      // Alph2 state code
 	PostalCode string `json:"postalCode"` // Numeric string only
