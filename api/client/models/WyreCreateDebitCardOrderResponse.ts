@@ -14,6 +14,9 @@ import { HttpFile } from '../http/http';
 
 export class WyreCreateDebitCardOrderResponse {
     'reservation'?: string;
+    'orderId'?: string;
+    'status'?: string;
+    'transferId'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -21,6 +24,24 @@ export class WyreCreateDebitCardOrderResponse {
         {
             "name": "reservation",
             "baseName": "reservation",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "orderId",
+            "baseName": "orderId",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "status",
+            "baseName": "status",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "transferId",
+            "baseName": "transferId",
             "type": "string",
             "format": ""
         }    ];

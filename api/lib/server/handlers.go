@@ -1522,7 +1522,7 @@ func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransfer
 func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *proto.WyreCreateDebitCardOrderRequest) (*proto.WyreCreateDebitCardOrderResponse, error) {
 	includeFees := req.GetAmountIncludesFees()
 
-	t, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
+	reservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
 		PaymentMethod:      "debit-card",
 		SourceCurrency:     req.GetSourceCurrency(),
 		DestCurrency:       req.GetDestCurrency(),
@@ -1533,9 +1533,41 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		AmountIncludesFees: &includeFees,
 	})
 
+	// TODO: get these values from user/client
+	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
+		SourceCurrency: req.GetSourceCurrency(),
+		PurchaseAmount: req.GetSourceAmount(),
+		DestCurrency:   req.GetDestCurrency(),
+		SourceAmount:   req.GetSourceAmount(),
+		Dest:           req.GetDest(),
+		FirstName:      "Cornelius",
+		LastName:       "Dangerfield",
+		Email:          "someone@example.com",
+		PhoneNumber:    "+17608981717",
+		ReferenceID:    "crypto_moon_lambo",
+		ReservationID:  reservationResponse.Reservation,
+		Address: wyre.WalletOrderAddress{
+			Street1:    "123 moon st",
+			City:       "Los Angeles",
+			State:      "CA",
+			PostalCode: "90024",
+			Country:    "US",
+		},
+		DebitCard: wyre.WalletOrderDebitCard{
+			Number:           "4111111111111111",
+			ExpirationYear:   "2024",
+			ExpirationMonth:  "11",
+			VerificationCode: "000",
+		},
+	})
+
 	if err != nil {
 		return nil, err
 	}
 
-	return &proto.WyreCreateDebitCardOrderResponse{Reservation: t.Reservation}, nil
+	return &proto.WyreCreateDebitCardOrderResponse{
+		Reservation: reservationResponse.Reservation, OrderId: orderResponse.ID,
+		Status:     orderResponse.Status,
+		TransferId: orderResponse.TransferID,
+	}, nil
 }

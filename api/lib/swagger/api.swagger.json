@@ -1204,6 +1204,15 @@
       "properties": {
         "reservation": {
           "type": "string"
+        },
+        "orderId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "transferId": {
+          "type": "string"
         }
       }
     },
