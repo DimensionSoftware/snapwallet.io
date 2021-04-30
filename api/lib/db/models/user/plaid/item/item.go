@@ -10,6 +10,12 @@ import (
 // ID ...
 type ID string
 
+// AccountID ...
+type AccountID string
+
+// InstitutionID ...
+type InstitutionID string
+
 // EncryptedItem ...
 type EncryptedItem struct {
 	ID                   ID        `firestore:"id"`
@@ -24,8 +30,24 @@ type EncryptedItem struct {
 type Item struct {
 	ID          ID
 	AccessToken string
-	AccountIDs  []string
+	Institution Institution
+	Accounts    []Account
 	CreatedAt   time.Time
+}
+
+// Institution ...
+type Institution struct {
+	ID   InstitutionID
+	Name string
+}
+
+// Account ...
+type Account struct {
+	ID      AccountID
+	Name    string
+	Mask    string
+	Type    string
+	SubType string
 }
 
 // Decrypt ...
