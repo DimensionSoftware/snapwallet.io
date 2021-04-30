@@ -795,6 +795,49 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 	return resp.Result().(*WalletOrderReservation), nil
 }
 
+// CreateWalletOrderReservation creates a wallet order reservation in Wyre's system
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/white-label-card-processing-api
+// POST https://api.sendwyre.com/v3/debitcard/process/partner
+func (c Client) CreateWalletOrder(req CreateWalletOrderRequest) (*WalletOrder, error) {
+	req.ReferrerAccountID = c.config.WyreAccountID
+	payload, err := json.Marshal(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/debitcard/process/partner?timestamp=%d", ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(WalletOrder{}).
+		SetBody(req).
+		EnableTrace().
+		Post(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*WalletOrder), nil
+}
+
 /*
 req ex:
 {
