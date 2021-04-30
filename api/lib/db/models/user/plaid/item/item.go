@@ -1,6 +1,7 @@
 package item
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -21,7 +22,8 @@ type EncryptedItem struct {
 	ID                   ID        `firestore:"id"`
 	DataEncryptionKey    []byte    `firestore:"DEK"`
 	AccessTokenEncrypted []byte    `firestore:"accessTokenEncrypted"`
-	AccountIDs           []string  `firestore:"accountIDs"`
+	InstitutionEncrypted []byte    `firestore:"institutionEncrypted"`
+	AccountsEncrypted    []byte    `firestore:"accountsEncrypted"`
 	CreatedAt            time.Time `firestore:"createdAt"`
 }
 
@@ -37,17 +39,17 @@ type Item struct {
 
 // Institution ...
 type Institution struct {
-	ID   InstitutionID
-	Name string
+	ID   InstitutionID `json:"id"`
+	Name string        `json:"name"`
 }
 
 // Account ...
 type Account struct {
-	ID      AccountID
-	Name    string
-	Mask    string
-	Type    string
-	SubType string
+	ID      AccountID `json:"id"`
+	Name    string    `json:"name"`
+	Mask    string    `json:"mask"`
+	Type    string    `json:"type"`
+	SubType string    `json:"subType"`
 }
 
 // Decrypt ...
@@ -63,12 +65,36 @@ func (enc *EncryptedItem) Decrypt(m *encryption.Manager, userID user.ID) (*Item,
 		return nil, err
 	}
 
+	institutionBytes, err := dek.Decrypt(enc.InstitutionEncrypted, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	var institution Institution
+	err = json.Unmarshal(institutionBytes, &institution)
+	if err != nil {
+		return nil, err
+	}
+
+	accountsBytes, err := dek.Decrypt(enc.AccountsEncrypted, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	var accounts []Account
+	err = json.Unmarshal(accountsBytes, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Item{
 		ID:          enc.ID,
 		AccessToken: *accessToken,
-		AccountIDs:  enc.AccountIDs,
+		Institution: institution,
+		Accounts:    accounts,
 		CreatedAt:   enc.CreatedAt,
 	}, nil
+
 }
 
 // Encrypt ...
