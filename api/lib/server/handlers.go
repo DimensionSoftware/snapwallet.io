@@ -1520,26 +1520,26 @@ func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransfer
 }
 
 func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *proto.WyreCreateDebitCardOrderRequest) (*proto.WyreCreateDebitCardOrderResponse, error) {
-	includeFees := req.GetAmountIncludesFees()
+	includeFees := req.AmountIncludesFees
 
 	reservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
 		PaymentMethod:      "debit-card",
-		SourceCurrency:     req.GetSourceCurrency(),
-		DestCurrency:       req.GetDestCurrency(),
-		Country:            req.GetCountry(),
-		SourceAmount:       req.GetSourceAmount(),
-		LockFields:         req.GetLockFields(),
-		Dest:               req.GetDest(),
+		SourceCurrency:     req.SourceCurrency,
+		DestCurrency:       req.DestCurrency,
+		Country:            req.Country,
+		SourceAmount:       req.SourceAmount,
+		LockFields:         req.LockFields,
+		Dest:               req.Dest,
 		AmountIncludesFees: &includeFees,
 	})
 
 	// TODO: get these values from user/client
 	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
-		SourceCurrency: req.GetSourceCurrency(),
-		PurchaseAmount: req.GetSourceAmount(),
-		DestCurrency:   req.GetDestCurrency(),
-		SourceAmount:   req.GetSourceAmount(),
-		Dest:           req.GetDest(),
+		SourceCurrency: req.SourceCurrency,
+		PurchaseAmount: req.SourceAmount,
+		DestCurrency:   req.DestCurrency,
+		SourceAmount:   req.SourceAmount,
+		Dest:           req.Dest,
 		FirstName:      "Cornelius",
 		LastName:       "Dangerfield",
 		Email:          "someone@example.com",
