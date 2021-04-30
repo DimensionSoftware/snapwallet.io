@@ -1523,7 +1523,7 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 	includeFees := req.AmountIncludesFees
 	card := req.Card
 
-	reservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
+	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
 		Country:            card.Address.Country,
 		PaymentMethod:      "debit-card",
 		SourceCurrency:     req.SourceCurrency,
@@ -1538,8 +1538,16 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		return nil, err
 	}
 
+	reservationResponse, err := s.Wyre.GetWalletOrderReservation(wyre.GetWalletOrderReservationRequest{
+		ReservationID: createReservationResponse.Reservation,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
 	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
-		ReservationID:  reservationResponse.Reservation,
+		ReservationID:  createReservationResponse.Reservation,
 		SourceCurrency: req.SourceCurrency,
 		PurchaseAmount: req.SourceAmount,
 		DestCurrency:   req.DestCurrency,
@@ -1573,7 +1581,17 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 
 	// TODO: store the wallet order information
 	return &proto.WyreCreateDebitCardOrderResponse{
-		Reservation: reservationResponse.Reservation, OrderId: orderResponse.ID,
+		Reservation: createReservationResponse.Reservation,
+		OrderId:     orderResponse.ID,
+		Quote: &proto.WyreWalletOrderReservationQuote{
+			ExchangeRate:            reservationResponse.Quote.ExchangeRate,
+			DestCurrency:            reservationResponse.Quote.DestCurrency,
+			SourceCurrency:          reservationResponse.Quote.SourceCurrency,
+			Fees:                    reservationResponse.Quote.Fees,
+			SourceAmount:            reservationResponse.Quote.SourceAmount,
+			DestAmount:              reservationResponse.Quote.DestAmount,
+			SourceAmountWithoutFees: reservationResponse.Quote.SourceAmountWithoutFees,
+		},
 		Status:     orderResponse.Status,
 		TransferId: orderResponse.TransferID,
 	}, nil
