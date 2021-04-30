@@ -727,7 +727,6 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 	resp, err := c.http.R().
 		SetHeader("X-Api-Signature", *signature).
 		SetHeader("X-Api-Key", c.config.WyreAPIKey).
-		SetHeader("Content-Type", "application/json").
 		SetError(APIError{}).
 		SetResult(WalletOrderReservation{}).
 		SetBody(req).
