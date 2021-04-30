@@ -1521,43 +1521,45 @@ func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransfer
 
 func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *proto.WyreCreateDebitCardOrderRequest) (*proto.WyreCreateDebitCardOrderResponse, error) {
 	includeFees := req.AmountIncludesFees
+	card := req.Card
 
 	reservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
+		Country:            card.Address.Country,
 		PaymentMethod:      "debit-card",
 		SourceCurrency:     req.SourceCurrency,
 		DestCurrency:       req.DestCurrency,
-		Country:            req.Country,
 		SourceAmount:       req.SourceAmount,
 		LockFields:         req.LockFields,
 		Dest:               req.Dest,
 		AmountIncludesFees: &includeFees,
 	})
 
-	// TODO: get these values from user/client
 	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
+		ReservationID:  reservationResponse.Reservation,
 		SourceCurrency: req.SourceCurrency,
 		PurchaseAmount: req.SourceAmount,
 		DestCurrency:   req.DestCurrency,
 		SourceAmount:   req.SourceAmount,
 		Dest:           req.Dest,
-		FirstName:      "Cornelius",
-		LastName:       "Dangerfield",
-		Email:          "someone@example.com",
-		PhoneNumber:    "+17608981717",
-		ReferenceID:    "crypto_moon_lambo",
-		ReservationID:  reservationResponse.Reservation,
+		FirstName:      card.FirstName,
+		LastName:       card.LastName,
+		// TODO: This should come from logged in user
+		Email:       "someone@example.com",
+		PhoneNumber: card.PhoneNumber,
+		ReferenceID: "crypto_moon_lambo",
 		Address: wyre.WalletOrderAddress{
-			Street1:    "123 moon st",
-			City:       "Los Angeles",
-			State:      "CA",
-			PostalCode: "90024",
-			Country:    "US",
+			Street1:    card.Address.Street_1,
+			Street2:    card.Address.Street_2,
+			City:       card.Address.City,
+			State:      card.Address.State,
+			PostalCode: card.Address.PostalCode,
+			Country:    card.Address.Country,
 		},
 		DebitCard: wyre.WalletOrderDebitCard{
-			Number:           "4111111111111111",
-			ExpirationYear:   "2024",
-			ExpirationMonth:  "11",
-			VerificationCode: "000",
+			Number:           card.Number,
+			ExpirationMonth:  card.ExpirationMonth,
+			ExpirationYear:   card.ExpirationYear,
+			VerificationCode: card.VerificationCode,
 		},
 	})
 
