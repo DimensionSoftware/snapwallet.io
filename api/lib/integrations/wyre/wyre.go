@@ -707,6 +707,7 @@ func (c Client) CreatePaymentMethod(token string, req CreatePaymentMethodRequest
 // POST https://api.sendwyre.com/v3/orders/reserve
 func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationRequest) (*WalletOrderReservation, error) {
 	reqPath := fmt.Sprintf("/v3/orders/reserve?timestamp=%d", time.Now().Unix()*int64(time.Millisecond))
+	req.ReferrerAccountID = c.config.WyreAccountID
 	payload, err := json.Marshal(req)
 
 	if err != nil {
