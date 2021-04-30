@@ -378,9 +378,20 @@ message WyreCreateDebitCardOrderRequest {
   string source_currency = 2;
   string dest_currency = 3;
   double source_amount = 4;
-  string country = 5;
-  bool amountIncludesFees = 6;
+  bool amount_includes_fees = 6;
   repeated string lockFields = 7;
+  WyreDebitCardInfo card = 10;
+}
+
+message WyreDebitCardInfo {
+  string first_name = 1;
+  string last_name = 2;
+  string phone_number = 3;
+  string number = 4;
+  string expiration_month = 5;
+  string expiration_year = 6;
+  string verification_code = 7;
+  Address address = 8;
 }
 
 message WyreTransfer {
