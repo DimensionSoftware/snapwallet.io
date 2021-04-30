@@ -190,6 +190,38 @@ type CreateWalletOrderReservationRequest struct {
 	Dest               string   `json:"dest"`
 }
 
+type CreateWalletOrderRequest struct {
+	FirstName         string               `json:"givenName"`              // Card first name
+	LastName          string               `json:"familyName"`             // Card last name
+	Email             string               `json:"email"`                  // User's email
+	PhoneNumber       string               `json:"phone"`                  // User's phone number (should match card)
+	ReferenceID       string               `json:"referenceId"`            // Optional field for internal reference
+	ReservationID     string               `json:"reservationId"`          // WalletOrderReservation created just before this step
+	SourceCurrency    string               `json:"sourceCurrency"`         // The currency (ISO 3166-1 alpha-3) to withdrawal from the payment method
+	DestCurrency      string               `json:"destCurrency"`           // The destination currency for the trade
+	SourceAmount      float64              `json:"sourceAmount,omitempty"` // The amount to withdrawal from the source, in units of sourceCurrency. Only include sourceAmount OR destAmount, not both.
+	ReferrerAccountID string               `json:"referrerAccountId"`      // The Wyre account ID
+	Dest              string               `json:"dest"`                   // A Wyre destination SRN
+	Address           WalletOrderAddress   `json:"address"`                // The user's card address
+	DebitCard         WalletOrderDebitCard `json:"debitCard"`              // Ther user's debit card information
+	PurchaseAmount    float64              `json:"purchaseAmount"`
+}
+
+type WalletOrderAddress struct {
+	Street1    string `json:"street1"`
+	City       string `json:"city"`
+	State      string `json:"state"`      // Alph2 state code
+	PostalCode string `json:"postalCode"` // Numeric string only
+	Country    string `json:"country"`    // Alpha2 country code
+}
+
+type WalletOrderDebitCard struct {
+	Number           string `json:"number"` // Card number
+	ExpirationYear   string `json:"year"`   // 4 digit card expiration year
+	ExpirationMonth  string `json:"month"`  // 2 digit card expiration month
+	VerificationCode string `json:"cvv"`    // 3-4 digit code on front or back of card
+}
+
 type ConfirmTransferRequest struct {
 	TransferId string `json:"transferId"` // The Wyre transfer identifier
 }
