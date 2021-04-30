@@ -327,7 +327,7 @@ message WyrePaymentMethod {
 
 message WyreWalletOrderReservationQuote {
   string sourceCurrency = 1;
-  string sourceAmount = 2;
+  double sourceAmount = 2;
   double sourceAmountWithoutFees = 3;
   string destCurrency = 4;
   double destAmount = 5;
@@ -482,6 +482,7 @@ message WyreCreateDebitCardOrderResponse {
   string orderId = 2;
   string status = 3;
   string transferId = 4;
+  WyreWalletOrderReservationQuote quote = 5;
 }
 
 message GotoRequest {
