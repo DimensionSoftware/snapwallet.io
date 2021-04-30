@@ -10,8 +10,10 @@ export * from './LifecycleStatus';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
+export * from './PlaidAccount';
 export * from './PlaidConnectBankAccountsRequest';
 export * from './PlaidCreateLinkTokenResponse';
+export * from './PlaidInstitution';
 export * from './PricingDataResponse';
 export * from './PricingRate';
 export * from './ProfileDataInfo';
@@ -57,8 +59,10 @@ import { LifecycleStatus } from './LifecycleStatus';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
+import { PlaidAccount } from './PlaidAccount';
 import { PlaidConnectBankAccountsRequest } from './PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from './PlaidCreateLinkTokenResponse';
+import { PlaidInstitution } from './PlaidInstitution';
 import { PricingDataResponse } from './PricingDataResponse';
 import { PricingRate } from './PricingRate';
 import { ProfileDataInfo } from './ProfileDataInfo';
@@ -129,8 +133,10 @@ let typeMap: {[index: string]: any} = {
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,
     "OneTimePasscodeVerifyResponse": OneTimePasscodeVerifyResponse,
+    "PlaidAccount": PlaidAccount,
     "PlaidConnectBankAccountsRequest": PlaidConnectBankAccountsRequest,
     "PlaidCreateLinkTokenResponse": PlaidCreateLinkTokenResponse,
+    "PlaidInstitution": PlaidInstitution,
     "PricingDataResponse": PricingDataResponse,
     "PricingRate": PricingRate,
     "ProfileDataInfo": ProfileDataInfo,

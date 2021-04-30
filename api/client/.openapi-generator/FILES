@@ -24,8 +24,10 @@ models/ObjectSerializer.ts
 models/OneTimePasscodeRequest.ts
 models/OneTimePasscodeVerifyRequest.ts
 models/OneTimePasscodeVerifyResponse.ts
+models/PlaidAccount.ts
 models/PlaidConnectBankAccountsRequest.ts
 models/PlaidCreateLinkTokenResponse.ts
+models/PlaidInstitution.ts
 models/PricingDataResponse.ts
 models/PricingRate.ts
 models/ProfileDataInfo.ts
