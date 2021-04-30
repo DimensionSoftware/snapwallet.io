@@ -373,6 +373,10 @@ message WyreGetTransfersRequest {
   int64 page = 1;
 }
 
+message WyreGetDebitCardOrderAuthorizationsRequest {
+  string order_id = 1;
+}
+
 message WyreCreateDebitCardOrderRequest {
   string dest = 1;
   string source_currency = 2;
@@ -464,6 +468,13 @@ message SnapWidgetConfig {
 
 message WidgetGetShortUrlResponse {
   string url = 1;
+}
+
+message WyreGetDebitCardOrderAuthorizationsResponse {
+  string wallet_order_id = 1;
+  bool sms_needed = 2;
+  bool card2faNeeded = 3;
+  string authorization_3ds_url = 4;
 }
 
 message WyreCreateDebitCardOrderResponse {
@@ -632,6 +643,13 @@ service Flux {
   rpc WyreCreateWalletOrderReservation(WyreCreateDebitCardOrderRequest) returns (WyreCreateDebitCardOrderResponse) {
     option (google.api.http) = {
       post: "/wyre/transfers/debit-card"
+      body: "*"
+    };
+  }
+
+  rpc WyreGetWalletOrderAuthorizations(WyreGetDebitCardOrderAuthorizationsRequest) returns (WyreGetDebitCardOrderAuthorizationsResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/auth"
       body: "*"
     };
   }
