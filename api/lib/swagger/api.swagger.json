@@ -1245,6 +1245,9 @@
         },
         "transferId": {
           "type": "string"
+        },
+        "quote": {
+          "$ref": "#/definitions/WyreWalletOrderReservationQuote"
         }
       }
     },
@@ -1501,6 +1504,47 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/WyreTransfer"
+          }
+        }
+      }
+    },
+    "WyreWalletOrderReservationQuote": {
+      "type": "object",
+      "properties": {
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "sourceAmountWithoutFees": {
+          "type": "number",
+          "format": "double"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "equivelancies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "fees": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
           }
         }
       }

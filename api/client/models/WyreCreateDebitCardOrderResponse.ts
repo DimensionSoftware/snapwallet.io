@@ -10,6 +10,7 @@
  * Do not edit the class manually.
  */
 
+import { WyreWalletOrderReservationQuote } from './WyreWalletOrderReservationQuote';
 import { HttpFile } from '../http/http';
 
 export class WyreCreateDebitCardOrderResponse {
@@ -17,6 +18,7 @@ export class WyreCreateDebitCardOrderResponse {
     'orderId'?: string;
     'status'?: string;
     'transferId'?: string;
+    'quote'?: WyreWalletOrderReservationQuote;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -43,6 +45,12 @@ export class WyreCreateDebitCardOrderResponse {
             "name": "transferId",
             "baseName": "transferId",
             "type": "string",
+            "format": ""
+        },
+        {
+            "name": "quote",
+            "baseName": "quote",
+            "type": "WyreWalletOrderReservationQuote",
             "format": ""
         }    ];
 

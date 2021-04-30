@@ -62,6 +62,7 @@ models/WyrePaymentMethods.ts
 models/WyreTransfer.ts
 models/WyreTransferDetail.ts
 models/WyreTransfers.ts
+models/WyreWalletOrderReservationQuote.ts
 models/WyreWebhookRequest.ts
 models/all.ts
 package.json

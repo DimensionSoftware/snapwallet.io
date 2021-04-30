@@ -48,6 +48,7 @@ export * from './WyrePaymentMethods';
 export * from './WyreTransfer';
 export * from './WyreTransferDetail';
 export * from './WyreTransfers';
+export * from './WyreWalletOrderReservationQuote';
 export * from './WyreWebhookRequest';
 
 import { Address } from './Address';
@@ -100,6 +101,7 @@ import { WyrePaymentMethods } from './WyrePaymentMethods';
 import { WyreTransfer } from './WyreTransfer';
 import { WyreTransferDetail } from './WyreTransferDetail';
 import { WyreTransfers } from './WyreTransfers';
+import { WyreWalletOrderReservationQuote } from './WyreWalletOrderReservationQuote';
 import { WyreWebhookRequest } from './WyreWebhookRequest';
 
 /* tslint:disable:no-unused-variable */
@@ -174,6 +176,7 @@ let typeMap: {[index: string]: any} = {
     "WyreTransfer": WyreTransfer,
     "WyreTransferDetail": WyreTransferDetail,
     "WyreTransfers": WyreTransfers,
+    "WyreWalletOrderReservationQuote": WyreWalletOrderReservationQuote,
     "WyreWebhookRequest": WyreWebhookRequest,
 }
 
