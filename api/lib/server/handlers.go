@@ -1575,3 +1575,20 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		TransferId: orderResponse.TransferID,
 	}, nil
 }
+
+func (s *Server) WyreGetWalletOrderAuthorizations(ctx context.Context, req *proto.WyreGetDebitCardOrderAuthorizationsRequest) (*proto.WyreGetDebitCardOrderAuthorizationsResponse, error) {
+	res, err := s.Wyre.GetWalletOrderAuthorizations(wyre.GetWalletOrderAuthorizationsRequest{
+		OrderID: req.OrderId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreGetDebitCardOrderAuthorizationsResponse{
+		WalletOrderId: res.WalletOrderID,
+		SmsNeeded:     *res.SMSNeeded,
+		Card2FaNeeded: *res.Card2faNeeded,
+	}, nil
+}
+
