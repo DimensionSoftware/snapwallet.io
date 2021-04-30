@@ -179,12 +179,15 @@ type CreateTransferRequest struct {
 }
 
 type CreateWalletOrderReservationRequest struct {
-	PaymentMethod      string   `json:"paymentMethod"`          // Should be one of "debit-card" or "apple-pay"
-	SourceCurrency     string   `json:"sourceCurrency"`         // The currency (ISO 3166-1 alpha-3) to withdrawal from the payment method
+	PaymentMethod      string   `json:"paymentMethod"`  // Should be one of "debit-card" or "apple-pay"
+	SourceCurrency     string   `json:"sourceCurrency"` // The currency (ISO 3166-1 alpha-3) to withdrawal from the payment method
+	DestCurrency       string   `json:"destCurrency"`
 	Country            string   `json:"country"`                // The country of the user's payment method
 	LockFields         []string `json:"lockFields"`             //  ["amount"]
 	SourceAmount       float64  `json:"sourceAmount,omitempty"` // The amount to withdrawal from the source, in units of sourceCurrency. Only include sourceAmount OR destAmount, not both.
-	AmountIncludesFees *bool    `json:"amountIncludesFees"`     // Determines whether or not the source or dest amount includes fees for this transaction.
+	AmountIncludesFees *bool    `json:"amountIncludeFees"`      // Determines whether or not the source or dest amount includes fees for this transaction.
+	ReferrerAccountID  string   `json:"referrerAccountId"`
+	Dest               string   `json:"dest"`
 }
 
 type ConfirmTransferRequest struct {
