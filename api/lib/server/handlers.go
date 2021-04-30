@@ -1534,6 +1534,10 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		AmountIncludesFees: &includeFees,
 	})
 
+	if err != nil {
+		return nil, err
+	}
+
 	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
 		ReservationID:  reservationResponse.Reservation,
 		SourceCurrency: req.SourceCurrency,
@@ -1592,3 +1596,31 @@ func (s *Server) WyreGetWalletOrderAuthorizations(ctx context.Context, req *prot
 	}, nil
 }
 
+/*
+
+window.API.fluxWyreCreateWalletOrderReservation({
+sourceCurrency: 'usd',
+lockFields: ["sourceAmount"],
+sourceAmount: 5,
+destCurrency: 'eth',
+dest: "ethereum:0xf636B6aA45C554139763Ad926407C02719bc22f7",
+amountIncludesFees: false,
+card: {
+  firstName: 'Carlo',
+  lastName: 'Quintana',
+  phoneNumber: '+17608982762',
+  number: '4111111111111111',
+  expirationMonth: '10',
+  expirationYear: '2024',
+  verificationCode: '000',
+  address: {
+    street1: '123 my rd',
+    city: 'palm springs',
+    state: 'CA',
+    country: 'US',
+    postalCode: '92260'
+  }
+}
+}).then(console.log)
+
+*/
