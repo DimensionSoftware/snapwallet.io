@@ -1523,6 +1523,7 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 	includeFees := req.AmountIncludesFees
 	card := req.Card
 
+	// Create the order reservation
 	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
 		Country:            card.Address.Country,
 		PaymentMethod:      "debit-card",
@@ -1538,6 +1539,7 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		return nil, err
 	}
 
+	// Get the order reservation details because why would they return them in the previous call? :(
 	reservationResponse, err := s.Wyre.GetWalletOrderReservation(wyre.GetWalletOrderReservationRequest{
 		ReservationID: createReservationResponse.Reservation,
 	})
@@ -1546,6 +1548,7 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		return nil, err
 	}
 
+	// Create the order
 	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
 		ReservationID:  createReservationResponse.Reservation,
 		SourceCurrency: req.SourceCurrency,
