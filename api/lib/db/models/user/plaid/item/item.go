@@ -98,20 +98,39 @@ func (enc *EncryptedItem) Decrypt(m *encryption.Manager, userID user.ID) (*Item,
 }
 
 // Encrypt ...
-func (u *Item) Encrypt(m *encryption.Manager, userID user.ID) (*EncryptedItem, error) {
+func (item *Item) Encrypt(m *encryption.Manager, userID user.ID) (*EncryptedItem, error) {
 	dekH := encryption.NewDEK()
 	dek := encryption.NewEncryptor(dekH)
 
-	accessTokenEncrypted, err := encryption.EncryptStringIfNonNil(dek, []byte(userID), &u.AccessToken)
+	accessTokenEncrypted, err := encryption.EncryptStringIfNonNil(dek, []byte(userID), &item.AccessToken)
+	if err != nil {
+		return nil, err
+	}
+
+	institutionJSON, err := json.Marshal(&item.Institution)
+	if err != nil {
+		return nil, err
+	}
+	institutionEncrypted, err := dek.Encrypt(institutionJSON, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	accountsJSON, err := json.Marshal(&item.Accounts)
+	if err != nil {
+		return nil, err
+	}
+	accountsEncrypted, err := dek.Encrypt(accountsJSON, []byte(userID))
 	if err != nil {
 		return nil, err
 	}
 
 	return &EncryptedItem{
-		ID:                   u.ID,
+		ID:                   item.ID,
 		DataEncryptionKey:    *encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		AccessTokenEncrypted: *accessTokenEncrypted,
-		AccountIDs:           u.AccountIDs,
-		CreatedAt:            u.CreatedAt,
+		InstitutionEncrypted: institutionEncrypted,
+		AccountsEncrypted:    accountsEncrypted,
+		CreatedAt:            item.CreatedAt,
 	}, nil
 }

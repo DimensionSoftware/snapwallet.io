@@ -257,7 +257,14 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	}
 	log.Printf("Plaid Public Token successfuly exchanged")
 
-	_, err = s.Db.SavePlaidItem(ctx, u.ID, item.ID(resp.ItemID), resp.AccessToken, req.PlaidAccountIds)
+	item := item.Item{
+		ID:          item.ID(resp.ItemID),
+		AccessToken: resp.AccessToken,
+		Institution: item.Institution{},
+		Accounts:    []item.Account{},
+		CreatedAt:   time.Now(),
+	}
+	err = s.Db.SavePlaidItem(ctx, u.ID, &item)
 	if err != nil {
 		return nil, err
 	}
@@ -1248,11 +1255,11 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 		}
 
 		if !pmCreated {
-			for _, accountID := range plaidItem.AccountIDs {
+			for _, account := range plaidItem.Accounts {
 				out = append(out, &proto.WyrePaymentMethod{
 					LifecyleStatus: proto.LifecycleStatus_L_PENDING,
 					// todo: store name, last4 from plaid so i can make this nicer
-					Name: fmt.Sprintf("Plaid Account ID %s", accountID),
+					Name: fmt.Sprintf("Plaid Account ID %s", account.ID),
 					//Last4:               "foo",
 				})
 			}
