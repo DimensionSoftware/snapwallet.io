@@ -3,6 +3,7 @@
   import { Routes } from '../constants'
   import { Logger } from '../util'
   import { onDestroy, onMount } from 'svelte'
+  import type { PlaidAccount, PlaidInstitution } from 'api-client'
 
   let handler
 
@@ -13,11 +14,13 @@
 
   async function connectAccounts(
     plaidPublicToken: string,
-    plaidAccountIds: string[],
+    institution: PlaidInstitution,
+    accounts: PlaidAccount[],
   ): Promise<void> {
     await window.API.fluxPlaidConnectBankAccounts({
       plaidPublicToken,
-      plaidAccountIds,
+      institution,
+      accounts,
     })
   }
 
@@ -50,7 +53,17 @@
           Logger.debug(metadata)
           connectAccounts(
             publicToken,
-            metadata.accounts.map(a => a.id),
+            {
+              id: metadata.institution.institution_id,
+              name: metadata.institution.name,
+            },
+            metadata.accounts.map((pa: PlaidAccount) => ({
+              id: pa.id,
+              name: pa.name,
+              mask: pa.mask,
+              type: pa.type,
+              subType: pa.subType,
+            })),
           ).then(() => {
             setTimeout(() => push(Routes.ROOT), 700)
           })
