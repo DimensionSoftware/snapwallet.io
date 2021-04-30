@@ -69,6 +69,7 @@ type FluxClient interface {
 	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
 	WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error)
 	WyreCreateWalletOrderReservation(ctx context.Context, in *WyreCreateDebitCardOrderRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardOrderResponse, error)
+	WyreGetWalletOrderAuthorizations(ctx context.Context, in *WyreGetDebitCardOrderAuthorizationsRequest, opts ...grpc.CallOption) (*WyreGetDebitCardOrderAuthorizationsResponse, error)
 	WidgetGetShortUrl(ctx context.Context, in *SnapWidgetConfig, opts ...grpc.CallOption) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
 	//
@@ -253,6 +254,15 @@ func (c *fluxClient) WyreCreateWalletOrderReservation(ctx context.Context, in *W
 	return out, nil
 }
 
+func (c *fluxClient) WyreGetWalletOrderAuthorizations(ctx context.Context, in *WyreGetDebitCardOrderAuthorizationsRequest, opts ...grpc.CallOption) (*WyreGetDebitCardOrderAuthorizationsResponse, error) {
+	out := new(WyreGetDebitCardOrderAuthorizationsResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreGetWalletOrderAuthorizations", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fluxClient) WidgetGetShortUrl(ctx context.Context, in *SnapWidgetConfig, opts ...grpc.CallOption) (*WidgetGetShortUrlResponse, error) {
 	out := new(WidgetGetShortUrlResponse)
 	err := c.cc.Invoke(ctx, "/Flux/WidgetGetShortUrl", in, out, opts...)
@@ -343,6 +353,7 @@ type FluxServer interface {
 	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransferDetail, error)
 	WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error)
 	WyreCreateWalletOrderReservation(context.Context, *WyreCreateDebitCardOrderRequest) (*WyreCreateDebitCardOrderResponse, error)
+	WyreGetWalletOrderAuthorizations(context.Context, *WyreGetDebitCardOrderAuthorizationsRequest) (*WyreGetDebitCardOrderAuthorizationsResponse, error)
 	WidgetGetShortUrl(context.Context, *SnapWidgetConfig) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
 	//
@@ -415,6 +426,9 @@ func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *WyreGetTransfe
 }
 func (UnimplementedFluxServer) WyreCreateWalletOrderReservation(context.Context, *WyreCreateDebitCardOrderRequest) (*WyreCreateDebitCardOrderResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateWalletOrderReservation not implemented")
+}
+func (UnimplementedFluxServer) WyreGetWalletOrderAuthorizations(context.Context, *WyreGetDebitCardOrderAuthorizationsRequest) (*WyreGetDebitCardOrderAuthorizationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreGetWalletOrderAuthorizations not implemented")
 }
 func (UnimplementedFluxServer) WidgetGetShortUrl(context.Context, *SnapWidgetConfig) (*WidgetGetShortUrlResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WidgetGetShortUrl not implemented")
@@ -765,6 +779,24 @@ func _Flux_WyreCreateWalletOrderReservation_Handler(srv interface{}, ctx context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_WyreGetWalletOrderAuthorizations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreGetDebitCardOrderAuthorizationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreGetWalletOrderAuthorizations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreGetWalletOrderAuthorizations",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreGetWalletOrderAuthorizations(ctx, req.(*WyreGetDebitCardOrderAuthorizationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Flux_WidgetGetShortUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(SnapWidgetConfig)
 	if err := dec(in); err != nil {
@@ -915,6 +947,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WyreCreateWalletOrderReservation",
 			Handler:    _Flux_WyreCreateWalletOrderReservation_Handler,
+		},
+		{
+			MethodName: "WyreGetWalletOrderAuthorizations",
+			Handler:    _Flux_WyreGetWalletOrderAuthorizations_Handler,
 		},
 		{
 			MethodName: "WidgetGetShortUrl",

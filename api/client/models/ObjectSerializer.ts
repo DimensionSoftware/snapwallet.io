@@ -41,6 +41,8 @@ export * from './WyreCreateDebitCardOrderRequest';
 export * from './WyreCreateDebitCardOrderResponse';
 export * from './WyreCreateTransferRequest';
 export * from './WyreDebitCardInfo';
+export * from './WyreGetDebitCardOrderAuthorizationsRequest';
+export * from './WyreGetDebitCardOrderAuthorizationsResponse';
 export * from './WyrePaymentMethod';
 export * from './WyrePaymentMethods';
 export * from './WyreTransfer';
@@ -91,6 +93,8 @@ import { WyreCreateDebitCardOrderRequest } from './WyreCreateDebitCardOrderReque
 import { WyreCreateDebitCardOrderResponse } from './WyreCreateDebitCardOrderResponse';
 import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
 import { WyreDebitCardInfo } from './WyreDebitCardInfo';
+import { WyreGetDebitCardOrderAuthorizationsRequest } from './WyreGetDebitCardOrderAuthorizationsRequest';
+import { WyreGetDebitCardOrderAuthorizationsResponse } from './WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethod } from './WyrePaymentMethod';
 import { WyrePaymentMethods } from './WyrePaymentMethods';
 import { WyreTransfer } from './WyreTransfer';
@@ -163,6 +167,8 @@ let typeMap: {[index: string]: any} = {
     "WyreCreateDebitCardOrderResponse": WyreCreateDebitCardOrderResponse,
     "WyreCreateTransferRequest": WyreCreateTransferRequest,
     "WyreDebitCardInfo": WyreDebitCardInfo,
+    "WyreGetDebitCardOrderAuthorizationsRequest": WyreGetDebitCardOrderAuthorizationsRequest,
+    "WyreGetDebitCardOrderAuthorizationsResponse": WyreGetDebitCardOrderAuthorizationsResponse,
     "WyrePaymentMethod": WyrePaymentMethod,
     "WyrePaymentMethods": WyrePaymentMethods,
     "WyreTransfer": WyreTransfer,

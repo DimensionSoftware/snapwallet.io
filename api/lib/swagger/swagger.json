@@ -591,6 +591,38 @@
         ]
       }
     },
+    "/wyre/transfers/debit-card/auth": {
+      "post": {
+        "operationId": "Flux_WyreGetWalletOrderAuthorizations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreGetDebitCardOrderAuthorizationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreGetDebitCardOrderAuthorizationsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/wyre/transfers/{transferId}": {
       "get": {
         "operationId": "Flux_WyreGetTransfer",
@@ -1376,6 +1408,31 @@
         },
         "address": {
           "$ref": "#/definitions/Address"
+        }
+      }
+    },
+    "WyreGetDebitCardOrderAuthorizationsRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreGetDebitCardOrderAuthorizationsResponse": {
+      "type": "object",
+      "properties": {
+        "walletOrderId": {
+          "type": "string"
+        },
+        "smsNeeded": {
+          "type": "boolean"
+        },
+        "card2faNeeded": {
+          "type": "boolean"
+        },
+        "authorization3dsUrl": {
+          "type": "string"
         }
       }
     },
