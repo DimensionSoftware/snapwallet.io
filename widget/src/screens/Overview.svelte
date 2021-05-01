@@ -6,7 +6,7 @@
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
-  import { TransactionIntents } from '../types'
+  import { TransactionIntents, TransactionMediums } from '../types'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { ParentMessenger } from '../util/parent_messenger'
@@ -34,6 +34,7 @@
   } = wyrePreview)
 
   $: isBuy = intent === TransactionIntents.BUY
+  $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
   $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
   $: cryptoAmount = isBuy ? destinationAmount : sourceAmount
@@ -53,8 +54,10 @@
 
   let buttonText
   $: {
-    if (isBuy) {
+    if (isBuy && !isDebitCard) {
       buttonText = isConfirmingTxn ? 'Buying' : 'Buy Now'
+    } else if (isBuy && isDebitCard) {
+      buttonText = isConfirmingTxn ? 'Confirming' : 'Confirm'
     } else {
       buttonText = isConfirmingTxn ? 'Selling' : 'Sell Now'
     }
@@ -136,6 +139,7 @@
       {/if}
     </div>
     <div class="line-items" class:is-product={Boolean(product)}>
+      <!-- ACH -->
       {#if $transactionStore.selectedSourcePaymentMethod}
         <div class="line-item muted warning">
           <div>Price Expires</div>
@@ -170,6 +174,20 @@
           </div>
         {/if}
         <div class="line dashed" />
+      {/if}
+      <!-- Debit Card -->
+      {#if isDebitCard}
+        <div class="line-item muted">
+          <div>From</div>
+          <div>Debit Card</div>
+        </div>
+        <div class="line-item muted">
+          <div>To</div>
+          <div>
+            {dest.substring(0, 6)}...{dest.substring(dest.length - 4)}
+          </div>
+        </div>
+        <div class="line-dashed" />
       {/if}
       <div class="line-item muted">
         <div>Subtotal</div>
