@@ -721,7 +721,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		Remediations: remediations,
 	}
 
-	if len(existingWyreAccounts) == 0 && profile.HasWyreAccountPreconditionsMet() {
+	if profile.HasWyreAccountPreconditionsMet() {
 		// todo, create job in db
 		// todo make sure theres not a job already running
 		log.Printf("Creating new wyre account for user id: %s", u.ID)
@@ -744,7 +744,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		resp.Wyre = &proto.ThirdPartyUserAccount{
 			LifecyleStatus: proto.LifecycleStatus_L_PENDING,
 		}
-	} else {
+	} else if len(existingWyreAccounts) == 0 {
 		job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindUpdateWyreAccountForUser, job.StatusQueued, string(u.ID))
 		if err != nil {
 			return nil, err
