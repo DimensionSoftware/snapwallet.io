@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import { push } from 'svelte-spa-router'
   import FaIcon from 'svelte-awesome'
   import {
@@ -27,6 +28,11 @@
   export let isExpanded: boolean = false
   let isProductCheckout: boolean = Boolean($configStore.product)
   let slow: boolean = false
+  let isLoaded: boolean = false
+
+  onMount(() => {
+    isLoaded = true
+  })
 
   function logout() {
     close()
@@ -135,7 +141,7 @@
     </g>
   </svg>
 </div>
-<aside class:closed={!isExpanded} class:active={isExpanded}>
+<aside class:closed={isLoaded && !isExpanded} class:active={isExpanded}>
   <nav>
     <div>
       <FaIcon data={isProductCheckout ? faShoppingCart : faExchangeAlt} />
