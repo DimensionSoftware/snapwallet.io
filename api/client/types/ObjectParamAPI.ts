@@ -49,7 +49,6 @@ import { WyreCreateDebitCardQuoteRequest } from '../models/WyreCreateDebitCardQu
 import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyreDebitCardInfo } from '../models/WyreDebitCardInfo';
-import { WyreGetDebitCardOrderAuthorizationsRequest } from '../models/WyreGetDebitCardOrderAuthorizationsRequest';
 import { WyreGetDebitCardOrderAuthorizationsResponse } from '../models/WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
@@ -206,10 +205,10 @@ export interface FluxApiFluxWyreCreateTransferRequest {
 export interface FluxApiFluxWyreGetDebitCardAuthorizationsRequest {
     /**
      * 
-     * @type WyreGetDebitCardOrderAuthorizationsRequest
+     * @type string
      * @memberof FluxApifluxWyreGetDebitCardAuthorizations
      */
-    body: WyreGetDebitCardOrderAuthorizationsRequest
+    orderId: string
 }
 
 export interface FluxApiFluxWyreGetPaymentMethodsRequest {
@@ -400,7 +399,7 @@ export class ObjectFluxApi {
      * @param param the request object
      */
     public fluxWyreGetDebitCardAuthorizations(param: FluxApiFluxWyreGetDebitCardAuthorizationsRequest, options?: Configuration): Promise<WyreGetDebitCardOrderAuthorizationsResponse> {
-        return this.api.fluxWyreGetDebitCardAuthorizations(param.body,  options).toPromise();
+        return this.api.fluxWyreGetDebitCardAuthorizations(param.orderId,  options).toPromise();
     }
 	
     /**

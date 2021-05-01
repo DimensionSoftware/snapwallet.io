@@ -559,8 +559,8 @@
         ]
       }
     },
-    "/wyre/transfers/debit-card/auth": {
-      "post": {
+    "/wyre/transfers/debit-card/auth/{orderId}": {
+      "get": {
         "operationId": "Flux_WyreGetDebitCardAuthorizations",
         "responses": {
           "200": {
@@ -578,12 +578,10 @@
         },
         "parameters": [
           {
-            "name": "body",
-            "in": "body",
+            "name": "orderId",
+            "in": "path",
             "required": true,
-            "schema": {
-              "$ref": "#/definitions/WyreGetDebitCardOrderAuthorizationsRequest"
-            }
+            "type": "string"
           }
         ],
         "tags": [
@@ -1506,14 +1504,6 @@
         },
         "address": {
           "$ref": "#/definitions/Address"
-        }
-      }
-    },
-    "WyreGetDebitCardOrderAuthorizationsRequest": {
-      "type": "object",
-      "properties": {
-        "orderId": {
-          "type": "string"
         }
       }
     },

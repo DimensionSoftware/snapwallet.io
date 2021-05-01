@@ -51,7 +51,6 @@ import { WyreCreateDebitCardQuoteRequest } from '../models/WyreCreateDebitCardQu
 import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyreDebitCardInfo } from '../models/WyreDebitCardInfo';
-import { WyreGetDebitCardOrderAuthorizationsRequest } from '../models/WyreGetDebitCardOrderAuthorizationsRequest';
 import { WyreGetDebitCardOrderAuthorizationsResponse } from '../models/WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
@@ -471,10 +470,10 @@ export class ObservableFluxApi {
     }
 	
     /**
-     * @param body 
+     * @param orderId 
      */
-    public fluxWyreGetDebitCardAuthorizations(body: WyreGetDebitCardOrderAuthorizationsRequest, options?: Configuration): Observable<WyreGetDebitCardOrderAuthorizationsResponse> {
-    	const requestContextPromise = this.requestFactory.fluxWyreGetDebitCardAuthorizations(body, options);
+    public fluxWyreGetDebitCardAuthorizations(orderId: string, options?: Configuration): Observable<WyreGetDebitCardOrderAuthorizationsResponse> {
+    	const requestContextPromise = this.requestFactory.fluxWyreGetDebitCardAuthorizations(orderId, options);
 
 		// build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);

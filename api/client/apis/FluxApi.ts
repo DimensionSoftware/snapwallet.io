@@ -29,7 +29,6 @@ import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest
 import { WyreCreateDebitCardQuoteRequest } from '../models/WyreCreateDebitCardQuoteRequest';
 import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
-import { WyreGetDebitCardOrderAuthorizationsRequest } from '../models/WyreGetDebitCardOrderAuthorizationsRequest';
 import { WyreGetDebitCardOrderAuthorizationsResponse } from '../models/WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
 import { WyreTransferDetail } from '../models/WyreTransferDetail';
@@ -779,22 +778,23 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
     }
 
     /**
-     * @param body 
+     * @param orderId 
      */
-    public async fluxWyreGetDebitCardAuthorizations(body: WyreGetDebitCardOrderAuthorizationsRequest, options?: Configuration): Promise<RequestContext> {
+    public async fluxWyreGetDebitCardAuthorizations(orderId: string, options?: Configuration): Promise<RequestContext> {
 		let config = options || this.configuration;
 		
-        // verify required parameter 'body' is not null or undefined
-        if (body === null || body === undefined) {
-            throw new RequiredError('Required parameter body was null or undefined when calling fluxWyreGetDebitCardAuthorizations.');
+        // verify required parameter 'orderId' is not null or undefined
+        if (orderId === null || orderId === undefined) {
+            throw new RequiredError('Required parameter orderId was null or undefined when calling fluxWyreGetDebitCardAuthorizations.');
         }
 
 		
 		// Path Params
-    	const localVarPath = '/wyre/transfers/debit-card/auth';
+    	const localVarPath = '/wyre/transfers/debit-card/auth/{orderId}'
+            .replace('{' + 'orderId' + '}', encodeURIComponent(String(orderId)));
 
 		// Make Request Context
-    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.GET);
         requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
 
         // Query Params
@@ -805,15 +805,6 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
 
 
 		// Body Params
-        const contentType = ObjectSerializer.getPreferredMediaType([
-            "application/json"
-        ]);
-        requestContext.setHeaderParam("Content-Type", contentType);
-        const serializedBody = ObjectSerializer.stringify(
-            ObjectSerializer.serialize(body, "WyreGetDebitCardOrderAuthorizationsRequest", ""),
-            contentType
-        );
-        requestContext.setBody(serializedBody);
 
         // Apply auth methods
 
