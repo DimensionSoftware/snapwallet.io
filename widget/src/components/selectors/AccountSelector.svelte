@@ -1,13 +1,13 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
-  import { faUniversity } from '@fortawesome/free-solid-svg-icons'
+  import { faCreditCard, faUniversity } from '@fortawesome/free-solid-svg-icons'
   import { createEventDispatcher } from 'svelte'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../../constants'
   import { transactionStore } from '../../stores/TransactionStore'
   import { userStore } from '../../stores/UserStore'
-  import { TransactionIntents } from '../../types'
+  import { TransactionIntents, TransactionMediums } from '../../types'
   import IconCard from '../cards/IconCard.svelte'
   import PopupSelector from '../inputs/PopupSelector.svelte'
   import { paymentMethodStore } from '../../stores/PaymentMethodStore'
@@ -71,10 +71,20 @@
       />
     </div>
     <h5 style="margin-top:2rem;margin-bottom:1rem;">{copy.sectionTwoTitle}</h5>
+    <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * 1 }}>
+      <IconCard
+        label="Debit Card"
+        icon={faCreditCard}
+        badgeText="Active"
+        badgeType="success"
+        on:click={() => {
+          transactionStore.update({ inMedium: TransactionMediums.DEBIT_CARD })
+          dispatch('close')
+        }}
+      />
+    </div>
     {#if !allPaymentMethods.length && isLoadingPaymentMethods}
       <p class="help">Retrieving Payment Methods...</p>
-    {:else if !allPaymentMethods.length && !isLoadingPaymentMethods}
-      <p class="help">{copy.unavailable}</p>
     {:else}
       {#each allPaymentMethods as pm, i (pm.id)}
         <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * i }}>
@@ -88,7 +98,10 @@
               ? 'warning'
               : 'success'}
             on:click={() => {
-              transactionStore.setSelectedSourcePaymentMethod(pm)
+              transactionStore.update({
+                selectedSourcePaymentMethod: pm,
+                inMedium: TransactionMediums.ACH,
+              })
               cachePrimaryPaymentMethodID(pm.id)
               dispatch('close')
             }}
