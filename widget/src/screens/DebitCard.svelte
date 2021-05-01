@@ -12,6 +12,8 @@
   import { Masks } from '../types'
   import PhoneInput from '../components/inputs/PhoneInput.svelte'
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
+  import { onMount } from 'svelte'
+  import { focusFirstInput } from '../util'
 
   let countrySelectorVisible = false
   $: isUSPhoneNumber =
@@ -20,6 +22,10 @@
   const handleNextStep = async () => {
     push(Routes.DEBIT_CARD_ADDRESS)
   }
+
+  onMount(() => {
+    focusFirstInput()
+  })
 </script>
 
 <ModalContent>
@@ -42,7 +48,6 @@
         inputmode="phone"
         autocapitalize="none"
         autocomplete="on"
-        autofocus={!countrySelectorVisible}
         required
         type="tel"
         mask={isUSPhoneNumber ? Masks.PHONE : undefined}
