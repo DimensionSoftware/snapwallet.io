@@ -57,7 +57,7 @@
     if (isBuy && !isDebitCard) {
       buttonText = isConfirmingTxn ? 'Buying' : 'Buy Now'
     } else if (isBuy && isDebitCard) {
-      buttonText = isConfirmingTxn ? 'Confirming' : 'Confirm'
+      buttonText = 'Continue'
     } else {
       buttonText = isConfirmingTxn ? 'Selling' : 'Sell Now'
     }
@@ -82,6 +82,9 @@
   const handleConfirmation = async () => {
     try {
       isConfirmingTxn = true
+      if (isDebitCard) {
+        return push(Routes.DEBIT_CARD)
+      }
       const txn = await window.API.fluxWyreConfirmTransfer(txnId, {
         transferId: txnId,
       })
