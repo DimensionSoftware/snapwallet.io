@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 )
 
 // https://docs.sendwyre.com/docs/productiontest-environments
@@ -55,6 +56,11 @@ type CreateAccountRequest struct {
 	SubAccount *bool `json:"subaccount,omitempty"`
 	// If true prevents all outbound emails to the account.
 	DisableEmail *bool `json:"disableEmail,omitempty"`
+}
+
+type UpdateAccountRequest struct {
+	// fields for update on account
+	ProfileFields []ProfileField `json:"profileFields"`
 }
 
 type TransferStatusHistoryItem struct {
@@ -449,6 +455,29 @@ func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*Tran
 	return resp.Result().(*TransferDetail), nil
 }
 
+// UpdateAccount updates a user account in the wyre system with new profile fields
+// https://docs.sendwyre.com/docs/submit-account-info
+// POST https://api.sendwyre.com/v3/accounts/:accountId
+func (c Client) UpdateAccount(token string, accountID account.ID, req UpdateAccountRequest) (*Account, error) {
+	resp, err := c.http.R().
+		SetAuthToken(token).
+		SetError(APIError{}).
+		SetResult(Account{}).
+		SetBody(req).
+		EnableTrace().
+		SetPathParam("accountID", string(accountID)).
+		Post("/v3/accounts/{accountID}")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*Account), nil
+}
+
 // GetTransferHistory gets a history of transfers in the wyre system
 // https://docs.sendwyre.com/docs/transfer-history
 // GET https://api.sendwyre.com/v3/transfers
@@ -497,13 +526,13 @@ func (c Client) GetTransfer(token string, transferID string) (*TransferDetail, e
 // GetAccount gets an an account from the wyre system
 // https://docs.sendwyre.com/docs/get-account
 // GET https://api.sendwyre.com/v3/accounts/:accountId
-func (c Client) GetAccount(token string, accountID string) (*Account, error) {
+func (c Client) GetAccount(token string, accountID account.ID) (*Account, error) {
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).
 		SetResult(Account{}).
 		EnableTrace().
-		SetPathParam("accountID", accountID).
+		SetPathParam("accountID", string(accountID)).
 		Get("/v3/accounts/{accountID}")
 	if err != nil {
 		return nil, err

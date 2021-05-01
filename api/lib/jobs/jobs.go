@@ -8,6 +8,7 @@ import (
 
 	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/user"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/jobmanager"
 	"github.com/lithammer/shortuuid"
@@ -17,8 +18,8 @@ import (
 func RunSnapJob(ctx context.Context, jobManager jobmanager.Manager, j *job.Job) error {
 	var err error
 	switch j.Kind {
-	case job.KindCreateWyreAccountForUser:
-		err = runCreateWyreAccountForUser(ctx, jobManager, j)
+	case job.KindUpdateWyreAccountForUser:
+		err = runUpdateWyreAccountForUser(ctx, jobManager, j)
 	case job.KindCreateWyrePaymentMethodsForUser:
 		err = runCreateWyrePaymentMethodsForUser(ctx, jobManager, j)
 	default:
@@ -78,29 +79,54 @@ func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manage
 	return nil
 }
 
-func runCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j *job.Job) error {
+func runUpdateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j *job.Job) error {
 	if len(j.RelatedIDs) == 0 {
-		log.Println("error: relatedIDs can't be empty")
-		return nil
+		return fmt.Errorf("relatedIDs can't be empty")
 	}
 
-	userID := user.ID(j.RelatedIDs[0])
-	log.Println("creating wyre account")
-
-	pdata, err := m.GetDb().GetAllProfileData(ctx, nil, userID)
+	user, err := m.Db.GetUserByID(ctx, nil, user.ID(j.RelatedIDs[0]))
 	if err != nil {
-		log.Println("error while getting profile data: ", err)
-		return nil
+		return err
+	}
+	if user == nil {
+		return fmt.Errorf("user id does not exist")
 	}
 
-	_, err = m.GetWyreManager().CreateAccount(ctx, userID, pdata)
+	var existingWyreAccount *account.Account
+	{
+		accounts, err := m.Db.GetWyreAccounts(ctx, nil, user.ID)
+		if err != nil {
+			return err
+		}
+		if len(accounts) > 0 {
+			existingWyreAccount = accounts[0]
+		}
+	}
+
+	pdata, err := m.GetDb().GetAllProfileData(ctx, nil, user.ID)
 	if err != nil {
-		log.Println("error while creating wyre account: ", err)
-		// retryable once i work out issues?
-		return nil
+		return err
 	}
 
-	err = m.GetPusher().Send(userID, &pusher.Message{
+	if existingWyreAccount == nil {
+		if pdata.HasWyreAccountPreconditionsMet() {
+			log.Println("creating wyre account")
+			_, err = m.GetWyreManager().CreateAccount(ctx, user.ID, pdata)
+			if err != nil {
+				return err
+			}
+		} else {
+			return nil
+		}
+	} else {
+		log.Println("updating wyre account")
+		err = m.GetWyreManager().UpdateAccountProfileData(ctx, user.ID, existingWyreAccount, pdata)
+		if err != nil {
+			return err
+		}
+	}
+
+	err = m.GetPusher().Send(user.ID, &pusher.Message{
 		Kind: pusher.MessageKindWyreAccountUpdated,
 		At:   time.Now(),
 	})
@@ -117,7 +143,7 @@ func runCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j *j
 			ID:         shortuuid.New(),
 			Kind:       job.KindCreateWyrePaymentMethodsForUser,
 			Status:     job.StatusQueued,
-			RelatedIDs: []string{string(userID)},
+			RelatedIDs: []string{string(user.ID)},
 			CreatedAt:  now.Unix(),
 			UpdatedAt:  now.Unix(),
 		})

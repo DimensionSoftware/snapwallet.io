@@ -189,15 +189,85 @@ func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, 
 	return fields, selected
 }
 
+// converts pdata into wyre format
+func (m Manager) selectWyreProfileUploads(ctx context.Context, userID user.ID, wyreAccountID account.ID, profile profiledata.ProfileDatas) ([]UploadDocumentRequest, profiledata.ProfileDatas, error) {
+	var uploads []UploadDocumentRequest
+	var selected profiledata.ProfileDatas
+
+	if usgoviddocs := profile.FilterStatus(common.StatusReceived).FilterKindUSGovernmentIDDoc(); len(usgoviddocs) > 0 {
+		usgoviddoc := usgoviddocs[0]
+		selected = append(selected, usgoviddoc)
+
+		for i, fileID := range usgoviddoc.FileIDs {
+			file, err := m.FileManager.GetFile(ctx, userID, fileID)
+			if err != nil {
+				return nil, nil, err
+			}
+
+			req := UploadDocumentRequest{
+				AccountID:    string(wyreAccountID),
+				FieldID:      ProfileFieldIDIndividualGovernmentID,
+				DocumentType: usgoviddoc.GovernmentIDKind.ToWyreDocumentType(),
+				MimeType:     file.MimeType,
+				Body:         file.Body,
+			}
+
+			if usgoviddoc.GovernmentIDKind != usgovernmentid.KindUSPassport {
+				if i == 0 {
+					req.DocumentSubtype = "FRONT"
+				}
+				if i == 1 {
+					req.DocumentSubtype = "BACK"
+				}
+			}
+
+			uploads = append(uploads, req)
+		}
+	}
+
+	return uploads, selected, nil
+}
+
+func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, wyreAccount *account.Account, profile profiledata.ProfileDatas) error {
+	fields, selected1 := selectWyreProfileFields(profile)
+	uploads, selected2, err := m.selectWyreProfileUploads(ctx, userID, wyreAccount.ID, profile)
+	if err != nil {
+		return err
+	}
+	selected := append(selected1, selected2...)
+
+	if len(selected) == 0 {
+		// nothing to update
+		return nil
+	}
+
+	_, err = m.Wyre.UpdateAccount(wyreAccount.SecretKey, wyreAccount.ID, UpdateAccountRequest{
+		ProfileFields: fields,
+	})
+	if err != nil {
+		return err
+	}
+
+	for _, upload := range uploads {
+		_, err = m.Wyre.UploadDocument(wyreAccount.SecretKey, upload)
+		if err != nil {
+			return err
+		}
+	}
+
+	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, selected.SetStatuses(common.StatusPending))
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*wyre_model.Account, error) {
 	now := time.Now()
 	t := true
 
-	if !profile.HasWyreAccountPreconditionsMet() {
-		return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
-	}
-
-	fields, selected := selectWyreProfileFields(profile)
+	fields, selected1 := selectWyreProfileFields(profile)
 
 	wyreAccountResp, err := m.Wyre.CreateAccount(m.Wyre.config.WyreSecretKey, CreateAccountRequest{
 		SubAccount:        &t,
@@ -208,6 +278,13 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	if err != nil {
 		return nil, err
 	}
+
+	uploads, selected2, err := m.selectWyreProfileUploads(ctx, userID, wyre_model.ID(wyreAccountResp.ID), profile)
+	if err != nil {
+		return nil, err
+	}
+
+	selected := append(selected1, selected2...)
 
 	accountAPIKey, err := m.Wyre.CreateAPIKey(
 		m.Wyre.config.WyreSecretKey,
@@ -220,55 +297,12 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 		return nil, err
 	}
 
-	if usgoviddocs := profile.FilterStatus(common.StatusReceived).FilterKindUSGovernmentIDDoc(); len(usgoviddocs) > 0 {
-		usgoviddoc := usgoviddocs[0]
-		selected = append(selected, usgoviddoc)
-
-		for i, fileID := range usgoviddoc.FileIDs {
-			file, err := m.FileManager.GetFile(ctx, userID, fileID)
-			if err != nil {
-				return nil, err
-			}
-
-			upload := func(req UploadDocumentRequest) error {
-				_, err = m.Wyre.UploadDocument(accountAPIKey.SecretKey, req)
-				return err
-			}
-
-			req := UploadDocumentRequest{
-				AccountID:    wyreAccountResp.ID,
-				FieldID:      ProfileFieldIDIndividualGovernmentID,
-				DocumentType: usgoviddoc.GovernmentIDKind.ToWyreDocumentType(),
-				MimeType:     file.MimeType,
-				Body:         file.Body,
-			}
-
-			if usgoviddoc.GovernmentIDKind == usgovernmentid.KindUSPassport {
-				err := upload(req)
-				if err != nil {
-					return nil, err
-				}
-				break
-			}
-
-			if i == 0 {
-				req.DocumentSubtype = "FRONT"
-				err := upload(req)
-				if err != nil {
-					return nil, err
-				}
-			} else if i == 1 {
-				req.DocumentSubtype = "BACK"
-				err := upload(req)
-				if err != nil {
-					return nil, err
-				}
-				break
-			}
+	for _, upload := range uploads {
+		_, err = m.Wyre.UploadDocument(accountAPIKey.SecretKey, upload)
+		if err != nil {
+			return nil, err
 		}
 	}
-
-	modifiedProfile := selected.SetStatuses(common.StatusPending)
 
 	// todo, can't create account if they already have one
 
@@ -286,8 +320,7 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	}
 
 	//TODO: use tx
-	//TODO:  upload 2 docs proof of address, govt id
-	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, modifiedProfile)
+	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, selected.SetStatuses(common.StatusPending))
 	if err != nil {
 		return nil, err
 	}

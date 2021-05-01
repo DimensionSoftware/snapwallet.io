@@ -259,6 +259,7 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 	log.Printf("user??? : %#v\n", u)
 
 	err = db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		changed := false
 		pdatas, err := db.GetAllProfileData(ctx, tx, u.ID)
 		if err != nil {
 			return err
@@ -268,6 +269,7 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			existingPdata := pdatas.FilterKindPhone().FindByPhone(emailOrPhone)
 
 			if existingPdata == nil {
+				changed = true
 				pdatas = append(pdatas, phone.ProfileDataPhone{
 					CommonProfileData: common.CommonProfileData{
 						ID:        common.ProfileDataID(shortuuid.New()),
@@ -281,6 +283,7 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			existingPdata := pdatas.FilterKindEmail().FindByEmail(emailOrPhone)
 
 			if existingPdata == nil {
+				changed = true
 				pdatas = append(pdatas, email.ProfileDataEmail{
 					CommonProfileData: common.CommonProfileData{
 						ID:        common.ProfileDataID(shortuuid.New()),
@@ -292,9 +295,11 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			}
 		}
 
-		_, err = db.SaveProfileDatas(ctx, tx, u.ID, pdatas)
-		if err != nil {
-			return err
+		if changed {
+			_, err = db.SaveProfileDatas(ctx, tx, u.ID, pdatas)
+			if err != nil {
+				return err
+			}
 		}
 		return nil
 	})
