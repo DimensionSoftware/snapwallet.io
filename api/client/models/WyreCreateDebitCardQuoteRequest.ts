@@ -10,17 +10,16 @@
  * Do not edit the class manually.
  */
 
-import { WyreDebitCardInfo } from './WyreDebitCardInfo';
 import { HttpFile } from '../http/http';
 
-export class WyreCreateDebitCardOrderRequest {
+export class WyreCreateDebitCardQuoteRequest {
     'dest'?: string;
     'sourceCurrency'?: string;
     'destCurrency'?: string;
     'sourceAmount'?: number;
     'amountIncludesFees'?: boolean;
     'lockFields'?: Array<string>;
-    'card'?: WyreDebitCardInfo;
+    'country'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -62,14 +61,14 @@ export class WyreCreateDebitCardOrderRequest {
             "format": ""
         },
         {
-            "name": "card",
-            "baseName": "card",
-            "type": "WyreDebitCardInfo",
+            "name": "country",
+            "baseName": "country",
+            "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return WyreCreateDebitCardOrderRequest.attributeTypeMap;
+        return WyreCreateDebitCardQuoteRequest.attributeTypeMap;
     }
     
     public constructor() {

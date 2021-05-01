@@ -52,9 +52,11 @@ models/User.ts
 models/UserFlags.ts
 models/ViewerDataResponse.ts
 models/WidgetGetShortUrlResponse.ts
+models/WyreConfirmDebitCardQuoteRequest.ts
+models/WyreConfirmDebitCardQuoteResponse.ts
 models/WyreConfirmTransferRequest.ts
-models/WyreCreateDebitCardOrderRequest.ts
-models/WyreCreateDebitCardOrderResponse.ts
+models/WyreCreateDebitCardQuoteRequest.ts
+models/WyreCreateDebitCardQuoteResponse.ts
 models/WyreCreateTransferRequest.ts
 models/WyreDebitCardInfo.ts
 models/WyreGetDebitCardOrderAuthorizationsRequest.ts

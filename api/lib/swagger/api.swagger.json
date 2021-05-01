@@ -509,38 +509,6 @@
         ]
       }
     },
-    "/wyre/transfers/debit-card": {
-      "post": {
-        "operationId": "Flux_WyreCreateWalletOrderReservation",
-        "responses": {
-          "200": {
-            "description": "A successful response.",
-            "schema": {
-              "$ref": "#/definitions/WyreCreateDebitCardOrderResponse"
-            }
-          },
-          "default": {
-            "description": "An unexpected error response.",
-            "schema": {
-              "$ref": "#/definitions/rpcStatus"
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "$ref": "#/definitions/WyreCreateDebitCardOrderRequest"
-            }
-          }
-        ],
-        "tags": [
-          "Flux"
-        ]
-      }
-    },
     "/wyre/transfers/debit-card/auth": {
       "post": {
         "operationId": "Flux_WyreGetWalletOrderAuthorizations",
@@ -565,6 +533,70 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/WyreGetDebitCardOrderAuthorizationsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/confirm": {
+      "post": {
+        "operationId": "Flux_WyreConfirmDebitCardQuote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreConfirmDebitCardQuoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreConfirmDebitCardQuoteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/quote": {
+      "post": {
+        "operationId": "Flux_WyreCreateDebitCardQuote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreCreateDebitCardQuoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreCreateDebitCardQuoteRequest"
             }
           }
         ],
@@ -1227,6 +1259,44 @@
         }
       }
     },
+    "WyreConfirmDebitCardQuoteRequest": {
+      "type": "object",
+      "properties": {
+        "card": {
+          "$ref": "#/definitions/WyreDebitCardInfo"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "reservationId": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreConfirmDebitCardQuoteResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "transferId": {
+          "type": "string"
+        }
+      }
+    },
     "WyreConfirmTransferRequest": {
       "type": "object",
       "properties": {
@@ -1235,7 +1305,7 @@
         }
       }
     },
-    "WyreCreateDebitCardOrderRequest": {
+    "WyreCreateDebitCardQuoteRequest": {
       "type": "object",
       "properties": {
         "dest": {
@@ -1260,24 +1330,15 @@
             "type": "string"
           }
         },
-        "card": {
-          "$ref": "#/definitions/WyreDebitCardInfo"
+        "country": {
+          "type": "string"
         }
       }
     },
-    "WyreCreateDebitCardOrderResponse": {
+    "WyreCreateDebitCardQuoteResponse": {
       "type": "object",
       "properties": {
-        "reservation": {
-          "type": "string"
-        },
-        "orderId": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        },
-        "transferId": {
+        "reservationId": {
           "type": "string"
         },
         "quote": {

@@ -68,7 +68,8 @@ type FluxClient interface {
 	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
 	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
 	WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error)
-	WyreCreateWalletOrderReservation(ctx context.Context, in *WyreCreateDebitCardOrderRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardOrderResponse, error)
+	WyreCreateDebitCardQuote(ctx context.Context, in *WyreCreateDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardQuoteResponse, error)
+	WyreConfirmDebitCardQuote(ctx context.Context, in *WyreConfirmDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreConfirmDebitCardQuoteResponse, error)
 	WyreGetWalletOrderAuthorizations(ctx context.Context, in *WyreGetDebitCardOrderAuthorizationsRequest, opts ...grpc.CallOption) (*WyreGetDebitCardOrderAuthorizationsResponse, error)
 	WidgetGetShortUrl(ctx context.Context, in *SnapWidgetConfig, opts ...grpc.CallOption) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
@@ -245,9 +246,18 @@ func (c *fluxClient) WyreGetTransfers(ctx context.Context, in *WyreGetTransfersR
 	return out, nil
 }
 
-func (c *fluxClient) WyreCreateWalletOrderReservation(ctx context.Context, in *WyreCreateDebitCardOrderRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardOrderResponse, error) {
-	out := new(WyreCreateDebitCardOrderResponse)
-	err := c.cc.Invoke(ctx, "/Flux/WyreCreateWalletOrderReservation", in, out, opts...)
+func (c *fluxClient) WyreCreateDebitCardQuote(ctx context.Context, in *WyreCreateDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardQuoteResponse, error) {
+	out := new(WyreCreateDebitCardQuoteResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreCreateDebitCardQuote", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreConfirmDebitCardQuote(ctx context.Context, in *WyreConfirmDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreConfirmDebitCardQuoteResponse, error) {
+	out := new(WyreConfirmDebitCardQuoteResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreConfirmDebitCardQuote", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -352,7 +362,8 @@ type FluxServer interface {
 	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransferDetail, error)
 	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransferDetail, error)
 	WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error)
-	WyreCreateWalletOrderReservation(context.Context, *WyreCreateDebitCardOrderRequest) (*WyreCreateDebitCardOrderResponse, error)
+	WyreCreateDebitCardQuote(context.Context, *WyreCreateDebitCardQuoteRequest) (*WyreCreateDebitCardQuoteResponse, error)
+	WyreConfirmDebitCardQuote(context.Context, *WyreConfirmDebitCardQuoteRequest) (*WyreConfirmDebitCardQuoteResponse, error)
 	WyreGetWalletOrderAuthorizations(context.Context, *WyreGetDebitCardOrderAuthorizationsRequest) (*WyreGetDebitCardOrderAuthorizationsResponse, error)
 	WidgetGetShortUrl(context.Context, *SnapWidgetConfig) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
@@ -424,8 +435,11 @@ func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransfer
 func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfers not implemented")
 }
-func (UnimplementedFluxServer) WyreCreateWalletOrderReservation(context.Context, *WyreCreateDebitCardOrderRequest) (*WyreCreateDebitCardOrderResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateWalletOrderReservation not implemented")
+func (UnimplementedFluxServer) WyreCreateDebitCardQuote(context.Context, *WyreCreateDebitCardQuoteRequest) (*WyreCreateDebitCardQuoteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateDebitCardQuote not implemented")
+}
+func (UnimplementedFluxServer) WyreConfirmDebitCardQuote(context.Context, *WyreConfirmDebitCardQuoteRequest) (*WyreConfirmDebitCardQuoteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreConfirmDebitCardQuote not implemented")
 }
 func (UnimplementedFluxServer) WyreGetWalletOrderAuthorizations(context.Context, *WyreGetDebitCardOrderAuthorizationsRequest) (*WyreGetDebitCardOrderAuthorizationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetWalletOrderAuthorizations not implemented")
@@ -761,20 +775,38 @@ func _Flux_WyreGetTransfers_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Flux_WyreCreateWalletOrderReservation_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(WyreCreateDebitCardOrderRequest)
+func _Flux_WyreCreateDebitCardQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreCreateDebitCardQuoteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(FluxServer).WyreCreateWalletOrderReservation(ctx, in)
+		return srv.(FluxServer).WyreCreateDebitCardQuote(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/Flux/WyreCreateWalletOrderReservation",
+		FullMethod: "/Flux/WyreCreateDebitCardQuote",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FluxServer).WyreCreateWalletOrderReservation(ctx, req.(*WyreCreateDebitCardOrderRequest))
+		return srv.(FluxServer).WyreCreateDebitCardQuote(ctx, req.(*WyreCreateDebitCardQuoteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreConfirmDebitCardQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreConfirmDebitCardQuoteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreConfirmDebitCardQuote(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreConfirmDebitCardQuote",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreConfirmDebitCardQuote(ctx, req.(*WyreConfirmDebitCardQuoteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -945,8 +977,12 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Flux_WyreGetTransfers_Handler,
 		},
 		{
-			MethodName: "WyreCreateWalletOrderReservation",
-			Handler:    _Flux_WyreCreateWalletOrderReservation_Handler,
+			MethodName: "WyreCreateDebitCardQuote",
+			Handler:    _Flux_WyreCreateDebitCardQuote_Handler,
+		},
+		{
+			MethodName: "WyreConfirmDebitCardQuote",
+			Handler:    _Flux_WyreConfirmDebitCardQuote_Handler,
 		},
 		{
 			MethodName: "WyreGetWalletOrderAuthorizations",

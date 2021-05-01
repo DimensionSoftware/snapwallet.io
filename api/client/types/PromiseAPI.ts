@@ -42,9 +42,11 @@ import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
 import { WidgetGetShortUrlResponse } from '../models/WidgetGetShortUrlResponse';
+import { WyreConfirmDebitCardQuoteRequest } from '../models/WyreConfirmDebitCardQuoteRequest';
+import { WyreConfirmDebitCardQuoteResponse } from '../models/WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
-import { WyreCreateDebitCardOrderRequest } from '../models/WyreCreateDebitCardOrderRequest';
-import { WyreCreateDebitCardOrderResponse } from '../models/WyreCreateDebitCardOrderResponse';
+import { WyreCreateDebitCardQuoteRequest } from '../models/WyreCreateDebitCardQuoteRequest';
+import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyreDebitCardInfo } from '../models/WyreDebitCardInfo';
 import { WyreGetDebitCardOrderAuthorizationsRequest } from '../models/WyreGetDebitCardOrderAuthorizationsRequest';
@@ -194,6 +196,14 @@ export class PromiseFluxApi {
     }
 	
     /**
+     * @param body 
+     */
+    public fluxWyreConfirmDebitCardQuote(body: WyreConfirmDebitCardQuoteRequest, options?: Configuration): Promise<WyreConfirmDebitCardQuoteResponse> {
+    	const result = this.api.fluxWyreConfirmDebitCardQuote(body, options);
+        return result.toPromise();
+    }
+	
+    /**
      * @param transferId 
      * @param body 
      */
@@ -205,16 +215,16 @@ export class PromiseFluxApi {
     /**
      * @param body 
      */
-    public fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Promise<WyreTransferDetail> {
-    	const result = this.api.fluxWyreCreateTransfer(body, options);
+    public fluxWyreCreateDebitCardQuote(body: WyreCreateDebitCardQuoteRequest, options?: Configuration): Promise<WyreCreateDebitCardQuoteResponse> {
+    	const result = this.api.fluxWyreCreateDebitCardQuote(body, options);
         return result.toPromise();
     }
 	
     /**
      * @param body 
      */
-    public fluxWyreCreateWalletOrderReservation(body: WyreCreateDebitCardOrderRequest, options?: Configuration): Promise<WyreCreateDebitCardOrderResponse> {
-    	const result = this.api.fluxWyreCreateWalletOrderReservation(body, options);
+    public fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Promise<WyreTransferDetail> {
+    	const result = this.api.fluxWyreCreateTransfer(body, options);
         return result.toPromise();
     }
 	

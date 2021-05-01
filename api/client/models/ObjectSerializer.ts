@@ -38,9 +38,11 @@ export * from './User';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
 export * from './WidgetGetShortUrlResponse';
+export * from './WyreConfirmDebitCardQuoteRequest';
+export * from './WyreConfirmDebitCardQuoteResponse';
 export * from './WyreConfirmTransferRequest';
-export * from './WyreCreateDebitCardOrderRequest';
-export * from './WyreCreateDebitCardOrderResponse';
+export * from './WyreCreateDebitCardQuoteRequest';
+export * from './WyreCreateDebitCardQuoteResponse';
 export * from './WyreCreateTransferRequest';
 export * from './WyreDebitCardInfo';
 export * from './WyreGetDebitCardOrderAuthorizationsRequest';
@@ -93,9 +95,11 @@ import { User } from './User';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
 import { WidgetGetShortUrlResponse } from './WidgetGetShortUrlResponse';
+import { WyreConfirmDebitCardQuoteRequest } from './WyreConfirmDebitCardQuoteRequest';
+import { WyreConfirmDebitCardQuoteResponse } from './WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
-import { WyreCreateDebitCardOrderRequest } from './WyreCreateDebitCardOrderRequest';
-import { WyreCreateDebitCardOrderResponse } from './WyreCreateDebitCardOrderResponse';
+import { WyreCreateDebitCardQuoteRequest } from './WyreCreateDebitCardQuoteRequest';
+import { WyreCreateDebitCardQuoteResponse } from './WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
 import { WyreDebitCardInfo } from './WyreDebitCardInfo';
 import { WyreGetDebitCardOrderAuthorizationsRequest } from './WyreGetDebitCardOrderAuthorizationsRequest';
@@ -170,9 +174,11 @@ let typeMap: {[index: string]: any} = {
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
     "WidgetGetShortUrlResponse": WidgetGetShortUrlResponse,
+    "WyreConfirmDebitCardQuoteRequest": WyreConfirmDebitCardQuoteRequest,
+    "WyreConfirmDebitCardQuoteResponse": WyreConfirmDebitCardQuoteResponse,
     "WyreConfirmTransferRequest": WyreConfirmTransferRequest,
-    "WyreCreateDebitCardOrderRequest": WyreCreateDebitCardOrderRequest,
-    "WyreCreateDebitCardOrderResponse": WyreCreateDebitCardOrderResponse,
+    "WyreCreateDebitCardQuoteRequest": WyreCreateDebitCardQuoteRequest,
+    "WyreCreateDebitCardQuoteResponse": WyreCreateDebitCardQuoteResponse,
     "WyreCreateTransferRequest": WyreCreateTransferRequest,
     "WyreDebitCardInfo": WyreDebitCardInfo,
     "WyreGetDebitCardOrderAuthorizationsRequest": WyreGetDebitCardOrderAuthorizationsRequest,

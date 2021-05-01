@@ -13,37 +13,16 @@
 import { WyreWalletOrderReservationQuote } from './WyreWalletOrderReservationQuote';
 import { HttpFile } from '../http/http';
 
-export class WyreCreateDebitCardOrderResponse {
-    'reservation'?: string;
-    'orderId'?: string;
-    'status'?: string;
-    'transferId'?: string;
+export class WyreCreateDebitCardQuoteResponse {
+    'reservationId'?: string;
     'quote'?: WyreWalletOrderReservationQuote;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "reservation",
-            "baseName": "reservation",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "orderId",
-            "baseName": "orderId",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "status",
-            "baseName": "status",
-            "type": "string",
-            "format": ""
-        },
-        {
-            "name": "transferId",
-            "baseName": "transferId",
+            "name": "reservationId",
+            "baseName": "reservationId",
             "type": "string",
             "format": ""
         },
@@ -55,7 +34,7 @@ export class WyreCreateDebitCardOrderResponse {
         }    ];
 
     static getAttributeTypeMap() {
-        return WyreCreateDebitCardOrderResponse.attributeTypeMap;
+        return WyreCreateDebitCardQuoteResponse.attributeTypeMap;
     }
     
     public constructor() {
