@@ -683,7 +683,7 @@ service Flux {
     };
   }
 
-  rpc WyreGetWalletOrderAuthorizations(WyreGetDebitCardOrderAuthorizationsRequest) returns (WyreGetDebitCardOrderAuthorizationsResponse) {
+  rpc WyreGetDebitCardAuthorizations(WyreGetDebitCardOrderAuthorizationsRequest) returns (WyreGetDebitCardOrderAuthorizationsResponse) {
     option (google.api.http) = {
       post: "/wyre/transfers/debit-card/auth"
       body: "*"

@@ -1695,7 +1695,7 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 	}, nil
 }
 
-func (s *Server) WyreGetWalletOrderAuthorizations(ctx context.Context, req *proto.WyreGetDebitCardOrderAuthorizationsRequest) (*proto.WyreGetDebitCardOrderAuthorizationsResponse, error) {
+func (s *Server) WyreGetDebitCardAuthorizations(ctx context.Context, req *proto.WyreGetDebitCardOrderAuthorizationsRequest) (*proto.WyreGetDebitCardOrderAuthorizationsResponse, error) {
 	res, err := s.Wyre.GetWalletOrderAuthorizations(wyre.GetWalletOrderAuthorizationsRequest{
 		OrderID: req.OrderId,
 	})
