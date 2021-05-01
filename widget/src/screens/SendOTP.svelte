@@ -30,7 +30,6 @@
   $: isUSPhoneNumber = $userStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   onMount(() => {
-    window.vld8 = vld8
     resizeWidget(425, $configStore.appName)
   })
 
