@@ -364,7 +364,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 		}
 		if len(accounts) > 0 {
 			a := accounts[0]
-			wyreAcct, err := s.Wyre.GetAccount(a.SecretKey, string(a.ID))
+			wyreAcct, err := s.Wyre.GetAccount(a.SecretKey, a.ID)
 			if err != nil {
 				return nil, err
 			}
@@ -1005,7 +1005,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
 		}
 
-		theirAccount, err := s.Wyre.GetAccount(ourWyreAccount.SecretKey, string(ourWyreAccount.ID))
+		theirAccount, err := s.Wyre.GetAccount(ourWyreAccount.SecretKey, ourWyreAccount.ID)
 		if err != nil {
 			log.Printf("failure getting wyre account from them: %#v", err)
 			return nil, status.Errorf(codes.Unknown, "hook failed")
