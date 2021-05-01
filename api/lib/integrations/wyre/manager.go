@@ -210,7 +210,10 @@ func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, w
 	// todo: update wyre account w/ sendable profile data (new stuff)
 
 	sendableProfile.SetStatuses(common.StatusPending)
-	// todo: save pdatas w/ new statuses
+	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, sendableProfile)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
