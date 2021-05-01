@@ -251,6 +251,11 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 		return nil, err
 	}
 
+	existingPlaidItems, err := s.Db.GetAllPlaidItems(ctx, nil, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := s.Plaid.ExchangePublicToken(req.PlaidPublicToken)
 	if err != nil {
 		return nil, err
@@ -259,13 +264,36 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 
 	var accounts []item.Account
 	for _, reqAccount := range req.Accounts {
-		accounts = append(accounts, item.Account{
-			ID:      item.AccountID(reqAccount.Id),
-			Name:    reqAccount.Name,
-			Mask:    reqAccount.Mask,
-			Type:    reqAccount.Type,
-			SubType: reqAccount.SubType,
-		})
+		var alreadyExists bool
+
+		for _, epi := range existingPlaidItems {
+			// https://plaid.com/docs/link/duplicate-items/#preventing-duplicate-item-adds-with-onsuccess
+			// You can compare a combination of the accounts’ institution_id, account name, and account mask
+			// to determine whether your user has previously linked their account to your application.
+			if item.InstitutionID(req.Institution.Id) == epi.Institution.ID {
+				for _, epiAccount := range epi.Accounts {
+					if reqAccount.Name == epiAccount.Name && reqAccount.Mask == epiAccount.Mask {
+						alreadyExists = true
+						break
+					}
+				}
+			}
+		}
+
+		if !alreadyExists {
+			accounts = append(accounts, item.Account{
+				ID:      item.AccountID(reqAccount.Id),
+				Name:    reqAccount.Name,
+				Mask:    reqAccount.Mask,
+				Type:    reqAccount.Type,
+				SubType: reqAccount.SubType,
+			})
+		}
+	}
+
+	if len(accounts) == 0 {
+		// no new plaid accounts were provided (duplicates are not allowed)
+		return &proto.PlaidConnectBankAccountsResponse{}, nil
 	}
 
 	item := item.Item{
