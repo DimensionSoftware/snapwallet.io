@@ -93,7 +93,7 @@
     // guards
     if (!sourceAmount || !isValidNumber(sourceAmount)) {
       focus(document.querySelector('input'))
-      throw new Error('Input an amount in USD')
+      throw new Error(`Input an amount to ${isBuy ? 'Buy' : 'Sell'} in USD.`)
     }
 
     if (sourceAmount < 0.01) {

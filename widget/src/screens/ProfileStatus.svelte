@@ -104,7 +104,7 @@
         </div>
       </VStep>
       <PaymentSelector
-        disabled={false}
+        disabled={step !== 'payment'}
         onClick={() => (paymentSelectorVisible = true)}
         description="Payment to buy and sell"
       />

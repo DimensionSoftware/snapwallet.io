@@ -84,8 +84,7 @@
         msg: 'Please check your code and try again.',
         error: true,
       })
-
-      return
+      return focus(document.querySelector('input[type="text"]:first-child'))
     }
 
     if (phoneVerificationOnly)

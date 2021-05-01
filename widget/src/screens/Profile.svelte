@@ -46,7 +46,8 @@
 
       if (!minFieldFilled) {
         isSaving = false
-        return focus(0)
+        focus(0)
+        throw new Error('Enter and update your details below.')
       }
 
       const parsedBirthDate =
