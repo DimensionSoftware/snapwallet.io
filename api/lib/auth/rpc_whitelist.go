@@ -10,6 +10,7 @@ var RPCPublicWhitelist = map[string]bool{
 	"/Flux/WidgetGetShortUrl":     true,
 	"/Flux/Goto":                  true,
 	// TODO: remove these once debit card integration is completed
-	"/Flux/WyreCreateWalletOrderReservation": true,
+	"/Flux/WyreCreateDebitCardQuote":         true,
+	"/Flux/WyreConfirmDebitCardQuote":        true,
 	"/Flux/WyreGetWalletOrderAuthorizations": true,
 }
