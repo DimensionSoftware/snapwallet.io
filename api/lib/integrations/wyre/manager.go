@@ -208,10 +208,17 @@ func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, w
 
 	fields, selected := selectWyreProfileFields(profile)
 
-	// todo: update wyre account w/ sendable profile data (new stuff) need client call implemented
+	_, err = m.Wyre.UpdateAccount(wyreAccount.SecretKey, wyreAccount.ID, UpdateAccountRequest{
+		ProfileFields: fields,
+	})
+	if err != nil {
+		return err
+	}
+
+	// todo: implement updating government id
 
 	selected.SetStatuses(common.StatusPending)
-	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, sendableProfile)
+	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, selected)
 	if err != nil {
 		return err
 	}
