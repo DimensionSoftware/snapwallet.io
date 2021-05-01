@@ -392,14 +392,23 @@ message WyreGetDebitCardOrderAuthorizationsRequest {
   string order_id = 1;
 }
 
-message WyreCreateDebitCardOrderRequest {
+message WyreCreateDebitCardQuoteRequest {
   string dest = 1;
   string source_currency = 2;
   string dest_currency = 3;
   double source_amount = 4;
   bool amount_includes_fees = 6;
-  repeated string lockFields = 7;
-  WyreDebitCardInfo card = 10;
+  repeated string lock_fields = 7;
+  string country = 8;
+}
+
+message WyreConfirmDebitCardQuoteRequest {
+  WyreDebitCardInfo card = 1;
+  string dest = 2;
+  string source_currency = 3;
+  string dest_currency = 4;
+  double source_amount = 5;
+  string reservation_id = 6;
 }
 
 message WyreDebitCardInfo {
@@ -492,12 +501,15 @@ message WyreGetDebitCardOrderAuthorizationsResponse {
   string authorization_3ds_url = 4;
 }
 
-message WyreCreateDebitCardOrderResponse {
-  string reservation = 1;
-  string orderId = 2;
-  string status = 3;
-  string transferId = 4;
-  WyreWalletOrderReservationQuote quote = 5;
+message WyreCreateDebitCardQuoteResponse {
+  string reservation_id = 1;
+  WyreWalletOrderReservationQuote quote = 2;
+}
+
+message WyreConfirmDebitCardQuoteResponse {
+  string orderId = 1;
+  string status = 2;
+  string transfer_id = 3;
 }
 
 message GotoRequest {
@@ -656,9 +668,16 @@ service Flux {
     };
   }
 
-  rpc WyreCreateWalletOrderReservation(WyreCreateDebitCardOrderRequest) returns (WyreCreateDebitCardOrderResponse) {
+  rpc WyreCreateDebitCardQuote(WyreCreateDebitCardQuoteRequest) returns (WyreCreateDebitCardQuoteResponse) {
     option (google.api.http) = {
-      post: "/wyre/transfers/debit-card"
+      post: "/wyre/transfers/debit-card/quote"
+      body: "*"
+    };
+  }
+
+  rpc WyreConfirmDebitCardQuote(WyreConfirmDebitCardQuoteRequest) returns (WyreConfirmDebitCardQuoteResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/confirm"
       body: "*"
     };
   }
