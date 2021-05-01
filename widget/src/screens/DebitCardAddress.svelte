@@ -125,11 +125,7 @@
         sourceCurrency: $transactionStore.sourceCurrency.ticker,
         sourceAmount: $transactionStore.sourceAmount,
         destCurrency: $transactionStore.destinationCurrency.ticker,
-        // TODO: move srn prefix to server
-        dest:
-          $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
-            ? 'ethereum:0xf636B6aA45C554139763Ad926407C02719bc22f7'
-            : 'bitcoin:n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU',
+        dest: $debitCardStore.dest,
         card: {
           firstName: $debitCardStore.firstName,
           lastName: $debitCardStore.lastName,

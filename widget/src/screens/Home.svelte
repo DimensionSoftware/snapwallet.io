@@ -97,17 +97,17 @@
     if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {
       try {
         isCreatingTxnPreview = true
+        const dest = // TODO: move srn prefix to server
+          $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
+            ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
+            : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU'
         const {
           reservationId,
           quote,
         } = await window.API.fluxWyreCreateDebitCardQuote({
+          dest,
           sourceCurrency: $transactionStore.sourceCurrency.ticker,
           lockFields: ['sourceAmount'],
-          dest:
-            // TODO: move srn prefix to server
-            $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
-              ? 'ethereum:0xf636B6aA45C554139763Ad926407C02719bc22f7'
-              : 'bitcoin:n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU',
           amountIncludesFees: false,
           country: $debitCardStore.address.country,
           sourceAmount: $transactionStore.sourceAmount,
@@ -115,7 +115,7 @@
           destCurrency: $transactionStore.destinationCurrency?.ticker,
         })
 
-        debitCardStore.update({ reservationId })
+        debitCardStore.update({ reservationId, dest })
         transactionStore.setWyrePreview(quote)
         return push(Routes.CHECKOUT_OVERVIEW)
       } finally {
