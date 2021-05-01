@@ -25,9 +25,10 @@
     faIdCard,
     faLock,
     faExclamationCircle,
+    faGlobe,
   } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
-  import { TransactionIntents } from '../types'
+  import { TransactionIntents, TransactionMediums } from '../types'
   import ExchangeRate from '../components/ExchangeRate.svelte'
   import PaymentSelector from '../components/selectors/PaymentSelector.svelte'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
@@ -37,9 +38,13 @@
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
   import { toaster } from '../stores/ToastStore'
   import { configStore } from '../stores/ConfigStore'
+  import CountrySelector from '../components/selectors/CountrySelector.svelte'
+  import { debitCardStore } from '../stores/DebitCardStore'
+  import { countries, WYRE_SUPPORTED_COUNTRIES } from '../util/country'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
+  let countrySelectorVisible = false
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
   let glow = false
   let isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
@@ -76,19 +81,7 @@
   }
 
   const handleNextStep = async () => {
-    getNextPath()
     const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore
-    isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
-    if (
-      selectedSourcePaymentMethod &&
-      selectedSourcePaymentMethod?.status !== 'ACTIVE'
-    ) {
-      paymentSelectorVisible = true
-      return toaster.pop({
-        msg: 'Please select an active payment method.',
-        error: true,
-      })
-    }
 
     // guards
     if (!sourceAmount || !isValidNumber(sourceAmount)) {
@@ -99,6 +92,50 @@
     if (sourceAmount < 0.01) {
       focus(document.querySelector('input'))
       throw new Error('The minimum trade amount is $0.01')
+    }
+
+    if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {
+      try {
+        isCreatingTxnPreview = true
+        const {
+          reservationId,
+          quote,
+        } = await window.API.fluxWyreCreateDebitCardQuote({
+          sourceCurrency: $transactionStore.sourceCurrency.ticker,
+          lockFields: ['sourceAmount'],
+          dest:
+            // TODO: move srn prefix to server
+            $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
+              ? 'ethereum:0xf636B6aA45C554139763Ad926407C02719bc22f7'
+              : 'bitcoin:n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU',
+          amountIncludesFees: false,
+          country: $debitCardStore.address.country,
+          sourceAmount: $transactionStore.sourceAmount,
+
+          destCurrency: $transactionStore.destinationCurrency?.ticker,
+        })
+
+        debitCardStore.update({ reservationId })
+        transactionStore.setWyrePreview(quote)
+        return push(Routes.CHECKOUT_OVERVIEW)
+      } finally {
+        isCreatingTxnPreview = false
+        return
+      }
+    }
+
+    getNextPath()
+
+    isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
+    if (
+      selectedSourcePaymentMethod &&
+      selectedSourcePaymentMethod?.status !== 'ACTIVE'
+    ) {
+      paymentSelectorVisible = true
+      return toaster.pop({
+        msg: 'Please select an active payment method.',
+        error: true,
+      })
     }
 
     // Only do this when the user has a Wyre account
@@ -240,44 +277,66 @@
             <TotalContainer />
           </b>
         </VStep>
-        {#if flags?.hasWyreAccount}
-          <VStep success>
-            <span slot="icon">
-              <FaIcon data={faCheck} />
-            </span>
-            <b slot="step">Verify Identity</b>
-          </VStep>
-        {:else if $userStore.isProfilePending}
-          <VStep disabled>
-            <span slot="icon">
-              <FaIcon data={faExclamationCircle} />
-            </span>
-            <b slot="step">Reviewing Identity</b>
-            <div class="description help" slot="info">
-              We're reviewing your identity.
-              {#if !$paymentMethodStore.wyrePaymentMethods?.length}
-                Please add a payment method below.
-              {/if}
-            </div>
-          </VStep>
-        {:else}
-          <VStep
-            disabled
-            onClick={() =>
-              push(
-                $userStore.isProfileComplete ? Routes.ADDRESS : Routes.PROFILE,
-              )}
-          >
-            <span slot="icon">
-              <FaIcon data={faIdCard} />
-            </span>
-            <b slot="step"> Verify Identity </b>
-          </VStep>
-        {/if}
         <PaymentSelector
           {isBuy}
           onClick={() => (paymentSelectorVisible = true)}
         />
+        {#if $transactionStore.inMedium === TransactionMediums.ACH}
+          {#if flags?.hasWyreAccount}
+            <VStep success>
+              <span slot="icon">
+                <FaIcon data={faCheck} />
+              </span>
+              <b slot="step">Verify Identity</b>
+            </VStep>
+          {:else if $userStore.isProfilePending}
+            <VStep disabled>
+              <span slot="icon">
+                <FaIcon data={faExclamationCircle} />
+              </span>
+              <b slot="step">Reviewing Identity</b>
+              <div class="description help" slot="info">
+                We're reviewing your identity.
+                {#if !$paymentMethodStore.wyrePaymentMethods?.length}
+                  Please add a payment method below.
+                {/if}
+              </div>
+            </VStep>
+          {:else if $paymentMethodStore.wyrePaymentMethods.length}
+            <VStep
+              disabled
+              onClick={() =>
+                push(
+                  $userStore.isProfileComplete
+                    ? Routes.ADDRESS
+                    : Routes.PROFILE,
+                )}
+            >
+              <span slot="icon">
+                <FaIcon data={faIdCard} />
+              </span>
+              <b slot="step"> Verify Identity </b>
+            </VStep>
+          {/if}
+        {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
+          <VStep
+            disabled
+            onClick={() => {
+              countrySelectorVisible = true
+            }}
+            success={Boolean($debitCardStore.address.country)}
+          >
+            <span slot="icon">
+              <FaIcon
+                data={$debitCardStore.address.country ? faCheck : faGlobe}
+              />
+            </span>
+            <b slot="step"
+              >{countries[$debitCardStore.address.country]?.name ||
+                'Select Location'}</b
+            >
+          </VStep>
+        {/if}
       </ul>
     </div>
   </ModalBody>
@@ -317,6 +376,18 @@
 <!-- Payment Method Selector (remount for onMount trigger) -->
 {#if paymentSelectorVisible}
   <AccountSelector visible on:close={() => (paymentSelectorVisible = false)} />
+{/if}
+
+{#if countrySelectorVisible}
+  <CountrySelector
+    whiteList={WYRE_SUPPORTED_COUNTRIES}
+    on:close={() => (countrySelectorVisible = false)}
+    on:select={e => {
+      const { country } = e?.detail
+      country && debitCardStore.updateAddress({ country: country.code })
+      countrySelectorVisible = false
+    }}
+  />
 {/if}
 
 <style lang="scss">
