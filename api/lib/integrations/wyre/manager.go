@@ -228,25 +228,9 @@ func (m Manager) selectWyreProfileUploads(ctx context.Context, userID user.ID, w
 	return uploads, selected, nil
 }
 
-func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, wyreAccountID account.ID, profile profiledata.ProfileDatas) error {
-	wyreAccounts, err := m.Db.GetWyreAccounts(ctx, nil, userID)
-	if err != nil {
-		return err
-	}
-
-	var wyreAccount *wyre_model.Account
-	for _, wa := range wyreAccounts {
-		if wa.ID == wyreAccountID {
-			wyreAccount = wa
-		}
-	}
-
-	if wyreAccount == nil {
-		return fmt.Errorf("user does not have a wyre account with the given id")
-	}
-
+func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, wyreAccount *account.Account, profile profiledata.ProfileDatas) error {
 	fields, selected1 := selectWyreProfileFields(profile)
-	uploads, selected2, err := m.selectWyreProfileUploads(ctx, userID, wyreAccountID, profile)
+	uploads, selected2, err := m.selectWyreProfileUploads(ctx, userID, wyreAccount.ID, profile)
 	if err != nil {
 		return err
 	}
