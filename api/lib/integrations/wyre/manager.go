@@ -252,6 +252,11 @@ func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, w
 	}
 	selected := append(selected1, selected2...)
 
+	if len(selected) == 0 {
+		// nothing to update
+		return nil
+	}
+
 	_, err = m.Wyre.UpdateAccount(wyreAccount.SecretKey, wyreAccount.ID, UpdateAccountRequest{
 		ProfileFields: fields,
 	})
