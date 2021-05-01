@@ -206,10 +206,11 @@ func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, w
 		return fmt.Errorf("user does not have a wyre account with the given id")
 	}
 
-	sendableProfile := profile.FilterStatus(common.StatusReceived)
-	// todo: update wyre account w/ sendable profile data (new stuff)
+	fields, selected := selectWyreProfileFields(profile)
 
-	sendableProfile.SetStatuses(common.StatusPending)
+	// todo: update wyre account w/ sendable profile data (new stuff) need client call implemented
+
+	selected.SetStatuses(common.StatusPending)
 	_, err = m.Db.SaveProfileDatas(ctx, nil, userID, sendableProfile)
 	if err != nil {
 		return err
