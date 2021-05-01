@@ -189,6 +189,33 @@ func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, 
 	return fields, selected
 }
 
+// update anything not in "APPROVED" state
+func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, wyreAccountID account.ID, profile profiledata.ProfileDatas) error {
+	wyreAccounts, err := m.Db.GetWyreAccounts(ctx, nil, userID)
+	if err != nil {
+		return err
+	}
+
+	var wyreAccount *wyre_model.Account
+	for _, wa := range wyreAccounts {
+		if wa.ID == wyreAccountID {
+			wyreAccount = wa
+		}
+	}
+
+	if wyreAccount == nil {
+		return fmt.Errorf("user does not have a wyre account with the given id")
+	}
+
+	sendableProfile := profile.FilterNotStatus(common.StatusApproved)
+	// todo: update wyre account w/ sendable profile data
+
+	sendableProfile.SetStatuses(common.StatusPending)
+	// todo: save w/ new statuses
+
+	return nil
+}
+
 func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile profiledata.ProfileDatas) (*wyre_model.Account, error) {
 	now := time.Now()
 	t := true
