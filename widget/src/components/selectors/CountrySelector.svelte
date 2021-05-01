@@ -7,8 +7,11 @@
   import VirtualList from '../VirtualList.svelte'
 
   export let visible = false
+  export let whiteList: string[] = []
 
-  $: filteredCountries = Object.values(countries)
+  $: filteredCountries = whiteList.length
+    ? Object.values(countries).filter(c => whiteList.includes(c.code))
+    : Object.values(countries)
 
   let searchTimeout
 
