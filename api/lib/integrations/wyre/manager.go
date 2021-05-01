@@ -189,7 +189,6 @@ func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, 
 	return fields, selected
 }
 
-// update anything not in "APPROVED" state
 func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, wyreAccountID account.ID, profile profiledata.ProfileDatas) error {
 	wyreAccounts, err := m.Db.GetWyreAccounts(ctx, nil, userID)
 	if err != nil {
@@ -207,11 +206,11 @@ func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, w
 		return fmt.Errorf("user does not have a wyre account with the given id")
 	}
 
-	sendableProfile := profile.FilterNotStatus(common.StatusApproved)
-	// todo: update wyre account w/ sendable profile data
+	sendableProfile := profile.FilterStatus(common.StatusReceived)
+	// todo: update wyre account w/ sendable profile data (new stuff)
 
 	sendableProfile.SetStatuses(common.StatusPending)
-	// todo: save w/ new statuses
+	// todo: save pdatas w/ new statuses
 
 	return nil
 }
