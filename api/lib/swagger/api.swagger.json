@@ -511,7 +511,7 @@
     },
     "/wyre/transfers/debit-card/auth": {
       "post": {
-        "operationId": "Flux_WyreGetWalletOrderAuthorizations",
+        "operationId": "Flux_WyreGetDebitCardAuthorizations",
         "responses": {
           "200": {
             "description": "A successful response.",

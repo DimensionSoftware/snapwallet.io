@@ -203,6 +203,15 @@ export interface FluxApiFluxWyreCreateTransferRequest {
     body: WyreCreateTransferRequest
 }
 
+export interface FluxApiFluxWyreGetDebitCardAuthorizationsRequest {
+    /**
+     * 
+     * @type WyreGetDebitCardOrderAuthorizationsRequest
+     * @memberof FluxApifluxWyreGetDebitCardAuthorizations
+     */
+    body: WyreGetDebitCardOrderAuthorizationsRequest
+}
+
 export interface FluxApiFluxWyreGetPaymentMethodsRequest {
 }
 
@@ -222,15 +231,6 @@ export interface FluxApiFluxWyreGetTransfersRequest {
      * @memberof FluxApifluxWyreGetTransfers
      */
     page?: string
-}
-
-export interface FluxApiFluxWyreGetWalletOrderAuthorizationsRequest {
-    /**
-     * 
-     * @type WyreGetDebitCardOrderAuthorizationsRequest
-     * @memberof FluxApifluxWyreGetWalletOrderAuthorizations
-     */
-    body: WyreGetDebitCardOrderAuthorizationsRequest
 }
 
 export interface FluxApiFluxWyreWebhookRequest {
@@ -399,6 +399,13 @@ export class ObjectFluxApi {
     /**
      * @param param the request object
      */
+    public fluxWyreGetDebitCardAuthorizations(param: FluxApiFluxWyreGetDebitCardAuthorizationsRequest, options?: Configuration): Promise<WyreGetDebitCardOrderAuthorizationsResponse> {
+        return this.api.fluxWyreGetDebitCardAuthorizations(param.body,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
     public fluxWyreGetPaymentMethods(param: FluxApiFluxWyreGetPaymentMethodsRequest, options?: Configuration): Promise<WyrePaymentMethods> {
         return this.api.fluxWyreGetPaymentMethods( options).toPromise();
     }
@@ -415,13 +422,6 @@ export class ObjectFluxApi {
      */
     public fluxWyreGetTransfers(param: FluxApiFluxWyreGetTransfersRequest, options?: Configuration): Promise<WyreTransfers> {
         return this.api.fluxWyreGetTransfers(param.page,  options).toPromise();
-    }
-	
-    /**
-     * @param param the request object
-     */
-    public fluxWyreGetWalletOrderAuthorizations(param: FluxApiFluxWyreGetWalletOrderAuthorizationsRequest, options?: Configuration): Promise<WyreGetDebitCardOrderAuthorizationsResponse> {
-        return this.api.fluxWyreGetWalletOrderAuthorizations(param.body,  options).toPromise();
     }
 	
     /**

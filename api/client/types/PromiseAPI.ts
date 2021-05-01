@@ -229,6 +229,14 @@ export class PromiseFluxApi {
     }
 	
     /**
+     * @param body 
+     */
+    public fluxWyreGetDebitCardAuthorizations(body: WyreGetDebitCardOrderAuthorizationsRequest, options?: Configuration): Promise<WyreGetDebitCardOrderAuthorizationsResponse> {
+    	const result = this.api.fluxWyreGetDebitCardAuthorizations(body, options);
+        return result.toPromise();
+    }
+	
+    /**
      */
     public fluxWyreGetPaymentMethods(options?: Configuration): Promise<WyrePaymentMethods> {
     	const result = this.api.fluxWyreGetPaymentMethods(options);
@@ -248,14 +256,6 @@ export class PromiseFluxApi {
      */
     public fluxWyreGetTransfers(page?: string, options?: Configuration): Promise<WyreTransfers> {
     	const result = this.api.fluxWyreGetTransfers(page, options);
-        return result.toPromise();
-    }
-	
-    /**
-     * @param body 
-     */
-    public fluxWyreGetWalletOrderAuthorizations(body: WyreGetDebitCardOrderAuthorizationsRequest, options?: Configuration): Promise<WyreGetDebitCardOrderAuthorizationsResponse> {
-    	const result = this.api.fluxWyreGetWalletOrderAuthorizations(body, options);
         return result.toPromise();
     }
 	

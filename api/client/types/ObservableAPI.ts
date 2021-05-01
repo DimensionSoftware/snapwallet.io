@@ -471,6 +471,28 @@ export class ObservableFluxApi {
     }
 	
     /**
+     * @param body 
+     */
+    public fluxWyreGetDebitCardAuthorizations(body: WyreGetDebitCardOrderAuthorizationsRequest, options?: Configuration): Observable<WyreGetDebitCardOrderAuthorizationsResponse> {
+    	const requestContextPromise = this.requestFactory.fluxWyreGetDebitCardAuthorizations(body, options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxWyreGetDebitCardAuthorizations(rsp)));
+	    	}));
+    }
+	
+    /**
      */
     public fluxWyreGetPaymentMethods(options?: Configuration): Observable<WyrePaymentMethods> {
     	const requestContextPromise = this.requestFactory.fluxWyreGetPaymentMethods(options);
@@ -532,28 +554,6 @@ export class ObservableFluxApi {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
 	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxWyreGetTransfers(rsp)));
-	    	}));
-    }
-	
-    /**
-     * @param body 
-     */
-    public fluxWyreGetWalletOrderAuthorizations(body: WyreGetDebitCardOrderAuthorizationsRequest, options?: Configuration): Observable<WyreGetDebitCardOrderAuthorizationsResponse> {
-    	const requestContextPromise = this.requestFactory.fluxWyreGetWalletOrderAuthorizations(body, options);
-
-		// build promise chain
-    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
-    	for (let middleware of this.configuration.middleware) {
-    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
-    	}
-
-    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
-	    	pipe(mergeMap((response: ResponseContext) => {
-	    		let middlewarePostObservable = of(response);
-	    		for (let middleware of this.configuration.middleware) {
-	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
-	    		}
-	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxWyreGetWalletOrderAuthorizations(rsp)));
 	    	}));
     }
 	
