@@ -1641,6 +1641,9 @@
             "type": "number",
             "format": "double"
           }
+        },
+        "dest": {
+          "type": "string"
         }
       }
     },

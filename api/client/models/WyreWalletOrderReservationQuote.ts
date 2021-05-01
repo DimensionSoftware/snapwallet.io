@@ -21,6 +21,7 @@ export class WyreWalletOrderReservationQuote {
     'exchangeRate'?: number;
     'equivelancies'?: { [key: string]: number; };
     'fees'?: { [key: string]: number; };
+    'dest'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -72,6 +73,12 @@ export class WyreWalletOrderReservationQuote {
             "baseName": "fees",
             "type": "{ [key: string]: number; }",
             "format": "double"
+        },
+        {
+            "name": "dest",
+            "baseName": "dest",
+            "type": "string",
+            "format": ""
         }    ];
 
     static getAttributeTypeMap() {
