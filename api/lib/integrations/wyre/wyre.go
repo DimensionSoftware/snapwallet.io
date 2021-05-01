@@ -348,9 +348,6 @@ func ProvideWyreConfig() (*Config, error) {
 func NewClient(config *Config) *Client {
 	resty := resty.New()
 
-	// TODO: remove this
-	resty.SetDebug(true)
-
 	if config.EnableProduction {
 		log.Println("🚨 Production Wyre API is activated")
 		resty.SetHostURL(wyreProductionAPIEndpoint)
