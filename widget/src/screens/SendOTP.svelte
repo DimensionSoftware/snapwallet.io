@@ -30,6 +30,7 @@
   $: isUSPhoneNumber = $userStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   onMount(() => {
+    window.vld8 = vld8
     resizeWidget(425, $configStore.appName)
   })
 
@@ -49,10 +50,11 @@
       }
     } else {
       const rawPhone = unMaskValue($userStore.phoneNumber, Masks.PHONE)
-      Logger.debug('Unmasked', rawPhone, 'StorePhone', $userStore.phoneNumber)
-      let isPhoneValid = vld8.isMobilePhone($userStore.phoneNumber)
-      if (!isPhoneValid) focus(document.querySelector('input[type="tel"]'))
-      throw new Error('Enter a valid phone number.')
+      let isPhoneValid = vld8.isMobilePhone(rawPhone)
+      if (!isPhoneValid) {
+        focus(document.querySelector('input[type="tel"]'))
+        throw new Error('Enter a valid phone number.')
+      }
     }
 
     try {
@@ -137,6 +139,7 @@
             autofocus={!countrySelectorVisible}
             required
             type="tel"
+            mask={isUSPhoneNumber ? Masks.PHONE : undefined}
             placeholder={$userStore.virtual.phone
               ? $userStore.virtual.phone
               : isUSPhoneNumber
