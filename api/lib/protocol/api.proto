@@ -349,6 +349,7 @@ message WyreWalletOrderReservationQuote {
   double exchangeRate = 6;
   map<string, double> equivelancies = 7;
   map<string, double> fees = 8;
+  string dest = 9;
 }
 
 message WyreWalletOrderReservation {
