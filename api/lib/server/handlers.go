@@ -1567,20 +1567,17 @@ func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransfer
 	return wyre.WyreTransferDetailToProto(t), nil
 }
 
-func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *proto.WyreCreateDebitCardOrderRequest) (*proto.WyreCreateDebitCardOrderResponse, error) {
-	includeFees := req.AmountIncludesFees
-	card := req.Card
-
+func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCreateDebitCardQuoteRequest) (*proto.WyreCreateDebitCardQuoteResponse, error) {
 	// Create the order reservation
 	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
-		Country:            card.Address.Country,
+		Country:            req.Country,
 		PaymentMethod:      "debit-card",
 		SourceCurrency:     req.SourceCurrency,
 		DestCurrency:       req.DestCurrency,
 		SourceAmount:       req.SourceAmount,
 		LockFields:         req.LockFields,
 		Dest:               req.Dest,
-		AmountIncludesFees: &includeFees,
+		AmountIncludesFees: &req.AmountIncludesFees,
 	})
 
 	if err != nil {
@@ -1596,9 +1593,26 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		return nil, err
 	}
 
+	return &proto.WyreCreateDebitCardQuoteResponse{
+		ReservationId: createReservationResponse.Reservation,
+		Quote: &proto.WyreWalletOrderReservationQuote{
+			ExchangeRate:            reservationResponse.Quote.ExchangeRate,
+			DestCurrency:            reservationResponse.Quote.DestCurrency,
+			SourceCurrency:          reservationResponse.Quote.SourceCurrency,
+			Fees:                    reservationResponse.Quote.Fees,
+			SourceAmount:            reservationResponse.Quote.SourceAmount,
+			DestAmount:              reservationResponse.Quote.DestAmount,
+			SourceAmountWithoutFees: reservationResponse.Quote.SourceAmountWithoutFees,
+		},
+	}, nil
+}
+
+func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreConfirmDebitCardQuoteRequest) (*proto.WyreConfirmDebitCardQuoteResponse, error) {
+	card := req.Card
+
 	// Create the order
 	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
-		ReservationID:  createReservationResponse.Reservation,
+		ReservationID:  req.ReservationId,
 		SourceCurrency: req.SourceCurrency,
 		PurchaseAmount: req.SourceAmount,
 		DestCurrency:   req.DestCurrency,
@@ -1630,19 +1644,8 @@ func (s *Server) WyreCreateWalletOrderReservation(ctx context.Context, req *prot
 		return nil, err
 	}
 
-	// TODO: store the wallet order information
-	return &proto.WyreCreateDebitCardOrderResponse{
-		Reservation: createReservationResponse.Reservation,
-		OrderId:     orderResponse.ID,
-		Quote: &proto.WyreWalletOrderReservationQuote{
-			ExchangeRate:            reservationResponse.Quote.ExchangeRate,
-			DestCurrency:            reservationResponse.Quote.DestCurrency,
-			SourceCurrency:          reservationResponse.Quote.SourceCurrency,
-			Fees:                    reservationResponse.Quote.Fees,
-			SourceAmount:            reservationResponse.Quote.SourceAmount,
-			DestAmount:              reservationResponse.Quote.DestAmount,
-			SourceAmountWithoutFees: reservationResponse.Quote.SourceAmountWithoutFees,
-		},
+	return &proto.WyreConfirmDebitCardQuoteResponse{
+		OrderId:    orderResponse.ID,
 		Status:     orderResponse.Status,
 		TransferId: orderResponse.TransferID,
 	}, nil
