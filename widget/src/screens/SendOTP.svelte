@@ -48,10 +48,12 @@
         throw new Error('Enter a valid email address.')
       }
     } else {
-      const rawPhone = unMaskValue($userStore.phoneNumber, Masks.PHONE)
+      const rawPhone = $userStore.phoneNumberCountry.dial_code + unMaskValue($userStore.phoneNumber, Masks.PHONE)
       let isPhoneValid = vld8.isMobilePhone(rawPhone)
-      if (!isPhoneValid) focus(document.querySelector('input[type="tel"]'))
-      throw new Error('Enter a valid phone number.')
+      if (!isPhoneValid) {
+        focus(document.querySelector('input[type="tel"]'))
+        throw new Error('Enter a valid phone number.')
+      }
     }
 
     try {

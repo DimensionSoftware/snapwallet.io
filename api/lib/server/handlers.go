@@ -364,7 +364,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 		}
 		if len(accounts) > 0 {
 			a := accounts[0]
-			wyreAcct, err := s.Wyre.GetAccount(a.SecretKey, string(a.ID))
+			wyreAcct, err := s.Wyre.GetAccount(a.SecretKey, wyre.AccountID(a.ID))
 			if err != nil {
 				return nil, err
 			}
@@ -375,7 +375,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 				return nil, err
 			}
 			for _, pm := range pms {
-				theirPm, err := s.Wyre.GetPaymentMethod(a.SecretKey, string(pm.ID))
+				theirPm, err := s.Wyre.GetPaymentMethod(a.SecretKey, wyre.PaymentMethodID(pm.ID))
 				if err != nil {
 					return nil, err
 				}
@@ -721,7 +721,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		Remediations: remediations,
 	}
 
-	if len(existingWyreAccounts) == 0 && profile.HasWyreAccountPreconditionsMet() {
+	if profile.HasWyreAccountPreconditionsMet() {
 		// todo, create job in db
 		// todo make sure theres not a job already running
 		log.Printf("Creating new wyre account for user id: %s", u.ID)
@@ -730,22 +730,22 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 		err = s.JobPublisher.PublishJob(ctx, &job.Job{
 			ID:         shortuuid.New(),
-			Kind:       job.KindCreateWyreAccountForUser,
+			Kind:       job.KindUpdateWyreAccountForUser,
 			Status:     job.StatusQueued,
 			RelatedIDs: []string{string(u.ID)},
 			CreatedAt:  now.Unix(),
 			UpdatedAt:  now.Unix(),
 		})
 		if err != nil {
-			log.Println(err)
+			return nil, err
 		}
 
 		// todo: store pending lifecycle status? or can use job submitted information
 		resp.Wyre = &proto.ThirdPartyUserAccount{
 			LifecyleStatus: proto.LifecycleStatus_L_PENDING,
 		}
-	} else {
-		job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindCreateWyreAccountForUser, job.StatusQueued, string(u.ID))
+	} else if len(existingWyreAccounts) == 0 {
+		job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindUpdateWyreAccountForUser, job.StatusQueued, string(u.ID))
 		if err != nil {
 			return nil, err
 		}
@@ -795,7 +795,7 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 				// todo: remediations
 			}
 		} else {
-			job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindCreateWyreAccountForUser, job.StatusQueued, string(u.ID))
+			job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindUpdateWyreAccountForUser, job.StatusQueued, string(u.ID))
 			if err != nil {
 				return nil, err
 			}
@@ -852,6 +852,19 @@ func (s *Server) ChangeViewerEmail(ctx context.Context, req *proto.ChangeViewerE
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
 	}
 
+	now := time.Now()
+	err = s.JobPublisher.PublishJob(ctx, &job.Job{
+		ID:         shortuuid.New(),
+		Kind:       job.KindUpdateWyreAccountForUser,
+		Status:     job.StatusQueued,
+		RelatedIDs: []string{string(u.ID)},
+		CreatedAt:  now.Unix(),
+		UpdatedAt:  now.Unix(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &emptypb.Empty{}, nil
 }
 
@@ -886,6 +899,19 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
+	}
+
+	now := time.Now()
+	err = s.JobPublisher.PublishJob(ctx, &job.Job{
+		ID:         shortuuid.New(),
+		Kind:       job.KindUpdateWyreAccountForUser,
+		Status:     job.StatusQueued,
+		RelatedIDs: []string{string(u.ID)},
+		CreatedAt:  now.Unix(),
+		UpdatedAt:  now.Unix(),
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	return &emptypb.Empty{}, nil
@@ -1005,7 +1031,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
 		}
 
-		theirAccount, err := s.Wyre.GetAccount(ourWyreAccount.SecretKey, string(ourWyreAccount.ID))
+		theirAccount, err := s.Wyre.GetAccount(ourWyreAccount.SecretKey, wyre.AccountID(ourWyreAccount.ID))
 		if err != nil {
 			log.Printf("failure getting wyre account from them: %#v", err)
 			return nil, status.Errorf(codes.Unknown, "hook failed")
@@ -1198,7 +1224,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
 		}
 
-		theirPaymentMethod, err := s.Wyre.GetPaymentMethod(ourWyreAccount.SecretKey, string(ourWyrePaymentMethod.ID))
+		theirPaymentMethod, err := s.Wyre.GetPaymentMethod(ourWyreAccount.SecretKey, wyre.PaymentMethodID(ourWyrePaymentMethod.ID))
 		if err != nil {
 			log.Printf("failure getting wyre payment method from them: %#v", err)
 			return nil, status.Errorf(codes.Unknown, "hook failed")

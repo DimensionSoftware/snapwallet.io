@@ -62,6 +62,11 @@ type CreateAccountRequest struct {
 	DisableEmail *bool `json:"disableEmail,omitempty"`
 }
 
+type UpdateAccountRequest struct {
+	// fields for update on account
+	ProfileFields []ProfileField `json:"profileFields"`
+}
+
 type TransferStatusHistoryItem struct {
 	ID           string `json:"id"`           // i.e. "N88AFATLRZY"
 	TransferID   string `json:"transferId"`   // i.e. "TF-4F3HRUYPNFY"
@@ -91,7 +96,7 @@ type TransferBlockchainTx struct {
 }
 
 type Transfer struct {
-	ID             string             `json:"id"`             // i.e. "TF-4F3HRUYPNFY"
+	ID             TransferID         `json:"id"`             // i.e. "TF-4F3HRUYPNFY"
 	CustomID       string             `json:"customId"`       // an optional custom ID to tag the transfer
 	Source         string             `json:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
 	Dest           string             `json:"dest"`           // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
@@ -111,7 +116,7 @@ type Transfer struct {
 }
 
 type TransferDetail struct {
-	ID             string             `json:"id"`             // i.e. "TF-4F3HRUYPNFY"
+	ID             TransferID         `json:"id"`             // i.e. "TF-4F3HRUYPNFY"
 	Owner          string             `json:"owner"`          // i.e. "account:AC-WYUR7ZZ6UMU"
 	CustomID       string             `json:"customId"`       // an optional custom ID to tag the transfer
 	Source         string             `json:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
@@ -271,6 +276,15 @@ func (req CreateAccountRequest) WithDefaults() CreateAccountRequest {
 // ProfileFieldID field ID for create account request
 type ProfileFieldID string
 
+// AccountID ...
+type AccountID string
+
+// PaymentMethodID ...
+type PaymentMethodID string
+
+// TransferID ...
+type TransferID string
+
 const (
 	// ProfileFieldIDIndividualLegalName indicates the value is a legal name string
 	ProfileFieldIDIndividualLegalName ProfileFieldID = "individualLegalName"
@@ -354,13 +368,13 @@ func NewClient(config *Config) *Client {
 // GetPaymentMethod
 // https://docs.sendwyre.com/docs/get-payment-method
 // GET https://api.sendwyre.com/v2/paymentMethod/:paymentMethodId
-func (c Client) GetPaymentMethod(token string, paymentMethodID string) (*PaymentMethod, error) {
+func (c Client) GetPaymentMethod(token string, paymentMethodID PaymentMethodID) (*PaymentMethod, error) {
 	spec := c.http.R().
 		SetAuthToken(token).
 		SetError(APIError{}).
 		SetResult(PaymentMethod{}).
 		EnableTrace().
-		SetPathParam("paymentMethodID", paymentMethodID)
+		SetPathParam("paymentMethodID", string(paymentMethodID))
 
 	resp, err := spec.Get("/v2/paymentMethod/{paymentMethodID}")
 	if err != nil {
@@ -440,7 +454,7 @@ func (c Client) UploadDocument(token string, req UploadDocumentRequest) (*Accoun
 // CreateAPIKey Generate a new set of API credentials for the token bearer
 // https://docs.sendwyre.com/docs/create-api-key
 // POST https://api.sendwyre.com/v2/apiKeys
-func (c Client) CreateAPIKey(token string, masqueradeAs string, req CreateAPIKeyRequest) (*CreateAPIKeyResponse, error) {
+func (c Client) CreateAPIKey(token string, masqueradeAs AccountID, req CreateAPIKeyRequest) (*CreateAPIKeyResponse, error) {
 	// to make sure we don't inadvertently create an api key linking to master key instead of intended customer key
 	if masqueradeAs == "" {
 		return nil, fmt.Errorf("masqueradeAs must be provided when creating an api key")
@@ -451,7 +465,7 @@ func (c Client) CreateAPIKey(token string, masqueradeAs string, req CreateAPIKey
 		SetError(APIError{}).
 		SetResult(CreateAPIKeyResponse{}).
 		SetBody(req).
-		SetQueryParam("masqueradeAs", masqueradeAs).
+		SetQueryParam("masqueradeAs", string(masqueradeAs)).
 		EnableTrace().
 		Post("/v2/apiKeys")
 	if err != nil {
@@ -510,6 +524,29 @@ func (c Client) ConfirmTransfer(token string, req ConfirmTransferRequest) (*Tran
 	return resp.Result().(*TransferDetail), nil
 }
 
+// UpdateAccount updates a user account in the wyre system with new profile fields
+// https://docs.sendwyre.com/docs/submit-account-info
+// POST https://api.sendwyre.com/v3/accounts/:accountId
+func (c Client) UpdateAccount(token string, accountID AccountID, req UpdateAccountRequest) (*Account, error) {
+	resp, err := c.http.R().
+		SetAuthToken(token).
+		SetError(APIError{}).
+		SetResult(Account{}).
+		SetBody(req).
+		EnableTrace().
+		SetPathParam("accountID", string(accountID)).
+		Post("/v3/accounts/{accountID}")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*Account), nil
+}
+
 // GetTransferHistory gets a history of transfers in the wyre system
 // https://docs.sendwyre.com/docs/transfer-history
 // GET https://api.sendwyre.com/v3/transfers
@@ -558,13 +595,13 @@ func (c Client) GetTransfer(token string, transferID string) (*TransferDetail, e
 // GetAccount gets an an account from the wyre system
 // https://docs.sendwyre.com/docs/get-account
 // GET https://api.sendwyre.com/v3/accounts/:accountId
-func (c Client) GetAccount(token string, accountID string) (*Account, error) {
+func (c Client) GetAccount(token string, accountID AccountID) (*Account, error) {
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetError(APIError{}).
 		SetResult(Account{}).
 		EnableTrace().
-		SetPathParam("accountID", accountID).
+		SetPathParam("accountID", string(accountID)).
 		Get("/v3/accounts/{accountID}")
 	if err != nil {
 		return nil, err
@@ -968,7 +1005,7 @@ type CryptoAmounts = map[string]float64
 
 // Account represents the response object for https://api.sendwyre.com/v3/accounts
 type Account struct {
-	ID                string          `json:"id"`
+	ID                AccountID       `json:"id"`
 	Status            string          `json:"status"`
 	Type              string          `json:"type"`
 	Country           string          `json:"country"`

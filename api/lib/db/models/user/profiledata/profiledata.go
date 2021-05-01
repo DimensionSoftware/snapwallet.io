@@ -141,6 +141,19 @@ func (profile ProfileDatas) FilterStatus(status common.ProfileDataStatus) Profil
 	return out
 }
 
+// FilterNotStatus ...
+func (profile ProfileDatas) FilterNotStatus(notStatus common.ProfileDataStatus) ProfileDatas {
+	out := []ProfileData{}
+
+	for _, pdata := range profile {
+		if pdata.GetStatus() != notStatus {
+			out = append(out, pdata)
+		}
+	}
+
+	return out
+}
+
 // SetStatuses ...
 func (profile ProfileDatas) SetStatuses(newStatus common.ProfileDataStatus) ProfileDatas {
 	out := []ProfileData{}

@@ -66,7 +66,7 @@ func run() error {
 	// Goto redirector
 	mux.HandlePath("GET", "/g/{id}", gotoHandler(ctx, client))
 
-	return http.ListenAndServe(apiPort(), allowCORS(mux))
+	return http.ListenAndServe(apiPort(), ipLogger(allowCORS(mux)))
 }
 
 // https://github.com/rephus/grpc-gateway-example/blob/master/main.go
@@ -78,6 +78,7 @@ func preflightHandler(w http.ResponseWriter, r *http.Request) {
 	glog.Infof("preflight request for %s", r.URL.Path)
 	return
 }
+
 func allowCORS(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if origin := r.Header.Get("Origin"); origin != "" {
@@ -87,6 +88,24 @@ func allowCORS(h http.Handler) http.Handler {
 				return
 			}
 		}
+		h.ServeHTTP(w, r)
+	})
+}
+
+func ipLogger(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		remoteAddr := r.RemoteAddr
+		log.Printf("remoteAddr: %s\n", remoteAddr)
+
+		directIP := remoteAddr[:strings.LastIndex(remoteAddr, ":")]
+		log.Printf("directIP: %s\n", directIP)
+
+		headerValue := r.Header.Get("x-forwarded-for")
+		log.Printf("X-Forwarded-For: %s\n", headerValue)
+
+		forwardedIPs := strings.Split(headerValue, ", ")
+		log.Printf("forwardedIPs: %s\n", forwardedIPs)
+
 		h.ServeHTTP(w, r)
 	})
 }
