@@ -45,6 +45,7 @@
     z-index: 9999;
     // Don't overlay top of modal
     height: 0px;
+    padding: 0 0.75rem;
     cursor: pointer;
   }
 

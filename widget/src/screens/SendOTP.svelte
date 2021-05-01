@@ -41,18 +41,20 @@
   const timeout = 700
 
   const handleNextStep = async () => {
-    try {
-      if (!phoneVerificationOnly && !isUsingPhoneNumber) {
-        let emailIsValid = vld8.isEmail($userStore.emailAddress)
-        if (!emailIsValid)
-          return focus(document.querySelector('input[type="email"]'))
-      } else {
-        const rawPhone = unMaskValue($userStore.phoneNumber, Masks.PHONE)
-        let isPhoneValid = vld8.isMobilePhone(rawPhone)
-        if (!isPhoneValid)
-          return focus(document.querySelector('input[type="tel"]'))
+    if (!phoneVerificationOnly && !isUsingPhoneNumber) {
+      let emailIsValid = vld8.isEmail($userStore.emailAddress)
+      if (!emailIsValid) {
+        focus(document.querySelector('input[type="email"]'))
+        throw new Error('Enter a valid email address.')
       }
+    } else {
+      const rawPhone = unMaskValue($userStore.phoneNumber, Masks.PHONE)
+      let isPhoneValid = vld8.isMobilePhone(rawPhone)
+      if (!isPhoneValid) focus(document.querySelector('input[type="tel"]'))
+      throw new Error('Enter a valid phone number.')
+    }
 
+    try {
       isMakingRequest = true
       await window.API.fluxOneTimePasscode({
         emailOrPhone:
