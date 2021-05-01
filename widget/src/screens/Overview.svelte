@@ -187,7 +187,7 @@
             {dest.substring(0, 6)}...{dest.substring(dest.length - 4)}
           </div>
         </div>
-        <div class="line-dashed" />
+        <div class="line dashed" />
       {/if}
       <div class="line-item muted">
         <div>Subtotal</div>
