@@ -241,7 +241,7 @@ func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, w
 		return nil
 	}
 
-	_, err = m.Wyre.UpdateAccount(wyreAccount.SecretKey, wyreAccount.ID, UpdateAccountRequest{
+	_, err = m.Wyre.UpdateAccount(wyreAccount.SecretKey, AccountID(wyreAccount.ID), UpdateAccountRequest{
 		ProfileFields: fields,
 	})
 	if err != nil {

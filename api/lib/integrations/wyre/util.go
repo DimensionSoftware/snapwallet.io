@@ -9,7 +9,7 @@ import (
 
 func WyreTransferToProto(t *Transfer) *proto.WyreTransfer {
 	return &proto.WyreTransfer{
-		Id:             t.ID,
+		Id:             string(t.ID),
 		Source:         strings.Split(t.Source, ":")[1],
 		Dest:           strings.Split(t.Dest, ":")[1],
 		SourceCurrency: t.SourceCurrency,
@@ -30,7 +30,7 @@ func WyreTransferToProto(t *Transfer) *proto.WyreTransfer {
 
 func WyreTransferDetailToProto(t *TransferDetail) *proto.WyreTransferDetail {
 	return &proto.WyreTransferDetail{
-		Id:             t.ID,
+		Id:             string(t.ID),
 		Source:         strings.Split(t.Source, ":")[1],
 		Dest:           strings.Split(t.Dest, ":")[1],
 		SourceCurrency: t.SourceCurrency,
