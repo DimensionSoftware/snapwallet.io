@@ -98,7 +98,7 @@ func ipLogger(h http.Handler) http.Handler {
 		directIP := remoteAddr[:strings.LastIndex(remoteAddr, ":")]
 
 		headerValue := r.Header.Get("x-forwarded-for")
-		forwardedIPs := strings.Split(headerValue, ", ")
+		forwardedIPs := strings.Split(headerValue, ",")
 
 		log.Printf("directIP: %s, forwardedIPs: %#v\n", directIP, forwardedIPs)
 
