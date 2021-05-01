@@ -95,16 +95,12 @@ func allowCORS(h http.Handler) http.Handler {
 func ipLogger(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		remoteAddr := r.RemoteAddr
-		log.Printf("remoteAddr: %s\n", remoteAddr)
-
 		directIP := remoteAddr[:strings.LastIndex(remoteAddr, ":")]
-		log.Printf("directIP: %s\n", directIP)
 
 		headerValue := r.Header.Get("x-forwarded-for")
-		log.Printf("X-Forwarded-For: %s\n", headerValue)
-
 		forwardedIPs := strings.Split(headerValue, ", ")
-		log.Printf("forwardedIPs: %s\n", forwardedIPs)
+
+		log.Printf("directIP: %s, forwardedIPs: %#v\n", directIP, forwardedIPs)
 
 		h.ServeHTTP(w, r)
 	})
