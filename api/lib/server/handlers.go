@@ -1630,7 +1630,8 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 	return &proto.WyreCreateDebitCardQuoteResponse{
 		ReservationId: createReservationResponse.Reservation,
 		Quote: &proto.WyreWalletOrderReservationQuote{
-			Dest:                    dest,
+			// Return non prefixed dest
+			Dest:                    req.Dest,
 			ExchangeRate:            reservationResponse.Quote.ExchangeRate,
 			DestCurrency:            reservationResponse.Quote.DestCurrency,
 			SourceCurrency:          reservationResponse.Quote.SourceCurrency,
