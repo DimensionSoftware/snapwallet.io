@@ -42,13 +42,21 @@ import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
 import { WidgetGetShortUrlResponse } from '../models/WidgetGetShortUrlResponse';
+import { WyreConfirmDebitCardQuoteRequest } from '../models/WyreConfirmDebitCardQuoteRequest';
+import { WyreConfirmDebitCardQuoteResponse } from '../models/WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
+import { WyreCreateDebitCardQuoteRequest } from '../models/WyreCreateDebitCardQuoteRequest';
+import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
+import { WyreDebitCardInfo } from '../models/WyreDebitCardInfo';
+import { WyreGetDebitCardOrderAuthorizationsRequest } from '../models/WyreGetDebitCardOrderAuthorizationsRequest';
+import { WyreGetDebitCardOrderAuthorizationsResponse } from '../models/WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
 import { WyreTransfer } from '../models/WyreTransfer';
 import { WyreTransferDetail } from '../models/WyreTransferDetail';
 import { WyreTransfers } from '../models/WyreTransfers';
+import { WyreWalletOrderReservationQuote } from '../models/WyreWalletOrderReservationQuote';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 
 import { ObservableFluxApi } from "./ObservableAPI";
@@ -153,6 +161,15 @@ export interface FluxApiFluxWidgetGetShortUrlRequest {
     body: SnapWidgetConfig
 }
 
+export interface FluxApiFluxWyreConfirmDebitCardQuoteRequest {
+    /**
+     * 
+     * @type WyreConfirmDebitCardQuoteRequest
+     * @memberof FluxApifluxWyreConfirmDebitCardQuote
+     */
+    body: WyreConfirmDebitCardQuoteRequest
+}
+
 export interface FluxApiFluxWyreConfirmTransferRequest {
     /**
      * 
@@ -166,6 +183,15 @@ export interface FluxApiFluxWyreConfirmTransferRequest {
      * @memberof FluxApifluxWyreConfirmTransfer
      */
     body: WyreConfirmTransferRequest
+}
+
+export interface FluxApiFluxWyreCreateDebitCardQuoteRequest {
+    /**
+     * 
+     * @type WyreCreateDebitCardQuoteRequest
+     * @memberof FluxApifluxWyreCreateDebitCardQuote
+     */
+    body: WyreCreateDebitCardQuoteRequest
 }
 
 export interface FluxApiFluxWyreCreateTransferRequest {
@@ -196,6 +222,15 @@ export interface FluxApiFluxWyreGetTransfersRequest {
      * @memberof FluxApifluxWyreGetTransfers
      */
     page?: string
+}
+
+export interface FluxApiFluxWyreGetWalletOrderAuthorizationsRequest {
+    /**
+     * 
+     * @type WyreGetDebitCardOrderAuthorizationsRequest
+     * @memberof FluxApifluxWyreGetWalletOrderAuthorizations
+     */
+    body: WyreGetDebitCardOrderAuthorizationsRequest
 }
 
 export interface FluxApiFluxWyreWebhookRequest {
@@ -336,8 +371,22 @@ export class ObjectFluxApi {
     /**
      * @param param the request object
      */
+    public fluxWyreConfirmDebitCardQuote(param: FluxApiFluxWyreConfirmDebitCardQuoteRequest, options?: Configuration): Promise<WyreConfirmDebitCardQuoteResponse> {
+        return this.api.fluxWyreConfirmDebitCardQuote(param.body,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
     public fluxWyreConfirmTransfer(param: FluxApiFluxWyreConfirmTransferRequest, options?: Configuration): Promise<WyreTransferDetail> {
         return this.api.fluxWyreConfirmTransfer(param.transferId, param.body,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreCreateDebitCardQuote(param: FluxApiFluxWyreCreateDebitCardQuoteRequest, options?: Configuration): Promise<WyreCreateDebitCardQuoteResponse> {
+        return this.api.fluxWyreCreateDebitCardQuote(param.body,  options).toPromise();
     }
 	
     /**
@@ -366,6 +415,13 @@ export class ObjectFluxApi {
      */
     public fluxWyreGetTransfers(param: FluxApiFluxWyreGetTransfersRequest, options?: Configuration): Promise<WyreTransfers> {
         return this.api.fluxWyreGetTransfers(param.page,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreGetWalletOrderAuthorizations(param: FluxApiFluxWyreGetWalletOrderAuthorizationsRequest, options?: Configuration): Promise<WyreGetDebitCardOrderAuthorizationsResponse> {
+        return this.api.fluxWyreGetWalletOrderAuthorizations(param.body,  options).toPromise();
     }
 	
     /**

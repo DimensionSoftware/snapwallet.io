@@ -38,13 +38,21 @@ export * from './User';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
 export * from './WidgetGetShortUrlResponse';
+export * from './WyreConfirmDebitCardQuoteRequest';
+export * from './WyreConfirmDebitCardQuoteResponse';
 export * from './WyreConfirmTransferRequest';
+export * from './WyreCreateDebitCardQuoteRequest';
+export * from './WyreCreateDebitCardQuoteResponse';
 export * from './WyreCreateTransferRequest';
+export * from './WyreDebitCardInfo';
+export * from './WyreGetDebitCardOrderAuthorizationsRequest';
+export * from './WyreGetDebitCardOrderAuthorizationsResponse';
 export * from './WyrePaymentMethod';
 export * from './WyrePaymentMethods';
 export * from './WyreTransfer';
 export * from './WyreTransferDetail';
 export * from './WyreTransfers';
+export * from './WyreWalletOrderReservationQuote';
 export * from './WyreWebhookRequest';
 
 import { Address } from './Address';
@@ -87,13 +95,21 @@ import { User } from './User';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
 import { WidgetGetShortUrlResponse } from './WidgetGetShortUrlResponse';
+import { WyreConfirmDebitCardQuoteRequest } from './WyreConfirmDebitCardQuoteRequest';
+import { WyreConfirmDebitCardQuoteResponse } from './WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
+import { WyreCreateDebitCardQuoteRequest } from './WyreCreateDebitCardQuoteRequest';
+import { WyreCreateDebitCardQuoteResponse } from './WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
+import { WyreDebitCardInfo } from './WyreDebitCardInfo';
+import { WyreGetDebitCardOrderAuthorizationsRequest } from './WyreGetDebitCardOrderAuthorizationsRequest';
+import { WyreGetDebitCardOrderAuthorizationsResponse } from './WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethod } from './WyrePaymentMethod';
 import { WyrePaymentMethods } from './WyrePaymentMethods';
 import { WyreTransfer } from './WyreTransfer';
 import { WyreTransferDetail } from './WyreTransferDetail';
 import { WyreTransfers } from './WyreTransfers';
+import { WyreWalletOrderReservationQuote } from './WyreWalletOrderReservationQuote';
 import { WyreWebhookRequest } from './WyreWebhookRequest';
 
 /* tslint:disable:no-unused-variable */
@@ -158,13 +174,21 @@ let typeMap: {[index: string]: any} = {
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
     "WidgetGetShortUrlResponse": WidgetGetShortUrlResponse,
+    "WyreConfirmDebitCardQuoteRequest": WyreConfirmDebitCardQuoteRequest,
+    "WyreConfirmDebitCardQuoteResponse": WyreConfirmDebitCardQuoteResponse,
     "WyreConfirmTransferRequest": WyreConfirmTransferRequest,
+    "WyreCreateDebitCardQuoteRequest": WyreCreateDebitCardQuoteRequest,
+    "WyreCreateDebitCardQuoteResponse": WyreCreateDebitCardQuoteResponse,
     "WyreCreateTransferRequest": WyreCreateTransferRequest,
+    "WyreDebitCardInfo": WyreDebitCardInfo,
+    "WyreGetDebitCardOrderAuthorizationsRequest": WyreGetDebitCardOrderAuthorizationsRequest,
+    "WyreGetDebitCardOrderAuthorizationsResponse": WyreGetDebitCardOrderAuthorizationsResponse,
     "WyrePaymentMethod": WyrePaymentMethod,
     "WyrePaymentMethods": WyrePaymentMethods,
     "WyreTransfer": WyreTransfer,
     "WyreTransferDetail": WyreTransferDetail,
     "WyreTransfers": WyreTransfers,
+    "WyreWalletOrderReservationQuote": WyreWalletOrderReservationQuote,
     "WyreWebhookRequest": WyreWebhookRequest,
 }
 

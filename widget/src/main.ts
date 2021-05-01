@@ -26,7 +26,9 @@ try {
   config = {}
 }
 
-configStore.setInitial(config)
+configStore.setInitial({
+  ...config,
+})
 
 const app = new App({
   target: document.body,

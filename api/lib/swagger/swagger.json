@@ -559,6 +559,102 @@
         ]
       }
     },
+    "/wyre/transfers/debit-card/auth": {
+      "post": {
+        "operationId": "Flux_WyreGetWalletOrderAuthorizations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreGetDebitCardOrderAuthorizationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreGetDebitCardOrderAuthorizationsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/confirm": {
+      "post": {
+        "operationId": "Flux_WyreConfirmDebitCardQuote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreConfirmDebitCardQuoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreConfirmDebitCardQuoteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/quote": {
+      "post": {
+        "operationId": "Flux_WyreCreateDebitCardQuote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreCreateDebitCardQuoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreCreateDebitCardQuoteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/wyre/transfers/{transferId}": {
       "get": {
         "operationId": "Flux_WyreGetTransfer",
@@ -1275,11 +1371,90 @@
         }
       }
     },
+    "WyreConfirmDebitCardQuoteRequest": {
+      "type": "object",
+      "properties": {
+        "card": {
+          "$ref": "#/definitions/WyreDebitCardInfo"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "reservationId": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreConfirmDebitCardQuoteResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "transferId": {
+          "type": "string"
+        }
+      }
+    },
     "WyreConfirmTransferRequest": {
       "type": "object",
       "properties": {
         "transferId": {
           "type": "string"
+        }
+      }
+    },
+    "WyreCreateDebitCardQuoteRequest": {
+      "type": "object",
+      "properties": {
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "amountIncludesFees": {
+          "type": "boolean"
+        },
+        "lockFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "country": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreCreateDebitCardQuoteResponse": {
+      "type": "object",
+      "properties": {
+        "reservationId": {
+          "type": "string"
+        },
+        "quote": {
+          "$ref": "#/definitions/WyreWalletOrderReservationQuote"
         }
       }
     },
@@ -1302,6 +1477,60 @@
         "destAmount": {
           "type": "number",
           "format": "double"
+        }
+      }
+    },
+    "WyreDebitCardInfo": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "expirationMonth": {
+          "type": "string"
+        },
+        "expirationYear": {
+          "type": "string"
+        },
+        "verificationCode": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/Address"
+        }
+      }
+    },
+    "WyreGetDebitCardOrderAuthorizationsRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreGetDebitCardOrderAuthorizationsResponse": {
+      "type": "object",
+      "properties": {
+        "walletOrderId": {
+          "type": "string"
+        },
+        "smsNeeded": {
+          "type": "boolean"
+        },
+        "card2faNeeded": {
+          "type": "boolean"
+        },
+        "authorization3dsUrl": {
+          "type": "string"
         }
       }
     },
@@ -1482,6 +1711,47 @@
           "type": "array",
           "items": {
             "$ref": "#/definitions/WyreTransfer"
+          }
+        }
+      }
+    },
+    "WyreWalletOrderReservationQuote": {
+      "type": "object",
+      "properties": {
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "sourceAmountWithoutFees": {
+          "type": "number",
+          "format": "double"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "equivelancies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "fees": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
           }
         }
       }

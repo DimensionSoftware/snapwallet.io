@@ -340,6 +340,29 @@ message WyrePaymentMethod {
   repeated string depositable_currencies = 7;
 }
 
+message WyreWalletOrderReservationQuote {
+  string sourceCurrency = 1;
+  double sourceAmount = 2;
+  double sourceAmountWithoutFees = 3;
+  string destCurrency = 4;
+  double destAmount = 5;
+  double exchangeRate = 6;
+  map<string, double> equivelancies = 7;
+  map<string, double> fees = 8;
+}
+
+message WyreWalletOrderReservation {
+  int64 amount = 1;
+	bool amountIncludesFees = 2;
+	repeated string lockFields = 3;
+	string paymentMethod = 4;
+	string referenceId = 5;
+	bool quoteLockRequest = 6;
+  WyreWalletOrderReservationQuote quote = 7;
+}
+
+
+
 message WyrePaymentMethods {
   repeated WyrePaymentMethod payment_methods = 1;
 }
@@ -363,6 +386,40 @@ message WyreGetTransferRequest {
 
 message WyreGetTransfersRequest {
   int64 page = 1;
+}
+
+message WyreGetDebitCardOrderAuthorizationsRequest {
+  string order_id = 1;
+}
+
+message WyreCreateDebitCardQuoteRequest {
+  string dest = 1;
+  string source_currency = 2;
+  string dest_currency = 3;
+  double source_amount = 4;
+  bool amount_includes_fees = 6;
+  repeated string lock_fields = 7;
+  string country = 8;
+}
+
+message WyreConfirmDebitCardQuoteRequest {
+  WyreDebitCardInfo card = 1;
+  string dest = 2;
+  string source_currency = 3;
+  string dest_currency = 4;
+  double source_amount = 5;
+  string reservation_id = 6;
+}
+
+message WyreDebitCardInfo {
+  string first_name = 1;
+  string last_name = 2;
+  string phone_number = 3;
+  string number = 4;
+  string expiration_month = 5;
+  string expiration_year = 6;
+  string verification_code = 7;
+  Address address = 8;
 }
 
 message WyreTransfer {
@@ -435,6 +492,24 @@ message SnapWidgetConfig {
 
 message WidgetGetShortUrlResponse {
   string url = 1;
+}
+
+message WyreGetDebitCardOrderAuthorizationsResponse {
+  string wallet_order_id = 1;
+  bool sms_needed = 2;
+  bool card2faNeeded = 3;
+  string authorization_3ds_url = 4;
+}
+
+message WyreCreateDebitCardQuoteResponse {
+  string reservation_id = 1;
+  WyreWalletOrderReservationQuote quote = 2;
+}
+
+message WyreConfirmDebitCardQuoteResponse {
+  string orderId = 1;
+  string status = 2;
+  string transfer_id = 3;
 }
 
 message GotoRequest {
@@ -590,6 +665,27 @@ service Flux {
   rpc WyreGetTransfers(WyreGetTransfersRequest) returns (WyreTransfers) {
     option (google.api.http) = {
       get: "/wyre/transfers"
+    };
+  }
+
+  rpc WyreCreateDebitCardQuote(WyreCreateDebitCardQuoteRequest) returns (WyreCreateDebitCardQuoteResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/quote"
+      body: "*"
+    };
+  }
+
+  rpc WyreConfirmDebitCardQuote(WyreConfirmDebitCardQuoteRequest) returns (WyreConfirmDebitCardQuoteResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/confirm"
+      body: "*"
+    };
+  }
+
+  rpc WyreGetWalletOrderAuthorizations(WyreGetDebitCardOrderAuthorizationsRequest) returns (WyreGetDebitCardOrderAuthorizationsResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/auth"
+      body: "*"
     };
   }
 

@@ -2,6 +2,7 @@ import type { ProfileDataItemRemediation } from 'api-client'
 
 export enum TransactionMediums {
   ACH = 'ach',
+  DEBIT_CARD = 'debit_card',
   BLOCKCHAIN = 'blockchain',
 }
 
@@ -18,6 +19,8 @@ export enum Masks {
   SSN = 'xxx-xx-xxxx',
   INTL_DATE = 'xxxx-xx-xx',
   US_DATE = 'xx-xx-xxxx',
+  DEBIT_CARD = 'xxxx xxxx xxxx xxxx',
+  DEBIT_CARD_EXPIRATION_DATE = 'xx/xxxx',
 }
 
 export enum TransactionIntents {

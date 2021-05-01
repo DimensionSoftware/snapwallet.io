@@ -1,9 +1,14 @@
 package wyre
 
 import (
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -176,6 +181,59 @@ type CreateTransferRequest struct {
 	AmountIncludesFees *bool   `json:"amountIncludesFees,omitempty"` // Optional. When true, the amount indicated (source or dest) will be treated as already including the fees
 	Preview            *bool   `json:"preview,omitempty"`            // creates a quote transfer object, but does not execute a real transfer.
 	MuteMessages       *bool   `json:"muteMessages,omitempty"`       // When true, disables outbound emails/messages to the destination
+}
+
+type CreateWalletOrderReservationRequest struct {
+	PaymentMethod      string   `json:"paymentMethod"`  // Should be one of "debit-card" or "apple-pay"
+	SourceCurrency     string   `json:"sourceCurrency"` // The currency (ISO 3166-1 alpha-3) to withdrawal from the payment method
+	DestCurrency       string   `json:"destCurrency"`
+	Country            string   `json:"country"`                // The country of the user's payment method
+	LockFields         []string `json:"lockFields"`             //  ["amount"]
+	SourceAmount       float64  `json:"sourceAmount,omitempty"` // The amount to withdrawal from the source, in units of sourceCurrency. Only include sourceAmount OR destAmount, not both.
+	AmountIncludesFees *bool    `json:"amountIncludeFees"`      // Determines whether or not the source or dest amount includes fees for this transaction.
+	ReferrerAccountID  string   `json:"referrerAccountId"`
+	Dest               string   `json:"dest"`
+}
+
+type GetWalletOrderReservationRequest struct {
+	ReservationID string `json:"reservationId"` // The wallet order reservation ID
+}
+
+type CreateWalletOrderRequest struct {
+	FirstName         string               `json:"givenName"`              // Card first name
+	LastName          string               `json:"familyName"`             // Card last name
+	Email             string               `json:"email"`                  // User's email
+	PhoneNumber       string               `json:"phone"`                  // User's phone number (should match card)
+	ReferenceID       string               `json:"referenceId"`            // Optional field for internal reference
+	ReservationID     string               `json:"reservationId"`          // WalletOrderReservation created just before this step
+	SourceCurrency    string               `json:"sourceCurrency"`         // The currency (ISO 3166-1 alpha-3) to withdrawal from the payment method
+	DestCurrency      string               `json:"destCurrency"`           // The destination currency for the trade
+	SourceAmount      float64              `json:"sourceAmount,omitempty"` // The amount to withdrawal from the source, in units of sourceCurrency. Only include sourceAmount OR destAmount, not both.
+	ReferrerAccountID string               `json:"referrerAccountId"`      // The Wyre account ID
+	Dest              string               `json:"dest"`                   // A Wyre destination SRN
+	Address           WalletOrderAddress   `json:"address"`                // The user's card address
+	DebitCard         WalletOrderDebitCard `json:"debitCard"`              // Ther user's debit card information
+	PurchaseAmount    float64              `json:"purchaseAmount"`
+}
+
+type GetWalletOrderAuthorizationsRequest struct {
+	OrderID string `json:"orderId"` // The wallet order ID
+}
+
+type WalletOrderAddress struct {
+	Street1    string `json:"street1"`
+	Street2    string `json:"street2"`
+	City       string `json:"city"`
+	State      string `json:"state"`      // Alph2 state code
+	PostalCode string `json:"postalCode"` // Numeric string only
+	Country    string `json:"country"`    // Alpha2 country code
+}
+
+type WalletOrderDebitCard struct {
+	Number           string `json:"number"` // Card number
+	ExpirationYear   string `json:"year"`   // 4 digit card expiration year
+	ExpirationMonth  string `json:"month"`  // 2 digit card expiration month
+	VerificationCode string `json:"cvv"`    // 3-4 digit code on front or back of card
 }
 
 type ConfirmTransferRequest struct {
@@ -637,6 +695,78 @@ type PaymentMethod struct {
 	*/
 }
 
+type CreateWalletOrderReservationResponse struct {
+	URL         string `json:"url"`
+	Reservation string `json:"reservation"`
+}
+
+// WalletOrderReservation represents the response object for https://api.sendwyre.com/v3/orders/reserve
+type WalletOrderReservation struct {
+	Amount             float64                     `json:"amount"`
+	SourceCurrency     string                      `json:"sourceCurrency"`
+	DestCurrency       string                      `json:"destCurrency"`
+	Dest               string                      `json:"dest"`
+	ReferrerAccountID  string                      `json:"referrerAccountId"`
+	SourceAmount       float64                     `json:"sourceAmount"`
+	DestAmount         float64                     `json:"destAmount"`
+	AmountIncludesFees *bool                       `json:"amountIncludeFees"`
+	Street1            string                      `json:"street1"`
+	City               string                      `json:"city"`
+	State              string                      `json:"state"`
+	PostalCode         string                      `json:"postalCode"`
+	Country            string                      `json:"country"`
+	FirstName          string                      `json:"firstName"`
+	LastName           string                      `json:"lastName"`
+	Phone              string                      `json:"phone"`
+	Email              string                      `json:"email"`
+	LockFields         []string                    `json:"lockFields"`
+	RedirectURL        string                      `json:"redirectUrl"`
+	FailureRedirectURL string                      `json:"failureRedirectUrl"`
+	PaymentMethod      string                      `json:"paymentMethod"`
+	ReferenceID        string                      `json:"referenceId"`
+	QuoteLockRequest   *bool                       `json:"quoteLockRequest"`
+	Quote              WalletOrderReservationQuote `json:"quote"`
+}
+
+// The Quote struct for a WalletOrderReservation https://api.sendwyre.com/v3/orders/reserve
+type WalletOrderReservationQuote struct {
+	SourceCurrency          string             `json:"sourceCurrency"`
+	SourceAmount            float64            `json:"sourceAmount"`
+	SourceAmountWithoutFees float64            `json:"sourceAmountWithoutFees"`
+	DestCurrency            string             `json:"destCurrency"`
+	DestAmount              float64            `json:"destAmount"`
+	ExchangeRate            float64            `json:"exchangeRate"`
+	Equivelancies           map[string]float64 `json:"equivalencies"`
+	Fees                    map[string]float64 `json:"fees"`
+}
+
+// WalletOrder represents the response object for https://api.sendwyre.com/v3/debitcard/process/partner
+type WalletOrder struct {
+	ID             string  `json:"id"`
+	SourceCurrency string  `json:"sourceCurrency"`
+	DestCurrency   string  `json:"destCurrency"`
+	Dest           string  `json:"dest"`
+	AccountID      string  `json:"accountId"`
+	SourceAmount   float64 `json:"sourceAmount"`
+	DestAmount     float64 `json:"destAmount"`
+	Email          string  `json:"email"`
+	PaymentMethod  string  `json:"paymentMethodName"`
+	WalletType     string  `json:"walletType"`
+	TransferID     string  `json:"transferId"`
+	ErrorMessage   string  `json:"errorMessage"`
+	CreatedAt      int64   `json:"createdAt"`
+	Owner          string  `json:"owner"`
+	Status         string  `json:"status"`
+}
+
+// WalletOrderAuthorizations represents the response object for https://api.sendwyre.com/v3/debitcard/authorization/:orderId
+type WalletOrderAuthorizations struct {
+	WalletOrderID       string `json:"walletOrderId"`       // The wallet order ID
+	SMSNeeded           *bool  `json:"smsNeeded"`           // Determines whether or not sms 2FA is required
+	Card2faNeeded       *bool  `json:"card2faNeeded"`       // Determines whether or not card 2FA is required
+	Authorization3DsURL string `json:"authorization3dsUrl"` // 3ds is not used currently
+}
+
 // {"language":"en","compositeType":"","subType":"","errorCode":"accessDenied.invalidSession","exceptionId":"test_TQCJZP","message":"Invalid Session","type":"AccessDeniedException","transient":false}
 
 // APIError represents the error object sent back by the api
@@ -674,6 +804,163 @@ func (c Client) CreatePaymentMethod(token string, req CreatePaymentMethodRequest
 	}
 
 	return resp.Result().(*PaymentMethod), nil
+}
+
+// CreateWalletOrderReservation creates a wallet order reservation in Wyre's system
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/wallet-order-reservations
+// POST https://api.sendwyre.com/v3/orders/reserve
+func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationRequest) (*CreateWalletOrderReservationResponse, error) {
+	req.ReferrerAccountID = c.config.WyreAccountID
+	payload, err := json.Marshal(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/orders/reserve?timestamp=%d", ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(CreateWalletOrderReservationResponse{}).
+		SetBody(req).
+		EnableTrace().
+		Post(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*CreateWalletOrderReservationResponse), nil
+}
+
+// CreateWalletOrderReservation creates a wallet order reservation in Wyre's system
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/wallet-order-reservations
+// GET https://api.sendwyre.com/v3/orders/reservation/:reservationId
+func (c Client) GetWalletOrderReservation(req GetWalletOrderReservationRequest) (*WalletOrderReservation, error) {
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/orders/reservation/%s?timestamp=%d", req.ReservationID, ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, []byte(""))
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(WalletOrderReservation{}).
+		SetBody(req).
+		EnableTrace().
+		Get(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*WalletOrderReservation), nil
+}
+
+// CreateWalletOrder creates a wallet order in Wyre's system
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/white-label-card-processing-api
+// POST https://api.sendwyre.com/v3/debitcard/process/partner
+func (c Client) CreateWalletOrder(req CreateWalletOrderRequest) (*WalletOrder, error) {
+	req.ReferrerAccountID = c.config.WyreAccountID
+	payload, err := json.Marshal(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/debitcard/process/partner?timestamp=%d", ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(WalletOrder{}).
+		SetBody(req).
+		EnableTrace().
+		Post(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*WalletOrder), nil
+}
+
+// GetWalletOrderAuthorizations retrieves required auth mechanisms for a wallet order
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/white-label-card-processing-api
+// POST https://api.sendwyre.com/v3/debitcard/authorization/:orderId
+func (c Client) GetWalletOrderAuthorizations(req GetWalletOrderAuthorizationsRequest) (*WalletOrderAuthorizations, error) {
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/debitcard/authorization/%s?timestamp=%d", req.OrderID, ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, []byte(""))
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(WalletOrderAuthorizations{}).
+		EnableTrace().
+		Get(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*WalletOrderAuthorizations), nil
 }
 
 /*
@@ -860,4 +1147,16 @@ func (c Client) SubmitAuthToken(secretKey string) (*SubmitAuthTokenResponse, err
 type SubmitAuthTokenResponse struct {
 	APIKey          string      `json:"apiKey"`
 	AuthenticatedAs interface{} `json:"authenticatedAs"`
+}
+
+// Generate SHA256 HMAC signature...
+func GenerateHMACSignature(Secret string, url string, data []byte) (signature *string, err error) {
+	mac := hmac.New(sha256.New, []byte(Secret))
+	if err != nil {
+		return nil, err
+	}
+	payload := append([]byte(url), data...)
+	mac.Write(payload)
+	sig := hex.EncodeToString(mac.Sum(nil))
+	return &sig, nil
 }

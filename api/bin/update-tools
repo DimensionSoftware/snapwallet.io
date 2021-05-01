@@ -1,0 +1,3 @@
+#!/bin/bash -xeu
+
+brew upgrade protobuf@3.15

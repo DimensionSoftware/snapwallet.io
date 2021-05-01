@@ -1592,3 +1592,132 @@ func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransfer
 
 	return wyre.WyreTransferDetailToProto(t), nil
 }
+
+func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCreateDebitCardQuoteRequest) (*proto.WyreCreateDebitCardQuoteResponse, error) {
+	// Create the order reservation
+	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
+		Country:            req.Country,
+		PaymentMethod:      "debit-card",
+		SourceCurrency:     req.SourceCurrency,
+		DestCurrency:       req.DestCurrency,
+		SourceAmount:       req.SourceAmount,
+		LockFields:         req.LockFields,
+		Dest:               req.Dest,
+		AmountIncludesFees: &req.AmountIncludesFees,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Get the order reservation details because why would they return them in the previous call? :(
+	reservationResponse, err := s.Wyre.GetWalletOrderReservation(wyre.GetWalletOrderReservationRequest{
+		ReservationID: createReservationResponse.Reservation,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreCreateDebitCardQuoteResponse{
+		ReservationId: createReservationResponse.Reservation,
+		Quote: &proto.WyreWalletOrderReservationQuote{
+			ExchangeRate:            reservationResponse.Quote.ExchangeRate,
+			DestCurrency:            reservationResponse.Quote.DestCurrency,
+			SourceCurrency:          reservationResponse.Quote.SourceCurrency,
+			Fees:                    reservationResponse.Quote.Fees,
+			SourceAmount:            reservationResponse.Quote.SourceAmount,
+			DestAmount:              reservationResponse.Quote.DestAmount,
+			SourceAmountWithoutFees: reservationResponse.Quote.SourceAmountWithoutFees,
+		},
+	}, nil
+}
+
+func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreConfirmDebitCardQuoteRequest) (*proto.WyreConfirmDebitCardQuoteResponse, error) {
+	card := req.Card
+
+	// Create the order
+	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
+		ReservationID:  req.ReservationId,
+		SourceCurrency: req.SourceCurrency,
+		PurchaseAmount: req.SourceAmount,
+		DestCurrency:   req.DestCurrency,
+		SourceAmount:   req.SourceAmount,
+		Dest:           req.Dest,
+		FirstName:      card.FirstName,
+		LastName:       card.LastName,
+		// TODO: This should come from logged in user
+		Email:       "someone@example.com",
+		PhoneNumber: card.PhoneNumber,
+		ReferenceID: "crypto_moon_lambo",
+		Address: wyre.WalletOrderAddress{
+			Street1:    card.Address.Street_1,
+			Street2:    card.Address.Street_2,
+			City:       card.Address.City,
+			State:      card.Address.State,
+			PostalCode: card.Address.PostalCode,
+			Country:    card.Address.Country,
+		},
+		DebitCard: wyre.WalletOrderDebitCard{
+			Number:           card.Number,
+			ExpirationMonth:  card.ExpirationMonth,
+			ExpirationYear:   card.ExpirationYear,
+			VerificationCode: card.VerificationCode,
+		},
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreConfirmDebitCardQuoteResponse{
+		OrderId:    orderResponse.ID,
+		Status:     orderResponse.Status,
+		TransferId: orderResponse.TransferID,
+	}, nil
+}
+
+func (s *Server) WyreGetWalletOrderAuthorizations(ctx context.Context, req *proto.WyreGetDebitCardOrderAuthorizationsRequest) (*proto.WyreGetDebitCardOrderAuthorizationsResponse, error) {
+	res, err := s.Wyre.GetWalletOrderAuthorizations(wyre.GetWalletOrderAuthorizationsRequest{
+		OrderID: req.OrderId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreGetDebitCardOrderAuthorizationsResponse{
+		WalletOrderId: res.WalletOrderID,
+		SmsNeeded:     *res.SMSNeeded,
+		Card2FaNeeded: *res.Card2faNeeded,
+	}, nil
+}
+
+/*
+
+window.API.fluxWyreCreateWalletOrderReservation({
+sourceCurrency: 'usd',
+lockFields: ["sourceAmount"],
+sourceAmount: 5,
+destCurrency: 'eth',
+dest: "ethereum:0xf636B6aA45C554139763Ad926407C02719bc22f7",
+amountIncludesFees: false,
+card: {
+  firstName: 'Carlo',
+  lastName: 'Quintana',
+  phoneNumber: '+17608982762',
+  number: '4111111111111111',
+  expirationMonth: '10',
+  expirationYear: '2024',
+  verificationCode: '000',
+  address: {
+    street1: '123 my rd',
+    city: 'palm springs',
+    state: 'CA',
+    country: 'US',
+    postalCode: '92260'
+  }
+}
+}).then(console.log)
+
+*/
