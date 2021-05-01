@@ -42,6 +42,8 @@
   import ProfileStatus from './screens/ProfileStatus.svelte'
   import Product from './screens/Product.svelte'
   import { configStore } from './stores/ConfigStore'
+  import DebitCard from './screens/DebitCard.svelte'
+  import DebitCardAddress from './screens/DebitCardAddress.svelte'
 
   $: isPreLogout = false
   $: isBlurred = false
@@ -206,6 +208,12 @@
       props: {
         phoneVerificationOnly: true,
       },
+    }),
+    [Routes.DEBIT_CARD]: wrap({
+      ...authedRouteOptions(DebitCard),
+    }),
+    [Routes.DEBIT_CARD_ADDRESS]: wrap({
+      ...authedRouteOptions(DebitCardAddress),
     }),
     '*': NotFound as any,
   }
