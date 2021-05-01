@@ -67,6 +67,8 @@ export enum Routes {
   FILE_UPLOAD = '/file-upload',
   FILE_UPLOAD_UPDATE = '/file-upload-update',
   SUCCESS = '/success',
+  DEBIT_CARD = '/debit-card',
+  DEBIT_CARD_ADDRESS = '/debit-card-address',
 }
 
 export enum APIErrors {
