@@ -14,7 +14,7 @@ export interface IAsset {
 
 export enum Masks {
   CODE = 'x',
-  PHONE = 'xxx xxx-xxxx',
+  PHONE = 'xxx-xxx-xxxx',
   SSN = 'xxx-xx-xxxx',
   INTL_DATE = 'xxxx-xx-xx',
   US_DATE = 'xx-xx-xxxx',
