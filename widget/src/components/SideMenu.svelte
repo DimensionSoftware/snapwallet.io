@@ -31,7 +31,8 @@
   let isLoaded: boolean = false
 
   onMount(() => {
-    isLoaded = true
+    // set timeout yields to initial build-in
+    setTimeout(() => (isLoaded = true), 300)
   })
 
   function logout() {
@@ -260,6 +261,7 @@
     height: 150%;
     padding: 25% 1rem 0 4rem;
     transform: translateX(105%);
+    transition: none;
     z-index: 100;
     nav > div {
       display: flex;
