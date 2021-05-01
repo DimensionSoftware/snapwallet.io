@@ -49,7 +49,8 @@
       }
     } else {
       const rawPhone = unMaskValue($userStore.phoneNumber, Masks.PHONE)
-      let isPhoneValid = vld8.isMobilePhone(rawPhone)
+      Logger.debug('Unmasked', rawPhone, 'StorePhone', $userStore.phoneNumber)
+      let isPhoneValid = vld8.isMobilePhone($userStore.phoneNumber)
       if (!isPhoneValid) focus(document.querySelector('input[type="tel"]'))
       throw new Error('Enter a valid phone number.')
     }
