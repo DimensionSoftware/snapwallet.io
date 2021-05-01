@@ -1594,6 +1594,14 @@ func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransfer
 }
 
 func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCreateDebitCardQuoteRequest) (*proto.WyreCreateDebitCardQuoteResponse, error) {
+	var dest string
+	// Wyre only supports bitcoin or erc20 but expects this prefix
+	if strings.ToLower(req.DestCurrency) == "btc" {
+		dest = "bitcoin:" + req.Dest
+	} else {
+		dest = "ethereum:" + req.Dest
+	}
+
 	// Create the order reservation
 	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
 		Country:            req.Country,
@@ -1602,7 +1610,7 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 		DestCurrency:       req.DestCurrency,
 		SourceAmount:       req.SourceAmount,
 		LockFields:         req.LockFields,
-		Dest:               req.Dest,
+		Dest:               dest,
 		AmountIncludesFees: &req.AmountIncludesFees,
 	})
 
@@ -1634,6 +1642,14 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 }
 
 func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreConfirmDebitCardQuoteRequest) (*proto.WyreConfirmDebitCardQuoteResponse, error) {
+	var dest string
+	// Wyre only supports bitcoin or erc20 but expects this prefix
+	if strings.ToLower(req.DestCurrency) == "btc" {
+		dest = "bitcoin:" + req.Dest
+	} else {
+		dest = "ethereum:" + req.Dest
+	}
+
 	card := req.Card
 
 	// Create the order
@@ -1643,7 +1659,7 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 		PurchaseAmount: req.SourceAmount,
 		DestCurrency:   req.DestCurrency,
 		SourceAmount:   req.SourceAmount,
-		Dest:           req.Dest,
+		Dest:           dest,
 		FirstName:      card.FirstName,
 		LastName:       card.LastName,
 		// TODO: This should come from logged in user
