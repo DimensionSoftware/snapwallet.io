@@ -730,7 +730,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 		err = s.JobPublisher.PublishJob(ctx, &job.Job{
 			ID:         shortuuid.New(),
-			Kind:       job.KindCreateWyreAccountForUser,
+			Kind:       job.KindUpdateWyreAccountForUser,
 			Status:     job.StatusQueued,
 			RelatedIDs: []string{string(u.ID)},
 			CreatedAt:  now.Unix(),
@@ -745,7 +745,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			LifecyleStatus: proto.LifecycleStatus_L_PENDING,
 		}
 	} else {
-		job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindCreateWyreAccountForUser, job.StatusQueued, string(u.ID))
+		job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindUpdateWyreAccountForUser, job.StatusQueued, string(u.ID))
 		if err != nil {
 			return nil, err
 		}
@@ -795,7 +795,7 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 				// todo: remediations
 			}
 		} else {
-			job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindCreateWyreAccountForUser, job.StatusQueued, string(u.ID))
+			job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindUpdateWyreAccountForUser, job.StatusQueued, string(u.ID))
 			if err != nil {
 				return nil, err
 			}

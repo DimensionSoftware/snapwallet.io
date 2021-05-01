@@ -18,7 +18,7 @@ import (
 func RunSnapJob(ctx context.Context, jobManager jobmanager.Manager, j *job.Job) error {
 	var err error
 	switch j.Kind {
-	case job.KindCreateWyreAccountForUser:
+	case job.KindUpdateWyreAccountForUser:
 		err = runCreateWyreAccountForUser(ctx, jobManager, j)
 	case job.KindCreateWyrePaymentMethodsForUser:
 		err = runCreateWyrePaymentMethodsForUser(ctx, jobManager, j)
