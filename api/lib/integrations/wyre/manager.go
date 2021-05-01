@@ -267,10 +267,6 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	now := time.Now()
 	t := true
 
-	if !profile.HasWyreAccountPreconditionsMet() {
-		return nil, fmt.Errorf("Profile data is not complete enough to submit to Wyre (preconditions are unmet)")
-	}
-
 	fields, selected1 := selectWyreProfileFields(profile)
 
 	wyreAccountResp, err := m.Wyre.CreateAccount(m.Wyre.config.WyreSecretKey, CreateAccountRequest{

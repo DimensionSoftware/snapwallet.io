@@ -19,7 +19,7 @@ func RunSnapJob(ctx context.Context, jobManager jobmanager.Manager, j *job.Job) 
 	var err error
 	switch j.Kind {
 	case job.KindUpdateWyreAccountForUser:
-		err = runCreateWyreAccountForUser(ctx, jobManager, j)
+		err = runUpdateWyreAccountForUser(ctx, jobManager, j)
 	case job.KindCreateWyrePaymentMethodsForUser:
 		err = runCreateWyrePaymentMethodsForUser(ctx, jobManager, j)
 	default:
@@ -79,7 +79,7 @@ func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manage
 	return nil
 }
 
-func runCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j *job.Job) error {
+func runUpdateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j *job.Job) error {
 	if len(j.RelatedIDs) == 0 {
 		return fmt.Errorf("relatedIDs can't be empty")
 	}
@@ -109,10 +109,14 @@ func runCreateWyreAccountForUser(ctx context.Context, m jobmanager.Manager, j *j
 	}
 
 	if existingWyreAccount == nil {
-		log.Println("creating wyre account")
-		_, err = m.GetWyreManager().CreateAccount(ctx, user.ID, pdata)
-		if err != nil {
-			return err
+		if pdata.HasWyreAccountPreconditionsMet() {
+			log.Println("creating wyre account")
+			_, err = m.GetWyreManager().CreateAccount(ctx, user.ID, pdata)
+			if err != nil {
+				return err
+			}
+		} else {
+			return nil
 		}
 	} else {
 		log.Println("updating wyre account")

@@ -737,7 +737,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 			UpdatedAt:  now.Unix(),
 		})
 		if err != nil {
-			log.Println(err)
+			return nil, err
 		}
 
 		// todo: store pending lifecycle status? or can use job submitted information
@@ -852,6 +852,19 @@ func (s *Server) ChangeViewerEmail(ctx context.Context, req *proto.ChangeViewerE
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
 	}
 
+	now := time.Now()
+	err = s.JobPublisher.PublishJob(ctx, &job.Job{
+		ID:         shortuuid.New(),
+		Kind:       job.KindUpdateWyreAccountForUser,
+		Status:     job.StatusQueued,
+		RelatedIDs: []string{string(u.ID)},
+		CreatedAt:  now.Unix(),
+		UpdatedAt:  now.Unix(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &emptypb.Empty{}, nil
 }
 
@@ -886,6 +899,19 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
+	}
+
+	now := time.Now()
+	err = s.JobPublisher.PublishJob(ctx, &job.Job{
+		ID:         shortuuid.New(),
+		Kind:       job.KindUpdateWyreAccountForUser,
+		Status:     job.StatusQueued,
+		RelatedIDs: []string{string(u.ID)},
+		CreatedAt:  now.Unix(),
+		UpdatedAt:  now.Unix(),
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	return &emptypb.Empty{}, nil
