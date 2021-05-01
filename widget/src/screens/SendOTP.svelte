@@ -136,7 +136,6 @@
             autofocus={!countrySelectorVisible}
             required
             type="tel"
-            mask={isUSPhoneNumber ? Masks.PHONE : undefined}
             placeholder={$userStore.virtual.phone
               ? $userStore.virtual.phone
               : isUSPhoneNumber
