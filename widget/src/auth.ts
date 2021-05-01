@@ -29,17 +29,35 @@ export class AuthManager {
   }
 
   private tokenIsLocked(): boolean {
-    return !!window.localStorage.getItem(JWT_TOKENS_LOCK_KEY)
+    const lockedAtStr = window.localStorage.getItem(JWT_TOKENS_LOCK_KEY)
+    if (!lockedAtStr) {
+      return false
+    }
+
+    const lockedAt = parseInt(lockedAtStr) // epoch ms
+    if (isNaN(lockedAt)) {
+      this.clearTokenLock('Token lock cleared: invalid timestamp')
+      return false
+    }
+
+    // wait 10 seconds before force unlocking
+    const cutoffTime = Date.now() - 10 * 1000
+    if (lockedAt < cutoffTime) {
+      this.clearTokenLock('Token lock cleared: 10 seconds elapsed')
+      return false
+    }
+
+    return true
   }
 
-  private clearTokenLock() {
-    Logger.debug('Token lock cleared')
+  private clearTokenLock(reason: string = 'Token lock cleared') {
+    Logger.debug(reason)
     return window.localStorage.removeItem(JWT_TOKENS_LOCK_KEY)
   }
 
   private setTokenLock() {
     Logger.debug('Token lock set')
-    return window.localStorage.setItem(JWT_TOKENS_LOCK_KEY, 'locked')
+    return window.localStorage.setItem(JWT_TOKENS_LOCK_KEY, Date.now().toString())
   }
 
   // returns access, refresh
