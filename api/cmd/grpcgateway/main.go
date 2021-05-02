@@ -39,8 +39,16 @@ func run() error {
 
 	// Register gRPC server endpint
 	// Note: Make sure the gRPC server is running properly and accessible
-	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
+	opts2 := runtime.WithIncomingHeaderMatcher(func(key string) (string, bool) {
+		switch strings.ToLower(key) {
+		case "cf-ipcountry":
+			return key, true
+		default:
+			return key, false
+		}
+	})
+	mux := runtime.NewServeMux(opts2)
 	err := proto.RegisterFluxHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts)
 	if err != nil {
 		return err
