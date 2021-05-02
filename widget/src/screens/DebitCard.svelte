@@ -63,7 +63,7 @@
         mask={Masks.DEBIT_CARD}
         id="autocomplete"
         defaultValue={$debitCardStore.number}
-        placeholder="4444333322221111"
+        placeholder="4444 3333 2222 1111"
         on:change={e => {
           e.detail &&
             debitCardStore.update({
