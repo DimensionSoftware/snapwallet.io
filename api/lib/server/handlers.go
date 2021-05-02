@@ -1644,6 +1644,12 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 }
 
 func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreConfirmDebitCardQuoteRequest) (*proto.WyreConfirmDebitCardQuoteResponse, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+
+	if err != nil {
+		return nil, err
+	}
+
 	var dest string
 	// Wyre only supports bitcoin or erc20 but expects this prefix
 	if strings.ToLower(req.DestCurrency) == "btc" {
@@ -1664,10 +1670,9 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 		Dest:           dest,
 		FirstName:      card.FirstName,
 		LastName:       card.LastName,
-		// TODO: This should come from logged in user
-		Email:       "someone@example.com",
-		PhoneNumber: card.PhoneNumber,
-		ReferenceID: "crypto_moon_lambo",
+		Email:          *u.Email,
+		PhoneNumber:    card.PhoneNumber,
+		ReferenceID:    "crypto_moon_lambo",
 		Address: wyre.WalletOrderAddress{
 			Street1:    card.Address.Street_1,
 			Street2:    card.Address.Street_2,
