@@ -608,8 +608,7 @@ service Flux {
   // Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
   rpc Geo(google.protobuf.Empty) returns (GeoResponse) {
     option (google.api.http) = {
-      post: "/flux/geo"
-      body: "*"
+      get: "/flux/geo"
     };
   }
 
