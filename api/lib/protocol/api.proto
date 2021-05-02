@@ -393,6 +393,13 @@ message WyreGetDebitCardOrderAuthorizationsRequest {
   string order_id = 1;
 }
 
+message WyreSubmitDebitCardOrderAuthorizationsRequest {
+  string order_id = 1;
+  string reservation_id = 2;
+  string sms_2fa_code = 3;
+  string card_2fa_code = 4;
+}
+
 message WyreCreateDebitCardQuoteRequest {
   string dest = 1;
   string source_currency = 2;
@@ -500,6 +507,10 @@ message WyreGetDebitCardOrderAuthorizationsResponse {
   bool sms_needed = 2;
   bool card2faNeeded = 3;
   string authorization_3ds_url = 4;
+}
+
+message WyreSubmitDebitCardOrderAuthorizationsResponse {
+  bool success = 1;
 }
 
 message WyreCreateDebitCardQuoteResponse {
@@ -686,6 +697,13 @@ service Flux {
   rpc WyreGetDebitCardAuthorizations(WyreGetDebitCardOrderAuthorizationsRequest) returns (WyreGetDebitCardOrderAuthorizationsResponse) {
     option (google.api.http) = {
       get: "/wyre/transfers/debit-card/auth/{order_id}"
+    };
+  }
+
+  rpc WyreSubmitDebitCardAuthorizations(WyreSubmitDebitCardOrderAuthorizationsRequest) returns (WyreSubmitDebitCardOrderAuthorizationsResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/auth"
+      body: "*"
     };
   }
 
