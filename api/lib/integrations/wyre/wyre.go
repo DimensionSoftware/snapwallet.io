@@ -190,6 +190,7 @@ type CreateWalletOrderReservationRequest struct {
 	Country            string   `json:"country"`                // The country of the user's payment method
 	LockFields         []string `json:"lockFields"`             //  ["amount"]
 	SourceAmount       float64  `json:"sourceAmount,omitempty"` // The amount to withdrawal from the source, in units of sourceCurrency. Only include sourceAmount OR destAmount, not both.
+	DestAmount         float64  `json:"destAmount,omitempty"`   // The amount to withdrawal from the source, in units of sourceCurrency. Only include sourceAmount OR destAmount, not both.
 	AmountIncludesFees *bool    `json:"amountIncludeFees"`      // Determines whether or not the source or dest amount includes fees for this transaction.
 	ReferrerAccountID  string   `json:"referrerAccountId"`
 	Dest               string   `json:"dest"`

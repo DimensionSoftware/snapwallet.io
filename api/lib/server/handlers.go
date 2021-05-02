@@ -1602,8 +1602,7 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 		dest = "ethereum:" + req.Dest
 	}
 
-	// Create the order reservation
-	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{
+	reqData := wyre.CreateWalletOrderReservationRequest{
 		Country:            req.Country,
 		PaymentMethod:      "debit-card",
 		SourceCurrency:     req.SourceCurrency,
@@ -1612,7 +1611,18 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 		LockFields:         req.LockFields,
 		Dest:               dest,
 		AmountIncludesFees: &req.AmountIncludesFees,
-	})
+	}
+
+	if req.SourceAmount > 0 {
+		reqData.SourceAmount = req.SourceAmount
+		reqData.DestAmount = 0
+	} else {
+		reqData.SourceAmount = 0
+		reqData.DestAmount = req.DestAmount
+	}
+
+	// Create the order reservation
+	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(reqData)
 
 	if err != nil {
 		return nil, err
