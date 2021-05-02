@@ -9,7 +9,7 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed } from '../util'
+  import { focusFirstInput, Logger, onEnterPressed } from '../util'
   import { Routes, UserProfileFieldTypes } from '../constants'
   import type { Address } from 'api-client'
   import { transactionStore } from '../stores/TransactionStore'
@@ -70,6 +70,7 @@
   }
 
   onMount(() => {
+    focusFirstInput()
     const waitForGoogle = () => {
       if (window.google?.maps) {
         initAutoComplete()

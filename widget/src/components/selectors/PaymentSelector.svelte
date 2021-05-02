@@ -13,7 +13,9 @@
   export let description
   export let disabled: boolean | null = null
 
-  $: success = Boolean($transactionStore.selectedSourcePaymentMethod) || $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
+  $: success =
+    Boolean($transactionStore.selectedSourcePaymentMethod) ||
+    $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
 
   $: ({ flags } = $userStore)
 
