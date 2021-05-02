@@ -1711,6 +1711,36 @@ func (s *Server) WyreGetDebitCardAuthorizations(ctx context.Context, req *proto.
 	}, nil
 }
 
+func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *proto.WyreSubmitDebitCardOrderAuthorizationsRequest) (*proto.WyreSubmitDebitCardOrderAuthorizationsResponse, error) {
+	var verificationType string
+
+	if req.Card_2FaCode != "" && req.Sms_2FaCode == "" {
+		verificationType = "CARD"
+	}
+	if req.Card_2FaCode == "" && req.Sms_2FaCode != "" {
+		verificationType = "SMS"
+	}
+	if req.Card_2FaCode != "" && req.Sms_2FaCode != "" {
+		verificationType = "ALL"
+	}
+
+	res, err := s.Wyre.SubmitWalletOrderAuthorizations(wyre.SubmitWalletOrderAuthorizationsRequest{
+		WalletOrderID: req.OrderId,
+		Type:          verificationType,
+		Reservation:   req.ReservationId,
+		SMS:           req.Sms_2FaCode,
+		Card2fa:       req.Card_2FaCode,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreSubmitDebitCardOrderAuthorizationsResponse{
+		Success: *res.Success,
+	}, nil
+}
+
 /*
 
 window.API.fluxWyreCreateWalletOrderReservation({
