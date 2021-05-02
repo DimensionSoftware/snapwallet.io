@@ -17,6 +17,7 @@ import (
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
@@ -1757,7 +1758,13 @@ func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *pro
 }
 
 func (s *Server) Geo(ctx context.Context, _ *emptypb.Empty) (*proto.GeoResponse, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	vals := md.Get("cf-country")
+	val := ""
+	if len(val) > 0 {
+		val = vals[0]
+	}
 	return &proto.GeoResponse{
-		country: "US",
+		Country: val,
 	}, nil
 }
