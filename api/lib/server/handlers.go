@@ -1706,8 +1706,8 @@ func (s *Server) WyreGetDebitCardAuthorizations(ctx context.Context, req *proto.
 
 	return &proto.WyreGetDebitCardOrderAuthorizationsResponse{
 		WalletOrderId: res.WalletOrderID,
-		SmsNeeded:     *res.SMSNeeded,
-		Card2FaNeeded: *res.Card2faNeeded,
+		SmsNeeded:     res.SMSNeeded,
+		Card2FaNeeded: res.Card2faNeeded,
 	}, nil
 }
 
@@ -1737,35 +1737,6 @@ func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *pro
 	}
 
 	return &proto.WyreSubmitDebitCardOrderAuthorizationsResponse{
-		Success: *res.Success,
+		Success: res.Success,
 	}, nil
 }
-
-/*
-
-window.API.fluxWyreCreateWalletOrderReservation({
-sourceCurrency: 'usd',
-lockFields: ["sourceAmount"],
-sourceAmount: 5,
-destCurrency: 'eth',
-dest: "ethereum:0xf636B6aA45C554139763Ad926407C02719bc22f7",
-amountIncludesFees: false,
-card: {
-  firstName: 'Carlo',
-  lastName: 'Quintana',
-  phoneNumber: '+17608982762',
-  number: '4111111111111111',
-  expirationMonth: '10',
-  expirationYear: '2024',
-  verificationCode: '000',
-  address: {
-    street1: '123 my rd',
-    city: 'palm springs',
-    state: 'CA',
-    country: 'US',
-    postalCode: '92260'
-  }
-}
-}).then(console.log)
-
-*/

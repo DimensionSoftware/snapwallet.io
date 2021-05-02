@@ -770,14 +770,14 @@ type WalletOrder struct {
 // WalletOrderAuthorizations represents the response object for https://api.sendwyre.com/v3/debitcard/authorization/:orderId
 type WalletOrderAuthorizations struct {
 	WalletOrderID       string `json:"walletOrderId"`       // The wallet order ID
-	SMSNeeded           *bool  `json:"smsNeeded"`           // Determines whether or not sms 2FA is required
-	Card2faNeeded       *bool  `json:"card2faNeeded"`       // Determines whether or not card 2FA is required
+	SMSNeeded           bool   `json:"smsNeeded"`           // Determines whether or not sms 2FA is required
+	Card2faNeeded       bool   `json:"card2faNeeded"`       // Determines whether or not card 2FA is required
 	Authorization3DsURL string `json:"authorization3dsUrl"` // 3ds is not used currently
 }
 
 // WalletOrderAuthorizationsSubmissionStatus represents the response object for https://api.sendwyre.com/v3/debitcard/authorize/partner
 type WalletOrderAuthorizationsSubmissionStatus struct {
-	Success *bool  `json:"success"`
+	Success bool   `json:"success"`
 	OrderID string `json:"walletOrderId"`
 }
 
