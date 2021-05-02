@@ -14,9 +14,12 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
+  import { configStore } from '../stores/ConfigStore'
 
   let isConfirmingQuote = false
   let autocomplete: google.maps.places.Autocomplete
+
+  $: ({ product } = $configStore)
 
   const componentForm = {
     street_number: 'short_name',
@@ -122,11 +125,18 @@
         expirationYear,
       ] = $debitCardStore.expirationDate.split('/')
       isConfirmingQuote = true
+
       const result = await window.API.fluxWyreConfirmDebitCardQuote({
         reservationId: $debitCardStore.reservationId,
         sourceCurrency: $transactionStore.sourceCurrency.ticker,
-        sourceAmount: $transactionStore.sourceAmount,
-        destCurrency: $transactionStore.destinationCurrency.ticker,
+        ...($transactionStore.sourceAmount && {
+          sourceAmount: $transactionStore.sourceAmount,
+          destCurrency: $transactionStore.destinationCurrency.ticker,
+        }),
+        ...($configStore.product?.destinationAmount && {
+          destAmount: $configStore.product.destinationAmount,
+          destCurrency: $configStore.product.destinationTicker,
+        }),
         dest: $debitCardStore.dest,
         card: {
           firstName: $debitCardStore.firstName,
