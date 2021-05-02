@@ -15,6 +15,7 @@ models/Address.ts
 models/ChangeViewerEmailRequest.ts
 models/ChangeViewerPhoneRequest.ts
 models/DocumentInput.ts
+models/GeoResponse.ts
 models/GetImageResponse.ts
 models/GotoResponse.ts
 models/ImageProcessingMode.ts

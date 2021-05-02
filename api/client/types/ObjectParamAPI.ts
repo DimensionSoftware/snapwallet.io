@@ -6,6 +6,7 @@ import { Address } from '../models/Address';
 import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
 import { DocumentInput } from '../models/DocumentInput';
+import { GeoResponse } from '../models/GeoResponse';
 import { GetImageResponse } from '../models/GetImageResponse';
 import { GotoResponse } from '../models/GotoResponse';
 import { ImageProcessingMode } from '../models/ImageProcessingMode';
@@ -79,6 +80,15 @@ export interface FluxApiFluxChangeViewerPhoneRequest {
      * @memberof FluxApifluxChangeViewerPhone
      */
     body: ChangeViewerPhoneRequest
+}
+
+export interface FluxApiFluxGeoRequest {
+    /**
+     * 
+     * @type any
+     * @memberof FluxApifluxGeo
+     */
+    body: any
 }
 
 export interface FluxApiFluxOneTimePasscodeRequest {
@@ -282,6 +292,14 @@ export class ObjectFluxApi {
      */
     public fluxChangeViewerPhone(param: FluxApiFluxChangeViewerPhoneRequest, options?: Configuration): Promise<any> {
         return this.api.fluxChangeViewerPhone(param.body,  options).toPromise();
+    }
+	
+    /**
+     * Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
+     * @param param the request object
+     */
+    public fluxGeo(param: FluxApiFluxGeoRequest, options?: Configuration): Promise<GeoResponse> {
+        return this.api.fluxGeo(param.body,  options).toPromise();
     }
 	
     /**

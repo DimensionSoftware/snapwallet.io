@@ -117,6 +117,39 @@
         ]
       }
     },
+    "/flux/geo": {
+      "post": {
+        "summary": "Use CloudFlare to figure origin IP Country for intelligent currency options/defaults",
+        "operationId": "Flux_Geo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GeoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "properties": {}
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/flux/pricing-data": {
       "get": {
         "summary": "Get pricing data",
@@ -895,6 +928,14 @@
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "GeoResponse": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
         }
       }
     },

@@ -2,6 +2,7 @@ export * from './Address';
 export * from './ChangeViewerEmailRequest';
 export * from './ChangeViewerPhoneRequest';
 export * from './DocumentInput';
+export * from './GeoResponse';
 export * from './GetImageResponse';
 export * from './GotoResponse';
 export * from './ImageProcessingMode';
@@ -60,6 +61,7 @@ import { Address } from './Address';
 import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from './ChangeViewerPhoneRequest';
 import { DocumentInput } from './DocumentInput';
+import { GeoResponse } from './GeoResponse';
 import { GetImageResponse } from './GetImageResponse';
 import { GotoResponse } from './GotoResponse';
 import { ImageProcessingMode } from './ImageProcessingMode';
@@ -145,6 +147,7 @@ let typeMap: {[index: string]: any} = {
     "ChangeViewerEmailRequest": ChangeViewerEmailRequest,
     "ChangeViewerPhoneRequest": ChangeViewerPhoneRequest,
     "DocumentInput": DocumentInput,
+    "GeoResponse": GeoResponse,
     "GetImageResponse": GetImageResponse,
     "GotoResponse": GotoResponse,
     "InlineResponse200": InlineResponse200,
