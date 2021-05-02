@@ -191,6 +191,7 @@
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
   .container {
+    border-radius: 1rem;
     font-size: 1.2rem;
     z-index: 101;
     position: relative;

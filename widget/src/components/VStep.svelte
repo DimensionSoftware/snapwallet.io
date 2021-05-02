@@ -39,7 +39,7 @@
       width: 8px;
       left: 0;
       top: 8px;
-      opacity: 0.5;
+      opacity: 0.75;
       z-index: 1;
     }
     > :global(span > svg) {

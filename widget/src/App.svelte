@@ -449,6 +449,8 @@
     background: var(--theme-modal-background);
     border-radius: 1rem;
     overflow: hidden;
+    transform: translateZ(0);
+    will-change: transform;
     display: flex;
     flex-direction: column;
     // Used by toast
