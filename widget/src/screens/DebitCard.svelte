@@ -77,7 +77,7 @@
         <Input
           maxlength={7}
           mask={Masks.DEBIT_CARD_EXPIRATION_DATE}
-          placeholder={`10/${String(new Date().getFullYear() + 1)}`}
+          placeholder="MM/YYYY"
           defaultValue={$debitCardStore.expirationDate}
           on:change={({ detail = '' }) => {
             debitCardStore.update({
