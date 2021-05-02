@@ -14,6 +14,7 @@ type DebitCardAddress = {
 type StoreState = {
   dest: string
   reservationId: string
+  orderId: string
   number: string
   expirationDate: string
   verificationCode: string
@@ -27,6 +28,7 @@ type StoreState = {
 const initialState: StoreState = {
   dest: '',
   reservationId: '',
+  orderId: '',
   firstName: '',
   lastName: '',
   number: '',
