@@ -12,6 +12,8 @@
   import { unMaskValue } from '../masks'
   import { Masks } from '../types'
   import { transactionStore } from '../stores/TransactionStore'
+  import { push } from 'svelte-spa-router'
+  import { Routes } from '../constants'
 
   let isConfirmingQuote = false
   let autocomplete: google.maps.places.Autocomplete
@@ -142,10 +144,9 @@
           address: $debitCardStore.address,
         },
       })
-      console.log(result)
       setTimeout(() => {
-        debitCardStore.clear()
-        // TODO: go somewhere
+        debitCardStore.update({ orderId: result.orderId })
+        push(Routes.DEBIT_CARD_2FA)
       }, 800)
     } finally {
       setTimeout(() => {
