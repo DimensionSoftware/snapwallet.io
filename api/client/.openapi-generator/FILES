@@ -62,6 +62,8 @@ models/WyreDebitCardInfo.ts
 models/WyreGetDebitCardOrderAuthorizationsResponse.ts
 models/WyrePaymentMethod.ts
 models/WyrePaymentMethods.ts
+models/WyreSubmitDebitCardOrderAuthorizationsRequest.ts
+models/WyreSubmitDebitCardOrderAuthorizationsResponse.ts
 models/WyreTransfer.ts
 models/WyreTransferDetail.ts
 models/WyreTransfers.ts

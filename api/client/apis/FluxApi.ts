@@ -31,6 +31,8 @@ import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQ
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyreGetDebitCardOrderAuthorizationsResponse } from '../models/WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
+import { WyreSubmitDebitCardOrderAuthorizationsRequest } from '../models/WyreSubmitDebitCardOrderAuthorizationsRequest';
+import { WyreSubmitDebitCardOrderAuthorizationsResponse } from '../models/WyreSubmitDebitCardOrderAuthorizationsResponse';
 import { WyreTransferDetail } from '../models/WyreTransferDetail';
 import { WyreTransfers } from '../models/WyreTransfers';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
@@ -628,7 +630,12 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         );
         requestContext.setBody(serializedBody);
 
+        let authMethod = null;
         // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
 
         return requestContext;
     }
@@ -725,7 +732,12 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         );
         requestContext.setBody(serializedBody);
 
+        let authMethod = null;
         // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
 
         return requestContext;
     }
@@ -806,7 +818,12 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
 
 		// Body Params
 
+        let authMethod = null;
         // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
 
         return requestContext;
     }
@@ -906,6 +923,53 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
 
 
 		// Body Params
+
+        let authMethod = null;
+        // Apply auth methods
+        authMethod = config.authMethods["Bearer"]
+        if (authMethod) {
+            await authMethod.applySecurityAuthentication(requestContext);
+        }
+
+        return requestContext;
+    }
+
+    /**
+     * @param body 
+     */
+    public async fluxWyreSubmitDebitCardAuthorizations(body: WyreSubmitDebitCardOrderAuthorizationsRequest, options?: Configuration): Promise<RequestContext> {
+		let config = options || this.configuration;
+		
+        // verify required parameter 'body' is not null or undefined
+        if (body === null || body === undefined) {
+            throw new RequiredError('Required parameter body was null or undefined when calling fluxWyreSubmitDebitCardAuthorizations.');
+        }
+
+		
+		// Path Params
+    	const localVarPath = '/wyre/transfers/debit-card/auth';
+
+		// Make Request Context
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+        // Query Params
+	
+		// Header Params
+	
+		// Form Params
+
+
+		// Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(body, "WyreSubmitDebitCardOrderAuthorizationsRequest", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
 
         let authMethod = null;
         // Apply auth methods
@@ -1743,6 +1807,43 @@ export class FluxApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "WyreTransfers", ""
             ) as WyreTransfers;
+            return body;
+        }
+
+        let body = response.body || "";
+    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
+    }
+			
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to fluxWyreSubmitDebitCardAuthorizations
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async fluxWyreSubmitDebitCardAuthorizations(response: ResponseContext): Promise<WyreSubmitDebitCardOrderAuthorizationsResponse > {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: WyreSubmitDebitCardOrderAuthorizationsResponse = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "WyreSubmitDebitCardOrderAuthorizationsResponse", ""
+            ) as WyreSubmitDebitCardOrderAuthorizationsResponse;
+            return body;
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: RpcStatus = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "RpcStatus", ""
+            ) as RpcStatus;
+            throw new ApiException<RpcStatus>(0, body);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: WyreSubmitDebitCardOrderAuthorizationsResponse = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "WyreSubmitDebitCardOrderAuthorizationsResponse", ""
+            ) as WyreSubmitDebitCardOrderAuthorizationsResponse;
             return body;
         }
 

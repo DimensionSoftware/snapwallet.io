@@ -52,6 +52,8 @@ import { WyreDebitCardInfo } from '../models/WyreDebitCardInfo';
 import { WyreGetDebitCardOrderAuthorizationsResponse } from '../models/WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
+import { WyreSubmitDebitCardOrderAuthorizationsRequest } from '../models/WyreSubmitDebitCardOrderAuthorizationsRequest';
+import { WyreSubmitDebitCardOrderAuthorizationsResponse } from '../models/WyreSubmitDebitCardOrderAuthorizationsResponse';
 import { WyreTransfer } from '../models/WyreTransfer';
 import { WyreTransferDetail } from '../models/WyreTransferDetail';
 import { WyreTransfers } from '../models/WyreTransfers';
@@ -230,6 +232,15 @@ export interface FluxApiFluxWyreGetTransfersRequest {
      * @memberof FluxApifluxWyreGetTransfers
      */
     page?: string
+}
+
+export interface FluxApiFluxWyreSubmitDebitCardAuthorizationsRequest {
+    /**
+     * 
+     * @type WyreSubmitDebitCardOrderAuthorizationsRequest
+     * @memberof FluxApifluxWyreSubmitDebitCardAuthorizations
+     */
+    body: WyreSubmitDebitCardOrderAuthorizationsRequest
 }
 
 export interface FluxApiFluxWyreWebhookRequest {
@@ -421,6 +432,13 @@ export class ObjectFluxApi {
      */
     public fluxWyreGetTransfers(param: FluxApiFluxWyreGetTransfersRequest, options?: Configuration): Promise<WyreTransfers> {
         return this.api.fluxWyreGetTransfers(param.page,  options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxWyreSubmitDebitCardAuthorizations(param: FluxApiFluxWyreSubmitDebitCardAuthorizationsRequest, options?: Configuration): Promise<WyreSubmitDebitCardOrderAuthorizationsResponse> {
+        return this.api.fluxWyreSubmitDebitCardAuthorizations(param.body,  options).toPromise();
     }
 	
     /**

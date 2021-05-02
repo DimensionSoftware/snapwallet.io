@@ -559,6 +559,43 @@
         ]
       }
     },
+    "/wyre/transfers/debit-card/auth": {
+      "post": {
+        "operationId": "Flux_WyreSubmitDebitCardAuthorizations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreSubmitDebitCardOrderAuthorizationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreSubmitDebitCardOrderAuthorizationsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/wyre/transfers/debit-card/auth/{orderId}": {
       "get": {
         "operationId": "Flux_WyreGetDebitCardAuthorizations",
@@ -586,6 +623,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -618,6 +660,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -650,6 +697,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -1564,6 +1616,31 @@
           "items": {
             "$ref": "#/definitions/WyrePaymentMethod"
           }
+        }
+      }
+    },
+    "WyreSubmitDebitCardOrderAuthorizationsRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "reservationId": {
+          "type": "string"
+        },
+        "sms2faCode": {
+          "type": "string"
+        },
+        "card2faCode": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreSubmitDebitCardOrderAuthorizationsResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
         }
       }
     },
