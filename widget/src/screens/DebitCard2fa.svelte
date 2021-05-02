@@ -12,7 +12,6 @@
   import { onMount } from 'svelte'
 
   let pollTimer
-  let fetchingAuth = true
   let cardCode = ''
   let smsCode = ''
   let smsCodeRequired = false
@@ -29,19 +28,14 @@
   }
 
   const fetchAuthorizations = async () => {
-    try {
-      const {
-        card2faNeeded,
-        smsNeeded,
-      } = await window.API.fluxWyreGetDebitCardAuthorizations(
-        $debitCardStore.orderId,
-      )
-      smsCodeRequired = smsNeeded
-      cardCodeRequired = card2faNeeded
-      fetchingAuth = false
-    } finally {
-      clearInterval(pollTimer)
-    }
+    const {
+      card2faNeeded,
+      smsNeeded,
+    } = await window.API.fluxWyreGetDebitCardAuthorizations(
+      $debitCardStore.orderId,
+    )
+    smsCodeRequired = smsNeeded
+    cardCodeRequired = card2faNeeded
   }
 
   const pollAuthorizations = () => {
@@ -49,19 +43,15 @@
   }
 
   onMount(() => {
-    if (fetchingAuth) {
-      pollTimer = pollAuthorizations()
-      return () => clearInterval(pollTimer)
-    }
+    pollTimer = pollAuthorizations()
+    return () => clearInterval(pollTimer)
   })
 </script>
 
 <ModalContent>
   <ModalHeader>Card Authorization</ModalHeader>
   <ModalBody>
-    {#if fetchingAuth}
-      Retrieving required authorizations...
-    {:else if smsCodeRequired}
+    {#if smsCodeRequired}
       <Label label="SMS Code">
         <Input
           id="autocomplete"
@@ -79,6 +69,8 @@
           on:change={e => (cardCode = e?.detail)}
         />
       </Label>
+    {:else}
+      Retrieving authorizations...
     {/if}
   </ModalBody>
   <ModalFooter>
