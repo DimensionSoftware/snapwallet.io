@@ -408,6 +408,7 @@ message WyreCreateDebitCardQuoteRequest {
   bool amount_includes_fees = 6;
   repeated string lock_fields = 7;
   string country = 8;
+  double dest_amount = 9;
 }
 
 message WyreConfirmDebitCardQuoteRequest {
