@@ -1759,7 +1759,7 @@ func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *pro
 
 func (s *Server) Geo(ctx context.Context, _ *emptypb.Empty) (*proto.GeoResponse, error) {
 	md, _ := metadata.FromIncomingContext(ctx)
-	vals := md.Get("cf-country")
+	vals := md.Get("cf-ipcountry")
 	val := ""
 	if len(val) > 0 {
 		val = vals[0]
