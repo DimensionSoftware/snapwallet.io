@@ -13,58 +13,142 @@
   "paths": {
     "/plaid/connect-bank-accounts": {
       "post": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/plaid/create-link-token": {
       "post": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/viewer": {
       "get": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/viewer/email": {
       "put": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/viewer/phone": {
       "put": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/viewer/profile": {
       "get": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "patch": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/wyre/payment-methods": {
       "get": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/wyre/transfers": {
       "get": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       },
       "post": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/wyre/transfers/{transferId}": {
       "get": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/wyre/transfers/{transferId}/confirm": {
       "post": {
-        "security": [{"Bearer": []}]
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/quote": {
+      "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/confirm": {
+      "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/auth": {
+      "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/auth/{orderId}": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
       }
     },
     "/upload": {
@@ -80,35 +164,35 @@
           }
         ],
         "consumes": [
-            "multipart/form-data"
+          "multipart/form-data"
         ],
         "produces": [
           "application/json"
         ],
         "parameters": [
-            {
-               "in": "formData",
-               "name": "file",
-               "type": "file",
-               "description": "The file to upload."
-            }
-         ],
-         "responses": {
-           "200": {
-             "description": "A file upload response object.",
-             "schema": {
-                "type": "object",
-                "properties": {
-                   "fileId": {
-                      "type": "string",
-                      "description": "The file id"
-                   },
-                   "size": {
-                      "type": "integer",
-                      "description": "The size of the file just uploaded in bytes"
-                   }
+          {
+            "in": "formData",
+            "name": "file",
+            "type": "file",
+            "description": "The file to upload."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A file upload response object.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "fileId": {
+                  "type": "string",
+                  "description": "The file id"
+                },
+                "size": {
+                  "type": "integer",
+                  "description": "The size of the file just uploaded in bytes"
                 }
-             }
+              }
+            }
           },
           "default": {
             "description": "An unexpected error response.",
@@ -116,9 +200,8 @@
               "$ref": "#/definitions/rpcStatus"
             }
           }
-       }
+        }
       }
     }
   }
 }
-
