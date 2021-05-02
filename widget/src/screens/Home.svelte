@@ -219,6 +219,7 @@
     getInitialPrices()
     getNextPath()
     const interval = priceStore.pollPrices()
+    // TODO: @khoerling if ($configStore.intent === 'donate') {transactionStore.update({inMedium: TransactionMediums.DEBIT_CARD})}
     return () => clearInterval(interval)
   })
 </script>
