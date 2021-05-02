@@ -7,9 +7,11 @@
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
-  import { TransactionIntents } from '../types'
+  import { TransactionIntents, TransactionMediums } from '../types'
   import { ParentMessenger } from '../util/parent_messenger'
   import { configStore } from '../stores/ConfigStore'
+
+  let isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
 
   $: ({ product } = $configStore)
 
@@ -80,7 +82,12 @@
         <p>Your <b>{cryptoTicker}</b> checkout is confirmed!</p>
       {/if}
       <p>
-        Please allow up to five (5) business days for your purchase to complete.
+        {#if isDebitCard}
+          Please allow up to one (1) business day for your purchase to complete.
+        {:else}
+          Please allow up to five (5) business days for your purchase to
+          complete.
+        {/if}
       </p>
     </div>
   </ModalBody>
