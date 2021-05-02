@@ -44,6 +44,7 @@
   import { configStore } from './stores/ConfigStore'
   import DebitCard from './screens/DebitCard.svelte'
   import DebitCardAddress from './screens/DebitCardAddress.svelte'
+  import DebitCard2fa from './screens/DebitCard2fa.svelte'
 
   $: isPreLogout = false
   $: isBlurred = false
@@ -214,6 +215,9 @@
     }),
     [Routes.DEBIT_CARD_ADDRESS]: wrap({
       ...authedRouteOptions(DebitCardAddress),
+    }),
+    [Routes.DEBIT_CARD_2FA]: wrap({
+      ...authedRouteOptions(DebitCard2fa),
     }),
     '*': NotFound as any,
   }
