@@ -1764,6 +1764,7 @@ func (s *Server) Geo(ctx context.Context, _ *emptypb.Empty) (*proto.GeoResponse,
 	if len(val) > 0 {
 		val = vals[0]
 	}
+	log.Printf("%#v\n", md)
 	return &proto.GeoResponse{
 		Country: val,
 	}, nil
