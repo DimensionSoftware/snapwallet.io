@@ -220,6 +220,14 @@ type GetWalletOrderAuthorizationsRequest struct {
 	OrderID string `json:"orderId"` // The wallet order ID
 }
 
+type SubmitWalletOrderAuthorizationsRequest struct {
+	WalletOrderID string `json:"walletOrderId"` // The wallet order ID
+	Type          string `json:"type"`          // The type of code to be verified ALL | SMS | CARD
+	Reservation   string `json:"reservation"`
+	SMS           string `json:"sms"`     // The SMS code to be verified
+	Card2fa       string `json:"card2fa"` // The debit card code to be verified
+}
+
 type WalletOrderAddress struct {
 	Street1    string `json:"street1"`
 	Street2    string `json:"street2"`
@@ -767,6 +775,12 @@ type WalletOrderAuthorizations struct {
 	Authorization3DsURL string `json:"authorization3dsUrl"` // 3ds is not used currently
 }
 
+// WalletOrderAuthorizationsSubmissionStatus represents the response object for https://api.sendwyre.com/v3/debitcard/authorize/partner
+type WalletOrderAuthorizationsSubmissionStatus struct {
+	Success *bool  `json:"success"`
+	OrderID string `json:"walletOrderId"`
+}
+
 // {"language":"en","compositeType":"","subType":"","errorCode":"accessDenied.invalidSession","exceptionId":"test_TQCJZP","message":"Invalid Session","type":"AccessDeniedException","transient":false}
 
 // APIError represents the error object sent back by the api
@@ -961,6 +975,48 @@ func (c Client) GetWalletOrderAuthorizations(req GetWalletOrderAuthorizationsReq
 	}
 
 	return resp.Result().(*WalletOrderAuthorizations), nil
+}
+
+// SubmitWalletOrderAuthorizations retrieves required auth mechanisms for a wallet order
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/v3/docs/authorize-card
+// POST https://api.sendwyre.com/v3/debitcard/authorize/partner request
+func (c Client) SubmitWalletOrderAuthorizations(req SubmitWalletOrderAuthorizationsRequest) (*WalletOrderAuthorizationsSubmissionStatus, error) {
+	payload, err := json.Marshal(req)
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/debitcard/authorize/partner?timestamp=%d", ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(WalletOrderAuthorizationsSubmissionStatus{}).
+		EnableTrace().
+		SetBody(req).
+		Post(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*WalletOrderAuthorizationsSubmissionStatus), nil
 }
 
 /*
