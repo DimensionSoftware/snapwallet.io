@@ -83,6 +83,8 @@
   const handleNextStep = async () => {
     const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore
 
+    isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
+
     // guards
     if (!sourceAmount || !isValidNumber(sourceAmount)) {
       focus(document.querySelector('input'))
@@ -95,6 +97,7 @@
     }
 
     if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {
+      if (!isLoggedIn) throw new Error('Please login and try again')
       try {
         isCreatingTxnPreview = true
         const dest = // TODO: move srn prefix to server
