@@ -97,7 +97,7 @@
     }
 
     if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {
-      if (!isLoggedIn) throw new Error('Please login and try again')
+      if (!isLoggedIn) push(Routes.SEND_OTP)
       try {
         isCreatingTxnPreview = true
         const dest = // TODO: move srn prefix to server
