@@ -1494,6 +1494,10 @@
         },
         "country": {
           "type": "string"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
         }
       }
     },

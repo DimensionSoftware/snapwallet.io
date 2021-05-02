@@ -20,6 +20,7 @@ export class WyreCreateDebitCardQuoteRequest {
     'amountIncludesFees'?: boolean;
     'lockFields'?: Array<string>;
     'country'?: string;
+    'destAmount'?: number;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -65,6 +66,12 @@ export class WyreCreateDebitCardQuoteRequest {
             "baseName": "country",
             "type": "string",
             "format": ""
+        },
+        {
+            "name": "destAmount",
+            "baseName": "destAmount",
+            "type": "number",
+            "format": "double"
         }    ];
 
     static getAttributeTypeMap() {
