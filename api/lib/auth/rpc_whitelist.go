@@ -9,4 +9,5 @@ var RPCPublicWhitelist = map[string]bool{
 	"/Flux/TokenExchange":         true,
 	"/Flux/WidgetGetShortUrl":     true,
 	"/Flux/Goto":                  true,
+	"/Flux/Geo":                   true,
 }

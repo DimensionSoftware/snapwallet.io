@@ -1755,3 +1755,9 @@ func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *pro
 		Success: res.Success,
 	}, nil
 }
+
+func (s *Server) Geo(ctx context.Context, _ *emptypb.Empty) (*proto.GeoResponse, error) {
+	return &proto.GeoResponse{
+		country: "US",
+	}, nil
+}

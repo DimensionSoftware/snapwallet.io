@@ -1031,7 +1031,16 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         return requestContext;
     }
 
-}
+    public async fluxGeo(response: ResponseContext): Promise<RequestContext> {
+		// Make Request Context
+    	const
+          localVarPath = '/geo',
+          config = this.configuration,
+    	  requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
+        // requestContext.setBody()
+    	throw new ApiException<string>(response.httpStatusCode, "exception here fluxGeo");
+        return requestContext;
+    }
 
 
 

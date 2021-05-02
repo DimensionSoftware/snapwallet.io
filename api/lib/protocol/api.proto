@@ -315,6 +315,9 @@ message GetImageResponse {
   int32 height = 6;
 }
 
+message GeoResponse {
+  string country = 1;
+}
 
 message WyreWebhookRequest {
   string hook_id = 1;
@@ -598,6 +601,14 @@ service Flux {
   rpc OneTimePasscodeVerify(OneTimePasscodeVerifyRequest) returns (OneTimePasscodeVerifyResponse) {
     option (google.api.http) = {
       post: "/flux/auth/one-time-passcode-verify"
+      body: "*"
+    };
+  }
+
+  // Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
+  rpc Geo(google.protobuf.Empty) returns (GeoResponse) {
+    option (google.api.http) = {
+      post: "/flux/geo"
       body: "*"
     };
   }
