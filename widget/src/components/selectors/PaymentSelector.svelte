@@ -13,7 +13,9 @@
   export let description
   export let disabled: boolean | null = null
 
-  $: success = Boolean($transactionStore.selectedSourcePaymentMethod) || $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
+  $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
+  $: success =
+    Boolean($transactionStore.selectedSourcePaymentMethod) || isDebitCard
 
   $: ({ flags } = $userStore)
 
@@ -40,15 +42,11 @@
   {onClick}
 >
   <span slot="icon">
-    <FaIcon
-      data={!success
-        ? faUniversity
-        : faCheck}
-    />
+    <FaIcon data={!success ? faUniversity : faCheck} />
   </span>
   <b slot="step">
     <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
-    {#if $transactionStore.selectedSourcePaymentMethod}
+    {#if !isDebitCard && $transactionStore.selectedSourcePaymentMethod}
       {$transactionStore.selectedSourcePaymentMethod.name}
     {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
       Debit Card
