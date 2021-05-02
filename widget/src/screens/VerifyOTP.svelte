@@ -186,16 +186,15 @@
             id={`code-${i}`}
             inputmode="numeric"
             autocapitalize="none"
-            autocomplete="one-time-code"
+            autocomplete="off"
             autofocus={i === 0}
             mask={Masks.CODE}
             size={1}
             required
             type="text"
-            placeholder={i + 1}
             maxlength="1"
             autoselect
-            defaultValue={codes[i]}
+            value={codes[i]}
             on:focus={() => {
               cur = i
             }}
@@ -283,6 +282,10 @@
           border-radius: 0;
           border-right: 1px solid rgba(0, 0, 0, 0.1);
           text-indent: 0;
+          &:focus,
+          &:hover {
+            z-index: 9;
+          }
         }
         :global(#code-0) {
           border-top-left-radius: 0.5rem;
