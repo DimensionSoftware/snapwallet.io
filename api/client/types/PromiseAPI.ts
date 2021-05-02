@@ -97,10 +97,9 @@ export class PromiseFluxApi {
 	
     /**
      * Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
-     * @param body 
      */
-    public fluxGeo(body: any, options?: Configuration): Promise<GeoResponse> {
-    	const result = this.api.fluxGeo(body, options);
+    public fluxGeo(options?: Configuration): Promise<GeoResponse> {
+    	const result = this.api.fluxGeo(options);
         return result.toPromise();
     }
 	

@@ -129,10 +129,9 @@ export class ObservableFluxApi {
 	
     /**
      * Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
-     * @param body 
      */
-    public fluxGeo(body: any, options?: Configuration): Observable<GeoResponse> {
-    	const requestContextPromise = this.requestFactory.fluxGeo(body, options);
+    public fluxGeo(options?: Configuration): Observable<GeoResponse> {
+    	const requestContextPromise = this.requestFactory.fluxGeo(options);
 
 		// build promise chain
     let middlewarePreObservable = from<RequestContext>(requestContextPromise);

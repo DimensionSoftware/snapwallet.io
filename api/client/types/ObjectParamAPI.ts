@@ -83,12 +83,6 @@ export interface FluxApiFluxChangeViewerPhoneRequest {
 }
 
 export interface FluxApiFluxGeoRequest {
-    /**
-     * 
-     * @type any
-     * @memberof FluxApifluxGeo
-     */
-    body: any
 }
 
 export interface FluxApiFluxOneTimePasscodeRequest {
@@ -299,7 +293,7 @@ export class ObjectFluxApi {
      * @param param the request object
      */
     public fluxGeo(param: FluxApiFluxGeoRequest, options?: Configuration): Promise<GeoResponse> {
-        return this.api.fluxGeo(param.body,  options).toPromise();
+        return this.api.fluxGeo( options).toPromise();
     }
 	
     /**

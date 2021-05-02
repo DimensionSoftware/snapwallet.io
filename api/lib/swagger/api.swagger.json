@@ -118,7 +118,7 @@
       }
     },
     "/flux/geo": {
-      "post": {
+      "get": {
         "summary": "Use CloudFlare to figure origin IP Country for intelligent currency options/defaults",
         "operationId": "Flux_Geo",
         "responses": {
@@ -135,16 +135,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "body",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "properties": {}
-            }
-          }
-        ],
         "tags": [
           "Flux"
         ]
