@@ -69,6 +69,7 @@ export enum Routes {
   SUCCESS = '/success',
   DEBIT_CARD = '/debit-card',
   DEBIT_CARD_ADDRESS = '/debit-card-address',
+  DEBIT_CARD_2FA = '/debit-card-2fa',
 }
 
 export enum APIErrors {
