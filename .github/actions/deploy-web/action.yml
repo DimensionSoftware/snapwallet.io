@@ -1,0 +1,36 @@
+name: DeployWeb
+description: Deploy the web tree
+inputs:
+  GCP_SA_KEY:
+    description: service account key
+    required: true
+  BUILD_SCRIPT:
+    description: script to use
+    required: true
+  API_BASE_URL:
+    description: api base url to use
+    required: true
+  WIDGET_URL:
+    description: widget url to use
+    required: true
+  DEBUG:
+    description: debug settings to use
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Deploy Web Tree
+      shell: bash
+      run: |
+        ${{ inputs.BUILD_SCRIPT }}
+
+        pushd /tmp
+        echo -n ${{ inputs.GCP_SA_KEY }} | base64 --decode > gcloud-service-key.json
+        export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
+        popd
+
+        npx firebase-tools -c firebase.deploy.json deploy --only hosting
+      env:
+        API_BASE_URL: ${{ inputs.API_BASE_URL }}
+        WIDGET_URL: ${{ inputs.WIDGET_URL }}
+        DEBUG: ${{ inputs.DEBUG }}
