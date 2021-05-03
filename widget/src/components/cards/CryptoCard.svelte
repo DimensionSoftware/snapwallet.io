@@ -66,9 +66,9 @@
       opacity: 0.5;
       background: linear-gradient(
         to right,
-        rgba(255, 255, 255, 0),
+        transparent,
         var(--theme-color-lightened),
-        rgba(255, 255, 255, 0)
+        transparent
       );
       transform: scale(0);
       transition: transform 0.2s $easeOutExpo;
