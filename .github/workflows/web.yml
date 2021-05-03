@@ -24,7 +24,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
         with:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           BUILD_SCRIPT: bin/build-web
           API_BASE_URL: https://api.snapwallet.io
           WIDGET_URL: https://snapwallet.io/widget
@@ -38,7 +38,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
         with:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
+          GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY}}
           BUILD_SCRIPT: bin/build-sandbox-web
           API_BASE_URL: https://sandbox-api.snapwallet.io
           WIDGET_URL: https://sandbox.snapwallet.io/widget

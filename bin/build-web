@@ -12,11 +12,8 @@ npm run build
 popd
 mkdir -p web_dist/widget/dist
 cp init/dist/init.*.js web_dist/widget/dist/
-# merge redirects into firebase config
-jq -Mn '$f1 * $f2 | .hosting.headers = ($f1.hosting.headers + $f2.hosting.headers | unique) | .hosting.rewrites = ($f1.hosting.rewrites + $f2.hosting.rewrites | unique) | .hosting.redirects = ($f1.hosting.redirects + $f2.hosting.redirects | unique)' \
-  --argfile f1 firebase.json \
-  --argfile f2 init/dist/firebase-hosting-config.json \
-  > firebase.deploy.json
+
+bin/build-firebase-deploy-json
 
 # snapwallet.io
 pushd web

@@ -4,3 +4,5 @@ rm -rf web_dist
 mkdir -p web_dist
 
 bin/build-web-widget
+
+bin/build-firebase-deploy-json
