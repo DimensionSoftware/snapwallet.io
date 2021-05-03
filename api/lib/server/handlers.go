@@ -195,6 +195,15 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}
 	if passcode == nil {
 		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(loginKind))
+
+		// @chris; i figured out how to add structured details to grpc errors; details can be any proto message:
+		//
+		// status, err := status.New(codes.Unauthenticated, genMsgUnauthenticatedOTP(loginKind)).WithDetails(&proto.Address{})
+		// if err != nil {
+		// 	return nil, err
+		// }
+
+		// return nil, status.Err()
 	}
 
 	u, err := s.Db.GetOrCreateUser(ctx, loginKind, loginValue)
