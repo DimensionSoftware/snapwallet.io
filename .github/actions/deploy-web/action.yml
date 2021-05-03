@@ -4,6 +4,9 @@ inputs:
   GCP_SA_KEY:
     description: service account key
     required: true
+  GCP_PROJECT_ID:
+    description: gcp project id
+    required: true
   BUILD_SCRIPT:
     description: script to use
     required: true
@@ -29,7 +32,7 @@ runs:
         export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
         popd
 
-        npx firebase-tools -c firebase.deploy.json deploy --only hosting
+        npx firebase-tools -P ${{ inputs.GCP_PROJECT_ID }} -c firebase.deploy.json deploy --only hosting
       env:
         API_BASE_URL: ${{ inputs.API_BASE_URL }}
         WIDGET_URL: ${{ inputs.WIDGET_URL }}
