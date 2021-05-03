@@ -34,4 +34,3 @@ runs:
         API_BASE_URL: ${{ inputs.API_BASE_URL }}
         WIDGET_URL: ${{ inputs.WIDGET_URL }}
         DEBUG: ${{ inputs.DEBUG }}
-# Hawt
