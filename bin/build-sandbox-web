@@ -5,4 +5,5 @@ mkdir -p web_dist
 
 bin/build-web-widget
 
-bin/build-firebase-deploy-json
+# no modifications needed
+cp firebase.json firebase.deploy.json
