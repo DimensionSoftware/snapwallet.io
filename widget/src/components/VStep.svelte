@@ -1,13 +1,15 @@
 <script lang="ts">
   export let success: boolean = false
   export let disabled: boolean = false
-  export let onClick: () => {}
+  export let custom: boolean = false
+  export let onClick: () => void
   export let title: string
 </script>
 
 <li
   on:click={onClick}
   {title}
+  class:custom
   class:success
   class:disabled
   style={onClick ? 'cursor: pointer' : ''}
@@ -29,6 +31,11 @@
     padding-left: 1.25rem;
     margin-left: 1rem;
     margin-top: 0.75rem;
+    &.custom {
+      :global(span):before {
+        display: none;
+      }
+    }
     // icon surround
     :global(span.default-icon):before {
       position: absolute;
