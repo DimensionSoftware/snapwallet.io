@@ -86,4 +86,26 @@ jobs:
         with:
           GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY }} 
           GCP_PROJECT_ID: ds-snap-sandbox
-
+  deploy-production-api:
+    name: "[P] Deploy API"
+    needs: build-api
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-api
+        with:
+          GCP_SA_KEY: ${{ secrets.PRODUCTION_GCP_SA_KEY }}
+          GCP_PROJECT_ID: ds-snap-production
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
+  deploy-production-jobrunner: 
+    needs: test
+    name: "[P] Build/Deploy JobRunner"
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-snap-job
+        with:
+          GCP_SA_KEY: ${{ secrets.PRODUCTION_GCP_SA_KEY }}
+          GCP_PROJECT_ID: ds-snap-production
