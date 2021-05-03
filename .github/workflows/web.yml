@@ -33,7 +33,7 @@ jobs:
   deploy-sandbox-web: 
     name: "[S] Build/Deploy Web"
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
