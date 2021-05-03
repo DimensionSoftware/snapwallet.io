@@ -15,6 +15,7 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { configStore } from '../stores/ConfigStore'
+  import { userStore } from '../stores/UserStore'
 
   let isConfirmingQuote = false
   let autocomplete: google.maps.places.Autocomplete
@@ -208,7 +209,8 @@
       <Label label="Country" style="margin-right: 1rem;">
         <Input
           placeholder="Country"
-          defaultValue={$debitCardStore.address.country}
+          defaultValue={$debitCardStore.address.country ||
+            $userStore.geo?.country?.toUpperCase()}
         />
       </Label>
       <Label class="state" label="State">

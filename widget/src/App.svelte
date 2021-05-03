@@ -242,6 +242,7 @@
     }
 
     // pre-fetch user
+    userStore.fetchGeo()
     if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
       userStore.fetchUserProfile()
       paymentMethodStore.fetchWyrePaymentMethods()

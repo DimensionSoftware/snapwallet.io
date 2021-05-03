@@ -388,7 +388,10 @@
     on:close={() => (countrySelectorVisible = false)}
     on:select={e => {
       const { country } = e?.detail
-      country && debitCardStore.updateAddress({ country: country.code })
+      if (country) {
+        userStore.setPhoneNumberCountry(country)
+        debitCardStore.updateAddress({ country: country.code })
+      }
       countrySelectorVisible = false
     }}
   />

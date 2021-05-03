@@ -9,6 +9,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { Routes } from '../constants'
   import { debitCardStore } from '../stores/DebitCardStore'
+  import { userStore } from '../stores/UserStore'
   import { Masks } from '../types'
   import PhoneInput from '../components/inputs/PhoneInput.svelte'
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
@@ -111,7 +112,10 @@
     }}
     on:select={e => {
       const { country } = e?.detail
-      country && debitCardStore.update({ phoneNumberCountry: country })
+      if (country) {
+        userStore.setPhoneNumberCountry(country)
+        debitCardStore.update({ phoneNumberCountry: country })
+      }
       countrySelectorVisible = false
     }}
   />
