@@ -6,7 +6,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
-  import { Logger, onEnterPressed } from '../util'
+  import { focusFirstInput, Logger, onEnterPressed } from '../util'
   import { debitCardStore } from '../stores/DebitCardStore'
   import { onMount } from 'svelte'
   import { unMaskValue } from '../masks'
@@ -77,6 +77,7 @@
     }
     // wait for address api to load (since we're 'defer')
     waitForGoogle()
+    focusFirstInput()
   })
 
   function fillInAddress() {
