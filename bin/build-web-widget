@@ -1,0 +1,13 @@
+#!/bin/bash -xeu
+
+# programmable widget api
+pushd api/client
+npm i
+popd
+
+# sandbox "/widget" demo
+pushd widget
+npm i
+npm run build
+popd
+mv widget/dist web_dist/widget

@@ -1,0 +1,6 @@
+#!/bin/bash -xeu
+
+rm -rf web_dist
+mkdir -p web_dist
+
+bin/build-web-widget
