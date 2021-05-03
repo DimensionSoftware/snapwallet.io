@@ -86,7 +86,7 @@
     {#if !allPaymentMethods.length && isLoadingPaymentMethods}
       <p class="help">Retrieving Payment Methods...</p>
     {:else}
-      {#each allPaymentMethods as pm, i (pm.id)}
+      {#each allPaymentMethods as pm, i (i + pm.id)}
         <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * i }}>
           <IconCard
             label={pm.name}
