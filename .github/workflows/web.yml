@@ -19,7 +19,7 @@ jobs:
   deploy-development-web: 
     name: "[D] Build/Deploy Web"
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev'
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
@@ -29,12 +29,11 @@ jobs:
           BUILD_SCRIPT: bin/build-web
           API_BASE_URL: https://api.snapwallet.io
           WIDGET_URL: https://snapwallet.io/widget
-          # TODO: remove SnapWallet:debug ?
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
   deploy-sandbox-web: 
     name: "[S] Build/Deploy Web"
     runs-on: ubuntu-latest
-    #if: github.ref == 'refs/heads/dev'
+    if: github.ref == 'refs/heads/dev'
     steps:
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
@@ -58,4 +57,5 @@ jobs:
           BUILD_SCRIPT: bin/build-web
           API_BASE_URL: https://api.snapwallet.io
           WIDGET_URL: https://snapwallet.io/widget
+          # TODO: remove SnapWallet:debug ?
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
