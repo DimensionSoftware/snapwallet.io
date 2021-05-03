@@ -1,0 +1,5 @@
+#!/bin/bash -xeu
+
+bin/build-web
+
+cp robots-deny.txt web_dist/robots.txt

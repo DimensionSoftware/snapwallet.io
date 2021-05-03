@@ -27,7 +27,7 @@ jobs:
         with:
           GCP_PROJECT_ID: silken-phalanx-305703
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          BUILD_SCRIPT: bin/build-web
+          BUILD_SCRIPT: bin/build-development-web
           API_BASE_URL: https://dev-api.snapwallet.io
           WIDGET_URL: https://dev.snapwallet.io/widget
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
