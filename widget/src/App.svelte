@@ -45,6 +45,7 @@
   import DebitCard from './screens/DebitCard.svelte'
   import DebitCardAddress from './screens/DebitCardAddress.svelte'
   import DebitCard2fa from './screens/DebitCard2fa.svelte'
+  import { debitCardStore } from './stores/DebitCardStore'
 
   $: isPreLogout = false
   $: isBlurred = false
@@ -225,6 +226,13 @@
   // Set theme context so theme can be used in JS also
   setContext('theme', {
     ...$configStore.theme,
+  })
+
+  userStore.subscribe(state => {
+    // Set this once fetchGeo runs
+    if (!$debitCardStore.address?.country) {
+      debitCardStore.updateAddress({ country: state.geo?.country || '' })
+    }
   })
 
   onMount(() => {

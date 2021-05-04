@@ -73,7 +73,7 @@
   $: isCreatingTxnPreview = false
 
   $: country =
-    countries[$debitCardStore.address.country]?.name || $userStore.geo.country
+    countries[$debitCardStore.address.country]?.name
   $: countryFlag = country ? country[0] + country[1].toLowerCase() : ''
 
   const animateRandomPrice = () => {
