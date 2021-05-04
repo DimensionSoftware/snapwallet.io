@@ -374,6 +374,26 @@ func NewClient(config *Config) *Client {
 	}
 }
 
+// Convert a Wyre API error response to
+// a SnapWallet gRPC response.
+func GetErrorResponse(r *resty.Response) (err error) {
+	wyreError := r.Error().(*APIError)
+	if e := APIExceptionsMap[wyreError.ErrorCode]; e.Message != "" {
+		return status.Error(codes.Code(e.RPCCode), e.Message)
+	} else if e := APIExceptionsMap[wyreError.Type]; e.Message != "" {
+		return status.Error(codes.Code(e.RPCCode), e.Message)
+	} else {
+		e := APIExceptionsMap["unknown"]
+		var msg string
+		if wyreError.Message != "" {
+			msg = wyreError.Message
+		} else {
+			msg = e.Message
+		}
+		return status.Error(codes.Code(e.RPCCode), msg)
+	}
+}
+
 // GetPaymentMethod
 // https://docs.sendwyre.com/docs/get-payment-method
 // GET https://api.sendwyre.com/v2/paymentMethod/:paymentMethodId
