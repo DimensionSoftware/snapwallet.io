@@ -827,7 +827,7 @@ type APIError struct {
 	Message       string `json:"message"`
 }
 
-// APIError represents the error object sent back by the api
+// APIErrorResponse represents the outgoing gRPC error
 type APIErrorResponse struct {
 	RPCCode code.Code `json:"rpcCode"`
 	Message string    `json:"message"`
