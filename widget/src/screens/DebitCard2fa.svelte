@@ -15,10 +15,10 @@
   let cardCode = ''
   let smsCode = ''
   let submittingAuth = false
-  let verificationWaitTimeout = 40_000
 
   $: smsCodeRequired = false
   $: cardCodeRequired = false
+  $: isOneCodeRequired = Boolean(smsCodeRequired) || Boolean(cardCodeRequired)
 
   const handleNextStep = async () => {
     try {
@@ -67,29 +67,9 @@
     return t
   }
 
-  /**
-   * Wyre may never require auth codes
-   * but we have no way of knowing if they were sent
-   * so we wait for the timeout and then proceed
-   */
-  const authorizationDoneWaitingTimer = () => {
-    const t = setTimeout(() => {
-      // Only one of these may be required
-      if (!smsCodeRequired || !cardCodeRequired) {
-        return push(Routes.SUCCESS)
-      }
-      clearTimeout(t)
-    }, verificationWaitTimeout)
-    return t
-  }
-
   onMount(() => {
-    const authzTimer = authorizationDoneWaitingTimer()
     pollTimer = pollAuthorizations()
-    return () => {
-      clearInterval(pollTimer)
-      clearTimeout(authzTimer)
-    }
+    return () => clearInterval(pollTimer)
   })
 </script>
 
@@ -117,15 +97,13 @@
       </Label>
     {/if}
     <!-- TODO: add an animation or something-->
-    {#if !smsCodeRequired && !cardCodeRequired}
+    {#if !isOneCodeRequired}
       Authorizing card...
-      <br />
-      This can take up to 1 minute.
     {/if}
   </ModalBody>
   <ModalFooter>
     <Button
-      disabled={!cardCodeRequired && !smsCodeRequired}
+      disabled={!isOneCodeRequired}
       isLoading={submittingAuth}
       on:mousedown={handleNextStep}
       >{submittingAuth ? 'Buying...' : 'Buy Now'}</Button
