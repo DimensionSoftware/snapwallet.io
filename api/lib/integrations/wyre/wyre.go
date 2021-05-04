@@ -358,18 +358,27 @@ func ProvideWyreConfig() (*Config, error) {
 
 // NewClient instantiates a new Client
 func NewClient(config *Config) *Client {
-	resty := resty.New()
+	client := resty.New()
 
 	if config.EnableProduction {
 		log.Println("🚨 Production Wyre API is activated")
-		resty.SetHostURL(wyreProductionAPIEndpoint)
+		client.SetHostURL(wyreProductionAPIEndpoint)
 	} else {
 		log.Println("🧪 Test Wyre API is activated")
-		resty.SetHostURL(wyreTestAPIEndpoint)
+		client.SetHostURL(wyreTestAPIEndpoint)
 	}
 
+	client.OnAfterResponse(func(c *resty.Client, r *resty.Response) error {
+		if r.IsError() {
+			fmt.Println(r.Error())
+			return GetErrorResponse(r)
+		}
+		// Return for successful response
+		return nil
+	})
+
 	return &Client{
-		http:   resty,
+		http:   client,
 		config: *config,
 	}
 }
