@@ -90,6 +90,9 @@
   .relative {
     position: relative;
     height: 100%;
+    &:first-child {
+      margin-right: 3rem;
+    }
     > div {
       cursor: pointer;
     }
@@ -120,6 +123,7 @@
   }
   :global(button) {
     font-size: 1rem;
+    margin-right: 0.75rem !important;
   }
   .qr {
     cursor: pointer;

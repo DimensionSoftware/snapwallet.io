@@ -1,0 +1,9 @@
+#!/bin/bash -xeu
+
+rm -rf web_dist
+mkdir -p web_dist
+
+bin/build-web-widget
+
+# no modifications needed
+cp firebase.json firebase.deploy.json

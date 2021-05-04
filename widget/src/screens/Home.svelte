@@ -1,5 +1,6 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
+  import * as Flags from 'svelte-flagicon'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -70,6 +71,10 @@
 
   $: fakePrice = 1_000
   $: isCreatingTxnPreview = false
+
+  $: country =
+    countries[$debitCardStore.address.country]?.name || $userStore.geo.country
+  $: countryFlag = country ? country[0] + country[1].toLowerCase() : ''
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
@@ -325,19 +330,27 @@
         {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
           <VStep
             disabled
+            title="Select Payment Country"
             onClick={() => {
               countrySelectorVisible = true
             }}
             success={Boolean($debitCardStore.address.country)}
           >
             <span slot="icon">
-              <FaIcon
-                data={$debitCardStore.address.country ? faCheck : faGlobe}
-              />
+              {#if false}
+                <!-- TODO improve flag ui -->
+                <span class="flag">
+                  <svelte:component this={Flags[countryFlag]} />
+                </span>
+              {:else}
+                <FaIcon
+                  data={$debitCardStore.address.country ? faCheck : faGlobe}
+                />
+              {/if}
             </span>
-            <b slot="step"
-              >{countries[$debitCardStore.address.country]?.name ||
-                'Select Location'}</b
+            <b slot="step">
+              {`${country}`}
+              &nbsp;<small>( change )</small></b
             >
           </VStep>
         {/if}
@@ -388,7 +401,10 @@
     on:close={() => (countrySelectorVisible = false)}
     on:select={e => {
       const { country } = e?.detail
-      country && debitCardStore.updateAddress({ country: country.code })
+      if (country) {
+        userStore.setPhoneNumberCountry(country)
+        debitCardStore.updateAddress({ country: country.code })
+      }
       countrySelectorVisible = false
     }}
   />
@@ -424,6 +440,11 @@
     margin-top: 2rem;
     list-style: none;
     padding: 0;
+    :global(.flag > svg) {
+      position: absolute;
+      left: -12px;
+      z-index: 1;
+    }
   }
 
   .description {

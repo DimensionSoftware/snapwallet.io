@@ -6,7 +6,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
-  import { Logger, onEnterPressed } from '../util'
+  import { focusFirstInput, Logger, onEnterPressed } from '../util'
   import { debitCardStore } from '../stores/DebitCardStore'
   import { onMount } from 'svelte'
   import { unMaskValue } from '../masks'
@@ -15,6 +15,7 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { configStore } from '../stores/ConfigStore'
+  import { userStore } from '../stores/UserStore'
 
   let isConfirmingQuote = false
   let autocomplete: google.maps.places.Autocomplete
@@ -77,6 +78,7 @@
     }
     // wait for address api to load (since we're 'defer')
     waitForGoogle()
+    focusFirstInput()
   })
 
   function fillInAddress() {
@@ -207,7 +209,8 @@
       <Label label="Country" style="margin-right: 1rem;">
         <Input
           placeholder="Country"
-          defaultValue={$debitCardStore.address.country}
+          defaultValue={$debitCardStore.address.country ||
+            $userStore.geo?.country?.toUpperCase()}
         />
       </Label>
       <Label class="state" label="State">

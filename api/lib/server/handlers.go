@@ -17,6 +17,7 @@ import (
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
@@ -194,6 +195,15 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}
 	if passcode == nil {
 		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(loginKind))
+
+		// @chris; i figured out how to add structured details to grpc errors; details can be any proto message:
+		//
+		// status, err := status.New(codes.Unauthenticated, genMsgUnauthenticatedOTP(loginKind)).WithDetails(&proto.Address{})
+		// if err != nil {
+		// 	return nil, err
+		// }
+
+		// return nil, status.Err()
 	}
 
 	u, err := s.Db.GetOrCreateUser(ctx, loginKind, loginValue)
@@ -1753,5 +1763,18 @@ func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *pro
 
 	return &proto.WyreSubmitDebitCardOrderAuthorizationsResponse{
 		Success: res.Success,
+	}, nil
+}
+
+func (s *Server) Geo(ctx context.Context, _ *emptypb.Empty) (*proto.GeoResponse, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	vals := md.Get("cf-ipcountry")
+	val := ""
+	if len(vals) > 0 {
+		val = vals[0]
+	}
+	log.Printf("%#v\n", md)
+	return &proto.GeoResponse{
+		Country: val,
 	}, nil
 }

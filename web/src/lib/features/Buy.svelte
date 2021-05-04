@@ -84,7 +84,7 @@
 
   .relative {
     position: relative;
-    padding: 0 1rem;
+    padding: 0 0 0 5rem;
     height: 100%;
     > div {
       cursor: pointer;

@@ -13,7 +13,7 @@
 </script>
 
 <div
-  on:mousedown={() => {
+  on:click={() => {
     const { destinationCurrency, sourceCurrency } = $transactionStore
     if ($transactionStore.intent === TransactionIntents.BUY) {
       transactionStore.setCurrencies({

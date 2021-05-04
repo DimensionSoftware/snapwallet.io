@@ -109,9 +109,12 @@
     line-height: 1.75rem;
     padding: 0;
     margin: -0.25rem 0 1.5rem;
+    align-self: flex-start;
   }
   video {
     cursor: pointer;
+    align-self: flex-start;
+    margin-right: 2rem;
     min-height: 400px;
     min-width: 400px;
     max-width: 50%;

@@ -35,6 +35,7 @@ type UserStoreState = {
   phoneNumberCountry: ICountry
   lastKnownRoute: Routes
   flags: ViewerFlags
+  geo: { country: string }
   address: {
     street1: string
     street2: string
@@ -73,6 +74,7 @@ function createStore() {
       // when auth kicks in.
       lastKnownRoute: Routes.ROOT,
       flags: {} as ViewerFlags,
+      geo: {},
       address: { ...initialAddress },
       isLoggedIn: false,
       virtual: {
@@ -178,6 +180,11 @@ function createStore() {
         hasPhone: Boolean(user.phone),
       }
       update(s => ({ ...s, flags }))
+    },
+    fetchGeo: async () => {
+      const geo = await window.API.fluxGeo()
+      // fetch and cache
+      update(s => ({ ...s, geo }))
     },
     setFullAddress: (address: any) => {
       update(s => ({
