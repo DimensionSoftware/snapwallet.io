@@ -224,6 +224,10 @@
   }
 
   onMount(() => {
+    // Make sure screens do not read previous data
+    // for other types of future transfers
+    debitCardStore.clear()
+    transactionStore.reset()
     resizeWidget(525, $configStore.appName)
     getInitialPrices()
     getNextPath()

@@ -28,10 +28,6 @@
 
   const done = () => {
     ParentMessenger.exit()
-    // Make sure screens do not read this data
-    // for other types of future transfers
-    debitCardStore.clear()
-    transactionStore.reset()
     // if within a model, let that close first
     setTimeout(() => push(Routes.ROOT), 250)
   }
