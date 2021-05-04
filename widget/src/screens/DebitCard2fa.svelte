@@ -17,10 +17,7 @@
   $: smsCodeRequired = false
   $: cardCodeRequired = false
   let submittingAuth = false
-  // Wyre may never require auth codes
-  // but we have no way of knowing if they were sent
-  // so we wait for the timeout and then proceed
-  let verificationWaitTimeout = 10_000
+  let verificationWaitTimeout = 40_000
 
   const handleNextStep = async () => {
     try {
@@ -37,6 +34,10 @@
     }
   }
 
+  /**
+   * Fetch Wyre debit card authorization codes
+   * Both SMS and Card (micro deposit) codes may be required.
+   */
   const fetchAuthorizations = async () => {
     const {
       card2faNeeded,
@@ -48,6 +49,11 @@
     cardCodeRequired = card2faNeeded
   }
 
+  /**
+   * Fetch authorizations regularly
+   * until either the overall authz timeout
+   * is met or codes are required.
+   */
   const pollAuthorizations = () => {
     const t = setInterval(() => {
       // Only one of these may be required
@@ -60,6 +66,11 @@
     return t
   }
 
+  /**
+   * Wyre may never require auth codes
+   * but we have no way of knowing if they were sent
+   * so we wait for the timeout and then proceed
+   */
   const authorizationDoneWaitingTimer = () => {
     const t = setTimeout(() => {
       // Only one of these may be required
