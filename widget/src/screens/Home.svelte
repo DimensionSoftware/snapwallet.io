@@ -352,9 +352,13 @@
               {/if}
             </span>
             <b slot="step">
-              {`${country.name}`}
-              &nbsp;<small>( change )</small></b
-            >
+              {#if country}
+                {`${country.name}`}
+                &nbsp;<small>( change )</small>
+              {:else}
+                Select Payment Country
+              {/if}
+            </b>
           </VStep>
         {/if}
       </ul>
