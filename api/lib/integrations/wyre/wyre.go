@@ -798,6 +798,12 @@ type APIError struct {
 	Message       string `json:"message"`
 }
 
+// APIError represents the error object sent back by the api
+type APIErrorResponse struct {
+	RPCCode code.Code `json:"rpcCode"`
+	Message string    `json:"message"`
+}
+
 func (err APIError) Error() string {
 	return fmt.Sprintf("%#v", err)
 }
