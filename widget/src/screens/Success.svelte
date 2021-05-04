@@ -10,6 +10,7 @@
   import { TransactionIntents, TransactionMediums } from '../types'
   import { ParentMessenger } from '../util/parent_messenger'
   import { configStore } from '../stores/ConfigStore'
+  import { debitCardStore } from '../stores/DebitCardStore'
 
   let isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
 
@@ -27,6 +28,10 @@
 
   const done = () => {
     ParentMessenger.exit()
+    // Make sure screens do not read this data
+    // for other types of future transfers
+    debitCardStore.clear()
+    transactionStore.reset()
     // if within a model, let that close first
     setTimeout(() => push(Routes.ROOT), 250)
   }

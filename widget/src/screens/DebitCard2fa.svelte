@@ -29,9 +29,6 @@
         sms2faCode: smsCode,
         card2faCode: cardCode,
       })
-      // Make sure screens do not read this data
-      // for other types of future transfers
-      debitCardStore.clear()
       push(Routes.SUCCESS)
     } finally {
       submittingAuth = false
