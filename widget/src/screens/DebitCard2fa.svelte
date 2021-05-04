@@ -14,10 +14,11 @@
   let pollTimer
   let cardCode = ''
   let smsCode = ''
-  $: smsCodeRequired = false
-  $: cardCodeRequired = false
   let submittingAuth = false
   let verificationWaitTimeout = 40_000
+
+  $: smsCodeRequired = false
+  $: cardCodeRequired = false
 
   const handleNextStep = async () => {
     try {
