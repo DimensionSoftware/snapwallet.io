@@ -836,7 +836,7 @@ type APIErrorResponse struct {
 // TODO: find a place for this massive map
 // Used for dynamically accessing Wyre's API error responses
 var APIExceptionsMap = map[string]APIErrorResponse{
-	"unknown": {code.Code_UNKNOWN, "An unknown expection has occurred. Please try again later."},
+	"unknown": {code.Code_UNKNOWN, "An unknown exception has occurred. Please try again later."},
 	"accessDenied.invalidSession": {
 		code.Code_UNKNOWN,
 		"Wyre has reported an authorization error.",
