@@ -1087,10 +1087,6 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 		return nil, err
 	}
 
-	if resp.IsError() {
-		return nil, resp.Error().(*APIError)
-	}
-
 	return resp.Result().(*CreateWalletOrderReservationResponse), nil
 }
 
@@ -1121,10 +1117,6 @@ func (c Client) GetWalletOrderReservation(req GetWalletOrderReservationRequest) 
 
 	if err != nil {
 		return nil, err
-	}
-
-	if resp.IsError() {
-		return nil, resp.Error().(*APIError)
 	}
 
 	return resp.Result().(*WalletOrderReservation), nil
@@ -1166,10 +1158,6 @@ func (c Client) CreateWalletOrder(req CreateWalletOrderRequest) (*WalletOrder, e
 		return nil, err
 	}
 
-	if resp.IsError() {
-		return nil, resp.Error().(*APIError)
-	}
-
 	return resp.Result().(*WalletOrder), nil
 }
 
@@ -1199,10 +1187,6 @@ func (c Client) GetWalletOrderAuthorizations(req GetWalletOrderAuthorizationsReq
 
 	if err != nil {
 		return nil, err
-	}
-
-	if resp.IsError() {
-		return nil, resp.Error().(*APIError)
 	}
 
 	return resp.Result().(*WalletOrderAuthorizations), nil
@@ -1241,10 +1225,6 @@ func (c Client) SubmitWalletOrderAuthorizations(req SubmitWalletOrderAuthorizati
 
 	if err != nil {
 		return nil, err
-	}
-
-	if resp.IsError() {
-		return nil, resp.Error().(*APIError)
 	}
 
 	return resp.Result().(*WalletOrderAuthorizationsSubmissionStatus), nil
