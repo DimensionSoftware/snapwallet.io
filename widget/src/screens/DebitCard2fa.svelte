@@ -52,8 +52,7 @@
 
   /**
    * Fetch authorizations regularly
-   * until either the overall authz timeout
-   * is met or codes are required.
+   * until codes are required.
    */
   const pollAuthorizations = () => {
     const t = setInterval(() => {
