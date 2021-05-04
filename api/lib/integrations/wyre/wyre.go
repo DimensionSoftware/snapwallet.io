@@ -804,6 +804,198 @@ type APIErrorResponse struct {
 	Message string    `json:"message"`
 }
 
+// TODO: find a place for this massive map
+// Used for dynamically accessing Wyre's API error responses
+var APIExceptionsMap = map[string]APIErrorResponse{
+	"thing":   {code.Code_ABORTED, "Something"},
+	"unknown": {code.Code_UNKNOWN, "An unknown expection has occurred. Please try again later."},
+	"accessDenied.invalidSession": {
+		code.Code_UNKNOWN,
+		"Wyre has reported an authorization error.",
+	},
+	"AccessDeniedException": {
+		code.Code_UNKNOWN,
+		"Your Wyre account is not authenticated.",
+	},
+	"InsufficientFundsException": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"The Wyre payment method has insufficient funds for this transaction.",
+	},
+	"ValidationException": {
+		code.Code_INVALID_ARGUMENT,
+		"Wyre was not able to understand the request.",
+	},
+	"TransferException": {
+		code.Code_UNKNOWN,
+		"An unknown Wyre transfer exception has occurred.",
+	},
+	"MFARequiredException": {
+		code.Code_FAILED_PRECONDITION,
+		"Wyre Two factor authentication is required.",
+	},
+	"CustomerSupportException": {
+		code.Code_INTERNAL,
+		"Please contact support in order to resolve this issue.",
+	},
+	"NotFoundException": {
+		code.Code_NOT_FOUND,
+		"The Wyre resource was not able to be located.",
+	},
+	"RateLimitException": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"The Wyre request rate limit for this user has been met or exceeded.",
+	},
+	// The user account is locked out
+	"AccountLockedException": {
+		code.Code_FAILED_PRECONDITION,
+		"Your Wyre account has been locked. Please contact Wyre support directly to unlock your account.",
+	},
+	// The partner account is locked out
+	"LockoutException": {
+		code.Code_INTERNAL,
+		"A Wyre account lockout has occurred. Please contact support immediately.",
+	},
+	"UnknownException": {
+		code.Code_UNKNOWN,
+		"Wyre has experienced an unknown error while processing the request.",
+	},
+	// Check payment method ID when this occurs
+	"JsonFormatException": {
+		code.Code_INTERNAL,
+		"The request was not understood by Wyre. Please contact support.",
+	},
+	"PlaidApiException": {
+		code.Code_INTERNAL,
+		"A Plaid error was received by Wyre. Please contact support.",
+	},
+	"AccoutHasNotBeenApprovedToTransactException": {
+		code.Code_FAILED_PRECONDITION,
+		"Your Wyre account has not been approved to transact yet.",
+	},
+	"SnapXException": {
+		code.Code_INTERNAL,
+		"An unexpected Wyre error occurred. Please contact support",
+	},
+	"UserFacingException": {
+		code.Code_UNKNOWN,
+		// NOTE: This is resolvable by the user.
+		// Override with Wyre user facing message when possible.
+		"A Wyre exception has occurred which requires your attention.",
+	},
+	"MustValidateEmailAndPhoneException": {
+		code.Code_FAILED_PRECONDITION,
+		"Your phone number and email address must be verified by Wyre before transacting.",
+	},
+	"TransferLimitExceededException": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"This trade has exceeded your Wyre limit.",
+	},
+	"validation.snapx.exceedTransferLimits": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"This trade has exceeded Wyre's transfer limit.",
+	},
+	"OrderTooLargeException": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"The order is too large for current market conditions.",
+	},
+	"validation.orderAuthorizationDetailsNotAvailable": {
+		code.Code_NOT_FOUND,
+		"The requested resource could not be located. Please contact support.",
+	},
+	"validation.snapx.paymentMethodNotActive": {
+		code.Code_FAILED_PRECONDITION,
+		"The selected payment method is not currently active.",
+	},
+	"validation.invalidCode": {
+		code.Code_INVALID_ARGUMENT,
+		"The provided security code is not valid.",
+	},
+	"validation.authorizationMaxAttempts": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"Too many invalid verification code attempts have been made.",
+	},
+	"validation.authorizationCodeExpired": {
+		code.Code_DEADLINE_EXCEEDED,
+		"The provided security code has expired.",
+	},
+	"validation.authorizationCodeMismatch": {
+		code.Code_INVALID_ARGUMENT,
+		"The provided security code does not match.",
+	},
+	"validation.authorizationAlreadyValidated": {
+		code.Code_INVALID_ARGUMENT,
+		"The provided security code has already been used",
+	},
+	"illegalReservation": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"This quote has either already been confirmed or has expired.",
+	},
+	"validation.cardExpirationYear": {
+		code.Code_INVALID_ARGUMENT,
+		"Please provide a valid 4 digit year.",
+	},
+	"validation.invalidDebitCardNumber": {
+		code.Code_INVALID_ARGUMENT,
+		"Please provide a valid card number.",
+	},
+	"limits.dailyLimitReached": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"Your daily limit has been met or exceeded. Please try again in 24 hours.",
+	},
+	"limits.weeklyLimitReached": {
+		code.Code_RESOURCE_EXHAUSTED,
+		"Your weekly limit has been met or exceeded. Please try again next week.",
+	},
+	"validation.invalidPhoneNumber": {
+		code.Code_INVALID_ARGUMENT,
+		"Please provide a valid mobile number issued within your card's address country.",
+	},
+	"validation.avs": {
+		code.Code_INVALID_ARGUMENT,
+		"Wyre has reported that they are unable to use this card. Please contact support.",
+	},
+	"validation.invalidValue": {
+		code.Code_INVALID_ARGUMENT,
+		"Wyre has reported one or more of the transaction details as invalid.",
+	},
+	"validation.invalidValueForField": {
+		code.Code_INVALID_ARGUMENT,
+		"The institution has reported one or more of the transaction details as invalid.",
+	},
+	"validation.invalidOrderStatus": {
+		code.Code_INVALID_ARGUMENT,
+		"The order status is not valid. Please start your order over.",
+	},
+	"validation.stateNotSupported": {
+		code.Code_INVALID_ARGUMENT,
+		"The U.S. state provided is not supported for this trade.",
+	},
+	"validation.unsupportedCardType.prepaid": {
+		code.Code_INVALID_ARGUMENT,
+		"Prepaid cards are not supported. Please try using a different card.",
+	},
+	"validation.addressState": {
+		code.Code_INVALID_ARGUMENT,
+		"The address state provided is not valid.",
+	},
+	"validation.snapx.transactionAmountTooSmall": {
+		code.Code_INVALID_ARGUMENT,
+		"The minimum amount entered for this transaction is too low.",
+	},
+	"SnapXTransactionAmountTooSmallException": {
+		code.Code_INVALID_ARGUMENT,
+		"The minimum amount entered for this transaction is too low.",
+	},
+	"validation.paymentMethod.inactive": {
+		code.Code_FAILED_PRECONDITION,
+		"The payment method provided is not currently active.",
+	},
+	"validation.snapx.min": {
+		code.Code_INVALID_ARGUMENT,
+		"The minimum amount entered for this transaction is too low.",
+	},
+}
+
 func (err APIError) Error() string {
 	return fmt.Sprintf("%#v", err)
 }
