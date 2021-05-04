@@ -14,17 +14,27 @@
   let pollTimer
   let cardCode = ''
   let smsCode = ''
-  let smsCodeRequired = false
-  let cardCodeRequired = false
+  $: smsCodeRequired = false
+  $: cardCodeRequired = false
+  let submittingAuth = false
+  // Wyre may never require auth codes
+  // but we have no way of knowing if they were sent
+  // so we wait for the timeout and then proceed
+  let verificationWaitTimeout = 10_000
 
   const handleNextStep = async () => {
-    await window.API.fluxWyreSubmitDebitCardAuthorizations({
-      reservationId: $debitCardStore.reservationId,
-      orderId: $debitCardStore.orderId,
-      sms2faCode: smsCode,
-      card2faCode: cardCode,
-    })
-    push(Routes.SUCCESS)
+    try {
+      submittingAuth = true
+      await window.API.fluxWyreSubmitDebitCardAuthorizations({
+        reservationId: $debitCardStore.reservationId,
+        orderId: $debitCardStore.orderId,
+        sms2faCode: smsCode,
+        card2faCode: cardCode,
+      })
+      push(Routes.SUCCESS)
+    } finally {
+      submittingAuth = false
+    }
   }
 
   const fetchAuthorizations = async () => {
@@ -39,12 +49,35 @@
   }
 
   const pollAuthorizations = () => {
-    return setInterval(fetchAuthorizations, 4000)
+    const t = setInterval(() => {
+      // Only one of these may be required
+      if (!smsCodeRequired || !cardCodeRequired) {
+        fetchAuthorizations()
+      } else {
+        clearInterval(t)
+      }
+    }, 4000)
+    return t
+  }
+
+  const authorizationDoneWaitingTimer = () => {
+    const t = setTimeout(() => {
+      // Only one of these may be required
+      if (!smsCodeRequired || !cardCodeRequired) {
+        return push(Routes.SUCCESS)
+      }
+      clearTimeout(t)
+    }, verificationWaitTimeout)
+    return t
   }
 
   onMount(() => {
+    const authzTimer = authorizationDoneWaitingTimer()
     pollTimer = pollAuthorizations()
-    return () => clearInterval(pollTimer)
+    return () => {
+      clearInterval(pollTimer)
+      clearTimeout(authzTimer)
+    }
   })
 </script>
 
@@ -60,7 +93,8 @@
           on:change={e => (smsCode = e?.detail)}
         />
       </Label>
-    {:else if cardCodeRequired}
+    {/if}
+    {#if cardCodeRequired}
       <Label label="Card Code">
         <Input
           id="autocomplete"
@@ -69,12 +103,21 @@
           on:change={e => (cardCode = e?.detail)}
         />
       </Label>
-    {:else}
-      Retrieving authorizations...
+    {/if}
+    <!-- TODO: add an animation or something-->
+    {#if !smsCodeRequired && !cardCodeRequired}
+      Authorizing card...
+      <br />
+      This can take up to 1 minute.
     {/if}
   </ModalBody>
   <ModalFooter>
-    <Button on:mousedown={handleNextStep}>Continue</Button>
+    <Button
+      disabled={!cardCodeRequired && !smsCodeRequired}
+      isLoading={submittingAuth}
+      on:mousedown={handleNextStep}
+      >{submittingAuth ? 'Buying...' : 'Buy Now'}</Button
+    >
   </ModalFooter>
 </ModalContent>
 
