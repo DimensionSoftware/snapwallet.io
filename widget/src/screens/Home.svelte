@@ -72,9 +72,10 @@
   $: fakePrice = 1_000
   $: isCreatingTxnPreview = false
 
-  $: country =
-    countries[$debitCardStore.address.country]?.name
-  $: countryFlag = country ? country[0] + country[1].toLowerCase() : ''
+  $: country = countries[$debitCardStore.address.country]
+  $: countryFlag = country
+    ? country.code[0] + country.code[1].toLowerCase()
+    : ''
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
@@ -334,11 +335,9 @@
             onClick={() => {
               countrySelectorVisible = true
             }}
-            success={Boolean($debitCardStore.address.country)}
           >
             <span slot="icon">
-              {#if false}
-                <!-- TODO improve flag ui -->
+              {#if WYRE_SUPPORTED_COUNTRIES.includes(country?.code?.toUpperCase())}
                 <span class="flag">
                   <svelte:component this={Flags[countryFlag]} />
                 </span>
@@ -349,7 +348,7 @@
               {/if}
             </span>
             <b slot="step">
-              {`${country}`}
+              {`${country.name}`}
               &nbsp;<small>( change )</small></b
             >
           </VStep>
