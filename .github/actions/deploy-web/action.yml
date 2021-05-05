@@ -25,6 +25,8 @@ runs:
     - name: Deploy Web Tree
       shell: bash
       run: |
+        node -v
+        npm -v
         ${{ inputs.BUILD_SCRIPT }}
 
         pushd /tmp
