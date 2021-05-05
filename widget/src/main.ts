@@ -13,7 +13,7 @@ window.AUTH_MANAGER.watch()
 window.API = genAPIClient(window.AUTH_MANAGER)
 
 // Pusher
-// woogly boogly....
+// woogly boogly.... woodey woo
 PusherUtil.setup()
 
 // Handle user
