@@ -8,6 +8,7 @@ runs:
   using: composite
   steps:
     # https://github.com/nodejs/help/wiki/Installation
+    # https://docs.github.com/en/actions/reference/workflow-commands-for-github-actions#adding-a-system-path
     - name: Install NodeJS
       shell: bash
       run: |
@@ -16,4 +17,5 @@ runs:
         popd
 
         sudo tar -xJf /tmp/node-v${{ inputs.NODE_VERSION }}-linux-x64.tar.xz -C /usr/local/lib
-        echo 'export PATH=/usr/local/lib/node-v${{ inputs.NODE_VERSION }}-linux-x64/bin:$PATH' >> ~/.profile
+        echo 'export PATH= >> ~/.profile
+        echo '/usr/local/lib/node-v${{ inputs.NODE_VERSION }}-linux-x64/bin' >> $GITHUB_PATH
