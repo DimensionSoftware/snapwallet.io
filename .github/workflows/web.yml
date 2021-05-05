@@ -60,11 +60,6 @@ jobs:
       - uses: ./.github/actions/install-nodejs
         with:
           NODE_VERSION: 16.1.0
-      - run: |
-          set -x
-          cat ~/.profile
-          cat ~/.bash_profile
-          echo $PATH
       - uses: ./.github/actions/deploy-web
         with:
           GCP_PROJECT_ID: ds-snap-production
