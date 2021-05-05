@@ -11,6 +11,8 @@ runs:
     - name: Install NodeJS
       shell: bash
       run: |
+        ls -lha ~
+
         pushd /tmp
         curl -O https://nodejs.org/dist/v${{ inputs.NODE_VERSION }}/node-v${{ inputs.NODE_VERSION }}-linux-x64.tar.xz
         popd
