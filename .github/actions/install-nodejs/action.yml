@@ -1,0 +1,15 @@
+name: InstallNodeJS
+description: Install NodeJS
+inputs:
+  NODE_VERSION:
+    description: nodejs version to install
+    required: true
+runs:
+  using: composite
+  steps:
+    # https://github.com/nodejs/help/wiki/Installation
+    - name: Install NodeJS
+      shell: bash
+      run: |
+        tar -xJvf node-v${{ inputs.NODE_VERSION }}-linux-x64.tar.xz -C /usr/local/lib
+        echo 'export PATH=/usr/local/lib/node-v${{ inputs.NODE_VERSION }}-linux-x64/bin:$PATH' > ~/.profile

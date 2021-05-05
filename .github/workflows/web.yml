@@ -22,6 +22,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
     steps:
+      - uses: ./.github/actions/install-nodejs
+        with:
+          NODE_VERSION: 16.1.0
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
         with:
@@ -36,6 +39,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
+      - uses: ./.github/actions/install-nodejs
+        with:
+          NODE_VERSION: 16.1.0
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
         with:
@@ -50,6 +56,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
+      - uses: ./.github/actions/install-nodejs
+        with:
+          NODE_VERSION: 16.1.0
       - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
         with:
