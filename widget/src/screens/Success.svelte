@@ -10,6 +10,7 @@
   import { TransactionIntents, TransactionMediums } from '../types'
   import { ParentMessenger } from '../util/parent_messenger'
   import { configStore } from '../stores/ConfigStore'
+  import { debitCardStore } from '../stores/DebitCardStore'
 
   let isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
 

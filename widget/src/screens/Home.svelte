@@ -86,6 +86,36 @@
     })
   }
 
+  const processDebitTransaction = async (isLoggedIn: boolean) => {
+    if (!isLoggedIn) push(Routes.SEND_OTP)
+    try {
+      isCreatingTxnPreview = true
+      const dest = // TODO: move srn prefix to server
+        $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
+          ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
+          : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU'
+      const {
+        reservationId,
+        quote,
+      } = await window.API.fluxWyreCreateDebitCardQuote({
+        dest,
+        sourceCurrency: $transactionStore.sourceCurrency.ticker,
+        lockFields: ['sourceAmount'],
+        amountIncludesFees: false,
+        country: $debitCardStore.address.country,
+        sourceAmount: $transactionStore.sourceAmount,
+
+        destCurrency: $transactionStore.destinationCurrency?.ticker,
+      })
+
+      debitCardStore.update({ reservationId, dest })
+      transactionStore.setWyrePreview(quote)
+      return push(Routes.CHECKOUT_OVERVIEW)
+    } finally {
+      isCreatingTxnPreview = false
+    }
+  }
+
   const handleNextStep = async () => {
     const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore
 
@@ -103,34 +133,7 @@
     }
 
     if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {
-      if (!isLoggedIn) push(Routes.SEND_OTP)
-      try {
-        isCreatingTxnPreview = true
-        const dest = // TODO: move srn prefix to server
-          $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
-            ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
-            : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU'
-        const {
-          reservationId,
-          quote,
-        } = await window.API.fluxWyreCreateDebitCardQuote({
-          dest,
-          sourceCurrency: $transactionStore.sourceCurrency.ticker,
-          lockFields: ['sourceAmount'],
-          amountIncludesFees: false,
-          country: $debitCardStore.address.country,
-          sourceAmount: $transactionStore.sourceAmount,
-
-          destCurrency: $transactionStore.destinationCurrency?.ticker,
-        })
-
-        debitCardStore.update({ reservationId, dest })
-        transactionStore.setWyrePreview(quote)
-        return push(Routes.CHECKOUT_OVERVIEW)
-      } finally {
-        isCreatingTxnPreview = false
-        return
-      }
+      return await processDebitTransaction(isLoggedIn)
     }
 
     getNextPath()
@@ -224,6 +227,10 @@
   }
 
   onMount(() => {
+    // Make sure screens do not read previous data
+    // for other types of future transfers
+    debitCardStore.clear()
+    transactionStore.reset()
     resizeWidget(525, $configStore.appName)
     getInitialPrices()
     getNextPath()
@@ -348,9 +355,13 @@
               {/if}
             </span>
             <b slot="step">
-              {`${country.name}`}
-              &nbsp;<small>( change )</small></b
-            >
+              {#if country}
+                {`${country.name}`}
+                &nbsp;<small>( change )</small>
+              {:else}
+                Select Payment Country
+              {/if}
+            </b>
           </VStep>
         {/if}
       </ul>

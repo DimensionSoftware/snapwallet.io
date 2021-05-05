@@ -14,19 +14,31 @@
   let pollTimer
   let cardCode = ''
   let smsCode = ''
-  let smsCodeRequired = false
-  let cardCodeRequired = false
+  let submittingAuth = false
+
+  $: smsCodeRequired = false
+  $: cardCodeRequired = false
+  $: isOneCodeRequired = Boolean(smsCodeRequired) || Boolean(cardCodeRequired)
 
   const handleNextStep = async () => {
-    await window.API.fluxWyreSubmitDebitCardAuthorizations({
-      reservationId: $debitCardStore.reservationId,
-      orderId: $debitCardStore.orderId,
-      sms2faCode: smsCode,
-      card2faCode: cardCode,
-    })
-    push(Routes.SUCCESS)
+    try {
+      submittingAuth = true
+      await window.API.fluxWyreSubmitDebitCardAuthorizations({
+        reservationId: $debitCardStore.reservationId,
+        orderId: $debitCardStore.orderId,
+        sms2faCode: smsCode,
+        card2faCode: cardCode,
+      })
+      push(Routes.SUCCESS)
+    } finally {
+      submittingAuth = false
+    }
   }
 
+  /**
+   * Fetch Wyre debit card authorization codes
+   * Both SMS and Card (micro deposit) codes may be required.
+   */
   const fetchAuthorizations = async () => {
     const {
       card2faNeeded,
@@ -38,8 +50,20 @@
     cardCodeRequired = card2faNeeded
   }
 
+  /**
+   * Fetch authorizations regularly
+   * until codes are required.
+   */
   const pollAuthorizations = () => {
-    return setInterval(fetchAuthorizations, 4000)
+    const t = setInterval(() => {
+      // Only one of these may be required
+      if (!smsCodeRequired || !cardCodeRequired) {
+        fetchAuthorizations()
+      } else {
+        clearInterval(t)
+      }
+    }, 4000)
+    return t
   }
 
   onMount(() => {
@@ -60,7 +84,8 @@
           on:change={e => (smsCode = e?.detail)}
         />
       </Label>
-    {:else if cardCodeRequired}
+    {/if}
+    {#if cardCodeRequired}
       <Label label="Card Code">
         <Input
           id="autocomplete"
@@ -69,12 +94,19 @@
           on:change={e => (cardCode = e?.detail)}
         />
       </Label>
-    {:else}
-      Retrieving authorizations...
+    {/if}
+    <!-- TODO: add an animation or something-->
+    {#if !isOneCodeRequired}
+      Authorizing card...
     {/if}
   </ModalBody>
   <ModalFooter>
-    <Button on:mousedown={handleNextStep}>Continue</Button>
+    <Button
+      disabled={!isOneCodeRequired}
+      isLoading={submittingAuth}
+      on:mousedown={handleNextStep}
+      >{submittingAuth ? 'Buying...' : 'Buy Now'}</Button
+    >
   </ModalFooter>
 </ModalContent>
 

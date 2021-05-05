@@ -71,7 +71,6 @@
         return push(Routes.CHECKOUT_OVERVIEW)
       } finally {
         isPreviewing = false
-        return
       }
     }
 
