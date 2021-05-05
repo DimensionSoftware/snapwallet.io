@@ -11,5 +11,6 @@ runs:
     - name: Install NodeJS
       shell: bash
       run: |
+        curl -O https://nodejs.org/dist/v${{ inputs.NODE_VERSION }}/node-v${{ inputs.NODE_VERSION }}-linux-x64.tar.xz
         tar -xJvf node-v${{ inputs.NODE_VERSION }}-linux-x64.tar.xz -C /usr/local/lib
         echo 'export PATH=/usr/local/lib/node-v${{ inputs.NODE_VERSION }}-linux-x64/bin:$PATH' > ~/.profile
