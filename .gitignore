@@ -112,3 +112,5 @@ dist
 /web_dist/
 /.firebase/
 /firebase.deploy.json
+
+.svelte-kit/
