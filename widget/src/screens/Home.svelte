@@ -334,6 +334,8 @@
         {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
           <VStep
             disabled
+            custom
+            success={!!country}
             title="Select Payment Country"
             onClick={() => {
               countrySelectorVisible = true
