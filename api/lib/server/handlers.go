@@ -1476,21 +1476,21 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 		})
 	}
 
+	swc := gotoconfig.SnapWidgetConfig{
+		AppName: req.AppName,
+		Wallets: wallets,
+		Intent:  req.Intent,
+		Focus:   req.Focus,
+		Theme:   req.Theme,
+	}
+
 	g := gotoconfig.Config{
 		ID:      gotoconfig.ID(id),
 		ShortID: gotoconfig.ShortID(shortID),
-		Config: gotoconfig.SnapWidgetConfig{
-			AppName: req.AppName,
-			Wallets: wallets,
-			Intent:  req.Intent,
-			Focus:   req.Focus,
-			Theme:   req.Theme,
-		},
+		Config:  &swc,
 	}
 
 	if req.Product != nil {
-		swc := g.Config.(gotoconfig.SnapWidgetConfig)
-
 		swc.Product = &gotoconfig.SnapWidgetProduct{
 			ImageURL:           req.Product.Image_URL,
 			VideoURL:           req.Product.Video_URL,
