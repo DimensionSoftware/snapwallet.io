@@ -11,6 +11,7 @@
   import { ParentMessenger } from '../util/parent_messenger'
   import { configStore } from '../stores/ConfigStore'
   import { debitCardStore } from '../stores/DebitCardStore'
+  import { onDestroy } from 'svelte'
 
   let isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
 
@@ -31,6 +32,13 @@
     // if within a model, let that close first
     setTimeout(() => push(Routes.ROOT), 250)
   }
+
+  onDestroy(() => {
+    // Make sure screens do not read previous data
+    // for other types of future transfers
+    debitCardStore.clear()
+    transactionStore.reset()
+  })
 </script>
 
 <ModalContent>
