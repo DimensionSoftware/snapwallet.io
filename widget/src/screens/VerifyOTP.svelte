@@ -271,32 +271,30 @@
     :global(label) {
       display: flex;
       flex-direction: row;
-      :global(> span.input-label) {
-        top: -2rem !important;
-        margin-left: 0 !important;
+    }
+    :global(label > span.input-label) {
+      top: -2rem !important;
+      margin-left: 0 !important;
+    }
+    :global(#code-0, #code-1, #code-2, #code-3, #code-4, #code-5) {
+      text-align: center !important;
+      padding: 25px 0 25px 0 !important;
+      border-radius: 0;
+      border-right: 1px solid rgba(0, 0, 0, 0.1);
+      text-indent: 0;
+      &:focus,
+      &:hover {
+        z-index: 9;
       }
-      :global(.input-container) {
-        :global(#code-0, #code-1, #code-2, #code-3, #code-4, #code-5) {
-          text-align: center !important;
-          padding: 25px 0 25px 0 !important;
-          border-radius: 0;
-          border-right: 1px solid rgba(0, 0, 0, 0.1);
-          text-indent: 0;
-          &:focus,
-          &:hover {
-            z-index: 9;
-          }
-        }
-        :global(#code-0) {
-          border-top-left-radius: 0.5rem;
-          border-bottom-left-radius: 0.5rem;
-        }
-        :global(#code-5) {
-          border-top-right-radius: 0.5rem;
-          border-bottom-right-radius: 0.5rem;
-          border-right: 0 solid transparent;
-        }
-      }
+    }
+    :global(#code-0) {
+      border-top-left-radius: 0.5rem;
+      border-bottom-left-radius: 0.5rem;
+    }
+    :global(#code-5) {
+      border-top-right-radius: 0.5rem;
+      border-bottom-right-radius: 0.5rem;
+      border-right: 0 solid transparent;
     }
   }
 
