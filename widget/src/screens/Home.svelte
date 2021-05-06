@@ -227,10 +227,6 @@
   }
 
   onMount(() => {
-    // Make sure screens do not read previous data
-    // for other types of future transfers
-    debitCardStore.clear()
-    transactionStore.reset()
     resizeWidget(525, $configStore.appName)
     getInitialPrices()
     getNextPath()
@@ -238,6 +234,10 @@
     // TODO: @khoerling if ($configStore.intent === 'donate') {transactionStore.update({inMedium: TransactionMediums.DEBIT_CARD})}
     return () => clearInterval(interval)
   })
+
+  $: hasCountryIcon = WYRE_SUPPORTED_COUNTRIES.includes(
+    country?.code?.toUpperCase(),
+  )
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -338,13 +338,15 @@
         {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
           <VStep
             disabled
+            custom={!!hasCountryIcon}
+            success={!!country}
             title="Select Payment Country"
             onClick={() => {
               countrySelectorVisible = true
             }}
           >
             <span slot="icon">
-              {#if WYRE_SUPPORTED_COUNTRIES.includes(country?.code?.toUpperCase())}
+              {#if hasCountryIcon}
                 <span class="flag">
                   <svelte:component this={Flags[countryFlag]} />
                 </span>

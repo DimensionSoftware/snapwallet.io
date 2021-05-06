@@ -21,8 +21,9 @@ npm i
 npm run build
 popd
 mkdir -p web/build/prerendered
-mv web/build/assets/* web/build/prerendered/.
-mv web/build/prerendered/* web_dist/.
+# mv web/build/_app/assets/* web/build/prerendered/.
+# mv web/build/prerendered/* web_dist/.
+mv web/build/* web_dist/.
 
 # docs: api + getting started examples
 pushd docs
