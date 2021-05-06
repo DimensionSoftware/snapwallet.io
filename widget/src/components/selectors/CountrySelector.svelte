@@ -5,6 +5,7 @@
   import CountryCard from '../cards/CountryCard.svelte'
   import * as Flags from 'svelte-flagicon'
   import VirtualList from '../VirtualList.svelte'
+  import { userStore } from '../../stores/UserStore'
 
   export let visible = false
   export let whiteList: string[] = []
@@ -29,12 +30,12 @@
       return
     }
     if (searchTimeout) clearTimeout(searchTimeout)
-    searchTimeout = debounceSearch(searchTerm)
+    searchTimeout = debouncedSearch(searchTerm)
   }
 
-  const debounceSearch = searchTerm => {
-    return setTimeout(() => {
-      filteredCountries = Object.values(countries)
+  const debouncedSearch = searchTerm => setTimeout(() => doSearch(searchTerm)),
+    doSearch = searchTerm =>
+      (filteredCountries = Object.values(countries)
         .filter(c => {
           const terms = [c.name, c.code, c.dial_code].join(',').toLowerCase()
           return terms.includes(searchTerm)
@@ -43,12 +44,19 @@
           // Sort by the closest text match first
           if (a.name.toLowerCase().startsWith(searchTerm)) return -1
           return 1
-        })
-    }, 400)
-  }
+        }))
 
   // focus search
-  onMount(() => setTimeout(() => search.focus(), 400))
+  onMount(() => {
+    setTimeout(() => search.focus(), 300)
+    const country = $userStore.geo.country
+    if (country) {
+      // default search
+      search.value = country
+      doSearch(country.toLowerCase())
+      setTimeout(() => search.select(), 301)
+    }
+  })
 </script>
 
 <PopupSelector
@@ -60,6 +68,7 @@
     <input
       placeholder="Search..."
       bind:this={search}
+      type="search"
       class="search-input"
       on:input={e => {
         searchCountries(e.target?.value)
