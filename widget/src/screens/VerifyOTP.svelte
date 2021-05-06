@@ -33,6 +33,7 @@
     window.addEventListener('paste', handlePaste)
 
     return () => {
+      // cleanup
       window.removeEventListener('paste', handlePaste)
     }
   })
@@ -41,6 +42,7 @@
     e.preventDefault()
     const numString = e.clipboardData.getData('Text').slice(0, 6)
     numString.split('').forEach((n, idx) => {
+      document.getElementById(`code-${idx}`).value = n
       codes[idx] = n
     })
     code = codes.join('')
@@ -204,7 +206,7 @@
               }
               if (e.keyCode === 8) {
                 e.preventDefault()
-                codes[i] = ''
+                document.getElementById(`code-${cur}`).value = codes[i] = ''
                 code = codes.join('')
                 // backspace over input
                 cur = cur <= 0 ? 0 : cur - 1
