@@ -1,3 +1,7 @@
+<script context="module" lang="ts">
+  export const prerender = true
+</script>
+
 <script lang="ts">
   let Typewriter: any
   import { onMount } from 'svelte'
