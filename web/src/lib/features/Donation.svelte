@@ -8,8 +8,6 @@
     focus: true,
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
     theme: {
-      modalBackground: 'rgba(40,40,40,.9)',
-      modalPopupBackground: 'rgba(50,50,50,.95)',
       badgeTextColor: '#333',
       inputColor: '#333',
       shadowBottomColor: 'rgba(0,0,0,.075)',

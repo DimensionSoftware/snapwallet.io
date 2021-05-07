@@ -17,7 +17,7 @@
         theme: {
           // Coinbase theme
           modalBackground: '#070F15',
-          modalPopupBackground: 'rgba(2,13,19,.85)',
+          modalPopupBackground: 'rgba(2,13,19,.95)',
           colorLightened: 'rgba(102,113,119,.8)',
           color: '#2187FF',
           textColor: '#fff',
