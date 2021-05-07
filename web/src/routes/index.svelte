@@ -13,8 +13,6 @@
 
   let ifr: HTMLIFrameElement
 
-  $: fillColor = '#fffc00'
-
   onMount(async () => {
     await import('flux-init')
     Typewriter = (await import('svelte-typewriter')).default
@@ -55,16 +53,6 @@
           if (event === SnapWallet.events.RESIZE && data && ifr) {
             if (appName === data.appName) ifr.height = data.height
           }
-
-          // TODO: remove if lame
-          // if (event === SnapWallet.events.DEMO_CURRENCY_SELECTED && data) {
-          //   const color =
-          //     data.currency.ticker.toUpperCase() === 'WBTC'
-          //       ? '#fafafa'
-          //       : data.currency.color
-          //   fillColor = color
-          //   window.document.body.style.background = color
-          // }
         } catch (e) {
           console.warn('Unable to parse message', msg, e)
         }
@@ -159,27 +147,6 @@ Hey, you-- join us!  https://dimensionsoftware.com
     .col {
       position: relative;
       max-width: 50%;
-      .buttons {
-        margin: 3rem 0 0;
-        max-width: 100%;
-        .button {
-          display: inline-block;
-          font-weight: 600;
-          border-radius: 3px;
-          background: rgba($textColor, 0.9);
-          background: transparent;
-          border: 1px solid $textColor;
-          color: $textColor;
-          padding: 1rem 3rem;
-          margin-right: 1.5rem;
-          transition: background 0.3s ease-out;
-          &:hover {
-            border: 1px solid rgba($textColor, 0.9);
-            animation: scaleIn 0.5s ease-out forwards;
-            transition: none;
-          }
-        }
-      }
     }
     h1,
     h2 {
