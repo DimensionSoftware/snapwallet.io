@@ -95,7 +95,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     <h2>
       Connect Crypto to Your
       {#if Typewriter}
-        <Typewriter interval={50} loop={1800}>
+        <Typewriter interval={50} delay={0} loop={1800}>
           <span>Idea</span>
           <span>NFT</span>
           <span>App</span>
@@ -122,14 +122,10 @@ Hey, you-- join us!  https://dimensionsoftware.com
     />
   </div>
 </main>
-<!-- <video
-  loop
-  playsinline
-  autoplay
-  muted
-  src="https://video-previews.elements.envatousercontent.com/h264-video-previews/006e9a98-6b47-4a22-9d9a-643500d6c84e/25055399.mp4"
-/> -->
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"
+<svg
+  style="opacity 0;"
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 1440 320"
   ><path
     fill="#ffffff"
     fill-opacity="1"
@@ -146,6 +142,12 @@ Hey, you-- join us!  https://dimensionsoftware.com
   $textColor: #333;
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
+
+  svg {
+    opacity: 0;
+    animation: chartBuildIn 1s $easeOutExpo forwards 0.1s;
+  }
+
   main {
     position: relative;
     z-index: 1;
@@ -214,10 +216,13 @@ Hey, you-- join us!  https://dimensionsoftware.com
       border-radius: 20px;
       top: -15%;
       right: -20%;
+      opacity: 0;
     }
     :global(iframe.loaded) {
+      opacity: 1;
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-      transition: box-shadow 0.8s $easeOutExpo 0.1s, height 0.3s $easeOutBack;
+      transition: opacity 0.3s $easeOutExpo, box-shadow 0.5s $easeOutExpo,
+        height 0.3s $easeOutBack;
       will-change: box-shadow, height;
     }
   }
