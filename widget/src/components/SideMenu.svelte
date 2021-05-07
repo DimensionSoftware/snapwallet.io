@@ -273,7 +273,7 @@
       :global(svg) {
         opacity: 0;
         transform: translateX(-5px);
-        transition: transform 0s ease-in 0.7s, opacity 0s ease-in 0.7s;
+        transition: transform 0s ease-in 0.7s, opacity 0.1s ease-in;
       }
     }
     nav div a {
@@ -297,30 +297,7 @@
       nav > div :global(svg) {
         opacity: 0.9;
         transform: translateX(0);
-        &:nth-child(0) {
-          transition: transform 0.5s ease-out 0.27s, opacity 0.5s ease-out 0.27s;
-        }
-        &:nth-child(1) {
-          transition: transform 0.5s ease-out 0.27s, opacity 0.5s ease-out 0.27s;
-        }
-        &:nth-child(2) {
-          transition: transform 0.4s ease-out 0.26s, opacity 0.4s ease-out 0.26s;
-        }
-        &:nth-child(3) {
-          transition: transform 0.4s ease-out 0.26s, opacity 0.4s ease-out 0.26s;
-        }
-        &:nth-child(4) {
-          transition: transform 0.3s ease-out 0.25s, opacity 0.3s ease-out 0.25s;
-        }
-        &:nth-child(5) {
-          transition: transform 0.3s ease-out 0.25s, opacity 0.3s ease-out 0.25s;
-        }
-        &:nth-child(6) {
-          transition: transform 0.2s ease-out 0.24s, opacity 0.2s ease-out 0.24s;
-        }
-        &:nth-child(7) {
-          transition: transform 0.2s ease-out 0.24s, opacity 0.2s ease-out 0.24s;
-        }
+        transition: opacity 0.2s ease-out 0.3s;
       }
       nav > div {
         transform: translateX(0);

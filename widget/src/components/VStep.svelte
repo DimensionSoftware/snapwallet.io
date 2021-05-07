@@ -37,16 +37,16 @@
       }
     }
     // icon surround
-    :global(span.default-icon):before {
+    :global(span.default-icon:before) {
       position: absolute;
       content: '';
       background: var(--theme-text-color);
       border-radius: 50%;
-      height: 8px;
-      width: 8px;
-      left: 0;
-      top: 8px;
-      opacity: 0.75;
+      height: 6px;
+      width: 6px;
+      left: 1px;
+      top: 9px;
+      opacity: 0.7;
       z-index: 1;
     }
     > :global(span > svg) {
@@ -115,7 +115,7 @@
       animation-iteration-count: infinite;
     }
     &.success {
-      animation: scaleIn 0.3s ease-out;
+      animation: scaleIn 0.25s ease-out;
       z-index: 1;
       :global(.total-container) {
         font-weight: bold;
@@ -135,7 +135,7 @@
       }
       // hide the dot
       :global(span:before) {
-        opacity: 0.5;
+        opacity: 0;
         background: var(--theme-success-color);
       }
       & > :global(.icon) {
@@ -146,7 +146,7 @@
       }
 
       & > :global(span > svg) {
-        color: var(--theme-color-inverse);
+        color: var(--theme-success-color);
       }
     }
     &.disabled {
