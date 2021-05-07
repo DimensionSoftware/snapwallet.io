@@ -1,6 +1,5 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
-  import * as Flags from 'svelte-flagicon'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
@@ -246,6 +245,7 @@
     if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
       // Profile should be updated when user comes back here from any other route
       userStore.fetchUserProfile()
+      userStore.fetchFlags()
     }
     // TODO: @khoerling if ($configStore.intent === 'donate') {transactionStore.update({inMedium: TransactionMediums.DEBIT_CARD})}
     return () => clearInterval(interval)
