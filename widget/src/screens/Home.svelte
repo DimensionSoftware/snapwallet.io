@@ -243,8 +243,10 @@
     getInitialPrices()
     getNextPath()
     const interval = priceStore.pollPrices()
-    // Profile should be updated when user comes back here from any other route
-    userStore.fetchUserProfile()
+    if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
+      // Profile should be updated when user comes back here from any other route
+      userStore.fetchUserProfile()
+    }
     // TODO: @khoerling if ($configStore.intent === 'donate') {transactionStore.update({inMedium: TransactionMediums.DEBIT_CARD})}
     return () => clearInterval(interval)
   })
