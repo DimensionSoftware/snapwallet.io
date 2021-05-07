@@ -41,14 +41,17 @@
   {success}
   {onClick}
 >
-  <span slot="icon">
+  <span
+    class:glow={!isDebitCard && !$transactionStore.selectedSourcePaymentMethod}
+    slot="icon"
+  >
     <FaIcon data={!success ? faUniversity : faCheck} />
   </span>
   <b slot="step">
     <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
     {#if !isDebitCard && $transactionStore.selectedSourcePaymentMethod}
       {$transactionStore.selectedSourcePaymentMethod.name}
-    {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
+    {:else if isDebitCard}
       Debit Card
     {:else if isBuy}
       Select Payment Method
