@@ -1186,7 +1186,7 @@
     "ThirdPartyUserAccount": {
       "type": "object",
       "properties": {
-        "lifecyclestatus": {
+        "lifecycleStatus": {
           "$ref": "#/definitions/LifecycleStatus"
         },
         "status": {
@@ -1482,7 +1482,7 @@
     "WyrePaymentMethod": {
       "type": "object",
       "properties": {
-        "lifecyclestatus": {
+        "lifecycleStatus": {
           "$ref": "#/definitions/LifecycleStatus"
         },
         "id": {
