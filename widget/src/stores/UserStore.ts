@@ -141,6 +141,7 @@ function createStore() {
       )
 
       const isProfilePending =
+        (wyre && !wyre?.status && !wyre?.lifecycleStatus) ||
         wyre?.lifecycleStatus === 'L_PENDING' ||
         (wyre?.status === 'OPEN' && !remediations?.length)
 
