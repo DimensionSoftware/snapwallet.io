@@ -752,7 +752,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 		// todo: store pending lifecycle status? or can use job submitted information
 		resp.Wyre = &proto.ThirdPartyUserAccount{
-			LifecyleStatus: proto.LifecycleStatus_L_PENDING,
+			LifecycleStatus: proto.LifecycleStatus_L_PENDING,
 		}
 	} else if len(existingWyreAccounts) == 0 {
 		job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindUpdateWyreAccountForUser, job.StatusQueued, string(u.ID))
@@ -761,7 +761,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		}
 		if job != nil {
 			resp.Wyre = &proto.ThirdPartyUserAccount{
-				LifecyleStatus: proto.LifecycleStatus_L_PENDING,
+				LifecycleStatus: proto.LifecycleStatus_L_PENDING,
 			}
 		}
 	}
@@ -769,8 +769,8 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 	if len(existingWyreAccounts) > 0 {
 		resp.Wyre = &proto.ThirdPartyUserAccount{
 			// todo: store created lifecycle status?
-			LifecyleStatus: proto.LifecycleStatus_L_CREATED,
-			Status:         existingWyreAccounts[0].Status,
+			LifecycleStatus: proto.LifecycleStatus_L_CREATED,
+			Status:          existingWyreAccounts[0].Status,
 			// todo: remediations
 		}
 	}
@@ -800,8 +800,8 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 			wa := existingWyreAccounts[0]
 
 			wyre = &proto.ThirdPartyUserAccount{
-				LifecyleStatus: proto.LifecycleStatus_L_CREATED,
-				Status:         wa.Status,
+				LifecycleStatus: proto.LifecycleStatus_L_CREATED,
+				Status:          wa.Status,
 				// todo: remediations
 			}
 		} else {
@@ -811,7 +811,7 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 			}
 			if job != nil {
 				wyre = &proto.ThirdPartyUserAccount{
-					LifecyleStatus: proto.LifecycleStatus_L_PENDING,
+					LifecycleStatus: proto.LifecycleStatus_L_PENDING,
 				}
 			}
 		}
@@ -1307,7 +1307,7 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 
 		for _, pm := range pms {
 			out = append(out, &proto.WyrePaymentMethod{
-				LifecyleStatus:        proto.LifecycleStatus_L_CREATED,
+				LifecycleStatus:       proto.LifecycleStatus_L_CREATED,
 				Id:                    string(pm.ID),
 				Status:                pm.Status,
 				Name:                  pm.Name,
@@ -1335,9 +1335,9 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 		if !pmCreated {
 			for _, account := range plaidItem.Accounts {
 				out = append(out, &proto.WyrePaymentMethod{
-					LifecyleStatus: proto.LifecycleStatus_L_PENDING,
-					Name:           fmt.Sprintf("%s (%s)", account.Name, plaidItem.Institution.Name),
-					Last4:          account.Mask,
+					LifecycleStatus: proto.LifecycleStatus_L_PENDING,
+					Name:            fmt.Sprintf("%s (%s)", account.Name, plaidItem.Institution.Name),
+					Last4:           account.Mask,
 				})
 			}
 		}

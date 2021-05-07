@@ -215,7 +215,7 @@ enum LifecycleStatus {
 //
 // Represents the wyre user account status (or other tps)
 message ThirdPartyUserAccount {
-  LifecycleStatus lifecyclestatus = 1;
+  LifecycleStatus lifecycle_status = 1;
   string status = 2;
 }
 
@@ -334,7 +334,7 @@ message TokenExchangeResponse {
 }
 
 message WyrePaymentMethod {
-  LifecycleStatus lifecyclestatus = 1;
+  LifecycleStatus lifecycle_status = 1;
   string id = 2;
   string status = 3;
   string name = 4;
