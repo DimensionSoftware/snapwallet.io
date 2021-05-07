@@ -42,6 +42,7 @@
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
   import { debitCardStore } from '../stores/DebitCardStore'
   import { countries, WYRE_SUPPORTED_COUNTRIES } from '../util/country'
+  import { getMissingFieldMessages } from '../util/profiles'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
@@ -73,6 +74,24 @@
   $: isCreatingTxnPreview = false
 
   $: country = countries[$debitCardStore.address.country]
+  $: missingInfo = getMissingFieldMessages($userStore.profileItems)
+
+  let verificationNextStep
+  $: {
+    // NOTE: these should remain in this order
+
+    if (!missingInfo.personal.isComplete) {
+      verificationNextStep = Routes.PROFILE
+    } else if (!missingInfo.address.isComplete) {
+      verificationNextStep = Routes.ADDRESS
+    } else if (!missingInfo.contact.isComplete) {
+      verificationNextStep = Routes.SEND_OTP
+    } else if (!missingInfo.document.isComplete) {
+      verificationNextStep = Routes.FILE_UPLOAD
+    } else {
+      verificationNextStep = Routes.PROFILE_STATUS
+    }
+  }
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
@@ -190,15 +209,11 @@
   // Find the next path based on user data
   const getNextPath = () => {
     if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
-      let nextRoute = Routes.PROFILE
       const { hasWyrePaymentMethods, hasWyreAccount } = flags
-
       if (hasWyrePaymentMethods && hasWyreAccount)
-        nextRoute = Routes.CHECKOUT_OVERVIEW
-      else if (!hasWyrePaymentMethods) nextRoute = Routes.PLAID_LINK
-      else if ($userStore.isProfileComplete) nextRoute = Routes.ADDRESS
-      else nextRoute = Routes.PROFILE_STATUS
-      return nextRoute
+        return Routes.CHECKOUT_OVERVIEW
+      else if (!hasWyrePaymentMethods) return Routes.PLAID_LINK
+      else return verificationNextStep
     }
     return Routes.SEND_OTP
   }
@@ -317,15 +332,7 @@
               </div>
             </VStep>
           {:else if $paymentMethodStore.wyrePaymentMethods.length}
-            <VStep
-              disabled
-              onClick={() =>
-                push(
-                  $userStore.isProfileComplete
-                    ? Routes.ADDRESS
-                    : Routes.PROFILE,
-                )}
-            >
+            <VStep disabled onClick={() => push(verificationNextStep)}>
               <span
                 class:glow={$transactionStore.selectedSourcePaymentMethod}
                 slot="icon"
