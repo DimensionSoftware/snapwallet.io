@@ -41,7 +41,7 @@
   @import '../../styles/_vars.scss';
 
   .icon-card-container {
-    flex: 1;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -51,7 +51,7 @@
     }
     & > .content-container {
       height: 100%;
-      width: 100%;
+      width: 70%;
       display: flex;
       justify-content: flex-start;
       align-items: center;
