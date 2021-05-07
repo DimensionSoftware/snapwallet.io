@@ -66,7 +66,10 @@
 >
   <div class="scroll-y selector-container">
     <h5 style="margin-bottom:1rem;">{copy.sectionOneTitle}</h5>
-    <div class="card-vertical-margin">
+    <div
+      class="card-vertical-margin"
+      in:fly={{ y: 25, duration: 200 + 50 * 1 }}
+    >
       <IconCard
         icon={faUniversity}
         on:click={() => push(Routes.PLAID_LINK)}
@@ -75,7 +78,10 @@
       />
     </div>
     <h5 style="margin-top:2rem;margin-bottom:1rem;">{copy.sectionTwoTitle}</h5>
-    <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * 1 }}>
+    <div
+      class="card-vertical-margin"
+      in:fly={{ y: 25, duration: 200 + 50 * 2 }}
+    >
       <IconCard
         label="Debit Card"
         icon={faCreditCard}
@@ -91,7 +97,10 @@
       <p class="help">Retrieving Payment Methods...</p>
     {:else}
       {#each allPaymentMethods as pm, i (i + pm.id)}
-        <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * i }}>
+        <div
+          class="card-vertical-margin"
+          in:fly={{ y: 25, duration: 300 + 50 * i }}
+        >
           <IconCard
             label={pm.name}
             icon={faUniversity}
