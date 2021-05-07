@@ -4,7 +4,7 @@
   import { Logger } from '../util'
   // props
   export let items
-  export let height = '100%'
+  export let height = '80%'
   export let itemHeight = undefined
 
   let foo
