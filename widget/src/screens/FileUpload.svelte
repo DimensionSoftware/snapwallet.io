@@ -83,7 +83,7 @@
         })
         setTimeout(() => {
           Logger.debug(profileResponse.wyre)
-          if (profileResponse.wyre) userStore.setProfilePending()
+          if (profileResponse.wyre) userStore.setProfilePending(true)
           const wyreApproved = profileResponse.wyre?.status === 'APPROVED'
           if (isUpdatingFiles) push(Routes.PROFILE_STATUS)
           else if (wyreApproved && $transactionStore.sourceAmount)
