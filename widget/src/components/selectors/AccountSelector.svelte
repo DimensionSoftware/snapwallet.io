@@ -95,10 +95,14 @@
           <IconCard
             label={pm.name}
             icon={faUniversity}
-            badgeText={['OPEN', 'PENDING'].includes(pm.status)
+            badgeText={['OPEN', 'PENDING', 'L_PENDING'].includes(
+              pm.status ? pm.status : pm.lifecycleStatus,
+            )
               ? 'Pending'
               : 'Active'}
-            badgeType={['OPEN', 'PENDING'].includes(pm.status)
+            badgeType={['OPEN', 'PENDING', 'L_PENDING'].includes(
+              pm.status ? pm.status : pm.lifecycleStatus,
+            )
               ? 'warning'
               : 'success'}
             on:click={() => {
