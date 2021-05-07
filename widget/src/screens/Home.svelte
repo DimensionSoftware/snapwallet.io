@@ -315,14 +315,7 @@
           onClick={() => (paymentSelectorVisible = true)}
         />
         {#if $transactionStore.inMedium === TransactionMediums.ACH}
-          {#if flags?.hasWyreAccount}
-            <VStep success>
-              <span slot="icon">
-                <FaIcon data={faCheck} />
-              </span>
-              <b slot="step">Verify Identity</b>
-            </VStep>
-          {:else if $userStore.isProfilePending}
+          {#if $userStore.isProfilePending}
             <VStep disabled>
               <span slot="icon">
                 <FaIcon data={faExclamationCircle} />
@@ -331,11 +324,18 @@
               <div class="description help" slot="info">
                 We're reviewing your identity.
                 {#if !$paymentMethodStore.wyrePaymentMethods?.length}
-                  Please add a payment method below.
+                  Please add a payment method.
                 {/if}
               </div>
             </VStep>
-          {:else if $paymentMethodStore.wyrePaymentMethods.length}
+          {:else if flags?.hasWyreAccount}
+            <VStep success>
+              <span slot="icon">
+                <FaIcon data={faCheck} />
+              </span>
+              <b slot="step">Verify Identity</b>
+            </VStep>
+          {:else}
             <VStep disabled onClick={() => push(verificationNextStep)}>
               <span
                 class:glow={$transactionStore.selectedSourcePaymentMethod}
