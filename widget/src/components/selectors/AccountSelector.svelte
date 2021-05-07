@@ -19,7 +19,11 @@
   $: ({ intent } = $transactionStore)
   $: ({ flags } = $userStore)
   $: isSell = intent === TransactionIntents.SELL
-  $: allPaymentMethods = [...$paymentMethodStore.wyrePaymentMethods]
+  $: allPaymentMethods = [
+    ...$paymentMethodStore.wyrePaymentMethods.sort(pm =>
+      pm.status.toLowerCase() === 'active' ? -1 : 1,
+    ),
+  ]
 
   let isLoadingPaymentMethods = true
   let copy
