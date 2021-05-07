@@ -73,9 +73,6 @@
   $: isCreatingTxnPreview = false
 
   $: country = countries[$debitCardStore.address.country]
-  $: countryFlag = country
-    ? country.code[0] + country.code[1].toLowerCase()
-    : ''
 
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
@@ -329,7 +326,10 @@
                     : Routes.PROFILE,
                 )}
             >
-              <span slot="icon">
+              <span
+                class:glow={$transactionStore.selectedSourcePaymentMethod}
+                slot="icon"
+              >
                 <FaIcon data={faIdCard} />
               </span>
               <b slot="step"> Verify Identity </b>
@@ -345,16 +345,8 @@
               countrySelectorVisible = true
             }}
           >
-            <span slot="icon">
-              {#if hasCountryIcon}
-                <span class="flag">
-                  <svelte:component this={Flags[countryFlag]} />
-                </span>
-              {:else}
-                <FaIcon
-                  data={$debitCardStore.address.country ? faCheck : faGlobe}
-                />
-              {/if}
+            <span class:glow={!$debitCardStore.address.country} slot="icon">
+              <FaIcon data={country ? faCheck : faGlobe} />
             </span>
             <b slot="step">
               {#if country}
