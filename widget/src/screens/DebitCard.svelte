@@ -14,20 +14,27 @@
   import PhoneInput from '../components/inputs/PhoneInput.svelte'
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
   import { onMount } from 'svelte'
-  import { focusFirstInput } from '../util'
+  import { focusFirstInput, onEnterPressed } from '../util'
 
   let countrySelectorVisible = false
   $: isUSPhoneNumber =
     $debitCardStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   const handleNextStep = async () => {
+    // TODO: validate form
     push(Routes.DEBIT_CARD_ADDRESS)
   }
 
   onMount(() => {
     focusFirstInput()
   })
+
+  const onKeyDown = (e: Event) => {
+    onEnterPressed(e, handleNextStep)
+  }
 </script>
+
+<svelte:window on:keydown={onKeyDown} />
 
 <ModalContent>
   <ModalHeader>Card Information</ModalHeader>
