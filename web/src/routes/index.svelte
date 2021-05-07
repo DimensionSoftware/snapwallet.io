@@ -110,10 +110,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     />
   </div>
 </main>
-<svg
-  style="opacity 0;"
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 1440 320"
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"
   ><path
     fill="#ffffff"
     fill-opacity="1"
@@ -130,11 +127,6 @@ Hey, you-- join us!  https://dimensionsoftware.com
   $textColor: #333;
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
-
-  svg {
-    opacity: 0;
-    animation: chartBuildIn 1s $easeOutExpo forwards 0.1s;
-  }
 
   main {
     position: relative;
