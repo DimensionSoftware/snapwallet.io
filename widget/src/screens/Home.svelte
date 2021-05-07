@@ -322,7 +322,8 @@
               </span>
               <b slot="step">Reviewing Identity</b>
               <div class="description help" slot="info">
-                We're reviewing your identity.
+                We're reviewing your identity. This should only take a few
+                minutes.
                 {#if !$paymentMethodStore.wyrePaymentMethods?.length}
                   Please add a payment method.
                 {/if}
