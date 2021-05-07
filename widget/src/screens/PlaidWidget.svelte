@@ -4,6 +4,7 @@
   import { Logger } from '../util'
   import { onDestroy, onMount } from 'svelte'
   import type { PlaidAccount, PlaidInstitution } from 'api-client'
+  import { paymentMethodStore } from '../stores/PaymentMethodStore'
 
   let handler
 
@@ -42,6 +43,10 @@
     accounts: PlaidSuccessCallbackMetadataAccount[]
   }
 
+  const onComplete = () => {
+    paymentMethodStore.fetchWyrePaymentMethods().then(() => push(Routes.ROOT))
+  }
+
   function initializePlaid() {
     return getLinkToken().then(token => {
       handler = window.Plaid.create({
@@ -57,21 +62,30 @@
               id: metadata.institution.institution_id,
               name: metadata.institution.name,
             },
-            metadata.accounts.map((pa: PlaidSuccessCallbackMetadataAccount) => ({
-              id: pa.id,
-              name: pa.name,
-              mask: pa.mask,
-              type: pa.type,
-              subType: pa.subtype,
-            })),
-          ).then(() => {
-            setTimeout(() => push(Routes.ROOT), 700)
-          })
+            metadata.accounts.map(
+              (pa: PlaidSuccessCallbackMetadataAccount) => ({
+                id: pa.id,
+                name: pa.name,
+                mask: pa.mask,
+                type: pa.type,
+                subType: pa.subtype,
+              }),
+            ),
+          ).then(onComplete)
         },
         onExit: (_err, _metadata) => {
           push(Routes.ROOT)
         },
-        onEvent: (_eventName, _metadata) => {},
+        onEvent: (eventName, metadata) => {
+          const event = eventName.toLowerCase()
+          if (event === 'error') {
+            Logger.error('Plaid error', metadata)
+            throw new Error(
+              'An unexpected error occurred. Please contact support.',
+            )
+          }
+          Logger.debug(eventName, metadata)
+        },
         // Required for RN
         isWebview: true,
       })
