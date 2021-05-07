@@ -17,15 +17,15 @@ import { HttpFile } from '../http/http';
 * Represents the wyre user account status (or other tps)
 */
 export class ThirdPartyUserAccount {
-    'lifecyleStatus'?: LifecycleStatus;
+    'lifecyclestatus'?: LifecycleStatus;
     'status'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "lifecyleStatus",
-            "baseName": "lifecyleStatus",
+            "name": "lifecyclestatus",
+            "baseName": "lifecyclestatus",
             "type": "LifecycleStatus",
             "format": ""
         },
