@@ -19,7 +19,7 @@
   <div {title} class="icon-card-container" class:blend class:paddingSmall>
     <div class="content-container">
       <FaIcon data={icon} />
-      <div class="label">{label}</div>
+      <div alt={label} class="label">{label}</div>
     </div>
     {#if badgeText}
       <Badge
@@ -56,6 +56,10 @@
       justify-content: flex-start;
       align-items: center;
       & > .label {
+        width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-weight: 500;
         margin-left: 0.5rem;
       }
