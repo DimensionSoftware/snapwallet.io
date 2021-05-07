@@ -69,13 +69,15 @@
 
   let formattedExpiration
   $: {
-    const d = new Date(0)
-    d.setSeconds(secondsUntilExpiration)
-    const mins = d.getMinutes()
+    const mins: number = Math.floor(secondsUntilExpiration / 60)
+    const seconds: number = Math.floor(secondsUntilExpiration % 60)
+    const displaySeconds: string =
+      seconds > 9 ? seconds.toString() : `0${seconds}`
+
     if (mins > 1) {
-      formattedExpiration = `${mins.toString()}m ${d.getSeconds().toString()}s`
+      formattedExpiration = `${mins}m ${displaySeconds}s`
     } else {
-      formattedExpiration = `${d.getSeconds().toString()}s`
+      formattedExpiration = `${displaySeconds}s`
     }
   }
 
