@@ -74,7 +74,7 @@ function createStore() {
       // when auth kicks in.
       lastKnownRoute: Routes.ROOT,
       flags: {} as ViewerFlags,
-      geo: {},
+      geo: { country: undefined },
       address: { ...initialAddress },
       isLoggedIn: false,
       virtual: {
@@ -140,7 +140,9 @@ function createStore() {
         virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
       )
 
-      const isProfilePending = wyre?.status === 'OPEN' && !remediations?.length
+      const isProfilePending =
+        wyre?.lifecycleStatus === 'L_PENDING' ||
+        (wyre?.status === 'OPEN' && !remediations?.length)
 
       update(s => ({
         ...s,
