@@ -1,18 +1,27 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount } from 'svelte'
-  import { countries } from '../../util/country'
+  import { afterUpdate, createEventDispatcher, onMount } from 'svelte'
+  import { countries, getFilteredCountries } from '../../util/country'
   import PopupSelector from '../inputs/PopupSelector.svelte'
   import CountryCard from '../cards/CountryCard.svelte'
   import * as Flags from 'svelte-flagicon'
   import VirtualList from '../VirtualList.svelte'
   import { userStore } from '../../stores/UserStore'
+  import { transactionStore } from '../../stores/TransactionStore'
+  import { TransactionMediums } from '../../types'
+  import { debitCardStore } from '../../stores/DebitCardStore'
 
   export let visible = false
   export let whiteList: string[] = []
 
-  $: filteredCountries = whiteList.length
-    ? Object.values(countries).filter(c => whiteList.includes(c.code))
-    : Object.values(countries)
+  $: filteredCountries = getFilteredCountries(
+    Object.values(countries),
+    whiteList,
+  )
+
+  let isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
+  let selectedCountry = isDebitCard
+    ? $debitCardStore.address.country
+    : $userStore.geo.country
 
   let searchTimeout
 
@@ -26,7 +35,10 @@
     const searchTerm = val?.toLowerCase()
     if (!searchTerm) {
       clearTimeout(searchTimeout)
-      filteredCountries = Object.values(countries)
+      filteredCountries = getFilteredCountries(
+        Object.values(countries),
+        whiteList,
+      )
       return
     }
     if (searchTimeout) clearTimeout(searchTimeout)
@@ -35,7 +47,10 @@
 
   const debouncedSearch = searchTerm => setTimeout(() => doSearch(searchTerm)),
     doSearch = searchTerm =>
-      (filteredCountries = Object.values(countries)
+      (filteredCountries = getFilteredCountries(
+        Object.values(countries),
+        whiteList,
+      )
         .filter(c => {
           const terms = [c.name, c.code, c.dial_code].join(',').toLowerCase()
           return terms.includes(searchTerm)
@@ -49,12 +64,17 @@
   // focus search
   onMount(() => {
     setTimeout(() => search.focus(), 300)
-    const country = $userStore.geo.country
-    if (country) {
-      // default search
-      search.value = country
-      doSearch(country.toLowerCase())
-      setTimeout(() => search.select(), 301)
+  })
+
+  afterUpdate(() => {
+    // Move the selected country to top of list
+    if (selectedCountry && !search?.value) {
+      const idx = filteredCountries.findIndex(fc => fc.code === selectedCountry)
+      if (idx > -1) {
+        const elem = filteredCountries[idx]
+        filteredCountries.splice(idx, 1)
+        filteredCountries.unshift(elem)
+      }
     }
   })
 </script>
@@ -109,6 +129,7 @@
     margin-bottom: 0.75rem;
     padding-left: 0;
     background: var(--theme-modal-popup-background);
+    border-radius: none;
   }
   :global(.country-select > .fa-icon) {
     position: relative;
