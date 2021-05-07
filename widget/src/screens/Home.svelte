@@ -317,7 +317,7 @@
         {#if $transactionStore.inMedium === TransactionMediums.ACH}
           {#if $userStore.isProfilePending}
             <VStep disabled>
-              <span slot="icon">
+              <span class="glow" slot="icon">
                 <FaIcon data={faExclamationCircle} />
               </span>
               <b slot="step">Reviewing Identity</b>
