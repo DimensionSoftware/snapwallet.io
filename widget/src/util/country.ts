@@ -348,3 +348,11 @@ export const WYRE_SUPPORTED_COUNTRIES = [
   'US',
   'VN',
 ]
+
+export const getFilteredCountries = (
+  countries: ICountry[],
+  whiteList?: string[],
+) =>
+  whiteList?.length
+    ? [...countries].filter(c => whiteList.includes(c.code))
+    : [...countries]
