@@ -85,7 +85,7 @@
     } else if (!missingInfo.address.isComplete) {
       verificationNextStep = Routes.ADDRESS
     } else if (!missingInfo.contact.isComplete) {
-      verificationNextStep = Routes.SEND_OTP
+      verificationNextStep = Routes.PROFILE_SEND_SMS
     } else if (!missingInfo.document.isComplete) {
       verificationNextStep = Routes.FILE_UPLOAD
     } else {
