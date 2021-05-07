@@ -20,6 +20,9 @@
     Typewriter = (await import('svelte-typewriter')).default
 
     const appName = 'Noir Checkout',
+      // themeColor = '#E1143D',
+      // themeColor = '#F1071C',
+      themeColor = '#fffc00',
       SnapWallet = new (window as any).Snap({
         appName,
         intent: 'buy',
@@ -33,12 +36,10 @@
           colorLightened: 'rgba(5,5,5,.8)',
           shadowBottomColor: 'rgba(0,0,0,.25)',
           colorInverse: '#fff',
-          // buttonColor: '#fffc00',
-          buttonColor: 'rgb(247, 127, 26)',
+          buttonColor: themeColor,
           buttonTextColor: '#000',
-          buttonGlowColor: '247, 127, 26',
-          // successColor: '#fffc00',
-          successColor: 'rgb(247, 127, 26)',
+          buttonGlowColor: themeColor,
+          successColor: themeColor,
           textColor: '#fff',
           inputTextColor: '#333',
         },
@@ -110,14 +111,6 @@ Hey, you-- join us!  https://dimensionsoftware.com
       The "Add Money" button for Crypto Currency, a fully configurable, gorgeous
       wallet that delights customers.
     </article>
-    <div class="buttons col">
-      <a class="button" href={`${domain}/docs/guide`} target="_blank"
-        >Get Started</a
-      >
-      <!-- <a href={`https://snapwallet.io/docs/api`} target="_blank"
-        >API Documentation</a
-      > -->
-    </div>
   </div>
   <div class="col wallet" style="margin: 0 auto;">
     <iframe
