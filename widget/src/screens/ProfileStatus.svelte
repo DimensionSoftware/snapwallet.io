@@ -47,15 +47,16 @@
   $: documentMessage = reduceDocumentFields(remediationGroups.document)
 
   $: missingInfo = getMissingFieldMessages($userStore.profileItems)
-  $: step = !missingInfo.personal.isComplete
-    ? 'personal'
-    : !missingInfo.contact.isComplete
-    ? 'contact'
-    : !missingInfo.address.isComplete
-    ? 'address'
-    : !missingInfo.document.isComplete
-    ? 'document'
-    : 'payment'
+  $: step =
+    !missingInfo.personal.isComplete || isPersonalInfoError
+      ? 'personal'
+      : !missingInfo.contact.isComplete || isContactError
+      ? 'contact'
+      : !missingInfo.address.isComplete || isAddressError
+      ? 'address'
+      : !missingInfo.document.isComplete || isDocumentError
+      ? 'document'
+      : 'payment'
 
   const getLatestProfile = async () => {
     await userStore.fetchUserProfile()
@@ -81,7 +82,7 @@
       <VStep
         title="Edit Your Profile"
         onClick={() => push(Routes.PROFILE_UPDATE)}
-        success={missingInfo.personal.isComplete}
+        success={missingInfo.personal.isComplete && !isPersonalInfoError}
         disabled={step !== 'personal' && !missingInfo.personal.isComplete}
       >
         <span
@@ -90,7 +91,7 @@
           class:glow={step === 'personal'}
           slot="icon"
         >
-          {#if missingInfo.personal.isComplete}
+          {#if missingInfo.personal.isComplete && !isPersonalInfoError}
             <FaIcon data={faCheck} />
           {:else if !missingInfo.personal.isValid || isPersonalInfoError}
             <FaIcon data={faExclamationCircle} />
@@ -111,7 +112,7 @@
       <VStep
         title="Edit Your Contact"
         onClick={() => push(Routes.PROFILE_SEND_SMS)}
-        success={missingInfo.contact.isComplete}
+        success={missingInfo.contact.isComplete && !isContactError}
         disabled={step !== 'contact' && !missingInfo.contact.isComplete}
       >
         <span
@@ -121,7 +122,7 @@
           class:glow={step === 'contact'}
           slot="icon"
         >
-          {#if missingInfo.contact.isComplete}
+          {#if missingInfo.contact.isComplete && !isContactError}
             <FaIcon data={faCheck} />
           {:else if (missingInfo.contact.isComplete && !missingInfo.contact.isValid) || isContactError}
             <FaIcon data={faExclamationCircle} />
@@ -137,7 +138,7 @@
       <VStep
         title="Edit Your Address"
         onClick={() => push(Routes.ADDRESS_UPDATE)}
-        success={missingInfo.address.isComplete}
+        success={missingInfo.address.isComplete && !isAddressError}
         disabled={step !== 'address' && !missingInfo.address.isComplete}
       >
         <span
@@ -146,7 +147,7 @@
           class:glow={step === 'address'}
           slot="icon"
         >
-          {#if missingInfo.address.isComplete}
+          {#if missingInfo.address.isComplete && !isAddressError}
             <FaIcon data={faCheck} />
           {:else if !missingInfo.address.isValid || isAddressError}
             <FaIcon data={faExclamationCircle} />
@@ -162,7 +163,7 @@
       <VStep
         title="Edit Your Documents"
         onClick={() => push(Routes.FILE_UPLOAD_UPDATE)}
-        success={missingInfo.document.isComplete}
+        success={missingInfo.document.isComplete && !isDocumentError}
         disabled={step !== 'document' && !missingInfo.document.isComplete}
       >
         <span
@@ -171,7 +172,7 @@
           class:glow={step === 'document'}
           slot="icon"
         >
-          {#if missingInfo.document.isComplete}
+          {#if missingInfo.document.isComplete && !isDocumentError}
             <FaIcon data={faCheck} />
           {:else if !missingInfo.document.isComplete || isDocumentError}
             <FaIcon data={faExclamationCircle} />
