@@ -83,9 +83,9 @@
     <div class="inline-inputs">
       <Label label="Expiration" style="margin-right:1rem;">
         <Input
-          maxlength={7}
+          maxlength={5}
           mask={Masks.DEBIT_CARD_EXPIRATION_DATE}
-          placeholder="MM/YYYY"
+          placeholder="MM/YY"
           defaultValue={$debitCardStore.expirationDate}
           on:change={({ detail = '' }) => {
             debitCardStore.update({

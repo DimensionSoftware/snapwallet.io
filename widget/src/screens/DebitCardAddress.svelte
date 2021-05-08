@@ -151,7 +151,8 @@
             .replace(/-/g, ''),
           number: unMaskValue($debitCardStore.number, Masks.DEBIT_CARD),
           expirationMonth,
-          expirationYear,
+          // Make this a 4 digit year
+          expirationYear: `20${expirationYear}`,
           verificationCode: $debitCardStore.verificationCode,
           address: $debitCardStore.address,
         },
