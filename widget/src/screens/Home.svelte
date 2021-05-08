@@ -50,7 +50,6 @@
   let paymentSelectorVisible = false
   let countrySelectorVisible = false
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
-  let glow = false
   let isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
 
   $: ({
@@ -294,7 +293,6 @@
             pattern={`[\\d,\\.]+`}
             on:change={e => {
               const val = Number(e.detail)
-              glow = !!val
               transactionStore.setSourceAmount(val, selectedDestinationPrice)
             }}
             defaultValue={sourceAmount
@@ -398,7 +396,7 @@
   </ModalBody>
   <ModalFooter>
     <Button
-      {glow}
+      glow={!!$transactionStore.sourceAmount}
       isLoading={isCreatingTxnPreview}
       on:mousedown={handleNextStep}
     >
