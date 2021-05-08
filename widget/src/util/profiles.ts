@@ -32,6 +32,16 @@ export const groupRemediations = (
   return result
 }
 
+export const remediationsAvailable = (
+  remediations: ProfileDataItemRemediation[],
+) => {
+  const result = groupRemediations(remediations)
+  return Object.values(result).reduce((acc, r) => {
+    if (acc) return acc
+    return r.length > 0
+  }, false)
+}
+
 export const isPersonalInfo = (kind: ProfileDataItemKind): boolean => {
   return [
     UserProfileFieldTypes.DATE_OF_BIRTH,
