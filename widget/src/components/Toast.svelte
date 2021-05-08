@@ -9,7 +9,11 @@
   $: error = Boolean($toaster?.error)
 </script>
 
-<div class="toast-wrapper" title="Click to Dismiss" on:click={toaster.dismiss}>
+<div
+  class="toast-wrapper"
+  title="Click to Dismiss"
+  on:mousedown={toaster.dismiss}
+>
   {#if $toaster}
     <div
       class="toast-item"

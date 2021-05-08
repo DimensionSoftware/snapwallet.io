@@ -77,7 +77,7 @@
   id="prelogout"
   class="container"
   class:visible={isVisible}
-  on:click={shouldClose}
+  on:mousedown={shouldClose}
   out:scale={{ opacity: 0, start: 1.15, duration: 175, easing: expoOut }}
 >
   <article>

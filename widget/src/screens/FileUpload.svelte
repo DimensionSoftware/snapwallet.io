@@ -163,7 +163,7 @@
         title="Select a Document Type"
         blend
         icon={iconCardProps.icon}
-        on:click={() => {
+        on:mousedown={() => {
           // Can't change this once one doc side is uploaded
           if (fileIds.length && minimumFiles >= 1) {
             return
@@ -174,7 +174,7 @@
       />
     </div>
     <div
-      on:click={openFileBrowser}
+      on:mousedown={openFileBrowser}
       title="Click to Upload a Document"
       class="dropzone"
     >
@@ -235,7 +235,7 @@
         >
           <IconCard
             icon={options.icon}
-            on:click={selectFileType(optionFileType)}
+            on:mousedown={selectFileType(optionFileType)}
             label={options.label}
           />
         </div>

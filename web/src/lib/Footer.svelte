@@ -3,7 +3,7 @@
 </script>
 
 <hr />
-<footer on:click={scrollToTop}>
+<footer on:mousedown={scrollToTop}>
   <p title="Scroll to Top">
     <big
       >Snap Wallet
@@ -13,7 +13,7 @@
     <br /><small
       ><a
         href="https://dimensionsoftware.com"
-        on:click|stopPropagation
+        on:mousedown|stopPropagation
         target="_blank">Dimension Software since 1998</a
       ></small
     >
