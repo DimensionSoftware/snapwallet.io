@@ -41,7 +41,10 @@
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
   import { debitCardStore } from '../stores/DebitCardStore'
   import { countries, WYRE_SUPPORTED_COUNTRIES } from '../util/country'
-  import { getMissingFieldMessages } from '../util/profiles'
+  import {
+    getMissingFieldMessages,
+    remediationsAvailable,
+  } from '../util/profiles'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
@@ -76,6 +79,7 @@
   $: missingInfo = getMissingFieldMessages($userStore.profileItems)
 
   let verificationNextStep
+  let shouldFixRemediations = false
   $: {
     // NOTE: these should remain in this order
 
@@ -90,6 +94,10 @@
     } else {
       verificationNextStep = Routes.PROFILE_STATUS
     }
+
+    shouldFixRemediations = remediationsAvailable(
+      $userStore.profileRemediations,
+    )
   }
 
   const animateRandomPrice = () => {
@@ -312,10 +320,21 @@
         </VStep>
         <PaymentSelector
           {isBuy}
+          disabled={shouldFixRemediations}
           onClick={() => (paymentSelectorVisible = true)}
         />
         {#if $transactionStore.inMedium === TransactionMediums.ACH}
-          {#if $userStore.isProfilePending}
+          {#if shouldFixRemediations}
+            <VStep onClick={() => push(Routes.PROFILE_STATUS)}>
+              <span class="glow error" slot="icon">
+                <FaIcon data={faExclamationCircle} />
+              </span>
+              <b slot="step">Update Identity</b>
+              <div class="description help" slot="info">
+                Please update your identity information.
+              </div>
+            </VStep>
+          {:else if $userStore.isProfilePending}
             <VStep disabled>
               <span class="glow" slot="icon">
                 <FaIcon data={faExclamationCircle} />
