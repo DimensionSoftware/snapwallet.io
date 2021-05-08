@@ -13,7 +13,7 @@
         appName,
         intent: 'buy',
         wallets: [],
-        focus: true,
+        focus: false,
         theme: {
           // Coinbase theme
           modalBackground: '#070F15',

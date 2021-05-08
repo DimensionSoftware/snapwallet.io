@@ -258,6 +258,8 @@
       userStore.fetchUserProfile()
       userStore.fetchFlags()
     }
+    // handle viewer focus
+    if ($configStore.focus) focus(document.getElementById('amount'), 300)
     // TODO: @khoerling if ($configStore.intent === 'donate') {transactionStore.update({inMedium: TransactionMediums.DEBIT_CARD})}
     return () => clearInterval(interval)
   })

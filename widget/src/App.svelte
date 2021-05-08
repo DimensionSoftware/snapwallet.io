@@ -28,7 +28,6 @@
     isJWTValid,
     Logger,
     onEscPressed,
-    focus as focusElement,
   } from './util'
   import { ParentMessenger } from './util/parent_messenger'
   import { userStore } from './stores/UserStore'
@@ -275,8 +274,6 @@
       document.documentElement.style.setProperty(`--theme-${k}`, v, 'important')
     })
 
-    // handle viewer focus
-    if ($configStore.focus) focusElement(document.getElementById('amount'), 350)
     // Centralized error handler
     window.onunhandledrejection = e => {
       Logger.error(e)

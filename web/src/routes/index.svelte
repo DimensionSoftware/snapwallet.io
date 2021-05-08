@@ -25,7 +25,7 @@
         appName,
         intent: 'buy',
         wallets: [],
-        focus: true,
+        focus: false,
         theme: {
           modalBackground: 'rgba(40,40,40,.9)',
           modalPopupBackground: 'rgba(50,50,50,.95)',
