@@ -111,6 +111,9 @@
 
   const processDebitTransaction = async (isLoggedIn: boolean) => {
     if (!isLoggedIn) push(Routes.SEND_OTP)
+    if (!$debitCardStore.address.country) {
+      throw new Error('Please select a country')
+    }
     try {
       isCreatingTxnPreview = true
       const dest = // TODO: move srn prefix to server
@@ -159,34 +162,33 @@
       return await processDebitTransaction(isLoggedIn)
     }
 
-    getNextPath()
-
-    isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
-    if (
-      selectedSourcePaymentMethod &&
-      selectedSourcePaymentMethod?.status !== 'ACTIVE'
-    ) {
-      paymentSelectorVisible = true
-      return toaster.pop({
-        msg: 'Please select an active payment method.',
-        error: true,
-      })
-    }
-
-    // Only do this when the user has a Wyre account
-    if (
-      isLoggedIn &&
-      (flags?.hasWyreAccount || $userStore.isProfilePending) &&
-      !$transactionStore.selectedSourcePaymentMethod
-    ) {
-      paymentSelectorVisible = true
-      return
-    }
-    // if they're not logged in, forward them instead to login
-    if (!isLoggedIn) return push(Routes.SEND_OTP)
-
     const nextRoute = getNextPath()
+
     if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
+      isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
+      if (
+        selectedSourcePaymentMethod &&
+        selectedSourcePaymentMethod?.status !== 'ACTIVE'
+      ) {
+        paymentSelectorVisible = true
+        return toaster.pop({
+          msg: 'Please select an active payment method.',
+          error: true,
+        })
+      }
+
+      // Only do this when the user has a Wyre account
+      if (
+        isLoggedIn &&
+        (flags?.hasWyreAccount || $userStore.isProfilePending) &&
+        !$transactionStore.selectedSourcePaymentMethod
+      ) {
+        paymentSelectorVisible = true
+        return
+      }
+      // if they're not logged in, forward them instead to login
+      if (!isLoggedIn) return push(Routes.SEND_OTP)
+
       try {
         isCreatingTxnPreview = true
         const preview = await window.API.fluxWyreCreateTransfer({
@@ -219,7 +221,11 @@
       const { hasWyrePaymentMethods, hasWyreAccount } = flags
       if (hasWyrePaymentMethods && hasWyreAccount)
         return Routes.CHECKOUT_OVERVIEW
-      else if (!hasWyrePaymentMethods) return Routes.PLAID_LINK
+      else if (
+        !hasWyrePaymentMethods &&
+        !$paymentMethodStore.wyrePaymentMethods.length
+      )
+        return Routes.PLAID_LINK
       else return verificationNextStep
     }
     return Routes.SEND_OTP
