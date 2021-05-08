@@ -165,7 +165,6 @@
     const nextRoute = getNextPath()
 
     if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
-      isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
       if (
         selectedSourcePaymentMethod &&
         selectedSourcePaymentMethod?.status !== 'ACTIVE'
@@ -186,8 +185,6 @@
         paymentSelectorVisible = true
         return
       }
-      // if they're not logged in, forward them instead to login
-      if (!isLoggedIn) return push(Routes.SEND_OTP)
 
       try {
         isCreatingTxnPreview = true
@@ -212,6 +209,7 @@
         isCreatingTxnPreview = false
       }
     }
+
     push(nextRoute)
   }
 
