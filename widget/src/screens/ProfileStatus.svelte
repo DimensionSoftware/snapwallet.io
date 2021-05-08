@@ -27,12 +27,13 @@
     reduceAddressFields,
     reduceContactFields,
     getMissingFieldMessages,
-    isContactInfo,
   } from '../util/profiles'
+  import Address from './Address.svelte'
 
   let paymentSelectorVisible = false
-  let remediationGroups = groupRemediations($userStore.profileRemediations)
   let step
+
+  $: remediationGroups = groupRemediations($userStore.profileRemediations)
 
   $: isPersonalInfoError = remediationGroups.personal.length > 0
   $: personalInfoMessage = reducePersonalInfoFields(remediationGroups.personal)
@@ -93,7 +94,7 @@
         >
           {#if missingInfo.personal.isComplete && !isPersonalInfoError}
             <FaIcon data={faCheck} />
-          {:else if !missingInfo.personal.isValid || isPersonalInfoError}
+          {:else if (missingInfo.personal.isComplete && !missingInfo.personal.isValid) || isPersonalInfoError}
             <FaIcon data={faExclamationCircle} />
           {:else}
             <FaIcon data={faIdCard} />
@@ -149,7 +150,7 @@
         >
           {#if missingInfo.address.isComplete && !isAddressError}
             <FaIcon data={faCheck} />
-          {:else if !missingInfo.address.isValid || isAddressError}
+          {:else if (missingInfo.address.isComplete && !missingInfo.address.isValid) || isAddressError}
             <FaIcon data={faExclamationCircle} />
           {:else}
             <FaIcon data={faHome} />
@@ -174,7 +175,7 @@
         >
           {#if missingInfo.document.isComplete && !isDocumentError}
             <FaIcon data={faCheck} />
-          {:else if !missingInfo.document.isComplete || isDocumentError}
+          {:else if (missingInfo.document.isComplete && !missingInfo.document.isValid) || isDocumentError}
             <FaIcon data={faExclamationCircle} />
           {:else}
             <FaIcon data={faFolder} />
