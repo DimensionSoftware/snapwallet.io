@@ -180,9 +180,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
     :global(iframe.loaded) {
       opacity: 1;
       box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-      transition: opacity 0.3s $easeOutExpo, box-shadow 0.5s $easeOutExpo,
+      transition: opacity 0.1s $easeOutExpo, box-shadow 0.3s $easeOutExpo,
         height 0.3s $easeOutBack;
-      will-change: box-shadow, height;
+      will-change: opacity, box-shadow, height;
     }
   }
 
@@ -232,6 +232,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
   }
   @media (max-width: 1000px) {
+    :global(body:before) {
+      display: none;
+    }
     :global(body) {
       overflow-y: scroll !important;
       main {
