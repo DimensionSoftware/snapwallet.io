@@ -213,6 +213,16 @@
     }),
     [Routes.DEBIT_CARD]: wrap({
       ...authedRouteOptions(DebitCard),
+      conditions: [
+        isJWTValid,
+        () => {
+          return Boolean(
+            $debitCardStore.address.country &&
+              $transactionStore.wyrePreview &&
+              $transactionStore.sourceAmount,
+          )
+        },
+      ],
     }),
     [Routes.DEBIT_CARD_ADDRESS]: wrap({
       ...authedRouteOptions(DebitCardAddress),
