@@ -41,7 +41,7 @@
   <ModalBody>
     <Label label="Name on Card">
       <Input
-        id="autocomplete"
+        autocomplete="cc-name"
         defaultValue={$debitCardStore.firstName}
         placeholder="John Smith"
         on:change={e => {
@@ -68,8 +68,8 @@
     </Label>
     <Label label="Card Number">
       <Input
+        autocomplete="cc-number"
         mask={Masks.DEBIT_CARD}
-        id="autocomplete"
         defaultValue={$debitCardStore.number}
         placeholder="4444 3333 2222 1111"
         on:change={e => {
@@ -83,6 +83,7 @@
     <div class="inline-inputs">
       <Label label="Expiration" style="margin-right:1rem;">
         <Input
+          autocomplete="cc-exp"
           maxlength={5}
           mask={Masks.DEBIT_CARD_EXPIRATION_DATE}
           placeholder="MM/YY"
@@ -96,6 +97,7 @@
       </Label>
       <Label label="CVC">
         <Input
+          autocomplete="cc-csc"
           maxlength={4}
           placeholder="0000"
           defaultValue={$debitCardStore.verificationCode}
