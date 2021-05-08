@@ -42,7 +42,9 @@
   {onClick}
 >
   <span
-    class:glow={!isDebitCard && !$transactionStore.selectedSourcePaymentMethod}
+    class:glow={!disabled &&
+      !isDebitCard &&
+      !$transactionStore.selectedSourcePaymentMethod}
     slot="icon"
   >
     <FaIcon data={!success ? faUniversity : faCheck} />
