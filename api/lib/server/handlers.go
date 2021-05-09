@@ -343,16 +343,16 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 }
 
 func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
-	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
-	subject := "Your one time passcode for flux"
-	plainTextContent := fmt.Sprintf("Your one time passcode is: %s", code)
-	htmlContent := fmt.Sprintf("Your one time passcode is: <strong>%s</strong>", code)
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+	subject := fmt.Sprintf("Login Verification  (code: \"%s\")", code)
+	plainTextContent := fmt.Sprintf("Your one-time access code is: %s", code)
+	htmlContent := fmt.Sprintf("Your one-time access code is: <strong>%s</strong>", code)
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
 }
 
 func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) *mail.SGMailV3 {
-	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
-	subject := fmt.Sprintf("Transfer %s has been initiated", t.ID)
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+	subject := fmt.Sprintf("Transfer %s Has Been Initiated", t.ID)
 	plainTextContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
 	htmlContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
