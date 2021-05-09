@@ -5,11 +5,11 @@
 <script lang="ts">
   let Typewriter: any
   import { onMount } from 'svelte'
+  import Overview from '$lib/features/Overview.svelte'
   import NFT from '$lib/features/NFT.svelte'
   import Donation from '$lib/features/Donation.svelte'
   import Buy from '$lib/features/Buy.svelte'
   import Footer from '$lib/Footer.svelte'
-  const domain = 'https://snapwallet.io'
 
   let ifr: HTMLIFrameElement
 
@@ -79,7 +79,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
 
 <main>
   <div class="intro col">
-    <h1>Snap Wallet</h1>
+    <h1>Welcome to <b>Snap Wallet</b></h1>
     <h2>
       Connect Crypto to Your
       {#if Typewriter}
@@ -96,8 +96,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
       {/if}
     </h2>
     <article>
-      The "Add Money" button for Crypto Currency, a fully configurable, gorgeous
-      wallet that delights customers.
+      Snap Wallet is the fastest crypto wallet connecting crypto currency to
+      your everything in a snap!
     </article>
   </div>
   <div class="col wallet" style="margin: 0 auto;">
@@ -117,6 +117,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     d="M0,320L240,288L480,192L720,160L960,96L1200,192L1440,0L1440,320L1200,320L960,320L720,320L480,320L240,320L0,320Z"
   /></svg
 >
+<Overview />
 <NFT />
 <Donation />
 <Buy />
@@ -135,7 +136,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     max-width: 960px;
     height: 100vh;
     margin: 0 auto;
-    transform: translateY(30%);
+    transform: translateY(20%);
     .col {
       position: relative;
       max-width: 50%;
@@ -148,11 +149,15 @@ Hey, you-- join us!  https://dimensionsoftware.com
       margin: 0.5rem 0;
     }
     h1 {
-      font-weight: 500;
-      margin-bottom: 0.25rem;
+      font-weight: 300;
+      font-size: 2.25rem;
+      margin-bottom: 1.15rem;
+      b {
+        font-weight: bold;
+      }
     }
     h2 {
-      margin: 0 0 1.75rem;
+      margin: 0 0 1.25rem;
       font-weight: 500;
       font-size: 1.25rem;
       :global(div) {
@@ -168,19 +173,20 @@ Hey, you-- join us!  https://dimensionsoftware.com
     article {
       font-size: 1.1rem;
       margin: 0;
+      max-width: 400px;
       line-height: 1.35;
     }
     :global(iframe) {
       position: relative;
       border-radius: 20px;
-      top: -15%;
+      top: -5%;
       right: -20%;
       opacity: 0;
     }
     :global(iframe.loaded) {
       opacity: 1;
-      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-      transition: opacity 0.1s $easeOutExpo, box-shadow 0.3s $easeOutExpo,
+      box-shadow: 5px 5px 18px 5px rgba(0, 0, 0, 0.4);
+      transition: opacity 0.025s $easeOutExpo, box-shadow 0.3s $easeOutExpo,
         height 0.3s $easeOutBack;
       will-change: opacity, box-shadow, height;
     }
@@ -200,7 +206,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
   }
   svg {
     position: absolute;
-    bottom: 0;
+    bottom: -5px;
     right: 0;
     left: 0;
     width: 100%;
@@ -228,6 +234,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
       overflow-y: scroll !important;
       main {
         padding: 0;
+        h1 > b {
+          display: block;
+        }
       }
     }
   }
@@ -248,12 +257,12 @@ Hey, you-- join us!  https://dimensionsoftware.com
           padding-right: 1rem;
           article {
             max-width: none;
-            margin-right: 2rem;
+            margin: 0 2rem 6rem 0;
           }
         }
         .wallet {
+          position: relative;
           max-width: inherit;
-          padding-top: 5rem;
           padding-bottom: 5rem;
           iframe {
             top: inherit;

@@ -48,8 +48,10 @@
 </script>
 
 <Feature
-  docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+  name="nft"
   title="NFT Checkout"
+  docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+  hasBackground={true}
 >
   <video loop playsinline autoplay muted slot="left" on:mousedown={snap.openWeb}
     ><source

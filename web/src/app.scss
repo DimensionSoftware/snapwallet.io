@@ -5,6 +5,15 @@
     Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
+::-moz-selection {
+  background: #000;
+  color: #fffc00;
+}
+::selection {
+  background: #000;
+  color: #fffc00;
+}
+
 * {
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;

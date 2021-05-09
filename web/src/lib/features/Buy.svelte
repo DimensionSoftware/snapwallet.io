@@ -51,8 +51,10 @@
 </script>
 
 <Feature
-  docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+  name="fiat"
   title="Fiat On & Offramp"
+  docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+  hasBackground={true}
 >
   <div slot="left">
     <iframe

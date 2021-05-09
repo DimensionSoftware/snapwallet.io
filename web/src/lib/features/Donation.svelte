@@ -56,8 +56,10 @@
 </script>
 
 <Feature
-  docLink="https://snapwallet.io/docs/guide/use-cases/donate.html"
+  name="donations"
   title="Donations & Tips"
+  hasBackground={true}
+  docLink="https://snapwallet.io/docs/guide/use-cases/donate.html"
 >
   <div class="relative" slot="left">
     <p>Accept Crypto Donations & Tips, Simply.</p>
