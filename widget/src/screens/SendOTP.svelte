@@ -30,7 +30,7 @@
   $: isUSPhoneNumber = $userStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   onMount(() => {
-    resizeWidget(425, $configStore.appName)
+    resizeWidget(400, $configStore.appName)
   })
 
   export let phoneVerificationOnly: boolean = false
@@ -48,7 +48,9 @@
         throw new Error('Enter a valid email address.')
       }
     } else {
-      const rawPhone = $userStore.phoneNumberCountry.dial_code + unMaskValue($userStore.phoneNumber, Masks.PHONE)
+      const rawPhone =
+        $userStore.phoneNumberCountry.dial_code +
+        unMaskValue($userStore.phoneNumber, Masks.PHONE)
       let isPhoneValid = vld8.isMobilePhone(rawPhone)
       if (!isPhoneValid) {
         focus(document.querySelector('input[type="tel"]'))

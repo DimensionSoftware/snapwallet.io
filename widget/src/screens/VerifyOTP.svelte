@@ -29,7 +29,7 @@
   $: cur = 0
 
   onMount(() => {
-    resizeWidget(425, $configStore.appName)
+    resizeWidget(400, $configStore.appName)
     window.addEventListener('paste', handlePaste)
 
     return () => {
