@@ -344,7 +344,7 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 
 func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
 	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
-	subject := fmt.Sprintf("Login Verification  (code: \"%s\")", code)
+	subject := fmt.Sprintf("Login Verification  (code: %s)", code)
 	plainTextContent := fmt.Sprintf("Your one-time access code is: %s", code)
 	htmlContent := fmt.Sprintf("Your one-time access code is: <strong>%s</strong>", code)
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
