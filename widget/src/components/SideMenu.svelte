@@ -60,7 +60,7 @@
   function close(isSlow = false) {
     slow = isSlow
     isExpanded = false
-    focusFirstInput()
+    focusFirstInput(800)
   }
   function handleClose(e) {
     // close if esc pressed

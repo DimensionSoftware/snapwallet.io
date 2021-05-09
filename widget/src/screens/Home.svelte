@@ -424,7 +424,7 @@
     visible
     on:close={() => {
       cryptoSelectorVisible = false
-      focusFirstInput(150)
+      focusFirstInput(800)
     }}
   />
 {/if}
