@@ -150,7 +150,7 @@
         >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
       >
     </div>
-    <br />
+    <hr />
     <div>
       <FaIcon data={faList} />
       <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}
@@ -161,7 +161,7 @@
       <FaIcon data={faUserCircle} />
       <a on:mousedown={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
     </div>
-    <br />
+    <hr />
     {#if isLoggedIn}
       <div>
         <FaIcon data={faSignOutAlt} />
@@ -264,28 +264,37 @@
     transform: translateX(105%);
     transition: none;
     z-index: 100;
-    nav > div {
-      display: flex;
-      align-items: center;
-      margin: 1rem 0 0 0;
-      transform: translateX(50px);
-      transition: transform 0s ease-out 0.5s;
-      :global(svg) {
-        opacity: 0;
-        transform: translateX(-5px);
-        transition: transform 0s ease-in 0.7s, opacity 0.1s ease-in;
+    nav {
+      > div {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0 0 0;
+        transform: translateX(50px);
+        transition: transform 0s ease-out 0.5s;
+        :global(svg) {
+          opacity: 0;
+          transform: translateX(-5px);
+          transition: transform 0s ease-in 0.7s, opacity 0.1s ease-in;
+        }
       }
-    }
-    nav div a {
-      position: relative;
-      display: block;
-      margin: -0.1rem 0 0 1.25rem !important;
-      color: var(--theme-text-color);
-      font-size: 1.35rem;
-      font-weight: 500;
-      &.hr {
-        margin-top: 2.5rem;
+      div a {
         position: relative;
+        display: block;
+        margin: -0.1rem 0 0 1.25rem !important;
+        color: var(--theme-text-color);
+        font-size: 1.35rem;
+        font-weight: 500;
+        &.hr {
+          margin-top: 2.5rem;
+          position: relative;
+        }
+      }
+      hr {
+        margin-top: 1.5rem;
+        height: 0;
+        border: none;
+        background: none;
+        background-color: transparent;
       }
     }
     &.closed {
