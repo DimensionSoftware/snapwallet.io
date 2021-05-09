@@ -42,7 +42,12 @@
   <div class="flex" slot="left">
     {#each cards as card}
       <article on:mousedown={_ => scrollTo(card.name)}>
-        <img src={`/static/images/${card.icon}`} alt={card.title} />
+        <img
+          height="300"
+          width="300"
+          src={`/images/${card.icon}`}
+          alt={card.title}
+        />
         <h4>{card.title}</h4>
         <p>{card.desc}</p>
       </article>
