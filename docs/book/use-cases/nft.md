@@ -1,12 +1,6 @@
-# Checkout Use Case
+# NFT Checkouts
 
-SnapWallet supports checkouts for your organization.
-
-In order to embed the widget for checkouts, set a description on the configuration to describe what is being purchased and where the money is being sent to.
-
-i.e. "Rooster John Wick #32 sold by CryptoRoosters via OpenSea"
-
-The amount can be fixed or enterable by the user.
+Configure Snap Wallet for NFT checkouts in a snap! Simply provide a `product` configuration parameter to get started. A user can purchase an NFT using a debit card or a bank account.
 
 ```html
 <!DOCTYPE html5>
@@ -23,19 +17,20 @@ The amount can be fixed or enterable by the user.
     <script>
       const snap = new window.Snap({
         appName: 'Example App',
-        focus: true,
         product: {
           videoURL:
             'https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4',
+          // Optionally provide an image URL instead
+          // imageURL: '',
           destinationAmount: 20,
           destinationTicker: 'ETH',
           destinationAddress: '0xf636B6aA45C554139763Ad926407C02719bc22f7',
           title: 'The Crown #1',
         },
         onMessage: (msg) => {
+          console.log('Msg', msg.event, 'Msg Data', msg.data)
           const closeEvents = [snap.events.EXIT, snap.events.SUCCESS]
           if (closeEvents.includes(msg.event)) {
-            console.log('Message Data', msg.data)
             snap.closeWeb()
           }
         },
