@@ -28,9 +28,10 @@
   @import '../styles/animations.scss';
   li {
     position: relative;
+    z-index: 2;
     padding-left: 1.25rem;
     margin-left: 1rem;
-    margin-top: 0.75rem;
+    margin-top: 0.55rem;
     &.custom {
       :global(span):before {
         display: none;
@@ -52,7 +53,7 @@
     > :global(span > svg) {
       position: absolute;
       left: -4px;
-      z-index: 1;
+      z-index: 4;
       top: 4px;
     }
     div {
@@ -96,6 +97,7 @@
       border-color: inherit;
       border-width: 0;
       outline: 0;
+      z-index: 0;
     }
     :global(span:before) {
       background: var(--theme-modal-background);
@@ -132,11 +134,14 @@
         background-color: var(--theme-success-color);
         background: var(--theme-success-color);
         width: 2px;
+        z-index: 0;
       }
       // hide the dot
       :global(span:before) {
-        opacity: 0;
-        background: var(--theme-success-color);
+        z-index: 3;
+        opacity: 1;
+        // background: var(--theme-success-color);
+        background: var(--theme-modal-background);
       }
       & > :global(.icon) {
         margin-left: 0.4rem;

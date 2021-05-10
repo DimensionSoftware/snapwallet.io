@@ -313,9 +313,12 @@
   }
 
   .vertical-stepper {
-    margin-top: 1.75rem;
+    margin-top: 2rem;
     list-style: none;
     padding: 0 0.5rem;
+    :global(li) {
+      margin-top: 0.25rem !important;
+    }
   }
 
   .btn-content {
