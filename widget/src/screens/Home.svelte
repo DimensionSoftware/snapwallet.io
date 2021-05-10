@@ -161,6 +161,10 @@
       return await processDebitTransaction(isLoggedIn)
     }
 
+    if (!isLoggedIn) {
+      return push(Routes.SEND_OTP)
+    }
+
     const nextRoute = getNextPath()
 
     if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
