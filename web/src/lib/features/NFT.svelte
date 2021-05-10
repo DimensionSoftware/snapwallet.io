@@ -3,6 +3,7 @@
   import Feature from '../Feature.svelte'
   import { formatLocaleCurrency } from '../../../../widget/src/util'
   import Button from '../Button.svelte'
+  import Heart from '../Heart.svelte'
 
   const config = {
     appName: 'NFT Checkout',
@@ -50,7 +51,9 @@
 <Feature
   name="nft"
   title="NFT Checkout"
+  description="Snap Wallet supports your favorite platform.  Check out with ANY NFT in one step.  Your loot is automagically added to your collection."
   docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+  hasImage={true}
   hasBackground={true}
 >
   <video loop playsinline autoplay muted slot="left" on:mousedown={snap.openWeb}
@@ -60,21 +63,19 @@
     /></video
   >
   <div class="relative" slot="right">
-    <p>
-      Checkout with any NFT. Your loot is automagically added to your
-      Collection.
-    </p>
     <div on:mousedown={snap.openWeb}>
       <h3>{config.product.title}</h3>
       <small>by {config.product.author}</small>
-      <h4>
+      <h3>Price</h3>
+      <small>
         {typeof navigator !== 'undefined'
           ? formatLocaleCurrency(
               config.product.destinationTicker,
               config.product.destinationAmount,
             )
           : '0'}
-      </h4>
+      </small>
+      <Heart />
       <Button>Buy</Button>
     </div>
     <div class="qr" on:mousedown={snap.openWeb}>
@@ -97,14 +98,29 @@
   .docs-link {
     margin: 1rem auto 0;
   }
+  :global(.nft h2) {
+    margin-top: -4rem;
+  }
+  :global(.nft h3) {
+    margin-top: -4rem;
+  }
   h3 {
-    margin: 0.5rem 0 0 0;
+    margin: 0.5rem 0 0.2rem 0;
+    font-size: 1.25rem;
   }
   small {
-    margin: 0 0 0 0.1rem;
+    margin: 0 0 1.5rem 0.1rem;
+    font-size: 1rem;
+    font-weight: 100;
+    display: block;
   }
   h4 {
-    margin: 1.5rem 0 2rem 0;
+    margin: 0.25rem 0 2rem 0;
+  }
+  :global(.nft article) {
+    margin-top: 4.55rem !important;
+    background: linear-gradient(#fff, rgba(255, 255, 255, 0.9)) !important;
+    box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
   }
   p {
     font-size: 1.25rem;
@@ -116,23 +132,30 @@
   video {
     cursor: pointer;
     align-self: flex-start;
-    margin-right: 2rem;
     min-height: 400px;
     min-width: 400px;
     max-width: 50%;
   }
-  :global(button) {
-    font-size: 1rem;
+  :global(.nft button) {
+    text-transform: capitalize !important;
+    color: #fff !important;
+    font-size: 1.15rem !important;
+    background: red !important;
+    border-color: red !important;
+    top: -3rem;
   }
   .qr {
     cursor: pointer;
     position: absolute;
-    bottom: -0.5rem;
-    left: 1rem;
+    bottom: 0rem;
+    right: 0rem;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 100%;
+    padding: 1rem;
+    overflow: hidden;
     #nft-qr-canvas {
       height: 100px;
       width: 100px;
-      border: 0.5rem solid #fff;
     }
   }
 </style>

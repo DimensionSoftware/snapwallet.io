@@ -5,10 +5,11 @@
   export let right
   export let name
   export let hasBackground
+  export let hasImage
 </script>
 
 <a id={name} />
-<section class={name} class:hasBackground>
+<section class={name} class:hasImage class:hasBackground>
   <article>
     <h2 class:right>
       {title}
@@ -25,8 +26,6 @@
   </article>
   {#if docLink}
     <a class="bottom docs-link" href={docLink} target="_blank">
-      See Docs
-      <br />
       <img
         height="25px"
         width="25px"
@@ -34,6 +33,7 @@
         alt="Made"
         src="/made.svg"
       />
+      <span>See Docs</span>
     </a>
   {/if}
 </section>
@@ -53,14 +53,24 @@
     background: white;
     display: flex;
     flex-direction: column;
-    padding: 10rem 10rem 0;
+    padding: 10rem 10rem 7rem 0;
+    position: relative;
+    &.hasImage {
+      &:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        transform: rotate(180deg);
+        background-image: url('/static/bg.png');
+      }
+    }
     &.hasBackground article {
       padding: 3rem;
       border-radius: 2rem;
       background: linear-gradient(#fafafa, #f0f0f0);
-    }
-    .docs-link {
-      margin: 1rem auto 0;
     }
     article {
       position: relative;
@@ -68,10 +78,11 @@
       max-width: 900px;
       width: 100%;
       margin: 0 auto;
-
       h2 {
         position: absolute;
-        top: -6.25rem;
+        top: -5.5rem;
+        left: -10%;
+        margin-left: -2rem;
         background: linear-gradient(#333, #000);
         background-clip: text;
         -webkit-background-clip: text;
@@ -85,7 +96,10 @@
       }
       h3 {
         position: absolute;
-        top: -3rem;
+        top: -2.25rem;
+        left: -10%;
+        max-width: 65%;
+        margin-left: -2rem;
         font-size: 1.25rem;
         font-weight: 100;
       }
@@ -102,8 +116,31 @@
       }
     }
     .docs-link {
+      position: relative;
+      margin: 1rem auto 0;
+      box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
+      border-radius: 2rem;
+      padding: 0.25rem 2rem;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 100;
       margin: 1.5rem 0 0 0;
       color: #222;
+      transition: background 0.2s ease-out, box-shadow 0.2s ease-out;
+      overflow: hidden;
+      backdrop-filter: blur(5px) contrast(110%);
+      &:hover {
+        transition: none;
+        background-color: #fff;
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+      }
+      img {
+        display: inline-block;
+      }
+      span {
+        margin: 0 0 0 0.5rem;
+        vertical-align: middle;
+      }
       &.bottom {
         display: block;
         margin: 1.5rem auto 0;
