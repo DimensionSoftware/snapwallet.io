@@ -52,8 +52,10 @@
 
 <Feature
   name="fiat"
-  title="Fiat On & Offramp"
+  title="Fiat Onramp & Offramp"
+  description="Buy and sell crypto currency fast, with the best rates & lowest fees.  Pay in fiat, receive crypto currency or vice-versa."
   docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+  hasImage={true}
   hasBackground={true}
 >
   <div slot="left">
@@ -68,13 +70,13 @@
   </div>
   <div class="relative" slot="right">
     <br style="margin-top: .5rem;" />
-    <p>Buy and Sell Crypto Currency fast, with the best rates & lowest fees.</p>
     <div on:mousedown={snap.openWeb}>
       <br />
       <h3>Snap Wallet is</h3>
       <ul>
         <li>&nbsp; Web, iOS & Android</li>
         <li>&nbsp; Fast, Secure, Embeddable</li>
+        <li>&nbsp; Dependency-free</li>
         <li>&nbsp; Pay in fiat, receive crypto currency</li>
       </ul>
     </div>
@@ -91,6 +93,20 @@
     > div {
       cursor: pointer;
     }
+  }
+  :global(.fiat article) {
+    margin-top: 4.55rem !important;
+    background: linear-gradient(#fff, rgba(255, 255, 255, 0.9)) !important;
+    box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
+  }
+  :global(.fiat.hasImage:before) {
+    transform: rotate(0) !important;
+  }
+  :global(.fiat h2) {
+    margin-top: -4rem;
+  }
+  :global(.fiat h3) {
+    margin-top: -4rem;
   }
   ul {
     margin: 0;

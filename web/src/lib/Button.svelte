@@ -26,11 +26,13 @@
     position: relative;
     min-height: 50px;
     width: 100%;
-    background: transparent;
+    background: #fffc00;
+    padding: 0.25rem 1rem;
+    color: #000;
     border: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0.5rem;
-    color: var(--theme-button-text-color);
     cursor: pointer;
+    white-space: nowrap;
     text-transform: uppercase;
     letter-spacing: 2px;
     margin: 0;

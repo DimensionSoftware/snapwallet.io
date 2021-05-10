@@ -61,15 +61,9 @@
   .flex {
     display: flex;
   }
-  :global(.overview h2),
-  :global(.overview h3) {
-    left: -10%;
-    margin-left: -2rem;
-  }
   article {
     max-width: 300px;
-    margin: 0 2.5rem;
-    margin-top: 0;
+    margin: 0 2.5rem 1rem;
     box-shadow: 8px 10px 20px rgba(0, 0, 0, 0.15);
     transition: box-shadow 0.3s ease-out, transform 0.04s ease-in;
     border-radius: 1rem;
@@ -90,12 +84,11 @@
   }
   h4 {
     text-align: center;
-    // padding-left: 1.5rem;
     font-size: 1.25rem;
     margin: 0 0 2rem 0;
   }
   p {
-    font-size: 1.05rem;
+    font-size: 1rem;
     line-height: 1.4rem;
     padding: 0 1.5rem;
     font-weight: 100;

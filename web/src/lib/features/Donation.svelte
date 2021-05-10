@@ -58,11 +58,11 @@
 <Feature
   name="donations"
   title="Donations & Tips"
+  description="Accept crypto donations and tips to your business.  SnapWallet's simple onramp makes integration easy.  It's fully customizable."
   hasBackground={true}
   docLink="https://snapwallet.io/docs/guide/use-cases/donate.html"
 >
   <div class="relative" slot="left">
-    <p>Accept Crypto Donations & Tips, Simply.</p>
     <div>
       <h3>Donate</h3>
       <small>to Snap Wallet</small>
@@ -73,7 +73,6 @@
     </div>
   </div>
   <div class="relative" slot="right">
-    <p>&nbsp;</p>
     <div>
       <h3>Tip</h3>
       <small>to Snap Wallet</small>
@@ -90,6 +89,7 @@
   @import '../../../../widget/src/styles/animations.scss';
 
   .relative {
+    color: #fff;
     position: relative;
     height: 100%;
     &:first-child {
@@ -98,6 +98,17 @@
     > div {
       cursor: pointer;
     }
+  }
+  :global(.donations h2) {
+    margin-top: -4rem;
+  }
+  :global(.donations h3) {
+    margin-top: -4rem;
+  }
+  :global(.donations article) {
+    margin-top: 4.55rem !important;
+    background: linear-gradient(#000, rgba(0, 0, 0, 0.9)) !important;
+    box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
   }
   .docs-link {
     margin: 1rem auto 0;
