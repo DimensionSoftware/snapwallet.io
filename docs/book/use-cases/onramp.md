@@ -1,6 +1,6 @@
 # Onramp
 
-Onramp is a common use case where the Snap Wallet widget is configured for buying cryptocurrencies using fiat and depositing cryptocurrency into a destination wallet. A user can purchase cryptocurrencies using a bank account or a debit card. Simply provide a wallet destination address and Snap Wallet will handle the rest.
+Onramp is a common use case where the Snap Wallet widget is configured for buying cryptocurrencies using a debit card or a bank account. Simply provide a destination wallet address using the `wallets` parameter in the widget configuration and Snap Wallet will handle the rest.
 
 ```html
 <!DOCTYPE html5>
