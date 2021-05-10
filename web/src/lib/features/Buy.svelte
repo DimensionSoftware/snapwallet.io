@@ -54,7 +54,7 @@
   name="fiat"
   title="Fiat Onramp & Offramp"
   description="Buy and sell crypto currency fast, with the best rates & lowest fees.  Pay in fiat, receive crypto currency or vice-versa."
-  docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+  docLink="https://snapwallet.io/docs/guide/use-cases/onramp.html"
   hasImage={true}
   hasBackground={true}
 >

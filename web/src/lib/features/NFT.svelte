@@ -52,7 +52,7 @@
   name="nft"
   title="NFT Checkout"
   description="Snap Wallet supports your favorite platform.  Check out with ANY NFT in one step.  Your loot is automagically added to your collection."
-  docLink="https://snapwallet.io/docs/guide/use-cases/checkout.html"
+  docLink="https://snapwallet.io/docs/guide/use-cases/nft.html"
   hasImage={true}
   hasBackground={true}
 >
