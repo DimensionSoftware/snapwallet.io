@@ -57,7 +57,10 @@ export class AuthManager {
 
   private setTokenLock() {
     Logger.debug('Token lock set')
-    return window.localStorage.setItem(JWT_TOKENS_LOCK_KEY, Date.now().toString())
+    return window.localStorage.setItem(
+      JWT_TOKENS_LOCK_KEY,
+      Date.now().toString(),
+    )
   }
 
   // returns access, refresh
@@ -292,7 +295,7 @@ export class FluxBearerAuthentication implements SecurityAuthentication {
     Logger.warn(
       'route needs authentication but no token was provided by the auth manager',
     )
-    throw new Error('Please login and try again.')
+    throw new Error('Please login')
   }
 }
 
