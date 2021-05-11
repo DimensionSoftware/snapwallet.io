@@ -53,6 +53,7 @@ export enum Routes {
   SEND_PAYMENT = '/send-payment',
   SELECT_PAYMENT = '/select-payment',
   TRANSACTIONS = '/transactions',
+  TRANSACTION_DETAILS = '/transaction-details',
   PROFILE_SEND_SMS = '/profile-send-sms',
   PROFILE_VERIFY_SMS = '/profile-verify-sms',
   PROFILE = '/profile',
