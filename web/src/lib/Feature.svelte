@@ -81,7 +81,7 @@
       h2 {
         position: absolute;
         top: -5.5rem;
-        left: -10%;
+        left: -5%;
         margin-left: -2rem;
         background: linear-gradient(#333, #000);
         background-clip: text;
@@ -97,11 +97,14 @@
       h3 {
         position: absolute;
         top: -2.25rem;
-        left: -10%;
+        left: -5%;
         max-width: 65%;
         margin-left: -2rem;
         font-size: 1.25rem;
         font-weight: 100;
+      }
+      h4 {
+        font-size: 2rem;
       }
     }
     a {

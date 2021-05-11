@@ -70,6 +70,8 @@
         <Button on:mousedown={donateAsset('btc')}>Send BTC</Button>
         <Button on:mousedown={donateAsset('eth')}>Send ETH</Button>
       </aside>
+      <input class="name" placeholder="Name" type="text" />
+      <textarea placeholder="Message" />
     </div>
   </div>
   <div class="relative" slot="right">
@@ -104,6 +106,7 @@
   }
   :global(.donations h3) {
     margin-top: -4rem;
+    font-size: 1.5rem;
   }
   :global(.donations article) {
     margin-top: 4.55rem !important;
@@ -148,5 +151,21 @@
       width: 100px;
       border: 0.5rem solid #fff;
     }
+  }
+
+  input.name,
+  textarea {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem 0.75rem 1rem;
+    border: none;
+    border-radius: 0.25rem;
+    margin: 1.5rem 0 1rem;
+  }
+  input.name {
+    margin-top: 3rem;
+  }
+  textarea {
+    margin-top: 0;
+    width: 75%;
   }
 </style>

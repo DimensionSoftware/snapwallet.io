@@ -262,7 +262,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
             font-size: 1rem;
           }
           article {
-            max-width: none;
+            max-width: 75%;
             margin: 0 2rem 6rem 0;
           }
         }

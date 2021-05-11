@@ -72,11 +72,17 @@
     <br style="margin-top: .5rem;" />
     <div on:mousedown={snap.openWeb}>
       <br />
+      <h3>I Want to Buy & Sell Crypto</h3>
+      <ul>
+        <li>Fiat to Crypto</li>
+        <li>Crypto to Crypto</li>
+        <li>Crypto to Fiat</li>
+      </ul>
+      <br />
       <h3>Snap Wallet is</h3>
       <ul>
         <li>&nbsp; Web, iOS & Android</li>
-        <li>&nbsp; Fast, Secure, Embeddable</li>
-        <li>&nbsp; Dependency-free</li>
+        <li>&nbsp; Dependency-free, Fast, Secure & Embeddable</li>
         <li>&nbsp; Pay in fiat, receive crypto currency</li>
       </ul>
     </div>
@@ -107,6 +113,7 @@
   }
   :global(.fiat h3) {
     margin-top: -4rem;
+    font-size: 1.5rem;
   }
   ul {
     margin: 0;

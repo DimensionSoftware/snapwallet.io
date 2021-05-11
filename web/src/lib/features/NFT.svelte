@@ -106,7 +106,7 @@
   }
   h3 {
     margin: 0.5rem 0 0.2rem 0;
-    font-size: 1.25rem;
+    font-size: 1.5rem;
   }
   small {
     margin: 0 0 1.5rem 0.1rem;
