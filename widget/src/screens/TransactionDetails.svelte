@@ -127,7 +127,7 @@
     justify-content: center;
     align-items: center;
     .checkout-item-name {
-      margin-top: 1rem;
+      margin-top: 0.5rem;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -156,9 +156,6 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    &.is-product {
-      margin-top: 1rem;
-    }
     & > .line-item {
       display: flex;
       justify-content: space-between;
@@ -167,26 +164,6 @@
         color: var(--theme-color-muted);
         font-weight: 300;
       }
-    }
-  }
-
-  .nft-title {
-    margin-top: 1rem;
-    font-weight: bold;
-  }
-
-  .nft-container {
-    height: 25%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin-bottom: 0.5rem;
-    .nft-video {
-      height: 100%;
-    }
-    .nft-image {
-      height: 100%;
     }
   }
 </style>
