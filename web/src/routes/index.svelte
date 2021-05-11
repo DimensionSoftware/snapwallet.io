@@ -255,6 +255,12 @@ Hey, you-- join us!  https://dimensionsoftware.com
         .intro {
           padding-left: 2rem;
           padding-right: 1rem;
+          h1 {
+            font-size: 1.7rem;
+          }
+          h2 {
+            font-size: 1rem;
+          }
           article {
             max-width: none;
             margin: 0 2rem 6rem 0;
