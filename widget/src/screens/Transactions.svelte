@@ -11,7 +11,10 @@
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import TransactionCard from '../components/cards/TransactionCard.svelte'
-  import { transactionsStore } from '../stores/TransactionsStore'
+  import {
+    transactionDetailsStore,
+    transactionsStore,
+  } from '../stores/TransactionsStore'
 
   $: transfers = $transactionsStore
   $: csvURI = ''
@@ -25,12 +28,13 @@
 
   onMount(async () => {
     await transactionsStore.fetchUserTransactions()
+    transactionDetailsStore.reset()
     loading = false
     csvURI = transactionsAsDataURI(transfers)
   })
 </script>
 
-<ModalContent fullscreen>
+<ModalContent>
   <ModalHeader>My Transactions</ModalHeader>
   <ModalBody fullscreen>
     {#if transfers?.length > 0}
@@ -51,7 +55,11 @@
       <div class="line-items scroll-y">
         {#each transfers as transfer, i}
           <div
-            style="margin-bottom: 1rem;"
+            on:click={() => {
+              $transactionDetailsStore = { transaction: transfer }
+              push(Routes.TRANSACTION_DETAILS)
+            }}
+            style="margin-bottom: 1rem;cursor:pointer;"
             in:fly={{ y: 25, duration: 350 + 50 * i }}
           >
             <TransactionCard transaction={transfer} />
