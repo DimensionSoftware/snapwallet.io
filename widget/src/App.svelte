@@ -45,6 +45,8 @@
   import DebitCardAddress from './screens/DebitCardAddress.svelte'
   import DebitCard2fa from './screens/DebitCard2fa.svelte'
   import { debitCardStore } from './stores/DebitCardStore'
+  import TransactionDetails from './screens/TransactionDetails.svelte'
+  import { transactionDetailsStore } from './stores/TransactionsStore'
 
   $: isPreLogout = false
   $: isBlurred = false
@@ -172,6 +174,13 @@
     }),
     [Routes.TRANSACTIONS]: wrap({
       ...authedRouteOptions(Transactions),
+    }),
+    [Routes.TRANSACTION_DETAILS]: wrap({
+      ...authedRouteOptions(TransactionDetails),
+      conditions: [
+        isJWTValid,
+        () => Boolean($transactionDetailsStore.transaction),
+      ],
     }),
     [Routes.PLAID_LINK]: wrap({
       ...authedRouteOptions(PlaidWidget),
