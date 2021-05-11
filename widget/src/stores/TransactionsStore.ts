@@ -1,6 +1,5 @@
-import type { WyreTransfer, WyreTransfers } from 'api-client'
+import type { WyreTransfer } from 'api-client'
 import { writable } from 'svelte/store'
-import { reducePersonalInfoFields } from '../util/profiles'
 
 const createStore = () => {
   const { subscribe, update } = writable<WyreTransfer[]>([])
@@ -31,3 +30,16 @@ async function rFetchUserTransfers(
 }
 
 export const transactionsStore = createStore()
+
+const createTransactionDetailsStore = () => {
+  const { subscribe, set } = writable<{ transaction: WyreTransfer }>({
+    transaction: null,
+  })
+  return {
+    subscribe,
+    set,
+    reset: () => set(null),
+  }
+}
+
+export const transactionDetailsStore = createTransactionDetailsStore()
