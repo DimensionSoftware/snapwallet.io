@@ -89,7 +89,7 @@
       left: 3px;
       top: -20px;
       opacity: 0.3;
-      height: calc(100% + 12px);
+      height: calc(100% + 9px);
       content: '';
       background-color: var(--theme-text-color);
       background-position: 0 0;

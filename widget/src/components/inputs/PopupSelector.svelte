@@ -73,7 +73,7 @@
     right: 0;
     padding-top: 0.5rem;
     background: var(--theme-modal-popup-background);
-    animation: slideUp 0.25s $easeOutExpo forwards;
+    animation: slideUp 0.25s var(--theme-ease-out-expo) forwards;
     &:after {
       @include bottom-shadow;
     }
