@@ -350,16 +350,22 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 }
 
 func generateOtpMessage(to *mail.Email, code string) (*mail.SGMailV3, error) {
-	fp, err := filepath.Abs("./lib/server/templates/otp.html")
+	// NOTE: Rel "." is referring to the project root.
+	// Using Abs does not allow custom errors to be thrown
+	fp, e := filepath.Rel(".", "lib/server/templates/otp.html")
+	errMsg := "Unable to send your security code. Please contact support@snapwallet.io"
 
-	if err != nil {
-		return nil, err
+	if e != nil {
+		fmt.Println(e)
+		return nil, status.Error(codes.Internal, errMsg)
 	}
+
 	// TODO: read into memory once
 	t, err := template.ParseFiles(fp)
 
 	if err != nil {
-		return nil, err
+		fmt.Println(err)
+		return nil, status.Error(codes.Internal, errMsg)
 	}
 
 	var body bytes.Buffer
