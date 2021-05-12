@@ -139,6 +139,7 @@
     perspective: 1000px;
     backface-visibility: hidden;
     border-radius: 0.5rem;
+    align-self: center;
     & > .flip-card-inner {
       border-radius: 0.5rem;
       animation: flipHorizontal 1s infinite;
