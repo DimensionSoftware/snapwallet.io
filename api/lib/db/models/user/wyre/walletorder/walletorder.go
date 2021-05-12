@@ -15,11 +15,11 @@ type WalletOrder struct {
 
 type WalletOrders []WalletOrder
 
-func (wos WalletOrders) IDs() []string {
-	var out []string
+func (wos WalletOrders) IDs() []ID {
+	var out []ID
 
 	for _, wo := range wos {
-		out = append(out, string(wo.ID))
+		out = append(out, wo.ID)
 	}
 
 	return out
