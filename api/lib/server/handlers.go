@@ -37,6 +37,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/walletorder"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
@@ -1708,7 +1709,11 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 			VerificationCode: card.VerificationCode,
 		},
 	})
+	if err != nil {
+		return nil, err
+	}
 
+	err = s.Db.SaveWalletOrderForUser(ctx, u.ID, walletorder.ID(orderResponse.ID))
 	if err != nil {
 		return nil, err
 	}
