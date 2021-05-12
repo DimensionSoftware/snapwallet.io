@@ -83,10 +83,7 @@
         top: -5.5rem;
         left: -5%;
         margin-left: -2rem;
-        background: linear-gradient(#333, #000);
-        background-clip: text;
-        -webkit-background-clip: text;
-        color: transparent;
+        color: #000;
         font-size: 2rem;
         font-weight: bold;
         &.right {
