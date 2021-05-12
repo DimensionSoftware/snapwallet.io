@@ -19,6 +19,10 @@
       title: 'The Crown',
       author: 'Patrick Mahomes',
     },
+    theme: {
+      color: 'rgb(222, 49, 45)',
+      buttonColor: 'rgb(222, 49, 45)',
+    },
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
   }
   let snap: any = {}
@@ -102,6 +106,10 @@
     margin-top: -4rem;
   }
   :global(.nft h3) {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    background: black;
     margin-top: -4rem;
   }
   h3 {
@@ -140,8 +148,8 @@
     text-transform: capitalize !important;
     color: #fff !important;
     font-size: 1.15rem !important;
-    background: red !important;
-    border-color: red !important;
+    background: rgb(222, 49, 45) !important;
+    border-color: rgb(222, 49, 45) !important;
     top: -3rem;
   }
   .qr {

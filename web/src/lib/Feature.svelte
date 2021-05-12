@@ -134,8 +134,11 @@
       backdrop-filter: blur(5px) contrast(110%);
       &:hover {
         transition: none;
-        background-color: #fff;
+        background-color: rgba(255, 255, 255, 0.7);
         box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+      }
+      &:active {
+        animation: scaleIn 0.25s ease-out;
       }
       img {
         display: inline-block;

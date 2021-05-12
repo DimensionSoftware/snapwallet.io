@@ -141,6 +141,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
       position: relative;
       max-width: 50%;
     }
+    :global(h1, h2, h3) {
+      backdrop-filter: blur(10px);
+    }
     h1,
     h2 {
       white-space: nowrap;
@@ -171,7 +174,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
       margin-bottom: 1rem;
     }
     article {
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       margin: 0;
       max-width: 400px;
       line-height: 1.35;

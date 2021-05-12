@@ -24,6 +24,8 @@
   @import '../../../widget/src/styles/animations.scss';
   button {
     position: relative;
+    overflow: hidden;
+    display: block;
     min-height: 50px;
     width: 100%;
     background: #fffc00;
@@ -40,6 +42,7 @@
     transition: border 0.3s ease-in 0.05s;
     z-index: 10;
     &.glow {
+      overflow: hidden;
       &:hover {
         animation: inherit;
       }
@@ -48,6 +51,7 @@
       animation-iteration-count: infinite;
     }
     &:hover {
+      position: relative;
       background: var(--theme-button-color);
       border-color: var(--theme-button-color);
       transform: scale(1.0025);
