@@ -1,34 +1,7 @@
+{{ define "otpHTML" }}
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta name="viewport" content="width=device-width" />
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <title>Security Code</title>
-    <!--[if gte mso 9]>
-      <xml>
-        <o:OfficeDocumentSettings>
-          <o:AllowPNG />
-          <o:PixelsPerInch>96</o:PixelsPerInch>
-        </o:OfficeDocumentSettings>
-      </xml>
-    <![endif]-->
-    <style>
-      @media (min-width: 493px) {
-        .content-td {
-          padding-left: 100px !important;
-          padding-right: 100px !important;
-        }
-        td {
-          padding: 0 100px;
-        }
-      }
-      @media (prefers-color-scheme: dark) {
-        .footer {
-          background-image: none !important;
-        }
-      }
-    </style>
-  </head>
+  {{ template "headHTML" }}
   <body
     style="
       -ms-text-size-adjust: 100%;
@@ -128,56 +101,7 @@
               cellspacing="0"
             >
               <!-- START MAIN CONTENT AREA -->
-              <tr
-                style="
-                  box-sizing: border-box;
-                  margin: 0;
-                  margin-bottom: 30px;
-                  margin-top: 0;
-                  padding: 0;
-                  width: 100%;
-                "
-                align="left"
-              >
-                <td
-                  valign="top"
-                  align="center"
-                  style="
-                    box-sizing: border-box;
-                    font-family: -apple-system, BlinkMacSystemFont, segoe ui,
-                      Roboto, Oxygen, Ubuntu, Cantarell, open sans,
-                      helvetica neue, sans-serif;
-                    font-size: 14px;
-                    margin: 0;
-                    padding: 30px 0 30px 0 !important;
-                  "
-                >
-                  <a
-                    href="https://snapwallet.io"
-                    target="_blank"
-                    style="
-                      color: #3498db !important;
-                      text-decoration: none !important;
-                    "
-                  >
-                    <img
-                      id="snap-wallet-header-logo"
-                      src="https://dimensionsoftware.com/static/images/layout/dimension_icon.png"
-                      alt="Snap Wallet"
-                      align="center"
-                      style="
-                        -ms-interpolation-mode: bicubic;
-                        border: none;
-                        height: 50px;
-                        max-width: 50px;
-                        vertical-align: center;
-                        width: 82px;
-                      "
-                      width="82"
-                    />
-                  </a>
-                </td>
-              </tr>
+              {{ template "contentHeaderHTML" }}
               <tr
                 style="box-sizing: border-box; margin: 0; padding: 0"
                 align="left"
@@ -240,7 +164,7 @@
                             margin: 0;
                             margin-bottom: 0;
                             padding-bottom: 20px;
-                            text-align: center;
+                            text-align: left;
                           "
                         >
                           Security Code
@@ -257,7 +181,7 @@
                             margin: 0;
                             margin-bottom: 0;
                             padding-bottom: 20px;
-                            text-align: center;
+                            text-align: left;
                           "
                         >
                           {{.OTPCode}}
@@ -278,7 +202,7 @@
                             padding-left: 0 !important;
                             padding-right: 0 !important;
                             padding-top: 20px;
-                            text-align: center;
+                            text-align: left;
                           "
                         >
                           If you did not request this security code please
@@ -294,67 +218,7 @@
                         </p>
                       </td>
                     </tr>
-                    <tr
-                      class="footer"
-                      align="center"
-                      style="
-                        box-sizing: border-box;
-                        clear: both;
-                        height: 100px;
-                        margin: 0;
-                        padding: 0;
-                        padding-top: 30px;
-                        width: 100%;
-                      "
-                    >
-                      <td
-                        valign="top"
-                        align="center"
-                        style="
-                          box-sizing: border-box;
-                          font-family: -apple-system, BlinkMacSystemFont,
-                            segoe ui, Roboto, Oxygen, Ubuntu, Cantarell,
-                            open sans, helvetica neue, sans-serif;
-                          font-size: 12px;
-                          margin: 0;
-                          margin-bottom: 0;
-                          padding: 0 0 20px 0;
-                          padding-top: 40px;
-                        "
-                      >
-                        <p
-                          style="
-                            font-family: -apple-system, BlinkMacSystemFont,
-                              segoe ui, Roboto, Oxygen, Ubuntu, Cantarell,
-                              open sans, helvetica neue, sans-serif;
-                            font-size: 12px;
-                            font-weight: normal;
-                            margin: 0;
-                            margin-bottom: 20px;
-                            padding-left: 0 !important;
-                            padding-right: 0 !important;
-                            padding-top: 10px;
-                            text-align: center;
-                            vertical-align: middle;
-                          "
-                        >
-                          <a
-                            href="https://snapwallet.io"
-                            target="_blank"
-                            style="
-                              color: initial !important;
-                              font-size: 12px;
-                              text-align: center;
-                              text-decoration: none !important;
-                              vertical-align: middle;
-                              font-size: 14px;
-                            "
-                          >
-                            Secured by <b>Snap Wallet</b> ⦁ Silicon Beach, CA
-                          </a>
-                        </p>
-                      </td>
-                    </tr>
+                    {{ template "footerHTML" }}
                   </table>
                 </td>
               </tr>
@@ -381,3 +245,4 @@
     </table>
   </body>
 </html>
+{{ end }}
