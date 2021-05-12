@@ -26,6 +26,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/unmarshal"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
+	"github.com/khoerling/flux/api/lib/db/models/user/wyre/walletorder"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/hashing"
 	"google.golang.org/api/iterator"
@@ -100,6 +101,18 @@ func (db Db) GetGotoConfigByShortID(ctx context.Context, shortID gotoconfig.Shor
 	}
 
 	return nil, nil
+}
+
+func (db Db) SaveWalletOrderForUser(ctx context.Context, userID user.ID, woID walletorder.ID) error {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreWalletOrders").Doc(string(woID))
+
+	wo := walletorder.WalletOrder{
+		ID:        woID,
+		CreatedAt: time.Now(),
+	}
+	_, err := ref.Set(ctx, &wo)
+
+	return err
 }
 
 // CreateOneTimePasscode stores a record of a one-time-password request for verification later
