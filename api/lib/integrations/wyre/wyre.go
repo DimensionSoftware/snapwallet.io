@@ -225,11 +225,11 @@ type GetWalletOrderAuthorizationsRequest struct {
 }
 
 type SubmitWalletOrderAuthorizationsRequest struct {
-	WalletOrderID string `json:"walletOrderId"` // The wallet order ID
-	Type          string `json:"type"`          // The type of code to be verified ALL | SMS | CARD
-	Reservation   string `json:"reservation"`
-	SMS           string `json:"sms"`     // The SMS code to be verified
-	Card2fa       string `json:"card2fa"` // The debit card code to be verified
+	WalletOrderID WalletOrderID `json:"walletOrderId"` // The wallet order ID
+	Type          string        `json:"type"`          // The type of code to be verified ALL | SMS | CARD
+	Reservation   string        `json:"reservation"`
+	SMS           string        `json:"sms"`     // The SMS code to be verified
+	Card2fa       string        `json:"card2fa"` // The debit card code to be verified
 }
 
 type WalletOrderAddress struct {
@@ -296,6 +296,9 @@ type PaymentMethodID string
 
 // TransferID ...
 type TransferID string
+
+// WalletOrderID
+type WalletOrderID string
 
 const (
 	// ProfileFieldIDIndividualLegalName indicates the value is a legal name string
@@ -1119,6 +1122,37 @@ func (c Client) GetWalletOrderReservation(req GetWalletOrderReservationRequest) 
 	}
 
 	return resp.Result().(*WalletOrderReservation), nil
+}
+
+// WalletOrderDetails gets wallet order details from wyre
+// NOTE: This endpoint uses centralized authentication.
+// https://docs.sendwyre.com/docs/wallet-order-details
+// GET https://api.sendwyre.com/v3/orders/:orderId
+func (c Client) WalletOrderDetails(woID WalletOrderID) (*WalletOrder, error) {
+	// Timestamp is required by Wyre to avoid replay attacks
+	ts := time.Now().Unix() * int64(time.Millisecond)
+	// Req path and URL are constructed here so that the signature and req match
+	reqPath := fmt.Sprintf("/v3/orders/%s?timestamp=%d", woID, ts)
+	url := c.http.HostURL + reqPath
+	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, []byte(""))
+
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := c.http.R().
+		SetHeader("X-Api-Signature", *signature).
+		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetError(APIError{}).
+		SetResult(WalletOrder{}).
+		EnableTrace().
+		Get(reqPath)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Result().(*WalletOrder), nil
 }
 
 // CreateWalletOrder creates a wallet order in Wyre's system

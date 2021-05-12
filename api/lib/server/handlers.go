@@ -1750,7 +1750,7 @@ func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *pro
 	}
 
 	res, err := s.Wyre.SubmitWalletOrderAuthorizations(wyre.SubmitWalletOrderAuthorizationsRequest{
-		WalletOrderID: req.OrderId,
+		WalletOrderID: wyre.WalletOrderID(req.OrderId),
 		Type:          verificationType,
 		Reservation:   req.ReservationId,
 		SMS:           req.Sms_2FaCode,
