@@ -9,7 +9,12 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { Routes } from '../constants'
   import { debitCardStore } from '../stores/DebitCardStore'
-  import { onMount } from 'svelte'
+  import { onDestroy, onMount } from 'svelte'
+  import { unMaskValue } from '../masks'
+  import { Masks } from '../types'
+  import { configStore } from '../stores/ConfigStore'
+  import { transactionStore } from '../stores/TransactionStore'
+  import { toaster } from '../stores/ToastStore'
 
   let pollTimer
   let cardCode = ''
@@ -19,6 +24,57 @@
   $: smsCodeRequired = false
   $: cardCodeRequired = false
   $: isOneCodeRequired = Boolean(smsCodeRequired) || Boolean(cardCodeRequired)
+
+  const confirmQuote = async () => {
+    try {
+      const [
+        expirationMonth,
+        expirationYear,
+      ] = $debitCardStore.expirationDate.split('/')
+
+      const result = await window.API.fluxWyreConfirmDebitCardQuote({
+        reservationId: $debitCardStore.reservationId,
+        sourceCurrency: $transactionStore.sourceCurrency.ticker,
+        ...($transactionStore.sourceAmount && {
+          sourceAmount: $transactionStore.sourceAmount,
+          destCurrency: $transactionStore.destinationCurrency.ticker,
+        }),
+        ...($configStore.product?.destinationAmount && {
+          destAmount: $configStore.product.destinationAmount,
+          destCurrency: $configStore.product.destinationTicker,
+        }),
+        dest: $debitCardStore.dest,
+        card: {
+          firstName: $debitCardStore.firstName,
+          lastName: $debitCardStore.lastName,
+          phoneNumber: [
+            $debitCardStore.phoneNumberCountry.dial_code,
+            $debitCardStore.phoneNumber,
+          ]
+            .join('')
+            .replace(/-/g, ''),
+          number: unMaskValue($debitCardStore.number, Masks.DEBIT_CARD),
+          expirationMonth,
+          // Make this a 4 digit year
+          expirationYear: `20${expirationYear}`,
+          verificationCode: $debitCardStore.verificationCode,
+          address: $debitCardStore.address,
+        },
+      })
+      debitCardStore.update({ orderId: result.orderId })
+      pollTimer = pollAuthorizations()
+    } catch (e) {
+      toaster.pop({
+        msg: "We're unable to complete this order. Please try again.",
+        error: true,
+      })
+      // Clear any refs to failed txn/order
+      debitCardStore.update({ orderId: '', reservationId: '' })
+      setTimeout(() => {
+        push(Routes.ROOT)
+      }, 800)
+    }
+  }
 
   const handleNextStep = async () => {
     try {
@@ -67,8 +123,11 @@
   }
 
   onMount(() => {
-    pollTimer = pollAuthorizations()
-    return () => clearInterval(pollTimer)
+    confirmQuote()
+  })
+
+  onDestroy(() => {
+    clearInterval(pollTimer)
   })
 </script>
 
