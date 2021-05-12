@@ -6,10 +6,8 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"html/template"
 	"log"
 	"net/url"
-	"path/filepath"
 	"strings"
 	"time"
 
@@ -350,33 +348,16 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 }
 
 func generateOtpMessage(to *mail.Email, code string) (*mail.SGMailV3, error) {
-	// NOTE: Rel "." is referring to the project root.
-	// Using Abs does not allow custom errors to be thrown
-	fp, e := filepath.Rel(".", "lib/server/templates/otp.html")
-	errMsg := "Unable to send your security code. Please contact support@snapwallet.io"
-
-	if e != nil {
-		fmt.Println(e)
-		return nil, status.Error(codes.Internal, errMsg)
-	}
-
-	// TODO: read into memory once
-	t, err := template.ParseFiles(fp)
+	htmlContent, err := genEmailTemplate("otpHTML", EmailTemplateVars{OTPCode: code})
 
 	if err != nil {
-		fmt.Println(err)
-		return nil, status.Error(codes.Internal, errMsg)
+		return nil, err
 	}
-
-	var body bytes.Buffer
-	t.Execute(&body, struct {
-		OTPCode string
-	}{OTPCode: code})
 
 	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
 	subject := "Security Code"
 	plainTextContent := fmt.Sprintf("Your security code is: %s", code)
-	return mail.NewSingleEmail(from, subject, to, plainTextContent, body.String()), nil
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
 }
 
 func newMailWithAttachments(to *mail.Email, attachments []*mail.Attachment, plain string, html string) *mail.SGMailV3 {
@@ -403,12 +384,17 @@ func newMailWithAttachments(to *mail.Email, attachments []*mail.Attachment, plai
 	return m
 }
 
-func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) *mail.SGMailV3 {
+func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) (*mail.SGMailV3, error) {
+	htmlContent, err := genEmailTemplate("newTransactionHTML", EmailTemplateVars{TransactionID: string(t.ID), BusinessDays: 5})
+
+	if err != nil {
+		return nil, err
+	}
+
 	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
-	subject := fmt.Sprintf("Transfer %s Has Been Initiated", t.ID)
-	plainTextContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
-	htmlContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
-	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	subject := fmt.Sprintf("Transaction Created")
+	plainTextContent := fmt.Sprintf("Transaction %s created successfully", t.ID)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
 }
 
 // PlaidCreateLinkToken is an rpc handler
@@ -1497,7 +1483,11 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	}
 
 	// send email
-	msg := generateTransferMessage(mail.NewEmail("Customer", *u.Email), t)
+	msg, err := generateTransferMessage(mail.NewEmail("Customer", *u.Email), t)
+	if err != nil {
+		return nil, err
+	}
+
 	_, err = s.Sendgrid.Send(msg)
 	if err != nil {
 		return nil, err
