@@ -81,7 +81,7 @@ func genEmailTemplate(templateName string, templateVars EmailTemplateVars) (stri
 	}
 
 	var body bytes.Buffer
-	t.ExecuteTemplate(&body, "otpHTML", templateVars)
+	t.ExecuteTemplate(&body, templateName, templateVars)
 
 	return body.String(), nil
 }
