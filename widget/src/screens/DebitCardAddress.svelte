@@ -9,18 +9,11 @@
   import { focusFirstInput, Logger, onEnterPressed } from '../util'
   import { debitCardStore } from '../stores/DebitCardStore'
   import { onMount } from 'svelte'
-  import { unMaskValue } from '../masks'
-  import { Masks } from '../types'
-  import { transactionStore } from '../stores/TransactionStore'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
-  import { configStore } from '../stores/ConfigStore'
   import { userStore } from '../stores/UserStore'
 
-  let isConfirmingQuote = false
   let autocomplete: google.maps.places.Autocomplete
-
-  $: ({ product } = $configStore)
 
   const componentForm = {
     street_number: 'short_name',
@@ -120,52 +113,8 @@
     debitCardStore.update({ address })
   }
 
-  const handleNextStep = async () => {
-    try {
-      const [
-        expirationMonth,
-        expirationYear,
-      ] = $debitCardStore.expirationDate.split('/')
-      isConfirmingQuote = true
-
-      const result = await window.API.fluxWyreConfirmDebitCardQuote({
-        reservationId: $debitCardStore.reservationId,
-        sourceCurrency: $transactionStore.sourceCurrency.ticker,
-        ...($transactionStore.sourceAmount && {
-          sourceAmount: $transactionStore.sourceAmount,
-          destCurrency: $transactionStore.destinationCurrency.ticker,
-        }),
-        ...($configStore.product?.destinationAmount && {
-          destAmount: $configStore.product.destinationAmount,
-          destCurrency: $configStore.product.destinationTicker,
-        }),
-        dest: $debitCardStore.dest,
-        card: {
-          firstName: $debitCardStore.firstName,
-          lastName: $debitCardStore.lastName,
-          phoneNumber: [
-            $debitCardStore.phoneNumberCountry.dial_code,
-            $debitCardStore.phoneNumber,
-          ]
-            .join('')
-            .replace(/-/g, ''),
-          number: unMaskValue($debitCardStore.number, Masks.DEBIT_CARD),
-          expirationMonth,
-          // Make this a 4 digit year
-          expirationYear: `20${expirationYear}`,
-          verificationCode: $debitCardStore.verificationCode,
-          address: $debitCardStore.address,
-        },
-      })
-      setTimeout(() => {
-        debitCardStore.update({ orderId: result.orderId })
-        push(Routes.DEBIT_CARD_2FA)
-      }, 800)
-    } finally {
-      setTimeout(() => {
-        isConfirmingQuote = false
-      }, 800)
-    }
+  const handleNextStep = () => {
+    push(Routes.DEBIT_CARD_2FA)
   }
 
   const onKeyDown = (e: Event) => {
@@ -223,9 +172,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isConfirmingQuote} on:mousedown={handleNextStep}
-      >{isConfirmingQuote ? 'Confirming' : 'Confirm'}</Button
-    >
+    <Button on:mousedown={handleNextStep}>Confirm</Button>
   </ModalFooter>
 </ModalContent>
 
