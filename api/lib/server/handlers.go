@@ -6,8 +6,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"html/template"
 	"log"
 	"net/url"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -170,7 +172,11 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return &proto.OneTimePasscodeResponse{}, nil
 	}
 
-	msg := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
+	msg, err := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
+
+	if err != nil {
+		return nil, err
+	}
 
 	_, err = s.Sendgrid.Send(msg)
 	if err != nil {
@@ -342,12 +348,28 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	return &proto.PlaidConnectBankAccountsResponse{}, nil
 }
 
-func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
+func generateOtpMessage(to *mail.Email, code string) (*mail.SGMailV3, error) {
+	fp, err := filepath.Abs("./lib/server/templates/otp.html")
+
+	if err != nil {
+		return nil, err
+	}
+	// TODO: read into memory once
+	t, err := template.ParseFiles(fp)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var body bytes.Buffer
+	t.Execute(&body, struct {
+		OTPCode string
+	}{OTPCode: code})
+
 	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
-	subject := fmt.Sprintf("Login Verification  (code: %s)", code)
-	plainTextContent := fmt.Sprintf("Your one-time access code is: %s", code)
-	htmlContent := fmt.Sprintf("Your one-time access code is: <strong>%s</strong>", code)
-	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+	subject := "Security Code"
+	plainTextContent := fmt.Sprintf("Your security code is: %s", code)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, body.String()), nil
 }
 
 func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) *mail.SGMailV3 {
