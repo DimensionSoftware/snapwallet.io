@@ -19,6 +19,10 @@
       title: 'The Crown',
       author: 'Patrick Mahomes',
     },
+    theme: {
+      color: 'rgb(222, 49, 45)',
+      buttonColor: 'rgb(222, 49, 45)',
+    },
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
   }
   let snap: any = {}

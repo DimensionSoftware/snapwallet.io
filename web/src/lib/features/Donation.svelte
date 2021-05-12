@@ -3,22 +3,29 @@
   import Feature from '../Feature.svelte'
   import Button from '../Button.svelte'
 
-  const config = {
-    appName: 'Donation',
-    focus: true,
-    wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
-    theme: {
-      badgeTextColor: '#333',
-      inputColor: '#333',
-      shadowBottomColor: 'rgba(0,0,0,.075)',
-      colorInverse: '#fff',
-      buttonColor: 'rgba(247,127,26,1)',
-      buttonTextColor: '#fff',
-      successColor: 'rgb(247,127,26)',
-      colorLightened: 'rgba(247,127,26,.5)',
-      color: 'rgb(247,127,26)',
-    },
-  }
+  const themeColor = '#fffc00',
+    config = {
+      appName: 'Donation',
+      focus: true,
+      wallets: [
+        { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
+      ],
+      theme: {
+        modalBackground: 'rgba(10,10,10,1)',
+        modalPopupBackground: 'rgba(25,25,25,.9)',
+        color: 'rgba(0,0,0,.9)',
+        badgeTextColor: '#333',
+        colorLightened: 'rgba(5,5,5,.8)',
+        shadowBottomColor: 'rgba(0,0,0,.25)',
+        colorInverse: '#fff',
+        buttonColor: themeColor,
+        buttonTextColor: '#000',
+        buttonGlowColor: themeColor,
+        successColor: themeColor,
+        textColor: '#fff',
+        inputTextColor: '#333',
+      },
+    }
 
   let snap: any = {}
 
