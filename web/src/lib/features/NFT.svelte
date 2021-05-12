@@ -109,7 +109,6 @@
     position: relative;
     overflow: hidden;
     display: inline-block;
-    background: black;
     margin-top: -4rem;
   }
   h3 {
