@@ -397,6 +397,19 @@ func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) (*mail.SGMa
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
 }
 
+func generateDebitCardTransactionMessage(to *mail.Email, order *wyre.WalletOrder) (*mail.SGMailV3, error) {
+	htmlContent, err := genEmailTemplate("newTransactionHTML", EmailTemplateVars{TransactionID: order.ID, BusinessDays: 1})
+
+	if err != nil {
+		return nil, err
+	}
+
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+	subject := fmt.Sprintf("Transaction Created")
+	plainTextContent := fmt.Sprintf("Transaction %s created successfully", order.ID)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
+}
+
 // PlaidCreateLinkToken is an rpc handler
 func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreateLinkTokenRequest) (*proto.PlaidCreateLinkTokenResponse, error) {
 
@@ -1784,6 +1797,8 @@ func (s *Server) WyreGetDebitCardAuthorizations(ctx context.Context, req *proto.
 }
 
 func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *proto.WyreSubmitDebitCardOrderAuthorizationsRequest) (*proto.WyreSubmitDebitCardOrderAuthorizationsResponse, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+
 	var verificationType string
 
 	if req.Card_2FaCode != "" && req.Sms_2FaCode == "" {
@@ -1804,6 +1819,17 @@ func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *pro
 		Card2fa:       req.Card_2FaCode,
 	})
 
+	if err != nil {
+		return nil, err
+	}
+
+	// Send email
+	msg, err := generateDebitCardTransactionMessage(mail.NewEmail("Customer", *u.Email), &wyre.WalletOrder{ID: req.OrderId})
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = s.Sendgrid.Send(msg)
 	if err != nil {
 		return nil, err
 	}
