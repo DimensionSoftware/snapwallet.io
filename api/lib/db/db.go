@@ -115,7 +115,7 @@ func (db Db) SaveWalletOrderForUser(ctx context.Context, userID user.ID, woID wa
 	return err
 }
 
-func (db Db) GetAllWalletOrdersForUser(ctx context.Context, userID user.ID) ([]walletorder.WalletOrder, error) {
+func (db Db) GetAllWalletOrdersForUser(ctx context.Context, userID user.ID) (walletorder.WalletOrders, error) {
 	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreWalletOrders")
 
 	docs, err := ref.Documents(ctx).GetAll()
