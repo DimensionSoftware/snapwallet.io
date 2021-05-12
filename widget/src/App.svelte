@@ -234,9 +234,32 @@
     }),
     [Routes.DEBIT_CARD_ADDRESS]: wrap({
       ...authedRouteOptions(DebitCardAddress),
+      conditions: [
+        isJWTValid,
+        () => {
+          return Boolean(
+            $debitCardStore.address.country &&
+              $transactionStore.wyrePreview &&
+              $transactionStore.sourceAmount &&
+              $debitCardStore.reservationId,
+          )
+        },
+      ],
     }),
     [Routes.DEBIT_CARD_2FA]: wrap({
       ...authedRouteOptions(DebitCard2fa),
+      conditions: [
+        isJWTValid,
+        () => {
+          return Boolean(
+            $debitCardStore.address.country &&
+              $debitCardStore.address.street1 &&
+              $transactionStore.wyrePreview &&
+              $transactionStore.sourceAmount &&
+              $debitCardStore.reservationId,
+          )
+        },
+      ],
     }),
     '*': NotFound as any,
   }
