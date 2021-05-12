@@ -373,6 +373,30 @@ func generateOtpMessage(to *mail.Email, code string) (*mail.SGMailV3, error) {
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, body.String()), nil
 }
 
+func newMailWithAttachments(to *mail.Email, attachments []*mail.Attachment, plain string, html string) *mail.SGMailV3 {
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+
+	m := mail.NewV3Mail()
+
+	p := mail.NewPersonalization()
+	p.AddTos(to)
+
+	cplain := mail.NewContent("text/plain", plain)
+	chtml := mail.NewContent("text/html", html)
+
+	m.SetFrom(from)
+	m.AddPersonalizations(p)
+
+	for _, attachment := range attachments {
+		m.AddAttachment(attachment)
+	}
+
+	m.AddContent(cplain)
+	m.AddContent(chtml)
+
+	return m
+}
+
 func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) *mail.SGMailV3 {
 	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
 	subject := fmt.Sprintf("Transfer %s Has Been Initiated", t.ID)
