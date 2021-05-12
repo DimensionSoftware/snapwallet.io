@@ -115,6 +115,30 @@ func (db Db) SaveWalletOrderForUser(ctx context.Context, userID user.ID, woID wa
 	return err
 }
 
+func (db Db) GetAllWalletOrdersForUser(ctx context.Context, userID user.ID) ([]walletorder.WalletOrder, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("wyreWalletOrders")
+
+	docs, err := ref.Documents(ctx).GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	var out []walletorder.WalletOrder
+
+	for _, doc := range docs {
+		var wo walletorder.WalletOrder
+
+		err := doc.DataTo(&wo)
+		if err != nil {
+			return nil, err
+		}
+
+		out = append(out, wo)
+	}
+
+	return out, nil
+}
+
 // CreateOneTimePasscode stores a record of a one-time-password request for verification later
 func (db Db) CreateOneTimePasscode(ctx context.Context, emailOrPhone string, kind onetimepasscode.LoginKind) (*onetimepasscode.OneTimePasscode, error) {
 	id := shortuuid.New()
