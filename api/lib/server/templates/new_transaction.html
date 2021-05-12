@@ -201,8 +201,13 @@
                         >
                           Your transaction has been created successfully. Please
                           allow up to
-                          <b>five ({{.BusinessDays}}) business days</b> for your
-                          transaction to settle.
+                          <b
+                            >{{if eq .BusinessDays 5 }} five {{ end }} {{if eq
+                            .BusinessDays 1 }} one {{ end }} ({{.BusinessDays}})
+                            business {{ if gt .BusinessDays 1 }}days{{else}} day
+                            {{ end }}</b
+                          >
+                          for your transaction to settle.
                         </p>
                         <p
                           style="
