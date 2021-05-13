@@ -17,6 +17,12 @@ const (
 	KindACH   Kind = "ACH"
 )
 
+type Partner string
+
+const (
+	PartnerWyre Partner = "WYRE"
+)
+
 type Status string
 
 const (
@@ -38,6 +44,7 @@ const (
 
 type Transaction struct {
 	ID             ID             `firestore:"id"`
+	Partner        Partner        `firestore:"partner"`
 	Kind           Kind           `firestore:"kind"`
 	Direction      Direction      `firestore:"direction"`
 	Status         Status         `firestore:"status"`
