@@ -110,6 +110,18 @@ func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
 	return out
 }
 
+func (trx Transaction) EnrichWithWalletOrderReservation(in wyre.WalletOrderReservation) Transaction {
+	out := trx
+
+	return out
+}
+
+func (trx Transaction) EnrichWithWalletOrder(in wyre.WalletOrder) Transaction {
+	out := trx
+
+	return out
+}
+
 type Transactions []Transaction
 
 func (txns Transactions) IDs() []ID {
