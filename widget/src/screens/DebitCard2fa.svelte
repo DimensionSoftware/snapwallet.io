@@ -7,7 +7,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
-  import { Routes } from '../constants'
+  import { APIErrors, Routes } from '../constants'
   import { debitCardStore } from '../stores/DebitCardStore'
   import { onDestroy, onMount } from 'svelte'
   import { unMaskValue } from '../masks'
@@ -64,8 +64,12 @@
       debitCardStore.update({ orderId: result.orderId })
       pollTimer = pollAuthorizations()
     } catch (e) {
+      let msg = "We're unable to complete this order. Please try again."
+      if (e?.body?.code === APIErrors.BAD_REQUEST) {
+        msg = e?.body?.message
+      }
       toaster.pop({
-        msg: "We're unable to complete this order. Please try again.",
+        msg,
         error: true,
       })
       // Clear any refs to failed txn/order
@@ -228,6 +232,7 @@
           top: 5rem;
           left: 1rem;
           text-align: left;
+          font-weight: 600;
         }
       }
 

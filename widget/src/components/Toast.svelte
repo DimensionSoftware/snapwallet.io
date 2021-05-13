@@ -59,8 +59,8 @@
     align-items: center;
     padding: 0 1rem;
     width: 100%;
-    min-height: 60px;
-    max-height: 100px;
+    min-height: 100px;
+    max-height: 250px;
     color: var(--theme-text-color);
     font-weight: 500;
     z-index: 9999;
