@@ -98,6 +98,9 @@ func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
 	out.DestAmount = in.DestAmount
 	out.SourceCurrency = in.SourceCurrency
 	out.DestCurrency = in.DestCurrency
+	out.CreatedAt = fromEpochMS(in.CreatedAt)
+	// todo: is this right? is closed at same as completed at?
+	//out.CompletedAt = fromEpochMS(in.ClosedAt)
 
 	if out.SourceName == "" {
 		out.SourceName = in.SourceName
@@ -112,11 +115,43 @@ func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
 	return out
 }
 
+func (trx Transaction) EnrichWithWyreTransferDetail(in wyre.TransferDetail) Transaction {
+	out := trx
+
+	out.Partner = PartnerWyre
+	// todo: infer from input status
+	out.Status = StatusConfirmed
+
+	if !out.ExternalIDs.Has(ExternalID(in.ID)) {
+		out.ExternalIDs = append(trx.ExternalIDs, ExternalID(in.ID))
+	}
+
+	out.ExternalStatus = ExternalStatus(in.Status)
+	out.Source = stripWyreObjectPrefix(in.Source)
+	out.Dest = stripWyreObjectPrefix(in.Dest)
+	out.SourceAmount = in.SourceAmount
+	out.DestAmount = in.DestAmount
+	out.SourceCurrency = in.SourceCurrency
+	out.DestCurrency = in.DestCurrency
+	out.Message = in.Message
+	out.ExchangeRate = in.ExchangeRate
+	out.TotalFees = in.TotalFees
+	out.CreatedAt = fromEpochMS(in.CreatedAt)
+	out.ExpiresAt = fromEpochMS(in.ExpiresAt)
+	out.CompletedAt = fromEpochMS(in.CompletedAt)
+	out.CancelledAt = fromEpochMS(in.CancelledAt)
+
+	out.Message = in.Message
+
+	return out
+}
+
 func (trx Transaction) EnrichWithCreateWalletOrderReservationResponse(in wyre.CreateWalletOrderReservationResponse) Transaction {
 	out := trx
 
 	out.Partner = PartnerWyre
 	out.Kind = KindDebit
+	// this input object always indicates a quoted status
 	out.Status = StatusQuoted
 
 	if !out.ExternalIDs.Has(ExternalID(in.Reservation)) {
@@ -139,6 +174,13 @@ func (trx Transaction) EnrichWithWalletOrder(in wyre.WalletOrder) Transaction {
 	}
 
 	out.ExternalStatus = ExternalStatus(in.Status)
+	// todo: figure out what source makes sense here as a generated fill in
+	//out.Source = ""
+	out.Dest = stripWyreObjectPrefix(in.Dest)
+	out.SourceAmount = in.SourceAmount
+	out.DestAmount = in.DestAmount
+	out.SourceCurrency = in.SourceCurrency
+	out.DestCurrency = in.DestCurrency
 
 	return out
 }
@@ -164,4 +206,12 @@ func stripWyreObjectPrefix(s string) string {
 		return parts[0]
 	}
 	return parts[1]
+}
+
+func fromEpochMS(epochMS int64) time.Time {
+	if epochMS == 0 {
+		return time.Time{}
+	}
+
+	return time.Unix(epochMS/1000, 0)
 }
