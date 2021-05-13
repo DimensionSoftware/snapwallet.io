@@ -183,7 +183,6 @@ func (trx Transaction) EnrichWithCreateWalletOrderReservationResponse(in *wyre.C
 	out := trx
 
 	out.Partner = PartnerWyre
-	out.Kind = KindDebit
 	// this input object always indicates a quoted status
 	out.Status = StatusQuoted
 
@@ -198,7 +197,6 @@ func (trx Transaction) EnrichWithWalletOrder(in *wyre.WalletOrder) Transaction {
 	out := trx
 
 	out.Partner = PartnerWyre
-	out.Kind = KindDebit
 	// todo: infer from input status
 	out.Status = StatusConfirmed
 

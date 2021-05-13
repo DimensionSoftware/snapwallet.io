@@ -1458,7 +1458,9 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 		return nil, status.Error(codes.Unknown, "Unknown error while contacting wyre.")
 	}
 
-	trx := transaction.Transaction{}.WithDefaults().EnrichWithWyreTransferDetail(t)
+	trx := transaction.Transaction{
+		Kind: transaction.KindACH,
+	}.WithDefaults().EnrichWithWyreTransferDetail(t)
 	trx.Status = transaction.StatusQuoted
 	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
 	if err != nil {
@@ -1738,7 +1740,9 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 		return nil, err
 	}
 
-	trx := transaction.Transaction{}.WithDefaults().EnrichWithCreateWalletOrderReservationResponse(createReservationResponse)
+	trx := transaction.Transaction{
+		Kind: transaction.KindDebit,
+	}.WithDefaults().EnrichWithCreateWalletOrderReservationResponse(createReservationResponse)
 	trx.Status = transaction.StatusQuoted
 	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
 	if err != nil {
