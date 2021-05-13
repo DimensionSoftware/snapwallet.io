@@ -114,6 +114,7 @@
         address[fluxType] = val
       }
     }
+    Logger.debug('Place Final Address', address)
     debitCardStore.update({ address })
   }
 
@@ -146,6 +147,7 @@
         id="autocomplete"
         defaultValue={$debitCardStore.address.street1}
         placeholder="Street 1"
+        on:change={e => debitCardStore.updateAddress({ street1: e.detail })}
       />
     </Label>
     <div class="inline-inputs">
@@ -153,18 +155,24 @@
         <Input
           placeholder="Street 2"
           defaultValue={$debitCardStore.address.street2}
-          on:change={e => (address.street2 = e.detail)}
+          on:change={e => debitCardStore.updateAddress({ street2: e.detail })}
         />
       </Label>
       <Label class="postal" label="Postal Code">
         <Input
           placeholder="Postal Code"
           defaultValue={$debitCardStore.address.postalCode}
+          on:change={e =>
+            debitCardStore.updateAddress({ postalCode: e.detail })}
         />
       </Label>
     </div>
     <Label label="City">
-      <Input placeholder="City" defaultValue={$debitCardStore.address.city} />
+      <Input
+        placeholder="City"
+        defaultValue={$debitCardStore.address.city}
+        on:change={e => debitCardStore.updateAddress({ city: e.detail })}
+      />
     </Label>
     <div class="inline-inputs">
       <Label label="Country" style="margin-right: 1rem;">
@@ -172,14 +180,18 @@
           placeholder="Country"
           defaultValue={$debitCardStore.address.country ||
             $userStore.geo?.country?.toUpperCase()}
+          on:change={e => debitCardStore.updateAddress({ country: e.detail })}
         />
       </Label>
-      <Label class="state" label="State">
-        <Input
-          placeholder="State"
-          defaultValue={$debitCardStore.address.state}
-        />
-      </Label>
+      {#if $debitCardStore.address.country === 'US' || $userStore.geo?.country?.toUpperCase() === 'US'}
+        <Label class="state" label="State">
+          <Input
+            placeholder="State"
+            defaultValue={$debitCardStore.address.state}
+            on:change={e => debitCardStore.updateAddress({ state: e.detail })}
+          />
+        </Label>
+      {/if}
     </div>
   </ModalBody>
   <ModalFooter>
