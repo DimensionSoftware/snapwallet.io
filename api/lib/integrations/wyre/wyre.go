@@ -204,7 +204,7 @@ type GetWalletOrderReservationRequest struct {
 }
 
 type CreateWalletOrderRequest struct {
-	FirstName         string               `json:"givenName"`              // Card first name
+	Firstname         string               `json:"givenName"`              // Card first name
 	LastName          string               `json:"familyName"`             // Card last name
 	Email             string               `json:"email"`                  // User's email
 	PhoneNumber       string               `json:"phone"`                  // User's phone number (should match card)

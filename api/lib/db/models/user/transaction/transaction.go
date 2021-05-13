@@ -84,14 +84,28 @@ func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
 	out := trx
 
 	out.Partner = PartnerWyre
+
 	if !out.ExternalIDs.Has(ExternalID(in.ID)) {
 		out.ExternalIDs = append(trx.ExternalIDs, ExternalID(in.ID))
 	}
+
 	out.ExternalStatus = ExternalStatus(in.Status)
 	out.Source = stripWyreObjectPrefix(in.Source)
 	out.Dest = stripWyreObjectPrefix(in.Dest)
 	out.SourceAmount = in.SourceAmount
 	out.DestAmount = in.DestAmount
+	out.SourceCurrency = in.SourceCurrency
+	out.DestCurrency = in.DestCurrency
+
+	if out.SourceName == "" {
+		out.SourceName = in.SourceName
+	}
+
+	if out.DestName == "" {
+		out.DestName = in.DestName
+	}
+
+	out.Message = in.Message
 
 	return out
 }
