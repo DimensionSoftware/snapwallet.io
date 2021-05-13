@@ -1,11 +1,22 @@
 package transaction
 
 import (
+	"encoding/json"
 	"strings"
 	"time"
 
+	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 )
+
+// EncryptedTransaction is the at-rest form of transactions
+type EncryptedTransaction struct {
+	ID                ID          `firestore:"id"`
+	ExternalIDs       ExternalIDs `firestore:"externalIDs"`
+	DataEncryptionKey []byte      `firestore:"DEK"`
+	DataEncrypted     []byte      `firestore:"data"`
+	CreatedAt         time.Time   `firestore:"createdAt"`
+}
 
 // ID
 type ID string
@@ -56,28 +67,28 @@ const (
 )
 
 type Transaction struct {
-	ID             ID             `firestore:"id"`
-	Partner        Partner        `firestore:"partner"`
-	Kind           Kind           `firestore:"kind"`
-	Direction      Direction      `firestore:"direction"`
-	Status         Status         `firestore:"status"`
-	ExternalIDs    ExternalIDs    `firestore:"externalIDs"`
-	ExternalStatus ExternalStatus `firestore:"status"`
-	Source         string         `firestore:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
-	Dest           string         `firestore:"dest"`           // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
-	SourceName     string         `firestore:"sourceName"`     // i.e. "account:AC-WYUR7ZZ6UMU"
-	DestName       string         `firestore:"destName"`       // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
-	SourceAmount   float64        `firestore:"sourceAmount"`   // i.e. 5
-	DestAmount     float64        `firestore:"destAmount"`     // i.e. 0.01
-	SourceCurrency string         `firestore:"sourceCurrency"` // i.e. "USD"
-	DestCurrency   string         `firestore:"destCurrency"`   // i.e. "BTC"
-	Message        string         `firestore:"message"`        // i.e. "Payment for DorianNakamoto@sendwyre.com"
-	ExchangeRate   float64        `firestore:"exchangeRate"`   // i.e. 499.00
-	TotalFees      float64        `firestore:"totalFees"`
-	CreatedAt      time.Time      `firestore:"createdAt"`
-	ExpiresAt      time.Time      `firestore:"expiresAt,omitempty"`
-	CompletedAt    time.Time      `firestore:"completedAt,omitempty"`
-	CancelledAt    time.Time      `firestore:"cancelledAt,omitempty"`
+	ID             ID             `json:"id"`
+	Partner        Partner        `json:"partner"`
+	Kind           Kind           `json:"kind"`
+	Direction      Direction      `json:"direction"`
+	Status         Status         `json:"status"`
+	ExternalIDs    ExternalIDs    `json:"externalIDs"`
+	ExternalStatus ExternalStatus `json:"externalStatus"`
+	Source         string         `json:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
+	Dest           string         `json:"dest"`           // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
+	SourceName     string         `json:"sourceName"`     // i.e. "account:AC-WYUR7ZZ6UMU"
+	DestName       string         `json:"destName"`       // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
+	SourceAmount   float64        `json:"sourceAmount"`   // i.e. 5
+	DestAmount     float64        `json:"destAmount"`     // i.e. 0.01
+	SourceCurrency string         `json:"sourceCurrency"` // i.e. "USD"
+	DestCurrency   string         `json:"destCurrency"`   // i.e. "BTC"
+	Message        string         `json:"message"`        // i.e. "Payment for DorianNakamoto@sendwyre.com"
+	ExchangeRate   float64        `json:"exchangeRate"`   // i.e. 499.00
+	TotalFees      float64        `json:"totalFees"`
+	CreatedAt      time.Time      `json:"createdAt"`
+	ExpiresAt      time.Time      `json:"expiresAt,omitempty"`
+	CompletedAt    time.Time      `json:"completedAt,omitempty"`
+	CancelledAt    time.Time      `json:"cancelledAt,omitempty"`
 }
 
 func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
@@ -214,4 +225,50 @@ func fromEpochMS(epochMS int64) time.Time {
 	}
 
 	return time.Unix(epochMS/1000, 0)
+}
+
+// Encrypt encrypts the transaction
+func (transaction Transaction) Encrypt(m *encryption.Manager, userID ID) (*EncryptedTransaction, error) {
+	dekH := encryption.NewDEK()
+	dek := encryption.NewEncryptor(dekH)
+
+	jsonData, err := json.Marshal(&transaction)
+	if err != nil {
+		return nil, err
+	}
+
+	encryptedData, err := dek.Encrypt(jsonData, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	return &EncryptedTransaction{
+		ID:                transaction.ID,
+		ExternalIDs:       transaction.ExternalIDs,
+		DataEncryptionKey: *encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
+		DataEncrypted:     encryptedData,
+		CreatedAt:         transaction.CreatedAt,
+	}, nil
+}
+
+// Decrypt decrypts the transaction
+func (enc EncryptedTransaction) Decrypt(m *encryption.Manager, userID ID) (*Transaction, error) {
+	dekH, err := encryption.ParseAndDecryptKeyBytes(enc.DataEncryptionKey, m.Encryptor)
+	if err != nil {
+		return nil, err
+	}
+	dek := encryption.NewEncryptor(dekH)
+
+	jsonData, err := dek.Decrypt(enc.DataEncrypted, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	var transaction Transaction
+	err = json.Unmarshal(jsonData, &transaction)
+	if err != nil {
+		return nil, err
+	}
+
+	return &transaction, nil
 }
