@@ -26,7 +26,7 @@
       /(-|\s)/g,
       '',
     )
-    validateForm(debitCardValidationRules, {
+    const { isValid, error } = validateForm(debitCardValidationRules, {
       phoneNumber,
       firstName: $debitCardStore.firstName,
       lastName: $debitCardStore.lastName,
@@ -34,6 +34,8 @@
       cardExpiration: $debitCardStore.expirationDate,
       cardVerificationCode: $debitCardStore.verificationCode,
     })
+
+    if (!isValid) throw new Error(error)
 
     push(Routes.DEBIT_CARD_ADDRESS)
   }
