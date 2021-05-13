@@ -34,7 +34,7 @@ metadata:
 spec:
   template:
     spec:
-      containerConcurrency: 5
+      containerConcurrency: 15
       timeoutSeconds: 300
       containers:
       - image: ${JSON.stringify(image)}
