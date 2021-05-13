@@ -15,6 +15,7 @@ import (
 type EncryptedTransaction struct {
 	ID                ID          `firestore:"id"`
 	ExternalIDs       ExternalIDs `firestore:"externalIDs"`
+	Status            Status      `firestore:"status"`
 	DataEncryptionKey []byte      `firestore:"DEK"`
 	DataEncrypted     []byte      `firestore:"dataEncrypted"`
 	CreatedAt         time.Time   `firestore:"createdAt"`
@@ -262,6 +263,7 @@ func (transaction Transaction) Encrypt(m *encryption.Manager, userID user.ID) (*
 	return &EncryptedTransaction{
 		ID:                transaction.ID,
 		ExternalIDs:       transaction.ExternalIDs,
+		Status:            transaction.Status,
 		DataEncryptionKey: *encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		DataEncrypted:     encryptedData,
 		CreatedAt:         transaction.CreatedAt,
