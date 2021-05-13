@@ -1,7 +1,10 @@
 package transaction
 
 import (
+	"strings"
 	"time"
+
+	"github.com/khoerling/flux/api/lib/integrations/wyre"
 )
 
 // ID
@@ -9,6 +12,16 @@ type ID string
 
 // ExternalID
 type ExternalID string
+type ExternalIDs []ExternalID
+
+func (ids ExternalIDs) Has(targetID ExternalID) bool {
+	for _, id := range ids {
+		if id == targetID {
+			return true
+		}
+	}
+	return false
+}
 
 type Kind string
 
@@ -48,7 +61,7 @@ type Transaction struct {
 	Kind           Kind           `firestore:"kind"`
 	Direction      Direction      `firestore:"direction"`
 	Status         Status         `firestore:"status"`
-	ExternalIDs    []ExternalID   `firestore:"externalIDs"`
+	ExternalIDs    ExternalIDs    `firestore:"externalIDs"`
 	ExternalStatus ExternalStatus `firestore:"status"`
 	Source         string         `firestore:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
 	Dest           string         `firestore:"dest"`           // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
@@ -67,6 +80,22 @@ type Transaction struct {
 	CancelledAt    time.Time      `firestore:"cancelledAt,omitempty"`
 }
 
+func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
+	out := trx
+
+	out.Partner = PartnerWyre
+	if !out.ExternalIDs.Has(ExternalID(in.ID)) {
+		out.ExternalIDs = append(trx.ExternalIDs, ExternalID(in.ID))
+	}
+	out.ExternalStatus = ExternalStatus(in.Status)
+	out.Source = stripWyreObjectPrefix(in.Source)
+	out.Dest = stripWyreObjectPrefix(in.Dest)
+	out.SourceAmount = in.SourceAmount
+	out.DestAmount = in.DestAmount
+
+	return out
+}
+
 type Transactions []Transaction
 
 func (txns Transactions) IDs() []ID {
@@ -77,4 +106,15 @@ func (txns Transactions) IDs() []ID {
 	}
 
 	return out
+}
+
+func stripWyreObjectPrefix(s string) string {
+	parts := strings.Split(s, ":")
+	if len(parts) == 0 {
+		return ""
+	}
+	if len(parts) == 1 {
+		return parts[0]
+	}
+	return parts[1]
 }
