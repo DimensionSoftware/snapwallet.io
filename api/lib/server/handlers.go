@@ -1518,7 +1518,7 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 		trx := existingTrx.EnrichWithWyreTransferDetail(t)
 		trx.Status = transaction.StatusConfirmed
 
-		err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
+		err = s.Db.SaveTransaction(ctx, tx, u.ID, &trx)
 		if err != nil {
 			return err
 		}
