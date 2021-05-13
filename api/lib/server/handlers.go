@@ -1509,6 +1509,12 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 			return err
 		}
 
+		if existingTrx == nil {
+			//return status.Errorf(codes.NotFound, "existing transaction not found")
+			log.Println("existing transaction not found during WyreConfirmTransfer; cannot update transaction")
+			return nil
+		}
+
 		trx := existingTrx.EnrichWithWyreTransferDetail(t)
 		trx.Status = transaction.StatusConfirmed
 
