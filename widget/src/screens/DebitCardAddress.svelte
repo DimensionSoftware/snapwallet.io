@@ -12,6 +12,10 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { userStore } from '../stores/UserStore'
+  import {
+    debitCardAddressValidationRules,
+    validateForm,
+  } from '../util/validation'
 
   let autocomplete: google.maps.places.Autocomplete
 
@@ -110,18 +114,26 @@
         address[fluxType] = val
       }
     }
+    Logger.debug('Place Final Address', address)
     debitCardStore.update({ address })
   }
 
   const handleNextStep = () => {
+    const { isValid, error } = validateForm(debitCardAddressValidationRules, {
+      ...$debitCardStore.address,
+    })
+    if (!isValid) throw new Error(error)
     push(Routes.DEBIT_CARD_2FA)
   }
 
   const onKeyDown = (e: Event) => {
     // Stop "Save" from occurring when enter
     // is clicked during google autocomplete
-    const addressVal = Object.values($debitCardStore.address).join('')
-    if (addressVal.length) onEnterPressed(e, handleNextStep)
+
+    const { isValid } = validateForm(debitCardAddressValidationRules, {
+      ...$debitCardStore.address,
+    })
+    if (isValid) onEnterPressed(e, handleNextStep)
   }
 </script>
 
@@ -135,6 +147,7 @@
         id="autocomplete"
         defaultValue={$debitCardStore.address.street1}
         placeholder="Street 1"
+        on:change={e => debitCardStore.updateAddress({ street1: e.detail })}
       />
     </Label>
     <div class="inline-inputs">
@@ -142,18 +155,24 @@
         <Input
           placeholder="Street 2"
           defaultValue={$debitCardStore.address.street2}
-          on:change={e => (address.street2 = e.detail)}
+          on:change={e => debitCardStore.updateAddress({ street2: e.detail })}
         />
       </Label>
       <Label class="postal" label="Postal Code">
         <Input
           placeholder="Postal Code"
           defaultValue={$debitCardStore.address.postalCode}
+          on:change={e =>
+            debitCardStore.updateAddress({ postalCode: e.detail })}
         />
       </Label>
     </div>
     <Label label="City">
-      <Input placeholder="City" defaultValue={$debitCardStore.address.city} />
+      <Input
+        placeholder="City"
+        defaultValue={$debitCardStore.address.city}
+        on:change={e => debitCardStore.updateAddress({ city: e.detail })}
+      />
     </Label>
     <div class="inline-inputs">
       <Label label="Country" style="margin-right: 1rem;">
@@ -161,14 +180,18 @@
           placeholder="Country"
           defaultValue={$debitCardStore.address.country ||
             $userStore.geo?.country?.toUpperCase()}
+          on:change={e => debitCardStore.updateAddress({ country: e.detail })}
         />
       </Label>
-      <Label class="state" label="State">
-        <Input
-          placeholder="State"
-          defaultValue={$debitCardStore.address.state}
-        />
-      </Label>
+      {#if $debitCardStore.address.country === 'US' || $userStore.geo?.country?.toUpperCase() === 'US'}
+        <Label class="state" label="State">
+          <Input
+            placeholder="State"
+            defaultValue={$debitCardStore.address.state}
+            on:change={e => debitCardStore.updateAddress({ state: e.detail })}
+          />
+        </Label>
+      {/if}
     </div>
   </ModalBody>
   <ModalFooter>

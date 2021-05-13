@@ -16,10 +16,11 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { toaster } from '../stores/ToastStore'
 
-  let pollTimer
   let cardCode = ''
   let smsCode = ''
   let submittingAuth = false
+  let pollTimer: number | undefined = undefined
+  let componentDestroyed = false
 
   $: smsCodeRequired = false
   $: cardCodeRequired = false
@@ -61,8 +62,11 @@
           address: $debitCardStore.address,
         },
       })
-      debitCardStore.update({ orderId: result.orderId })
-      pollTimer = pollAuthorizations()
+      // Don't run this if the user leaves the page
+      if (!componentDestroyed) {
+        debitCardStore.update({ orderId: result.orderId })
+        pollTimer = pollAuthorizations()
+      }
     } catch (e) {
       let msg = "We're unable to complete this order. Please try again."
       if (e?.body?.code === APIErrors.BAD_REQUEST) {
@@ -115,11 +119,15 @@
    * until codes are required.
    */
   const pollAuthorizations = () => {
-    const t = setInterval(() => {
-      // Only one of these may be required
-      if (!smsCodeRequired || !cardCodeRequired) {
-        fetchAuthorizations()
-      } else {
+    const t = setInterval(async () => {
+      try {
+        // Only one of these may be required
+        if (!smsCodeRequired || !cardCodeRequired) {
+          await fetchAuthorizations()
+        } else {
+          clearInterval(t)
+        }
+      } catch (e) {
         clearInterval(t)
       }
     }, 4000)
@@ -132,6 +140,7 @@
 
   onDestroy(() => {
     clearInterval(pollTimer)
+    componentDestroyed = true
   })
 </script>
 
@@ -214,14 +223,14 @@
       transform-style: preserve-3d;
       & > .flip-card-front {
         font-family: Courier, monospace;
-        background-color: red;
-        color: white;
+        background-color: #dddddd;
+        color: #2f3640;
         border-radius: 0.5rem;
         & > .nfc-chip {
           position: absolute;
           height: 2rem;
           width: 3rem;
-          background-color: goldenrod;
+          background-color: #fbc531;
           top: 3rem;
           left: 1.5rem;
           border-radius: 0.2rem;
@@ -232,17 +241,16 @@
           top: 5rem;
           left: 1rem;
           text-align: left;
-          font-weight: 600;
         }
       }
 
       & > .flip-card-back {
         border-radius: 0.5rem;
         transform: rotateY(180deg);
-        background-color: red;
+        background-color: #dddddd;
         backface-visibility: hidden;
         & > .flip-card-stripe {
-          background-color: black;
+          background-color: #2f3640;
           position: absolute;
           top: 1.5rem;
           width: 100%;

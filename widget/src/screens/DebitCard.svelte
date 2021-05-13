@@ -15,13 +15,28 @@
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
   import { onMount } from 'svelte'
   import { focusFirstInput, onEnterPressed } from '../util'
+  import { debitCardValidationRules, validateForm } from '../util/validation'
 
   let countrySelectorVisible = false
   $: isUSPhoneNumber =
     $debitCardStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   const handleNextStep = async () => {
-    // TODO: validate form
+    const phoneNumber = `${$debitCardStore.phoneNumberCountry?.dial_code}${$debitCardStore.phoneNumber}`.replace(
+      /(-|\s)/g,
+      '',
+    )
+    const { isValid, error } = validateForm(debitCardValidationRules, {
+      phoneNumber,
+      firstName: $debitCardStore.firstName,
+      lastName: $debitCardStore.lastName,
+      cardNumber: $debitCardStore.number,
+      cardExpiration: $debitCardStore.expirationDate,
+      cardVerificationCode: $debitCardStore.verificationCode,
+    })
+
+    if (!isValid) throw new Error(error)
+
     push(Routes.DEBIT_CARD_ADDRESS)
   }
 
@@ -42,11 +57,12 @@
     <Label label="Name on Card">
       <Input
         autocomplete="cc-name"
-        defaultValue={$debitCardStore.firstName}
+        defaultValue={`${$debitCardStore.firstName} ${$debitCardStore.lastName}`.trim()}
         placeholder="John Smith"
         on:change={e => {
-          const [firstName = '', lastName = ''] = (e.detail || '').split(' ')
-          debitCardStore.update({ firstName, lastName })
+          let [firstName = '', ...lastName] = (e.detail || '').split(' ')
+          lastName = lastName.join(' ').trim()
+          debitCardStore.update({ firstName: firstName.trim(), lastName })
         }}
       />
     </Label>
