@@ -1,4 +1,5 @@
 import vld8 from 'validator'
+import { WYRE_SUPPORTED_COUNTRIES } from './country'
 
 // Allows different variations of names
 const NON_NUMERIC_STRING = /^[ '\p{L}-]+$/u
@@ -8,7 +9,7 @@ const CVC_REGEX = /^([0-9]{3}|[0-9]{4})$/
 
 interface IValidationRules {
   [field: string]: {
-    validate: (value?: any) => boolean
+    validate: (value: any | undefined, formValues: IValidationValues) => boolean
     errorMessage: (field: string, value?: any) => string
   }
 }
@@ -32,7 +33,7 @@ export const validateForm = (
       // Exit on first error
       if (acc.error || !acc.isValid) return acc
       if (opts.validate) {
-        if (!opts.validate(values[field])) {
+        if (!opts.validate(values[field], values)) {
           return {
             isValid: false,
             error: opts.errorMessage(field, values[field]),
@@ -87,5 +88,45 @@ export const debitCardValidationRules: IValidationRules = {
   cardVerificationCode: {
     validate: cvc => CVC_REGEX.test(cvc),
     errorMessage: () => 'Please enter a valid card verification code.',
+  },
+}
+
+/**
+ * Address validation
+ */
+export const debitCardAddressValidationRules: IValidationRules = {
+  street1: {
+    validate: street1 => street1?.length > 0,
+    errorMessage: () => 'Please enter a valid value for street 1',
+  },
+  street2: {
+    validate: street2 => {
+      if (!street2) return true
+      return street2?.length > 0
+    },
+    errorMessage: () => 'Please enter a valid value for street 2',
+  },
+  city: {
+    validate: city => NON_NUMERIC_STRING.test(city),
+    errorMessage: () => 'Please enter a valid city',
+  },
+  state: {
+    validate: state => /\w{2}/.test(state),
+    errorMessage: () => 'Please enter a valid state',
+  },
+  country: {
+    validate: country =>
+      country && WYRE_SUPPORTED_COUNTRIES.includes(country.toUpperCase()),
+    errorMessage: () => 'Please enter a valid and supported country',
+  },
+  postalCode: {
+    validate: (postalCode, form) => {
+      const countryCode = form.country?.toUpperCase()
+      if (vld8.isPostalCodeLocales.includes(countryCode)) {
+        return vld8.isPostalCode(postalCode, countryCode)
+      }
+      return /[0-9A-Za-z]/.test(postalCode)
+    },
+    errorMessage: () => 'Please enter a valid postal code',
   },
 }
