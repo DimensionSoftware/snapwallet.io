@@ -214,14 +214,14 @@
       transform-style: preserve-3d;
       & > .flip-card-front {
         font-family: Courier, monospace;
-        background-color: red;
-        color: white;
+        background-color: #dddddd;
+        color: #2f3640;
         border-radius: 0.5rem;
         & > .nfc-chip {
           position: absolute;
           height: 2rem;
           width: 3rem;
-          background-color: goldenrod;
+          background-color: #fbc531;
           top: 3rem;
           left: 1.5rem;
           border-radius: 0.2rem;
@@ -232,17 +232,16 @@
           top: 5rem;
           left: 1rem;
           text-align: left;
-          font-weight: 600;
         }
       }
 
       & > .flip-card-back {
         border-radius: 0.5rem;
         transform: rotateY(180deg);
-        background-color: red;
+        background-color: #dddddd;
         backface-visibility: hidden;
         & > .flip-card-stripe {
-          background-color: black;
+          background-color: #2f3640;
           position: absolute;
           top: 1.5rem;
           width: 100%;
