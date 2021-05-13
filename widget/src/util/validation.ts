@@ -65,7 +65,7 @@ export const debitCardValidationRules: IValidationRules = {
       const monthNow = Number(now.getMonth()) + 1
 
       const isMissing =
-        !EXP_MONTH.test(expMonth.toString()) &&
+        !EXP_MONTH.test(expMonth.toString()) ||
         !EXP_YEAR.test(expYear.toString())
       const isYearExpired = yearNow > expYear
       const isMonthExpired = monthNow > expMonth && yearNow === expYear
