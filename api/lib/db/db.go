@@ -965,21 +965,38 @@ func (db Db) CleanAgedPasscodes(ctx context.Context) (int, error) {
 
 }
 
-/*
+// GetUserByID gets a user object by id
+func (db Db) GetUserByWyreAccountID(ctx context.Context, wyreAccountID account.ID) (*user.User, error) {
+	if wyreAccountID == "" {
+		return nil, nil
 
-snap, err := passcodes.Next()
-if err == iterator.Done {
-return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(onetimepasscode.LoginKindPhone))
-}
-if err != nil {
-log.Println(err)
-return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
-}
+	}
 
-var passcode onetimepasscode.OneTimePasscode
-err = snap.DataTo(&passcode)
-if err != nil {
-log.Println(err)
-return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	ref := db.Firestore.CollectionGroup("wyreAccounts")
+	docs := ref.Where("id", "==", wyreAccountID).Documents(ctx)
+	snap, err := docs.Next()
+	if err == iterator.Done {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	parentSnap, err := snap.Ref.Parent.Parent.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var encU user.EncryptedUser
+	err = parentSnap.DataTo(&encU)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := encU.Decrypt(db.EncryptionManager, encU.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
-*/
