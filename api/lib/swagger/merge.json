@@ -38,6 +38,15 @@
         ]
       }
     },
+    "/viewer/transactions": {
+      "get": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/viewer/email": {
       "put": {
         "security": [

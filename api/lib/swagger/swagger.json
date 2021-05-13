@@ -442,6 +442,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
