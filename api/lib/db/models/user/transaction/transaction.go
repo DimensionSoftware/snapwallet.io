@@ -268,10 +268,10 @@ func (trx Transaction) AsProto() *proto.Transaction {
 		Message:        trx.Message,
 		ExchangeRate:   trx.ExchangeRate,
 		TotalFees:      trx.TotalFees,
-		CreatedAt:      trx.CreatedAt.Format(time.RFC3339),
-		ExpiresAt:      trx.ExpiresAt.Format(time.RFC3339),
-		CompletedAt:    trx.CompletedAt.Format(time.RFC3339),
-		CancelledAt:    trx.CancelledAt.Format(time.RFC3339),
+		CreatedAt:      formatAsRFC3339(trx.CreatedAt),
+		ExpiresAt:      formatAsRFC3339(trx.ExpiresAt),
+		CompletedAt:    formatAsRFC3339(trx.CompletedAt),
+		CancelledAt:    formatAsRFC3339(trx.CancelledAt),
 	}
 }
 
@@ -366,4 +366,12 @@ func (enc EncryptedTransaction) Decrypt(m *encryption.Manager, userID user.ID) (
 	}
 
 	return &transaction, nil
+}
+
+func formatAsRFC3339(t time.Time) string {
+	if (t == time.Time{}) {
+		return ""
+	}
+
+	return t.Format(time.RFC3339)
 }
