@@ -15,13 +15,26 @@
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
   import { onMount } from 'svelte'
   import { focusFirstInput, onEnterPressed } from '../util'
+  import { debitCardValidationRules, validateForm } from '../util/validation'
 
   let countrySelectorVisible = false
   $: isUSPhoneNumber =
     $debitCardStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   const handleNextStep = async () => {
-    // TODO: validate form
+    const phoneNumber = `${$debitCardStore.phoneNumberCountry?.dial_code}${$debitCardStore.phoneNumber}`.replace(
+      /(-|\s)/g,
+      '',
+    )
+    validateForm(debitCardValidationRules, {
+      phoneNumber,
+      firstName: $debitCardStore.firstName,
+      lastName: $debitCardStore.lastName,
+      cardNumber: $debitCardStore.number,
+      cardExpiration: $debitCardStore.expirationDate,
+      cardVerificationCode: $debitCardStore.verificationCode,
+    })
+
     push(Routes.DEBIT_CARD_ADDRESS)
   }
 
