@@ -19,21 +19,30 @@ interface IValidationValues {
 
 /**
  * Given rules and values this function validates a form.
- * This method will throw an error when the first invalid form field is met.
+ * Returns an error if available and a boolean to check validity.
  * @param rules The rules for validation.
  * @param values The values for the set rules.
  */
 export const validateForm = (
   rules: IValidationRules = {},
   values: IValidationValues,
-) => {
-  Object.entries(rules).forEach(([field, opts]) => {
-    if (opts.validate) {
-      if (!opts.validate(values[field])) {
-        throw new Error(opts.errorMessage(field, values[field]))
+): { isValid: boolean; error: string | null } => {
+  return Object.entries(rules).reduce(
+    (acc, [field, opts]) => {
+      // Exit on first error
+      if (acc.error || !acc.isValid) return acc
+      if (opts.validate) {
+        if (!opts.validate(values[field])) {
+          return {
+            isValid: false,
+            error: opts.errorMessage(field, values[field]),
+          }
+        }
       }
-    }
-  })
+      return acc
+    },
+    { error: null, isValid: true },
+  )
 }
 
 /**
