@@ -75,6 +75,7 @@ export enum Routes {
 
 export enum APIErrors {
   UNAUTHORIZED = 16,
+  BAD_REQUEST = 3,
 }
 
 export enum ParentMessages {
