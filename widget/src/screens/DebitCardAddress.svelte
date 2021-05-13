@@ -12,6 +12,10 @@
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { userStore } from '../stores/UserStore'
+  import {
+    debitCardAddressValidationRules,
+    validateForm,
+  } from '../util/validation'
 
   let autocomplete: google.maps.places.Autocomplete
 
@@ -114,14 +118,21 @@
   }
 
   const handleNextStep = () => {
+    const { isValid, error } = validateForm(debitCardAddressValidationRules, {
+      ...$debitCardStore.address,
+    })
+    if (!isValid) throw new Error(error)
     push(Routes.DEBIT_CARD_2FA)
   }
 
   const onKeyDown = (e: Event) => {
     // Stop "Save" from occurring when enter
     // is clicked during google autocomplete
-    const addressVal = Object.values($debitCardStore.address).join('')
-    if (addressVal.length) onEnterPressed(e, handleNextStep)
+
+    const { isValid } = validateForm(debitCardAddressValidationRules, {
+      ...$debitCardStore.address,
+    })
+    if (isValid) onEnterPressed(e, handleNextStep)
   }
 </script>
 
