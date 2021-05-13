@@ -2,6 +2,7 @@ package transaction
 
 import (
 	"encoding/json"
+	"fmt"
 	"strings"
 	"time"
 
@@ -113,7 +114,7 @@ func (trx Transaction) WithDefaults() Transaction {
 	return newTRX
 }
 
-func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
+func (trx Transaction) EnrichWithWyreTransfer(in *wyre.Transfer) Transaction {
 	out := trx
 
 	out.Partner = PartnerWyre
@@ -174,7 +175,27 @@ func (trx Transaction) EnrichWithWyreTransferDetail(in *wyre.TransferDetail) Tra
 	out.CompletedAt = fromEpochMS(in.CompletedAt)
 	out.CancelledAt = fromEpochMS(in.CancelledAt)
 
-	out.Message = in.Message
+	if in.DestCurrency == "BTC" || in.DestCurrency == "ETH" {
+		// doing this because a better name may have already been set
+		if out.DestName == "" {
+			out.DestName = fmt.Sprintf("%s Address: %s", in.DestCurrency, out.Dest)
+		}
+	}
+
+	// todo: we can do better than this by looking up payment methods
+	if in.SourceCurrency == "USD" {
+		if out.SourceName == "" {
+
+			// doing this because a better name may have already been set
+			if out.Kind == KindACH {
+				out.SourceName = fmt.Sprintf("Bank Account: %s", out.Source)
+			}
+
+			if out.Kind == KindDebit {
+				out.SourceName = fmt.Sprintf("Debit Card: %s", out.Source)
+			}
+		}
+	}
 
 	return out
 }
@@ -212,6 +233,19 @@ func (trx Transaction) EnrichWithWalletOrder(in *wyre.WalletOrder) Transaction {
 	out.DestAmount = in.DestAmount
 	out.SourceCurrency = in.SourceCurrency
 	out.DestCurrency = in.DestCurrency
+
+	if out.SourceName == "" {
+		out.SourceName = fmt.Sprintf("Debit Card (Wallet Order): %s", in.ID)
+	}
+
+	if out.DestName == "" {
+		if in.DestCurrency == "BTC" || in.DestCurrency == "ETH" {
+			// doing this because a better name may have already been set
+			if out.DestName == "" {
+				out.DestName = fmt.Sprintf("%s Address: %s", in.DestCurrency, out.Dest)
+			}
+		}
+	}
 
 	return out
 }
