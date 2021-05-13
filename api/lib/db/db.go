@@ -240,6 +240,49 @@ func (db Db) GetTransactions(ctx context.Context, userID user.ID) (*transaction.
 	return &out, nil
 }
 
+func (db Db) GetTransactionByExternalId(ctx context.Context, tx *firestore.Transaction, userID user.ID, externalID transaction.ExternalID) (*transaction.Transaction, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("transactions").Where("externalIDs", "array-contains", externalID).Limit(1)
+
+	var (
+		docs []*firestore.DocumentSnapshot
+		err  error
+	)
+
+	if tx == nil {
+		docs, err = ref.Documents(ctx).GetAll()
+	} else {
+		docs, err = tx.Documents(ref).GetAll()
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var out transaction.Transactions
+
+	for _, doc := range docs {
+		var enc transaction.EncryptedTransaction
+
+		err := doc.DataTo(&enc)
+		if err != nil {
+			return nil, err
+		}
+
+		transaction, err := enc.Decrypt(db.EncryptionManager, userID)
+		if err != nil {
+			return nil, err
+		}
+
+		out = append(out, *transaction)
+	}
+
+	if len(out) > 0 {
+		return &out[0], nil
+
+	} else {
+		return nil, nil
+	}
+}
+
 func (db Db) GetJobByKindAndStatusAndRelatedId(ctx context.Context, kind job.Kind, status job.Status, relatedID string) (*job.Job, error) {
 	table := db.Firestore.Collection("jobs").
 		Where("kind", "==", kind).

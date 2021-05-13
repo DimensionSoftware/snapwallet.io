@@ -1503,9 +1503,22 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 		return nil, err
 	}
 
-	trx := transaction.Transaction{}.WithDefaults().EnrichWithWyreTransferDetail(t)
-	trx.Status = transaction.StatusConfirmed
-	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
+	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		existingTrx, err := s.Db.GetTransactionByExternalId(ctx, tx, u.ID, transaction.ExternalID(req.TransferId))
+		if err != nil {
+			return err
+		}
+
+		trx := existingTrx.EnrichWithWyreTransferDetail(t)
+		trx.Status = transaction.StatusConfirmed
+
+		err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
 	if err != nil {
 		return nil, err
 	}
