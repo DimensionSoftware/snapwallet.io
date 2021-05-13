@@ -12,7 +12,6 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // FluxClient is the client API for Flux service.
@@ -70,6 +69,7 @@ type FluxClient interface {
 	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
 	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
 	WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error)
+	GetTransactions(ctx context.Context, in *GetTransactionsRequest, opts ...grpc.CallOption) (*Transactions, error)
 	WyreCreateDebitCardQuote(ctx context.Context, in *WyreCreateDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardQuoteResponse, error)
 	WyreConfirmDebitCardQuote(ctx context.Context, in *WyreConfirmDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreConfirmDebitCardQuoteResponse, error)
 	WyreGetDebitCardAuthorizations(ctx context.Context, in *WyreGetDebitCardOrderAuthorizationsRequest, opts ...grpc.CallOption) (*WyreGetDebitCardOrderAuthorizationsResponse, error)
@@ -258,6 +258,15 @@ func (c *fluxClient) WyreGetTransfers(ctx context.Context, in *WyreGetTransfersR
 	return out, nil
 }
 
+func (c *fluxClient) GetTransactions(ctx context.Context, in *GetTransactionsRequest, opts ...grpc.CallOption) (*Transactions, error) {
+	out := new(Transactions)
+	err := c.cc.Invoke(ctx, "/Flux/GetTransactions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fluxClient) WyreCreateDebitCardQuote(ctx context.Context, in *WyreCreateDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardQuoteResponse, error) {
 	out := new(WyreCreateDebitCardQuoteResponse)
 	err := c.cc.Invoke(ctx, "/Flux/WyreCreateDebitCardQuote", in, out, opts...)
@@ -385,6 +394,7 @@ type FluxServer interface {
 	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransferDetail, error)
 	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransferDetail, error)
 	WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error)
+	GetTransactions(context.Context, *GetTransactionsRequest) (*Transactions, error)
 	WyreCreateDebitCardQuote(context.Context, *WyreCreateDebitCardQuoteRequest) (*WyreCreateDebitCardQuoteResponse, error)
 	WyreConfirmDebitCardQuote(context.Context, *WyreConfirmDebitCardQuoteRequest) (*WyreConfirmDebitCardQuoteResponse, error)
 	WyreGetDebitCardAuthorizations(context.Context, *WyreGetDebitCardOrderAuthorizationsRequest) (*WyreGetDebitCardOrderAuthorizationsResponse, error)
@@ -462,6 +472,9 @@ func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransfer
 func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfers not implemented")
 }
+func (UnimplementedFluxServer) GetTransactions(context.Context, *GetTransactionsRequest) (*Transactions, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTransactions not implemented")
+}
 func (UnimplementedFluxServer) WyreCreateDebitCardQuote(context.Context, *WyreCreateDebitCardQuoteRequest) (*WyreCreateDebitCardQuoteResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateDebitCardQuote not implemented")
 }
@@ -495,8 +508,8 @@ type UnsafeFluxServer interface {
 	mustEmbedUnimplementedFluxServer()
 }
 
-func RegisterFluxServer(s grpc.ServiceRegistrar, srv FluxServer) {
-	s.RegisterService(&Flux_ServiceDesc, srv)
+func RegisterFluxServer(s *grpc.Server, srv FluxServer) {
+	s.RegisterService(&_Flux_serviceDesc, srv)
 }
 
 func _Flux_ViewerData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -823,6 +836,24 @@ func _Flux_WyreGetTransfers_Handler(srv interface{}, ctx context.Context, dec fu
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_GetTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTransactionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).GetTransactions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/GetTransactions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).GetTransactions(ctx, req.(*GetTransactionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Flux_WyreCreateDebitCardQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(WyreCreateDebitCardQuoteRequest)
 	if err := dec(in); err != nil {
@@ -967,10 +998,7 @@ func _Flux_Goto_Handler(srv interface{}, ctx context.Context, dec func(interface
 	return interceptor(ctx, in, info, handler)
 }
 
-// Flux_ServiceDesc is the grpc.ServiceDesc for Flux service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var Flux_ServiceDesc = grpc.ServiceDesc{
+var _Flux_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "Flux",
 	HandlerType: (*FluxServer)(nil),
 	Methods: []grpc.MethodDesc{
@@ -1045,6 +1073,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "WyreGetTransfers",
 			Handler:    _Flux_WyreGetTransfers_Handler,
+		},
+		{
+			MethodName: "GetTransactions",
+			Handler:    _Flux_GetTransactions_Handler,
 		},
 		{
 			MethodName: "WyreCreateDebitCardQuote",

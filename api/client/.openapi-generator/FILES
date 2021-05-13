@@ -46,6 +46,8 @@ models/ThirdPartyUserAccount.ts
 models/TokenExchangeRequest.ts
 models/TokenExchangeResponse.ts
 models/TokenMaterial.ts
+models/Transaction.ts
+models/Transactions.ts
 models/UploadFileResponse.ts
 models/UsGovernmentIdDocumentInput.ts
 models/UsGovernmentIdDocumentInputKind.ts

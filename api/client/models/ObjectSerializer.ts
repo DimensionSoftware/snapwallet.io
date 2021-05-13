@@ -32,6 +32,8 @@ export * from './ThirdPartyUserAccount';
 export * from './TokenExchangeRequest';
 export * from './TokenExchangeResponse';
 export * from './TokenMaterial';
+export * from './Transaction';
+export * from './Transactions';
 export * from './UploadFileResponse';
 export * from './UsGovernmentIdDocumentInput';
 export * from './UsGovernmentIdDocumentInputKind';
@@ -91,6 +93,8 @@ import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
 import { TokenExchangeRequest } from './TokenExchangeRequest';
 import { TokenExchangeResponse } from './TokenExchangeResponse';
 import { TokenMaterial } from './TokenMaterial';
+import { Transaction } from './Transaction';
+import { Transactions } from './Transactions';
 import { UploadFileResponse } from './UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from './UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKind';
@@ -173,6 +177,8 @@ let typeMap: {[index: string]: any} = {
     "TokenExchangeRequest": TokenExchangeRequest,
     "TokenExchangeResponse": TokenExchangeResponse,
     "TokenMaterial": TokenMaterial,
+    "Transaction": Transaction,
+    "Transactions": Transactions,
     "UploadFileResponse": UploadFileResponse,
     "UsGovernmentIdDocumentInput": UsGovernmentIdDocumentInput,
     "User": User,

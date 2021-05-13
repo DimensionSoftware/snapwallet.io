@@ -38,6 +38,8 @@ import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
 import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
 import { TokenMaterial } from '../models/TokenMaterial';
+import { Transaction } from '../models/Transaction';
+import { Transactions } from '../models/Transactions';
 import { UploadFileResponse } from '../models/UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from '../models/UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from '../models/UsGovernmentIdDocumentInputKind';
@@ -146,6 +148,28 @@ export class ObservableFluxApi {
 	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
 	    		}
 	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxGeo(rsp)));
+	    	}));
+    }
+	
+    /**
+     * @param page 
+     */
+    public fluxGetTransactions(page?: string, options?: Configuration): Observable<Transactions> {
+    	const requestContextPromise = this.requestFactory.fluxGetTransactions(page, options);
+
+		// build promise chain
+    let middlewarePreObservable = from<RequestContext>(requestContextPromise);
+    	for (let middleware of this.configuration.middleware) {
+    		middlewarePreObservable = middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => middleware.pre(ctx)));
+    	}
+
+    	return middlewarePreObservable.pipe(mergeMap((ctx: RequestContext) => this.configuration.httpApi.send(ctx))).
+	    	pipe(mergeMap((response: ResponseContext) => {
+	    		let middlewarePostObservable = of(response);
+	    		for (let middleware of this.configuration.middleware) {
+	    			middlewarePostObservable = middlewarePostObservable.pipe(mergeMap((rsp: ResponseContext) => middleware.post(rsp)));
+	    		}
+	    		return middlewarePostObservable.pipe(map((rsp: ResponseContext) => this.responseProcessor.fluxGetTransactions(rsp)));
 	    	}));
     }
 	

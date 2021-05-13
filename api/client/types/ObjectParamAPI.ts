@@ -36,6 +36,8 @@ import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
 import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
 import { TokenMaterial } from '../models/TokenMaterial';
+import { Transaction } from '../models/Transaction';
+import { Transactions } from '../models/Transactions';
 import { UploadFileResponse } from '../models/UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from '../models/UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from '../models/UsGovernmentIdDocumentInputKind';
@@ -83,6 +85,15 @@ export interface FluxApiFluxChangeViewerPhoneRequest {
 }
 
 export interface FluxApiFluxGeoRequest {
+}
+
+export interface FluxApiFluxGetTransactionsRequest {
+    /**
+     * 
+     * @type string
+     * @memberof FluxApifluxGetTransactions
+     */
+    page?: string
 }
 
 export interface FluxApiFluxOneTimePasscodeRequest {
@@ -294,6 +305,13 @@ export class ObjectFluxApi {
      */
     public fluxGeo(param: FluxApiFluxGeoRequest, options?: Configuration): Promise<GeoResponse> {
         return this.api.fluxGeo( options).toPromise();
+    }
+	
+    /**
+     * @param param the request object
+     */
+    public fluxGetTransactions(param: FluxApiFluxGetTransactionsRequest, options?: Configuration): Promise<Transactions> {
+        return this.api.fluxGetTransactions(param.page,  options).toPromise();
     }
 	
     /**

@@ -36,6 +36,8 @@ import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
 import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
 import { TokenMaterial } from '../models/TokenMaterial';
+import { Transaction } from '../models/Transaction';
+import { Transactions } from '../models/Transactions';
 import { UploadFileResponse } from '../models/UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from '../models/UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from '../models/UsGovernmentIdDocumentInputKind';
@@ -100,6 +102,14 @@ export class PromiseFluxApi {
      */
     public fluxGeo(options?: Configuration): Promise<GeoResponse> {
     	const result = this.api.fluxGeo(options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param page 
+     */
+    public fluxGetTransactions(page?: string, options?: Configuration): Promise<Transactions> {
+    	const result = this.api.fluxGetTransactions(page, options);
         return result.toPromise();
     }
 	

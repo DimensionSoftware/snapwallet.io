@@ -379,6 +379,37 @@
         ]
       }
     },
+    "/viewer/transactions": {
+      "get": {
+        "operationId": "Flux_GetTransactions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Transactions"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/widget/short-url": {
       "post": {
         "operationId": "Flux_WidgetGetShortUrl",
@@ -1220,6 +1251,86 @@
         },
         "accessToken": {
           "type": "string"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "partner": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceName": {
+          "type": "string"
+        },
+        "destName": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalFees": {
+          "type": "number",
+          "format": "double"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string"
+        },
+        "completedAt": {
+          "type": "string"
+        },
+        "cancelledAt": {
+          "type": "string"
+        }
+      }
+    },
+    "Transactions": {
+      "type": "object",
+      "properties": {
+        "transactions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Transaction"
+          }
         }
       }
     },

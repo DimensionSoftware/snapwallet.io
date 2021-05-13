@@ -392,6 +392,10 @@ message WyreGetTransfersRequest {
   int64 page = 1;
 }
 
+message GetTransactionsRequest {
+  int64 page = 1;
+}
+
 message WyreGetDebitCardOrderAuthorizationsRequest {
   string order_id = 1;
 }
@@ -478,6 +482,10 @@ message WyreTransfers {
   repeated WyreTransfer transfers = 1;
 }
 
+message Transactions {
+  repeated Transaction transactions = 1;
+}
+
 message SnapWidgetWallet {
   string asset = 1;
   string address = 2;
@@ -535,6 +543,30 @@ message GotoRequest {
 message GotoResponse {
   string location = 1;
 }
+
+
+message Transaction {
+  string id = 1;
+  string partner = 2;
+  string kind = 3;
+  string direction = 4;
+  string status = 5;
+  string source = 6;
+  string dest = 7;
+  string source_name = 8;
+  string dest_name = 9;
+  double source_amount = 10;
+  double dest_amount = 11;
+  string source_currency = 12;
+  string dest_currency = 13;
+  string message = 14;
+  double exchange_rate = 15;
+  double total_fees = 16;
+  string created_at = 17;
+  string expires_at = 18;
+  string completed_at = 19;
+  string cancelled_at = 20;
+};
 
 service Flux {
   // Get viewer data
@@ -688,6 +720,12 @@ service Flux {
   rpc WyreGetTransfers(WyreGetTransfersRequest) returns (WyreTransfers) {
     option (google.api.http) = {
       get: "/wyre/transfers"
+    };
+  }
+
+  rpc GetTransactions(GetTransactionsRequest) returns (Transactions) {
+    option (google.api.http) = {
+      get: "/viewer/transactions"
     };
   }
 
