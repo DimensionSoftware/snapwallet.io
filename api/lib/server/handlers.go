@@ -38,7 +38,6 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/transaction"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
-	"github.com/khoerling/flux/api/lib/db/models/user/wyre/walletorder"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	proto "github.com/khoerling/flux/api/lib/protocol"
@@ -1820,7 +1819,28 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 		return nil, err
 	}
 
-	err = s.Db.SaveWalletOrderForUser(ctx, u.ID, walletorder.ID(orderResponse.ID))
+	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		existingTrx, err := s.Db.GetTransactionByExternalId(ctx, tx, u.ID, transaction.ExternalID(req.ReservationId))
+		if err != nil {
+			return err
+		}
+
+		if existingTrx == nil {
+			//return status.Errorf(codes.NotFound, "existing transaction not found")
+			log.Println("existing transaction not found during WyreConfirmDebitCardQuote; cannot update transaction")
+			return nil
+		}
+
+		trx := existingTrx.EnrichWithWalletOrder(orderResponse)
+		trx.Status = transaction.StatusConfirmed
+
+		err = s.Db.SaveTransaction(ctx, tx, u.ID, &trx)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
 	if err != nil {
 		return nil, err
 	}

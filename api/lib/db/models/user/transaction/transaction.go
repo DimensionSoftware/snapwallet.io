@@ -190,7 +190,7 @@ func (trx Transaction) EnrichWithCreateWalletOrderReservationResponse(in *wyre.C
 	return out
 }
 
-func (trx Transaction) EnrichWithWalletOrder(in wyre.WalletOrder) Transaction {
+func (trx Transaction) EnrichWithWalletOrder(in *wyre.WalletOrder) Transaction {
 	out := trx
 
 	out.Partner = PartnerWyre
