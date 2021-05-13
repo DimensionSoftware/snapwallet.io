@@ -16,10 +16,11 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { toaster } from '../stores/ToastStore'
 
-  let pollTimer
   let cardCode = ''
   let smsCode = ''
   let submittingAuth = false
+  let pollTimer: number | undefined = undefined
+  let componentDestroyed = false
 
   $: smsCodeRequired = false
   $: cardCodeRequired = false
@@ -61,8 +62,11 @@
           address: $debitCardStore.address,
         },
       })
-      debitCardStore.update({ orderId: result.orderId })
-      pollTimer = pollAuthorizations()
+      // Don't run this if the user leaves the page
+      if (!componentDestroyed) {
+        debitCardStore.update({ orderId: result.orderId })
+        pollTimer = pollAuthorizations()
+      }
     } catch (e) {
       let msg = "We're unable to complete this order. Please try again."
       if (e?.body?.code === APIErrors.BAD_REQUEST) {
@@ -115,11 +119,15 @@
    * until codes are required.
    */
   const pollAuthorizations = () => {
-    const t = setInterval(() => {
-      // Only one of these may be required
-      if (!smsCodeRequired || !cardCodeRequired) {
-        fetchAuthorizations()
-      } else {
+    const t = setInterval(async () => {
+      try {
+        // Only one of these may be required
+        if (!smsCodeRequired || !cardCodeRequired) {
+          await fetchAuthorizations()
+        } else {
+          clearInterval(t)
+        }
+      } catch (e) {
         clearInterval(t)
       }
     }, 4000)
@@ -132,6 +140,7 @@
 
   onDestroy(() => {
     clearInterval(pollTimer)
+    componentDestroyed = true
   })
 </script>
 
