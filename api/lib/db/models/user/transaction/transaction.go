@@ -8,6 +8,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/lithammer/shortuuid"
 )
 
 // EncryptedTransaction is the at-rest form of transactions
@@ -90,6 +91,17 @@ type Transaction struct {
 	ExpiresAt      time.Time      `json:"expiresAt,omitempty"`
 	CompletedAt    time.Time      `json:"completedAt,omitempty"`
 	CancelledAt    time.Time      `json:"cancelledAt,omitempty"`
+}
+
+// WithDefaults provides defaults for User
+func (trx Transaction) WithDefaults() Transaction {
+	newTRX := trx
+
+	if trx.ID == "" {
+		newTRX.ID = ID(shortuuid.New())
+	}
+
+	return newTRX
 }
 
 func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
