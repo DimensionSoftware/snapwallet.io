@@ -11,8 +11,9 @@
         { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
       ],
       theme: {
-        modalBackground: 'rgba(10,10,10,1)',
+        modalBackground: 'rgba(0,0,0,1)',
         modalPopupBackground: 'rgba(25,25,25,.9)',
+        modalContainerBackgroundColor: 'rgba(255,255,255,.95)',
         color: 'rgba(0,0,0,.9)',
         badgeTextColor: '#333',
         colorLightened: 'rgba(5,5,5,.8)',
@@ -101,6 +102,7 @@
     color: #fff;
     position: relative;
     height: 100%;
+    background: #222;
     &:first-child {
       margin-right: 3rem;
     }
@@ -115,9 +117,9 @@
     margin-top: -4rem;
     font-size: 1.5rem;
   }
-  :global(.donations article) {
+  :global(.donations > article) {
     margin-top: 4.55rem !important;
-    background: linear-gradient(#000, rgba(0, 0, 0, 0.9)) !important;
+    background: #222 !important;
     box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
   }
   .docs-link {
