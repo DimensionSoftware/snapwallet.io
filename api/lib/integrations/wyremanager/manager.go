@@ -345,26 +345,6 @@ func (m Manager) CreateWalletOrderReservation(ctx context.Context, userID user.I
 	return &reservation, nil
 }
 
-func (m Manager) GetWalletOrders(ctx context.Context, userID user.ID) ([]wyre.WalletOrder, error) {
-	var out []wyre.WalletOrder
-
-	userWalletOrders, err := m.Db.GetAllWalletOrdersForUser(ctx, userID)
-	if err != nil {
-		return nil, err
-	}
-
-	for _, woID := range userWalletOrders.IDs() {
-		wo, err := m.Wyre.WalletOrderDetails(wyre.WalletOrderID(woID))
-		if err != nil {
-			return nil, err
-		}
-
-		out = append(out, *wo)
-	}
-
-	return out, nil
-}
-
 // GenerateSecretKey ...
 func GenerateSecretKey(n int) string {
 	return (shortuuid.New() + shortuuid.New())[:n]
