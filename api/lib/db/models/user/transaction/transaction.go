@@ -139,7 +139,7 @@ func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
 	return out
 }
 
-func (trx Transaction) EnrichWithWyreTransferDetail(in wyre.TransferDetail) Transaction {
+func (trx Transaction) EnrichWithWyreTransferDetail(in *wyre.TransferDetail) Transaction {
 	out := trx
 
 	out.Partner = PartnerWyre
@@ -170,7 +170,7 @@ func (trx Transaction) EnrichWithWyreTransferDetail(in wyre.TransferDetail) Tran
 	return out
 }
 
-func (trx Transaction) EnrichWithCreateWalletOrderReservationResponse(in wyre.CreateWalletOrderReservationResponse) Transaction {
+func (trx Transaction) EnrichWithCreateWalletOrderReservationResponse(in *wyre.CreateWalletOrderReservationResponse) Transaction {
 	out := trx
 
 	out.Partner = PartnerWyre

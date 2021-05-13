@@ -35,6 +35,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/proofofaddress"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
+	"github.com/khoerling/flux/api/lib/db/models/user/transaction"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/walletorder"
@@ -1458,6 +1459,13 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 		return nil, status.Error(codes.Unknown, "Unknown error while contacting wyre.")
 	}
 
+	trx := transaction.Transaction{}.WithDefaults().EnrichWithWyreTransferDetail(t)
+	trx.Status = transaction.StatusQuoted
+	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
+	if err != nil {
+		return nil, err
+	}
+
 	// TODO: store info in db about xfer
 	fmt.Printf("WYRE TRANSFER RESP: %#v", t)
 
@@ -1491,6 +1499,13 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	t, err := s.Wyre.ConfirmTransfer(wyreAccount.SecretKey, wyre.ConfirmTransferRequest{
 		TransferId: req.TransferId,
 	})
+	if err != nil {
+		return nil, err
+	}
+
+	trx := transaction.Transaction{}.WithDefaults().EnrichWithWyreTransferDetail(t)
+	trx.Status = transaction.StatusConfirmed
+	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
 	if err != nil {
 		return nil, err
 	}
@@ -1666,6 +1681,11 @@ func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransfer
 }
 
 func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCreateDebitCardQuoteRequest) (*proto.WyreCreateDebitCardQuoteResponse, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
 	var dest string
 	// Wyre only supports bitcoin or erc20 but expects this prefix
 	if strings.ToLower(req.DestCurrency) == "btc" {
@@ -1696,6 +1716,13 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 	// Create the order reservation
 	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(reqData)
 
+	if err != nil {
+		return nil, err
+	}
+
+	trx := transaction.Transaction{}.WithDefaults().EnrichWithCreateWalletOrderReservationResponse(createReservationResponse)
+	trx.Status = transaction.StatusQuoted
+	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
 	if err != nil {
 		return nil, err
 	}
