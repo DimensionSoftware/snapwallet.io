@@ -11,7 +11,13 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed, focus, resizeWidget } from '../util'
+  import {
+    Logger,
+    onEnterPressed,
+    focus,
+    resizeWidget,
+    focusFirstInput,
+  } from '../util'
   import { toaster } from '../stores/ToastStore'
   import { Routes } from '../constants'
   import type { OneTimePasscodeVerifyResponse } from 'api-client'
@@ -107,12 +113,17 @@
     try {
       await resendCode()
       Logger.debug('Email sent')
+      for (let cur = 0; cur < 6; cur++) {
+        document.getElementById(`code-${cur}`).value = codes[cur] = ''
+      }
+      code = ''
       setTimeout(() => {
         code = ''
         toaster.pop({
           msg: 'Success! Please check your email inbox.',
           success: true,
         })
+        focusFirstInput()
       }, 250)
     } catch (e) {
       Logger.error(e)
