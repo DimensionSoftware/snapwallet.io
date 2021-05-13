@@ -55,11 +55,12 @@
     <Label label="Name on Card">
       <Input
         autocomplete="cc-name"
-        defaultValue={$debitCardStore.firstName}
+        defaultValue={`${$debitCardStore.firstName} ${$debitCardStore.lastName}`.trim()}
         placeholder="John Smith"
         on:change={e => {
-          const [firstName = '', lastName = ''] = (e.detail || '').split(' ')
-          debitCardStore.update({ firstName, lastName })
+          let [firstName = '', ...lastName] = (e.detail || '').split(' ')
+          lastName = lastName.join(' ').trim()
+          debitCardStore.update({ firstName: firstName.trim(), lastName })
         }}
       />
     </Label>
