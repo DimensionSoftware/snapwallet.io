@@ -80,9 +80,7 @@
           const event = eventName.toLowerCase()
           if (event === 'error') {
             Logger.error('Plaid error', metadata)
-            throw new Error(
-              'An unexpected error occurred. Please contact support.',
-            )
+            throw new Error('A Plaid error occurred. Please contact support.')
           }
           Logger.debug(eventName, metadata)
         },

@@ -111,7 +111,7 @@
   const processDebitTransaction = async (isLoggedIn: boolean) => {
     if (!isLoggedIn) push(Routes.SEND_OTP)
     if (!$debitCardStore.address.country) {
-      throw new Error('Please select a country')
+      throw new Error('Please select a country.')
     }
     try {
       isCreatingTxnPreview = true
@@ -154,7 +154,7 @@
 
     if (sourceAmount < 0.01) {
       focus(document.querySelector('input'))
-      throw new Error('The minimum trade amount is $0.01')
+      throw new Error('The minimum trade amount is $0.01.')
     }
 
     if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {

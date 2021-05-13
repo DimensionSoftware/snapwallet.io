@@ -56,8 +56,8 @@
   .toast-item {
     position: relative;
     display: flex;
-    align-items: center;
-    padding: 0 1rem;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
     width: 100%;
     min-height: 100px;
     max-height: 250px;

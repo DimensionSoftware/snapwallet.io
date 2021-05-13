@@ -54,7 +54,7 @@
           Date.now() - Number(new Date(birthDate.replace(/-/g, '/'))),
         isEighteen = !isNaN(parsedBirthDate) && parsedBirthDate >= 5.676e11
 
-      if (!isEighteen) throw new Error('You must be 18 years of age or older')
+      if (!isEighteen) throw new Error('You must be 18 years of age or older.')
 
       const [mm, dd, yyyy] = birthDate.split('-')
 
