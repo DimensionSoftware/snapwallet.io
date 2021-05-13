@@ -4,6 +4,7 @@ import vld8 from 'validator'
 const NON_NUMERIC_STRING = /^[ '\p{L}-]+$/u
 const EXP_MONTH = /[0-9]{2}/
 const EXP_YEAR = /[0-9]{4}/
+const CVC_REGEX = /^([0-9]{3}|[0-9]{4})$/
 
 interface IValidationRules {
   [field: string]: {
@@ -75,7 +76,7 @@ export const debitCardValidationRules: IValidationRules = {
     errorMessage: () => 'Please enter a valid card expiration date',
   },
   cardVerificationCode: {
-    validate: cvc => /^([0-9]{3}|[0-9]{4})$/.test(cvc),
+    validate: cvc => CVC_REGEX.test(cvc),
     errorMessage: () => 'Please enter a valid card verification code.',
   },
 }
