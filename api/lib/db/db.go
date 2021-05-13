@@ -24,6 +24,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/email"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/phone"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/unmarshal"
+	"github.com/khoerling/flux/api/lib/db/models/user/transaction"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/walletorder"
@@ -192,6 +193,51 @@ func (db Db) SaveJob(ctx context.Context, tx *firestore.Transaction, j *job.Job)
 	}
 
 	return err
+}
+
+func (db Db) SaveTransaction(ctx context.Context, tx *firestore.Transaction, userID user.ID, transaction *transaction.Transaction) error {
+	enc, err := transaction.Encrypt(db.EncryptionManager, userID)
+	if err != nil {
+		return err
+	}
+
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("transactions").Doc(string(transaction.ID))
+	if tx == nil {
+		_, err = ref.Set(ctx, enc)
+	} else {
+		err = tx.Set(ref, enc)
+	}
+
+	return err
+}
+
+func (db Db) GetTransactions(ctx context.Context, userID user.ID) (*transaction.Transactions, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("transactions")
+
+	docs, err := ref.Documents(ctx).GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	var out transaction.Transactions
+
+	for _, doc := range docs {
+		var enc transaction.EncryptedTransaction
+
+		err := doc.DataTo(&enc)
+		if err != nil {
+			return nil, err
+		}
+
+		transaction, err := enc.Decrypt(db.EncryptionManager, userID)
+		if err != nil {
+			return nil, err
+		}
+
+		out = append(out, *transaction)
+	}
+
+	return &out, nil
 }
 
 func (db Db) GetJobByKindAndStatusAndRelatedId(ctx context.Context, kind job.Kind, status job.Status, relatedID string) (*job.Job, error) {

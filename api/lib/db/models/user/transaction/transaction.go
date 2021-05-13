@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 )
@@ -228,7 +229,7 @@ func fromEpochMS(epochMS int64) time.Time {
 }
 
 // Encrypt encrypts the transaction
-func (transaction Transaction) Encrypt(m *encryption.Manager, userID ID) (*EncryptedTransaction, error) {
+func (transaction Transaction) Encrypt(m *encryption.Manager, userID user.ID) (*EncryptedTransaction, error) {
 	dekH := encryption.NewDEK()
 	dek := encryption.NewEncryptor(dekH)
 
@@ -252,7 +253,7 @@ func (transaction Transaction) Encrypt(m *encryption.Manager, userID ID) (*Encry
 }
 
 // Decrypt decrypts the transaction
-func (enc EncryptedTransaction) Decrypt(m *encryption.Manager, userID ID) (*Transaction, error) {
+func (enc EncryptedTransaction) Decrypt(m *encryption.Manager, userID user.ID) (*Transaction, error) {
 	dekH, err := encryption.ParseAndDecryptKeyBytes(enc.DataEncryptionKey, m.Encryptor)
 	if err != nil {
 		return nil, err
