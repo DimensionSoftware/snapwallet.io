@@ -1870,6 +1870,9 @@ func (s *Server) WyreGetDebitCardAuthorizations(ctx context.Context, req *proto.
 
 func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *proto.WyreSubmitDebitCardOrderAuthorizationsRequest) (*proto.WyreSubmitDebitCardOrderAuthorizationsResponse, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
 
 	var verificationType string
 
@@ -1922,4 +1925,19 @@ func (s *Server) Geo(ctx context.Context, _ *emptypb.Empty) (*proto.GeoResponse,
 	return &proto.GeoResponse{
 		Country: val,
 	}, nil
+}
+
+func (s *Server) GetTransactions(ctx context.Context, req *proto.GetTransactionsRequest) (*proto.Transactions, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	// todo: pagination
+	transactions, err := s.Db.GetTransactions(ctx, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return transactions.AsProto(), nil
 }

@@ -8,6 +8,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	proto "github.com/khoerling/flux/api/lib/protocol"
 	"github.com/lithammer/shortuuid"
 )
 
@@ -217,7 +218,44 @@ func (trx Transaction) EnrichWithWalletOrder(in *wyre.WalletOrder) Transaction {
 	return out
 }
 
+func (trx Transaction) AsProto() *proto.Transaction {
+	return &proto.Transaction{
+		Id:             string(trx.ID),
+		Partner:        string(trx.Partner),
+		Kind:           string(trx.Kind),
+		Direction:      string(trx.Direction),
+		Status:         string(trx.Status),
+		Source:         trx.Source,
+		Dest:           trx.Dest,
+		SourceName:     trx.SourceName,
+		DestName:       trx.DestName,
+		SourceAmount:   trx.SourceAmount,
+		DestAmount:     trx.DestAmount,
+		SourceCurrency: trx.SourceCurrency,
+		DestCurrency:   trx.DestCurrency,
+		Message:        trx.Message,
+		ExchangeRate:   trx.ExchangeRate,
+		TotalFees:      trx.TotalFees,
+		CreatedAt:      trx.CreatedAt.Format(time.RFC3339),
+		ExpiresAt:      trx.ExpiresAt.Format(time.RFC3339),
+		CompletedAt:    trx.CompletedAt.Format(time.RFC3339),
+		CancelledAt:    trx.CancelledAt.Format(time.RFC3339),
+	}
+}
+
 type Transactions []Transaction
+
+func (txns Transactions) AsProto() *proto.Transactions {
+	var out []*proto.Transaction
+
+	for _, txn := range txns {
+		out = append(out, txn.AsProto())
+	}
+
+	return &proto.Transactions{
+		Transactions: out,
+	}
+}
 
 func (txns Transactions) IDs() []ID {
 	var out []ID
