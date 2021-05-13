@@ -16,7 +16,7 @@ type EncryptedTransaction struct {
 	ID                ID          `firestore:"id"`
 	ExternalIDs       ExternalIDs `firestore:"externalIDs"`
 	DataEncryptionKey []byte      `firestore:"DEK"`
-	DataEncrypted     []byte      `firestore:"data"`
+	DataEncrypted     []byte      `firestore:"dataEncrypted"`
 	CreatedAt         time.Time   `firestore:"createdAt"`
 }
 
@@ -99,6 +99,10 @@ func (trx Transaction) WithDefaults() Transaction {
 
 	if trx.ID == "" {
 		newTRX.ID = ID(shortuuid.New())
+	}
+
+	if (trx.CreatedAt == time.Time{}) {
+		newTRX.CreatedAt = time.Now()
 	}
 
 	return newTRX
