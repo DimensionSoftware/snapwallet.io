@@ -35,7 +35,7 @@ spec:
   template:
     spec:
       containerConcurrency: 15
-      timeoutSeconds: 300
+      timeoutSeconds: 30
       containers:
       - image: ${JSON.stringify(image)}
         ports:
