@@ -16,21 +16,22 @@ import (
 
 // RunSnapJob consumes a Pub/Sub message.
 func RunSnapJob(ctx context.Context, jobManager jobmanager.Manager, j *job.Job) error {
-	var err error
+	defer func() {
+		err := jobManager.MarkJobDone(ctx, j)
+		if err != nil {
+			log.Printf("could not mark job %s as done\n", j.ID)
+			log.Println(err)
+		}
+	}()
+
 	switch j.Kind {
 	case job.KindUpdateWyreAccountForUser:
-		err = runUpdateWyreAccountForUser(ctx, jobManager, j)
+		return runUpdateWyreAccountForUser(ctx, jobManager, j)
 	case job.KindCreateWyrePaymentMethodsForUser:
-		err = runCreateWyrePaymentMethodsForUser(ctx, jobManager, j)
+		return runCreateWyrePaymentMethodsForUser(ctx, jobManager, j)
 	default:
-		err = fmt.Errorf("error: unsupported job kind: %s", j.Kind)
+		return fmt.Errorf("error: unsupported job kind: %s", j.Kind)
 	}
-
-	if err != nil {
-		return err
-	}
-
-	return jobManager.MarkJobDone(ctx, j)
 }
 
 func runCreateWyrePaymentMethodsForUser(ctx context.Context, m jobmanager.Manager, j *job.Job) error {
