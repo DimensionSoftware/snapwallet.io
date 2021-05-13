@@ -19,6 +19,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
 	"github.com/khoerling/flux/api/lib/remedymanager"
 	"github.com/khoerling/flux/api/lib/server"
@@ -95,7 +96,7 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	wyreManager := &wyre.Manager{
+	wyremanagerManager := &wyremanager.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
 		Db:          dbDb,
@@ -145,7 +146,7 @@ func InitializeServer() (server.Server, error) {
 		FileManager:   filemanagerManager,
 		Db:            dbDb,
 		Wyre:          wyreClient,
-		WyreManager:   wyreManager,
+		WyreManager:   wyremanagerManager,
 		Plaid:         plaidClient,
 		JwtSigner:     jwtSigner,
 		JwtVerifier:   jwtVerifier,
@@ -226,7 +227,7 @@ func InitializeDevServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	wyreManager := &wyre.Manager{
+	wyremanagerManager := &wyremanager.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
 		Db:          dbDb,
@@ -252,7 +253,7 @@ func InitializeDevServer() (server.Server, error) {
 	inProcessPublisher := jobpublisher.InProcessPublisher{
 		Db:          dbDb,
 		Pusher:      pusherManager,
-		WyreManager: wyreManager,
+		WyreManager: wyremanagerManager,
 	}
 	remedymanagerManager := &remedymanager.Manager{
 		Db: dbDb,
@@ -270,7 +271,7 @@ func InitializeDevServer() (server.Server, error) {
 		FileManager:   filemanagerManager,
 		Db:            dbDb,
 		Wyre:          wyreClient,
-		WyreManager:   wyreManager,
+		WyreManager:   wyremanagerManager,
 		Plaid:         plaidClient,
 		JwtSigner:     jwtSigner,
 		JwtVerifier:   jwtVerifier,

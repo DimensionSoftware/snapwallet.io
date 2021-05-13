@@ -16,6 +16,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/pubsub"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
 	"github.com/khoerling/flux/api/lib/jobmanager"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
 	plaid2 "github.com/plaid/plaid-go/plaid"
@@ -79,7 +80,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		Db:                dbDb,
 		EncryptionManager: manager,
 	}
-	wyreManager := &wyre.Manager{
+	wyremanagerManager := &wyremanager.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
 		Db:          dbDb,
@@ -100,7 +101,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 	jobmanagerManager := jobmanager.Manager{
 		Db:           dbDb,
 		Pusher:       pusherManager,
-		WyreManager:  wyreManager,
+		WyreManager:  wyremanagerManager,
 		JobPublisher: pubSubPublisher,
 	}
 	return jobmanagerManager, nil
@@ -161,7 +162,7 @@ func InitializeDevJobManager() (jobmanager.Manager, error) {
 		Db:                dbDb,
 		EncryptionManager: manager,
 	}
-	wyreManager := &wyre.Manager{
+	wyremanagerManager := &wyremanager.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
 		Db:          dbDb,
@@ -171,12 +172,12 @@ func InitializeDevJobManager() (jobmanager.Manager, error) {
 	inProcessPublisher := jobpublisher.InProcessPublisher{
 		Db:          dbDb,
 		Pusher:      pusherManager,
-		WyreManager: wyreManager,
+		WyreManager: wyremanagerManager,
 	}
 	jobmanagerManager := jobmanager.Manager{
 		Db:           dbDb,
 		Pusher:       pusherManager,
-		WyreManager:  wyreManager,
+		WyreManager:  wyremanagerManager,
 		JobPublisher: inProcessPublisher,
 	}
 	return jobmanagerManager, nil

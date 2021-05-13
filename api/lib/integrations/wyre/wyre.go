@@ -324,7 +324,7 @@ const (
 // Client is the client interface for wyre
 type Client struct {
 	http   *resty.Client
-	config Config
+	Config Config
 }
 
 // Config represents the config needed to start the client
@@ -382,7 +382,7 @@ func NewClient(config *Config) *Client {
 
 	return &Client{
 		http:   client,
-		config: *config,
+		Config: *config,
 	}
 }
 
@@ -1058,7 +1058,7 @@ func (c Client) CreatePaymentMethod(token string, req CreatePaymentMethodRequest
 // https://docs.sendwyre.com/v3/docs/wallet-order-reservations
 // POST https://api.sendwyre.com/v3/orders/reserve
 func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationRequest) (*CreateWalletOrderReservationResponse, error) {
-	req.ReferrerAccountID = c.config.WyreAccountID
+	req.ReferrerAccountID = c.Config.WyreAccountID
 	payload, err := json.Marshal(req)
 
 	if err != nil {
@@ -1070,7 +1070,7 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 	// Req path and URL are constructed here so that the signature and req match
 	reqPath := fmt.Sprintf("/v3/orders/reserve?timestamp=%d", ts)
 	url := c.http.HostURL + reqPath
-	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
+	signature, err := GenerateHMACSignature(c.Config.WyreSecretKey, url, payload)
 
 	if err != nil {
 		return nil, err
@@ -1078,7 +1078,7 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 
 	resp, err := c.http.R().
 		SetHeader("X-Api-Signature", *signature).
-		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetHeader("X-Api-Key", c.Config.WyreAPIKey).
 		SetError(APIError{}).
 		SetResult(CreateWalletOrderReservationResponse{}).
 		SetBody(req).
@@ -1102,7 +1102,7 @@ func (c Client) GetWalletOrderReservation(req GetWalletOrderReservationRequest) 
 	// Req path and URL are constructed here so that the signature and req match
 	reqPath := fmt.Sprintf("/v3/orders/reservation/%s?timestamp=%d", req.ReservationID, ts)
 	url := c.http.HostURL + reqPath
-	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, []byte(""))
+	signature, err := GenerateHMACSignature(c.Config.WyreSecretKey, url, []byte(""))
 
 	if err != nil {
 		return nil, err
@@ -1110,7 +1110,7 @@ func (c Client) GetWalletOrderReservation(req GetWalletOrderReservationRequest) 
 
 	resp, err := c.http.R().
 		SetHeader("X-Api-Signature", *signature).
-		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetHeader("X-Api-Key", c.Config.WyreAPIKey).
 		SetError(APIError{}).
 		SetResult(WalletOrderReservation{}).
 		SetBody(req).
@@ -1134,7 +1134,7 @@ func (c Client) WalletOrderDetails(woID WalletOrderID) (*WalletOrder, error) {
 	// Req path and URL are constructed here so that the signature and req match
 	reqPath := fmt.Sprintf("/v3/orders/%s?timestamp=%d", woID, ts)
 	url := c.http.HostURL + reqPath
-	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, []byte(""))
+	signature, err := GenerateHMACSignature(c.Config.WyreSecretKey, url, []byte(""))
 
 	if err != nil {
 		return nil, err
@@ -1142,7 +1142,7 @@ func (c Client) WalletOrderDetails(woID WalletOrderID) (*WalletOrder, error) {
 
 	resp, err := c.http.R().
 		SetHeader("X-Api-Signature", *signature).
-		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetHeader("X-Api-Key", c.Config.WyreAPIKey).
 		SetError(APIError{}).
 		SetResult(WalletOrder{}).
 		EnableTrace().
@@ -1160,7 +1160,7 @@ func (c Client) WalletOrderDetails(woID WalletOrderID) (*WalletOrder, error) {
 // https://docs.sendwyre.com/v3/docs/white-label-card-processing-api
 // POST https://api.sendwyre.com/v3/debitcard/process/partner
 func (c Client) CreateWalletOrder(req CreateWalletOrderRequest) (*WalletOrder, error) {
-	req.ReferrerAccountID = c.config.WyreAccountID
+	req.ReferrerAccountID = c.Config.WyreAccountID
 	payload, err := json.Marshal(req)
 
 	if err != nil {
@@ -1172,7 +1172,7 @@ func (c Client) CreateWalletOrder(req CreateWalletOrderRequest) (*WalletOrder, e
 	// Req path and URL are constructed here so that the signature and req match
 	reqPath := fmt.Sprintf("/v3/debitcard/process/partner?timestamp=%d", ts)
 	url := c.http.HostURL + reqPath
-	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
+	signature, err := GenerateHMACSignature(c.Config.WyreSecretKey, url, payload)
 
 	if err != nil {
 		return nil, err
@@ -1180,7 +1180,7 @@ func (c Client) CreateWalletOrder(req CreateWalletOrderRequest) (*WalletOrder, e
 
 	resp, err := c.http.R().
 		SetHeader("X-Api-Signature", *signature).
-		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetHeader("X-Api-Key", c.Config.WyreAPIKey).
 		SetError(APIError{}).
 		SetResult(WalletOrder{}).
 		SetBody(req).
@@ -1204,7 +1204,7 @@ func (c Client) GetWalletOrderAuthorizations(req GetWalletOrderAuthorizationsReq
 	// Req path and URL are constructed here so that the signature and req match
 	reqPath := fmt.Sprintf("/v3/debitcard/authorization/%s?timestamp=%d", req.OrderID, ts)
 	url := c.http.HostURL + reqPath
-	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, []byte(""))
+	signature, err := GenerateHMACSignature(c.Config.WyreSecretKey, url, []byte(""))
 
 	if err != nil {
 		return nil, err
@@ -1212,7 +1212,7 @@ func (c Client) GetWalletOrderAuthorizations(req GetWalletOrderAuthorizationsReq
 
 	resp, err := c.http.R().
 		SetHeader("X-Api-Signature", *signature).
-		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetHeader("X-Api-Key", c.Config.WyreAPIKey).
 		SetError(APIError{}).
 		SetResult(WalletOrderAuthorizations{}).
 		EnableTrace().
@@ -1241,7 +1241,7 @@ func (c Client) SubmitWalletOrderAuthorizations(req SubmitWalletOrderAuthorizati
 	// Req path and URL are constructed here so that the signature and req match
 	reqPath := fmt.Sprintf("/v3/debitcard/authorize/partner?timestamp=%d", ts)
 	url := c.http.HostURL + reqPath
-	signature, err := GenerateHMACSignature(c.config.WyreSecretKey, url, payload)
+	signature, err := GenerateHMACSignature(c.Config.WyreSecretKey, url, payload)
 
 	if err != nil {
 		return nil, err
@@ -1249,7 +1249,7 @@ func (c Client) SubmitWalletOrderAuthorizations(req SubmitWalletOrderAuthorizati
 
 	resp, err := c.http.R().
 		SetHeader("X-Api-Signature", *signature).
-		SetHeader("X-Api-Key", c.config.WyreAPIKey).
+		SetHeader("X-Api-Key", c.Config.WyreAPIKey).
 		SetError(APIError{}).
 		SetResult(WalletOrderAuthorizationsSubmissionStatus{}).
 		EnableTrace().

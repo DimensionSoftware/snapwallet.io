@@ -1,4 +1,4 @@
-package wyre
+package wyremanager
 
 import (
 	"context"
@@ -17,13 +17,14 @@ import (
 	wyre_model "github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/khoerling/flux/api/lib/filemanager"
+	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/lithammer/shortuuid/v3"
 	"github.com/plaid/plaid-go/plaid"
 )
 
 type Manager struct {
 	APIHost     config.APIHost
-	Wyre        *Client
+	Wyre        *wyre.Client
 	Db          *db.Db
 	Plaid       *plaid.Client
 	FileManager *filemanager.Manager
@@ -57,7 +58,7 @@ func (m Manager) CreatePaymentMethod(ctx context.Context, userID user.ID, wyreAc
 		return nil, err
 	}
 
-	wyrePm, err := m.Wyre.CreatePaymentMethod(wyreAccount.SecretKey, CreatePaymentMethodRequest{
+	wyrePm, err := m.Wyre.CreatePaymentMethod(wyreAccount.SecretKey, wyre.CreatePaymentMethodRequest{
 		PlaidProcessorToken: resp.ProcessorToken,
 	}.WithDefaults())
 	if err != nil {
@@ -124,46 +125,46 @@ func (m Manager) CreatePaymentMethodsFromPlaidItems(ctx context.Context, userID 
 }
 
 // converts pdata into wyre format
-func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, profiledata.ProfileDatas) {
-	var fields []ProfileField
+func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]wyre.ProfileField, profiledata.ProfileDatas) {
+	var fields []wyre.ProfileField
 	var selected profiledata.ProfileDatas
 
 	if legalNames := profile.FilterStatus(common.StatusReceived).FilterKindLegalName(); len(legalNames) > 0 {
 		selected = append(selected, legalNames[0])
-		fields = append(fields, ProfileField{
-			FieldID: ProfileFieldIDIndividualLegalName,
+		fields = append(fields, wyre.ProfileField{
+			FieldID: wyre.ProfileFieldIDIndividualLegalName,
 			Value:   legalNames[0].LegalName,
 		})
 	}
 
 	if phones := profile.FilterStatus(common.StatusReceived).FilterKindPhone(); len(phones) > 0 {
 		selected = append(selected, phones[0])
-		fields = append(fields, ProfileField{
-			FieldID: ProfileFieldIDIndividualCellphoneNumber,
+		fields = append(fields, wyre.ProfileField{
+			FieldID: wyre.ProfileFieldIDIndividualCellphoneNumber,
 			Value:   phones[0].Phone,
 		})
 	}
 
 	if emails := profile.FilterStatus(common.StatusReceived).FilterKindEmail(); len(emails) > 0 {
 		selected = append(selected, emails[0])
-		fields = append(fields, ProfileField{
-			FieldID: ProfileFieldIDIndividualEmail,
+		fields = append(fields, wyre.ProfileField{
+			FieldID: wyre.ProfileFieldIDIndividualEmail,
 			Value:   emails[0].Email,
 		})
 	}
 
 	if dobs := profile.FilterStatus(common.StatusReceived).FilterKindDateOfBirth(); len(dobs) > 0 {
 		selected = append(selected, dobs[0])
-		fields = append(fields, ProfileField{
-			FieldID: ProfileFieldIDIndividualDateOfBirth,
+		fields = append(fields, wyre.ProfileField{
+			FieldID: wyre.ProfileFieldIDIndividualDateOfBirth,
 			Value:   dobs[0].DateOfBirth,
 		})
 	}
 
 	if ssns := profile.FilterStatus(common.StatusReceived).FilterKindSSN(); len(ssns) > 0 {
 		selected = append(selected, ssns[0])
-		fields = append(fields, ProfileField{
-			FieldID: ProfileFieldIDIndividualSSN,
+		fields = append(fields, wyre.ProfileField{
+			FieldID: wyre.ProfileFieldIDIndividualSSN,
 			Value:   ssns[0].SSN,
 		})
 	}
@@ -172,9 +173,9 @@ func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, 
 		address := addrs[0]
 		selected = append(selected, address)
 		fields = append(fields,
-			ProfileField{
-				FieldID: ProfileFieldIDIndividualResidenceAddress,
-				Value: ProfileFieldAddress{
+			wyre.ProfileField{
+				FieldID: wyre.ProfileFieldIDIndividualResidenceAddress,
+				Value: wyre.ProfileFieldAddress{
 					Street1:    address.Street1,
 					Street2:    address.Street2,
 					City:       address.City,
@@ -190,8 +191,8 @@ func selectWyreProfileFields(profile profiledata.ProfileDatas) ([]ProfileField, 
 }
 
 // converts pdata into wyre format
-func (m Manager) selectWyreProfileUploads(ctx context.Context, userID user.ID, wyreAccountID account.ID, profile profiledata.ProfileDatas) ([]UploadDocumentRequest, profiledata.ProfileDatas, error) {
-	var uploads []UploadDocumentRequest
+func (m Manager) selectWyreProfileUploads(ctx context.Context, userID user.ID, wyreAccountID account.ID, profile profiledata.ProfileDatas) ([]wyre.UploadDocumentRequest, profiledata.ProfileDatas, error) {
+	var uploads []wyre.UploadDocumentRequest
 	var selected profiledata.ProfileDatas
 
 	if usgoviddocs := profile.FilterStatus(common.StatusReceived).FilterKindUSGovernmentIDDoc(); len(usgoviddocs) > 0 {
@@ -204,9 +205,9 @@ func (m Manager) selectWyreProfileUploads(ctx context.Context, userID user.ID, w
 				return nil, nil, err
 			}
 
-			req := UploadDocumentRequest{
+			req := wyre.UploadDocumentRequest{
 				AccountID:    string(wyreAccountID),
-				FieldID:      ProfileFieldIDIndividualGovernmentID,
+				FieldID:      wyre.ProfileFieldIDIndividualGovernmentID,
 				DocumentType: usgoviddoc.GovernmentIDKind.ToWyreDocumentType(),
 				MimeType:     file.MimeType,
 				Body:         file.Body,
@@ -241,7 +242,7 @@ func (m Manager) UpdateAccountProfileData(ctx context.Context, userID user.ID, w
 		return nil
 	}
 
-	_, err = m.Wyre.UpdateAccount(wyreAccount.SecretKey, AccountID(wyreAccount.ID), UpdateAccountRequest{
+	_, err = m.Wyre.UpdateAccount(wyreAccount.SecretKey, wyre.AccountID(wyreAccount.ID), wyre.UpdateAccountRequest{
 		ProfileFields: fields,
 	})
 	if err != nil {
@@ -269,10 +270,10 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 
 	fields, selected1 := selectWyreProfileFields(profile)
 
-	wyreAccountResp, err := m.Wyre.CreateAccount(m.Wyre.config.WyreSecretKey, CreateAccountRequest{
+	wyreAccountResp, err := m.Wyre.CreateAccount(m.Wyre.Config.WyreSecretKey, wyre.CreateAccountRequest{
 		SubAccount:        &t,
 		DisableEmail:      &t,
-		ReferrerAccountID: &m.Wyre.config.WyreAccountID,
+		ReferrerAccountID: &m.Wyre.Config.WyreAccountID,
 		ProfileFields:     fields,
 	}.WithDefaults())
 	if err != nil {
@@ -287,9 +288,9 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	selected := append(selected1, selected2...)
 
 	accountAPIKey, err := m.Wyre.CreateAPIKey(
-		m.Wyre.config.WyreSecretKey,
+		m.Wyre.Config.WyreSecretKey,
 		wyreAccountResp.ID,
-		CreateAPIKeyRequest{
+		wyre.CreateAPIKeyRequest{
 			Description: fmt.Sprintf("snapwallet.io user %s", userID),
 			Type:        "FULL",
 		})
@@ -334,8 +335,8 @@ func (m Manager) CreateAccount(ctx context.Context, userID user.ID, profile prof
 	return &account, nil
 }
 
-func (m Manager) CreateWalletOrderReservation(ctx context.Context, userID user.ID, wyreAccountID account.ID) (**CreateWalletOrderReservationResponse, error) {
-	reservation, err := m.Wyre.CreateWalletOrderReservation(CreateWalletOrderReservationRequest{})
+func (m Manager) CreateWalletOrderReservation(ctx context.Context, userID user.ID, wyreAccountID account.ID) (**wyre.CreateWalletOrderReservationResponse, error) {
+	reservation, err := m.Wyre.CreateWalletOrderReservation(wyre.CreateWalletOrderReservationRequest{})
 
 	if err != nil {
 		return nil, err
@@ -344,8 +345,8 @@ func (m Manager) CreateWalletOrderReservation(ctx context.Context, userID user.I
 	return &reservation, nil
 }
 
-func (m Manager) GetWalletOrders(ctx context.Context, userID user.ID) ([]WalletOrder, error) {
-	var out []WalletOrder
+func (m Manager) GetWalletOrders(ctx context.Context, userID user.ID) ([]wyre.WalletOrder, error) {
+	var out []wyre.WalletOrder
 
 	userWalletOrders, err := m.Db.GetAllWalletOrdersForUser(ctx, userID)
 	if err != nil {
@@ -353,7 +354,7 @@ func (m Manager) GetWalletOrders(ctx context.Context, userID user.ID) ([]WalletO
 	}
 
 	for _, woID := range userWalletOrders.IDs() {
-		wo, err := m.Wyre.WalletOrderDetails(WalletOrderID(woID))
+		wo, err := m.Wyre.WalletOrderDetails(wyre.WalletOrderID(woID))
 		if err != nil {
 			return nil, err
 		}

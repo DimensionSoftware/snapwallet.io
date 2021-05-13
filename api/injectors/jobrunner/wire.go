@@ -12,6 +12,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/pubsub"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
 	"github.com/khoerling/flux/api/lib/jobmanager"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
 	vendorplaid "github.com/plaid/plaid-go/plaid"
@@ -27,7 +28,7 @@ func InitializeJobManager() (jobmanager.Manager, error) {
 		wire.Struct(new(pubsub.Manager), "*"),
 		wire.Struct(new(jobmanager.Manager), "*"),
 		wire.Struct(new(filemanager.Manager), "*"),
-		wire.Struct(new(wyre.Manager), "*"),
+		wire.Struct(new(wyremanager.Manager), "*"),
 		wire.Struct(new(jobpublisher.PubSubPublisher), "*"),
 		wire.Bind(new(jobmanager.IJobPublisher), new(jobpublisher.PubSubPublisher)),
 		cloudstorage.ProvideBucket,
@@ -53,7 +54,7 @@ func InitializeDevJobManager() (jobmanager.Manager, error) {
 		wire.Struct(new(pusher.Manager), "*"),
 		wire.Struct(new(jobmanager.Manager), "*"),
 		wire.Struct(new(filemanager.Manager), "*"),
-		wire.Struct(new(wyre.Manager), "*"),
+		wire.Struct(new(wyremanager.Manager), "*"),
 		wire.Bind(new(jobmanager.IJobPublisher), new(jobpublisher.InProcessPublisher)),
 		wire.Struct(new(jobpublisher.InProcessPublisher), "*"),
 		cloudstorage.ProvideBucket,

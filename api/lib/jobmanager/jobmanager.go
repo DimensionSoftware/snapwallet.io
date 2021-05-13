@@ -7,7 +7,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
-	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
 )
 
 type IJobPublisher interface {
@@ -17,7 +17,7 @@ type IJobPublisher interface {
 type Manager struct {
 	*db.Db
 	Pusher       *pusher.Manager
-	WyreManager  *wyre.Manager
+	WyreManager  *wyremanager.Manager
 	JobPublisher IJobPublisher
 }
 
@@ -29,7 +29,7 @@ func (m Manager) GetPusher() *pusher.Manager {
 	return m.Pusher
 }
 
-func (m Manager) GetWyreManager() *wyre.Manager {
+func (m Manager) GetWyreManager() *wyremanager.Manager {
 	return m.WyreManager
 }
 

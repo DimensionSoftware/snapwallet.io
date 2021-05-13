@@ -15,6 +15,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
 	"github.com/khoerling/flux/api/lib/jobmanager"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
 	"github.com/khoerling/flux/api/lib/remedymanager"
@@ -54,7 +55,7 @@ func InitializeServer() (server.Server, error) {
 		wire.Struct(new(db.Db), "*"),
 		config.ProvideAPIHost,
 		config.ProvideWebHost,
-		wire.Struct(new(wyre.Manager), "*"),
+		wire.Struct(new(wyremanager.Manager), "*"),
 		wire.Struct(new(pusher.Manager), "*"),
 		pusher.ProviderPusherConfig,
 		pusher.ProvidePusherClient,
@@ -93,7 +94,7 @@ func InitializeDevServer() (server.Server, error) {
 		wire.Struct(new(db.Db), "*"),
 		config.ProvideAPIHost,
 		config.ProvideWebHost,
-		wire.Struct(new(wyre.Manager), "*"),
+		wire.Struct(new(wyremanager.Manager), "*"),
 		wire.Struct(new(pusher.Manager), "*"),
 		pusher.ProviderPusherConfig,
 		pusher.ProvidePusherClient,

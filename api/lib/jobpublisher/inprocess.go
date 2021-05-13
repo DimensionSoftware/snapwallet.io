@@ -7,7 +7,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
-	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
 	"github.com/khoerling/flux/api/lib/jobmanager"
 	"github.com/khoerling/flux/api/lib/jobs"
 )
@@ -15,7 +15,7 @@ import (
 type InProcessPublisher struct {
 	*db.Db
 	Pusher      *pusher.Manager
-	WyreManager *wyre.Manager
+	WyreManager *wyremanager.Manager
 }
 
 func (pub InProcessPublisher) PublishJob(ctx context.Context, j *job.Job) error {

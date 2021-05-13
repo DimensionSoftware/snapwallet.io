@@ -11,6 +11,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
 	"github.com/khoerling/flux/api/lib/jobmanager"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"github.com/khoerling/flux/api/lib/remedymanager"
@@ -31,7 +32,7 @@ type Server struct {
 	FileManager                   *filemanager.Manager
 	Db                            *db.Db
 	Wyre                          *wyre.Client
-	WyreManager                   *wyre.Manager
+	WyreManager                   *wyremanager.Manager
 	Plaid                         *plaid.Client
 	JwtSigner                     *auth.JwtSigner
 	JwtVerifier                   *auth.JwtVerifier
