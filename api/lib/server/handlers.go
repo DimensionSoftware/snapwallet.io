@@ -1495,6 +1495,12 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 		return nil, err
 	}
 
+	hookResponse, err := s.Wyre.SubscribeWebhook(wyreAccount.SecretKey, "transfer:"+string(t.ID), string(s.APIHost)+"/wyre/hooks/"+string(u.ID))
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("hook response from wyre: %#v", hookResponse)
+
 	// send email
 	msg, err := generateTransferMessage(mail.NewEmail("Customer", *u.Email), t)
 	if err != nil {
