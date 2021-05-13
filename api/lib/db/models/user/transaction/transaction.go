@@ -84,6 +84,8 @@ func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
 	out := trx
 
 	out.Partner = PartnerWyre
+	// todo: infer from input status
+	out.Status = StatusConfirmed
 
 	if !out.ExternalIDs.Has(ExternalID(in.ID)) {
 		out.ExternalIDs = append(trx.ExternalIDs, ExternalID(in.ID))
@@ -110,14 +112,33 @@ func (trx Transaction) EnrichWithWyreTransfer(in wyre.Transfer) Transaction {
 	return out
 }
 
-func (trx Transaction) EnrichWithWalletOrderReservation(in wyre.WalletOrderReservation) Transaction {
+func (trx Transaction) EnrichWithCreateWalletOrderReservationResponse(in wyre.CreateWalletOrderReservationResponse) Transaction {
 	out := trx
+
+	out.Partner = PartnerWyre
+	out.Kind = KindDebit
+	out.Status = StatusQuoted
+
+	if !out.ExternalIDs.Has(ExternalID(in.Reservation)) {
+		out.ExternalIDs = append(trx.ExternalIDs, ExternalID(in.Reservation))
+	}
 
 	return out
 }
 
 func (trx Transaction) EnrichWithWalletOrder(in wyre.WalletOrder) Transaction {
 	out := trx
+
+	out.Partner = PartnerWyre
+	out.Kind = KindDebit
+	// todo: infer from input status
+	out.Status = StatusConfirmed
+
+	if !out.ExternalIDs.Has(ExternalID(in.ID)) {
+		out.ExternalIDs = append(trx.ExternalIDs, ExternalID(in.ID))
+	}
+
+	out.ExternalStatus = ExternalStatus(in.Status)
 
 	return out
 }

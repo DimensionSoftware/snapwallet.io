@@ -1094,7 +1094,7 @@ func (c Client) CreateWalletOrderReservation(req CreateWalletOrderReservationReq
 
 // CreateWalletOrderReservation creates a wallet order reservation in Wyre's system
 // NOTE: This endpoint uses centralized authentication.
-// https://docs.sendwyre.com/v3/docs/wallet-order-reservations
+// https://docs.sendwyre.com/docs/rate-locked-reservation
 // GET https://api.sendwyre.com/v3/orders/reservation/:reservationId
 func (c Client) GetWalletOrderReservation(req GetWalletOrderReservationRequest) (*WalletOrderReservation, error) {
 	// Timestamp is required by Wyre to avoid replay attacks
