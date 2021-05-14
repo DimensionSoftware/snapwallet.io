@@ -19,6 +19,7 @@ type EmailTemplateVars struct {
 	OTPCode       string `json:"otpCode"`
 	TransactionID string `json:"transactionID"`
 	BusinessDays  int    `json:"businessDays"`
+	Status        string `json:"status"`
 }
 
 // GetUserIDFromIncomingContext gets the user id from the incoming context
