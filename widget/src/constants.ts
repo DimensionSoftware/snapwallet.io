@@ -88,6 +88,7 @@ export enum ParentMessages {
 export enum PusherServerMessages {
   WYRE_PM_UPDATED = 'WYRE_PAYMENT_METHODS_UPDATED',
   WYRE_ACCOUNT_UPDATED = 'WYRE_ACCOUNT_UPDATED',
+  WYRE_TRANSFER_UPDATED = 'WYRE_TRANSFER_UPDATED',
 }
 
 export enum PusherClientMessages {}
