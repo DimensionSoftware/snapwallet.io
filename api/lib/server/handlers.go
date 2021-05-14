@@ -1331,9 +1331,9 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 	case "transfer":
 		swUser, err := s.Db.GetUserByID(ctx, nil, userID)
 
-		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, swUser.ID)
 		if err != nil {
-			log.Printf("Error retrieving Wyre accounts from DB for user %s", u.ID)
+			log.Printf("Error retrieving Wyre accounts from DB for user %s", swUser.ID)
 			return nil, status.Error(codes.Internal, "hook failed")
 		}
 
@@ -1345,7 +1345,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 		userAccount := accounts[0]
 
 		// Make sure it exists in our db
-		_, err = s.Db.GetTransactionByExternalId(ctx, nil, u.ID, transaction.ExternalID(objectID))
+		_, err = s.Db.GetTransactionByExternalId(ctx, nil, swUser.ID, transaction.ExternalID(objectID))
 
 		if err != nil {
 			log.Printf("Error retrieving transaction %s", objectID)
@@ -1364,7 +1364,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 		}
 
 		log.Printf("sending email for transaction status update")
-		emailMsg, err := generateTransactionStatusMessage(mail.NewEmail("Customer", *swUser.Email), &wyre.TransferDetail{ID: wyre.TransferID(objectID), Status: "COMPLETED"})
+		emailMsg, err := generateTransactionStatusMessage(mail.NewEmail("Customer", *swUser.Email), txn)
 
 		if err != nil {
 			return nil, err
