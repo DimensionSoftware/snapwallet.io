@@ -397,6 +397,32 @@ func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) (*mail.SGMa
 	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
 }
 
+func generateTransactionStatusMessage(to *mail.Email, t *wyre.TransferDetail) (*mail.SGMailV3, error) {
+	txnStatus := strings.ToLower(t.Status)
+	var status string
+
+	if txnStatus == "failed" {
+		status = "Failed"
+	}
+	if txnStatus == "completed" {
+		status = "Completed"
+	}
+
+	htmlContent, err := genEmailTemplate("transactionStatusHTML", EmailTemplateVars{
+		TransactionID: string(t.ID),
+		Status:        status,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+	subject := fmt.Sprintf("Transaction %s", status)
+	plainTextContent := fmt.Sprintf("Your transaction status has been changed to %s", status)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
+}
+
 func generateDebitCardTransactionMessage(to *mail.Email, order *wyre.WalletOrder) (*mail.SGMailV3, error) {
 	htmlContent, err := genEmailTemplate("newTransactionHTML", EmailTemplateVars{TransactionID: order.ID, BusinessDays: 1})
 
@@ -1302,15 +1328,70 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			log.Printf("failure saving our wyre payment method: %#v", err)
 			return nil, status.Errorf(codes.Unknown, "hook failed")
 		}
-	//case "transfer":
+	case "transfer":
+		swUser, err := s.Db.GetUserByID(ctx, nil, userID)
+
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		if err != nil {
+			log.Printf("Error retrieving Wyre accounts from DB for user %s", u.ID)
+			return nil, status.Error(codes.Internal, "hook failed")
+		}
+
+		if len(accounts) <= 0 {
+			log.Printf("wyre account not found for user")
+			return nil, status.Error(codes.Unknown, "hook failed")
+		}
+
+		userAccount := accounts[0]
+
+		// Make sure it exists in our db
+		_, err = s.Db.GetTransactionByExternalId(ctx, nil, u.ID, transaction.ExternalID(objectID))
+
+		if err != nil {
+			log.Printf("Error retrieving transaction %s", objectID)
+			return nil, status.Error(codes.Internal, "hook failed")
+		}
+
+		txn, err := s.Wyre.GetTransfer(userAccount.SecretKey, objectID)
+		if err != nil {
+			return nil, status.Error(codes.Unknown, "hook failed")
+		}
+
+		// This should never happen.
+		// We don't want to send email when status is the same
+		if txn.Status == "PENDING" {
+			break
+		}
+
+		log.Printf("sending email for transaction status update")
+		emailMsg, err := generateTransactionStatusMessage(mail.NewEmail("Customer", *swUser.Email), &wyre.TransferDetail{ID: wyre.TransferID(objectID), Status: "COMPLETED"})
+
+		if err != nil {
+			return nil, err
+		}
+
+		_, err = s.Sendgrid.Send(emailMsg)
+		if err != nil {
+			log.Printf("Error sending email")
+			return nil, err
+		}
+
+		msg = &pusher.Message{
+			Kind: pusher.MessageKindWyreTransferUpdated,
+			IDs:  []string{objectID},
+			At:   now,
+		}
 	default:
-		log.Printf("UNIMPLEMENTED TRANSFER WEBHOOK: %s %s", userID, req.Trigger)
+		log.Printf("UNIMPLEMENTED PHP WEBHOOK: %s %s", userID, req.Trigger)
 		return &emptypb.Empty{}, nil
 	}
 
-	err := s.Pusher.Send(userID, msg)
-	if err != nil {
-		return nil, err
+	if msg != nil {
+		err := s.Pusher.Send(userID, msg)
+		if err != nil {
+			log.Printf("Sending Pusher notification failed")
+			return nil, err
+		}
 	}
 
 	return &emptypb.Empty{}, nil
