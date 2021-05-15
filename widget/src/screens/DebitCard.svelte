@@ -16,6 +16,9 @@
   import { onMount } from 'svelte'
   import { focusFirstInput, onEnterPressed } from '../util'
   import { debitCardValidationRules, validateForm } from '../util/validation'
+  import { formatExpiration } from '../util/transactions'
+  import { transactionStore } from '../stores/TransactionStore'
+  import TimeTicker from '../components/TimeTicker.svelte'
 
   let countrySelectorVisible = false
   $: isUSPhoneNumber =
@@ -54,6 +57,9 @@
 <ModalContent>
   <ModalHeader>Card Information</ModalHeader>
   <ModalBody>
+    <TimeTicker
+      time={formatExpiration($transactionStore.transactionExpirationSeconds)}
+    />
     <Label label="Name on Card">
       <Input
         autocomplete="cc-name"
