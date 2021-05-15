@@ -190,7 +190,11 @@
       >
     </div>
   </nav>
-  <div on:mousedown={mailToSupport} class="support-container">
+  <div
+    on:mousedown={mailToSupport}
+    class="support-container"
+    class:fadeOpacity={isExpanded}
+  >
     <FaIcon scale="0.8" data={faEnvelope} />
     <span style="margin-left:0.35rem;">support@snapwallet.io</span>
   </div>
@@ -351,9 +355,21 @@
     position: absolute;
     bottom: 2.5rem;
     font-size: 0.8rem;
-    opacity: 0.5;
+    opacity: 0;
     display: flex;
     align-items: center;
     cursor: pointer;
+    &.fadeOpacity {
+      animation: fadeInSupport 0.5s linear 0.5s normal forwards;
+    }
+  }
+
+  @keyframes fadeInSupport {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 0.5;
+    }
   }
 </style>
