@@ -1,10 +1,11 @@
 <script lang="ts">
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
-  import { Logger } from '../util'
+  import { cachePrimaryPaymentMethodID, Logger } from '../util'
   import { onDestroy, onMount } from 'svelte'
   import type { PlaidAccount, PlaidInstitution } from 'api-client'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
+  import { transactionStore } from '../stores/TransactionStore'
 
   let handler
 
@@ -44,7 +45,19 @@
   }
 
   const onComplete = () => {
-    paymentMethodStore.fetchWyrePaymentMethods().then(() => push(Routes.ROOT))
+    paymentMethodStore.fetchWyrePaymentMethods().then(() => {
+      const PMs = $paymentMethodStore.wyrePaymentMethods
+
+      if (PMs.length) {
+        PMs.sort(pm => (pm.status.toLowerCase() === 'active' ? -1 : 1))
+        if (!$transactionStore.selectedSourcePaymentMethod) {
+          cachePrimaryPaymentMethodID(PMs[0]?.id)
+          transactionStore.setSelectedSourcePaymentMethod(PMs[0])
+        }
+      }
+
+      push(Routes.ROOT)
+    })
   }
 
   function initializePlaid() {
