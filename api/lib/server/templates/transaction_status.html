@@ -1,4 +1,4 @@
-{{ define "newTransactionHTML" }}
+{{ define "transactionStatusHTML" }}
 <!DOCTYPE html>
 <html>
   {{ template "headHTML" }}
@@ -82,9 +82,10 @@
                 overflow: hidden;
                 visibility: hidden;
                 width: 0;
+                text-transform: capitalize;
               "
             >
-              Transaction Created
+              Transaction {{.Status}}
             </span>
             <table
               width="100%"
@@ -165,9 +166,10 @@
                             margin-bottom: 0;
                             padding-bottom: 20px;
                             text-align: left;
+                            text-transform: capitalize;
                           "
                         >
-                          Transaction Created
+                          Transaction {{.Status}}
                         </h3>
                         <h3
                           style="
@@ -199,15 +201,11 @@
                             text-align: left;
                           "
                         >
-                          Your transaction has been created successfully. Please
-                          allow up to
-                          <b
-                            >{{if eq .BusinessDays 5 }} five {{ end }} {{if eq
-                            .BusinessDays 1 }} one {{ end }} ({{.BusinessDays}})
-                            business {{ if gt .BusinessDays 1 }}days{{else}} day
-                            {{ end }}</b
-                          >
-                          for your transaction to settle.
+                          Your transaction status has changed to
+                          <span
+                            style="text-transform: lowercase; font-weight: bold"
+                            >{{.Status}}</span
+                          >.
                         </p>
                         {{ template "excludedDetailsHTML" }}
                       </td>

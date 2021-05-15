@@ -2,6 +2,7 @@ import { paymentMethodStore } from '../stores/PaymentMethodStore'
 import { Logger } from '.'
 import { PusherServerMessages, PusherClientMessages } from '../constants'
 import { userStore } from '../stores/UserStore'
+import { transactionsStore } from '../stores/TransactionsStore'
 
 const handleWyrePaymentMethodUpdates = data => {
   Logger.debug(data)
@@ -13,6 +14,11 @@ const handleWyreAccountUpdates = async data => {
   await userStore.fetchFlags()
   userStore.fetchUserProfile()
   paymentMethodStore.fetchWyrePaymentMethods()
+}
+
+const handleWyreTransferUpdate = async data => {
+  Logger.debug(data)
+  transactionsStore.fetchUserTransactions()
 }
 
 const tryInitializePusher = () => {
@@ -38,6 +44,10 @@ const tryInitializePusher = () => {
     channel.bind(
       PusherServerMessages.WYRE_ACCOUNT_UPDATED,
       handleWyreAccountUpdates,
+    )
+    channel.bind(
+      PusherServerMessages.WYRE_TRANSFER_UPDATED,
+      handleWyreTransferUpdate,
     )
     Logger.debug('PUSHER LOADED')
   }
