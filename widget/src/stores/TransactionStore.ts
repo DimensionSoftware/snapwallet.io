@@ -1,6 +1,7 @@
 import type { WyrePaymentMethod } from 'api-client'
 import { writable } from 'svelte/store'
 import { IAsset, TransactionIntents, TransactionMediums } from '../types'
+import { computeTransactionExpiration } from '../util/transactions'
 
 type StoreState = {
   intent: TransactionIntents
@@ -13,6 +14,8 @@ type StoreState = {
   destinationAmount: number
   selectedSourcePaymentMethod: WyrePaymentMethod | null
   wyrePreview: object
+  transactionExpirationTimer?: number
+  transactionExpirationSeconds: number
 }
 
 const initialState: StoreState = {
@@ -26,14 +29,42 @@ const initialState: StoreState = {
   destinationAmount: 0.0,
   selectedSourcePaymentMethod: null,
   wyrePreview: null,
+  transactionExpirationTimer: null,
+  transactionExpirationSeconds: null,
 }
 
 const createStore = () => {
-  const { subscribe, update, set } = writable<StoreState>(initialState)
+  const { subscribe, update } = writable<StoreState>(initialState)
+
+  const updateTxnSeconds = (expiresAt: string) => {
+    const transactionExpirationSeconds = computeTransactionExpiration(expiresAt)
+    update(s => {
+      if (transactionExpirationSeconds <= 0)
+        clearInterval(s.transactionExpirationTimer)
+      return { ...s, transactionExpirationSeconds }
+    })
+  }
+
+  const beginExpirationTimer = expiresAt => {
+    updateTxnSeconds(expiresAt)
+    const transactionExpirationTimer = setInterval(() => {
+      try {
+        updateTxnSeconds(expiresAt)
+      } catch {
+        clearInterval(transactionExpirationTimer)
+        update(s => ({ ...s, transactionExpirationSeconds: null }))
+      }
+    }, 1000)
+    return transactionExpirationTimer
+  }
 
   return {
     subscribe,
-    reset: () => set(initialState),
+    reset: () =>
+      update(s => {
+        clearInterval(s.transactionExpirationTimer)
+        return initialState
+      }),
     update: (fields: Partial<StoreState>) => update(s => ({ ...s, ...fields })),
     setSelectedSourcePaymentMethod: (
       selectedSourcePaymentMethod: WyrePaymentMethod,
@@ -79,8 +110,12 @@ const createStore = () => {
           destinationAmount: s.sourceAmount,
         }
       }),
-    setWyrePreview: (wyrePreview: object) =>
-      update(s => ({ ...s, wyrePreview })),
+    setWyrePreview: (wyrePreview: object & { expiresAt: string }) => {
+      const transactionExpirationTimer = beginExpirationTimer(
+        wyrePreview.expiresAt,
+      )
+      update(s => ({ ...s, wyrePreview, transactionExpirationTimer }))
+    },
   }
 }
 
