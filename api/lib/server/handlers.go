@@ -1851,6 +1851,9 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 			SourceAmount:            reservationResponse.Quote.SourceAmount,
 			DestAmount:              reservationResponse.Quote.DestAmount,
 			SourceAmountWithoutFees: reservationResponse.Quote.SourceAmountWithoutFees,
+			// Wyre doesn't return this for some reason but 10 minutes is the amount of time
+			// Remove a minute for latency and whatnot
+			ExpiresAt: time.Now().Add(time.Minute * 9).Format(time.RFC3339),
 		},
 	}, nil
 }

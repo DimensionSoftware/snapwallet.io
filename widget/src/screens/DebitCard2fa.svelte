@@ -15,6 +15,8 @@
   import { configStore } from '../stores/ConfigStore'
   import { transactionStore } from '../stores/TransactionStore'
   import { toaster } from '../stores/ToastStore'
+  import TimeTicker from '../components/TimeTicker.svelte'
+  import { formatExpiration } from '../util/transactions'
 
   let cardCode = ''
   let smsCode = ''
@@ -147,6 +149,9 @@
 <ModalContent>
   <ModalHeader>Card Authorization</ModalHeader>
   <ModalBody>
+    <TimeTicker
+      time={formatExpiration($transactionStore.transactionExpirationSeconds)}
+    />
     {#if smsCodeRequired}
       <Label label="SMS Code">
         <Input

@@ -35,3 +35,11 @@ export const computeTransactionExpiration = (expiresAt?: string) => {
   const now = new Date() as any
   return (expiration - now) / 1000
 }
+
+export const formatExpiration = secondsUntilExpiration => {
+  const mins: number = Math.floor(secondsUntilExpiration / 60)
+  const seconds: number = Math.floor(secondsUntilExpiration % 60)
+  const displaySeconds: string =
+    seconds > 9 ? seconds.toString() : `0${seconds}`
+  return mins > 1 ? `${mins}m ${displaySeconds}s` : `${displaySeconds}s`
+}

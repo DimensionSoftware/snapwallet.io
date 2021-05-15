@@ -22,6 +22,7 @@ export class WyreWalletOrderReservationQuote {
     'equivelancies'?: { [key: string]: number; };
     'fees'?: { [key: string]: number; };
     'dest'?: string;
+    'expiresAt'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -77,6 +78,12 @@ export class WyreWalletOrderReservationQuote {
         {
             "name": "dest",
             "baseName": "dest",
+            "type": "string",
+            "format": ""
+        },
+        {
+            "name": "expiresAt",
+            "baseName": "expiresAt",
             "type": "string",
             "format": ""
         }    ];

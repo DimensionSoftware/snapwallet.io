@@ -16,6 +16,9 @@
     debitCardAddressValidationRules,
     validateForm,
   } from '../util/validation'
+  import TimeTicker from '../components/TimeTicker.svelte'
+  import { formatExpiration } from '../util/transactions'
+  import { transactionStore } from '../stores/TransactionStore'
 
   let autocomplete: google.maps.places.Autocomplete
 
@@ -142,6 +145,9 @@
 <ModalContent>
   <ModalHeader>Card Address</ModalHeader>
   <ModalBody>
+    <TimeTicker
+      time={formatExpiration($transactionStore.transactionExpirationSeconds)}
+    />
     <Label label="Street 1">
       <Input
         id="autocomplete"
