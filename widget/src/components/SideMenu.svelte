@@ -69,7 +69,7 @@
   }
 
   const mailToSupport = () => {
-    window.location.href = `mailto:support@snapwallet.io?subject=Support Request&body=I am requesting help with the following:`
+    window.top.location.href = `mailto:support@snapwallet.io?subject=Support Request&body=I am requesting help with the following:`
   }
 
   $: isLoggedIn = $userStore.isLoggedIn
