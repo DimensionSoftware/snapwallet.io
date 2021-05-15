@@ -14,7 +14,7 @@
   import FaIcon from 'svelte-awesome'
   import { onMount } from 'svelte'
   import { toaster } from '../stores/ToastStore'
-  import { computeTransactionExpiration } from '../util/transactions'
+  import { formatExpiration } from '../util/transactions'
   import { configStore } from '../stores/ConfigStore'
 
   $: ({ product } = $configStore)
@@ -30,7 +30,6 @@
     destCurrency: destinationCurrency,
     exchangeRate: txnExchangeRate,
     fees,
-    expiresAt,
   } = wyrePreview)
 
   $: isBuy = intent === TransactionIntents.BUY
@@ -63,23 +62,9 @@
     }
   }
 
-  let secondsUntilExpiration = computeTransactionExpiration(
-    $transactionStore.wyrePreview?.expiresAt,
+  $: formattedExpiration = formatExpiration(
+    $transactionStore.transactionExpirationSeconds,
   )
-
-  let formattedExpiration
-  $: {
-    const mins: number = Math.floor(secondsUntilExpiration / 60)
-    const seconds: number = Math.floor(secondsUntilExpiration % 60)
-    const displaySeconds: string =
-      seconds > 9 ? seconds.toString() : `0${seconds}`
-
-    if (mins > 1) {
-      formattedExpiration = `${mins}m ${displaySeconds}s`
-    } else {
-      formattedExpiration = `${displaySeconds}s`
-    }
-  }
 
   const handleConfirmation = async () => {
     try {
@@ -99,10 +84,7 @@
 
   onMount(() => {
     const interval = setInterval(() => {
-      secondsUntilExpiration = computeTransactionExpiration(
-        $transactionStore.wyrePreview?.expiresAt,
-      )
-      if (secondsUntilExpiration <= 0) {
+      if ($transactionStore.transactionExpirationSeconds <= 0) {
         toaster.pop({
           msg: 'Your preview has expired. Please create a new preview.',
           error: true,
@@ -144,17 +126,17 @@
       {/if}
     </div>
     <div class="line-items" class:is-product={Boolean(product)}>
+      <div class="line-item muted warning">
+        <div>Price Expires</div>
+        <div style="display:flex;justify-content:center;align-items:center;">
+          <FaIcon data={faClock} />
+          <div style="margin-right:0.35rem;" />
+          <b>{formattedExpiration}</b>
+        </div>
+      </div>
+      <div class="line dashed" />
       <!-- ACH -->
       {#if !isDebitCard && $transactionStore.selectedSourcePaymentMethod}
-        <div class="line-item muted warning">
-          <div>Price Expires</div>
-          <div style="display:flex;justify-content:center;align-items:center;">
-            <FaIcon data={faClock} />
-            <div style="margin-right:0.35rem;" />
-            <b>{formattedExpiration}</b>
-          </div>
-        </div>
-        <div class="line dashed" />
         {#if isBuy}
           <div class="line-item muted">
             <div>From</div>
