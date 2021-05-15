@@ -353,6 +353,7 @@ message WyreWalletOrderReservationQuote {
   map<string, double> equivelancies = 7;
   map<string, double> fees = 8;
   string dest = 9;
+  string expires_at = 10;
 }
 
 message WyreWalletOrderReservation {
