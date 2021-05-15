@@ -10,6 +10,7 @@
     faSignInAlt,
     faUserCircle,
     faShoppingCart,
+    faEnvelope,
   } from '@fortawesome/free-solid-svg-icons'
   import { Routes } from '../constants'
   import {
@@ -65,6 +66,10 @@
   function handleClose(e) {
     // close if esc pressed
     if (onKeysPressed(e, ['Escape'])) close(true)
+  }
+
+  const mailToSupport = () => {
+    window.location.href = `mailto:support@snapwallet.io?subject=Support Request&body=I am requesting help with the following:`
   }
 
   $: isLoggedIn = $userStore.isLoggedIn
@@ -185,6 +190,10 @@
       >
     </div>
   </nav>
+  <div on:mousedown={mailToSupport} class="support-container">
+    <FaIcon scale="0.8" data={faEnvelope} />
+    <span style="margin-left:0.35rem;">support@snapwallet.io</span>
+  </div>
 </aside>
 
 <style lang="scss">
@@ -336,5 +345,15 @@
         }
       }
     }
+  }
+
+  .support-container {
+    position: absolute;
+    bottom: 17rem;
+    font-size: 0.8rem;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
   }
 </style>
