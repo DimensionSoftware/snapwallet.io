@@ -263,12 +263,12 @@
   aside {
     position: absolute;
     background: var(--theme-modal-popup-background);
-    top: -1rem;
+    top: 0;
     left: -1rem;
     right: -0.5rem;
-    bottom: -0.5rem;
+    bottom: 0;
     width: 125%;
-    height: 150%;
+    height: 100%;
     padding: 25% 1rem 0 4rem;
     transform: translateX(105%);
     transition: none;
@@ -349,7 +349,7 @@
 
   .support-container {
     position: absolute;
-    bottom: 17rem;
+    bottom: 2.5rem;
     font-size: 0.8rem;
     opacity: 0.5;
     display: flex;
