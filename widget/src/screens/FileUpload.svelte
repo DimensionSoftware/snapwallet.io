@@ -59,8 +59,13 @@
       const uploadResponse = await window.API.fluxUploadFile(fileEl.files[0])
       fileIds = [...fileIds, uploadResponse.fileId]
       if (fileIds.length < minimumFiles) {
-        selectedFileURI = ''
-        selectedFileName = ''
+        setTimeout(() => {
+          selectedFileURI = ''
+          selectedFileName = ''
+          // Clear the element val so chrome doesn't
+          // silently fail to show the preview [ch266]
+          fileEl.value = ''
+        }, 800)
       }
       if (fileIds.length >= minimumFiles) {
         const isGovId = [
