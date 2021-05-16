@@ -362,6 +362,9 @@
     &.fadeOpacity {
       animation: fadeInSupport 0.5s linear 0.5s normal forwards;
     }
+    :global(svg) {
+      margin: 2px 3px 0 0;
+    }
   }
 
   @keyframes fadeInSupport {

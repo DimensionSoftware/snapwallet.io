@@ -260,8 +260,7 @@
   <ModalFooter>
     <Button glow on:mousedown={handleNextStep} isLoading={isPreviewing}>
       <div class="btn-content">
-        <span class="btn-text">Preview Buy</span>
-        <FaIcon data={faLock} />
+        <span class="btn-text">Buy</span>
       </div>
     </Button>
   </ModalFooter>
@@ -298,7 +297,8 @@
     justify-content: flex-start;
     align-items: center;
     .nft-title {
-      margin: 0 0 1rem;
+      margin: -1rem 0 1rem;
+      font-weight: 300;
     }
     .nft-video {
       position: relative;

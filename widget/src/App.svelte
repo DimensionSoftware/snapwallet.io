@@ -436,6 +436,7 @@
   :global(.scroll-y) {
     overflow: hidden;
     overflow-y: scroll;
+    overscroll-behavior: contain;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }
