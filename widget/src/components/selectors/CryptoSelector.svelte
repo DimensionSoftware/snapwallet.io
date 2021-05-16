@@ -1,4 +1,5 @@
 <script lang="ts">
+  import VirtualList from '../VirtualList.svelte'
   import { createEventDispatcher } from 'svelte'
   import { SUPPORTED_CRYPTOCURRENCY_ASSETS } from '../../constants'
   import { fly } from 'svelte/transition'
@@ -8,6 +9,8 @@
   const dispatch = createEventDispatcher()
 
   export let visible = false
+
+  const items = SUPPORTED_CRYPTOCURRENCY_ASSETS.sort((a, b) => !a.popular)
 </script>
 
 {#if visible}
@@ -15,35 +18,12 @@
     on:close={() => dispatch('close')}
     headerTitle="Select Currency"
   >
-    <div class="scroll-y selector-container">
-      <h5>Popular</h5>
-      {#each SUPPORTED_CRYPTOCURRENCY_ASSETS.filter(c => c.popular) as cryptoCurrency, i (cryptoCurrency.ticker)}
-        <div
-          in:fly={{ y: 25, duration: 250 + 50 * (i + 1) }}
-          style="margin: 0.5rem 0"
-        >
-          <Label fx={false}>
-            <CryptoCard
-              on:mousedown={() => dispatch('close')}
-              crypto={cryptoCurrency}
-            />
-          </Label>
-        </div>
-      {/each}
-      <h5 style="margin-top: 1.25rem">All</h5>
-      {#each SUPPORTED_CRYPTOCURRENCY_ASSETS.filter(c => !c.popular) as cryptoCurrency, i (cryptoCurrency.ticker)}
-        <div
-          in:fly={{ y: 25, duration: 250 + 50 * (i + 4) }}
-          style="margin: 0.5rem 0"
-        >
-          <Label>
-            <CryptoCard
-              on:mousedown={() => dispatch('close')}
-              crypto={cryptoCurrency}
-            />
-          </Label>
-        </div>
-      {/each}
+    <div class="selector-container">
+      <VirtualList items={SUPPORTED_CRYPTOCURRENCY_ASSETS} let:item>
+        <Label fx={false}>
+          <CryptoCard on:mousedown={() => dispatch('close')} crypto={item} />
+        </Label>
+      </VirtualList>
       <div class="spacer" />
     </div>
   </PopupSelector>
@@ -51,4 +31,13 @@
 
 <style lang="scss">
   @import '../../styles/selectors.scss';
+  .selector-container {
+    padding-top: 0;
+  }
+  :global(svelte-virtual-list-viewport) {
+    height: 120% !important;
+  }
+  :global(svelte-virtual-list-row) {
+    padding-left: 7px;
+  }
 </style>
