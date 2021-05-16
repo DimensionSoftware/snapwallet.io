@@ -45,7 +45,7 @@
           alt={card.title}
         />
         <h4>{card.title}</h4>
-        <p>{card.desc}</p>
+        <p>{card.desc || ''}</p>
       </article>
     {/each}
   </div>

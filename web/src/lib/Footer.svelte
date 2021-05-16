@@ -1,7 +1,59 @@
 <script lang="ts">
-  const scrollToTop = _ => window.scrollTo(0, 0)
+  import Feature from './Feature.svelte'
+  import Button from './Button.svelte'
+  const scrollToTop = _ => window.scrollTo(0, 0),
+    contactUs = _ => {
+      window.location.href =
+        'mailto:support@snapwallet.com?subject=Hello SnapWallet Team!'
+    }
+  const cards = [
+    {
+      title: 'Built-In Compliance',
+      name: 'nft',
+      icon: 'SW Crypto Coin.png',
+      alt: 'Simply Checkout with Any NFT',
+    },
+    {
+      title: 'Diverse Payment Methods',
+      name: 'donations',
+      icon: 'Dr Crypto clean shaven.png',
+      alt: 'Accepts Credit Cards',
+    },
+    {
+      title: 'Fast & Secure',
+      name: 'fiat',
+      icon: 'Coin Checkmark.png',
+      alt: 'On and Off-Ramp Crypto Currencies',
+    },
+  ]
 </script>
 
+<Feature
+  name="started"
+  title="Get started in just a few minutes"
+  description="SnapWallet integrates with your platform and is fully customizable"
+  center
+>
+  <div class="cards flex" slot="left">
+    {#each cards as card, i}
+      <article on:mousedown={_ => scrollTo(card.name)}>
+        <img
+          title={card.alt}
+          width="300"
+          src={`/images/${card.icon}`}
+          alt={card.title}
+        />
+        <h4>{card.title}</h4>
+        {#if i !== cards.length - 1}
+          <span />
+        {/if}
+      </article>
+    {/each}
+  </div>
+</Feature>
+<div class="contact">
+  <Button on:mousedown={contactUs}>Contact Us</Button>
+</div>
 <hr />
 <footer on:mousedown={scrollToTop}>
   <p title="Scroll to Top">
@@ -21,11 +73,54 @@
 </footer>
 
 <style lang="scss">
+  .cards {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    h4 {
+      font-weight: 300;
+      text-align: center;
+      margin-top: -1rem;
+      font-size: 1.2rem;
+    }
+    article:first-child > span {
+      right: -14%;
+    }
+    article > span {
+      position: absolute;
+      height: 2px;
+      border-radius: 1rem;
+      right: -20%;
+      background: linear-gradient(to right, transparent, #ddd, transparent);
+      width: 100px;
+      top: 50%;
+    }
+  }
   hr {
     height: 5rem;
     background: #fff;
     margin: 0;
     border: none;
+  }
+  :global(.started article) {
+    position: relative;
+    width: 100%;
+  }
+  .contact {
+    position: absolute;
+    left: calc(50% - 82px);
+  }
+  :global(.contact > button) {
+    color: #fff !important;
+    font-size: 1.15rem !important;
+    background: rgb(222, 49, 45) !important;
+    border-color: rgb(222, 49, 45) !important;
+    top: -4.25rem;
+    left: auto;
+    right: auto;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 0.25rem;
   }
   footer {
     cursor: pointer;

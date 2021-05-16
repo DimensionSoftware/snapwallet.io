@@ -79,8 +79,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
 
 <main>
   <div class="intro col">
-    <h1>Welcome to <b>Snap Wallet</b></h1>
-    <h2>
+    <h1 class="blur">Welcome to <b>Snap Wallet</b></h1>
+    <h2 class="blur">
       Connect Crypto to Your
       {#if Typewriter}
         <Typewriter interval={50} delay={0} loop={1800}>
@@ -95,7 +95,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
         Idea
       {/if}
     </h2>
-    <article>
+    <article class="blur">
       The fastest wallet connecting crypto currency to everything— in a snap!
     </article>
   </div>
@@ -128,6 +128,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
 
+  :global(.blur) {
+    backdrop-filter: blur(8px) !important;
+  }
   main {
     position: relative;
     z-index: 1;
@@ -139,9 +142,6 @@ Hey, you-- join us!  https://dimensionsoftware.com
     .col {
       position: relative;
       max-width: 50%;
-    }
-    :global(h1, h2, h3) {
-      backdrop-filter: blur(10px);
     }
     h1,
     h2 {

@@ -6,16 +6,17 @@
   export let name
   export let hasBackground
   export let hasImage
+  export let center
 </script>
 
 <a id={name} />
-<section class={name} class:hasImage class:hasBackground>
+<section class={name} class:center class:hasImage class:hasBackground>
   <article>
-    <h2 class:right>
+    <h2 class:right class:blur={hasImage}>
       {title}
     </h2>
     {#if description}
-      <h3>{description}</h3>
+      <h3 class:blur={hasImage}>{description}</h3>
     {/if}
     <div class="flex">
       <slot name="left" />
@@ -55,6 +56,20 @@
     flex-direction: column;
     padding: 10rem 0 7rem 0;
     position: relative;
+    &.center {
+      article {
+        h2,
+        h3 {
+          left: inherit;
+          text-align: center;
+          margin: 0 auto;
+          position: relative;
+        }
+        h3 {
+          margin-top: -3rem;
+        }
+      }
+    }
     &.hasImage {
       &:before {
         content: '';
@@ -76,7 +91,6 @@
       position: relative;
       padding: 3rem 0;
       max-width: 900px;
-      width: 100%;
       margin: 0 auto;
       h2 {
         position: absolute;
@@ -131,7 +145,7 @@
       backdrop-filter: blur(5px) contrast(110%);
       &:hover {
         transition: none;
-        background-color: rgba(255, 255, 255, 0.7);
+        background-color: rgba(255, 255, 255, 0.85);
         box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
       }
       &:active {
