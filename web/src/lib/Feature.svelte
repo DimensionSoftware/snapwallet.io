@@ -53,7 +53,7 @@
     background: white;
     display: flex;
     flex-direction: column;
-    padding: 10rem 10rem 7rem 0;
+    padding: 10rem 0 7rem 0;
     position: relative;
     &.hasImage {
       &:before {
@@ -81,10 +81,10 @@
       h2 {
         position: absolute;
         top: -5.5rem;
-        left: -5%;
+        left: -10%;
         margin-left: -2rem;
         color: #000;
-        font-size: 2rem;
+        font-size: 2.25rem;
         font-weight: bold;
         &.right {
           right: 0.75rem;
@@ -94,7 +94,7 @@
       h3 {
         position: absolute;
         top: -2.25rem;
-        left: -5%;
+        left: -10%;
         max-width: 65%;
         margin-left: -2rem;
         font-size: 1.25rem;

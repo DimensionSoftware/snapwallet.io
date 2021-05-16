@@ -102,7 +102,6 @@
     color: #fff;
     position: relative;
     height: 100%;
-    background: #222;
     &:first-child {
       margin-right: 3rem;
     }
@@ -129,11 +128,11 @@
     margin: 0.5rem 0 0 0;
   }
   small {
+    font-weight: 200;
     margin: 0 0 0 0.1rem;
   }
   aside {
     display: flex;
-    gap: 0.5rem;
     margin-top: 2rem;
   }
   h4 {
@@ -167,7 +166,7 @@
     font-size: 1rem;
     padding: 0.75rem 1.5rem 0.75rem 1rem;
     border: none;
-    border-radius: 0.25rem;
+    border-radius: 0.85rem;
     margin: 1.5rem 0 1rem;
   }
   input.name {

@@ -1,8 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte'
   import Feature from '../Feature.svelte'
-  import { formatLocaleCurrency } from '../../../../widget/src/util'
-  import Button from '../Button.svelte'
 
   const cards = [
     {
@@ -29,7 +26,6 @@
   ]
 
   function scrollTo(name) {
-    console.log('n', name)
     document.getElementById(name).scrollIntoView()
   }
 </script>

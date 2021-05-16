@@ -96,8 +96,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
       {/if}
     </h2>
     <article>
-      Snap Wallet is the fastest crypto wallet connecting crypto currency to
-      your everything in a snap!
+      The fastest wallet connecting crypto currency to everything— in a snap!
     </article>
   </div>
   <div class="col wallet" style="margin: 0 auto;">

@@ -26,19 +26,18 @@
     position: relative;
     overflow: hidden;
     display: block;
-    min-height: 50px;
-    width: 100%;
     background: #fffc00;
-    padding: 0.25rem 1rem;
+    padding: 0.75rem 1.75rem;
     color: #000;
     border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 0.5rem;
+    border-radius: 2rem;
     cursor: pointer;
     white-space: nowrap;
-    text-transform: uppercase;
     letter-spacing: 2px;
     margin: 0;
-    font-weight: bold;
+    font-weight: bolder;
+    font-size: 1.25rem;
+    letter-spacing: 0;
     transition: border 0.3s ease-in 0.05s;
     z-index: 10;
     &.glow {
