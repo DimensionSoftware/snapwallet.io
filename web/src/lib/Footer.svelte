@@ -108,6 +108,7 @@
   }
   .contact {
     position: absolute;
+    z-index: 2;
     left: calc(50% - 82px);
   }
   :global(.contact > button) {
@@ -116,6 +117,8 @@
     background: rgb(222, 49, 45) !important;
     border-color: rgb(222, 49, 45) !important;
     top: -4.25rem;
+    position: relative;
+    z-index: 1;
     left: auto;
     right: auto;
     margin: 0 auto;
@@ -153,7 +156,20 @@
       }
     }
   }
+  @media (max-width: 1250px) {
+    :global(article h2),
+    :global(article h3) {
+      left: 1rem !important;
+    }
+    :global(.overview article) {
+      margin-right: 0 !important;
+    }
+    :global(.overview article:first-child) {
+      margin-left: 3rem !important;
+    }
+  }
   @media (max-width: 1000px) {
+    .contact,
     footer,
     hr {
       display: none !important;
