@@ -68,20 +68,21 @@ export const debitCardValidationRules: IValidationRules = {
   },
   cardExpiration: {
     validate: cardExp => {
-      const [month, year] = cardExp.split('/')
-      const expYear = Number(`20${year}`)
-      const expMonth = Number(month)
-      const now = new Date()
-      const yearNow = Number(now.getFullYear())
-      const monthNow = Number(now.getMonth()) + 1
+      let [month, year] = cardExp.split('/')
+      year = `20${year}`
 
-      const isMissing =
-        !EXP_MONTH.test(expMonth.toString()) ||
-        !EXP_YEAR.test(expYear.toString())
-      const isYearExpired = yearNow > expYear
-      const isMonthExpired = monthNow > expMonth && yearNow === expYear
+      const isMissing = !EXP_MONTH.test(month) || !EXP_YEAR.test(year)
+      if (isMissing) return false
 
-      return !isMissing && !isYearExpired && !isMonthExpired
+      const expYear = Number(year),
+        expMonth = Number(month),
+        now = new Date(),
+        yearNow = Number(now.getFullYear()),
+        monthNow = Number(now.getMonth()) + 1,
+        isYearExpired = yearNow > expYear,
+        isMonthExpired = monthNow > expMonth && yearNow === expYear
+
+      return !isYearExpired && !isMonthExpired
     },
     errorMessage: () => 'Please enter a valid card expiration date',
   },
