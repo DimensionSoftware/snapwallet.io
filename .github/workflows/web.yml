@@ -72,5 +72,4 @@ jobs:
           BUILD_SCRIPT: bin/build-web
           API_BASE_URL: https://api.snapwallet.io
           WIDGET_URL: https://snapwallet.io/widget
-          # TODO: remove SnapWallet:debug ?
-          DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
+          DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info'
