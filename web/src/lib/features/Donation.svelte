@@ -11,20 +11,10 @@
         { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
       ],
       theme: {
-        modalBackground: 'rgba(0,0,0,1)',
-        modalPopupBackground: 'rgba(25,25,25,.9)',
-        modalContainerBackgroundColor: 'rgba(255,255,255,.95)',
-        color: 'rgba(0,0,0,.9)',
-        badgeTextColor: '#333',
-        colorLightened: 'rgba(5,5,5,.8)',
-        shadowBottomColor: 'rgba(0,0,0,.25)',
-        colorInverse: '#fff',
         buttonColor: themeColor,
         buttonTextColor: '#000',
-        buttonGlowColor: themeColor,
-        successColor: themeColor,
-        textColor: '#fff',
-        inputTextColor: '#333',
+        buttonGlowColor: '205,202,0',
+        shadowColor: 'rgba(0,0,0,.05)',
       },
     }
 
@@ -99,10 +89,9 @@
   @import '../../../../widget/src/styles/animations.scss';
 
   .relative {
-    color: #fff;
+    color: #222;
     position: relative;
     height: 100%;
-    background: #222;
     &:first-child {
       margin-right: 3rem;
     }
@@ -118,9 +107,15 @@
     font-size: 1.5rem;
   }
   :global(.donations > article) {
+    position: relative;
     margin-top: 4.55rem !important;
-    background: #222 !important;
-    box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    background: transparent !important;
+    box-shadow: 5px 7px 10px rgba(0, 0, 0, 0.15);
+    transition: box-shadow 0.3s ease-out, transform 0.04s ease-in !important;
+  }
+  :global(.donations > article:hover) {
+    box-shadow: 0 0 0 1px #fff600, 4px 6px 10px rgba(0, 0, 0, 0.15) !important;
+    transition: none !important;
   }
   .docs-link {
     margin: 1rem auto 0;
@@ -129,11 +124,11 @@
     margin: 0.5rem 0 0 0;
   }
   small {
+    font-weight: 200;
     margin: 0 0 0 0.1rem;
   }
   aside {
     display: flex;
-    gap: 0.5rem;
     margin-top: 2rem;
   }
   h4 {
@@ -149,6 +144,8 @@
   :global(button) {
     font-size: 1rem;
     margin-right: 0.75rem !important;
+    border: none !important;
+    box-shadow: none !important;
   }
   .qr {
     cursor: pointer;
@@ -164,11 +161,20 @@
 
   input.name,
   textarea {
+    font-family: inherit;
     font-size: 1rem;
     padding: 0.75rem 1.5rem 0.75rem 1rem;
-    border: none;
-    border-radius: 0.25rem;
+    border-radius: 0.85rem;
+    border: 1px solid rgba(0, 0, 0, 0.3);
     margin: 1.5rem 0 1rem;
+    transition: box-shadow 0.1s ease-in, border 0.2s ease-in;
+    &:hover,
+    &:focus,
+    &:active {
+      transition: none;
+      border: 1px solid rgba(0, 0, 0, 1);
+      box-shadow: 1px 0 0 5px #fff600;
+    }
   }
   input.name {
     margin-top: 3rem;

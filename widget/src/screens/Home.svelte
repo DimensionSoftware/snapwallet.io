@@ -486,7 +486,7 @@
     :global(.flag > svg) {
       position: absolute;
       left: -12px;
-      z-index: 1;
+      z-index: 2;
     }
   }
 

@@ -26,7 +26,7 @@
           warningColor: '#FFBD4A',
           successColor: '#83E068',
           errorColor: '#E7693C',
-          shadowBottomColor: 'rgba(0,0,0,.35)',
+          shadowBottomColor: 'rgba(0,0,0,.55)',
         },
       })
 
@@ -72,18 +72,18 @@
     <br style="margin-top: .5rem;" />
     <div on:mousedown={snap.openWeb}>
       <br />
-      <h3>I Want to Buy & Sell Crypto</h3>
+      <h3>Buy & Sell Crypto</h3>
       <ul>
-        <li>Fiat to Crypto</li>
-        <li>Crypto to Crypto</li>
-        <li>Crypto to Fiat</li>
+        <li>Fiat &rlarr; Crypto</li>
+        <li>Crypto &rlarr; Fiat</li>
+        <li>Crypto &rlarr; Crypto</li>
       </ul>
       <br />
       <h3>Snap Wallet is</h3>
       <ul>
         <li>&nbsp; Web, iOS & Android</li>
-        <li>&nbsp; Dependency-free, Fast, Secure & Embeddable</li>
-        <li>&nbsp; Pay in fiat, receive crypto currency</li>
+        <li>&nbsp; Fast & Secure</li>
+        <li>&nbsp; Dependency-free & Embeddable</li>
       </ul>
     </div>
   </div>
@@ -94,7 +94,7 @@
 
   .relative {
     position: relative;
-    padding: 0 0 0 5rem;
+    padding: 0 4rem 0 4rem;
     height: 100%;
     > div {
       cursor: pointer;
@@ -104,9 +104,6 @@
     margin-top: 4.55rem !important;
     background: linear-gradient(#fff, rgba(255, 255, 255, 0.9)) !important;
     box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
-  }
-  :global(.fiat.hasImage:before) {
-    transform: rotate(0) !important;
   }
   :global(.fiat h2) {
     margin-top: -4rem;

@@ -402,6 +402,7 @@
     --theme-text-color-4: #{$textColor4};
     --theme-text-color-muted: #{$textColorMuted};
     --theme-button-color: #{$buttonColor};
+    // XXX glow color format is "r,g,b", eg. "255,50,15"
     --theme-button-glow-color: #{toRGB($buttonGlowColor)};
     --theme-button-text-color: #{$buttonTextColor};
     --theme-modal-background: #{$modalBackground};
@@ -435,6 +436,7 @@
   :global(.scroll-y) {
     overflow: hidden;
     overflow-y: scroll;
+    overscroll-behavior: contain;
     scrollbar-width: none;
     -ms-overflow-style: none;
   }

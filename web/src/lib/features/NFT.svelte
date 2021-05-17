@@ -149,7 +149,9 @@
     font-size: 1.15rem !important;
     background: rgb(222, 49, 45) !important;
     border-color: rgb(222, 49, 45) !important;
-    top: -3rem;
+    top: -4.25rem;
+    width: 65%;
+    border-radius: 0.25rem;
   }
   .qr {
     cursor: pointer;
