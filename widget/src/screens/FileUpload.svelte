@@ -168,7 +168,7 @@
         icon={iconCardProps.icon}
         on:click={() => {
           // Can't change this once one doc side is uploaded
-          if (fileIds.length && minimumFiles >= 1) {
+          if (fileIds.length && minimumFiles > 1) {
             return
           }
           isFileTypeSelectorOpen = true
