@@ -3,10 +3,10 @@
   import type { Masks } from '../../types'
   import { withMaskOnInput, isValidMaskInput } from '../../masks'
   import { focus } from '../../util'
-  import * as Flags from 'svelte-flagicon'
   import FaIcon from 'svelte-awesome'
   import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
   import { userStore } from '../../stores/UserStore'
+  import { SVG_FLAG_ICON_PATH } from '../../constants'
 
   const dispatch = createEventDispatcher()
   export let type: string = 'text'
@@ -30,11 +30,13 @@
 
 <div class:active={isActive} class="input-container">
   <div on:mousedown={() => dispatch('select')} class="country-select">
-    <svelte:component
-      this={Flags[
+    <img
+      alt={$userStore.phoneNumberCountry.code.toUpperCase()}
+      width="32"
+      src={`${SVG_FLAG_ICON_PATH}/${
         $userStore.phoneNumberCountry.code[0] +
-          $userStore.phoneNumberCountry.code[1].toLowerCase()
-      ]}
+        $userStore.phoneNumberCountry.code[1]
+      }.svg`.toLowerCase()}
     />
     {$userStore.phoneNumberCountry.dial_code}
     <FaIcon data={faCaretDown} />
