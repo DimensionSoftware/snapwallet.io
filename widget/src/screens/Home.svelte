@@ -369,7 +369,7 @@
               <span slot="icon">
                 <FaIcon data={faCheck} />
               </span>
-              <b slot="step">Verify Identity</b>
+              <b slot="step">Identity Verified</b>
             </VStep>
           {:else}
             <VStep disabled onClick={() => push(verificationNextStep)}>
