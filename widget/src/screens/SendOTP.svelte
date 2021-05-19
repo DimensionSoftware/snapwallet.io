@@ -184,6 +184,9 @@
 {#if countrySelectorVisible}
   <CountrySelector
     visible
+    selectedCountryCode={$userStore.phoneNumberCountry?.code ||
+      $userStore.address.country ||
+      $userStore.geo.country}
     on:close={() => {
       countrySelectorVisible = false
       focusFirstInput()

@@ -128,3 +128,5 @@ export const SUPPORTED_CRYPTOCURRENCY_ASSETS = [
   { name: 'Wrapped Bitcoin', ticker: 'WBTC', color: '#323544' },
   { name: 'Yearn.Finance', ticker: 'YFI', color: '#006AE3' },
 ]
+
+export const SVG_FLAG_ICON_PATH = '/widget/flag-icons/svg'

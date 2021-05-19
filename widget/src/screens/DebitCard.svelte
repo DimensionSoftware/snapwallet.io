@@ -137,6 +137,8 @@
 
 {#if countrySelectorVisible}
   <CountrySelector
+    selectedCountryCode={$debitCardStore.phoneNumberCountry.code ||
+      $userStore.geo.country}
     visible
     on:close={() => {
       countrySelectorVisible = false

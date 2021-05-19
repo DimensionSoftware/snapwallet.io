@@ -40,6 +40,16 @@
   $: priceMap = $priceStore.prices[`USD_${product.destinationTicker}`] || {}
   $: exchangeRate = priceMap[product.destinationTicker] || 0
 
+  let selectedCountryCode
+  $: {
+    if (isDebitCard) {
+      selectedCountryCode =
+        $debitCardStore.address.country || $userStore.geo.country
+    } else {
+      selectedCountryCode = $userStore.address.country || $userStore.geo.country
+    }
+  }
+
   const handleNextStep = async () => {
     const { selectedSourcePaymentMethod } = $transactionStore,
       isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
@@ -276,6 +286,7 @@
 
 {#if countrySelectorVisible}
   <CountrySelector
+    {selectedCountryCode}
     whiteList={WYRE_SUPPORTED_COUNTRIES}
     on:close={() => (countrySelectorVisible = false)}
     on:select={e => {

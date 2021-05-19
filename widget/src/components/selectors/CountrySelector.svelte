@@ -3,15 +3,16 @@
   import { countries, getFilteredCountries } from '../../util/country'
   import PopupSelector from '../inputs/PopupSelector.svelte'
   import CountryCard from '../cards/CountryCard.svelte'
-  import * as Flags from 'svelte-flagicon'
   import VirtualList from '../VirtualList.svelte'
   import { userStore } from '../../stores/UserStore'
   import { transactionStore } from '../../stores/TransactionStore'
   import { TransactionMediums } from '../../types'
   import { debitCardStore } from '../../stores/DebitCardStore'
+  import { SVG_FLAG_ICON_PATH } from '../../constants'
 
   export let visible = false
   export let whiteList: string[] = []
+  export let selectedCountryCode
 
   $: filteredCountries = getFilteredCountries(
     Object.values(countries),
@@ -19,9 +20,6 @@
   )
 
   let isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
-  let selectedCountry = isDebitCard
-    ? $debitCardStore.address.country
-    : $userStore.geo.country
 
   let searchTimeout
 
@@ -61,21 +59,23 @@
           return 1
         }))
 
-  // focus search
-  onMount(() => {
-    setTimeout(() => search.focus(), 300)
-  })
-
-  afterUpdate(() => {
-    // Move the selected country to top of list
-    if (selectedCountry && !search?.value) {
-      const idx = filteredCountries.findIndex(fc => fc.code === selectedCountry)
+  // Move selected item to top of list
+  $: {
+    if (selectedCountryCode && !search?.value) {
+      const idx = filteredCountries.findIndex(
+        fc => fc.code.toLowerCase() === selectedCountryCode.toLowerCase(),
+      )
       if (idx > -1) {
         const elem = filteredCountries[idx]
         filteredCountries.splice(idx, 1)
         filteredCountries.unshift(elem)
       }
     }
+  }
+
+  // focus search
+  onMount(() => {
+    setTimeout(() => search.focus(), 300)
   })
 </script>
 
@@ -84,7 +84,7 @@
   on:close={() => dispatch('close')}
   headerTitle="Select Country"
 >
-  <div class="selector-container">
+  <div class="selector-container" style="height:90%">
     <input
       placeholder="Search..."
       bind:this={search}
@@ -103,8 +103,12 @@
       >
         <CountryCard on:click={() => dispatch('select', { country: item })}>
           <div style="display:flex;align-items:center;">
-            <svelte:component
-              this={Flags[item.code[0] + item.code[1].toLowerCase()]}
+            <img
+              alt={item.code.toUpperCase()}
+              width="32"
+              src={`${SVG_FLAG_ICON_PATH}/${
+                item.code[0] + item.code[1]
+              }.svg`.toLowerCase()}
             />
             <span style="margin-left:1rem;">{item.name}</span>
           </div>
