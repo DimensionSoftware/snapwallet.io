@@ -17,6 +17,6 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    color: var(--theme-text-color-3);
+    opacity: 0.5;
   }
 </style>
