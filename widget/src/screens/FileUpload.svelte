@@ -114,14 +114,19 @@
       icon: faIdCard,
       label: 'Drivers License',
     },
-    [FileUploadTypes.ACH_AUTHORIZATION_FORM]: {
+  }
+
+  // Only allow these file types after initial KYC has been done
+  if (isUpdatingFiles) {
+    SELECTOR_OPTIONS[FileUploadTypes.ACH_AUTHORIZATION_FORM] = {
       icon: faUniversity,
       label: 'Bank Authorization Form',
-    },
-    [FileUploadTypes.PROOF_OF_ADDRESS]: {
+    }
+
+    SELECTOR_OPTIONS[FileUploadTypes.PROOF_OF_ADDRESS] = {
       icon: faHome,
       label: 'Proof of Address',
-    },
+    }
   }
 
   const getSelectorProps = fileType => {
