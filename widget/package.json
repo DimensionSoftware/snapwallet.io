@@ -2,7 +2,7 @@
   "name": "svelte-app",
   "version": "1.0.0",
   "scripts": {
-    "build": "rm -rf dist/ && mkdir dist && rollup -c && mustache dist/info.json public/index.prod.html dist/index.html && cp public/widget/* dist",
+    "build": "rm -rf dist/ && mkdir dist && rollup -c && mustache dist/info.json public/index.prod.html dist/index.html && cp -R public/widget/* dist",
     "dev": "HOST=0.0.0.0 rollup -c -w",
     "start": "sirv public",
     "start-prod": "sirv dist",
