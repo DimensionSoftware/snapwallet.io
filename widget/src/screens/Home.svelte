@@ -79,6 +79,7 @@
 
   let verificationNextStep
   let shouldFixRemediations = false
+  let selectedCountryCode
   $: {
     // NOTE: these should remain in this order
 
@@ -97,6 +98,13 @@
     shouldFixRemediations = remediationsAvailable(
       $userStore.profileRemediations,
     )
+
+    if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {
+      selectedCountryCode =
+        $debitCardStore.address.country || $userStore.geo.country
+    } else {
+      selectedCountryCode = $userStore.address.country || $userStore.geo.country
+    }
   }
 
   const animateRandomPrice = () => {
@@ -440,6 +448,7 @@
 
 {#if countrySelectorVisible}
   <CountrySelector
+    {selectedCountryCode}
     whiteList={WYRE_SUPPORTED_COUNTRIES}
     on:close={() => (countrySelectorVisible = false)}
     on:select={e => {
