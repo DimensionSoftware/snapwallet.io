@@ -132,7 +132,7 @@
         </div>
         <FaIcon scale="3" data={faShieldAlt} />
       </div>
-      <p style="content-txt">
+      <p class="content-txt">
         We're linking your bank account. This should only take a few seconds.
       </p>
     </ModalBody>
