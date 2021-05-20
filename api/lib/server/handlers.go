@@ -292,6 +292,12 @@ func (s *Server) WyreConnectBankAccount(ctx context.Context, req *proto.WyreConn
 		return nil, err
 	}
 
+	hookResponse, err := s.Wyre.SubscribeWebhook(userAccount.SecretKey, "paymentmethod:"+string(res.ID), string(s.APIHost)+"/wyre/hooks/"+string(u.ID))
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("hook response from wyre: %#v", hookResponse)
+
 	pm := paymentmethod.PaymentMethod{
 		ID:                    paymentmethod.ID(res.ID),
 		PlaidItemID:           "",
