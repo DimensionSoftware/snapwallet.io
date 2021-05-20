@@ -19,6 +19,9 @@ inputs:
   DEBUG:
     description: debug settings to use
     required: true
+  WYRE_BASE_URL:
+    description: the wyre base URL for retrieving Plaid config
+    required: true  
 runs:
   using: composite
   steps:
@@ -38,4 +41,5 @@ runs:
       env:
         API_BASE_URL: ${{ inputs.API_BASE_URL }}
         WIDGET_URL: ${{ inputs.WIDGET_URL }}
+        WYRE_BASE_URL: ${{ inputs.WYRE_BASE_URL }}
         DEBUG: ${{ inputs.DEBUG }}
