@@ -989,10 +989,6 @@
           "items": {
             "$ref": "#/definitions/PlaidAccount"
           }
-        },
-        "publicToken": {
-          "type": "string",
-          "title": "Wyre \u003c-\u003e Plaid public token"
         }
       },
       "description": "request\nmirrors some elements of https://plaid.com/docs/link/web/#onsuccess",

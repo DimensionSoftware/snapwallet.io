@@ -21,7 +21,6 @@ export class PlaidConnectBankAccountsRequest {
     'plaidPublicToken'?: string;
     'institution'?: PlaidInstitution;
     'accounts'?: Array<PlaidAccount>;
-    'publicToken'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -42,12 +41,6 @@ export class PlaidConnectBankAccountsRequest {
             "name": "accounts",
             "baseName": "accounts",
             "type": "Array<PlaidAccount>",
-            "format": ""
-        },
-        {
-            "name": "publicToken",
-            "baseName": "publicToken",
-            "type": "string",
             "format": ""
         }    ];
 

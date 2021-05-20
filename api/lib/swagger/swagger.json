@@ -512,6 +512,11 @@
         ],
         "tags": [
           "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
         ]
       }
     },
@@ -1126,10 +1131,6 @@
           "items": {
             "$ref": "#/definitions/PlaidAccount"
           }
-        },
-        "publicToken": {
-          "type": "string",
-          "title": "Wyre <-> Plaid public token"
         }
       },
       "description": "request\nmirrors some elements of https://plaid.com/docs/link/web/#onsuccess",
