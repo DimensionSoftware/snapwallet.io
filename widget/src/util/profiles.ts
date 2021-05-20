@@ -3,7 +3,7 @@ import type {
   ProfileDataItemKind,
   ProfileDataItemRemediation,
 } from 'api-client'
-import { UserProfileFieldTypes } from '../constants'
+import { Routes, UserProfileFieldTypes } from '../constants'
 import type { RemediationGroups } from '../types'
 
 /**
@@ -254,4 +254,23 @@ export const getRequiredContactFields = () => {
  */
 export const getRequiredDocumentFields = () => {
   return [UserProfileFieldTypes.US_GOVT_DOCUMENT]
+}
+
+export const findNextKYCRoute = (profileItems: {
+  [k: string]: ProfileDataItemInfo
+}): Routes => {
+  const missingInfo = getMissingFieldMessages(profileItems)
+
+  // NOTE: these should remain in the order of the KYC (non update) flow
+  if (!missingInfo.personal.isComplete) {
+    return Routes.PROFILE
+  } else if (!missingInfo.address.isComplete) {
+    return Routes.ADDRESS
+  } else if (!missingInfo.contact.isComplete) {
+    return Routes.PROFILE_SEND_SMS
+  } else if (!missingInfo.document.isComplete) {
+    return Routes.FILE_UPLOAD
+  } else {
+    return Routes.PROFILE_STATUS
+  }
 }
