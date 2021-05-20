@@ -125,16 +125,14 @@
   <ModalContent>
     <ModalHeader hideBackButton>Linking Bank</ModalHeader>
     <ModalBody>
-      <div
-        style="margin-top:3rem;width:100%;display:flex;justify-content: center;align-items: center;"
-      >
+      <div class="icon-container">
         <FaIcon scale="3" data={faUniversity} />
         <div class="connection">
           <FaIcon scale="1" data={faLink} />
         </div>
         <FaIcon scale="3" data={faShieldAlt} />
       </div>
-      <p style="text-align:center;margin-top:3rem;">
+      <p style="content-txt">
         We're linking your bank account. This should only take a few seconds.
       </p>
     </ModalBody>
@@ -144,15 +142,18 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
 
-  .vertical-stepper {
-    margin-top: 2rem;
-    list-style: none;
-    padding: 0;
-    :global(.flag > svg) {
-      position: absolute;
-      left: -12px;
-      z-index: 2;
-    }
+  .icon-container {
+    margin-top: 3rem;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .content-txt {
+    text-align: center;
+    padding: 0 0.5rem;
+    margin-top: 3rem;
   }
 
   .connection {
