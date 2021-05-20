@@ -78,8 +78,8 @@
         onSuccess: async (_publicToken: string, metadata: any) => {
           Logger.debug(metadata)
           await connectWyrePaymentMethod(
-            metadata.publicToken,
-            metadata.accountId,
+            metadata.public_token,
+            metadata.account_id,
           )
           onComplete()
         },
