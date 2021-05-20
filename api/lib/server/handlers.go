@@ -292,6 +292,25 @@ func (s *Server) WyreConnectBankAccount(ctx context.Context, req *proto.WyreConn
 		return nil, err
 	}
 
+	pm := paymentmethod.PaymentMethod{
+		ID:                    paymentmethod.ID(res.ID),
+		PlaidItemID:           "",
+		PlaidAccountID:        item.AccountID(req.PlaidAccountId),
+		Status:                res.Status,
+		Name:                  res.Name,
+		Last4:                 res.Last4Digits,
+		ChargeableCurrencies:  res.ChargeableCurrencies,
+		DepositableCurrencies: res.DepositableCurrencies,
+		UpdatedAt:             time.Now(),
+		CreatedAt:             time.Now(),
+	}
+	err = s.Db.SaveWyrePaymentMethod(ctx, nil, u.ID, userAccount.ID, &pm)
+
+	if err != nil {
+		log.Printf("Error saving Wyre payment method")
+		return nil, status.Error(codes.Internal, "An error occurred while connecting your account. Please try again.")
+	}
+
 	var lifecycleStatus proto.LifecycleStatus
 	pmStatus := strings.ToLower(res.Status)
 	if pmStatus == "active" {
