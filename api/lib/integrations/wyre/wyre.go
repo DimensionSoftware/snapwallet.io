@@ -701,8 +701,10 @@ type SubscribeWebhookResponse struct {
 // CreatePaymentMethodRequest represents the request object for https://api.sendwyre.com/v2/paymentMethods
 type CreatePaymentMethodRequest struct {
 	PlaidProcessorToken string `json:"plaidProcessorToken"`
-	PaymentMethodType   string `json:"paymentMethodType"`
-	Country             string `json:"country"`
+	// Wyre <-> Plaid integration only this will look like publicToken + '|' + plaidAccountId
+	PublicToken       string `json:"publicToken"`
+	PaymentMethodType string `json:"paymentMethodType"`
+	Country           string `json:"country"`
 }
 
 // WithDefaults provides default values for CreatePaymentMethodRequest
