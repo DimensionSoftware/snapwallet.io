@@ -140,6 +140,12 @@ message PlaidConnectBankAccountsRequest {
   repeated PlaidAccount accounts = 3;
 }
 
+// WyreConnectBankAccountRequest
+message WyreConnectBankAccountRequest {
+  string plaid_public_token = 1;
+  string plaid_account_id = 2;
+}
+
 message PlaidInstitution {
   string id = 1;
   string name = 2;
@@ -664,6 +670,16 @@ service Flux {
       body: "*"
     };
   }
+
+  // Create a Wyre payment method using the Wyre <-> Plaid integration
+  //
+  rpc WyreConnectBankAccount(WyreConnectBankAccountRequest) returns (WyrePaymentMethod) {
+    option (google.api.http) = {
+      post: "/wyre/direct-connect-bank-account"
+      body: "*"
+    };
+  }
+
 
   // PlaidCreateLinkToken implements the link flow
  
