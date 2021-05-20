@@ -160,6 +160,15 @@
         ]
       }
     },
+    "/wyre/direct-connect-bank-account": {
+      "post": {
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/upload": {
       "post": {
         "summary": "Uploads a file and returns a fileId.",
