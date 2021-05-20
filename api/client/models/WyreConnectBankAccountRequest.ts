@@ -10,18 +10,11 @@
  * Do not edit the class manually.
  */
 
-import { PlaidAccount } from './PlaidAccount';
-import { PlaidInstitution } from './PlaidInstitution';
 import { HttpFile } from '../http/http';
 
-/**
-* request mirrors some elements of https://plaid.com/docs/link/web/#onsuccess
-*/
-export class PlaidConnectBankAccountsRequest {
+export class WyreConnectBankAccountRequest {
     'plaidPublicToken'?: string;
-    'institution'?: PlaidInstitution;
-    'accounts'?: Array<PlaidAccount>;
-    'publicToken'?: string;
+    'plaidAccountId'?: string;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -33,26 +26,14 @@ export class PlaidConnectBankAccountsRequest {
             "format": ""
         },
         {
-            "name": "institution",
-            "baseName": "institution",
-            "type": "PlaidInstitution",
-            "format": ""
-        },
-        {
-            "name": "accounts",
-            "baseName": "accounts",
-            "type": "Array<PlaidAccount>",
-            "format": ""
-        },
-        {
-            "name": "publicToken",
-            "baseName": "publicToken",
+            "name": "plaidAccountId",
+            "baseName": "plaidAccountId",
             "type": "string",
             "format": ""
         }    ];
 
     static getAttributeTypeMap() {
-        return PlaidConnectBankAccountsRequest.attributeTypeMap;
+        return WyreConnectBankAccountRequest.attributeTypeMap;
     }
     
     public constructor() {

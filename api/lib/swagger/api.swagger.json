@@ -442,6 +442,39 @@
         ]
       }
     },
+    "/wyre/direct-connect-bank-account": {
+      "post": {
+        "summary": "Create a Wyre payment method using the Wyre \u003c-\u003e Plaid integration",
+        "operationId": "Flux_WyreConnectBankAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyrePaymentMethod"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreConnectBankAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/wyre/hooks/{hookId}": {
       "post": {
         "operationId": "Flux_WyreWebhook",
@@ -956,6 +989,10 @@
           "items": {
             "$ref": "#/definitions/PlaidAccount"
           }
+        },
+        "publicToken": {
+          "type": "string",
+          "title": "Wyre \u003c-\u003e Plaid public token"
         }
       },
       "description": "request\nmirrors some elements of https://plaid.com/docs/link/web/#onsuccess",
@@ -1476,6 +1513,18 @@
           "type": "string"
         }
       }
+    },
+    "WyreConnectBankAccountRequest": {
+      "type": "object",
+      "properties": {
+        "plaidPublicToken": {
+          "type": "string"
+        },
+        "plaidAccountId": {
+          "type": "string"
+        }
+      },
+      "title": "WyreConnectBankAccountRequest"
     },
     "WyreCreateDebitCardQuoteRequest": {
       "type": "object",

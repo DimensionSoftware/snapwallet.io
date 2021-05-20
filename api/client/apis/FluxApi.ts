@@ -28,10 +28,12 @@ import { WidgetGetShortUrlResponse } from '../models/WidgetGetShortUrlResponse';
 import { WyreConfirmDebitCardQuoteRequest } from '../models/WyreConfirmDebitCardQuoteRequest';
 import { WyreConfirmDebitCardQuoteResponse } from '../models/WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
+import { WyreConnectBankAccountRequest } from '../models/WyreConnectBankAccountRequest';
 import { WyreCreateDebitCardQuoteRequest } from '../models/WyreCreateDebitCardQuoteRequest';
 import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
 import { WyreGetDebitCardOrderAuthorizationsResponse } from '../models/WyreGetDebitCardOrderAuthorizationsResponse';
+import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
 import { WyreSubmitDebitCardOrderAuthorizationsRequest } from '../models/WyreSubmitDebitCardOrderAuthorizationsRequest';
 import { WyreSubmitDebitCardOrderAuthorizationsResponse } from '../models/WyreSubmitDebitCardOrderAuthorizationsResponse';
@@ -756,6 +758,49 @@ export class FluxApiRequestFactory extends BaseAPIRequestFactory {
         if (authMethod) {
             await authMethod.applySecurityAuthentication(requestContext);
         }
+
+        return requestContext;
+    }
+
+    /**
+     * Create a Wyre payment method using the Wyre <-> Plaid integration
+     * @param body 
+     */
+    public async fluxWyreConnectBankAccount(body: WyreConnectBankAccountRequest, options?: Configuration): Promise<RequestContext> {
+		let config = options || this.configuration;
+		
+        // verify required parameter 'body' is not null or undefined
+        if (body === null || body === undefined) {
+            throw new RequiredError('Required parameter body was null or undefined when calling fluxWyreConnectBankAccount.');
+        }
+
+		
+		// Path Params
+    	const localVarPath = '/wyre/direct-connect-bank-account';
+
+		// Make Request Context
+    	const requestContext = config.baseServer.makeRequestContext(localVarPath, HttpMethod.POST);
+        requestContext.setHeaderParam("Accept", "application/json, */*;q=0.8")
+
+        // Query Params
+	
+		// Header Params
+	
+		// Form Params
+
+
+		// Body Params
+        const contentType = ObjectSerializer.getPreferredMediaType([
+            "application/json"
+        ]);
+        requestContext.setHeaderParam("Content-Type", contentType);
+        const serializedBody = ObjectSerializer.stringify(
+            ObjectSerializer.serialize(body, "WyreConnectBankAccountRequest", ""),
+            contentType
+        );
+        requestContext.setBody(serializedBody);
+
+        // Apply auth methods
 
         return requestContext;
     }
@@ -1724,6 +1769,43 @@ export class FluxApiResponseProcessor {
                 ObjectSerializer.parse(await response.body.text(), contentType),
                 "WyreTransferDetail", ""
             ) as WyreTransferDetail;
+            return body;
+        }
+
+        let body = response.body || "";
+    	throw new ApiException<string>(response.httpStatusCode, "Unknown API Status Code!\nBody: \"" + body + "\"");
+    }
+			
+    /**
+     * Unwraps the actual response sent by the server from the response context and deserializes the response content
+     * to the expected objects
+     *
+     * @params response Response returned by the server for a request to fluxWyreConnectBankAccount
+     * @throws ApiException if the response code was not in [200, 299]
+     */
+     public async fluxWyreConnectBankAccount(response: ResponseContext): Promise<WyrePaymentMethod > {
+        const contentType = ObjectSerializer.normalizeMediaType(response.headers["content-type"]);
+        if (isCodeInRange("200", response.httpStatusCode)) {
+            const body: WyrePaymentMethod = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "WyrePaymentMethod", ""
+            ) as WyrePaymentMethod;
+            return body;
+        }
+        if (isCodeInRange("0", response.httpStatusCode)) {
+            const body: RpcStatus = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "RpcStatus", ""
+            ) as RpcStatus;
+            throw new ApiException<RpcStatus>(0, body);
+        }
+
+        // Work around for missing responses in specification, e.g. for petstore.yaml
+        if (response.httpStatusCode >= 200 && response.httpStatusCode <= 299) {
+            const body: WyrePaymentMethod = ObjectSerializer.deserialize(
+                ObjectSerializer.parse(await response.body.text(), contentType),
+                "WyrePaymentMethod", ""
+            ) as WyrePaymentMethod;
             return body;
         }
 

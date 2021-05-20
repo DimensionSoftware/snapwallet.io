@@ -48,6 +48,7 @@ import { WidgetGetShortUrlResponse } from '../models/WidgetGetShortUrlResponse';
 import { WyreConfirmDebitCardQuoteRequest } from '../models/WyreConfirmDebitCardQuoteRequest';
 import { WyreConfirmDebitCardQuoteResponse } from '../models/WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
+import { WyreConnectBankAccountRequest } from '../models/WyreConnectBankAccountRequest';
 import { WyreCreateDebitCardQuoteRequest } from '../models/WyreCreateDebitCardQuoteRequest';
 import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
@@ -229,6 +230,15 @@ export class PromiseFluxApi {
      */
     public fluxWyreConfirmTransfer(transferId: string, body: WyreConfirmTransferRequest, options?: Configuration): Promise<WyreTransferDetail> {
     	const result = this.api.fluxWyreConfirmTransfer(transferId, body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * Create a Wyre payment method using the Wyre <-> Plaid integration
+     * @param body 
+     */
+    public fluxWyreConnectBankAccount(body: WyreConnectBankAccountRequest, options?: Configuration): Promise<WyrePaymentMethod> {
+    	const result = this.api.fluxWyreConnectBankAccount(body, options);
         return result.toPromise();
     }
 	

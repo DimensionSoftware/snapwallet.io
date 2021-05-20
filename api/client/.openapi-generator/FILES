@@ -58,6 +58,7 @@ models/WidgetGetShortUrlResponse.ts
 models/WyreConfirmDebitCardQuoteRequest.ts
 models/WyreConfirmDebitCardQuoteResponse.ts
 models/WyreConfirmTransferRequest.ts
+models/WyreConnectBankAccountRequest.ts
 models/WyreCreateDebitCardQuoteRequest.ts
 models/WyreCreateDebitCardQuoteResponse.ts
 models/WyreCreateTransferRequest.ts

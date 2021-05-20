@@ -44,6 +44,7 @@ export * from './WidgetGetShortUrlResponse';
 export * from './WyreConfirmDebitCardQuoteRequest';
 export * from './WyreConfirmDebitCardQuoteResponse';
 export * from './WyreConfirmTransferRequest';
+export * from './WyreConnectBankAccountRequest';
 export * from './WyreCreateDebitCardQuoteRequest';
 export * from './WyreCreateDebitCardQuoteResponse';
 export * from './WyreCreateTransferRequest';
@@ -105,6 +106,7 @@ import { WidgetGetShortUrlResponse } from './WidgetGetShortUrlResponse';
 import { WyreConfirmDebitCardQuoteRequest } from './WyreConfirmDebitCardQuoteRequest';
 import { WyreConfirmDebitCardQuoteResponse } from './WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
+import { WyreConnectBankAccountRequest } from './WyreConnectBankAccountRequest';
 import { WyreCreateDebitCardQuoteRequest } from './WyreCreateDebitCardQuoteRequest';
 import { WyreCreateDebitCardQuoteResponse } from './WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
@@ -188,6 +190,7 @@ let typeMap: {[index: string]: any} = {
     "WyreConfirmDebitCardQuoteRequest": WyreConfirmDebitCardQuoteRequest,
     "WyreConfirmDebitCardQuoteResponse": WyreConfirmDebitCardQuoteResponse,
     "WyreConfirmTransferRequest": WyreConfirmTransferRequest,
+    "WyreConnectBankAccountRequest": WyreConnectBankAccountRequest,
     "WyreCreateDebitCardQuoteRequest": WyreCreateDebitCardQuoteRequest,
     "WyreCreateDebitCardQuoteResponse": WyreCreateDebitCardQuoteResponse,
     "WyreCreateTransferRequest": WyreCreateTransferRequest,

@@ -58,6 +58,9 @@ type FluxClient interface {
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
 	PlaidConnectBankAccounts(ctx context.Context, in *PlaidConnectBankAccountsRequest, opts ...grpc.CallOption) (*PlaidConnectBankAccountsResponse, error)
+	// Create a Wyre payment method using the Wyre <-> Plaid integration
+	//
+	WyreConnectBankAccount(ctx context.Context, in *WyreConnectBankAccountRequest, opts ...grpc.CallOption) (*WyrePaymentMethod, error)
 	// https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLinkTokenRequest, opts ...grpc.CallOption) (*PlaidCreateLinkTokenResponse, error)
 	// SaveProfileData saves profile data items for the user
@@ -181,6 +184,15 @@ func (c *fluxClient) TokenExchange(ctx context.Context, in *TokenExchangeRequest
 func (c *fluxClient) PlaidConnectBankAccounts(ctx context.Context, in *PlaidConnectBankAccountsRequest, opts ...grpc.CallOption) (*PlaidConnectBankAccountsResponse, error) {
 	out := new(PlaidConnectBankAccountsResponse)
 	err := c.cc.Invoke(ctx, "/Flux/PlaidConnectBankAccounts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreConnectBankAccount(ctx context.Context, in *WyreConnectBankAccountRequest, opts ...grpc.CallOption) (*WyrePaymentMethod, error) {
+	out := new(WyrePaymentMethod)
+	err := c.cc.Invoke(ctx, "/Flux/WyreConnectBankAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -383,6 +395,9 @@ type FluxServer interface {
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
 	PlaidConnectBankAccounts(context.Context, *PlaidConnectBankAccountsRequest) (*PlaidConnectBankAccountsResponse, error)
+	// Create a Wyre payment method using the Wyre <-> Plaid integration
+	//
+	WyreConnectBankAccount(context.Context, *WyreConnectBankAccountRequest) (*WyrePaymentMethod, error)
 	// https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error)
 	// SaveProfileData saves profile data items for the user
@@ -448,6 +463,9 @@ func (UnimplementedFluxServer) TokenExchange(context.Context, *TokenExchangeRequ
 }
 func (UnimplementedFluxServer) PlaidConnectBankAccounts(context.Context, *PlaidConnectBankAccountsRequest) (*PlaidConnectBankAccountsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidConnectBankAccounts not implemented")
+}
+func (UnimplementedFluxServer) WyreConnectBankAccount(context.Context, *WyreConnectBankAccountRequest) (*WyrePaymentMethod, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreConnectBankAccount not implemented")
 }
 func (UnimplementedFluxServer) PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidCreateLinkToken not implemented")
@@ -689,6 +707,24 @@ func _Flux_PlaidConnectBankAccounts_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FluxServer).PlaidConnectBankAccounts(ctx, req.(*PlaidConnectBankAccountsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreConnectBankAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreConnectBankAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreConnectBankAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreConnectBankAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreConnectBankAccount(ctx, req.(*WyreConnectBankAccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1045,6 +1081,10 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "PlaidConnectBankAccounts",
 			Handler:    _Flux_PlaidConnectBankAccounts_Handler,
+		},
+		{
+			MethodName: "WyreConnectBankAccount",
+			Handler:    _Flux_WyreConnectBankAccount_Handler,
 		},
 		{
 			MethodName: "PlaidCreateLinkToken",
