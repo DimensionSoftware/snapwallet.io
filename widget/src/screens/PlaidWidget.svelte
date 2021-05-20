@@ -3,45 +3,52 @@
   import { Routes } from '../constants'
   import { cachePrimaryPaymentMethodID, Logger } from '../util'
   import { onDestroy, onMount } from 'svelte'
-  import type { PlaidAccount, PlaidInstitution } from 'api-client'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
   import { transactionStore } from '../stores/TransactionStore'
 
   let handler
+  let wyreConfig
 
-  async function getLinkToken(): Promise<string> {
-    const resp = await window.API.fluxPlaidCreateLinkToken({})
-    return resp.linkToken
+  type WyreConfig = {
+    plaidEnvironment: string
+    plaidPublicKey: string
+    plaidProducts: string[]
+    plaidWebhook: string
   }
 
-  async function connectAccounts(
+  const WYRE_CONFIG_URL = `${__ENV.WYRE_BASE_URL}/v2/client/config/plaid`
+
+  const fetchWyreConfig = async () => {
+    const res = await fetch(WYRE_CONFIG_URL)
+    return (await res.json()) as WyreConfig
+  }
+
+  // async function getLinkToken(): Promise<string> {
+  //   const resp = await window.API.fluxPlaidCreateLinkToken({})
+  //   return resp.linkToken
+  // }
+
+  // Used for connecting SW Plaid accounts
+  // async function connectAccounts(
+  //   plaidPublicToken: string,
+  //   institution: PlaidInstitution,
+  //   accounts: PlaidAccount[],
+  // ): Promise<void> {
+  //   await window.API.fluxPlaidConnectBankAccounts({
+  //     plaidPublicToken,
+  //     institution,
+  //     accounts,
+  //   })
+  // }
+
+  function connectWyrePaymentMethod(
     plaidPublicToken: string,
-    institution: PlaidInstitution,
-    accounts: PlaidAccount[],
-  ): Promise<void> {
-    await window.API.fluxPlaidConnectBankAccounts({
+    plaidAccountId: string,
+  ): Promise<any> {
+    return window.API.fluxWyreConnectBankAccount({
       plaidPublicToken,
-      institution,
-      accounts,
+      plaidAccountId,
     })
-  }
-
-  interface PlaidSuccessCallbackMetadataAccount {
-    id: string
-    name: string // 'Plaid Checking'
-    mask: string // '0000'
-    type: string // 'depository'
-    subtype: string // 'checking'
-  }
-
-  interface PlaidSuccessCallbackMetadataInstitution {
-    institution_id: string
-    name: string
-  }
-
-  interface PlaidSuccessCallbackMetadata {
-    institution: PlaidSuccessCallbackMetadataInstitution
-    accounts: PlaidSuccessCallbackMetadataAccount[]
   }
 
   const onComplete = () => {
@@ -61,30 +68,20 @@
   }
 
   function initializePlaid() {
-    return getLinkToken().then(token => {
+    return fetchWyreConfig().then(wyreConfig => {
       handler = window.Plaid.create({
-        token,
-        onSuccess: (
-          publicToken: string,
-          metadata: PlaidSuccessCallbackMetadata,
-        ) => {
+        key: wyreConfig.plaidPublicKey,
+        product: wyreConfig.plaidProducts,
+        webhook: wyreConfig.plaidWebhook,
+        env: wyreConfig.plaidEnvironment,
+        selectAccount: true,
+        onSuccess: async (_publicToken: string, metadata: any) => {
           Logger.debug(metadata)
-          connectAccounts(
-            publicToken,
-            {
-              id: metadata.institution.institution_id,
-              name: metadata.institution.name,
-            },
-            metadata.accounts.map(
-              (pa: PlaidSuccessCallbackMetadataAccount) => ({
-                id: pa.id,
-                name: pa.name,
-                mask: pa.mask,
-                type: pa.type,
-                subType: pa.subtype,
-              }),
-            ),
-          ).then(onComplete)
+          await connectWyrePaymentMethod(
+            metadata.publicToken,
+            metadata.accountId,
+          )
+          onComplete()
         },
         onExit: (_err, _metadata) => {
           push(Routes.ROOT)
