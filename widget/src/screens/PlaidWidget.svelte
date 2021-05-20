@@ -5,13 +5,11 @@
   import { onDestroy, onMount } from 'svelte'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
   import { transactionStore } from '../stores/TransactionStore'
-  import VStep from '../components/VStep.svelte'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import FaIcon from 'svelte-awesome'
   import {
-    faExclamationCircle,
     faLink,
     faShieldAlt,
     faUniversity,
@@ -107,8 +105,8 @@
           }
           Logger.debug(eventName, metadata)
         },
-        // Required for RN
-        isWebview: true,
+        // Required to be true for RN
+        isWebview: false,
       })
 
       return Promise.resolve(handler)
