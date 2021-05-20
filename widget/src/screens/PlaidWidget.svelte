@@ -5,9 +5,20 @@
   import { onDestroy, onMount } from 'svelte'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
   import { transactionStore } from '../stores/TransactionStore'
+  import VStep from '../components/VStep.svelte'
+  import ModalContent from '../components/ModalContent.svelte'
+  import ModalHeader from '../components/ModalHeader.svelte'
+  import ModalBody from '../components/ModalBody.svelte'
+  import FaIcon from 'svelte-awesome'
+  import {
+    faExclamationCircle,
+    faLink,
+    faShieldAlt,
+    faUniversity,
+  } from '@fortawesome/free-solid-svg-icons'
 
   let handler
-  let wyreConfig
+  let isCreatingPaymentMethod = false
 
   type WyreConfig = {
     plaidEnvironment: string
@@ -63,6 +74,7 @@
         }
       }
 
+      isCreatingPaymentMethod = false
       push(Routes.ROOT)
     })
   }
@@ -77,6 +89,7 @@
         selectAccount: true,
         onSuccess: async (_publicToken: string, metadata: any) => {
           Logger.debug(metadata)
+          isCreatingPaymentMethod = true
           await connectWyrePaymentMethod(
             metadata.public_token,
             metadata.account_id,
@@ -108,6 +121,67 @@
   })
 </script>
 
+{#if isCreatingPaymentMethod}
+  <ModalContent>
+    <ModalHeader hideBackButton>Linking Bank</ModalHeader>
+    <ModalBody>
+      <div
+        style="margin-top:3rem;width:100%;display:flex;justify-content: center;align-items: center;"
+      >
+        <FaIcon scale="3" data={faUniversity} />
+        <div class="connection">
+          <FaIcon scale="1" data={faLink} />
+        </div>
+        <FaIcon scale="3" data={faShieldAlt} />
+      </div>
+      <p style="text-align:center;margin-top:3rem;">
+        We're linking your bank account. This should only take a few seconds.
+      </p>
+    </ModalBody>
+  </ModalContent>
+{/if}
+
 <style lang="scss">
   @import '../styles/_vars.scss';
+
+  .vertical-stepper {
+    margin-top: 2rem;
+    list-style: none;
+    padding: 0;
+    :global(.flag > svg) {
+      position: absolute;
+      left: -12px;
+      z-index: 2;
+    }
+  }
+
+  .connection {
+    transform: scale(1);
+    animation: pulse 2s infinite;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 50%;
+    margin: 0 1rem;
+    padding: 0.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.5);
+    }
+
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(0, 0, 0, 0);
+    }
+
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+    }
+  }
 </style>
