@@ -707,6 +707,19 @@ type CreatePaymentMethodRequest struct {
 	Country           string `json:"country"`
 }
 
+// CreateWyrePaymentMethodRequest represents the request object for https://api.sendwyre.com/v2/paymentMethods
+// using Wyre's Plaid integration
+type CreateWyrePaymentMethodRequest struct {
+	// Wyre is retarded and has two fields for the same thing
+	// The order also matters when sending the request.
+	// PublicToken should come after PlaidPublicToken in the request... :(
+	// The value will look like plaidPublicToken + '|' + plaidAccountId
+	PlaidPublicToken  string `json:"plaidPublicToken"`
+	PublicToken       string `json:"publicToken"`
+	PaymentMethodType string `json:"paymentMethodType"`
+	Country           string `json:"country"`
+}
+
 // WithDefaults provides default values for CreatePaymentMethodRequest
 func (req CreatePaymentMethodRequest) WithDefaults() CreatePaymentMethodRequest {
 	newReq := req
@@ -1040,6 +1053,33 @@ func (c Client) CreatePaymentMethod(token string, req CreatePaymentMethodRequest
 	resp, err := c.http.R().
 		SetHeader("Authorization", "Bearer "+token).
 		SetBody(req).
+		SetResult(PaymentMethod{}).
+		SetError(APIError{}).
+		EnableTrace().
+		Post("/v2/paymentMethods")
+	if err != nil {
+		return nil, err
+	}
+
+	if resp.IsError() {
+		return nil, resp.Error().(*APIError)
+	}
+
+	return resp.Result().(*PaymentMethod), nil
+}
+
+// CreateWyrePaymentMethod adds a bank payment method using Wyre's Plaid integration
+// https://docs.sendwyre.com/v3/docs/local_transfer-ach-create-payment-method
+// POST https://api.sendwyre.com/v2/paymentMethods
+func (c Client) CreateWyrePaymentMethod(token string, req CreateWyrePaymentMethodRequest) (*PaymentMethod, error) {
+	resp, err := c.http.R().
+		SetHeader("Authorization", "Bearer "+token).
+		SetBody(CreateWyrePaymentMethodRequest{
+			PlaidPublicToken:  req.PublicToken,
+			PublicToken:       req.PublicToken,
+			PaymentMethodType: req.PaymentMethodType,
+			Country:           req.Country,
+		}).
 		SetResult(PaymentMethod{}).
 		SetError(APIError{}).
 		EnableTrace().

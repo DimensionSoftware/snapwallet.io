@@ -278,8 +278,14 @@ func (s *Server) WyreConnectBankAccount(ctx context.Context, req *proto.WyreConn
 	userAccount := accounts[0]
 
 	wyrePublicToken := req.PlaidPublicToken + "|" + req.PlaidAccountId
-	wyreReqParams := wyre.CreatePaymentMethodRequest{PublicToken: wyrePublicToken}.WithDefaults()
-	res, err := s.Wyre.CreatePaymentMethod(userAccount.SecretKey, wyreReqParams)
+	wyreReqParams := wyre.CreateWyrePaymentMethodRequest{
+		// NOTE: both attrs are required. See struct definition for further explanation.
+		PublicToken:       wyrePublicToken,
+		PlaidPublicToken:  wyrePublicToken,
+		PaymentMethodType: "LOCAL_TRANSFER",
+		Country:           "US",
+	}
+	res, err := s.Wyre.CreateWyrePaymentMethod(userAccount.SecretKey, wyreReqParams)
 
 	if err != nil {
 		log.Printf("Error creating Wyre payment method")
