@@ -36,7 +36,7 @@
           colorInverse: '#fff',
           buttonColor: themeColor,
           buttonTextColor: '#000',
-          buttonGlowColor: themeColor,
+          buttonGlowColor: '255, 255, 255',
           successColor: themeColor,
           textColor: '#fff',
           inputTextColor: '#333',

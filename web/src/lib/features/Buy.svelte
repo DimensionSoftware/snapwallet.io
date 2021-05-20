@@ -27,6 +27,7 @@
           successColor: '#83E068',
           errorColor: '#E7693C',
           shadowBottomColor: 'rgba(0,0,0,.55)',
+          buttonGlowColor: '255, 255, 255',
         },
       })
 
