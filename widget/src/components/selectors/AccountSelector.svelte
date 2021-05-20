@@ -12,6 +12,7 @@
   import PopupSelector from '../inputs/PopupSelector.svelte'
   import { paymentMethodStore } from '../../stores/PaymentMethodStore'
   import { cachePrimaryPaymentMethodID } from '../../util'
+  import { findNextKYCRoute } from '../../util/profiles'
   const dispatch = createEventDispatcher()
 
   export let visible = false
@@ -27,6 +28,8 @@
 
   let isLoadingPaymentMethods = true
   let copy
+  let verificationNextStep = findNextKYCRoute($userStore.profileItems)
+
   $: {
     if (isSell) {
       copy = {
@@ -43,6 +46,8 @@
         unavailable: 'No payment methods available',
       }
     }
+
+    verificationNextStep = findNextKYCRoute($userStore.profileItems)
   }
 
   onMount(() => {
@@ -72,7 +77,15 @@
     >
       <IconCard
         icon={faUniversity}
-        on:click={() => push(Routes.PLAID_LINK)}
+        on:click={() => {
+          // Route user to next KYC step when they don't have an active Wyre acct
+          const route =
+            !flags?.hasWyreAccount &&
+            verificationNextStep !== Routes.PROFILE_STATUS
+              ? verificationNextStep
+              : Routes.PLAID_LINK
+          push(route)
+        }}
         label="Bank Account"
         title="Connect Your Bank Account"
       />
