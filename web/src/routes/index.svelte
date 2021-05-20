@@ -188,7 +188,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     :global(iframe.loaded) {
       opacity: 1;
       box-shadow: 5px 5px 18px 5px rgba(0, 0, 0, 0.4);
-      transition: opacity 0.025s $easeOutExpo, box-shadow 0.3s $easeOutExpo,
+      transition: opacity 0s, box-shadow 0.3s $easeOutExpo,
         height 0.3s $easeOutBack;
       will-change: opacity, box-shadow, height;
     }

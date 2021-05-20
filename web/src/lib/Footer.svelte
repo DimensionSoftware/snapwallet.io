@@ -77,6 +77,7 @@
     display: flex;
     position: relative;
     flex-direction: row;
+    margin-left: -10%;
     h4 {
       font-weight: 300;
       text-align: center;
@@ -84,13 +85,16 @@
       font-size: 1.2rem;
     }
     article:first-child > span {
-      right: -14%;
+      right: -25%;
+    }
+    article {
+      margin: 0 2rem;
     }
     article > span {
       position: absolute;
       height: 2px;
       border-radius: 1rem;
-      right: -20%;
+      right: -25%;
       background: linear-gradient(to right, transparent, #ddd, transparent);
       width: 100px;
       top: 50%;

@@ -1,4 +1,6 @@
+// @ts-ignore
 import QR from 'qr-creator'
+// @ts-ignore
 import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
 declare global {
@@ -8,7 +10,7 @@ declare global {
   }
 }
 
-type UserIntent = 'buy' | 'sell'
+type UserIntent = 'buy' | 'sell' | 'donate'
 
 interface QROptions {
   element: HTMLElement
@@ -35,6 +37,7 @@ interface IConfig {
   onMessage?: (e: any) => any
   wallets: IWallet[]
   appName: string
+  payee: string
   intent: UserIntent
   focus: boolean
   sourceAmount?: number
@@ -55,6 +58,7 @@ class Snap {
   private originalConfig: IConfig
   wallets: IWallet[] = []
   appName: string = 'Snap Wallet'
+  payee: string = ''
   intent: UserIntent = 'buy'
   baseURL: string = _ENV.WIDGET_URL
   focus: boolean = true
@@ -79,6 +83,7 @@ class Snap {
       wallets: this.wallets,
       appName: this.appName,
       intent: this.intent,
+      payee: this.payee,
       focus: this.focus,
       theme: this.theme,
       product: this.product,

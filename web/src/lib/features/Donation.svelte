@@ -68,7 +68,6 @@
         <Button on:mousedown={donateAsset('btc')}>Send BTC</Button>
         <Button on:mousedown={donateAsset('eth')}>Send ETH</Button>
       </aside>
-      <input class="name" placeholder="Name" type="text" />
       <textarea placeholder="Message" />
     </div>
   </div>
@@ -176,11 +175,8 @@
       box-shadow: 1px 0 0 5px #fff600;
     }
   }
-  input.name {
-    margin-top: 3rem;
-  }
   textarea {
-    margin-top: 0;
+    margin-top: 3rem;
     width: 75%;
   }
 </style>
