@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { push } from 'svelte-spa-router'
+  import { push, pop } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { cachePrimaryPaymentMethodID, Logger } from '../util'
   import { onDestroy, onMount } from 'svelte'
@@ -28,8 +28,14 @@
   const WYRE_CONFIG_URL = `${__ENV.WYRE_BASE_URL}/v2/client/config/plaid`
 
   const fetchWyreConfig = async () => {
-    const res = await fetch(WYRE_CONFIG_URL)
-    return (await res.json()) as WyreConfig
+    try {
+      const res = await fetch(WYRE_CONFIG_URL)
+      return (await res.json()) as WyreConfig
+    } catch (e) {
+      Logger.error(e)
+      // Send user home when Wyre config fails
+      pop()
+    }
   }
 
   // async function getLinkToken(): Promise<string> {
