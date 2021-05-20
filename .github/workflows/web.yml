@@ -33,6 +33,7 @@ jobs:
           BUILD_SCRIPT: bin/build-development-web
           API_BASE_URL: https://dev-api.snapwallet.io
           WIDGET_URL: https://dev.snapwallet.io/widget
+          WYRE_BASE_URL: https://api.testwyre.com
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
   deploy-sandbox-web: 
     name: "[S] Build/Deploy Web"
@@ -50,6 +51,7 @@ jobs:
           BUILD_SCRIPT: bin/build-sandbox-web
           API_BASE_URL: https://sandbox-api.snapwallet.io
           WIDGET_URL: https://sandbox.snapwallet.io/widget
+          WYRE_BASE_URL: https://api.testwyre.com
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
   deploy-production-web: 
     name: "[P] Build/Deploy Web"
@@ -72,4 +74,5 @@ jobs:
           BUILD_SCRIPT: bin/build-web
           API_BASE_URL: https://api.snapwallet.io
           WIDGET_URL: https://snapwallet.io/widget
+          WYRE_BASE_URL: https://api.testwyre.com
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info'
