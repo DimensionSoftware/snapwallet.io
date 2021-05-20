@@ -254,6 +254,57 @@ func (s *Server) TokenExchange(ctx context.Context, req *proto.TokenExchangeRequ
 	}, nil
 }
 
+// RPC handler for connecting a Wyre ACH account using their Plaid integration
+func (s *Server) WyreConnectBankAccount(ctx context.Context, req *proto.WyreConnectBankAccountRequest) (*proto.WyrePaymentMethod, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	if req.PlaidPublicToken == "" {
+		return nil, status.Error(codes.InvalidArgument, "Please provide a valid Plaid token.")
+	}
+
+	if req.PlaidAccountId == "" {
+		return nil, status.Error(codes.InvalidArgument, "Please provide a valid bank account ID.")
+	}
+
+	accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+	if err != nil || len(accounts) <= 0 {
+		log.Printf("Could not find account for %s", u.ID)
+		return nil, status.Error(codes.NotFound, "Please verify your identity before connecting a bank account.")
+	}
+
+	userAccount := accounts[0]
+
+	wyrePublicToken := req.PlaidPublicToken + "|" + req.PlaidAccountId
+	wyreReqParams := wyre.CreatePaymentMethodRequest{PublicToken: wyrePublicToken}.WithDefaults()
+	res, err := s.Wyre.CreatePaymentMethod(userAccount.SecretKey, wyreReqParams)
+
+	if err != nil {
+		log.Printf("Error creating Wyre payment method")
+		return nil, err
+	}
+
+	var lifecycleStatus proto.LifecycleStatus
+	pmStatus := strings.ToLower(res.Status)
+	if pmStatus == "active" {
+		lifecycleStatus = proto.LifecycleStatus_L_CREATED
+	} else {
+		lifecycleStatus = proto.LifecycleStatus_L_PENDING
+	}
+
+	return &proto.WyrePaymentMethod{
+		Id:                    res.ID,
+		Status:                res.Status,
+		Name:                  res.Name,
+		Last4:                 res.Last4Digits,
+		ChargeableCurrencies:  res.ChargeableCurrencies,
+		DepositableCurrencies: res.DepositableCurrencies,
+		LifecycleStatus:       lifecycleStatus,
+	}, nil
+}
+
 // PlaidConnectBankAccounts is an rpc handler
 func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
