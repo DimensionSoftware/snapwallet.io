@@ -42,6 +42,7 @@
   import { debitCardStore } from '../stores/DebitCardStore'
   import { countries, WYRE_SUPPORTED_COUNTRIES } from '../util/country'
   import {
+    findNextKYCRoute,
     getMissingFieldMessages,
     remediationsAvailable,
   } from '../util/profiles'
@@ -81,19 +82,7 @@
   let shouldFixRemediations = false
   let selectedCountryCode
   $: {
-    // NOTE: these should remain in this order
-
-    if (!missingInfo.personal.isComplete) {
-      verificationNextStep = Routes.PROFILE
-    } else if (!missingInfo.address.isComplete) {
-      verificationNextStep = Routes.ADDRESS
-    } else if (!missingInfo.contact.isComplete) {
-      verificationNextStep = Routes.PROFILE_SEND_SMS
-    } else if (!missingInfo.document.isComplete) {
-      verificationNextStep = Routes.FILE_UPLOAD
-    } else {
-      verificationNextStep = Routes.PROFILE_STATUS
-    }
+    verificationNextStep = findNextKYCRoute($userStore.profileItems)
 
     shouldFixRemediations = remediationsAvailable(
       $userStore.profileRemediations,
@@ -355,12 +344,19 @@
               <span class="glow" slot="icon">
                 <FaIcon data={faExclamationCircle} />
               </span>
-              <b slot="step">Reviewing Identity</b>
-              <div class="description help" slot="info">
-                We're reviewing your identity. This should only take a few
-                minutes.
+              <b slot="step">
                 {#if !$paymentMethodStore.wyrePaymentMethods?.length}
-                  Please add a payment method.
+                  Action Required
+                {:else}
+                  Reviewing Identity
+                {/if}
+              </b>
+              <div class="description help" slot="info">
+                {#if !$paymentMethodStore.wyrePaymentMethods?.length}
+                  Please add a bank account above.
+                {:else}
+                  We're reviewing your identity. This should only take a few
+                  minutes.
                 {/if}
               </div>
             </VStep>
