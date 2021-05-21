@@ -55,8 +55,21 @@
   <Button on:mousedown={contactUs}>Contact Us</Button>
 </div>
 <hr />
-<footer on:mousedown={scrollToTop}>
-  <p title="Scroll to Top">
+<footer>
+  <ol>
+    <li><h2>Snap Wallet</h2></li>
+    <li>
+      <h4>
+        <a href="https://snapwallet.io/docs/guide" target="_blank"
+          >API Documentation</a
+        >
+      </h4>
+    </li>
+    <li>
+      <h4><a href="mailto:support@snapwallet.io">support@snapwallet.io</a></h4>
+    </li>
+  </ol>
+  <p title="Scroll to Top" on:mousedown={scrollToTop}>
     <big
       >Snap Wallet
       <img height="24px" width="24px" title="Love" alt="Love" src="/love.svg" />
@@ -133,8 +146,23 @@
     cursor: pointer;
     margin-top: 0.05rem;
     padding: 1.5rem 0 1rem;
-    background: #fff;
+    background: #fffc00;
     color: rgba(25, 25, 25, 0.8);
+    ol {
+      list-style: none;
+      margin: 5rem 0 5rem 5rem;
+      li {
+        margin: 0;
+        padding: 0;
+        h4 {
+          margin: 0.25rem 0 0.75rem 0;
+        }
+      }
+      a {
+        color: rgba(0, 0, 0, 0.8);
+        text-decoration: none;
+      }
+    }
     p {
       font-size: 0.85rem;
       margin: 0;
