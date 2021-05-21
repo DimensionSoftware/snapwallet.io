@@ -23,10 +23,11 @@ $buttonTextColor: $themeColorInverse;
 // NOTE: avoid linear gradient for react native safeview embedding
 // - solid catch;  let's eventually make a RN theme and/or toggle
 // $modalBackground: #f0f0f0;
-$modalBackground: linear-gradient(#eee, #fff);
+$modalBackgroundColor: #fff;
+$modalBackground: linear-gradient(#eee, $modalBackgroundColor);
 $modalPopupBackground: linear-gradient(
-  rgba(255, 255, 255, 0.85),
-  rgba(255, 255, 255, 0.95)
+  rgba(255, 255, 255, 0.8),
+  rgba(255, 255, 255, 0.92)
 );
 $modalContainerBackgroundColor: radial-gradient(
   circle closest-corner at 50% 40%,
