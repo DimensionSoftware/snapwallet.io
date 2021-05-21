@@ -258,6 +258,8 @@ export class AuthManager {
 
       if (refresh === '') {
         Logger.warn('refresh token was empty string, returning early...')
+        this.logout()
+
         return
       }
 
