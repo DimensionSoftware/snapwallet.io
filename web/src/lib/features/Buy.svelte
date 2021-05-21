@@ -58,6 +58,7 @@
   docLink="https://snapwallet.io/docs/guide/use-cases/onramp.html"
   hasImage={true}
   hasBackground={true}
+  icon="/images/coin 3.png"
 >
   <div slot="left">
     <iframe

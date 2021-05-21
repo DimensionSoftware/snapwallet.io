@@ -59,6 +59,7 @@
   description="Accept crypto donations and tips to your business.  SnapWallet's simple onramp makes integration easy.  It's fully customizable."
   hasBackground={true}
   docLink="https://snapwallet.io/docs/guide/use-cases/donations.html"
+  icon="/images/coin 2.png"
 >
   <div class="relative" slot="left">
     <div>

@@ -59,6 +59,7 @@
   docLink="https://snapwallet.io/docs/guide/use-cases/nft.html"
   hasImage={true}
   hasBackground={true}
+  icon="/images/coin 1.png"
 >
   <video loop playsinline autoplay muted slot="left" on:mousedown={snap.openWeb}
     ><source

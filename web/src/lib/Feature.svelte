@@ -7,11 +7,15 @@
   export let hasBackground
   export let hasImage
   export let center
+  export let icon
 </script>
 
 <a id={name} />
 <section class={name} class:center class:hasImage class:hasBackground>
   <article>
+    {#if icon}
+      <img class="icon" src={icon} />
+    {/if}
     <h2 class:right class:blur={hasImage}>
       {title}
     </h2>
@@ -90,8 +94,15 @@
     article {
       position: relative;
       padding: 3rem 0;
-      max-width: 900px;
+      max-width: 800px;
       margin: 0 auto;
+      .icon {
+        position: absolute;
+        top: -15.5rem;
+        left: calc(-10% - 200px);
+        height: 200px;
+        width: 200px;
+      }
       h2 {
         position: absolute;
         top: -5.5rem;
@@ -165,6 +176,11 @@
           margin: 0.5rem 0;
         }
       }
+    }
+  }
+  @media (max-width: 1400px) {
+    .icon {
+      display: none;
     }
   }
   @media (max-width: 1000px) {
