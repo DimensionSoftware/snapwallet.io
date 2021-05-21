@@ -167,6 +167,8 @@ export class AuthManager {
 
         if (this.tokenIsExpired(refresh)) {
           Logger.debug('Refresh token is expired')
+
+          this.logout()
           return ''
         }
 
@@ -258,7 +260,6 @@ export class AuthManager {
 
       if (refresh === '') {
         Logger.warn('refresh token was empty string, returning early...')
-        this.logout()
 
         return
       }
