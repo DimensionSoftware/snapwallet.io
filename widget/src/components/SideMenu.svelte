@@ -87,7 +87,7 @@
   }
 </script>
 
-<svelte:window on:keydown={handleClose} />
+<svelte:window on:keydown|stopPropagation={handleClose} />
 
 <div
   class="container"

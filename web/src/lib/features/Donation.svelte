@@ -56,7 +56,7 @@
 <Feature
   name="donations"
   title="Donations & Tips"
-  description="Accept crypto donations and tips to your business.  SnapWallet's simple onramp makes integration easy.  It's fully customizable."
+  description="Accept crypto donations and tips to your business.  Integration is easy and fully customizable."
   hasBackground={true}
   docLink="https://snapwallet.io/docs/guide/use-cases/donations.html"
   icon="/images/coin 2.png"

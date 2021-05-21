@@ -58,7 +58,7 @@
     background: white;
     display: flex;
     flex-direction: column;
-    padding: 10rem 0 7rem 0;
+    padding: 12rem 0 7rem 0;
     position: relative;
     &.center {
       article {
@@ -151,7 +151,7 @@
       font-weight: 100;
       margin: 1.5rem 0 0 0;
       color: #222;
-      transition: background 0.2s ease-out, box-shadow 0.2s ease-out;
+      transition: background 0.2s ease-out, box-shadow 0.1s ease-out;
       overflow: hidden;
       backdrop-filter: blur(5px) contrast(110%);
       &:hover {

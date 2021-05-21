@@ -150,7 +150,7 @@
     color: rgba(25, 25, 25, 0.8);
     ol {
       list-style: none;
-      margin: 5rem 0 5rem 5rem;
+      margin: 7rem 0 5rem 5rem;
       li {
         margin: 0;
         padding: 0;
