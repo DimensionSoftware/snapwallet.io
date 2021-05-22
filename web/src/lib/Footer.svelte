@@ -90,7 +90,6 @@
     display: flex;
     position: relative;
     flex-direction: row;
-    margin-left: -10%;
     h4 {
       font-weight: 300;
       text-align: center;
@@ -152,6 +151,7 @@
       list-style: none;
       margin: 7rem 0 5rem 5rem;
       li {
+        font-size: 0.9rem;
         margin: 0;
         padding: 0;
         h2 {
@@ -189,18 +189,6 @@
         text-decoration: none;
         color: #222;
       }
-    }
-  }
-  @media (max-width: 1250px) {
-    :global(article h2),
-    :global(article h3) {
-      left: 1rem !important;
-    }
-    :global(.overview article) {
-      margin-right: 0 !important;
-    }
-    :global(.overview article:first-child) {
-      margin-left: 3rem !important;
     }
   }
   @media (max-width: 1000px) {

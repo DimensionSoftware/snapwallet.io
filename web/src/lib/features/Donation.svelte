@@ -108,6 +108,7 @@
   }
   :global(.donations > article) {
     position: relative;
+    width: 800px;
     margin-top: 4.55rem !important;
     background: transparent !important;
     box-shadow: 5px 7px 10px rgba(0, 0, 0, 0.15);

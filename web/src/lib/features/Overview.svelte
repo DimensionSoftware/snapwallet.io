@@ -5,22 +5,19 @@
     {
       title: 'NFT Checkout',
       name: 'nft',
-      desc:
-        "Need a safe and reliable wallet to handle your NFT purchases?  SnapWallet's got you.",
+      desc: "Need a safe and reliable wallet to handle your NFT purchases?  SnapWallet's got you.",
       icon: 'Crypto_Checkout_final.png',
     },
     {
       title: 'Donations & Tips',
       name: 'donations',
-      desc:
-        'Accept crypto donations and tips for your services!  Snap Wallet makes that simple.',
+      desc: 'Accept crypto donations and tips for your services!  Snap Wallet makes that simple.',
       icon: 'Crypto_Tip_Jar_final.png',
     },
     {
       title: 'Fiat On & Off Ramp',
       name: 'fiat',
-      desc:
-        'Buy and Sell your fiat, like USD, into crypto:  Bitcoin & Ethereum, ERC20 tokens, etc...',
+      desc: 'Buy and Sell your fiat, like USD, into crypto:  Bitcoin & Ethereum, ERC20 tokens, etc...',
       icon: 'Crypto_Fiat_final.png',
     },
   ]
@@ -65,9 +62,6 @@
     border-radius: 1rem;
     padding: 0 1.5rem;
     cursor: pointer;
-    &:first-child {
-      margin-left: -10%;
-    }
     &:hover {
       box-shadow: 0 0 0 3px #fff600, 5px 7px 15px rgba(0, 0, 0, 0.18);
       transform: scale(0.995);
@@ -77,6 +71,10 @@
 
   img {
     margin-bottom: -1rem;
+  }
+  :global(.overview h2),
+  :global(.overview h3) {
+    left: -12% !important;
   }
   h4 {
     text-align: center;
@@ -89,5 +87,15 @@
     padding: 0 1.5rem;
     font-weight: 100;
     margin: -1.25rem 0 5.5rem 0;
+  }
+
+  @media (max-width: 1250px) {
+    article {
+      margin-right: 0;
+    }
+    :global(.overview > article > h2),
+    :global(.overview > article > h3) {
+      left: -5% !important;
+    }
   }
 </style>

@@ -47,6 +47,8 @@
   @import '../../../widget/src/styles/animations.scss';
   .flex {
     display: flex;
+    justify-content: center;
+    align-items: center;
     grid-gap: 2rem;
   }
   .relative {
@@ -99,14 +101,14 @@
       .icon {
         position: absolute;
         top: -15.5rem;
-        left: calc(-10% - 200px);
+        left: calc(-5% - 200px);
         height: 200px;
         width: 200px;
       }
       h2 {
         position: absolute;
         top: -5.5rem;
-        left: -10%;
+        left: -5%;
         margin-left: -2rem;
         color: #000;
         font-size: 2.25rem;
@@ -119,7 +121,7 @@
       h3 {
         position: absolute;
         top: -2.25rem;
-        left: -10%;
+        left: -5%;
         max-width: 75%;
         margin-left: -2rem;
         font-size: 1.25rem;
@@ -186,6 +188,14 @@
   @media (max-width: 1000px) {
     section {
       display: none;
+    }
+  }
+  @media (max-width: 1250px) {
+    article {
+      :global(> h2),
+      :global(> h3) {
+        left: 1rem !important;
+      }
     }
   }
 </style>

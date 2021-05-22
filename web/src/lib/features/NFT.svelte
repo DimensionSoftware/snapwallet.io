@@ -126,6 +126,7 @@
     margin: 0.25rem 0 2rem 0;
   }
   :global(.nft article) {
+    width: 800px;
     margin-top: 4.55rem !important;
     background: linear-gradient(#fff, rgba(255, 255, 255, 0.9)) !important;
     box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
