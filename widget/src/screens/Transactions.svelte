@@ -27,7 +27,10 @@
   }
 
   onMount(async () => {
-    await transactionsStore.fetchUserTransactions()
+    // NOTE: let SideMenu prefetch do its thing :melder:
+    if (!$transactionsStore.length) {
+      await transactionsStore.fetchUserTransactions()
+    }
     transactionDetailsStore.reset()
     loading = false
     csvURI = transactionsAsDataURI(transfers)
