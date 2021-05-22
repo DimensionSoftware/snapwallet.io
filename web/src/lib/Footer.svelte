@@ -1,7 +1,12 @@
 <script lang="ts">
   import Feature from './Feature.svelte'
   import Button from './Button.svelte'
-  const scrollToTop = _ => window.scrollTo(0, 0),
+  const scrollToTop = _ =>
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: 'smooth',
+      }),
     contactUs = _ => {
       window.location.href =
         'mailto:support@snapwallet.com?subject=Hello SnapWallet Team!'
