@@ -16,10 +16,9 @@
     height: 100px;
     transform: translate(-50%, -50%);
     margin: 3rem 0 0 1rem;
-    font-weight: bold;
+    font-weight: 400;
     font-size: 1.1rem;
-    background: url(https://cssanimation.rocks/images/posts/steps/heart.png)
-      no-repeat;
+    background: url('/images/Heart-Animation.png') no-repeat;
     background-position: 0 0;
     cursor: pointer;
     animation: fave-heart 1s steps(28);
