@@ -154,6 +154,9 @@
       li {
         margin: 0;
         padding: 0;
+        h2 {
+          color: #000;
+        }
         h4 {
           margin: 0.25rem 0 0.75rem 0;
         }

@@ -21,7 +21,7 @@
     },
     theme: {
       color: 'rgb(222, 49, 45)',
-      buttonColor: 'rgb(222, 49, 45)',
+      buttonColor: 'rgb(241, 7, 28)',
     },
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
   }
@@ -148,8 +148,8 @@
     text-transform: capitalize !important;
     color: #fff !important;
     font-size: 1.15rem !important;
-    background: rgb(222, 49, 45) !important;
-    border-color: rgb(222, 49, 45) !important;
+    background: rgb(241, 7, 28) !important;
+    border-color: rgb(241, 7, 28) !important;
     top: -4.25rem;
     width: 65%;
     border-radius: 0.25rem;

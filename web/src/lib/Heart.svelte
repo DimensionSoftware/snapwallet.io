@@ -5,7 +5,7 @@
   const inc = _ => counter++
 </script>
 
-<div on:mousedown={inc} class="heart">
+<div on:mousedown|stopPropagation|preventDefault={inc} class="heart">
   <span>{numberWithCommas(counter)}</span>
 </div>
 

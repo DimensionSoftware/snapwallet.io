@@ -120,7 +120,7 @@
         position: absolute;
         top: -2.25rem;
         left: -10%;
-        max-width: 65%;
+        max-width: 75%;
         margin-left: -2rem;
         font-size: 1.25rem;
         font-weight: 100;
