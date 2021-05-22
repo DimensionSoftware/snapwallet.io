@@ -9,25 +9,26 @@
     await import('flux-init')
 
     const appName = 'Buy Checkout',
+      themeColor = '#fffc00',
       Wallet = new (window as any).Snap({
         appName,
         intent: 'buy',
         wallets: [],
         focus: false,
         theme: {
-          // Coinbase theme
-          modalBackground: '#070F15',
-          modalPopupBackground: 'rgba(2,13,19,.9)',
-          colorLightened: 'rgba(102,113,119,.8)',
-          color: '#2187FF',
-          textColor: '#fff',
+          modalBackground: 'rgba(40,40,40,.9)',
+          modalPopupBackground: 'rgba(50,50,50,.9)',
+          color: 'rgba(0,0,0,.9)',
+          badgeTextColor: '#333',
+          colorLightened: 'rgba(5,5,5,.8)',
+          shadowBottomColor: 'rgba(0,0,0,.25)',
           colorInverse: '#fff',
-          buttonColor: '#2187FF',
-          warningColor: '#FFBD4A',
-          successColor: '#83E068',
-          errorColor: '#E7693C',
-          shadowBottomColor: 'rgba(0,0,0,.55)',
+          buttonColor: themeColor,
+          buttonTextColor: '#000',
           buttonGlowColor: '255, 255, 255',
+          successColor: themeColor,
+          textColor: '#fff',
+          inputTextColor: '#333',
         },
       })
 
