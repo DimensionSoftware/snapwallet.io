@@ -3,18 +3,16 @@
   import Feature from '../Feature.svelte'
   import Button from '../Button.svelte'
 
-  const themeColor = '#fffc00',
-    config = {
-      appName: 'Donation',
-      focus: true,
-      wallets: [
-        { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
-      ],
-      theme: {
-        color: 'rgb(222, 49, 45)',
-        buttonColor: 'rgb(241, 7, 28)',
-      },
-    }
+  const config = {
+    appName: 'Donation',
+    intent: 'donate',
+    focus: true,
+    wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
+    theme: {
+      color: 'rgb(222, 49, 45)',
+      buttonColor: 'rgb(241, 7, 28)',
+    },
+  }
 
   let snap: any = {}
 
@@ -175,7 +173,6 @@
     position: absolute;
     bottom: -25px;
     right: -75px;
-    background: rgba(0, 0, 0, 1);
     display: block;
     border-radius: 100%;
     padding: 1.25rem;
