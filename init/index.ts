@@ -2,6 +2,7 @@
 import QR from 'qr-creator'
 // @ts-ignore
 import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
+import { UserIntent } from '../widget/src/types'
 
 declare global {
   var _ENV: {
@@ -9,8 +10,6 @@ declare global {
     API_BASE_URL: string
   }
 }
-
-type UserIntent = 'buy' | 'sell' | 'donate'
 
 interface QROptions {
   element: HTMLElement

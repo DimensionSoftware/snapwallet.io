@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store'
-import type { ProductType, WalletType } from '../types'
+import type { UserIntent, ProductType, WalletType } from '../types'
 
 type ConfigStoreState = {
   apiKey: string
@@ -8,7 +8,7 @@ type ConfigStoreState = {
   defaultDestinationAsset?: string
   wallets: WalletType[]
   focus: boolean
-  intent: 'buy'
+  intent: UserIntent
   product?: ProductType
   theme: { [cssProp: string]: string }
 }

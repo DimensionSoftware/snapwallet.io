@@ -23,6 +23,8 @@ export enum Masks {
   DEBIT_CARD_EXPIRATION_DATE = 'xx/xxxx',
 }
 
+export type UserIntent = 'buy' | 'sell' | 'donate'
+
 export enum TransactionIntents {
   BUY = 'buy',
   SELL = 'sell',
