@@ -61,12 +61,17 @@
   hasBackground={true}
   icon="/images/coin 1.png"
 >
-  <video loop playsinline autoplay muted slot="left" on:mousedown={snap.openWeb}
-    ><source
-      src="https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4"
-      class="svelte-1pit40i"
-    /></video
-  >
+  <div class="relative" slot="left">
+    <div class="qr" on:mousedown={snap.openWeb}>
+      <canvas id="nft-qr-canvas" />
+    </div>
+    <video loop playsinline autoplay muted on:mousedown={snap.openWeb}
+      ><source
+        src="https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4"
+        class="svelte-1pit40i"
+      /></video
+    >
+  </div>
   <div class="relative" slot="right">
     <div on:mousedown={snap.openWeb}>
       <h3>{config.product.title}</h3>
@@ -83,9 +88,6 @@
       <Heart />
       <Button>Buy</Button>
     </div>
-    <div class="qr" on:mousedown={snap.openWeb}>
-      <canvas id="nft-qr-canvas" />
-    </div>
   </div>
 </Feature>
 
@@ -96,6 +98,7 @@
     padding: 0 0 0 1rem;
     position: relative;
     height: 100%;
+    width: 50%;
     > div {
       cursor: pointer;
     }
@@ -130,6 +133,7 @@
     margin-top: 4.55rem !important;
     background: linear-gradient(#fff, rgba(255, 255, 255, 0.9)) !important;
     box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    padding: 1.5rem;
   }
   p {
     font-size: 1.25rem;
@@ -151,19 +155,23 @@
     font-size: 1.15rem !important;
     background: rgb(241, 7, 28) !important;
     border-color: rgb(241, 7, 28) !important;
-    top: -4.25rem;
-    width: 65%;
+    top: -3.5rem;
+    width: 100%;
     border-radius: 0.25rem;
   }
   .qr {
     cursor: pointer;
     position: absolute;
-    bottom: 0rem;
-    right: 0rem;
-    padding: 1rem;
+    top: -30px;
+    left: -20px;
+    background: rgba(0, 0, 0, 1);
+    border-radius: 100%;
+    padding: 1.25rem;
+    overflow: hidden;
     #nft-qr-canvas {
-      height: 100px;
-      width: 100px;
+      background: #fff;
+      height: 75px;
+      width: 75px;
     }
   }
 </style>

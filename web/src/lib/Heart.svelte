@@ -2,30 +2,60 @@
   import { numberWithCommas } from '../../../widget/src/util'
 
   $: counter = 69420
-  const inc = _ => counter++
+  $: active = false
+  const inc = _ => {
+    active = false
+    counter++
+    setTimeout(_ => (active = true), 100)
+  }
 </script>
 
-<div on:mousedown|stopPropagation|preventDefault={inc} class="heart">
-  <span>{numberWithCommas(counter)}</span>
+<div class:active class="heart-container">
+  <div
+    on:mousedown|stopPropagation|preventDefault={inc}
+    class:active
+    class="heart"
+    title="<3 SnapWallet"
+  >
+    <span>{numberWithCommas(counter)}</span>
+  </div>
 </div>
 
 <style lang="scss">
+  @import '../../widget/src/styles/_vars.scss';
+
+  .heart-container {
+    display: inline-block;
+    transition: 0.3s $easeInExpo;
+    &:hover {
+      transform: scale(0.975) translateX(-1px);
+      transition: 0.1s $easeOutExpo;
+      .heart {
+        opacity: 1;
+      }
+    }
+    &.active {
+      transform: scale(1.15) translateX(2px);
+      transition: none;
+    }
+  }
   .heart {
     position: relative;
     width: 100px;
+    opacity: 0.75;
     height: 100px;
     transform: translate(-50%, -50%);
-    margin: 3rem 0 0 1rem;
+    margin: 1.5rem 0 0 1rem;
     font-weight: 400;
     font-size: 1.1rem;
     background: url('/images/Heart-Animation.png') no-repeat;
     background-position: 0 0;
     cursor: pointer;
-    animation: fave-heart 1s steps(28);
-    &:hover {
+    animation: fave-heart 1.25s steps(28);
+    &.active {
       opacity: 1;
       background-position: -2800px 0;
-      transition: background 1s steps(28);
+      transition: background 1.25s steps(28);
     }
   }
   span {
