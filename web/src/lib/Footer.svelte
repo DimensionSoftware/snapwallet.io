@@ -57,7 +57,7 @@
   </div>
 </Feature>
 <div class="contact">
-  <Button on:mousedown={contactUs}>Contact Us</Button>
+  <Button id="contact" on:mousedown={contactUs}>Contact Us</Button>
 </div>
 <hr />
 <footer>
@@ -71,7 +71,12 @@
       </h4>
     </li>
     <li>
-      <h4><a href="mailto:support@snapwallet.io">support@snapwallet.io</a></h4>
+      <h4>
+        <a href="https://dimensionsoftware.com" target="_blank">Company</a>
+      </h4>
+    </li>
+    <li>
+      <h4><a href="mailto:support@snapwallet.io">Support</a></h4>
     </li>
   </ol>
   <p title="Scroll to Top" on:mousedown={scrollToTop}>
@@ -91,6 +96,7 @@
 </footer>
 
 <style lang="scss">
+  $themeColor: #fffc00;
   .cards {
     display: flex;
     position: relative;
@@ -109,10 +115,15 @@
     }
     article > span {
       position: absolute;
-      height: 2px;
+      height: 1px;
       border-radius: 1rem;
       right: -25%;
-      background: linear-gradient(to right, transparent, #ddd, transparent);
+      background: linear-gradient(
+        to right,
+        transparent,
+        darken($themeColor, 10%),
+        transparent
+      );
       width: 100px;
       top: 50%;
     }
@@ -150,8 +161,23 @@
     cursor: pointer;
     margin-top: 0.05rem;
     padding: 1.5rem 0 1rem;
-    background: #fffc00;
+    background: $themeColor;
     color: rgba(25, 25, 25, 0.8);
+    position: relative;
+    &:after {
+      content: '';
+      top: -2px;
+      left: 0;
+      height: 1px;
+      right: 0;
+      position: absolute;
+      background: linear-gradient(
+        to right,
+        $themeColor,
+        darken($themeColor, 10%),
+        $themeColor
+      );
+    }
     ol {
       list-style: none;
       margin: 7rem 0 5rem 5rem;
@@ -167,7 +193,7 @@
         }
       }
       a {
-        color: rgba(0, 0, 0, 0.8);
+        color: rgba(0, 0, 0, 0.7);
         text-decoration: none;
       }
     }
