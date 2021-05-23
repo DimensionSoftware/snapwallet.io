@@ -10,7 +10,7 @@
 
     const appName = 'Buy Checkout',
       themeColor = '#fffc00',
-      Wallet = new (window as any).Snap({
+      snap = new (window as any).Snap({
         appName,
         intent: 'buy',
         wallets: [],
@@ -39,7 +39,7 @@
         if (!msg) return
         try {
           const { event, data } = JSON.parse(msg)
-          if (event === Wallet.events.RESIZE && data && ifr) {
+          if (event === snap.events.RESIZE && data && ifr) {
             if (appName === data.appName) ifr.height = data.height
           }
         } catch (e) {
@@ -48,7 +48,7 @@
       },
       false,
     )
-    ifr.src = Wallet.generateURL()
+    ifr.src = snap.generateURL()
     // Open using a QR code
     const canvas = document.getElementById('buy-qr-canvas')
     snap.createQR({ element: canvas, pixelSize: 100 })
