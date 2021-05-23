@@ -65,21 +65,31 @@
     <li><h2>Snap Wallet</h2></li>
     <li>
       <h4>
-        <a href="https://snapwallet.io/docs/guide" target="_blank"
-          >API Documentation</a
+        <a
+          title="Snap Wallet Integration Documentation"
+          href="https://snapwallet.io/docs/guide"
+          target="_blank">API Documentation</a
         >
       </h4>
     </li>
     <li>
       <h4>
-        <a href="https://dimensionsoftware.com" target="_blank">Company</a>
+        <a
+          title="Dimension Software on Silicon Beach"
+          href="https://dimensionsoftware.com"
+          target="_blank">Company</a
+        >
       </h4>
     </li>
     <li>
-      <h4><a href="mailto:support@snapwallet.io">Support</a></h4>
+      <h4>
+        <a title="Snap Wallet Support" href="mailto:support@snapwallet.io"
+          >Support</a
+        >
+      </h4>
     </li>
   </ol>
-  <p title="Scroll to Top" on:mousedown={scrollToTop}>
+  <p title="Scroll to Top!" on:mousedown={scrollToTop}>
     <big
       >Snap Wallet
       <img height="24px" width="24px" title="Love" alt="Love" src="/love.svg" />

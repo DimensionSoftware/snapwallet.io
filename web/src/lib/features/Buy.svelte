@@ -72,7 +72,6 @@
     />
   </div>
   <div class="relative" slot="right">
-    <br style="margin-top: .5rem;" />
     <div on:mousedown={snap.openWeb}>
       <br />
       <h3>Buy & Sell Crypto</h3>

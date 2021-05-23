@@ -48,7 +48,6 @@
   .flex {
     display: flex;
     justify-content: center;
-    align-items: center;
     grid-gap: 2rem;
   }
   .relative {

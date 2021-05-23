@@ -28,14 +28,15 @@
     display: inline-block;
     transition: 0.3s $easeInExpo;
     &:hover {
-      transform: scale(0.975) translateX(-1px);
+      transform: scale(0.985) translateX(-1px);
       transition: 0.1s $easeOutExpo;
       .heart {
         opacity: 1;
       }
     }
     &.active {
-      transform: scale(1.15) translateX(2px);
+      transform: scale(1.1) translateX(2px);
+      transition: 0.1s $easeOutExpo;
       transition: none;
     }
   }
@@ -52,6 +53,7 @@
     background-position: 0 0;
     cursor: pointer;
     animation: fave-heart 1.25s steps(28);
+    transition: opacity 0.3s ease-out;
     &.active {
       opacity: 1;
       background-position: -2800px 0;
