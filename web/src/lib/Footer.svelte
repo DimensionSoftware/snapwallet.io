@@ -88,6 +88,15 @@
         >
       </h4>
     </li>
+    <li>
+      <h4>
+        <a
+          title="Snap Wallet Never Shares Your Information"
+          href="https://login.dimensionsoftware.com/privacy"
+          target="_blank">Privacy</a
+        >
+      </h4>
+    </li>
   </ol>
   <p title="Scroll to Top!" on:mousedown={scrollToTop}>
     <big
@@ -97,6 +106,7 @@
     </big>
     <br /><small
       ><a
+        title="Dimension Software on Silicon Beach, Los Angeles!"
         href="https://dimensionsoftware.com"
         on:mousedown|stopPropagation
         target="_blank">Dimension Software since 1998</a
