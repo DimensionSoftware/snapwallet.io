@@ -169,6 +169,7 @@
     padding: 1.25rem;
     overflow: hidden;
     #nft-qr-canvas {
+      padding: 3px;
       background: #fff;
       height: 75px;
       width: 75px;
