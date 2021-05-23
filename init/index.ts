@@ -2,8 +2,8 @@
 import QR from 'qr-creator'
 // @ts-ignore
 import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
-import { UserIntent } from '../widget/src/types'
 
+export type UserIntent = 'buy' | 'sell' | 'donate'
 declare global {
   var _ENV: {
     WIDGET_URL: string
