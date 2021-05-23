@@ -45,9 +45,9 @@
       },
     })
 
-    // TODO: Open using a QR code
-    // const canvas = document.getElementById('qr-canvas')
-    // snap.createQR({ element: canvas, pixelSize: 100 })
+    // Open using a QR code
+    const canvas = document.getElementById('donation-qr-canvas')
+    snap.createQR({ element: canvas, pixelSize: 100 })
   })
 </script>
 
@@ -79,6 +79,9 @@
         <Button on:mousedown={donateUSDAmount(5.0)}>$5</Button>
         <Button on:mousedown={donateUSDAmount(10.0)}>$10</Button>
       </aside>
+    </div>
+    <div class="qr" on:mousedown={snap.openWeb}>
+      <canvas id="donation-qr-canvas" />
     </div>
   </div>
 </Feature>
@@ -146,18 +149,6 @@
     border: none !important;
     box-shadow: none !important;
   }
-  .qr {
-    cursor: pointer;
-    position: absolute;
-    bottom: -0.25rem;
-    left: 0;
-    #qr-canvas {
-      height: 100px;
-      width: 100px;
-      border: 0.5rem solid #fff;
-    }
-  }
-
   input.name,
   textarea {
     font-family: inherit;
@@ -178,5 +169,22 @@
   textarea {
     margin-top: 3rem;
     width: 75%;
+  }
+  .qr {
+    cursor: pointer;
+    position: absolute;
+    bottom: -25px;
+    right: -75px;
+    background: rgba(0, 0, 0, 1);
+    display: block;
+    border-radius: 100%;
+    padding: 1.25rem;
+    overflow: hidden;
+    #donation-qr-canvas {
+      padding: 3px;
+      background: #fff;
+      height: 75px;
+      width: 75px;
+    }
   }
 </style>

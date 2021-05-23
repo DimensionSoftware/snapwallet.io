@@ -49,6 +49,9 @@
       false,
     )
     ifr.src = Wallet.generateURL()
+    // Open using a QR code
+    const canvas = document.getElementById('buy-qr-canvas')
+    snap.createQR({ element: canvas, pixelSize: 100 })
   })
 </script>
 
@@ -87,6 +90,9 @@
         <li>&nbsp; Fast & Secure</li>
         <li>&nbsp; Dependency-free & Embeddable</li>
       </ul>
+    </div>
+    <div class="qr" on:mousedown={snap.openWeb}>
+      <canvas id="buy-qr-canvas" />
     </div>
   </div>
 </Feature>
@@ -153,12 +159,18 @@
   .qr {
     cursor: pointer;
     position: absolute;
-    bottom: -0.25rem;
-    left: 0;
-    #qr-canvas {
-      height: 100px;
-      width: 100px;
-      border: 0.5rem solid #fff;
+    bottom: -25px;
+    right: -25px;
+    background: rgba(0, 0, 0, 1);
+    display: block;
+    border-radius: 100%;
+    padding: 1.25rem;
+    overflow: hidden;
+    #buy-qr-canvas {
+      padding: 3px;
+      background: #fff;
+      height: 75px;
+      width: 75px;
     }
   }
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
