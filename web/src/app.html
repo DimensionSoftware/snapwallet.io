@@ -38,4 +38,17 @@
   <body id="svelte" style="overflow-x: hidden; background-color: #fffc00">
     %svelte.body%
   </body>
+  <script
+    async
+    src="https://www.googletagmanager.com/gtag/js?id=G-1YFG2CXVSN"
+  ></script>
+  <script>
+    window.dataLayer = window.dataLayer || []
+    function gtag() {
+      dataLayer.push(arguments)
+    }
+    gtag('js', new Date())
+
+    gtag('config', 'G-1YFG2CXVSN')
+  </script>
 </html>
