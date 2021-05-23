@@ -4,6 +4,7 @@ import QR from 'qr-creator'
 import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
 export type UserIntent = 'buy' | 'sell' | 'donate'
+export type SrcDst = 'source' | 'destination'
 declare global {
   var _ENV: {
     WIDGET_URL: string
@@ -43,6 +44,7 @@ interface IConfig {
   theme?: { [cssProperty: string]: string }
   product?: IProduct
   defaultDestinationAsset?: string
+  displayAmount?: SrcDst
 }
 
 class Snap {
@@ -65,6 +67,7 @@ class Snap {
   sourceAmount?: number
   product?: IProduct
   defaultDestinationAsset?: string
+  displayAmount?: SrcDst
   private API: FluxApi
 
   constructor(args: IConfig) {
@@ -88,6 +91,7 @@ class Snap {
       product: this.product,
       sourceAmount: this.sourceAmount,
       defaultDestinationAsset: this.defaultDestinationAsset,
+      displayAmount: this.displayAmount,
     }
   }
 

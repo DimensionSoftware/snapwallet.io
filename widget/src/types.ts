@@ -25,6 +25,8 @@ export enum Masks {
 
 export type UserIntent = 'buy' | 'sell' | 'donate'
 
+export type SrcDst = 'source' | 'destination'
+
 export enum TransactionIntents {
   BUY = 'buy',
   SELL = 'sell',
