@@ -122,10 +122,10 @@
     position: relative;
     flex-direction: row;
     h4 {
-      font-weight: 300;
+      font-weight: 200;
       text-align: center;
       margin-top: -1rem;
-      font-size: 1.2rem;
+      font-size: 1.5rem;
     }
     article:first-child > span {
       right: -25%;
@@ -171,7 +171,8 @@
     top: -4.25rem;
     position: relative;
     z-index: 1;
-    left: auto;
+    padding: 0.75rem 4rem;
+    eft: auto;
     right: auto;
     margin: 0 auto;
     text-align: center;
@@ -200,7 +201,7 @@
     }
     ol {
       list-style: none;
-      margin: 7rem 0 5rem 5rem;
+      margin: 7rem 0 5rem 10rem;
       li {
         font-size: 0.9rem;
         margin: 0;
