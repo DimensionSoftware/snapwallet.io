@@ -11,10 +11,8 @@
         { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
       ],
       theme: {
-        buttonColor: themeColor,
-        buttonTextColor: '#000',
-        buttonGlowColor: '205,202,0',
-        shadowColor: 'rgba(0,0,0,.05)',
+        color: 'rgb(222, 49, 45)',
+        buttonColor: 'rgb(241, 7, 28)',
       },
     }
 
