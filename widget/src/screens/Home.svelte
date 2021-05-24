@@ -377,7 +377,6 @@
           {/if}
         {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
           <VStep
-            disabled
             custom={!!hasCountryIcon}
             success={!!country}
             title="Select Payment Country"
