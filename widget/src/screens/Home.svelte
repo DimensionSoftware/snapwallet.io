@@ -270,42 +270,52 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent animation="right">
-  <ModalHeader hideBackButton
-    >{isBuy ? 'Buy' : 'Sell'} {destinationCurrency.ticker}</ModalHeader
-  >
+  {#if isDonation}
+    <ModalHeader hideBackButton>{$configStore.payee || 'Donation'}</ModalHeader>
+  {:else}
+    <ModalHeader hideBackButton
+      >{isBuy ? 'Buy' : 'Sell'} {destinationCurrency.ticker}</ModalHeader
+    >
+  {/if}
   <ModalBody>
     <div class="cryptocurrencies-container">
-      <div class="dst-container">
-        <Label fx={false}>
-          <CryptoCard
-            on:mousedown={() => (cryptoSelectorVisible = true)}
-            crypto={isBuy ? destinationCurrency : sourceCurrency}
-          />
-        </Label>
-      </div>
-      <div
-        style="display:flex;flex-direction:column;height:5rem;margin-top: -1rem;"
-      >
-        <Label label="Amount">
-          <span class="dst-currency">$</span>
-          <Input
-            id="amount"
-            pattern={`[\\d,\\.]+`}
-            on:change={e => {
-              const val = Number(e.detail)
-              transactionStore.setSourceAmount(val, selectedDestinationPrice)
-            }}
-            defaultValue={sourceAmount
-              ? sourceAmount
-              : $configStore.sourceAmount}
-            required
-            type="number"
-            inputmode="number"
-            placeholder="0"
-          />
-          <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
-        </Label>
-      </div>
+      {#if !$configStore.defaultDestinationAsset}
+        <div class="dst-container">
+          <Label fx={false}>
+            <CryptoCard
+              on:mousedown={() => (cryptoSelectorVisible = true)}
+              crypto={isBuy ? destinationCurrency : sourceCurrency}
+            />
+          </Label>
+        </div>
+      {/if}
+      {#if isDonation && $configStore.sourceAmount}
+        <span />
+      {:else}
+        <div
+          style="display:flex;flex-direction:column;height:5rem;margin-top: 0rem;"
+        >
+          <Label label="Amount">
+            <span class="dst-currency">$</span>
+            <Input
+              id="amount"
+              pattern={`[\\d,\\.]+`}
+              on:change={e => {
+                const val = Number(e.detail)
+                transactionStore.setSourceAmount(val, selectedDestinationPrice)
+              }}
+              defaultValue={sourceAmount
+                ? sourceAmount
+                : $configStore.sourceAmount}
+              required
+              type="number"
+              inputmode="number"
+              placeholder="0"
+            />
+            <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
+          </Label>
+        </div>
+      {/if}
       <ul class="vertical-stepper">
         <VStep success={!!$transactionStore.sourceAmount}>
           <span
@@ -379,7 +389,7 @@
           <VStep
             custom={!!hasCountryIcon}
             success={!!country}
-            title="Select Payment Country"
+            title="Select Your Payment Country"
             onClick={() => {
               countrySelectorVisible = true
             }}
@@ -390,7 +400,6 @@
             <b slot="step">
               {#if country}
                 {`${country.name}`}
-                &nbsp;<small>( change )</small>
               {:else}
                 Select Payment Country
               {/if}
@@ -467,7 +476,7 @@
     margin-right: 0.5rem;
     display: flex;
     flex-direction: column;
-    height: 5rem;
+    height: 4rem;
   }
   .dst-currency {
     position: absolute;

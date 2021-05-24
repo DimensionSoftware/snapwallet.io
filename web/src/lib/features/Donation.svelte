@@ -6,6 +6,7 @@
   const config = {
     appName: 'Donation',
     intent: 'donate',
+    payee: 'Snap Wallet',
     focus: true,
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
     theme: {
