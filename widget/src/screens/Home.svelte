@@ -245,7 +245,7 @@
   }
 
   onMount(() => {
-    resizeWidget(525, $configStore.appName)
+    resizeWidget(heightForConfig(), $configStore.appName)
     getInitialPrices()
     getNextPath()
     const interval = priceStore.pollPrices()
@@ -265,6 +265,14 @@
   $: hasCountryIcon = WYRE_SUPPORTED_COUNTRIES.includes(
     country?.code?.toUpperCase(),
   )
+
+  function heightForConfig(): number {
+    // start with max and substract when ui is hidden due to config
+    var height = 525
+    if ($configStore.sourceAmount) height -= 110
+    if ($configStore.defaultDestinationAsset) height -= 110
+    return height
+  }
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
