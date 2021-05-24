@@ -128,6 +128,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
 
+  :global(iframe) {
+    backdrop-filter: blur(2px) !important;
+  }
   :global(.blur) {
     backdrop-filter: blur(8px) !important;
   }

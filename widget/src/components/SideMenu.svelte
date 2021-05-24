@@ -273,7 +273,7 @@
     bottom: 0;
     width: 125%;
     height: 100%;
-    padding: 25% 1rem 0 4rem;
+    padding: 20% 1rem 0 4rem;
     transform: translateX(105%);
     transition: none;
     z-index: 100;

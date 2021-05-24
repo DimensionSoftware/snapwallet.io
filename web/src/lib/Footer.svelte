@@ -193,9 +193,8 @@
       right: 0;
       left: 0;
       bottom: 0;
-      transform: rotate(180deg);
       background-image: url('/static/bg.png');
-      filter: blur(20px);
+      filter: blur(30px) contrast(120%);
       z-index: 0;
     }
     &:after {

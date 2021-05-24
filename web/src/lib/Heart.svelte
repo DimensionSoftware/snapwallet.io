@@ -35,7 +35,7 @@
       }
     }
     &.active {
-      transform: scale(1.1) translateX(2px);
+      transform: scale(1.05) translateX(2px);
       transition: 0.1s $easeOutExpo;
       transition: none;
     }

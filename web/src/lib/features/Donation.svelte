@@ -150,6 +150,7 @@
   }
   input.name,
   textarea {
+    outline: none;
     font-family: inherit;
     font-size: 1rem;
     padding: 0.75rem 1.5rem 0.75rem 1rem;
