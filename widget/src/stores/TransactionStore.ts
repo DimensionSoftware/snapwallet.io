@@ -46,7 +46,6 @@ const createStore = () => {
   }
 
   const beginExpirationTimer = expiresAt => {
-    updateTxnSeconds(expiresAt)
     const transactionExpirationTimer = setInterval(() => {
       try {
         updateTxnSeconds(expiresAt)
@@ -112,12 +111,20 @@ const createStore = () => {
       }),
     setWyrePreview: (wyrePreview: object & { expiresAt: string }) => {
       update(s => {
-        // Clear previous txn timer
+        // Clear existing expiration timer
         clearInterval(s.transactionExpirationTimer)
+        const transactionExpirationSeconds = computeTransactionExpiration(
+          wyrePreview.expiresAt,
+        )
         const transactionExpirationTimer = beginExpirationTimer(
           wyrePreview.expiresAt,
         )
-        return { ...s, wyrePreview, transactionExpirationTimer }
+        return {
+          ...s,
+          wyrePreview,
+          transactionExpirationTimer,
+          transactionExpirationSeconds,
+        }
       })
     },
   }
