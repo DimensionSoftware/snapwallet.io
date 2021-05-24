@@ -13,19 +13,19 @@
     }
   const cards = [
     {
-      title: 'Built-In Compliance',
+      title: 'Enter Amount',
       name: 'nft',
       icon: 'SW Crypto Coin.png',
-      alt: 'Simply Checkout with Any NFT',
+      alt: 'Simply Checkout with Anything',
     },
     {
-      title: 'Diverse Payment Methods',
+      title: 'Select a Payment Method',
       name: 'donations',
       icon: 'Dr Crypto clean shaven.png',
-      alt: 'Accepts Credit Cards',
+      alt: 'Accepts Credit Cards and Debit Accounts',
     },
     {
-      title: 'Fast & Secure',
+      title: 'Transaction Completed!',
       name: 'fiat',
       icon: 'Coin Checkmark.png',
       alt: 'On and Off-Ramp Crypto Currencies',
@@ -35,8 +35,8 @@
 
 <Feature
   name="started"
-  title="Get started in just a few minutes"
-  description="SnapWallet integrates with your platform and is fully customizable"
+  title="Get started in just a few steps"
+  description="SnapWallet is simple, secure and fast"
   center
 >
   <div class="cards flex" slot="left">
@@ -161,7 +161,7 @@
   .contact {
     position: absolute;
     z-index: 2;
-    left: calc(50% - 82px);
+    left: calc(50% - 119px);
   }
   :global(.contact > button) {
     color: #fff !important;
