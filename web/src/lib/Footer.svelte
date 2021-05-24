@@ -181,13 +181,26 @@
   footer {
     cursor: pointer;
     margin-top: 0.05rem;
+    overflow: hidden;
     padding: 1.5rem 0 1rem;
     background: $themeColor;
     color: rgba(25, 25, 25, 0.8);
     position: relative;
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      transform: rotate(180deg);
+      background-image: url('/static/bg.png');
+      filter: blur(20px);
+      z-index: 0;
+    }
     &:after {
       content: '';
-      top: -2px;
+      top: 0;
       left: 0;
       height: 1px;
       right: 0;
@@ -200,6 +213,8 @@
       );
     }
     ol {
+      position: relative;
+      z-index: 1;
       list-style: none;
       margin: 7rem 0 5rem 10rem;
       li {
@@ -219,6 +234,8 @@
       }
     }
     p {
+      position: relative;
+      z-index: 1;
       font-size: 0.85rem;
       margin: 0;
       padding: 0;
