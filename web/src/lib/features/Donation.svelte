@@ -153,6 +153,10 @@
     outline: none;
     font-family: inherit;
     font-size: 1rem;
+    min-width: 100px;
+    min-height: 75px;
+    max-width: 225px;
+    max-height: 225px;
     padding: 0.75rem 1.5rem 0.75rem 1rem;
     border-radius: 0.85rem;
     border: 1px solid rgba(0, 0, 0, 0.3);
