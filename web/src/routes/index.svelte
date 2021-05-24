@@ -182,12 +182,10 @@ Hey, you-- join us!  https://dimensionsoftware.com
       position: relative;
       border-radius: 20px;
       top: -5%;
-      height: 500px;
       right: -20%;
       opacity: 0;
     }
     :global(iframe.loaded) {
-      height: 525px;
       opacity: 1;
       box-shadow: 5px 5px 18px 5px rgba(0, 0, 0, 0.4);
       transition: opacity 1s $easeOutExpo, box-shadow 0.3s $easeOutExpo,
