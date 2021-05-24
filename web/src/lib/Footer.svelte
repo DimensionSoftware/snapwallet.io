@@ -187,6 +187,7 @@
     color: rgba(25, 25, 25, 0.8);
     position: relative;
     &:before {
+      display: none;
       content: '';
       position: absolute;
       top: 0;
@@ -194,7 +195,7 @@
       left: 0;
       bottom: 0;
       background-image: url('/static/bg.png');
-      filter: blur(30px) contrast(120%);
+      filter: blur(20px) contrast(120%);
       z-index: 0;
     }
     &:after {

@@ -129,7 +129,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
 
   :global(iframe) {
-    backdrop-filter: blur(2px) !important;
+    backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
   }
   :global(.blur) {
     backdrop-filter: blur(8px) !important;
