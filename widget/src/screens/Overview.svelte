@@ -38,7 +38,7 @@
   $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
   $: cryptoAmount = isBuy ? destinationAmount : sourceAmount
   $: Icon = CryptoIcons[cryptoTicker]
-  $: screenTitle = $transactionStore.intent === 'buy' ? 'Buying' : 'Selling'
+  $: screenTitle = screenTitleFrom($configStore.intent)
   // $: exchangeRate = isBuy ? 1 / txnExchangeRate : txnExchangeRate
   $: total = isBuy ? sourceAmount : destinationAmount
 
@@ -94,6 +94,11 @@
     }, 1000)
     return () => clearInterval(interval)
   })
+
+  function screenTitleFrom(intent) {
+    if (intent === 'donate') return $configStore.payee || 'Donation'
+    return intent === 'buy' ? 'Buying' : 'Selling'
+  }
 </script>
 
 <ModalContent>
