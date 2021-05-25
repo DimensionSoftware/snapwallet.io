@@ -124,7 +124,7 @@
         max-width: 75%;
         margin-left: -2rem;
         font-size: 1.4rem;
-        font-weight: 100;
+        font-weight: 200;
       }
       h4 {
         font-size: 2rem;
@@ -149,7 +149,7 @@
       padding: 0.25rem 2rem;
       text-align: center;
       font-size: 1.1rem;
-      font-weight: 100;
+      font-weight: 200;
       margin: 1.5rem 0 0 0;
       color: #222;
       transition: background 0.2s ease-out, box-shadow 0.1s ease-out;

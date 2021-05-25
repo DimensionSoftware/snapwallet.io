@@ -125,7 +125,7 @@
     margin: 0.5rem 0 0 0;
   }
   small {
-    font-weight: 200;
+    font-weight: 300;
     margin: 0 0 0 0.1rem;
   }
   aside {

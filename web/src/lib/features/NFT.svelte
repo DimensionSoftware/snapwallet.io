@@ -122,7 +122,7 @@
   small {
     margin: 0 0 1.5rem 0.1rem;
     font-size: 1rem;
-    font-weight: 100;
+    font-weight: 200;
     display: block;
   }
   h4 {

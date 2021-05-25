@@ -85,7 +85,7 @@
     font-size: 1rem;
     line-height: 1.4rem;
     padding: 0 1.5rem;
-    font-weight: 100;
+    font-weight: 200;
     margin: -1.25rem 0 5.5rem 0;
   }
 
