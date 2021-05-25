@@ -44,7 +44,7 @@
       <article on:mousedown={_ => scrollTo(card.name)}>
         <img
           title={card.alt}
-          width="300"
+          width="150"
           src={`/images/${card.icon}`}
           alt={card.title}
         />
@@ -116,36 +116,33 @@
 </footer>
 
 <style lang="scss">
+  @import '../../../widget/src/styles/animations.scss';
   $themeColor: #fffc00;
   .cards {
     display: flex;
     position: relative;
     flex-direction: row;
-    h4 {
-      font-weight: 200;
-      text-align: center;
-      margin-top: -1rem;
-      font-size: 1.5rem;
-    }
-    article:first-child > span {
-      right: -25%;
-    }
     article {
-      margin: 0 2rem;
-    }
-    article > span {
-      position: absolute;
-      height: 1px;
-      border-radius: 1rem;
-      right: -25%;
-      background: linear-gradient(
-        to right,
-        transparent,
-        darken($themeColor, 10%),
-        transparent
-      );
-      width: 100px;
-      top: 50%;
+      margin: 0 7rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 150px;
+      h4 {
+        font-weight: 300;
+        text-align: center;
+        margin-top: 1rem;
+        font-size: 1.5rem;
+        white-space: nowrap;
+      }
+      & > span {
+        position: absolute;
+        height: 1px;
+        right: -100%;
+        background: #ccc;
+        width: 100px;
+        top: 35%;
+      }
     }
   }
   hr {
@@ -178,38 +175,34 @@
     text-align: center;
     border-radius: 0.25rem;
   }
+  :global(body) {
+    margin-bottom: 433px !important;
+  }
   footer {
-    cursor: pointer;
+    position: fixed;
+    z-index: -1;
+    bottom: 0;
+    left: 0;
+    right: 0;
     margin-top: 0.05rem;
     overflow: hidden;
     padding: 1.5rem 0 1rem;
-    background: $themeColor;
-    color: rgba(25, 25, 25, 0.8);
-    position: relative;
-    &:before {
-      display: none;
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      background-image: url('/static/bg.png');
-      filter: blur(20px) contrast(120%);
-      z-index: 0;
-    }
+    background: #000;
+    opacity: 0;
+    animation: backgroundFadeIn 0.5s ease-in 2s forwards;
+    color: rgba(255, 255, 255, 0.8);
     &:after {
       content: '';
       top: 0;
       left: 0;
-      height: 1px;
+      height: 3px;
       right: 0;
       position: absolute;
       background: linear-gradient(
         to right,
+        transparent,
         $themeColor,
-        darken($themeColor, 10%),
-        $themeColor
+        transparent
       );
     }
     ol {
@@ -222,15 +215,29 @@
         margin: 0;
         padding: 0;
         h2 {
-          color: #000;
+          padding: 0.25rem 0.75rem;
+          color: #fff;
         }
         h4 {
-          margin: 0.25rem 0 0.75rem 0;
+          margin: 0 0 0.75rem 0;
         }
       }
+
       a {
-        color: rgba(0, 0, 0, 0.7);
+        position: relative;
+        display: inline-block;
+        padding: 0.25rem 0.75rem;
+        border-radius: 3rem;
+        color: rgba(255, 255, 255, 0.7);
         text-decoration: none;
+        transition: transform 0.3s ease-out 0.1s, color 0.4s ease-out;
+        &:hover {
+          font-weight: bold;
+          background-color: $themeColor;
+          transition: none;
+          color: #000;
+          transform: scale(1.05);
+        }
       }
     }
     p {
@@ -241,9 +248,10 @@
       padding: 0;
       text-align: center;
       vertical-align: middle;
+      cursor: pointer;
       big {
         font-size: 0.9rem;
-        color: #222;
+        color: rgba(255, 255, 255, 0.8);
       }
       img {
         position: relative;
@@ -256,7 +264,7 @@
       }
       a {
         text-decoration: none;
-        color: #222;
+        color: rgba(255, 255, 255, 0.8);
       }
     }
   }
