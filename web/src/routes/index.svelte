@@ -250,6 +250,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
       display: none;
     }
     :global(body) {
+      background-color: #fffc00 !important;
       overflow-y: scroll !important;
       main {
         transform: translateY(10%);
