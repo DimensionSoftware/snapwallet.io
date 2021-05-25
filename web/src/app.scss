@@ -22,6 +22,16 @@
 
 html {
   scroll-behavior: smooth;
+  &:before {
+    content: '';
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 1px;
+    z-index: 1;
+    background: #fffc00;
+  }
   body {
     overflow: hidden;
     overflow-y: scroll;

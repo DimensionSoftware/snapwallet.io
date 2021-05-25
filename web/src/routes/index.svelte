@@ -149,13 +149,13 @@ Hey, you-- join us!  https://dimensionsoftware.com
     h1,
     h2 {
       white-space: nowrap;
-      font-size: 2rem;
+      font-size: 2.5rem;
       line-height: 1.1;
       margin: 0.5rem 0;
     }
     h1 {
       font-weight: 300;
-      font-size: 2.25rem;
+      font-size: 2.5rem;
       margin-bottom: 1.15rem;
       b {
         font-weight: bold;

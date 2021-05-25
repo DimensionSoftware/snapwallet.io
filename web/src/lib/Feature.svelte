@@ -99,10 +99,10 @@
       margin: 0 auto;
       .icon {
         position: absolute;
-        top: -15.5rem;
+        top: -13.5rem;
         left: calc(-5% - 200px);
-        height: 200px;
-        width: 200px;
+        height: 150px;
+        width: 150px;
       }
       h2 {
         position: absolute;
@@ -123,7 +123,7 @@
         left: -5%;
         max-width: 75%;
         margin-left: -2rem;
-        font-size: 1.25rem;
+        font-size: 1.4rem;
         font-weight: 100;
       }
       h4 {
