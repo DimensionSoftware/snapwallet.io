@@ -152,7 +152,7 @@
       font-weight: 200;
       margin: 1.5rem 0 0 0;
       color: #222;
-      transition: background 0.2s ease-out, box-shadow 0.1s ease-out;
+      transition: background 0.3s ease-out, box-shadow 0.2s ease-in;
       overflow: hidden;
       backdrop-filter: blur(5px) contrast(110%);
       &:hover {
