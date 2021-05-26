@@ -173,7 +173,7 @@
     top: -4.25rem;
     position: relative;
     z-index: 1;
-    padding: 1.75rem 4rem;
+    padding: 1rem 4rem;
     left: auto;
     right: auto;
     margin: 0 auto;
