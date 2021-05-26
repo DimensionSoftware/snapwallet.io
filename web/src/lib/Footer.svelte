@@ -36,7 +36,7 @@
 <Feature
   name="started"
   title="Get started in just a few steps"
-  description="SnapWallet is simple, secure and fast"
+  description="SnapWallet is simple, secure and fast."
   center
 >
   <div class="cards flex" slot="left">
@@ -44,7 +44,7 @@
       <article on:mousedown={_ => scrollTo(card.name)}>
         <img
           title={card.alt}
-          width="150"
+          width="100"
           src={`/images/${card.icon}`}
           alt={card.title}
         />

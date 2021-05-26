@@ -49,6 +49,7 @@
     display: flex;
     justify-content: center;
     grid-gap: 2rem;
+    margin-top: 2rem;
   }
   .relative {
     position: relative;
@@ -99,10 +100,10 @@
       margin: 0 auto;
       .icon {
         position: absolute;
-        top: -13.5rem;
-        left: calc(-5% - 200px);
-        height: 150px;
-        width: 150px;
+        top: -11.8rem;
+        left: calc(-5% - 150px);
+        height: 100px;
+        width: 100px;
       }
       h2 {
         position: absolute;
@@ -119,9 +120,10 @@
       }
       h3 {
         position: absolute;
-        top: -2.25rem;
+        top: -1.5rem;
         left: -5%;
         max-width: 75%;
+        opacity: 0.8;
         margin-left: -2rem;
         font-size: 1.4rem;
         font-weight: 200;
