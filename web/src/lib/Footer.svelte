@@ -117,7 +117,7 @@
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
-  $themeColor: #fffc00;
+  @import '../../../widget/src/styles/_vars.scss';
   .cards {
     display: flex;
     position: relative;
@@ -179,6 +179,11 @@
     margin: 0 auto;
     text-align: center;
     border-radius: 4.25rem;
+    transition: box-shadow 0.3s ease-out;
+    &:hover {
+      transition: none;
+      box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.25) !important;
+    }
   }
   :global(body) {
     margin-bottom: 433px !important;
@@ -231,13 +236,15 @@
       a {
         position: relative;
         display: inline-block;
-        padding: 0.25rem 0.75rem;
+        padding: 0.4rem 0.75rem;
+        margin: 0;
         border-radius: 3rem;
         z-index: 1;
         color: rgba(255, 255, 255, 0.7);
         text-decoration: none;
         overflow: hidden;
-        transition: transform 0.3s ease-out 0.1s, background-color 0.2s ease-out;
+        transition: transform 0.3s $easeOutExpo 0.1s,
+          background-color 0.2s $easeInExpo;
         &:before {
           content: '';
           position: absolute;
@@ -247,19 +254,24 @@
           bottom: 0;
           opacity: 0;
           z-index: -1;
-          background: $themeColor;
-          transform: scale(0);
+          background: linear-gradient(
+            63.26deg,
+            #ff6b00,
+            rgb(241, 7, 28) 75%
+          ) !important;
+          transform: translateX(-100%) scale(0);
           border-radius: 1rem;
           transition: opacity 0.3s ease-out, transform 0.3s ease-in;
         }
         &:hover {
-          color: #000;
+          color: #fff;
+          box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.5);
           font-weight: bold;
-          transform: scale(1.05);
+          transform: translateX(2px) scale(1.05);
           transition: none;
           &:before {
             opacity: 1;
-            transform: scale(1);
+            transform: translateX(0) scale(1);
             transition: none;
           }
         }

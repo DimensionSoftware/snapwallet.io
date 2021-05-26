@@ -111,11 +111,11 @@
     width: 800px;
     margin-top: 4.55rem !important;
     background: transparent !important;
-    box-shadow: 5px 7px 10px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 0 1px transparent, 5px 7px 10px rgba(0, 0, 0, 0.15);
     transition: box-shadow 0.3s ease-out, transform 0.04s ease-in !important;
   }
   :global(.donations > article:hover) {
-    box-shadow: 0 0 0 1px #fff600, 4px 6px 10px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 0 0 1px #fff600, 4px 6px 9px rgba(0, 0, 0, 0.15) !important;
     transition: none !important;
   }
   .docs-link {
@@ -167,7 +167,7 @@
     &:active {
       transition: none;
       border: 1px solid rgba(0, 0, 0, 1);
-      box-shadow: 1px 0 0 5px #fff600;
+      box-shadow: 1px 0 0 3px #fff600;
     }
   }
   textarea {

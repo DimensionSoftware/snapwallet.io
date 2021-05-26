@@ -54,7 +54,7 @@
       background: var(--theme-button-color);
       border-color: var(--theme-button-color);
       transform: scale(1.0025);
-      box-shadow: 0 2px 2px 1px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 0 0 2px var(--theme-button-color) !important;
       transition: none;
     }
     &:active,

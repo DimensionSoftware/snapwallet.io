@@ -156,6 +156,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     h1 {
       font-weight: 300;
       font-size: 2.5rem;
+      margin-left: -3rem;
       margin-bottom: 1.15rem;
       b {
         font-weight: bold;
@@ -163,6 +164,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
     h2 {
       margin: 0 0 1.25rem;
+      margin-left: -3rem;
       font-weight: 500;
       font-size: 1.25rem;
       :global(div) {
@@ -178,6 +180,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     article {
       font-size: 1.25rem;
       margin: 0;
+      margin-left: -3rem;
       max-width: 400px;
       line-height: 1.35;
     }

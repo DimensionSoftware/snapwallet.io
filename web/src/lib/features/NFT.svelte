@@ -159,6 +159,9 @@
     width: 100%;
     border-radius: 0.25rem;
   }
+  :global(.nft button:hover) {
+    box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.25) !important;
+  }
   .qr {
     cursor: pointer;
     position: absolute;
