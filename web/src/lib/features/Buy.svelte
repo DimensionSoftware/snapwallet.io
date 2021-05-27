@@ -55,7 +55,7 @@
       radius: 0.5, // 0.0 to 0.5
       ecLevel: 'H', // L, M, Q, H
       fill: '#F1071C',
-      background: 'transparent', // transparent default
+      background: null, // transparent default
       size: 128, // in pixels
       element: canvas,
       pixelSize: 100,
