@@ -85,6 +85,7 @@
       padding-right: 0.75em;
     }
     input {
+      overflow: hidden;
       position: relative;
       z-index: 2;
       margin: 0;
@@ -106,14 +107,14 @@
       font-size: 1.8em;
       color: var(--theme-input-text-color);
       border: none;
-      border-bottom: 1px solid var(--theme-color-lightened);
+      border-bottom: 1px solid transparent;
       outline: none;
       width: 100%;
       transform: scale(1);
       transition-duration: 0.3s;
       transition-property: transform;
       &:valid {
-        border-bottom: 1px solid var(--theme-color-lightened);
+        border-bottom: 1px solid transparent;
       }
       // .bg is the input surround
       ~ .bg {
@@ -137,7 +138,7 @@
       &:hover,
       &:focus {
         z-index: 1;
-        border-bottom: 1px solid var(--theme-color);
+        border-bottom: 1px solid transparent;
         transition: none;
       }
       &:invalid {
@@ -155,9 +156,9 @@
       // .fx is the subtle bottom line
       & + .fx {
         position: absolute;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        left: 0.5rem;
+        right: 0.5rem;
+        bottom: -1px;
         height: 1px;
         background: linear-gradient(
           to right,
@@ -187,6 +188,16 @@
         opacity: 1;
         transform: scale(1) translateX(0);
         transition: none;
+        background: var(--theme-color);
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--theme-color),
+          var(--theme-color),
+          var(--theme-color),
+          var(--theme-color),
+          transparent
+        );
       }
     }
     // HACK: remove yellow autofill background
