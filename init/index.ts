@@ -142,7 +142,7 @@ class Snap {
         radius: 0.5, // 0.0 to 0.5
         ecLevel: 'H', // L, M, Q, H
         fill: qrOpts.foregroundColor || '#485460',
-        background: qrOpts.backgroundColor, // transparent defautl
+        background: qrOpts.backgroundColor, // transparent default
         size: qrOpts.pixelSize || 128, // in pixels
       },
       qrOpts.element

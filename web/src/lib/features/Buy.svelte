@@ -51,7 +51,16 @@
     ifr.src = snap.generateURL()
     // Open using a QR code
     const canvas = document.getElementById('buy-qr-canvas')
-    snap.createQR({ element: canvas, pixelSize: 100 })
+    snap.createQR({
+      text,
+      radius: 0.5, // 0.0 to 0.5
+      ecLevel: 'H', // L, M, Q, H
+      fill: '#F1071C',
+      background: 'transparent', // transparent default
+      size: 128, // in pixels
+      element: canvas,
+      pixelSize: 100,
+    })
   })
 </script>
 
@@ -167,8 +176,7 @@
     padding: 1.25rem;
     overflow: hidden;
     #buy-qr-canvas {
-      padding: 3px;
-      background: #fff;
+      padding: 1px;
       height: 75px;
       width: 75px;
     }
