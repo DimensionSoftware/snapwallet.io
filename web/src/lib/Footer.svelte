@@ -104,7 +104,7 @@
       <img height="24px" width="24px" title="Love" alt="Love" src="/love.svg" />
       Silicon Beach, CA
     </big>
-    <br /><small
+    <small
       ><a
         title="Dimension Software on Silicon Beach, Los Angeles!"
         href="https://dimensionsoftware.com"
@@ -150,7 +150,7 @@
     background: #fff;
     margin: 0;
     border: none;
-    box-shadow: 0 0 50px 10px #000;
+    box-shadow: 0 50px 30px 0 rgba(0, 0, 0, 0.5);
   }
   :global(.started article) {
     position: relative;
@@ -283,7 +283,12 @@
       text-align: center;
       vertical-align: middle;
       cursor: pointer;
+      small {
+        display: block;
+      }
       big {
+        display: block;
+        margin-bottom: 0.75rem;
         font-size: 0.9rem;
         color: rgba(255, 255, 255, 0.8);
       }
