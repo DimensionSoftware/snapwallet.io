@@ -150,6 +150,7 @@
     background: #fff;
     margin: 0;
     border: none;
+    box-shadow: 0 0 50px 10px #000;
   }
   :global(.started article) {
     position: relative;
@@ -201,17 +202,28 @@
     opacity: 0;
     animation: backgroundFadeIn 0.5s ease-in 2s forwards;
     color: rgba(255, 255, 255, 0.8);
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      left: 0;
+      bottom: 0;
+      opacity: 0.075;
+      background-image: url('/static/bg.png');
+    }
     &:after {
       content: '';
-      top: 0;
+      top: 85px;
       left: 0;
-      height: 3px;
+      height: 5px;
+      width: 100%;
       right: 0;
       position: absolute;
       background: linear-gradient(
         to right,
         transparent,
-        $themeColor,
+        rgb(222, 49, 45),
         transparent
       );
     }
@@ -219,7 +231,7 @@
       position: relative;
       z-index: 1;
       list-style: none;
-      margin: 7rem 0 5rem 10rem;
+      margin: 9rem 0 5rem 10rem;
       li {
         font-size: 0.9rem;
         margin: 0;
@@ -237,7 +249,7 @@
         position: relative;
         display: inline-block;
         padding: 0.4rem 0.75rem;
-        margin: 0;
+        margin: -0.4rem 0 0 0;
         border-radius: 3rem;
         z-index: 1;
         color: rgba(255, 255, 255, 0.7);

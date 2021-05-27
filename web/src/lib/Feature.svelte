@@ -49,7 +49,7 @@
     display: flex;
     justify-content: center;
     grid-gap: 2rem;
-    margin-top: 2rem;
+    margin-top: 1rem;
   }
   .relative {
     position: relative;
@@ -120,7 +120,7 @@
       }
       h3 {
         position: absolute;
-        top: -1.5rem;
+        top: -2.5rem;
         left: -5%;
         max-width: 75%;
         opacity: 0.8;
