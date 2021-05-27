@@ -56,7 +56,7 @@
       ecLevel: 'H', // L, M, Q, H
       fill: '#F1071C',
       background: null, // transparent default
-      size: 128, // in pixels
+      size: 75, // in pixels
       element: canvas,
       pixelSize: 100,
     })
@@ -175,7 +175,7 @@
     padding: 1.25rem;
     overflow: hidden;
     #buy-qr-canvas {
-      padding: 1px;
+      padding: 0;
       height: 75px;
       width: 75px;
     }

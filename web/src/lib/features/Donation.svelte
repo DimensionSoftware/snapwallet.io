@@ -49,9 +49,9 @@
     snap.createQR({
       radius: 0.5, // 0.0 to 0.5
       ecLevel: 'H', // L, M, Q, H
-      fill: '#F1071C',
+      fill: '#000000',
       background: null, // transparent default
-      size: 128, // in pixels
+      size: 75, // in pixels
       element: canvas,
       pixelSize: 100,
     })
@@ -192,7 +192,6 @@
     padding: 1.25rem;
     overflow: hidden;
     #donation-qr-canvas {
-      padding: 1px;
       height: 75px;
       width: 75px;
     }
