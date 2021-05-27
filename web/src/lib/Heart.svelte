@@ -15,7 +15,7 @@
     on:mousedown|stopPropagation|preventDefault={inc}
     class:active
     class="heart"
-    title="<3 SnapWallet"
+    title="<3 Snap Wallet"
   >
     <span>{numberWithCommas(counter)}</span>
   </div>

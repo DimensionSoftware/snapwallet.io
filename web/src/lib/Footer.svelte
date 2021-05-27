@@ -9,7 +9,7 @@
       }),
     contactUs = _ => {
       window.location.href =
-        'mailto:support@snapwallet.com?subject=Hello SnapWallet Team!'
+        'mailto:support@snapwallet.com?subject=Hello Snap Wallet Team!'
     }
   const cards = [
     {
@@ -36,7 +36,7 @@
 <Feature
   name="started"
   title="Get started in just a few steps"
-  description="SnapWallet is simple, secure and fast."
+  description="Snap Wallet is simple, secure and fast."
   center
 >
   <div class="cards flex" slot="left">

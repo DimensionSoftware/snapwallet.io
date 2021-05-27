@@ -5,7 +5,7 @@
     {
       title: 'NFT Checkout',
       name: 'nft',
-      desc: "Need a safe and reliable wallet to handle your NFT purchases?  SnapWallet's got you.",
+      desc: "Need a safe and reliable wallet to handle your NFT purchases?  Snap Wallet's got you.",
       icon: 'Crypto_Checkout_final.png',
     },
     {
@@ -17,7 +17,7 @@
     {
       title: 'Fiat On & Off Ramp',
       name: 'fiat',
-      desc: 'Buy and Sell your fiat, like USD, into crypto:  Bitcoin & Ethereum, ERC20 tokens, etc...',
+      desc: 'Buy and Sell your fiat, like USD, into Bitcoin & Ethereum:  Single KYC Verification, ACH & Debit Card',
       icon: 'Crypto_Fiat_final.png',
     },
   ]
