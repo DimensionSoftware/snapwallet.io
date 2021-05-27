@@ -94,6 +94,10 @@
             )
           : '0'}
       </small>
+      <div class="flex tags">
+        <span>NFT</span>
+        <span>ART</span>
+      </div>
       <Heart />
       <Button>Buy</Button>
     </div>
@@ -124,14 +128,19 @@
     display: inline-block;
     margin-top: -4rem;
   }
+  h3:first-child {
+    margin-top: 1rem;
+  }
   h3 {
-    margin: 0.5rem 0 0.2rem 0;
+    margin: -0.25rem 0 0.2rem 0;
     font-size: 1.5rem;
   }
   small {
-    margin: 0 0 1.5rem 0.1rem;
+    margin: -0.25rem 0 1.5rem 0.1rem;
     font-size: 1rem;
     font-weight: 200;
+    opacity: 0.9;
+    letter-spacing: 1px;
     display: block;
   }
   h4 {
@@ -145,7 +154,7 @@
     padding: 1.5rem;
   }
   p {
-    font-size: 1.25rem;
+    font-size: 0.25rem;
     line-height: 1.75rem;
     padding: 0;
     margin: -0.25rem 0 1.5rem;
@@ -183,6 +192,16 @@
     #nft-qr-canvas {
       height: 75px;
       width: 75px;
+    }
+  }
+  .tags {
+    margin-bottom: 1rem;
+    span {
+      font-size: 0.9rem;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 0.2rem 1rem;
+      margin-right: 0.25rem;
+      border-radius: 5rem;
     }
   }
 </style>
