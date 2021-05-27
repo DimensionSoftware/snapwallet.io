@@ -67,8 +67,8 @@
       transition: transform 0.1s ease-out, opacity 0.1s ease-in;
     }
     &:hover {
-      box-shadow: 0 0 0 1px var(--theme-color),
-        0 8px 6px var(--theme-shadow-color);
+      box-shadow: 0 0 0 1px var(--theme-button-color),
+        0 6px 6px var(--theme-shadow-color);
       transition: none;
       &:before {
         transform: scale(1.1);
@@ -83,7 +83,7 @@
         animation-timing-function: var(--theme-ease-out-back);
       }
       box-shadow: 0 0 0 1px var(--theme-button-color),
-        0 6px 6px var(--theme-shadow-color);
+        0 4px 4px var(--theme-shadow-color);
       text-shadow: 0 1px 0 --var(--theme-button-text-color);
       transition: none;
       animation: infocus 0.35s;
