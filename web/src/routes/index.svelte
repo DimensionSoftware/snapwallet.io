@@ -265,9 +265,11 @@ Hey, you-- join us!  https://dimensionsoftware.com
           padding-left: 2rem;
           padding-right: 1rem;
           h1 {
+            margin-left: 0;
             font-size: 1.7rem;
           }
           h2 {
+            margin-left: 0;
             font-size: 1rem;
           }
           article {
