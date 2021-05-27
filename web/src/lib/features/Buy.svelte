@@ -54,7 +54,8 @@
     snap.createQR({
       radius: 0.5, // 0.0 to 0.5
       ecLevel: 'H', // L, M, Q, H
-      fill: '#F1071C',
+      // fill: '#F1071C',
+      fill: '#ffffff',
       background: null, // transparent default
       size: 75, // in pixels
       element: canvas,
