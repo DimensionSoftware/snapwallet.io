@@ -212,21 +212,6 @@
       opacity: 0.075;
       background-image: url('/static/bg.png');
     }
-    &:after {
-      content: '';
-      top: 85px;
-      left: 0;
-      height: 5px;
-      width: 100%;
-      right: 0;
-      position: absolute;
-      background: linear-gradient(
-        to right,
-        transparent,
-        rgb(222, 49, 45),
-        transparent
-      );
-    }
     ol {
       position: relative;
       z-index: 1;
@@ -269,14 +254,14 @@
           background: linear-gradient(
             63.26deg,
             #ff6b00,
-            rgb(241, 7, 28) 75%
+            #fffc00 75%
           ) !important;
           transform: translateX(-100%) scale(0);
           border-radius: 1rem;
           transition: opacity 0.3s ease-out, transform 0.3s ease-in;
         }
         &:hover {
-          color: #fff;
+          color: #000;
           box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.5);
           font-weight: bold;
           transform: translateX(2px) scale(1.05);
