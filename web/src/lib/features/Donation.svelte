@@ -47,11 +47,8 @@
     // Open using a QR code
     const canvas = document.getElementById('donation-qr-canvas')
     snap.createQR({
-      radius: 0.5, // 0.0 to 0.5
-      ecLevel: 'H', // L, M, Q, H
-      fill: '#000000',
-      background: null, // transparent default
-      size: 75, // in pixels
+      foregroundColor: '#333',
+      backgroundColor: null, // transparent default
       element: canvas,
       pixelSize: 100,
     })
