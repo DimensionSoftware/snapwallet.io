@@ -856,7 +856,7 @@ type APIErrorResponse struct {
 // TODO: find a place for this massive map
 // Used for dynamically accessing Wyre's API error responses
 var APIExceptionsMap = map[string]APIErrorResponse{
-	"unknown": {code.Code_UNKNOWN, "An unknown exception has occurred. Please try again later."},
+	"unknown": {code.Code_UNKNOWN, "An unknown error has occurred. Please contact support@snapwallet.io"},
 	"accessDenied.invalidSession": {
 		code.Code_UNKNOWN,
 		"Wyre has reported an authorization error.",
@@ -1041,6 +1041,10 @@ var APIExceptionsMap = map[string]APIErrorResponse{
 	"validation.snapx.min": {
 		code.Code_INVALID_ARGUMENT,
 		"The minimum amount entered for this transaction is too low.",
+	},
+	"reservation.featureNotEnabled": {
+		code.Code_UNKNOWN,
+		"Please contact support@snapwallet.io",
 	},
 }
 
