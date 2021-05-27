@@ -51,6 +51,7 @@
     height: 0px;
     padding: 0 0.75rem;
     cursor: pointer;
+    font-size: 1rem;
   }
 
   .toast-item {
@@ -63,6 +64,7 @@
     max-height: 250px;
     color: var(--theme-text-color);
     font-weight: 500;
+    line-height: 1rem;
     z-index: 9999;
     &:before {
       background: var(--theme-color);
