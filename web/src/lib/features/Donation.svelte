@@ -47,7 +47,6 @@
     // Open using a QR code
     const canvas = document.getElementById('donation-qr-canvas')
     snap.createQR({
-      text,
       radius: 0.5, // 0.0 to 0.5
       ecLevel: 'H', // L, M, Q, H
       fill: '#F1071C',
