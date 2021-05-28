@@ -57,7 +57,7 @@
   </div>
 </Feature>
 <div class="contact">
-  <Button id="contact" on:mousedown={contactUs}>Contact Us</Button>
+  <Button on:mousedown={contactUs}>Contact Us</Button>
 </div>
 <hr />
 <footer>
