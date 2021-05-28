@@ -28,7 +28,7 @@
     display: inline-block;
     transition: 0.3s $easeInExpo;
     &:hover {
-      transform: scale(0.985) translateX(-1px);
+      transform: scale(1.008);
       transition: 0.1s $easeOutExpo;
       .heart {
         opacity: 1;

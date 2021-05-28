@@ -209,7 +209,7 @@
       right: 0;
       left: 0;
       bottom: 0;
-      opacity: 0.075;
+      opacity: 0.085;
       background-image: url('/static/bg.png');
     }
     ol {

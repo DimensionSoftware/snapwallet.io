@@ -152,6 +152,10 @@
     margin-right: 0.75rem !important;
     border: none !important;
     box-shadow: none !important;
+    transition: box-shadow 0.3s ease-out !important;
+  }
+  :global(button:hover) {
+    transition: none !important;
   }
   input.name,
   textarea {
