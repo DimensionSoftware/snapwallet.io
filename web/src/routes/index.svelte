@@ -130,9 +130,11 @@ Hey, you-- join us!  https://dimensionsoftware.com
 
   :global(iframe) {
     backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
+    -webkit-backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
   }
   :global(.blur) {
     backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
   }
   main {
     position: relative;

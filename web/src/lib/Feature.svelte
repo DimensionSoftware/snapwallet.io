@@ -157,6 +157,7 @@
       transition: background 0.3s ease-out, box-shadow 0.2s ease-in;
       overflow: hidden;
       backdrop-filter: blur(5px) contrast(110%);
+      -webkit-backdrop-filter: blur(5px) contrast(110%);
       &:hover {
         transition: none;
         background-color: rgba(255, 255, 255, 0.85);
