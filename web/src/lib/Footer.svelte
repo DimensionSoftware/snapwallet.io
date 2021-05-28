@@ -200,18 +200,9 @@
     padding: 1.5rem 0 1rem;
     background: #000;
     opacity: 0;
+    border-bottom: 1px solid rgba(#fffc00, 0.25);
     animation: backgroundFadeIn 0.5s ease-in 2s forwards;
     color: rgba(255, 255, 255, 0.8);
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      opacity: 0.085;
-      background-image: url('/static/bg.png');
-    }
     ol {
       position: relative;
       z-index: 1;

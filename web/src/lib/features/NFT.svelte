@@ -202,9 +202,11 @@
       padding: 0.2rem 1rem;
       margin-right: 0.25rem;
       border-radius: 5rem;
-      transition: border 0.3s ease-out;
+      transition: box-shadow 0.2s ease-out, border 0.3s ease-out;
       &:hover {
-        border: 1px solid rgba(0, 0, 0, 0.5);
+        background: #fffc00;
+        border: 1px solid #fffc00;
+        box-shadow: 0 0 0 2px #fffc00;
         transition: none;
       }
     }
