@@ -10,8 +10,10 @@
   import Donation from '$lib/features/Donation.svelte'
   import Buy from '$lib/features/Buy.svelte'
   import Footer from '$lib/Footer.svelte'
+  import LiquidContent from '$lib/LiquidContent.svelte'
 
   let ifr: HTMLIFrameElement
+  let liquidVisible = false
 
   onMount(async () => {
     await import('flux-init')
@@ -74,6 +76,7 @@
 ▀▀▀▀▀• ▀▀▀▀▀  █▪▀▀▀ ▀▀▀ ▀▀ █▪ ▀▀▀▀ ▀▀▀ ▀█▄▀▪▀▀ █▪
 Hey, you-- join us!  https://dimensionsoftware.com
       `)
+    setTimeout(_ => (liquidVisible = true), 3000)
   })
 </script>
 
@@ -121,6 +124,10 @@ Hey, you-- join us!  https://dimensionsoftware.com
 <Donation />
 <Buy />
 <Footer />
+
+{#if liquidVisible}
+  <LiquidContent />
+{/if}
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
