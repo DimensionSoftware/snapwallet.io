@@ -22,6 +22,8 @@ Onramp is a common use case where the Snap Wallet widget is configured for buyin
     <script>
       const snap = new Snap({
         appName: 'Example App',
+        // 'sandbox' or 'production' default: 'production'
+        environment: 'sandbox',
         wallets: [
           { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
         ],
