@@ -20,13 +20,13 @@ enum WidgetURLs {
 
 enum APIBaseURLs {
   PRODUCTION = 'https://api.snapwallet.io',
-  SANDBOX = 'https://api.sandbox.snapwallet.io',
+  SANDBOX = 'https://sandbox-api.snapwallet.io',
 }
 
 declare global {
   var _ENV: {
     WIDGET_URL: string
-    API_BASE_URL: string
+    INIT_API_BASE_URL: string
   }
 }
 
@@ -222,7 +222,7 @@ class Snap {
    */
   private getAPIBaseURL = (): APIBaseURLs => {
     // Allow dev to override hardcoded 'sandbox' env for web
-    if (_ENV.API_BASE_URL) return _ENV.API_BASE_URL as APIBaseURLs
+    if (_ENV.INIT_API_BASE_URL) return _ENV.INIT_API_BASE_URL as APIBaseURLs
     if (this.environment === WidgetEnvironments.SANDBOX) {
       return APIBaseURLs.SANDBOX
     }
