@@ -5,6 +5,7 @@
 
   const config = {
     appName: 'Donation',
+    environment: 'sandbox',
     intent: 'donate',
     payee: 'Snap Wallet',
     focus: true,

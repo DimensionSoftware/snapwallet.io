@@ -23,6 +23,7 @@
       themeColor = '#fffc00',
       SnapWallet = new (window as any).Snap({
         appName,
+        environment: 'sandbox',
         intent: 'buy',
         wallets: [],
         focus: false,
