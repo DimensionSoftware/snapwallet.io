@@ -17,6 +17,8 @@ Configure Snap Wallet for NFT checkouts in a snap! Simply provide a `product` co
     <script>
       const snap = new window.Snap({
         appName: 'Example App',
+        // 'sandbox' or 'production' default: 'production'
+        environment: 'sandbox',
         product: {
           videoURL:
             'https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4',

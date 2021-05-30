@@ -7,6 +7,7 @@
 
   const config = {
     appName: 'NFT Checkout',
+    environment: 'sandbox',
     focus: true,
     product: {
       // imageURL:

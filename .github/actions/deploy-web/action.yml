@@ -39,6 +39,8 @@ runs:
 
         npx firebase-tools -P ${{ inputs.GCP_PROJECT_ID }} -c firebase.deploy.json deploy --only hosting
       env:
+        # Init API base URL is typically only needed for the dev env
+        INIT_API_BASE_URL: ${{ inputs.INIT_API_BASE_URL }} 
         API_BASE_URL: ${{ inputs.API_BASE_URL }}
         WIDGET_URL: ${{ inputs.WIDGET_URL }}
         WYRE_BASE_URL: ${{ inputs.WYRE_BASE_URL }}
