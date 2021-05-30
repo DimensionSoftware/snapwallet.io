@@ -5,6 +5,24 @@ import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
 export type UserIntent = 'buy' | 'sell' | 'donate'
 export type SrcDst = 'source' | 'destination'
+enum WidgetEnvironments {
+  // ** development ** is only and option for explicitness
+  // Simply provide a baseURL for dev
+  DEVELOPMENT = 'development',
+  SANDBOX = 'sandbox',
+  PRODUCTION = 'production',
+}
+
+enum WidgetURLs {
+  PRODUCTION = 'https://snapwallet.io/widget',
+  SANDBOX = 'https://sandbox.snapwallet.io/widget',
+}
+
+enum APIBaseURLs {
+  PRODUCTION = 'https://api.snapwallet.io',
+  SANDBOX = 'https://api.sandbox.snapwallet.io',
+}
+
 declare global {
   var _ENV: {
     WIDGET_URL: string
@@ -45,6 +63,8 @@ interface IConfig {
   product?: IProduct
   defaultDestinationAsset?: string
   displayAmount?: SrcDst
+  environment: WidgetEnvironments
+  baseURL?: WidgetURLs
 }
 
 class Snap {
@@ -61,7 +81,8 @@ class Snap {
   appName: string = 'Snap Wallet'
   payee: string = ''
   intent: UserIntent = 'buy'
-  baseURL: string = _ENV.WIDGET_URL
+  baseURL?: WidgetURLs
+  environment: WidgetEnvironments = WidgetEnvironments.PRODUCTION
   focus: boolean = true
   theme?: { [cssProperty: string]: string }
   sourceAmount?: number
@@ -81,7 +102,9 @@ class Snap {
   }
 
   getConfig = (): IConfig => {
+    const baseURL = this.getBaseURL()
     return {
+      baseURL,
       wallets: this.wallets,
       appName: this.appName,
       intent: this.intent,
@@ -92,6 +115,7 @@ class Snap {
       sourceAmount: this.sourceAmount,
       defaultDestinationAsset: this.defaultDestinationAsset,
       displayAmount: this.displayAmount,
+      environment: this.environment,
     }
   }
 
@@ -172,10 +196,45 @@ class Snap {
   }
 
   private genAPIClient = (): FluxApi => {
+    const apiBaseURL = this.getAPIBaseURL()
     const config = createConfiguration({
-      baseServer: new ServerConfiguration(_ENV.API_BASE_URL, {}),
+      baseServer: new ServerConfiguration(apiBaseURL, {}),
     })
     return new FluxApi(config)
+  }
+
+  /**
+   * Get the widget URL based on the environment
+   * @returns Widget URL
+   */
+  private getBaseURL = (): WidgetURLs => {
+    if (this.environment === WidgetEnvironments.DEVELOPMENT) {
+      if (!_ENV.WIDGET_URL) {
+        throw new Error('Please provide a valid development widget URL')
+      }
+      return _ENV.WIDGET_URL as WidgetURLs
+    }
+    if (this.environment === WidgetEnvironments.SANDBOX) {
+      return WidgetURLs.SANDBOX
+    }
+    return WidgetURLs.PRODUCTION
+  }
+
+  /**
+   * Get the API base URL based on the environment
+   * @returns API URL
+   */
+  private getAPIBaseURL = (): APIBaseURLs => {
+    if (this.environment === WidgetEnvironments.DEVELOPMENT) {
+      if (!_ENV.API_BASE_URL) {
+        throw new Error('Please provide a valid development API URL')
+      }
+      return _ENV.API_BASE_URL as APIBaseURLs
+    }
+    if (this.environment === WidgetEnvironments.SANDBOX) {
+      return APIBaseURLs.SANDBOX
+    }
+    return APIBaseURLs.PRODUCTION
   }
 }
 
