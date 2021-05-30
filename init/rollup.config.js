@@ -9,9 +9,6 @@ import { writeFileSync } from 'fs'
 
 dotenv.config()
 
-if (!process.env.WIDGET_URL)
-  throw new Error('Please set a WIDGET_URL and rebuild: `npm run build`')
-
 const BuildID = nanoid()
 const initBundleName = `init.${BuildID}.js`
 const initBundlePath = `/widget/dist/${initBundleName}`
@@ -54,7 +51,8 @@ export default {
       preventAssignment: true,
       _ENV: JSON.stringify({
         WIDGET_URL: process.env.WIDGET_URL,
-        API_BASE_URL: process.env.API_BASE_URL,
+        // This is only needed for dev environments
+        INIT_API_BASE_URL: process.env.INIT_API_BASE_URL,
       }),
     }),
     typescript(),
