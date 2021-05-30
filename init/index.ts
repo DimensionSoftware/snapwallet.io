@@ -6,8 +6,8 @@ import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 export type UserIntent = 'buy' | 'sell' | 'donate'
 export type SrcDst = 'source' | 'destination'
 enum WidgetEnvironments {
-  // ** development ** is only and option for explicitness
-  // Simply provide a baseURL for dev
+  // ** development ** is only an option for explicitness
+  // Simply provide the environment variable INIT_API_BASE_URL for dev
   DEVELOPMENT = 'development',
   SANDBOX = 'sandbox',
   PRODUCTION = 'production',
