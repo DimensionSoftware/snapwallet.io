@@ -208,12 +208,8 @@ class Snap {
    * @returns Widget URL
    */
   private getBaseURL = (): WidgetURLs => {
-    if (this.environment === WidgetEnvironments.DEVELOPMENT) {
-      if (!_ENV.WIDGET_URL) {
-        throw new Error('Please provide a valid development widget URL')
-      }
-      return _ENV.WIDGET_URL as WidgetURLs
-    }
+    // Allow dev to override hardcoded 'sandbox' env for web
+    if (_ENV.WIDGET_URL) return _ENV.WIDGET_URL as WidgetURLs
     if (this.environment === WidgetEnvironments.SANDBOX) {
       return WidgetURLs.SANDBOX
     }
@@ -225,12 +221,8 @@ class Snap {
    * @returns API URL
    */
   private getAPIBaseURL = (): APIBaseURLs => {
-    if (this.environment === WidgetEnvironments.DEVELOPMENT) {
-      if (!_ENV.API_BASE_URL) {
-        throw new Error('Please provide a valid development API URL')
-      }
-      return _ENV.API_BASE_URL as APIBaseURLs
-    }
+    // Allow dev to override hardcoded 'sandbox' env for web
+    if (_ENV.API_BASE_URL) return _ENV.API_BASE_URL as APIBaseURLs
     if (this.environment === WidgetEnvironments.SANDBOX) {
       return APIBaseURLs.SANDBOX
     }
