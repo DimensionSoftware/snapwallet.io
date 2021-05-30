@@ -176,7 +176,7 @@ class Snap {
   generateURL = (config?: IConfig) => {
     config && this.setConfig(config)
     const qs = `?ts=${Date.now()}&config=${this.configToQueryString()}`
-    return `${this.baseURL}/${qs}#/`
+    return `${this.getBaseURL()}/${qs}#/`
   }
 
   getShortURL = async (config?: IConfig): Promise<string> => {
