@@ -14,6 +14,9 @@
 
   let ifr: HTMLIFrameElement
   let liquidVisible = false
+  let sy
+
+  $: isRotated = sy > 900
 
   onMount(async () => {
     await import('flux-init')
@@ -120,11 +123,21 @@ Hey, you-- join us!  https://dimensionsoftware.com
     d="M0,320L240,288L480,192L720,160L960,96L1200,192L1440,0L1440,320L1200,320L960,320L720,320L480,320L240,320L0,320Z"
   /></svg
 >
+
 <Overview />
 <NFT />
 <Donation />
 <Buy />
 <Footer />
+
+<svelte:window bind:scrollY={sy} />
+
+<span
+  class="top-bg"
+  style={`transform: rotate(${isRotated ? '180deg' : 0}) translate(0 ,${
+    sy * (isRotated ? -0.3 : 0.3)
+  }px)`}
+/>
 
 {#if liquidVisible}
   <LiquidContent />

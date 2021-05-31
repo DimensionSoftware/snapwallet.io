@@ -62,6 +62,7 @@
     flex-direction: column;
     padding: 12rem 0 7rem 0;
     position: relative;
+    z-index: 1;
     &.center {
       article {
         h2,
@@ -77,16 +78,17 @@
       }
     }
     &.hasImage {
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        transform: rotate(180deg);
-        background-image: url('/static/bg.png');
-      }
+      background: transparent;
+      // &:before {
+      //   content: '';
+      //   position: absolute;
+      //   top: 0;
+      //   right: 0;
+      //   left: 0;
+      //   bottom: 0;
+      //   transform: rotate(180deg);
+      //   background-image: url('/static/bg.png');
+      // }
     }
     &.hasBackground article {
       padding: 3rem;
