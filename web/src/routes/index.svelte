@@ -70,6 +70,7 @@
       ifr.classList.add('loaded')
     }
     ifr.src = SnapWallet.generateURL()
+    ifr.classList.add('snapWallet')
 
     // front
     console.log(`
@@ -149,7 +150,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
 
-  :global(iframe) {
+  :global(iframe.snapWallet) {
     backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
     -webkit-backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
   }

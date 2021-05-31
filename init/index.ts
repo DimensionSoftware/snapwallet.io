@@ -130,6 +130,7 @@ class Snap {
     iframe.id = this.IFRAME_ID
     // TODO: toggle URL per env
     iframe.src = this.generateURL()
+    iframe.classList.add('snapWallet')
     iframe.frameBorder = '0'
     iframe.style.backgroundColor = 'transparent'
     iframe.style.position = 'fixed'

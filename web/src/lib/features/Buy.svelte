@@ -50,6 +50,7 @@
       false,
     )
     ifr.src = snap.generateURL()
+    ifr.classList.add('snapWallet')
     // Open using a QR code
     const canvas = document.getElementById('buy-qr-canvas')
     snap.createQR({
