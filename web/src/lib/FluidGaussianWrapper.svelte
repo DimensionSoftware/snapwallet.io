@@ -1,14 +1,14 @@
 <script>
   import { onMount, tick } from 'svelte'
 
-  import { elasticOut, cubicOut } from 'svelte/easing'
+  import { elasticOut } from 'svelte/easing'
   import { spring, tweened } from 'svelte/motion'
 
   export let width = 500
   export let height = 500
   export let step = 10
   export let position
-  export let triggerValue = 350
+  export let triggerValue = 250
   export let precision = 3
   export let slideDuration = 2000
   export let slideEasing = elasticOut
@@ -168,7 +168,11 @@
 
   function deactivate(e) {
     active = false
-    if (status === IDLE) tip.set($originalTipPosition)
+    if (status === IDLE) {
+      tip.set($originalTipPosition)
+      slide.set(width)
+    }
+    // setTimeout(_ => requestAnimationFrame(render), 100)
   }
 
   function watch(e, x, y) {
@@ -187,6 +191,12 @@
     if (e.key == 'Escape') closeLiquid(e)
   }
 
+  function openLiquid(e) {
+    status = SLIDING
+    mounted = active = true
+    tick().then(_ => requestAnimationFrame(render))
+  }
+
   function closeLiquid(e) {
     mounted = false
     deactivate(e)
@@ -200,8 +210,10 @@
 
 {#if mounted}
   <div
+    title="Double Click to Open!"
     class="wrapper"
     class:isOpen
+    on:dblclick={openLiquid}
     on:mousedown={activate}
     on:mouseup={deactivate}
     on:mousemove={e => watch(e, e.clientX, e.clientY)}
@@ -280,6 +292,7 @@
 
   .wrapper {
     position: fixed;
+    overflow: hidden;
     left: 0;
     right: 0;
     top: 0;
@@ -290,6 +303,7 @@
 
   .isOpen {
     max-width: 100%;
+    width: 100%;
   }
 
   .btn {
