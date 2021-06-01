@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { scale, fly } from 'svelte/transition'
+  import { backOut, expoIn, expoOut } from 'svelte/easing'
+  import Visibility from '$lib/Visibility.svelte'
   export let title
   export let description
   export let docLink
@@ -14,7 +17,24 @@
 <section class={name} class:center class:hasImage class:hasBackground>
   <article>
     {#if icon}
-      <img class="icon" src={icon} />
+      <Visibility steps={100} let:percent>
+        {#if percent > 80}
+          <img
+            in:scale={{ opacity: 1, easing: backOut, duration: 750 }}
+            out:fly={{ opacity: 0, easing: expoOut, duration: 250, y: -50 }}
+            class="icon"
+            src={icon}
+            alt="Snap Wallet"
+          />
+        {:else}
+          <img
+            class="icon"
+            src={icon}
+            alt="Snap Wallet"
+            style="opacity: 0;height: 100px; width: 100px;"
+          />
+        {/if}
+      </Visibility>
     {/if}
     <h2 class:right class:blur={hasImage}>
       {title}
