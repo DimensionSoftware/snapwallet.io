@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { fade, fly } from 'svelte/transition'
+  import { backOut, backInOut, expoOut } from 'svelte/easing'
+  import Visibility from '$lib/Visibility.svelte'
   import Feature from './Feature.svelte'
   import Button from './Button.svelte'
   const scrollToTop = _ =>
@@ -42,12 +45,19 @@
   <div class="cards flex" slot="left">
     {#each cards as card, i}
       <article on:mousedown={_ => scrollTo(card.name)}>
-        <img
-          title={card.alt}
-          width="100"
-          src={`/images/${card.icon}`}
-          alt={card.title}
-        />
+        <Visibility steps={100} let:percent>
+          {#if percent > 50}
+            <img
+              in:fly={{ easing: expoOut, duration: 750 + i * 500, y: 50 }}
+              title={card.alt}
+              width="100"
+              src={`/images/${card.icon}`}
+              alt={card.title}
+            />
+          {:else}
+            <div style="height: 100px; width: 100px;" alt={card.title} />
+          {/if}
+        </Visibility>
         <h4>{card.title}</h4>
         {#if i !== cards.length - 1}
           <span />
@@ -61,43 +71,49 @@
 </div>
 <hr />
 <footer>
-  <ol>
-    <li><h2>Snap Wallet</h2></li>
-    <li>
-      <h4>
-        <a
-          title="Snap Wallet Integration Documentation"
-          href="https://snapwallet.io/docs/guide"
-          target="_blank">API Documentation</a
-        >
-      </h4>
-    </li>
-    <li>
-      <h4>
-        <a
-          title="Dimension Software on Silicon Beach"
-          href="https://dimensionsoftware.com"
-          target="_blank">Company</a
-        >
-      </h4>
-    </li>
-    <li>
-      <h4>
-        <a title="Snap Wallet Support" href="mailto:support@snapwallet.io"
-          >Support</a
-        >
-      </h4>
-    </li>
-    <li>
-      <h4>
-        <a
-          title="Snap Wallet Never Shares Your Information"
-          href="https://login.dimensionsoftware.com/privacy"
-          target="_blank">Privacy</a
-        >
-      </h4>
-    </li>
-  </ol>
+  <Visibility steps={100} let:percent>
+    {#if percent > 50}
+      <ol in:fly={{ easing: backOut, duration: 350, opacity: 0, x: -50 }}>
+        <li><h2>Snap Wallet</h2></li>
+        <li>
+          <h4>
+            <a
+              title="Snap Wallet Integration Documentation"
+              href="https://snapwallet.io/docs/guide"
+              target="_blank">API Documentation</a
+            >
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a
+              title="Dimension Software on Silicon Beach"
+              href="https://dimensionsoftware.com"
+              target="_blank">Company</a
+            >
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a title="Snap Wallet Support" href="mailto:support@snapwallet.io"
+              >Support</a
+            >
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a
+              title="Snap Wallet Never Shares Your Information"
+              href="https://login.dimensionsoftware.com/privacy"
+              target="_blank">Privacy</a
+            >
+          </h4>
+        </li>
+      </ol>
+    {:else}
+      <ol style="height: 300px;" />
+    {/if}
+  </Visibility>
   <p title="Scroll to Top!" on:mousedown={scrollToTop}>
     <big
       >Snap Wallet
@@ -171,9 +187,9 @@
       rgb(241, 7, 28) 75%
     ) !important;
     border-color: rgb(222, 49, 45) !important;
-    top: -4.25rem;
-    position: relative;
-    z-index: 1;
+    top: 0.25rem;
+    position: absolute;
+    z-index: 4;
     padding: 1rem 4rem;
     left: auto;
     right: auto;
@@ -186,22 +202,12 @@
       box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.25) !important;
     }
   }
-  :global(body) {
-    margin-bottom: 433px !important;
-  }
   footer {
-    position: fixed;
-    z-index: -1;
-    bottom: 0;
-    left: 0;
-    right: 0;
     margin-top: 0.05rem;
     overflow: hidden;
     padding: 1.5rem 0 1rem;
     background: #000;
-    opacity: 0;
     border-bottom: 1px solid rgba(#fffc00, 0.25);
-    animation: backgroundFadeIn 0.5s ease-in 2s forwards;
     color: rgba(255, 255, 255, 0.8);
     ol {
       position: relative;
