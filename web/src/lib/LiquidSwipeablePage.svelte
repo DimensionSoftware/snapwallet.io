@@ -10,7 +10,7 @@
 </div>
 <FluidGaussianWrapper
   position={{
-    y: 600,
+    y: 515,
   }}
   {width}
   {height}
@@ -34,5 +34,7 @@
     top: 0;
     bottom: 0;
     z-index: 9999;
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
   }
 </style>

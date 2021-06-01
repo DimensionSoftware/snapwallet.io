@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { fade, fly } from 'svelte/transition'
-  import { backOut, backInOut, expoOut } from 'svelte/easing'
+  import { fly } from 'svelte/transition'
+  import { backOut, expoOut } from 'svelte/easing'
   import Visibility from '$lib/Visibility.svelte'
   import Feature from './Feature.svelte'
   import Button from './Button.svelte'
@@ -73,7 +73,10 @@
 <footer>
   <Visibility steps={100} let:percent>
     {#if percent > 50}
-      <ol in:fly={{ easing: backOut, duration: 350, opacity: 0, x: -50 }}>
+      <ol
+        in:fly={{ easing: backOut, duration: 350, opacity: 0, x: -50 }}
+        out:fly={{ easing: expoOut, duration: 500, y: 0 }}
+      >
         <li><h2>Snap Wallet</h2></li>
         <li>
           <h4>
@@ -187,7 +190,7 @@
       rgb(241, 7, 28) 75%
     ) !important;
     border-color: rgb(222, 49, 45) !important;
-    top: 0.25rem;
+    top: 3.25rem;
     position: absolute;
     z-index: 4;
     padding: 1rem 4rem;

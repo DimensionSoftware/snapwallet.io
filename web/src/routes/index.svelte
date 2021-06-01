@@ -5,6 +5,7 @@
 <script lang="ts">
   let Typewriter: any
   import { onMount } from 'svelte'
+  import { fly } from 'svelte/transition'
   import Overview from '$lib/features/Overview.svelte'
   import NFT from '$lib/features/NFT.svelte'
   import Donation from '$lib/features/Donation.svelte'
@@ -141,7 +142,12 @@ Hey, you-- join us!  https://dimensionsoftware.com
 />
 
 {#if liquidVisible}
-  <LiquidContent />
+  <span
+    in:fly={{ duration: 1000 }}
+    out:fly={{ duration: 5000, x: -100, y: 25, opacity: 0.1 }}
+  >
+    <LiquidContent />
+  </span>
 {/if}
 
 <style lang="scss">
@@ -238,6 +244,10 @@ Hey, you-- join us!  https://dimensionsoftware.com
   }
   svg {
     position: absolute;
+    // transform: translateY(0);
+    // bottom: -500px;
+    // bottom: 0;
+    // margin-top: -210px;
     bottom: -5px;
     right: 0;
     left: 0;

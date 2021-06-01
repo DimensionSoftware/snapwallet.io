@@ -10,12 +10,12 @@
 
 <LiquidSwipeablePage>
   <div slot="next-page" class="page2">
+    <span
+      class="close"
+      on:mousedown={() => window.dispatchEvent(new Event('closeLiquid'))}
+      >x</span
+    >
     <div class="content2">
-      <span
-        class="close"
-        on:mousedown={() => window.dispatchEvent(new Event('closeLiquid'))}
-        >x</span
-      >
       <h2>Get in Touch</h2>
       <h3>Snap Wallet Will Customize Your Widget</h3>
       <div class="contact">
@@ -26,6 +26,15 @@
 </LiquidSwipeablePage>
 
 <style lang="scss">
+  .close {
+    position: absolute;
+    padding: 1rem;
+    right: 5rem;
+    top: 2rem;
+    font-weight: 200;
+    font-size: 2.5rem;
+    cursor: pointer;
+  }
   .page1 {
     flex-direction: column;
     display: flex;
@@ -43,7 +52,7 @@
     flex-direction: column;
     display: flex;
     justify-content: space-between;
-    padding: 0vh 13px;
+    padding: 0vh 23px;
     padding-top: 20vh;
     height: 100%;
     width: 100%;
@@ -55,6 +64,7 @@
     height: 30vh;
     width: 600px;
     margin: 0 auto;
+    transform: translateX(50px);
     h2 {
       margin: 0 0 1rem;
     }
@@ -65,15 +75,6 @@
     }
     .contact {
       align-self: flex-start;
-    }
-    .close {
-      position: absolute;
-      padding: 1rem;
-      right: 5rem;
-      top: 2rem;
-      font-weight: 200;
-      font-size: 2.5rem;
-      cursor: pointer;
     }
   }
 
@@ -121,7 +122,7 @@
     letter-spacing: 1px;
     opacity: 0.5;
   }
-  :global(.contact > button) {
+  :global(.content2 .contact > button) {
     color: #fff !important;
     font-size: 1.15rem !important;
     background: rgb(241, 7, 28) !important;
@@ -135,7 +136,7 @@
     z-index: 1;
     padding: 1rem 4rem;
     text-align: center;
-    margin-top: 3rem;
+    margin-top: -3rem;
     border-radius: 4.25rem;
     transition: box-shadow 0.3s ease-out;
     &:hover {

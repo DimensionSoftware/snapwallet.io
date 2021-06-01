@@ -48,7 +48,13 @@
               alt={card.title}
             />
           {:else}
-            <div style="height: 300px; width: 300px;" alt={card.title} />
+            <img
+              height="300"
+              width="300"
+              style="opacity: 0"
+              src={`/images/${card.icon}`}
+              alt={card.title}
+            />
           {/if}
         </Visibility>
         <h4>{card.title}</h4>
