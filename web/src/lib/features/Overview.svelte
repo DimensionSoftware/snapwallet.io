@@ -1,5 +1,8 @@
 <script lang="ts">
-  import Feature from '../Feature.svelte'
+  import { fly } from 'svelte/transition'
+  import { expoOut } from 'svelte/easing'
+  import Feature from '$lib/Feature.svelte'
+  import Visibility from '$lib/Visibility.svelte'
 
   const cards = [
     {
@@ -33,14 +36,21 @@
   description="Crypto doesn't have to be difficult to spend and buy."
 >
   <div class="flex" slot="left">
-    {#each cards as card}
+    {#each cards as card, i}
       <article on:mousedown={_ => scrollTo(card.name)}>
-        <img
-          height="300"
-          width="300"
-          src={`/images/${card.icon}`}
-          alt={card.title}
-        />
+        <Visibility steps={100} let:percent>
+          {#if percent > 50}
+            <img
+              in:fly={{ easing: expoOut, duration: 200 + i * 200, x: -75 }}
+              height="300"
+              width="300"
+              src={`/images/${card.icon}`}
+              alt={card.title}
+            />
+          {:else}
+            <div style="height: 300px; width: 300px;" alt={card.title} />
+          {/if}
+        </Visibility>
         <h4>{card.title}</h4>
         <p>{card.desc || ''}</p>
       </article>
