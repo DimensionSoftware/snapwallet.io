@@ -23,7 +23,7 @@ jobs:
     if: github.ref == 'refs/heads/dev'
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-nodejs
+      - uses: actions/dead-simple-nodejs@v0
         with:
           NODE_VERSION: 16.1.0
       - uses: ./.github/actions/deploy-web
@@ -41,7 +41,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-nodejs
+      - uses: actions/dead-simple-nodejs@v0
         with:
           NODE_VERSION: 16.1.0
       - uses: ./.github/actions/deploy-web
@@ -59,7 +59,7 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
-      - uses: ./.github/actions/install-nodejs
+      - uses: actions/dead-simple-nodejs@v0
         with:
           NODE_VERSION: 16.1.0
       - run: |
