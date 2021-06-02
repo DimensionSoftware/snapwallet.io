@@ -65,4 +65,12 @@ html {
       max-width: 960px;
     }
   }
+  @media screen and (max-width: 1000px) {
+    body > .top-bg {
+      bottom: -30vh;
+    }
+    .wrapper {
+      display: none !important;
+    }
+  }
 }
