@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
     steps:
-      - uses: dreamcodez/dead-simple-nodejs@0.1
+      - uses: dreamcodez/dead-simple-nodejs@0.2
         with:
           NODE_VERSION: 16.1.0
       - uses: actions/checkout@v2
@@ -44,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-      - uses: dreamcodez/dead-simple-nodejs@0.1
+      - uses: dreamcodez/dead-simple-nodejs@0.2
         with:
           NODE_VERSION: 16.1.0
       - uses: actions/checkout@v2
@@ -62,7 +62,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-      - uses: dreamcodez/dead-simple-nodejs@0.1
+      - uses: dreamcodez/dead-simple-nodejs@0.2
         with:
           NODE_VERSION: 16.1.0
       - uses: actions/checkout@v2
