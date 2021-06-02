@@ -96,7 +96,7 @@
         <span>ART</span>
       </div>
       <Heart />
-      <Button>Buy</Button>
+      <Button id="nft_buy">Buy</Button>
     </div>
   </div>
 </Feature>

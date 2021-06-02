@@ -69,8 +69,8 @@
       <h3>Donate</h3>
       <small>to Snap Wallet</small>
       <aside>
-        <Button on:mousedown={donateAsset('btc')}>Send BTC</Button>
-        <Button on:mousedown={donateAsset('eth')}>Send ETH</Button>
+        <Button id="btc" on:mousedown={donateAsset('btc')}>Send BTC</Button>
+        <Button id="eth" on:mousedown={donateAsset('eth')}>Send ETH</Button>
       </aside>
       <input placeholder="Your Name" type="text" />
       <textarea maxlength="250" placeholder="Message" />
@@ -81,9 +81,9 @@
       <h3>Tip</h3>
       <small>to Snap Wallet</small>
       <aside class="small">
-        <Button on:mousedown={donateUSDAmount(1.0)}>$1</Button>
-        <Button on:mousedown={donateUSDAmount(5.0)}>$5</Button>
-        <Button on:mousedown={donateUSDAmount(10.0)}>$10</Button>
+        <Button id="1" on:mousedown={donateUSDAmount(1.0)}>$1</Button>
+        <Button id="5" on:mousedown={donateUSDAmount(5.0)}>$5</Button>
+        <Button id="10" on:mousedown={donateUSDAmount(10.0)}>$10</Button>
       </aside>
     </div>
     <div class="qr" on:mousedown={snap.openWeb}>
