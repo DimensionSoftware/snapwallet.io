@@ -22,6 +22,9 @@ inputs:
   WYRE_BASE_URL:
     description: the wyre base URL for retrieving Plaid config
     required: true  
+  INIT_API_BASE_URL:
+    description: todo
+    required: true
 runs:
   using: composite
   steps:
