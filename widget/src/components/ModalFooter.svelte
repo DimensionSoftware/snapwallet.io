@@ -5,7 +5,7 @@
 <style lang="scss">
   .modal-footer {
     /* height: 10%; */
-    /* flex-grow: 1; */
+    flex-grow: 1;
     position: relative;
     display: flex;
     flex-direction: column;

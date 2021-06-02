@@ -5,13 +5,19 @@
 <script lang="ts">
   let Typewriter: any
   import { onMount } from 'svelte'
+  import { fly } from 'svelte/transition'
   import Overview from '$lib/features/Overview.svelte'
   import NFT from '$lib/features/NFT.svelte'
   import Donation from '$lib/features/Donation.svelte'
   import Buy from '$lib/features/Buy.svelte'
   import Footer from '$lib/Footer.svelte'
+  import LiquidContent from '$lib/LiquidContent.svelte'
 
   let ifr: HTMLIFrameElement
+  let liquidVisible = false
+  let sy
+
+  $: isRotated = sy > 900
 
   onMount(async () => {
     await import('flux-init')
@@ -23,15 +29,16 @@
       themeColor = '#fffc00',
       SnapWallet = new (window as any).Snap({
         appName,
+        environment: 'sandbox',
         intent: 'buy',
         wallets: [],
         focus: false,
         theme: {
-          modalBackground: 'rgba(40,40,40,.9)',
-          modalPopupBackground: 'rgba(50,50,50,.9)',
+          modalBackground: 'rgba(0,0,0,.8)',
+          modalPopupBackground: 'rgba(10,10,10,.85)',
           color: 'rgba(0,0,0,.9)',
           badgeTextColor: '#333',
-          colorLightened: 'rgba(5,5,5,.8)',
+          colorLightened: 'rgba(255,252,0,.3)',
           shadowBottomColor: 'rgba(0,0,0,.25)',
           colorInverse: '#fff',
           buttonColor: themeColor,
@@ -61,9 +68,11 @@
     )
 
     ifr.onload = () => {
+      liquidVisible = true
       ifr.classList.add('loaded')
     }
     ifr.src = SnapWallet.generateURL()
+    ifr.classList.add('snapWallet')
 
     // front
     console.log(`
@@ -116,11 +125,30 @@ Hey, you-- join us!  https://dimensionsoftware.com
     d="M0,320L240,288L480,192L720,160L960,96L1200,192L1440,0L1440,320L1200,320L960,320L720,320L480,320L240,320L0,320Z"
   /></svg
 >
+
 <Overview />
 <NFT />
 <Donation />
 <Buy />
 <Footer />
+
+<svelte:window bind:scrollY={sy} />
+
+<span
+  class="top-bg"
+  style={`transform: rotate(${isRotated ? '180deg' : 0}) translate(0 ,${
+    sy * (isRotated ? -0.3 : 0.3)
+  }px)`}
+/>
+
+{#if liquidVisible}
+  <span
+    in:fly={{ duration: 1000 }}
+    out:fly={{ duration: 5000, x: -100, y: 25, opacity: 0.1 }}
+  >
+    <LiquidContent />
+  </span>
+{/if}
 
 <style lang="scss">
   @import '../../../widget/src/styles/animations.scss';
@@ -128,11 +156,13 @@ Hey, you-- join us!  https://dimensionsoftware.com
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
 
-  :global(iframe) {
+  :global(iframe.snapWallet) {
     backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
+    -webkit-backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
   }
   :global(.blur) {
     backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
   }
   main {
     position: relative;
@@ -156,7 +186,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     h1 {
       font-weight: 300;
       font-size: 2.5rem;
-      margin-left: -3rem;
+      margin-left: -6rem;
       margin-bottom: 1.15rem;
       b {
         font-weight: bold;
@@ -164,7 +194,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
     h2 {
       margin: 0 0 1.25rem;
-      margin-left: -3rem;
+      margin-left: -6rem;
       font-weight: 500;
       font-size: 1.25rem;
       :global(div) {
@@ -180,7 +210,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     article {
       font-size: 1.25rem;
       margin: 0;
-      margin-left: -3rem;
+      margin-left: -6rem;
       max-width: 400px;
       line-height: 1.35;
     }
@@ -214,6 +244,10 @@ Hey, you-- join us!  https://dimensionsoftware.com
   }
   svg {
     position: absolute;
+    // transform: translateY(0);
+    // bottom: -500px;
+    // bottom: 0;
+    // margin-top: -210px;
     bottom: -5px;
     right: 0;
     left: 0;
@@ -265,9 +299,11 @@ Hey, you-- join us!  https://dimensionsoftware.com
           padding-left: 2rem;
           padding-right: 1rem;
           h1 {
+            margin-left: 0;
             font-size: 1.7rem;
           }
           h2 {
+            margin-left: 0;
             font-size: 1rem;
           }
           article {

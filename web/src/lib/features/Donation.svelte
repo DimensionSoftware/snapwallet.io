@@ -5,6 +5,7 @@
 
   const config = {
     appName: 'Donation',
+    environment: 'sandbox',
     intent: 'donate',
     payee: 'Snap Wallet',
     focus: true,
@@ -47,11 +48,8 @@
     // Open using a QR code
     const canvas = document.getElementById('donation-qr-canvas')
     snap.createQR({
-      radius: 0.5, // 0.0 to 0.5
-      ecLevel: 'H', // L, M, Q, H
-      fill: '#000000',
-      background: null, // transparent default
-      size: 75, // in pixels
+      foregroundColor: '#333',
+      backgroundColor: null, // transparent default
       element: canvas,
       pixelSize: 100,
     })
@@ -71,20 +69,21 @@
       <h3>Donate</h3>
       <small>to Snap Wallet</small>
       <aside>
-        <Button on:mousedown={donateAsset('btc')}>Send BTC</Button>
-        <Button on:mousedown={donateAsset('eth')}>Send ETH</Button>
+        <Button id="btc" on:mousedown={donateAsset('btc')}>Send BTC</Button>
+        <Button id="eth" on:mousedown={donateAsset('eth')}>Send ETH</Button>
       </aside>
-      <textarea placeholder="Message" />
+      <input placeholder="Your Name" type="text" />
+      <textarea maxlength="250" placeholder="Message" />
     </div>
   </div>
   <div class="relative" slot="right">
     <div>
       <h3>Tip</h3>
       <small>to Snap Wallet</small>
-      <aside>
-        <Button on:mousedown={donateUSDAmount(1.0)}>$1</Button>
-        <Button on:mousedown={donateUSDAmount(5.0)}>$5</Button>
-        <Button on:mousedown={donateUSDAmount(10.0)}>$10</Button>
+      <aside class="small">
+        <Button id="1" on:mousedown={donateUSDAmount(1.0)}>$1</Button>
+        <Button id="5" on:mousedown={donateUSDAmount(5.0)}>$5</Button>
+        <Button id="10" on:mousedown={donateUSDAmount(10.0)}>$10</Button>
       </aside>
     </div>
     <div class="qr" on:mousedown={snap.openWeb}>
@@ -117,6 +116,7 @@
   :global(.donations > article) {
     position: relative;
     width: 800px;
+    padding: 2rem 3rem 3rem 3rem !important;
     margin-top: 4.55rem !important;
     background: transparent !important;
     box-shadow: 0 0 0 1px transparent, 5px 7px 10px rgba(0, 0, 0, 0.15);
@@ -137,8 +137,14 @@
     margin: 0 0 0 0.1rem;
   }
   aside {
+    font-size: 0.9rem;
     display: flex;
     margin-top: 2rem;
+    &.small :global(button) {
+      font-size: 1rem;
+      padding: 0.65rem 2rem;
+      margin-top: 0.25rem;
+    }
   }
   h4 {
     margin: 1.5rem 0 2rem 0;
@@ -155,8 +161,13 @@
     margin-right: 0.75rem !important;
     border: none !important;
     box-shadow: none !important;
+    transition: box-shadow 0.3s ease-out !important;
+  }
+  :global(button:hover) {
+    transition: none !important;
   }
   input.name,
+  input,
   textarea {
     outline: none;
     font-family: inherit;
@@ -167,26 +178,35 @@
     max-height: 225px;
     padding: 0.75rem 1.5rem 0.75rem 1rem;
     border-radius: 0.85rem;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(0, 0, 0, 0.025);
     margin: 1.5rem 0 1rem;
     transition: box-shadow 0.1s ease-in, border 0.2s ease-in;
-    &:hover,
+    box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.15);
+    &:hover {
+      box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.18);
+      transition: none;
+    }
     &:focus,
     &:active {
       transition: none;
-      border: 1px solid rgba(0, 0, 0, 1);
-      box-shadow: 1px 0 0 3px #fff600;
+      // box-shadow: 1px 0 0 3px #fff600;
+      box-shadow: 0 0 0 2px #fff600, 1px 3px 5px rgba(0, 0, 0, 0.18);
     }
   }
+  input[type='text'] {
+    min-height: 1rem;
+    margin-top: 2rem;
+    margin-bottom: 0;
+  }
   textarea {
-    margin-top: 3rem;
+    margin-top: 1rem;
     width: 75%;
   }
   .qr {
     cursor: pointer;
     position: absolute;
-    bottom: -25px;
-    right: -75px;
+    bottom: 0;
+    right: -55px;
     display: block;
     border-radius: 100%;
     padding: 1.25rem;

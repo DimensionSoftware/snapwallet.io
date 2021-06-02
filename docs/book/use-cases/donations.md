@@ -22,6 +22,8 @@ This use case can be used to accept fiat to cryptocurrency donations for your op
     <script>
       const snap = new Snap({
         appName: 'Example App',
+        // 'sandbox' or 'production' default: 'production'
+        environment: 'sandbox',
         wallets: [
           { asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' },
         ],

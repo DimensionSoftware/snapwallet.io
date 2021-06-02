@@ -5,10 +5,28 @@ import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
 export type UserIntent = 'buy' | 'sell' | 'donate'
 export type SrcDst = 'source' | 'destination'
+enum WidgetEnvironments {
+  // ** development ** is only an option for explicitness
+  // Simply provide the environment variable INIT_API_BASE_URL for dev
+  DEVELOPMENT = 'development',
+  SANDBOX = 'sandbox',
+  PRODUCTION = 'production',
+}
+
+enum WidgetURLs {
+  PRODUCTION = 'https://snapwallet.io/widget',
+  SANDBOX = 'https://sandbox.snapwallet.io/widget',
+}
+
+enum APIBaseURLs {
+  PRODUCTION = 'https://api.snapwallet.io',
+  SANDBOX = 'https://sandbox-api.snapwallet.io',
+}
+
 declare global {
   var _ENV: {
     WIDGET_URL: string
-    API_BASE_URL: string
+    INIT_API_BASE_URL: string
   }
 }
 
@@ -45,6 +63,8 @@ interface IConfig {
   product?: IProduct
   defaultDestinationAsset?: string
   displayAmount?: SrcDst
+  environment: WidgetEnvironments
+  baseURL?: WidgetURLs
 }
 
 class Snap {
@@ -61,7 +81,8 @@ class Snap {
   appName: string = 'Snap Wallet'
   payee: string = ''
   intent: UserIntent = 'buy'
-  baseURL: string = _ENV.WIDGET_URL
+  baseURL?: WidgetURLs
+  environment: WidgetEnvironments = WidgetEnvironments.PRODUCTION
   focus: boolean = true
   theme?: { [cssProperty: string]: string }
   sourceAmount?: number
@@ -81,7 +102,9 @@ class Snap {
   }
 
   getConfig = (): IConfig => {
+    const baseURL = this.getBaseURL()
     return {
+      baseURL,
       wallets: this.wallets,
       appName: this.appName,
       intent: this.intent,
@@ -92,6 +115,7 @@ class Snap {
       sourceAmount: this.sourceAmount,
       defaultDestinationAsset: this.defaultDestinationAsset,
       displayAmount: this.displayAmount,
+      environment: this.environment,
     }
   }
 
@@ -106,6 +130,7 @@ class Snap {
     iframe.id = this.IFRAME_ID
     // TODO: toggle URL per env
     iframe.src = this.generateURL()
+    iframe.classList.add('snapWallet')
     iframe.frameBorder = '0'
     iframe.style.backgroundColor = 'transparent'
     iframe.style.position = 'fixed'
@@ -152,7 +177,7 @@ class Snap {
   generateURL = (config?: IConfig) => {
     config && this.setConfig(config)
     const qs = `?ts=${Date.now()}&config=${this.configToQueryString()}`
-    return `${this.baseURL}/${qs}#/`
+    return `${this.getBaseURL()}/${qs}#/`
   }
 
   getShortURL = async (config?: IConfig): Promise<string> => {
@@ -172,10 +197,37 @@ class Snap {
   }
 
   private genAPIClient = (): FluxApi => {
+    const apiBaseURL = this.getAPIBaseURL()
     const config = createConfiguration({
-      baseServer: new ServerConfiguration(_ENV.API_BASE_URL, {}),
+      baseServer: new ServerConfiguration(apiBaseURL, {}),
     })
     return new FluxApi(config)
+  }
+
+  /**
+   * Get the widget URL based on the environment
+   * @returns Widget URL
+   */
+  private getBaseURL = (): WidgetURLs => {
+    // Allow dev to override hardcoded 'sandbox' env for web
+    if (_ENV.WIDGET_URL) return _ENV.WIDGET_URL as WidgetURLs
+    if (this.environment === WidgetEnvironments.SANDBOX) {
+      return WidgetURLs.SANDBOX
+    }
+    return WidgetURLs.PRODUCTION
+  }
+
+  /**
+   * Get the API base URL based on the environment
+   * @returns API URL
+   */
+  private getAPIBaseURL = (): APIBaseURLs => {
+    // Allow dev to override hardcoded 'sandbox' env for web
+    if (_ENV.INIT_API_BASE_URL) return _ENV.INIT_API_BASE_URL as APIBaseURLs
+    if (this.environment === WidgetEnvironments.SANDBOX) {
+      return APIBaseURLs.SANDBOX
+    }
+    return APIBaseURLs.PRODUCTION
   }
 }
 

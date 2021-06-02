@@ -193,7 +193,8 @@
   <ModalHeader>Enter Your Code</ModalHeader>
   <ModalBody>
     <div class="code" in:fade={{ duration: 300 }}>
-      <Label label="Your Code">
+      <Label on:click={focusFirstInput} label="Your Code" />
+      <div class="row">
         {#each inputs as input, i}
           <Input
             id={`code-${i}`}
@@ -257,7 +258,7 @@
             }}
           />
         {/each}
-      </Label>
+      </div>
       <div class="resend" title="Check SPAM">
         Didn't get a code?
         <!-- svelte-ignore a11y-missing-attribute -->
@@ -284,6 +285,7 @@
     :global(label) {
       display: flex;
       flex-direction: row;
+      margin-bottom: 0 !important;
     }
     :global(label > span.input-label) {
       top: -2rem !important;
@@ -311,6 +313,10 @@
     }
   }
 
+  .row {
+    display: flex;
+    flex-direction: row;
+  }
   .code {
     margin: 10% 0.5rem 0 0.5rem;
   }
@@ -319,7 +325,7 @@
     justify-content: center;
     align-items: center;
     font-size: 0.95rem;
-    margin-top: 0.35rem;
+    margin-top: 0.75rem;
     & > a {
       color: var(--theme-text-color);
       margin-left: 0.25em;

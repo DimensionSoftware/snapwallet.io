@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { fly } from 'svelte/transition'
+  import { backOut, expoOut } from 'svelte/easing'
+  import Visibility from '$lib/Visibility.svelte'
   import Feature from './Feature.svelte'
   import Button from './Button.svelte'
   const scrollToTop = _ =>
@@ -42,12 +45,19 @@
   <div class="cards flex" slot="left">
     {#each cards as card, i}
       <article on:mousedown={_ => scrollTo(card.name)}>
-        <img
-          title={card.alt}
-          width="100"
-          src={`/images/${card.icon}`}
-          alt={card.title}
-        />
+        <Visibility steps={100} let:percent>
+          {#if percent > 50}
+            <img
+              in:fly={{ easing: expoOut, duration: 900 + i * 600, y: 50 }}
+              title={card.alt}
+              width="100"
+              src={`/images/${card.icon}`}
+              alt={card.title}
+            />
+          {:else}
+            <div style="height: 100px; width: 100px;" alt={card.title} />
+          {/if}
+        </Visibility>
         <h4>{card.title}</h4>
         {#if i !== cards.length - 1}
           <span />
@@ -56,55 +66,64 @@
     {/each}
   </div>
 </Feature>
-<div class="contact">
-  <Button id="contact" on:mousedown={contactUs}>Contact Us</Button>
-</div>
 <hr />
 <footer>
-  <ol>
-    <li><h2>Snap Wallet</h2></li>
-    <li>
-      <h4>
-        <a
-          title="Snap Wallet Integration Documentation"
-          href="https://snapwallet.io/docs/guide"
-          target="_blank">API Documentation</a
-        >
-      </h4>
-    </li>
-    <li>
-      <h4>
-        <a
-          title="Dimension Software on Silicon Beach"
-          href="https://dimensionsoftware.com"
-          target="_blank">Company</a
-        >
-      </h4>
-    </li>
-    <li>
-      <h4>
-        <a title="Snap Wallet Support" href="mailto:support@snapwallet.io"
-          >Support</a
-        >
-      </h4>
-    </li>
-    <li>
-      <h4>
-        <a
-          title="Snap Wallet Never Shares Your Information"
-          href="https://login.dimensionsoftware.com/privacy"
-          target="_blank">Privacy</a
-        >
-      </h4>
-    </li>
-  </ol>
+  <div class="contact">
+    <Button id="footer_contact" on:mousedown={contactUs}>Contact Us</Button>
+  </div>
+  <Visibility steps={100} let:percent>
+    {#if percent > 50}
+      <ol
+        in:fly={{ easing: backOut, duration: 350, opacity: 0, x: -50 }}
+        out:fly={{ easing: expoOut, duration: 500, y: 0 }}
+      >
+        <li><h2>Snap Wallet</h2></li>
+        <li>
+          <h4>
+            <a
+              title="Snap Wallet Integration Documentation"
+              href="https://snapwallet.io/docs/guide"
+              target="_blank">API Documentation</a
+            >
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a
+              title="Dimension Software on Silicon Beach"
+              href="https://dimensionsoftware.com"
+              target="_blank">Company</a
+            >
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a title="Snap Wallet Support" href="mailto:support@snapwallet.io"
+              >Support</a
+            >
+          </h4>
+        </li>
+        <li>
+          <h4>
+            <a
+              title="Snap Wallet Never Shares Your Information"
+              href="https://login.dimensionsoftware.com/privacy"
+              target="_blank">Privacy</a
+            >
+          </h4>
+        </li>
+      </ol>
+    {:else}
+      <ol style="height: 300px;" />
+    {/if}
+  </Visibility>
   <p title="Scroll to Top!" on:mousedown={scrollToTop}>
     <big
       >Snap Wallet
       <img height="24px" width="24px" title="Love" alt="Love" src="/love.svg" />
       Silicon Beach, CA
     </big>
-    <br /><small
+    <small
       ><a
         title="Dimension Software on Silicon Beach, Los Angeles!"
         href="https://dimensionsoftware.com"
@@ -150,7 +169,7 @@
     background: #fff;
     margin: 0;
     border: none;
-    box-shadow: 0 0 50px 10px #000;
+    box-shadow: 0 50px 30px 0 rgba(0, 0, 0, 0.5);
   }
   :global(.started article) {
     position: relative;
@@ -161,7 +180,7 @@
     z-index: 2;
     left: calc(50% - 119px);
   }
-  :global(.contact > button) {
+  :global(footer .contact > button) {
     color: #fff !important;
     font-size: 1.15rem !important;
     background: rgb(241, 7, 28) !important;
@@ -171,47 +190,28 @@
       rgb(241, 7, 28) 75%
     ) !important;
     border-color: rgb(222, 49, 45) !important;
-    top: -4.25rem;
-    position: relative;
-    z-index: 1;
+    top: 3.25rem;
+    position: absolute;
+    z-index: 4;
     padding: 1rem 4rem;
     left: auto;
+    top: -3rem;
     right: auto;
     margin: 0 auto;
     text-align: center;
     border-radius: 4.25rem;
     transition: box-shadow 0.3s ease-out;
-    &:hover {
-      transition: none;
-      box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.25) !important;
-    }
   }
-  :global(body) {
-    margin-bottom: 433px !important;
+  :global(footer .contact > button:hover) {
+    transition: none;
+    box-shadow: 0 0 0 3px #fffc00 !important;
   }
   footer {
-    position: fixed;
-    z-index: -1;
-    bottom: 0;
-    left: 0;
-    right: 0;
     margin-top: 0.05rem;
-    overflow: hidden;
     padding: 1.5rem 0 1rem;
     background: #000;
-    opacity: 0;
-    animation: backgroundFadeIn 0.5s ease-in 2s forwards;
+    border-bottom: 1px solid rgba(#fffc00, 0.25);
     color: rgba(255, 255, 255, 0.8);
-    &:before {
-      content: '';
-      position: absolute;
-      top: 0;
-      right: 0;
-      left: 0;
-      bottom: 0;
-      opacity: 0.075;
-      background-image: url('/static/bg.png');
-    }
     ol {
       position: relative;
       z-index: 1;
@@ -283,7 +283,12 @@
       text-align: center;
       vertical-align: middle;
       cursor: pointer;
+      small {
+        display: block;
+      }
       big {
+        display: block;
+        margin-bottom: 0.75rem;
         font-size: 0.9rem;
         color: rgba(255, 255, 255, 0.8);
       }

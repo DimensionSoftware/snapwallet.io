@@ -431,9 +431,6 @@
             ? 'Preview'
             : 'Continue'}
         </span>
-        {#if isLoggedIn}
-          <FaIcon data={faLock} />
-        {/if}
       </div>
     </Button>
   </ModalFooter>

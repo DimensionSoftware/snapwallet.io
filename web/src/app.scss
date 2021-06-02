@@ -45,21 +45,32 @@ html {
     cursor: cell;
     padding: 0;
     margin: 0;
-    &:before {
+    opacity: 0;
+    animation: backgroundFadeIn 1.25s ease-out 0.01s forwards;
+    > .top-bg {
       content: '';
       position: absolute;
-      top: 0;
+      top: -100vh;
       right: 0;
       left: 0;
-      bottom: 0;
+      z-index: -1;
+      bottom: -340vh;
       background-image: url('/static/bg.png');
-      opacity: 0;
-      animation: backgroundFadeUp 1.25s ease-out 0.01s forwards;
+      background-repeat: repeat;
+      will-change: transform;
     }
     main {
       height: 100%;
       width: 100%;
       max-width: 960px;
+    }
+  }
+  @media screen and (max-width: 1000px) {
+    body > .top-bg {
+      bottom: -30vh;
+    }
+    .wrapper {
+      display: none !important;
     }
   }
 }

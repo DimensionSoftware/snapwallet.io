@@ -25,10 +25,11 @@
     $debitCardStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   const handleNextStep = async () => {
-    const phoneNumber = `${$debitCardStore.phoneNumberCountry?.dial_code}${$debitCardStore.phoneNumber}`.replace(
-      /(-|\s)/g,
-      '',
-    )
+    const phoneNumber =
+      `${$debitCardStore.phoneNumberCountry?.dial_code}${$debitCardStore.phoneNumber}`.replace(
+        /(-|\s)/g,
+        '',
+      )
     const { isValid, error } = validateForm(debitCardValidationRules, {
       phoneNumber,
       firstName: $debitCardStore.firstName,

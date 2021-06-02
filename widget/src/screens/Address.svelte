@@ -204,7 +204,10 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isSubmittingProfile} on:mousedown={handleNextStep}
+    <Button
+      id="address_save"
+      isLoading={isSubmittingProfile}
+      on:mousedown={handleNextStep}
       >{isSubmittingProfile ? 'Saving' : 'Save'}</Button
     >
   </ModalFooter>

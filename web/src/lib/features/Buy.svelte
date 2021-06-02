@@ -12,15 +12,16 @@
       themeColor = '#fffc00',
       snap = new (window as any).Snap({
         appName,
+        environment: 'sandbox',
         intent: 'buy',
         wallets: [],
         focus: false,
         theme: {
-          modalBackground: 'rgba(40,40,40,.9)',
-          modalPopupBackground: 'rgba(50,50,50,.9)',
+          modalBackground: 'rgba(0,0,0,.8)',
+          modalPopupBackground: 'rgba(10,10,10,.85)',
           color: 'rgba(0,0,0,.9)',
           badgeTextColor: '#333',
-          colorLightened: 'rgba(5,5,5,.8)',
+          colorLightened: 'rgba(255,252,0,.3)',
           shadowBottomColor: 'rgba(0,0,0,.25)',
           colorInverse: '#fff',
           buttonColor: themeColor,
@@ -49,15 +50,12 @@
       false,
     )
     ifr.src = snap.generateURL()
+    ifr.classList.add('snapWallet')
     // Open using a QR code
     const canvas = document.getElementById('buy-qr-canvas')
     snap.createQR({
-      radius: 0.5, // 0.0 to 0.5
-      ecLevel: 'H', // L, M, Q, H
-      // fill: '#F1071C',
-      fill: '#ffffff',
-      background: null, // transparent default
-      size: 75, // in pixels
+      foregroundColor: '#F1071C',
+      backgroundColor: null, // transparent default
       element: canvas,
       pixelSize: 100,
     })

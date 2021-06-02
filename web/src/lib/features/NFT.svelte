@@ -7,6 +7,7 @@
 
   const config = {
     appName: 'NFT Checkout',
+    environment: 'sandbox',
     focus: true,
     product: {
       // imageURL:
@@ -95,7 +96,7 @@
         <span>ART</span>
       </div>
       <Heart />
-      <Button>Buy</Button>
+      <Button id="nft_buy">Buy</Button>
     </div>
   </div>
 </Feature>
@@ -172,8 +173,10 @@
     top: -3.5rem;
     width: 100%;
     border-radius: 0.25rem;
+    transition: box-shadow 0.3s ease-out, transform 0.3s ease-in;
   }
   :global(.nft button:hover) {
+    transition: none;
     box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.25) !important;
   }
   .qr {
@@ -193,11 +196,20 @@
   .tags {
     margin-bottom: 1rem;
     span {
+      position: relative;
+      z-index: 1;
       font-size: 0.9rem;
       border: 1px solid rgba(0, 0, 0, 0.2);
       padding: 0.2rem 1rem;
       margin-right: 0.25rem;
       border-radius: 5rem;
+      transition: box-shadow 0.2s ease-out, border 0.3s ease-out;
+      &:hover {
+        background: #fffc00;
+        border: 1px solid #fffc00;
+        box-shadow: 0 0 0 2px #fffc00;
+        transition: none;
+      }
     }
   }
 </style>

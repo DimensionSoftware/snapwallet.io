@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { scale, fly } from 'svelte/transition'
+  import { backOut, expoIn, expoOut } from 'svelte/easing'
+  import Visibility from '$lib/Visibility.svelte'
   export let title
   export let description
   export let docLink
@@ -14,7 +17,24 @@
 <section class={name} class:center class:hasImage class:hasBackground>
   <article>
     {#if icon}
-      <img class="icon" src={icon} />
+      <Visibility steps={100} let:percent>
+        {#if percent > 80}
+          <img
+            in:scale={{ opacity: 1, easing: backOut, duration: 750 }}
+            out:fly={{ opacity: 0, easing: expoOut, duration: 250, y: -50 }}
+            class="icon"
+            src={icon}
+            alt="Snap Wallet"
+          />
+        {:else}
+          <img
+            class="icon"
+            src={icon}
+            alt="Snap Wallet"
+            style="opacity: 0;height: 100px; width: 100px;"
+          />
+        {/if}
+      </Visibility>
     {/if}
     <h2 class:right class:blur={hasImage}>
       {title}
@@ -62,6 +82,7 @@
     flex-direction: column;
     padding: 12rem 0 7rem 0;
     position: relative;
+    z-index: 1;
     &.center {
       article {
         h2,
@@ -77,16 +98,17 @@
       }
     }
     &.hasImage {
-      &:before {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        left: 0;
-        bottom: 0;
-        transform: rotate(180deg);
-        background-image: url('/static/bg.png');
-      }
+      background: transparent;
+      // &:before {
+      //   content: '';
+      //   position: absolute;
+      //   top: 0;
+      //   right: 0;
+      //   left: 0;
+      //   bottom: 0;
+      //   transform: rotate(180deg);
+      //   background-image: url('/static/bg.png');
+      // }
     }
     &.hasBackground article {
       padding: 3rem;
@@ -101,7 +123,7 @@
       .icon {
         position: absolute;
         top: -11.8rem;
-        left: calc(-5% - 150px);
+        left: calc(-11% - 150px);
         height: 100px;
         width: 100px;
       }
@@ -109,7 +131,7 @@
         position: absolute;
         top: -5.5rem;
         left: -5%;
-        margin-left: -2rem;
+        margin-left: -5rem;
         color: #000;
         font-size: 2.25rem;
         font-weight: bold;
@@ -124,7 +146,7 @@
         left: -5%;
         max-width: 75%;
         opacity: 0.8;
-        margin-left: -2rem;
+        margin-left: -5rem;
         font-size: 1.4rem;
         font-weight: 200;
       }
@@ -157,6 +179,7 @@
       transition: background 0.3s ease-out, box-shadow 0.2s ease-in;
       overflow: hidden;
       backdrop-filter: blur(5px) contrast(110%);
+      -webkit-backdrop-filter: blur(5px) contrast(110%);
       &:hover {
         transition: none;
         background-color: rgba(255, 255, 255, 0.85);
