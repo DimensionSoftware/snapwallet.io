@@ -22,10 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/dev'
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/dead-simple-nodejs@v0
+      - uses: dreamcodez/dead-simple-nodejs@0.1
         with:
           NODE_VERSION: 16.1.0
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
         with:
           GCP_PROJECT_ID: silken-phalanx-305703
@@ -44,10 +44,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/dead-simple-nodejs@v0
+      - uses: dreamcodez/dead-simple-nodejs@0.1
         with:
           NODE_VERSION: 16.1.0
+      - uses: actions/checkout@v2
       - uses: ./.github/actions/deploy-web
         with:
           GCP_PROJECT_ID: ds-snap-sandbox
@@ -62,10 +62,10 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/master'
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/dead-simple-nodejs@v0
+      - uses: dreamcodez/dead-simple-nodejs@0.1
         with:
           NODE_VERSION: 16.1.0
+      - uses: actions/checkout@v2
       - run: |
           set -x
           cat ~/.profile
