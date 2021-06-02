@@ -201,10 +201,10 @@
     text-align: center;
     border-radius: 4.25rem;
     transition: box-shadow 0.3s ease-out;
-    &:hover {
-      transition: none;
-      box-shadow: 0 0 0 3px #fffc00 !important;
-    }
+  }
+  :global(footer .contact > button:hover) {
+    transition: none;
+    box-shadow: 0 0 0 3px #fffc00 !important;
   }
   footer {
     margin-top: 0.05rem;
