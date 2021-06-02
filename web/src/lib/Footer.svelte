@@ -66,11 +66,11 @@
     {/each}
   </div>
 </Feature>
-<div class="contact">
-  <Button on:mousedown={contactUs}>Contact Us</Button>
-</div>
 <hr />
 <footer>
+  <div class="contact">
+    <Button id="footer_contact" on:mousedown={contactUs}>Contact Us</Button>
+  </div>
   <Visibility steps={100} let:percent>
     {#if percent > 50}
       <ol
@@ -180,7 +180,7 @@
     z-index: 2;
     left: calc(50% - 119px);
   }
-  :global(.contact > button) {
+  :global(footer .contact > button) {
     color: #fff !important;
     font-size: 1.15rem !important;
     background: rgb(241, 7, 28) !important;
@@ -195,6 +195,7 @@
     z-index: 4;
     padding: 1rem 4rem;
     left: auto;
+    top: -3rem;
     right: auto;
     margin: 0 auto;
     text-align: center;
@@ -207,7 +208,6 @@
   }
   footer {
     margin-top: 0.05rem;
-    overflow: hidden;
     padding: 1.5rem 0 1rem;
     background: #000;
     border-bottom: 1px solid rgba(#fffc00, 0.25);
