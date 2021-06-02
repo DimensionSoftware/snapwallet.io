@@ -34,11 +34,11 @@
         wallets: [],
         focus: false,
         theme: {
-          modalBackground: 'rgba(40,40,40,.9)',
-          modalPopupBackground: 'rgba(50,50,50,.9)',
+          modalBackground: 'rgba(0,0,0,.8)',
+          modalPopupBackground: 'rgba(10,10,10,.85)',
           color: 'rgba(0,0,0,.9)',
           badgeTextColor: '#333',
-          colorLightened: 'rgba(5,5,5,.8)',
+          colorLightened: 'rgba(255,252,0,.3)',
           shadowBottomColor: 'rgba(0,0,0,.25)',
           colorInverse: '#fff',
           buttonColor: themeColor,
@@ -68,6 +68,7 @@
     )
 
     ifr.onload = () => {
+      liquidVisible = true
       ifr.classList.add('loaded')
     }
     ifr.src = SnapWallet.generateURL()
@@ -82,7 +83,6 @@
 ▀▀▀▀▀• ▀▀▀▀▀  █▪▀▀▀ ▀▀▀ ▀▀ █▪ ▀▀▀▀ ▀▀▀ ▀█▄▀▪▀▀ █▪
 Hey, you-- join us!  https://dimensionsoftware.com
       `)
-    setTimeout(_ => (liquidVisible = true), 3000)
   })
 </script>
 
@@ -186,7 +186,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     h1 {
       font-weight: 300;
       font-size: 2.5rem;
-      margin-left: -3rem;
+      margin-left: -6rem;
       margin-bottom: 1.15rem;
       b {
         font-weight: bold;
@@ -194,7 +194,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
     h2 {
       margin: 0 0 1.25rem;
-      margin-left: -3rem;
+      margin-left: -6rem;
       font-weight: 500;
       font-size: 1.25rem;
       :global(div) {
@@ -210,7 +210,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     article {
       font-size: 1.25rem;
       margin: 0;
-      margin-left: -3rem;
+      margin-left: -6rem;
       max-width: 400px;
       line-height: 1.35;
     }

@@ -41,7 +41,7 @@
         <Visibility steps={100} let:percent>
           {#if percent > 50}
             <img
-              in:fly={{ easing: expoOut, duration: 200 + i * 200, x: -75 }}
+              in:fly={{ easing: expoOut, duration: 500 + i * 500, x: -75 }}
               height="300"
               width="300"
               src={`/images/${card.icon}`}

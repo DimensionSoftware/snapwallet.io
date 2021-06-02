@@ -48,7 +48,7 @@
         <Visibility steps={100} let:percent>
           {#if percent > 50}
             <img
-              in:fly={{ easing: expoOut, duration: 750 + i * 500, y: 50 }}
+              in:fly={{ easing: expoOut, duration: 900 + i * 600, y: 50 }}
               title={card.alt}
               width="100"
               src={`/images/${card.icon}`}
@@ -202,7 +202,7 @@
     transition: box-shadow 0.3s ease-out;
     &:hover {
       transition: none;
-      box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.25) !important;
+      box-shadow: 0 0 0 3px #fffc00 !important;
     }
   }
   footer {

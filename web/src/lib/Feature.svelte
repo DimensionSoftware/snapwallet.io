@@ -123,7 +123,7 @@
       .icon {
         position: absolute;
         top: -11.8rem;
-        left: calc(-5% - 150px);
+        left: calc(-11% - 150px);
         height: 100px;
         width: 100px;
       }
@@ -131,7 +131,7 @@
         position: absolute;
         top: -5.5rem;
         left: -5%;
-        margin-left: -2rem;
+        margin-left: -5rem;
         color: #000;
         font-size: 2.25rem;
         font-weight: bold;
@@ -146,7 +146,7 @@
         left: -5%;
         max-width: 75%;
         opacity: 0.8;
-        margin-left: -2rem;
+        margin-left: -5rem;
         font-size: 1.4rem;
         font-weight: 200;
       }

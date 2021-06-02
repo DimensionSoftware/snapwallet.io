@@ -45,6 +45,7 @@
     width: 100%;
   }
   .page2 {
+    opacity: 1 !important;
     background: #fffc00;
     text-align: center;
     font-size: 2rem;

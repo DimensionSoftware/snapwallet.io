@@ -8,9 +8,9 @@
   export let height = 500
   export let step = 10
   export let position
-  export let triggerValue = 250
-  export let precision = 3
-  export let slideDuration = 2000
+  export let triggerValue = 350
+  export let precision = 5
+  export let slideDuration = 1000
   export let slideEasing = elasticOut
   export let buttonSize = 10
   export let veilExpansionStiffness = 0.03
