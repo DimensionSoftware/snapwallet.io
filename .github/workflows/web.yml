@@ -54,7 +54,6 @@ jobs:
           GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY}}
           BUILD_SCRIPT: bin/build-sandbox-web
           API_BASE_URL: https://sandbox-api.snapwallet.io
-          WIDGET_URL: https://sandbox.snapwallet.io/widget
           WYRE_BASE_URL: https://api.testwyre.com
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
   deploy-production-web: 
@@ -77,6 +76,5 @@ jobs:
           GCP_SA_KEY: ${{ secrets.PRODUCTION_GCP_SA_KEY}}
           BUILD_SCRIPT: bin/build-web
           API_BASE_URL: https://api.snapwallet.io
-          WIDGET_URL: https://snapwallet.io/widget
           WYRE_BASE_URL: https://api.testwyre.com
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info'
