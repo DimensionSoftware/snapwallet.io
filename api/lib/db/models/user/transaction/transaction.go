@@ -214,6 +214,20 @@ func (trx Transaction) EnrichWithCreateWalletOrderReservationResponse(in *wyre.C
 	return out
 }
 
+func (trx Transaction) EnrichWithCreateWalletOrderRequest(in *wyre.CreateWalletOrderRequest) Transaction {
+	out := trx
+
+	out.Partner = PartnerWyre
+
+	{
+		num := in.DebitCard.Number
+		last4 := num[len(num)-3:]
+		out.SourceName = fmt.Sprintf("Debit Card ending with %s", last4)
+	}
+
+	return out
+}
+
 func (trx Transaction) EnrichWithWalletOrder(in *wyre.WalletOrder) Transaction {
 	out := trx
 

@@ -1957,8 +1957,7 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 
 	card := req.Card
 
-	// Create the order
-	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
+	orderRequest := wyre.CreateWalletOrderRequest{
 		ReservationID:  req.ReservationId,
 		SourceCurrency: req.SourceCurrency,
 		PurchaseAmount: req.SourceAmount,
@@ -1984,7 +1983,10 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 			ExpirationYear:   card.ExpirationYear,
 			VerificationCode: card.VerificationCode,
 		},
-	})
+	}
+
+	// Create the order
+	orderResponse, err := s.Wyre.CreateWalletOrder(orderRequest)
 	if err != nil {
 		return nil, err
 	}
@@ -2001,7 +2003,10 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 			return nil
 		}
 
-		trx := existingTrx.EnrichWithWalletOrder(orderResponse)
+		trx := *existingTrx
+		trx = trx.EnrichWithCreateWalletOrderRequest(&orderRequest)
+		trx = trx.EnrichWithWalletOrder(orderResponse)
+
 		trx.Status = transaction.StatusConfirmed
 
 		err = s.Db.SaveTransaction(ctx, tx, u.ID, &trx)
