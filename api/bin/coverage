@@ -1,3 +1,4 @@
 #!/bin/bash -xeu
 
-bin/test -cover -coverprofile=coverage.txt $@
+bin/test -cover -coverprofile coverage.txt -outputdir . $@
+go tool cover -html coverage.txt -o coverage.html
