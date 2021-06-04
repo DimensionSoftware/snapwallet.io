@@ -167,8 +167,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
     -webkit-backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
   }
   :global(.blur) {
-    backdrop-filter: blur(8px) !important;
-    -webkit-backdrop-filter: blur(8px) !important;
+    // backdrop-filter: blur(4px) !important;
+    // -webkit-backdrop-filter: blur(4px) !important;
   }
   main {
     position: relative;
