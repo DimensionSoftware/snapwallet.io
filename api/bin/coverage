@@ -1,4 +1,4 @@
 #!/bin/bash -xeu
 
-bin/test -cover -coverprofile coverage.txt -outputdir . $@
-go tool cover -html coverage.txt -o coverage.html
+bin/test -cover -coverprofile coverage.txt $@
+#go tool cover -html coverage.txt -o coverage.html
