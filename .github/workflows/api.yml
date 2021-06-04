@@ -28,6 +28,8 @@ jobs:
         working-directory: api
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+          # https://github.com/codecov/codecov-action/issues/85#issuecomment-652704304
+          GITHUB_ACTIONS: ''
   build-api:
     name: "Build/Push Docker Image"
     needs: test
