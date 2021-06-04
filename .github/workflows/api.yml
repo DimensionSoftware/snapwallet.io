@@ -23,8 +23,10 @@ jobs:
           sleep 2
 
           . .env.ci
-          make test
+          make coverage
         working-directory: api
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   build-api:
     name: "Build/Push Docker Image"
     needs: test
