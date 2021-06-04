@@ -12,6 +12,6 @@
   "author": "",
   "license": "UNLICENSED",
   "dependencies": {
-    "honkit": "^3.6.19"
+    "honkit": "^3.6.20"
   }
 }
