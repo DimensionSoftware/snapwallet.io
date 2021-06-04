@@ -6,7 +6,7 @@ run: grpcdevserver grpcgateway
 test:
 	bin/test
 
-coverage: test
+coverage:
 	bin/coverage
 
 wire:
