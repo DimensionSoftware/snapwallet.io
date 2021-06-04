@@ -12,6 +12,8 @@ import (
 	"github.com/lithammer/shortuuid/v3"
 
 	"cloud.google.com/go/firestore"
+	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
+	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/usedrefreshtoken"
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -22,6 +24,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/email"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/phone"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/unmarshal"
+	"github.com/khoerling/flux/api/lib/db/models/user/transaction"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/khoerling/flux/api/lib/encryption"
@@ -35,6 +38,69 @@ import (
 type Db struct {
 	Firestore         *firestore.Client
 	EncryptionManager *encryption.Manager
+}
+
+// will not save if item is already existing; returns short id of immutable first item
+func (db Db) SaveGotoConfig(ctx context.Context, g *gotoconfig.Config) (gotoconfig.ShortID, error) {
+	ref := db.Firestore.Collection("goto-configs").Doc(string(g.ID))
+
+	var out gotoconfig.ShortID
+
+	err := db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		existingDoc, err := tx.Get(ref)
+		if status.Code(err) == codes.NotFound {
+			err = tx.Set(ref, g)
+			if err != nil {
+				return err
+			}
+
+			out = g.ShortID
+			return nil
+		}
+		if err != nil {
+			return err
+		}
+
+		var existingG gotoconfig.Config
+		err = existingDoc.DataTo(&existingG)
+		if err != nil {
+			return err
+		}
+
+		out = existingG.ShortID
+		return nil
+	})
+	if err != nil {
+		return "", err
+	}
+
+	return out, nil
+}
+
+func (db Db) GetGotoConfigByShortID(ctx context.Context, shortID gotoconfig.ShortID) (*gotoconfig.Config, error) {
+	var err error
+
+	table := db.Firestore.Collection("goto-configs")
+
+	records, err := table.
+		Where("shortID", "==", shortID).
+		Limit(1).
+		Documents(ctx).
+		GetAll()
+	if err != nil {
+		return nil, err
+	}
+	if len(records) == 1 {
+		var g gotoconfig.Config
+		err := records[0].DataTo(&g)
+		if err != nil {
+			return nil, err
+		}
+
+		return &g, nil
+	}
+
+	return nil, nil
 }
 
 // CreateOneTimePasscode stores a record of a one-time-password request for verification later
@@ -77,6 +143,132 @@ func (db Db) SaveUser(ctx context.Context, tx *firestore.Transaction, u *user.Us
 	}
 
 	return err
+}
+
+func (db Db) SaveJob(ctx context.Context, tx *firestore.Transaction, j *job.Job) error {
+	var err error
+
+	ref := db.Firestore.Collection("jobs").Doc(string(j.ID))
+	if tx == nil {
+		_, err = ref.Set(ctx, j)
+	} else {
+		err = tx.Set(ref, j)
+	}
+
+	return err
+}
+
+func (db Db) SaveTransaction(ctx context.Context, tx *firestore.Transaction, userID user.ID, transaction *transaction.Transaction) error {
+	enc, err := transaction.Encrypt(db.EncryptionManager, userID)
+	if err != nil {
+		return err
+	}
+
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("transactions").Doc(string(transaction.ID))
+	if tx == nil {
+		_, err = ref.Set(ctx, enc)
+	} else {
+		err = tx.Set(ref, enc)
+	}
+
+	return err
+}
+
+func (db Db) GetTransactions(ctx context.Context, userID user.ID) (*transaction.Transactions, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("transactions")
+
+	docs, err := ref.Documents(ctx).GetAll()
+	if err != nil {
+		return nil, err
+	}
+
+	var out transaction.Transactions
+
+	for _, doc := range docs {
+		var enc transaction.EncryptedTransaction
+
+		err := doc.DataTo(&enc)
+		if err != nil {
+			return nil, err
+		}
+
+		transaction, err := enc.Decrypt(db.EncryptionManager, userID)
+		if err != nil {
+			return nil, err
+		}
+
+		out = append(out, *transaction)
+	}
+
+	return &out, nil
+}
+
+func (db Db) GetTransactionByExternalId(ctx context.Context, tx *firestore.Transaction, userID user.ID, externalID transaction.ExternalID) (*transaction.Transaction, error) {
+	ref := db.Firestore.Collection("users").Doc(string(userID)).Collection("transactions").Where("externalIDs", "array-contains", externalID).Limit(1)
+
+	var (
+		docs []*firestore.DocumentSnapshot
+		err  error
+	)
+
+	if tx == nil {
+		docs, err = ref.Documents(ctx).GetAll()
+	} else {
+		docs, err = tx.Documents(ref).GetAll()
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var out transaction.Transactions
+
+	for _, doc := range docs {
+		var enc transaction.EncryptedTransaction
+
+		err := doc.DataTo(&enc)
+		if err != nil {
+			return nil, err
+		}
+
+		transaction, err := enc.Decrypt(db.EncryptionManager, userID)
+		if err != nil {
+			return nil, err
+		}
+
+		out = append(out, *transaction)
+	}
+
+	if len(out) > 0 {
+		return &out[0], nil
+
+	} else {
+		return nil, nil
+	}
+}
+
+func (db Db) GetJobByKindAndStatusAndRelatedId(ctx context.Context, kind job.Kind, status job.Status, relatedID string) (*job.Job, error) {
+	table := db.Firestore.Collection("jobs").
+		Where("kind", "==", kind).
+		Where("status", "==", status).
+		Where("relatedIDs", "array-contains", relatedID).
+		Documents(ctx)
+
+	snap, err := table.Next()
+	if err == iterator.Done {
+		// not found
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	var job job.Job
+	err = snap.DataTo(&job)
+	if err != nil {
+		return nil, err
+	}
+
+	return &job, nil
 }
 
 // SaveFileMetadata saves file metadata
@@ -156,6 +348,7 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 	log.Printf("user??? : %#v\n", u)
 
 	err = db.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		changed := false
 		pdatas, err := db.GetAllProfileData(ctx, tx, u.ID)
 		if err != nil {
 			return err
@@ -165,6 +358,7 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			existingPdata := pdatas.FilterKindPhone().FindByPhone(emailOrPhone)
 
 			if existingPdata == nil {
+				changed = true
 				pdatas = append(pdatas, phone.ProfileDataPhone{
 					CommonProfileData: common.CommonProfileData{
 						ID:        common.ProfileDataID(shortuuid.New()),
@@ -178,6 +372,7 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			existingPdata := pdatas.FilterKindEmail().FindByEmail(emailOrPhone)
 
 			if existingPdata == nil {
+				changed = true
 				pdatas = append(pdatas, email.ProfileDataEmail{
 					CommonProfileData: common.CommonProfileData{
 						ID:        common.ProfileDataID(shortuuid.New()),
@@ -189,9 +384,11 @@ func (db Db) GetOrCreateUser(ctx context.Context, loginKind onetimepasscode.Logi
 			}
 		}
 
-		_, err = db.SaveProfileDatas(ctx, tx, u.ID, pdatas)
-		if err != nil {
-			return err
+		if changed {
+			_, err = db.SaveProfileDatas(ctx, tx, u.ID, pdatas)
+			if err != nil {
+				return err
+			}
 		}
 		return nil
 	})
@@ -240,25 +437,18 @@ func (db Db) GetUserByID(ctx context.Context, tx *firestore.Transaction, userID 
 }
 
 // SavePlaidItem ...
-func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, itemID item.ID, accessToken string, accountIDs []string) (*item.Item, error) {
-	item := item.Item{
-		ID:          itemID,
-		AccountIDs:  accountIDs,
-		AccessToken: accessToken,
-		CreatedAt:   time.Now(),
-	}
-
+func (db Db) SavePlaidItem(ctx context.Context, userID user.ID, item *item.Item) error {
 	encryptedItem, err := item.Encrypt(db.EncryptionManager, userID)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	_, err = db.Firestore.Collection("users").Doc(string(userID)).Collection("plaidItems").Doc(string(itemID)).Set(ctx, encryptedItem)
+	_, err = db.Firestore.Collection("users").Doc(string(userID)).Collection("plaidItems").Doc(string(item.ID)).Set(ctx, encryptedItem)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return &item, nil
+	return nil
 }
 
 // SaveWyreAccount ...
@@ -827,21 +1017,38 @@ func (db Db) CleanAgedPasscodes(ctx context.Context) (int, error) {
 
 }
 
-/*
+// GetUserByID gets a user object by id
+func (db Db) GetUserByWyreAccountID(ctx context.Context, wyreAccountID account.ID) (*user.User, error) {
+	if wyreAccountID == "" {
+		return nil, nil
 
-snap, err := passcodes.Next()
-if err == iterator.Done {
-return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(onetimepasscode.LoginKindPhone))
-}
-if err != nil {
-log.Println(err)
-return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
-}
+	}
 
-var passcode onetimepasscode.OneTimePasscode
-err = snap.DataTo(&passcode)
-if err != nil {
-log.Println(err)
-return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedGeneric())
+	ref := db.Firestore.CollectionGroup("wyreAccounts")
+	docs := ref.Where("id", "==", wyreAccountID).Documents(ctx)
+	snap, err := docs.Next()
+	if err == iterator.Done {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	parentSnap, err := snap.Ref.Parent.Parent.Get(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	var encU user.EncryptedUser
+	err = parentSnap.DataTo(&encU)
+	if err != nil {
+		return nil, err
+	}
+
+	u, err := encU.Decrypt(db.EncryptionManager, encU.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return u, nil
 }
-*/
