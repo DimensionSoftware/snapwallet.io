@@ -1,16 +1,8 @@
 #!/bin/bash -eu
 
-COVERPKG="./lib/auth/..."
-COVERPKG="$COVERPKG,./lib/db/..."
-COVERPKG="$COVERPKG,./lib/encryption/..."
-COVERPKG="$COVERPKG,./lib/hashing/..."
-COVERPKG="$COVERPKG,./lib/integrations/..."
-COVERPKG="$COVERPKG,./lib/server/..."
-
 set -x
 go test -cover \
   -coverprofile cover.out \
-  -coverpkg="$COVERPKG" \
   -v \
   ./...
 
