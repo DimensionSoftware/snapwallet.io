@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
-	"github.com/lithammer/shortuuid/v3"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -29,9 +28,9 @@ var _ = Describe("FirebaseDb", func() {
 			Expect(err).ShouldNot(HaveOccurred())
 		})
 
-		It("New", func() {
+		It("New ID returns ShortID", func() {
 			returnedShortID, err := testManager.SaveGotoConfig(context.Background(), &gotoconfig.Config{
-				ID:      gotoconfig.ID(shortuuid.New()),
+				ID:      id,
 				ShortID: shortID,
 				Config:  config,
 			})
@@ -40,7 +39,7 @@ var _ = Describe("FirebaseDb", func() {
 			Expect(returnedShortID).Should(Equal(shortID))
 		})
 
-		It("Existing", func() {
+		It("Existing ID returns same ShortID instead of new one", func() {
 			_, err := testManager.SaveGotoConfig(context.Background(), &gotoconfig.Config{
 				ID:      id,
 				ShortID: shortID,
