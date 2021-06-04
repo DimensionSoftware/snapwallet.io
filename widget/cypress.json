@@ -1,5 +1,3 @@
 {
-  "experimentalComponentTesting": true,
-  "componentFolder": "src",
   "testFiles": "**/*spec.js"
 }
