@@ -15,9 +15,7 @@
 
   let ifr: HTMLIFrameElement
   let liquidVisible = false
-  let sy
-
-  $: isRotated = sy > 900
+  let sy, isRotated
 
   onMount(async () => {
     await import('flux-init')
@@ -84,6 +82,16 @@
 Hey, you-- join us!  https://dimensionsoftware.com
       `)
   })
+
+  // init parallax
+  let frame
+  function loop() {
+    frame = requestAnimationFrame(loop)
+    sy = window.scrollY
+    isRotated = sy > 900
+    return () => cancelAnimationFrame(frame)
+  }
+  loop()
 </script>
 
 <main>
@@ -131,8 +139,6 @@ Hey, you-- join us!  https://dimensionsoftware.com
 <Donation />
 <Buy />
 <Footer />
-
-<svelte:window bind:scrollY={sy} />
 
 <span
   class="top-bg"
