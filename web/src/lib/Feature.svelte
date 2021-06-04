@@ -168,7 +168,6 @@
     .docs-link {
       position: relative;
       margin: 1rem auto 0;
-      box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.1);
       border-radius: 2rem;
       padding: 0.25rem 2rem;
       text-align: center;
@@ -178,12 +177,11 @@
       color: #222;
       transition: background 0.3s ease-out, box-shadow 0.2s ease-in;
       overflow: hidden;
-      backdrop-filter: blur(5px) contrast(110%);
-      -webkit-backdrop-filter: blur(5px) contrast(110%);
+      background: rgba(255, 255, 255, 0.4);
       &:hover {
         transition: none;
         background-color: rgba(255, 255, 255, 0.85);
-        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.3);
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
       }
       &:active {
         animation: scaleIn 0.25s ease-out;

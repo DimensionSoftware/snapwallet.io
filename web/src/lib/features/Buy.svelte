@@ -171,7 +171,7 @@
     background: rgba(0, 0, 0, 1);
     display: block;
     border-radius: 100%;
-    padding: 1.25rem;
+    padding: 1.5rem;
     overflow: hidden;
     #buy-qr-canvas {
       padding: 0;
