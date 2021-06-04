@@ -3,6 +3,6 @@
 /grpcgateway
 /secrets/
 /*.jar
-/cover.out
+/coverage.txt
 /coverage.html
 lib/google

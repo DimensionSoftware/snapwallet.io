@@ -1,8 +1,4 @@
-#!/bin/bash -eu
+#!/bin/bash -xeu
 
-set -x
-go test -cover \
-  -coverprofile cover.out \
-  -v \
-  ./...
-
+bin/test -coverprofile coverage.txt $@
+go tool cover -html coverage.txt -o coverage.html

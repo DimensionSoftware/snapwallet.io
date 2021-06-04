@@ -20,6 +20,8 @@ require (
 	github.com/lithammer/shortuuid v3.0.0+incompatible
 	github.com/lithammer/shortuuid/v3 v3.0.6
 	github.com/nyaruka/phonenumbers v1.0.66
+	github.com/onsi/ginkgo v1.16.4
+	github.com/onsi/gomega v1.10.1
 	github.com/plaid/plaid-go v0.0.0-20210216195344-700b8cfc627d
 	github.com/pusher/pusher-http-go v4.0.1+incompatible
 	github.com/sendgrid/rest v2.6.2+incompatible // indirect

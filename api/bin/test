@@ -1,5 +1,3 @@
-#!/bin/bash -eu
+#!/bin/bash -xeu
 
-set -x
-go test -v ./...
-
+bin/ginkgo -r -randomizeSuites -randomizeAllSpecs $@

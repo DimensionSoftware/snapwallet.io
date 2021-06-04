@@ -7,7 +7,7 @@ test:
 	bin/test
 
 coverage: test
-	go tool cover -html cover.out -o coverage.html
+	bin/coverage
 
 wire:
 	bin/generate-wire-code
