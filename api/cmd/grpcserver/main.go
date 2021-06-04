@@ -10,7 +10,7 @@ const (
 	defaultAddress = ":50051"
 )
 
-// sigh.....
+// sigh......
 func main() {
 	s, err := wire.InitializeServer()
 	if err != nil {
