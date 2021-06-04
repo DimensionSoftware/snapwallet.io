@@ -1,4 +1,7 @@
-[![codecov](https://codecov.io/gh/DimensionSoftware/flux/branch/master/graph/badge.svg?token=vbISJutLsH)](https://codecov.io/gh/DimensionSoftware/flux)
+## Coverage Status
+| Master | [![codecov](https://codecov.io/gh/DimensionSoftware/flux/branch/master/graph/badge.svg?token=vbISJutLsH)](https://codecov.io/gh/DimensionSoftware/flux) |
+| ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Dev    | [![codecov](https://codecov.io/gh/DimensionSoftware/flux/branch/dev/graph/badge.svg?token=vbISJutLsH)](https://codecov.io/gh/DimensionSoftware/flux) |
 
 ## Server Quick Start
 1. `cd api`
