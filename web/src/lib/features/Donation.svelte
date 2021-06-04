@@ -209,7 +209,7 @@
     right: -55px;
     display: block;
     border-radius: 100%;
-    padding: 5px;
+    padding: 1.5rem;
     overflow: hidden;
     #donation-qr-canvas {
       height: 75px;
