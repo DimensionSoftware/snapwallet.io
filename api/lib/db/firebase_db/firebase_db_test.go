@@ -58,4 +58,12 @@ var _ = Describe("FirebaseDb", func() {
 		})
 	})
 
+	Context("GetGotoConfigByShortID", func() {
+		It("returns nil when not found", func() {
+			config, err := testManager.GetGotoConfigByShortID(context.Background(), gotoconfig.NewShortID())
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(config).Should(BeNil())
+		})
+	})
+
 })
