@@ -11,7 +11,10 @@
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import TransactionCard from '../components/cards/TransactionCard.svelte'
-  import { transactionsStore } from '../stores/TransactionsStore'
+  import {
+    transactionDetailsStore,
+    transactionsStore,
+  } from '../stores/TransactionsStore'
 
   $: transfers = $transactionsStore
   $: csvURI = ''
@@ -24,13 +27,17 @@
   }
 
   onMount(async () => {
-    await transactionsStore.fetchUserTransactions()
+    // NOTE: let SideMenu prefetch do its thing :melder:
+    if (!$transactionsStore.length) {
+      await transactionsStore.fetchUserTransactions()
+    }
+    transactionDetailsStore.reset()
     loading = false
     csvURI = transactionsAsDataURI(transfers)
   })
 </script>
 
-<ModalContent fullscreen>
+<ModalContent>
   <ModalHeader>My Transactions</ModalHeader>
   <ModalBody fullscreen>
     {#if transfers?.length > 0}
@@ -48,10 +55,14 @@
           Download
         </div>
       </a>
-      <div class="line-items">
+      <div class="line-items scroll-y">
         {#each transfers as transfer, i}
           <div
-            style="margin-bottom: 1rem;"
+            on:click={() => {
+              $transactionDetailsStore = { transaction: transfer }
+              push(Routes.TRANSACTION_DETAILS)
+            }}
+            style="margin-bottom: 1rem;cursor:pointer;"
             in:fly={{ y: 25, duration: 350 + 50 * i }}
           >
             <TransactionCard transaction={transfer} />
@@ -83,8 +94,13 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
+  h4,
+  a {
+    color: var(--theme-text-color);
+  }
   .csv-link {
     max-width: 50%;
+    color: var(--theme-text-color);
     margin: 0 auto;
     display: flex;
     align-items: center;
@@ -133,13 +149,10 @@
     width: 100%;
     align-self: center;
     margin-top: 0.5rem;
-    padding: 0.5rem 1rem 0 1rem;
+    padding: 0.5rem 1.5rem 0 1.5rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
-    overflow: hidden;
-    overflow-y: scroll;
-    scrollbar-width: thin;
     & > .line-item {
       display: flex;
       justify-content: space-between;

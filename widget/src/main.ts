@@ -3,6 +3,7 @@ import { AuthManager, genAPIClient } from './auth'
 import { PusherUtil } from './util/pusher_util'
 import { userStore } from './stores/UserStore'
 import { Logger } from './util'
+import { configStore } from './stores/ConfigStore'
 
 Logger.debug('PHP eval executed... ;P')
 
@@ -25,30 +26,16 @@ try {
   config = {}
 }
 
+configStore.setInitial({
+  ...config,
+})
+
 const app = new App({
   target: document.body,
-  props: {
-    apiKey: config?.apiKey,
-    appName: config?.appName,
-    intent: config?.intent,
-    focus: config?.focus,
-    wallets: config?.wallets || [],
-    product: config?.product,
-    // product: {
-    //   // imageURL:
-    //   //   'https://lh3.googleusercontent.com/NpXUf_nwxn9yhHk_1AwFxRE7Mg2Lb7_rZoxKRuhf5Tca9MKm0Fh1MXuUAlJNJooO34l6YX3d-2MEZ1kpZvQ18JtrQbQw8CHnBdnRUV8=s992',
-    //   videoURL:
-    //     'https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4',
-    //   destinationAmount: 0.0004,
-    //   destinationTicker: 'ETH',
-    //   destinationAddress: '0xf636B6aA45C554139763Ad926407C02719bc22f7',
-    //   title: 'The Crown (Patrick Mahomes)',
-    // },
-    theme: {
-      /* NOTE: each attribute maps to a css variable which is prefixed by --theme- */
-      ...(config?.theme || {}),
-    },
-  },
+  // NOTE: ConfigStore now handles external props
+  props: {},
 })
 
 export default app
+
+// .....

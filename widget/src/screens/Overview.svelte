@@ -6,7 +6,7 @@
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
-  import { TransactionIntents } from '../types'
+  import { TransactionIntents, TransactionMediums } from '../types'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { ParentMessenger } from '../util/parent_messenger'
@@ -14,9 +14,10 @@
   import FaIcon from 'svelte-awesome'
   import { onMount } from 'svelte'
   import { toaster } from '../stores/ToastStore'
-  import { computeTransactionExpiration } from '../util/transactions'
+  import { formatExpiration } from '../util/transactions'
+  import { configStore } from '../stores/ConfigStore'
 
-  export let product
+  $: ({ product } = $configStore)
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
@@ -29,15 +30,15 @@
     destCurrency: destinationCurrency,
     exchangeRate: txnExchangeRate,
     fees,
-    expiresAt,
   } = wyrePreview)
 
   $: isBuy = intent === TransactionIntents.BUY
+  $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
   $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
   $: cryptoAmount = isBuy ? destinationAmount : sourceAmount
   $: Icon = CryptoIcons[cryptoTicker]
-  $: screenTitle = $transactionStore.intent === 'buy' ? 'Buying' : 'Selling'
+  $: screenTitle = screenTitleFrom($configStore.intent)
   // $: exchangeRate = isBuy ? 1 / txnExchangeRate : txnExchangeRate
   $: total = isBuy ? sourceAmount : destinationAmount
 
@@ -52,32 +53,25 @@
 
   let buttonText
   $: {
-    if (isBuy) {
+    if (isBuy && !isDebitCard) {
       buttonText = isConfirmingTxn ? 'Buying' : 'Buy Now'
+    } else if (isBuy && isDebitCard) {
+      buttonText = 'Continue'
     } else {
       buttonText = isConfirmingTxn ? 'Selling' : 'Sell Now'
     }
   }
 
-  let secondsUntilExpiration = computeTransactionExpiration(
-    $transactionStore.wyrePreview?.expiresAt,
+  $: formattedExpiration = formatExpiration(
+    $transactionStore.transactionExpirationSeconds,
   )
-
-  let formattedExpiration
-  $: {
-    const d = new Date(0)
-    d.setSeconds(secondsUntilExpiration)
-    const mins = d.getMinutes()
-    if (mins > 1) {
-      formattedExpiration = `${mins.toString()}m ${d.getSeconds().toString()}s`
-    } else {
-      formattedExpiration = `${d.getSeconds().toString()}s`
-    }
-  }
 
   const handleConfirmation = async () => {
     try {
       isConfirmingTxn = true
+      if (isDebitCard) {
+        return push(Routes.DEBIT_CARD)
+      }
       const txn = await window.API.fluxWyreConfirmTransfer(txnId, {
         transferId: txnId,
       })
@@ -90,10 +84,7 @@
 
   onMount(() => {
     const interval = setInterval(() => {
-      secondsUntilExpiration = computeTransactionExpiration(
-        $transactionStore.wyrePreview?.expiresAt,
-      )
-      if (secondsUntilExpiration <= 0) {
+      if ($transactionStore.transactionExpirationSeconds <= 0) {
         toaster.pop({
           msg: 'Your preview has expired. Please create a new preview.',
           error: true,
@@ -103,6 +94,11 @@
     }, 1000)
     return () => clearInterval(interval)
   })
+
+  function screenTitleFrom(intent) {
+    if (intent === 'donate') return $configStore.payee || 'Donation'
+    return intent === 'buy' ? 'Buying' : 'Selling'
+  }
 </script>
 
 <ModalContent>
@@ -135,16 +131,17 @@
       {/if}
     </div>
     <div class="line-items" class:is-product={Boolean(product)}>
-      {#if $transactionStore.selectedSourcePaymentMethod}
-        <div class="line-item muted warning">
-          <div>Price Expires</div>
-          <div style="display:flex;justify-content:center;align-items:center;">
-            <FaIcon data={faClock} />
-            <div style="margin-right:0.35rem;" />
-            <b>{formattedExpiration}</b>
-          </div>
+      <div class="line-item muted warning">
+        <div>Price Expires</div>
+        <div style="display:flex;justify-content:center;align-items:center;">
+          <FaIcon data={faClock} />
+          <div style="margin-right:0.35rem;" />
+          <b>{formattedExpiration}</b>
         </div>
-        <div class="line dashed" />
+      </div>
+      <div class="line dashed" />
+      <!-- ACH -->
+      {#if !isDebitCard && $transactionStore.selectedSourcePaymentMethod}
         {#if isBuy}
           <div class="line-item muted">
             <div>From</div>
@@ -168,6 +165,20 @@
             <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
           </div>
         {/if}
+        <div class="line dashed" />
+      {/if}
+      <!-- Debit Card -->
+      {#if isDebitCard}
+        <div class="line-item muted">
+          <div>From</div>
+          <div>Debit Card</div>
+        </div>
+        <div class="line-item muted">
+          <div>To</div>
+          <div>
+            {dest.substring(0, 6)}...{dest.substring(dest.length - 4)}
+          </div>
+        </div>
         <div class="line dashed" />
       {/if}
       <div class="line-item muted">
@@ -200,7 +211,7 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isConfirmingTxn} on:mousedown={handleConfirmation}>
+    <Button glow isLoading={isConfirmingTxn} on:mousedown={handleConfirmation}>
       <div style="display:flex;justify-content:center;align-items:center;">
         <span style="margin-right:0.75rem;">
           {buttonText}
@@ -247,7 +258,7 @@
     width: 100%;
     align-self: center;
     margin-top: 2.5rem;
-    padding: 0 0.2rem;
+    padding: 0 0.7rem;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;

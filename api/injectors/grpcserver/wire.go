@@ -3,6 +3,7 @@ package wire
 import (
 	"github.com/google/wire"
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/db/firebase_db"
 	"github.com/khoerling/flux/api/lib/encryption"
@@ -15,7 +16,8 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
-	"github.com/khoerling/flux/api/lib/interfaces/ijobpublisher"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
+	"github.com/khoerling/flux/api/lib/jobmanager"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
 	"github.com/khoerling/flux/api/lib/remedymanager"
 	"github.com/khoerling/flux/api/lib/server"
@@ -30,7 +32,7 @@ func InitializeServer() (server.Server, error) {
 		server.ProvideGrpcServer,
 		wire.Struct(new(auth.Manager), "*"),
 		wire.Struct(new(server.Server), "*"),
-		wire.Bind(new(ijobpublisher.JobPublisher), new(jobpublisher.PubSubPublisher)),
+		wire.Bind(new(jobmanager.IJobPublisher), new(jobpublisher.PubSubPublisher)),
 		wire.Struct(new(jobpublisher.PubSubPublisher), "*"),
 		wire.Struct(new(remedymanager.Manager), "*"),
 		sendgrid.ProvideSendClientAPIKey,
@@ -53,8 +55,9 @@ func InitializeServer() (server.Server, error) {
 		encryption.NewManager,
 		wire.Bind(new(db.Db), new(firebase_db.Db)),
 		wire.Struct(new(firebase_db.Db), "*"),
-		wyre.ProvideAPIHost,
-		wire.Struct(new(wyre.Manager), "*"),
+		config.ProvideAPIHost,
+		config.ProvideWebHost,
+		wire.Struct(new(wyremanager.Manager), "*"),
 		wire.Struct(new(pusher.Manager), "*"),
 		pusher.ProviderPusherConfig,
 		pusher.ProvidePusherClient,
@@ -69,7 +72,7 @@ func InitializeDevServer() (server.Server, error) {
 		server.ProvideGrpcServer,
 		wire.Struct(new(auth.Manager), "*"),
 		wire.Struct(new(server.Server), "*"),
-		wire.Bind(new(ijobpublisher.JobPublisher), new(jobpublisher.InProcessPublisher)),
+		wire.Bind(new(jobmanager.IJobPublisher), new(jobpublisher.InProcessPublisher)),
 		wire.Struct(new(jobpublisher.InProcessPublisher), "*"),
 		wire.Struct(new(remedymanager.Manager), "*"),
 		sendgrid.ProvideSendClientAPIKey,
@@ -92,8 +95,9 @@ func InitializeDevServer() (server.Server, error) {
 		encryption.NewManager,
 		wire.Bind(new(db.Db), new(firebase_db.Db)),
 		wire.Struct(new(firebase_db.Db), "*"),
-		wyre.ProvideAPIHost,
-		wire.Struct(new(wyre.Manager), "*"),
+		config.ProvideAPIHost,
+		config.ProvideWebHost,
+		wire.Struct(new(wyremanager.Manager), "*"),
 		wire.Struct(new(pusher.Manager), "*"),
 		pusher.ProviderPusherConfig,
 		pusher.ProvidePusherClient,

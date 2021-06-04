@@ -6,15 +6,19 @@ import { Address } from '../models/Address';
 import { ChangeViewerEmailRequest } from '../models/ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from '../models/ChangeViewerPhoneRequest';
 import { DocumentInput } from '../models/DocumentInput';
+import { GeoResponse } from '../models/GeoResponse';
 import { GetImageResponse } from '../models/GetImageResponse';
+import { GotoResponse } from '../models/GotoResponse';
 import { ImageProcessingMode } from '../models/ImageProcessingMode';
 import { InlineResponse200 } from '../models/InlineResponse200';
 import { LifecycleStatus } from '../models/LifecycleStatus';
 import { OneTimePasscodeRequest } from '../models/OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from '../models/OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from '../models/OneTimePasscodeVerifyResponse';
+import { PlaidAccount } from '../models/PlaidAccount';
 import { PlaidConnectBankAccountsRequest } from '../models/PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from '../models/PlaidCreateLinkTokenResponse';
+import { PlaidInstitution } from '../models/PlaidInstitution';
 import { PricingDataResponse } from '../models/PricingDataResponse';
 import { PricingRate } from '../models/PricingRate';
 import { ProfileDataInfo } from '../models/ProfileDataInfo';
@@ -25,22 +29,39 @@ import { ProfileDataItemStatus } from '../models/ProfileDataItemStatus';
 import { ProtobufAny } from '../models/ProtobufAny';
 import { RpcStatus } from '../models/RpcStatus';
 import { SaveProfileDataRequest } from '../models/SaveProfileDataRequest';
+import { SnapWidgetConfig } from '../models/SnapWidgetConfig';
+import { SnapWidgetProduct } from '../models/SnapWidgetProduct';
+import { SnapWidgetWallet } from '../models/SnapWidgetWallet';
 import { ThirdPartyUserAccount } from '../models/ThirdPartyUserAccount';
 import { TokenExchangeRequest } from '../models/TokenExchangeRequest';
 import { TokenExchangeResponse } from '../models/TokenExchangeResponse';
 import { TokenMaterial } from '../models/TokenMaterial';
+import { Transaction } from '../models/Transaction';
+import { Transactions } from '../models/Transactions';
 import { UploadFileResponse } from '../models/UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from '../models/UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from '../models/UsGovernmentIdDocumentInputKind';
 import { User } from '../models/User';
 import { UserFlags } from '../models/UserFlags';
 import { ViewerDataResponse } from '../models/ViewerDataResponse';
+import { WidgetGetShortUrlResponse } from '../models/WidgetGetShortUrlResponse';
+import { WyreConfirmDebitCardQuoteRequest } from '../models/WyreConfirmDebitCardQuoteRequest';
+import { WyreConfirmDebitCardQuoteResponse } from '../models/WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from '../models/WyreConfirmTransferRequest';
+import { WyreConnectBankAccountRequest } from '../models/WyreConnectBankAccountRequest';
+import { WyreCreateDebitCardQuoteRequest } from '../models/WyreCreateDebitCardQuoteRequest';
+import { WyreCreateDebitCardQuoteResponse } from '../models/WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from '../models/WyreCreateTransferRequest';
+import { WyreDebitCardInfo } from '../models/WyreDebitCardInfo';
+import { WyreGetDebitCardOrderAuthorizationsResponse } from '../models/WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethod } from '../models/WyrePaymentMethod';
 import { WyrePaymentMethods } from '../models/WyrePaymentMethods';
+import { WyreSubmitDebitCardOrderAuthorizationsRequest } from '../models/WyreSubmitDebitCardOrderAuthorizationsRequest';
+import { WyreSubmitDebitCardOrderAuthorizationsResponse } from '../models/WyreSubmitDebitCardOrderAuthorizationsResponse';
 import { WyreTransfer } from '../models/WyreTransfer';
+import { WyreTransferDetail } from '../models/WyreTransferDetail';
 import { WyreTransfers } from '../models/WyreTransfers';
+import { WyreWalletOrderReservationQuote } from '../models/WyreWalletOrderReservationQuote';
 import { WyreWebhookRequest } from '../models/WyreWebhookRequest';
 import { ObservableFluxApi } from './ObservableAPI';
 
@@ -74,6 +95,22 @@ export class PromiseFluxApi {
      */
     public fluxChangeViewerPhone(body: ChangeViewerPhoneRequest, options?: Configuration): Promise<any> {
     	const result = this.api.fluxChangeViewerPhone(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
+     */
+    public fluxGeo(options?: Configuration): Promise<GeoResponse> {
+    	const result = this.api.fluxGeo(options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param page 
+     */
+    public fluxGetTransactions(page?: string, options?: Configuration): Promise<Transactions> {
+    	const result = this.api.fluxGetTransactions(page, options);
         return result.toPromise();
     }
 	
@@ -172,19 +209,60 @@ export class PromiseFluxApi {
     }
 	
     /**
-     * @param transferId 
      * @param body 
      */
-    public fluxWyreConfirmTransfer(transferId: string, body: WyreConfirmTransferRequest, options?: Configuration): Promise<WyreTransfer> {
-    	const result = this.api.fluxWyreConfirmTransfer(transferId, body, options);
+    public fluxWidgetGetShortUrl(body: SnapWidgetConfig, options?: Configuration): Promise<WidgetGetShortUrlResponse> {
+    	const result = this.api.fluxWidgetGetShortUrl(body, options);
         return result.toPromise();
     }
 	
     /**
      * @param body 
      */
-    public fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Promise<WyreTransfer> {
+    public fluxWyreConfirmDebitCardQuote(body: WyreConfirmDebitCardQuoteRequest, options?: Configuration): Promise<WyreConfirmDebitCardQuoteResponse> {
+    	const result = this.api.fluxWyreConfirmDebitCardQuote(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param transferId 
+     * @param body 
+     */
+    public fluxWyreConfirmTransfer(transferId: string, body: WyreConfirmTransferRequest, options?: Configuration): Promise<WyreTransferDetail> {
+    	const result = this.api.fluxWyreConfirmTransfer(transferId, body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * Create a Wyre payment method using the Wyre <-> Plaid integration
+     * @param body 
+     */
+    public fluxWyreConnectBankAccount(body: WyreConnectBankAccountRequest, options?: Configuration): Promise<WyrePaymentMethod> {
+    	const result = this.api.fluxWyreConnectBankAccount(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param body 
+     */
+    public fluxWyreCreateDebitCardQuote(body: WyreCreateDebitCardQuoteRequest, options?: Configuration): Promise<WyreCreateDebitCardQuoteResponse> {
+    	const result = this.api.fluxWyreCreateDebitCardQuote(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param body 
+     */
+    public fluxWyreCreateTransfer(body: WyreCreateTransferRequest, options?: Configuration): Promise<WyreTransferDetail> {
     	const result = this.api.fluxWyreCreateTransfer(body, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param orderId 
+     */
+    public fluxWyreGetDebitCardAuthorizations(orderId: string, options?: Configuration): Promise<WyreGetDebitCardOrderAuthorizationsResponse> {
+    	const result = this.api.fluxWyreGetDebitCardAuthorizations(orderId, options);
         return result.toPromise();
     }
 	
@@ -198,15 +276,24 @@ export class PromiseFluxApi {
     /**
      * @param transferId 
      */
-    public fluxWyreGetTransfer(transferId: string, options?: Configuration): Promise<WyreTransfer> {
+    public fluxWyreGetTransfer(transferId: string, options?: Configuration): Promise<WyreTransferDetail> {
     	const result = this.api.fluxWyreGetTransfer(transferId, options);
         return result.toPromise();
     }
 	
     /**
+     * @param page 
      */
-    public fluxWyreGetTransfers(options?: Configuration): Promise<WyreTransfers> {
-    	const result = this.api.fluxWyreGetTransfers(options);
+    public fluxWyreGetTransfers(page?: string, options?: Configuration): Promise<WyreTransfers> {
+    	const result = this.api.fluxWyreGetTransfers(page, options);
+        return result.toPromise();
+    }
+	
+    /**
+     * @param body 
+     */
+    public fluxWyreSubmitDebitCardAuthorizations(body: WyreSubmitDebitCardOrderAuthorizationsRequest, options?: Configuration): Promise<WyreSubmitDebitCardOrderAuthorizationsResponse> {
+    	const result = this.api.fluxWyreSubmitDebitCardAuthorizations(body, options);
         return result.toPromise();
     }
 	

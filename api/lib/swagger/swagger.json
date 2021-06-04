@@ -117,6 +117,29 @@
         ]
       }
     },
+    "/flux/geo": {
+      "get": {
+        "summary": "Use CloudFlare to figure origin IP Country for intelligent currency options/defaults",
+        "operationId": "Flux_Geo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/GeoResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
     "/flux/pricing-data": {
       "get": {
         "summary": "Get pricing data",
@@ -391,6 +414,112 @@
         ]
       }
     },
+    "/viewer/transactions": {
+      "get": {
+        "operationId": "Flux_GetTransactions",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/Transactions"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/widget/short-url": {
+      "post": {
+        "operationId": "Flux_WidgetGetShortUrl",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WidgetGetShortUrlResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/SnapWidgetConfig"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ]
+      }
+    },
+    "/wyre/direct-connect-bank-account": {
+      "post": {
+        "summary": "Create a Wyre payment method using the Wyre <-> Plaid integration",
+        "operationId": "Flux_WyreConnectBankAccount",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyrePaymentMethod"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreConnectBankAccountRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/wyre/hooks/{hookId}": {
       "post": {
         "operationId": "Flux_WyreWebhook",
@@ -473,6 +602,15 @@
             }
           }
         },
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "int64"
+          }
+        ],
         "tags": [
           "Flux"
         ],
@@ -488,7 +626,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/WyreTransfer"
+              "$ref": "#/definitions/WyreTransferDetail"
             }
           },
           "default": {
@@ -518,6 +656,152 @@
         ]
       }
     },
+    "/wyre/transfers/debit-card/auth": {
+      "post": {
+        "operationId": "Flux_WyreSubmitDebitCardAuthorizations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreSubmitDebitCardOrderAuthorizationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreSubmitDebitCardOrderAuthorizationsRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/auth/{orderId}": {
+      "get": {
+        "operationId": "Flux_WyreGetDebitCardAuthorizations",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreGetDebitCardOrderAuthorizationsResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "orderId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/confirm": {
+      "post": {
+        "operationId": "Flux_WyreConfirmDebitCardQuote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreConfirmDebitCardQuoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreConfirmDebitCardQuoteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
+    "/wyre/transfers/debit-card/quote": {
+      "post": {
+        "operationId": "Flux_WyreCreateDebitCardQuote",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/WyreCreateDebitCardQuoteResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WyreCreateDebitCardQuoteRequest"
+            }
+          }
+        ],
+        "tags": [
+          "Flux"
+        ],
+        "security": [
+          {
+            "Bearer": []
+          }
+        ]
+      }
+    },
     "/wyre/transfers/{transferId}": {
       "get": {
         "operationId": "Flux_WyreGetTransfer",
@@ -525,7 +809,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/WyreTransfer"
+              "$ref": "#/definitions/WyreTransferDetail"
             }
           },
           "default": {
@@ -560,7 +844,7 @@
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/WyreTransfer"
+              "$ref": "#/definitions/WyreTransferDetail"
             }
           },
           "default": {
@@ -711,6 +995,14 @@
         }
       }
     },
+    "GeoResponse": {
+      "type": "object",
+      "properties": {
+        "country": {
+          "type": "string"
+        }
+      }
+    },
     "GetImageResponse": {
       "type": "object",
       "properties": {
@@ -735,6 +1027,14 @@
         "height": {
           "type": "integer",
           "format": "int32"
+        }
+      }
+    },
+    "GotoResponse": {
+      "type": "object",
+      "properties": {
+        "location": {
+          "type": "string"
         }
       }
     },
@@ -797,20 +1097,43 @@
       "description": "response",
       "title": "OneTimePasscodeVerifyResponse"
     },
+    "PlaidAccount": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "mask": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "subType": {
+          "type": "string"
+        }
+      }
+    },
     "PlaidConnectBankAccountsRequest": {
       "type": "object",
       "properties": {
         "plaidPublicToken": {
           "type": "string"
         },
-        "plaidAccountIds": {
+        "institution": {
+          "$ref": "#/definitions/PlaidInstitution"
+        },
+        "accounts": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/PlaidAccount"
           }
         }
       },
-      "description": "request",
+      "description": "request\nmirrors some elements of https://plaid.com/docs/link/web/#onsuccess",
       "title": "PlaidConnectBankAccountsRequest"
     },
     "PlaidConnectBankAccountsResponse": {
@@ -832,6 +1155,17 @@
       },
       "description": "response",
       "title": "PlaidCreateLinkTokenResponse"
+    },
+    "PlaidInstitution": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
     },
     "PricingDataResponse": {
       "type": "object",
@@ -988,10 +1322,77 @@
       "description": "request",
       "title": "SaveProfileDataRequest"
     },
+    "SnapWidgetConfig": {
+      "type": "object",
+      "properties": {
+        "appName": {
+          "type": "string"
+        },
+        "wallets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SnapWidgetWallet"
+          }
+        },
+        "intent": {
+          "type": "string"
+        },
+        "focus": {
+          "type": "boolean"
+        },
+        "theme": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "product": {
+          "$ref": "#/definitions/SnapWidgetProduct"
+        }
+      }
+    },
+    "SnapWidgetProduct": {
+      "type": "object",
+      "properties": {
+        "imageURL": {
+          "type": "string"
+        },
+        "videoURL": {
+          "type": "string"
+        },
+        "destinationAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "destinationTicker": {
+          "type": "string"
+        },
+        "destinationAddress": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "author": {
+          "type": "string"
+        }
+      }
+    },
+    "SnapWidgetWallet": {
+      "type": "object",
+      "properties": {
+        "asset": {
+          "type": "string"
+        },
+        "address": {
+          "type": "string"
+        }
+      }
+    },
     "ThirdPartyUserAccount": {
       "type": "object",
       "properties": {
-        "lifecyleStatus": {
+        "lifecycleStatus": {
           "$ref": "#/definitions/LifecycleStatus"
         },
         "status": {
@@ -1025,6 +1426,86 @@
         },
         "accessToken": {
           "type": "string"
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "partner": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string"
+        },
+        "direction": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceName": {
+          "type": "string"
+        },
+        "destName": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "totalFees": {
+          "type": "number",
+          "format": "double"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string"
+        },
+        "completedAt": {
+          "type": "string"
+        },
+        "cancelledAt": {
+          "type": "string"
+        }
+      }
+    },
+    "Transactions": {
+      "type": "object",
+      "properties": {
+        "transactions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Transaction"
+          }
         }
       }
     },
@@ -1117,11 +1598,114 @@
       "description": "response",
       "title": "ViewerDataResponse"
     },
+    "WidgetGetShortUrlResponse": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreConfirmDebitCardQuoteRequest": {
+      "type": "object",
+      "properties": {
+        "card": {
+          "$ref": "#/definitions/WyreDebitCardInfo"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "reservationId": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreConfirmDebitCardQuoteResponse": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "transferId": {
+          "type": "string"
+        }
+      }
+    },
     "WyreConfirmTransferRequest": {
       "type": "object",
       "properties": {
         "transferId": {
           "type": "string"
+        }
+      }
+    },
+    "WyreConnectBankAccountRequest": {
+      "type": "object",
+      "properties": {
+        "plaidPublicToken": {
+          "type": "string"
+        },
+        "plaidAccountId": {
+          "type": "string"
+        }
+      },
+      "title": "WyreConnectBankAccountRequest"
+    },
+    "WyreCreateDebitCardQuoteRequest": {
+      "type": "object",
+      "properties": {
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "amountIncludesFees": {
+          "type": "boolean"
+        },
+        "lockFields": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "country": {
+          "type": "string"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        }
+      }
+    },
+    "WyreCreateDebitCardQuoteResponse": {
+      "type": "object",
+      "properties": {
+        "reservationId": {
+          "type": "string"
+        },
+        "quote": {
+          "$ref": "#/definitions/WyreWalletOrderReservationQuote"
         }
       }
     },
@@ -1147,10 +1731,56 @@
         }
       }
     },
+    "WyreDebitCardInfo": {
+      "type": "object",
+      "properties": {
+        "firstName": {
+          "type": "string"
+        },
+        "lastName": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "number": {
+          "type": "string"
+        },
+        "expirationMonth": {
+          "type": "string"
+        },
+        "expirationYear": {
+          "type": "string"
+        },
+        "verificationCode": {
+          "type": "string"
+        },
+        "address": {
+          "$ref": "#/definitions/Address"
+        }
+      }
+    },
+    "WyreGetDebitCardOrderAuthorizationsResponse": {
+      "type": "object",
+      "properties": {
+        "walletOrderId": {
+          "type": "string"
+        },
+        "smsNeeded": {
+          "type": "boolean"
+        },
+        "card2faNeeded": {
+          "type": "boolean"
+        },
+        "authorization3dsUrl": {
+          "type": "string"
+        }
+      }
+    },
     "WyrePaymentMethod": {
       "type": "object",
       "properties": {
-        "lifecyleStatus": {
+        "lifecycleStatus": {
           "$ref": "#/definitions/LifecycleStatus"
         },
         "id": {
@@ -1190,6 +1820,31 @@
         }
       }
     },
+    "WyreSubmitDebitCardOrderAuthorizationsRequest": {
+      "type": "object",
+      "properties": {
+        "orderId": {
+          "type": "string"
+        },
+        "reservationId": {
+          "type": "string"
+        },
+        "sms2faCode": {
+          "type": "string"
+        },
+        "card2faCode": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreSubmitDebitCardOrderAuthorizationsResponse": {
+      "type": "object",
+      "properties": {
+        "success": {
+          "type": "boolean"
+        }
+      }
+    },
     "WyreTransfer": {
       "type": "object",
       "properties": {
@@ -1216,6 +1871,15 @@
           "type": "number",
           "format": "double"
         },
+        "sourceName": {
+          "type": "string"
+        },
+        "destName": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
         "exchangeRate": {
           "type": "number",
           "format": "double"
@@ -1226,6 +1890,64 @@
             "type": "number",
             "format": "double"
           }
+        },
+        "blockchainTxId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "createdAt": {
+          "type": "string"
+        },
+        "closedAt": {
+          "type": "string"
+        }
+      }
+    },
+    "WyreTransferDetail": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "dest": {
+          "type": "string"
+        },
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "message": {
+          "type": "string"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "fees": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "totalFees": {
+          "type": "number",
+          "format": "double"
         },
         "blockhash": {
           "type": "string"
@@ -1241,6 +1963,12 @@
         },
         "expiresAt": {
           "type": "string"
+        },
+        "completedAt": {
+          "type": "string"
+        },
+        "cancelledAt": {
+          "type": "string"
         }
       }
     },
@@ -1252,6 +1980,53 @@
           "items": {
             "$ref": "#/definitions/WyreTransfer"
           }
+        }
+      }
+    },
+    "WyreWalletOrderReservationQuote": {
+      "type": "object",
+      "properties": {
+        "sourceCurrency": {
+          "type": "string"
+        },
+        "sourceAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "sourceAmountWithoutFees": {
+          "type": "number",
+          "format": "double"
+        },
+        "destCurrency": {
+          "type": "string"
+        },
+        "destAmount": {
+          "type": "number",
+          "format": "double"
+        },
+        "exchangeRate": {
+          "type": "number",
+          "format": "double"
+        },
+        "equivelancies": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "fees": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "dest": {
+          "type": "string"
+        },
+        "expiresAt": {
+          "type": "string"
         }
       }
     },

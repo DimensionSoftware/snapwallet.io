@@ -1,0 +1,240 @@
+{{ define "transactionStatusHTML" }}
+<!DOCTYPE html>
+<html>
+  {{ template "headHTML" }}
+  <body
+    style="
+      -ms-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+      -webkit-text-size-adjust: 100%;
+      background-color: #fafafa !important;
+      font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto, Oxygen,
+        Ubuntu, Cantarell, open sans, helvetica neue, sans-serif;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
+    "
+  >
+    <table
+      style="
+        border-collapse: separate;
+        border-spacing: 0px !important;
+        mso-table-lspace: 0pt;
+        mso-table-rspace: 0pt;
+      "
+      border="0"
+      cellpadding="0"
+      cellspacing="0"
+      width="100%"
+    >
+      <tr style="box-sizing: border-box; margin: 0; padding: 0" align="left">
+        <td
+          valign="top"
+          style="
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto,
+              Oxygen, Ubuntu, Cantarell, open sans, helvetica neue, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+          "
+          align="left"
+        >
+          &nbsp;
+        </td>
+        <td
+          width="100% !important"
+          valign="top"
+          style="
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto,
+              Oxygen, Ubuntu, Cantarell, open sans, helvetica neue, sans-serif;
+            font-size: 14px;
+            margin: 0 auto !important;
+            max-width: 600px;
+            padding: 0;
+            padding-bottom: 40px;
+            padding-top: 40px;
+          "
+          align="left"
+        >
+          <div
+            style="
+              box-sizing: border-box;
+              display: block;
+              margin: 0 auto;
+              max-width: 600px;
+              overflow: hidden;
+              padding: 0;
+            "
+          >
+            <!-- START CENTERED WHITE CONTAINER -->
+            <span
+              style="
+                color: transparent;
+                display: none;
+                height: 0;
+                max-height: 0;
+                max-width: 0;
+                mso-hide: all;
+                opacity: 0;
+                overflow: hidden;
+                visibility: hidden;
+                width: 0;
+                text-transform: capitalize;
+              "
+            >
+              Transaction {{.Status}}
+            </span>
+            <table
+              width="100%"
+              style="
+                background: #ffffff !important;
+                border-collapse: separate;
+                border-radius: 5px;
+                border-spacing: 0px !important;
+                mso-table-lspace: 0pt;
+                mso-table-rspace: 0pt;
+              "
+              border="0"
+              cellpadding="0"
+              cellspacing="0"
+            >
+              <!-- START MAIN CONTENT AREA -->
+              {{ template "contentHeaderHTML" }}
+              <tr
+                style="box-sizing: border-box; margin: 0; padding: 0"
+                align="left"
+              >
+                <td
+                  valign="top"
+                  style="
+                    box-sizing: border-box;
+                    font-family: -apple-system, BlinkMacSystemFont, segoe ui,
+                      Roboto, Oxygen, Ubuntu, Cantarell, open sans,
+                      helvetica neue, sans-serif;
+                    font-size: 14px;
+                    margin: 0;
+                    padding: 0 !important;
+                  "
+                  align="left"
+                >
+                  <table
+                    border="0"
+                    style="
+                      border-collapse: separate;
+                      border-spacing: 0px !important;
+                      mso-table-lspace: 0pt;
+                      mso-table-rspace: 0pt;
+                    "
+                    cellpadding="0"
+                    cellspacing="0"
+                    width="100%"
+                  >
+                    <tr
+                      style="box-sizing: border-box; margin: 0; padding: 0"
+                      align="left"
+                    >
+                      <td
+                        class="border-top content-td"
+                        align="left"
+                        valign="top"
+                        style="
+                          border-bottom: 1px solid #eaeaea;
+                          border-top: 1px solid #eaeaea;
+                          box-sizing: border-box;
+                          font-family: -apple-system, BlinkMacSystemFont,
+                            segoe ui, Roboto, Oxygen, Ubuntu, Cantarell,
+                            open sans, helvetica neue, sans-serif;
+                          font-size: 14px;
+                          margin: 0;
+                          padding: 0 30px;
+                          padding-top: 40px;
+                        "
+                      >
+                        <h3
+                          style="
+                            color: #424242 !important;
+                            font-family: -apple-system, BlinkMacSystemFont,
+                              segoe ui, Roboto, Oxygen, Ubuntu, Cantarell,
+                              open sans, helvetica neue, sans-serif;
+                            font-size: 20px;
+                            font-weight: 400;
+                            line-height: 1.4;
+                            margin: 0;
+                            margin-bottom: 0;
+                            padding-bottom: 20px;
+                            text-align: left;
+                            text-transform: capitalize;
+                          "
+                        >
+                          Transaction {{.Status}}
+                        </h3>
+                        <h3
+                          style="
+                            color: #424242 !important;
+                            font-family: -apple-system, BlinkMacSystemFont,
+                              segoe ui, Roboto, Oxygen, Ubuntu, Cantarell,
+                              open sans, helvetica neue, sans-serif;
+                            font-size: 25px;
+                            font-weight: 600;
+                            line-height: 1.4;
+                            margin: 0;
+                            margin-bottom: 0;
+                            padding-bottom: 20px;
+                            text-align: left;
+                          "
+                        >
+                          {{.TransactionID}}
+                        </h3>
+                        <p
+                          style="
+                            color: #424242 !important;
+                            font-family: -apple-system, BlinkMacSystemFont,
+                              segoe ui, Roboto, Oxygen, Ubuntu, Cantarell,
+                              open sans, helvetica neue, sans-serif;
+                            line-height: 1.4;
+                            margin: 0;
+                            margin-bottom: 0;
+                            padding-bottom: 20px;
+                            text-align: left;
+                          "
+                        >
+                          Your transaction status has changed to
+                          <span
+                            style="text-transform: lowercase; font-weight: bold"
+                            >{{.Status}}</span
+                          >.
+                        </p>
+                        {{ template "excludedDetailsHTML" }}
+                      </td>
+                    </tr>
+                    {{ template "footerHTML" }}
+                  </table>
+                </td>
+              </tr>
+              <!-- END MAIN CONTENT AREA -->
+            </table>
+            <!-- END CENTERED WHITE CONTAINER -->
+          </div>
+        </td>
+        <td
+          valign="top"
+          style="
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, segoe ui, Roboto,
+              Oxygen, Ubuntu, Cantarell, open sans, helvetica neue, sans-serif;
+            font-size: 14px;
+            margin: 0;
+            padding: 0;
+          "
+          align="left"
+        >
+          &nbsp;
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
+{{ end }}

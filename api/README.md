@@ -99,3 +99,26 @@ job message examples
 ```
 {"kind": "CREATE_WYRE_ACCOUNT_FOR_USER", "relatedIDs": ["<user_id>"]}
 ```
+
+
+## secrets management
+
+### load up dev env from local into cloud secret in correct project env
+
+```
+bin/load-snap-env-secret --project silken-phalanx-305703 --data-file=secrets/.env.dev
+```
+
+### cleanup old versions
+```
+bin/get-active-versions-from-snap-env-secret --project silken-phalanx-305703 | xargs -n1 bin/delete-snap-env-version
+```
+
+.
+
+## USEFUL
+
+
+https://ahmet.im/blog/mastering-cloud-run-environment-variables/
+
+.

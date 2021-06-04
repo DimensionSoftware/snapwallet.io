@@ -10,14 +10,17 @@
  * Do not edit the class manually.
  */
 
+import { PlaidAccount } from './PlaidAccount';
+import { PlaidInstitution } from './PlaidInstitution';
 import { HttpFile } from '../http/http';
 
 /**
-* request
+* request mirrors some elements of https://plaid.com/docs/link/web/#onsuccess
 */
 export class PlaidConnectBankAccountsRequest {
     'plaidPublicToken'?: string;
-    'plaidAccountIds'?: Array<string>;
+    'institution'?: PlaidInstitution;
+    'accounts'?: Array<PlaidAccount>;
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -29,9 +32,15 @@ export class PlaidConnectBankAccountsRequest {
             "format": ""
         },
         {
-            "name": "plaidAccountIds",
-            "baseName": "plaidAccountIds",
-            "type": "Array<string>",
+            "name": "institution",
+            "baseName": "institution",
+            "type": "PlaidInstitution",
+            "format": ""
+        },
+        {
+            "name": "accounts",
+            "baseName": "accounts",
+            "type": "Array<PlaidAccount>",
             "format": ""
         }    ];
 

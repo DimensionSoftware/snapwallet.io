@@ -2,20 +2,30 @@ import type { ProfileDataItemRemediation } from 'api-client'
 
 export enum TransactionMediums {
   ACH = 'ach',
+  DEBIT_CARD = 'debit_card',
   BLOCKCHAIN = 'blockchain',
 }
 
 export interface IAsset {
   name: string
   ticker: string
+  color: string
+  popular?: boolean
 }
 
 export enum Masks {
-  PHONE = '+x (xxx) xxx-xxxx',
+  CODE = 'x',
+  PHONE = 'xxx xxx-xxxx',
   SSN = 'xxx-xx-xxxx',
   INTL_DATE = 'xxxx-xx-xx',
   US_DATE = 'xx-xx-xxxx',
+  DEBIT_CARD = 'xxxx xxxx xxxx xxxx',
+  DEBIT_CARD_EXPIRATION_DATE = 'xx/xxxx',
 }
+
+export type UserIntent = 'buy' | 'sell' | 'donate'
+
+export type SrcDst = 'source' | 'destination'
 
 export enum TransactionIntents {
   BUY = 'buy',
@@ -40,7 +50,20 @@ export type ProductType = {
   imageURL?: string
   videoURL?: string
   title: string
+  author?: string
   destinationAmount: number
   destinationTicker: string
   destinationAddress: string
+}
+
+export type WalletType = {
+  asset: string
+  address: string
+  default?: boolean
+}
+
+export interface ICountry {
+  name: string
+  dial_code: string
+  code: string
 }

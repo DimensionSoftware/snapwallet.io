@@ -3,20 +3,26 @@ package server
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
+	"net/url"
 	"strings"
 	"time"
+
+	"crypto/sha256"
 
 	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 
 	"github.com/disintegration/imaging"
+	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
 	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -29,6 +35,7 @@ import (
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/proofofaddress"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/ssn"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/usgovernmentid"
+	"github.com/khoerling/flux/api/lib/db/models/user/transaction"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/account"
 	"github.com/khoerling/flux/api/lib/db/models/user/wyre/paymentmethod"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
@@ -36,6 +43,7 @@ import (
 	proto "github.com/khoerling/flux/api/lib/protocol"
 
 	"github.com/lithammer/shortuuid/v3"
+	"github.com/teris-io/shortid"
 )
 
 // https://api.sendwyre.com/v3/rates?as=priced
@@ -163,7 +171,11 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return &proto.OneTimePasscodeResponse{}, nil
 	}
 
-	msg := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
+	msg, err := generateOtpMessage(mail.NewEmail("Customer", loginValue), otp.Code)
+
+	if err != nil {
+		return nil, err
+	}
 
 	_, err = s.Sendgrid.Send(msg)
 	if err != nil {
@@ -188,6 +200,15 @@ func (s *Server) OneTimePasscodeVerify(ctx context.Context, req *proto.OneTimePa
 	}
 	if passcode == nil {
 		return nil, status.Errorf(codes.Unauthenticated, genMsgUnauthenticatedOTP(loginKind))
+
+		// @chris; i figured out how to add structured details to grpc errors; details can be any proto message:
+		//
+		// status, err := status.New(codes.Unauthenticated, genMsgUnauthenticatedOTP(loginKind)).WithDetails(&proto.Address{})
+		// if err != nil {
+		// 	return nil, err
+		// }
+
+		// return nil, status.Err()
 	}
 
 	u, err := s.Db.GetOrCreateUser(ctx, loginKind, loginValue)
@@ -233,6 +254,88 @@ func (s *Server) TokenExchange(ctx context.Context, req *proto.TokenExchangeRequ
 	}, nil
 }
 
+// RPC handler for connecting a Wyre ACH account using their Plaid integration
+func (s *Server) WyreConnectBankAccount(ctx context.Context, req *proto.WyreConnectBankAccountRequest) (*proto.WyrePaymentMethod, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	if req.PlaidPublicToken == "" {
+		return nil, status.Error(codes.InvalidArgument, "Please provide a valid Plaid token.")
+	}
+
+	if req.PlaidAccountId == "" {
+		return nil, status.Error(codes.InvalidArgument, "Please provide a valid bank account ID.")
+	}
+
+	accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+	if err != nil || len(accounts) <= 0 {
+		log.Printf("Could not find account for %s", u.ID)
+		return nil, status.Error(codes.NotFound, "Please verify your identity before connecting a bank account.")
+	}
+
+	userAccount := accounts[0]
+
+	wyrePublicToken := req.PlaidPublicToken + "|" + req.PlaidAccountId
+	wyreReqParams := wyre.CreateWyrePaymentMethodRequest{
+		// NOTE: both attrs are required. See struct definition for further explanation.
+		PublicToken:       wyrePublicToken,
+		PlaidPublicToken:  wyrePublicToken,
+		PaymentMethodType: "LOCAL_TRANSFER",
+		Country:           "US",
+	}
+	res, err := s.Wyre.CreateWyrePaymentMethod(userAccount.SecretKey, wyreReqParams)
+
+	if err != nil {
+		log.Printf("Error creating Wyre payment method")
+		return nil, err
+	}
+
+	hookResponse, err := s.Wyre.SubscribeWebhook(userAccount.SecretKey, "paymentmethod:"+string(res.ID), string(s.APIHost)+"/wyre/hooks/"+string(u.ID))
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("hook response from wyre: %#v", hookResponse)
+
+	pm := paymentmethod.PaymentMethod{
+		ID:                    paymentmethod.ID(res.ID),
+		PlaidItemID:           "",
+		PlaidAccountID:        item.AccountID(req.PlaidAccountId),
+		Status:                res.Status,
+		Name:                  res.Name,
+		Last4:                 res.Last4Digits,
+		ChargeableCurrencies:  res.ChargeableCurrencies,
+		DepositableCurrencies: res.DepositableCurrencies,
+		UpdatedAt:             time.Now(),
+		CreatedAt:             time.Now(),
+	}
+	err = s.Db.SaveWyrePaymentMethod(ctx, nil, u.ID, userAccount.ID, &pm)
+
+	if err != nil {
+		log.Printf("Error saving Wyre payment method")
+		return nil, status.Error(codes.Internal, "An error occurred while connecting your account. Please try again.")
+	}
+
+	var lifecycleStatus proto.LifecycleStatus
+	pmStatus := strings.ToLower(res.Status)
+	if pmStatus == "active" {
+		lifecycleStatus = proto.LifecycleStatus_L_CREATED
+	} else {
+		lifecycleStatus = proto.LifecycleStatus_L_PENDING
+	}
+
+	return &proto.WyrePaymentMethod{
+		Id:                    res.ID,
+		Status:                res.Status,
+		Name:                  res.Name,
+		Last4:                 res.Last4Digits,
+		ChargeableCurrencies:  res.ChargeableCurrencies,
+		DepositableCurrencies: res.DepositableCurrencies,
+		LifecycleStatus:       lifecycleStatus,
+	}, nil
+}
+
 // PlaidConnectBankAccounts is an rpc handler
 func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidConnectBankAccountsRequest) (*proto.PlaidConnectBankAccountsResponse, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
@@ -245,13 +348,62 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 		return nil, err
 	}
 
+	existingPlaidItems, err := s.Db.GetAllPlaidItems(ctx, nil, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
 	resp, err := s.Plaid.ExchangePublicToken(req.PlaidPublicToken)
 	if err != nil {
 		return nil, err
 	}
 	log.Printf("Plaid Public Token successfuly exchanged")
 
-	_, err = s.Db.SavePlaidItem(ctx, u.ID, item.ID(resp.ItemID), resp.AccessToken, req.PlaidAccountIds)
+	var accounts []item.Account
+	for _, reqAccount := range req.Accounts {
+		var alreadyExists bool
+
+		for _, epi := range existingPlaidItems {
+			// https://plaid.com/docs/link/duplicate-items/#preventing-duplicate-item-adds-with-onsuccess
+			// You can compare a combination of the accounts’ institution_id, account name, and account mask
+			// to determine whether your user has previously linked their account to your application.
+			if item.InstitutionID(req.Institution.Id) == epi.Institution.ID {
+				for _, epiAccount := range epi.Accounts {
+					if reqAccount.Name == epiAccount.Name && reqAccount.Mask == epiAccount.Mask {
+						alreadyExists = true
+						break
+					}
+				}
+			}
+		}
+
+		if !alreadyExists {
+			accounts = append(accounts, item.Account{
+				ID:      item.AccountID(reqAccount.Id),
+				Name:    reqAccount.Name,
+				Mask:    reqAccount.Mask,
+				Type:    reqAccount.Type,
+				SubType: reqAccount.SubType,
+			})
+		}
+	}
+
+	if len(accounts) == 0 {
+		// no new plaid accounts were provided (duplicates are not allowed)
+		return &proto.PlaidConnectBankAccountsResponse{}, nil
+	}
+
+	item := item.Item{
+		ID:          item.ID(resp.ItemID),
+		AccessToken: resp.AccessToken,
+		Institution: item.Institution{
+			ID:   item.InstitutionID(req.Institution.Id),
+			Name: req.Institution.Name,
+		},
+		Accounts:  accounts,
+		CreatedAt: time.Now(),
+	}
+	err = s.Db.SavePlaidItem(ctx, u.ID, &item)
 	if err != nil {
 		return nil, err
 	}
@@ -277,20 +429,93 @@ func (s *Server) PlaidConnectBankAccounts(ctx context.Context, req *proto.PlaidC
 	return &proto.PlaidConnectBankAccountsResponse{}, nil
 }
 
-func generateOtpMessage(to *mail.Email, code string) *mail.SGMailV3 {
-	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
-	subject := "Your one time passcode for flux"
-	plainTextContent := fmt.Sprintf("Your one time passcode is: %s", code)
-	htmlContent := fmt.Sprintf("Your one time passcode is: <strong>%s</strong>", code)
-	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+func generateOtpMessage(to *mail.Email, code string) (*mail.SGMailV3, error) {
+	htmlContent, err := genEmailTemplate("otpHTML", EmailTemplateVars{OTPCode: code})
+
+	if err != nil {
+		return nil, err
+	}
+
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+	subject := "Security Code"
+	plainTextContent := fmt.Sprintf("Your security code is: %s", code)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
 }
 
-func generateTransferMessage(to *mail.Email, t *wyre.Transfer) *mail.SGMailV3 {
-	from := mail.NewEmail("Ctulhu", "ctulhu@dreamcodez.cc")
-	subject := fmt.Sprintf("Transfer %s has been initiated", t.ID)
-	plainTextContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
-	htmlContent := fmt.Sprintf("You are sending %f %s to %s. You were charged %f %s.", t.DestAmount, t.DestCurrency, t.Dest, t.SourceAmount, t.SourceCurrency)
-	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent)
+func newMailWithAttachments(to *mail.Email, attachments []*mail.Attachment, plain string, html string) *mail.SGMailV3 {
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+
+	m := mail.NewV3Mail()
+
+	p := mail.NewPersonalization()
+	p.AddTos(to)
+
+	cplain := mail.NewContent("text/plain", plain)
+	chtml := mail.NewContent("text/html", html)
+
+	m.SetFrom(from)
+	m.AddPersonalizations(p)
+
+	for _, attachment := range attachments {
+		m.AddAttachment(attachment)
+	}
+
+	m.AddContent(cplain)
+	m.AddContent(chtml)
+
+	return m
+}
+
+func generateTransferMessage(to *mail.Email, t *wyre.TransferDetail) (*mail.SGMailV3, error) {
+	htmlContent, err := genEmailTemplate("newTransactionHTML", EmailTemplateVars{TransactionID: string(t.ID), BusinessDays: 5})
+
+	if err != nil {
+		return nil, err
+	}
+
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+	subject := fmt.Sprintf("Transaction Created")
+	plainTextContent := fmt.Sprintf("Transaction %s created successfully", t.ID)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
+}
+
+func generateTransactionStatusMessage(to *mail.Email, t *wyre.TransferDetail) (*mail.SGMailV3, error) {
+	txnStatus := strings.ToLower(t.Status)
+	var status string
+
+	if txnStatus == "failed" {
+		status = "Failed"
+	}
+	if txnStatus == "completed" {
+		status = "Completed"
+	}
+
+	htmlContent, err := genEmailTemplate("transactionStatusHTML", EmailTemplateVars{
+		TransactionID: string(t.ID),
+		Status:        status,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+	subject := fmt.Sprintf("Transaction %s", status)
+	plainTextContent := fmt.Sprintf("Your transaction status has been changed to %s", status)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
+}
+
+func generateDebitCardTransactionMessage(to *mail.Email, order *wyre.WalletOrder) (*mail.SGMailV3, error) {
+	htmlContent, err := genEmailTemplate("newTransactionHTML", EmailTemplateVars{TransactionID: order.ID, BusinessDays: 1})
+
+	if err != nil {
+		return nil, err
+	}
+
+	from := mail.NewEmail("Snap Wallet", "support@snapwallet.io")
+	subject := fmt.Sprintf("Transaction Created")
+	plainTextContent := fmt.Sprintf("Transaction %s created successfully", order.ID)
+	return mail.NewSingleEmail(from, subject, to, plainTextContent, htmlContent), nil
 }
 
 // PlaidCreateLinkToken is an rpc handler
@@ -309,7 +534,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 		}
 		if len(accounts) > 0 {
 			a := accounts[0]
-			wyreAcct, err := s.Wyre.GetAccount(a.SecretKey, string(a.ID))
+			wyreAcct, err := s.Wyre.GetAccount(a.SecretKey, wyre.AccountID(a.ID))
 			if err != nil {
 				return nil, err
 			}
@@ -320,7 +545,7 @@ func (s *Server) PlaidCreateLinkToken(ctx context.Context, req *proto.PlaidCreat
 				return nil, err
 			}
 			for _, pm := range pms {
-				theirPm, err := s.Wyre.GetPaymentMethod(a.SecretKey, string(pm.ID))
+				theirPm, err := s.Wyre.GetPaymentMethod(a.SecretKey, wyre.PaymentMethodID(pm.ID))
 				if err != nil {
 					return nil, err
 				}
@@ -666,7 +891,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 		Remediations: remediations,
 	}
 
-	if len(existingWyreAccounts) == 0 && profile.HasWyreAccountPreconditionsMet() {
+	if profile.HasWyreAccountPreconditionsMet() {
 		// todo, create job in db
 		// todo make sure theres not a job already running
 		log.Printf("Creating new wyre account for user id: %s", u.ID)
@@ -675,27 +900,37 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 		err = s.JobPublisher.PublishJob(ctx, &job.Job{
 			ID:         shortuuid.New(),
-			Kind:       job.KindCreateWyreAccountForUser,
+			Kind:       job.KindUpdateWyreAccountForUser,
 			Status:     job.StatusQueued,
 			RelatedIDs: []string{string(u.ID)},
 			CreatedAt:  now.Unix(),
 			UpdatedAt:  now.Unix(),
 		})
 		if err != nil {
-			log.Println(err)
+			return nil, err
 		}
 
 		// todo: store pending lifecycle status? or can use job submitted information
 		resp.Wyre = &proto.ThirdPartyUserAccount{
-			LifecyleStatus: proto.LifecycleStatus_L_PENDING,
+			LifecycleStatus: proto.LifecycleStatus_L_PENDING,
+		}
+	} else if len(existingWyreAccounts) == 0 {
+		job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindUpdateWyreAccountForUser, job.StatusQueued, string(u.ID))
+		if err != nil {
+			return nil, err
+		}
+		if job != nil {
+			resp.Wyre = &proto.ThirdPartyUserAccount{
+				LifecycleStatus: proto.LifecycleStatus_L_PENDING,
+			}
 		}
 	}
 
 	if len(existingWyreAccounts) > 0 {
 		resp.Wyre = &proto.ThirdPartyUserAccount{
 			// todo: store created lifecycle status?
-			LifecyleStatus: proto.LifecycleStatus_L_CREATED,
-			Status:         existingWyreAccounts[0].Status,
+			LifecycleStatus: proto.LifecycleStatus_L_CREATED,
+			Status:          existingWyreAccounts[0].Status,
 			// todo: remediations
 		}
 	}
@@ -725,9 +960,19 @@ func (s *Server) ViewerProfileData(ctx context.Context, _ *emptypb.Empty) (*prot
 			wa := existingWyreAccounts[0]
 
 			wyre = &proto.ThirdPartyUserAccount{
-				LifecyleStatus: proto.LifecycleStatus_L_CREATED,
-				Status:         wa.Status,
+				LifecycleStatus: proto.LifecycleStatus_L_CREATED,
+				Status:          wa.Status,
 				// todo: remediations
+			}
+		} else {
+			job, err := s.Db.GetJobByKindAndStatusAndRelatedId(ctx, job.KindUpdateWyreAccountForUser, job.StatusQueued, string(u.ID))
+			if err != nil {
+				return nil, err
+			}
+			if job != nil {
+				wyre = &proto.ThirdPartyUserAccount{
+					LifecycleStatus: proto.LifecycleStatus_L_PENDING,
+				}
 			}
 		}
 	}
@@ -777,6 +1022,19 @@ func (s *Server) ChangeViewerEmail(ctx context.Context, req *proto.ChangeViewerE
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
 	}
 
+	now := time.Now()
+	err = s.JobPublisher.PublishJob(ctx, &job.Job{
+		ID:         shortuuid.New(),
+		Kind:       job.KindUpdateWyreAccountForUser,
+		Status:     job.StatusQueued,
+		RelatedIDs: []string{string(u.ID)},
+		CreatedAt:  now.Unix(),
+		UpdatedAt:  now.Unix(),
+	})
+	if err != nil {
+		return nil, err
+	}
+
 	return &emptypb.Empty{}, nil
 }
 
@@ -811,6 +1069,19 @@ func (s *Server) ChangeViewerPhone(ctx context.Context, req *proto.ChangeViewerP
 	if err != nil {
 		log.Println(err)
 		return nil, status.Errorf(codes.Unknown, "An unknown error ocurred; please try again.")
+	}
+
+	now := time.Now()
+	err = s.JobPublisher.PublishJob(ctx, &job.Job{
+		ID:         shortuuid.New(),
+		Kind:       job.KindUpdateWyreAccountForUser,
+		Status:     job.StatusQueued,
+		RelatedIDs: []string{string(u.ID)},
+		CreatedAt:  now.Unix(),
+		UpdatedAt:  now.Unix(),
+	})
+	if err != nil {
+		return nil, err
 	}
 
 	return &emptypb.Empty{}, nil
@@ -930,7 +1201,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
 		}
 
-		theirAccount, err := s.Wyre.GetAccount(ourWyreAccount.SecretKey, string(ourWyreAccount.ID))
+		theirAccount, err := s.Wyre.GetAccount(ourWyreAccount.SecretKey, wyre.AccountID(ourWyreAccount.ID))
 		if err != nil {
 			log.Printf("failure getting wyre account from them: %#v", err)
 			return nil, status.Errorf(codes.Unknown, "hook failed")
@@ -1123,7 +1394,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			return nil, status.Errorf(codes.FailedPrecondition, "hook failed")
 		}
 
-		theirPaymentMethod, err := s.Wyre.GetPaymentMethod(ourWyreAccount.SecretKey, string(ourWyrePaymentMethod.ID))
+		theirPaymentMethod, err := s.Wyre.GetPaymentMethod(ourWyreAccount.SecretKey, wyre.PaymentMethodID(ourWyrePaymentMethod.ID))
 		if err != nil {
 			log.Printf("failure getting wyre payment method from them: %#v", err)
 			return nil, status.Errorf(codes.Unknown, "hook failed")
@@ -1139,15 +1410,70 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			log.Printf("failure saving our wyre payment method: %#v", err)
 			return nil, status.Errorf(codes.Unknown, "hook failed")
 		}
-	//case "transfer":
+	case "transfer":
+		swUser, err := s.Db.GetUserByID(ctx, nil, userID)
+
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, swUser.ID)
+		if err != nil {
+			log.Printf("Error retrieving Wyre accounts from DB for user %s", swUser.ID)
+			return nil, status.Error(codes.Internal, "hook failed")
+		}
+
+		if len(accounts) <= 0 {
+			log.Printf("wyre account not found for user")
+			return nil, status.Error(codes.Unknown, "hook failed")
+		}
+
+		userAccount := accounts[0]
+
+		// Make sure it exists in our db
+		_, err = s.Db.GetTransactionByExternalId(ctx, nil, swUser.ID, transaction.ExternalID(objectID))
+
+		if err != nil {
+			log.Printf("Error retrieving transaction %s", objectID)
+			return nil, status.Error(codes.Internal, "hook failed")
+		}
+
+		txn, err := s.Wyre.GetTransfer(userAccount.SecretKey, objectID)
+		if err != nil {
+			return nil, status.Error(codes.Unknown, "hook failed")
+		}
+
+		// This should never happen.
+		// We don't want to send email when status is the same
+		if txn.Status == "PENDING" {
+			break
+		}
+
+		log.Printf("sending email for transaction status update")
+		emailMsg, err := generateTransactionStatusMessage(mail.NewEmail("Customer", *swUser.Email), txn)
+
+		if err != nil {
+			return nil, err
+		}
+
+		_, err = s.Sendgrid.Send(emailMsg)
+		if err != nil {
+			log.Printf("Error sending email")
+			return nil, err
+		}
+
+		msg = &pusher.Message{
+			Kind: pusher.MessageKindWyreTransferUpdated,
+			IDs:  []string{objectID},
+			At:   now,
+		}
 	default:
-		log.Printf("UNIMPLEMENTED TRANSFER WEBHOOK: %s %s", userID, req.Trigger)
+		log.Printf("UNIMPLEMENTED PHP WEBHOOK: %s %s", userID, req.Trigger)
 		return &emptypb.Empty{}, nil
 	}
 
-	err := s.Pusher.Send(userID, msg)
-	if err != nil {
-		return nil, err
+	if msg != nil {
+		err := s.Pusher.Send(userID, msg)
+		if err != nil {
+			log.Printf("Sending Pusher notification failed")
+			return nil, err
+		}
 	}
 
 	return &emptypb.Empty{}, nil
@@ -1179,29 +1505,57 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 		if err != nil {
 			return nil, err
 		}
-		if len(accounts) == 0 {
-			return &proto.WyrePaymentMethods{}, nil
+		if len(accounts) > 0 {
+			wyreAccountID = accounts[0].ID
 		}
 
-		wyreAccountID = accounts[0].ID
 	}
 
-	pms, err := s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccountID)
+	var out []*proto.WyrePaymentMethod
+
+	var pms []*paymentmethod.PaymentMethod
+	if wyreAccountID != "" {
+		pms, err = s.Db.GetWyrePaymentMethods(ctx, nil, u.ID, wyreAccountID)
+		if err != nil {
+			return nil, err
+		}
+
+		for _, pm := range pms {
+			out = append(out, &proto.WyrePaymentMethod{
+				LifecycleStatus:       proto.LifecycleStatus_L_CREATED,
+				Id:                    string(pm.ID),
+				Status:                pm.Status,
+				Name:                  pm.Name,
+				Last4:                 pm.Last4,
+				ChargeableCurrencies:  pm.ChargeableCurrencies,
+				DepositableCurrencies: pm.DepositableCurrencies,
+			})
+		}
+	}
+
+	pitems, err := s.Db.GetAllPlaidItems(ctx, nil, u.ID)
 	if err != nil {
 		return nil, err
 	}
 
-	var out []*proto.WyrePaymentMethod
-	for _, pm := range pms {
-		out = append(out, &proto.WyrePaymentMethod{
-			LifecyleStatus:        proto.LifecycleStatus_L_CREATED,
-			Id:                    string(pm.ID),
-			Status:                pm.Status,
-			Name:                  pm.Name,
-			Last4:                 pm.Last4,
-			ChargeableCurrencies:  pm.ChargeableCurrencies,
-			DepositableCurrencies: pm.DepositableCurrencies,
-		})
+	for _, plaidItem := range pitems {
+		pmCreated := false
+		for _, pm := range pms {
+			if item.ID(pm.PlaidItemID) == plaidItem.ID {
+				pmCreated = true
+				break
+			}
+		}
+
+		if !pmCreated {
+			for _, account := range plaidItem.Accounts {
+				out = append(out, &proto.WyrePaymentMethod{
+					LifecycleStatus: proto.LifecycleStatus_L_PENDING,
+					Name:            fmt.Sprintf("%s (%s)", account.Name, plaidItem.Institution.Name),
+					Last4:           account.Mask,
+				})
+			}
+		}
 	}
 
 	return &proto.WyrePaymentMethods{
@@ -1209,7 +1563,7 @@ func (s *Server) WyreGetPaymentMethods(ctx context.Context, _ *emptypb.Empty) (*
 	}, nil
 }
 
-func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTransferRequest) (*proto.WyreTransfer, error) {
+func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTransferRequest) (*proto.WyreTransferDetail, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
 		return nil, err
@@ -1267,13 +1621,22 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 		return nil, status.Error(codes.Unknown, "Unknown error while contacting wyre.")
 	}
 
+	trx := transaction.Transaction{
+		Kind: transaction.KindACH,
+	}.WithDefaults().EnrichWithWyreTransferDetail(t)
+	trx.Status = transaction.StatusQuoted
+	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
+	if err != nil {
+		return nil, err
+	}
+
 	// TODO: store info in db about xfer
 	fmt.Printf("WYRE TRANSFER RESP: %#v", t)
 
-	return wyre.WyreTransferToProto(t), nil
+	return wyre.WyreTransferDetailToProto(t), nil
 }
 
-func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirmTransferRequest) (*proto.WyreTransfer, error) {
+func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirmTransferRequest) (*proto.WyreTransferDetail, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
 		return nil, err
@@ -1304,8 +1667,44 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 		return nil, err
 	}
 
+	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		existingTrx, err := s.Db.GetTransactionByExternalId(ctx, tx, u.ID, transaction.ExternalID(req.TransferId))
+		if err != nil {
+			return err
+		}
+
+		if existingTrx == nil {
+			//return status.Errorf(codes.NotFound, "existing transaction not found")
+			log.Println("existing transaction not found during WyreConfirmTransfer; cannot update transaction")
+			return nil
+		}
+
+		trx := existingTrx.EnrichWithWyreTransferDetail(t)
+		trx.Status = transaction.StatusConfirmed
+
+		err = s.Db.SaveTransaction(ctx, tx, u.ID, &trx)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	hookResponse, err := s.Wyre.SubscribeWebhook(wyreAccount.SecretKey, "transfer:"+string(t.ID), string(s.APIHost)+"/wyre/hooks/"+string(u.ID))
+	if err != nil {
+		return nil, err
+	}
+	log.Printf("hook response from wyre: %#v", hookResponse)
+
 	// send email
-	msg := generateTransferMessage(mail.NewEmail("Customer", *u.Email), t)
+	msg, err := generateTransferMessage(mail.NewEmail("Customer", *u.Email), t)
+	if err != nil {
+		return nil, err
+	}
+
 	_, err = s.Sendgrid.Send(msg)
 	if err != nil {
 		return nil, err
@@ -1314,10 +1713,92 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 	// TODO: store info in db about xfer
 	fmt.Printf("Wyre transfer confirmation response: %#v", t)
 
-	return wyre.WyreTransferToProto(t), nil
+	return wyre.WyreTransferDetailToProto(t), nil
 }
 
-func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto.WyreTransfers, error) {
+func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetConfig) (*proto.WidgetGetShortUrlResponse, error) {
+	configJsonBytes, err := json.Marshal(req)
+	if err != nil {
+		return nil, err
+	}
+
+	id := fmt.Sprintf("WIDGET_CONFIG_%x", sha256.Sum256(configJsonBytes))
+	shortID, err := shortid.Generate()
+	if err != nil {
+		return nil, err
+	}
+
+	var wallets []gotoconfig.SnapWidgetWallet
+	for _, reqWallet := range req.Wallets {
+		wallets = append(wallets, gotoconfig.SnapWidgetWallet{
+			Asset:   reqWallet.Asset,
+			Address: reqWallet.Address,
+		})
+	}
+
+	swc := gotoconfig.SnapWidgetConfig{
+		AppName: req.AppName,
+		Wallets: wallets,
+		Intent:  req.Intent,
+		Focus:   req.Focus,
+		Theme:   req.Theme,
+	}
+
+	g := gotoconfig.Config{
+		ID:      gotoconfig.ID(id),
+		ShortID: gotoconfig.ShortID(shortID),
+		Config:  &swc,
+	}
+
+	if req.Product != nil {
+		swc.Product = &gotoconfig.SnapWidgetProduct{
+			ImageURL:           req.Product.Image_URL,
+			VideoURL:           req.Product.Video_URL,
+			DestinationAmount:  req.Product.DestinationAmount,
+			DestinationTicker:  req.Product.DestinationTicker,
+			DestinationAddress: req.Product.DestinationAddress,
+			Title:              req.Product.Title,
+			Author:             req.Product.Author,
+		}
+	}
+
+	shortid, err := s.Db.SaveGotoConfig(ctx, &g)
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WidgetGetShortUrlResponse{
+		Url: fmt.Sprintf("%s/g/%s", s.APIHost, shortid),
+	}, nil
+}
+
+func (s *Server) Goto(ctx context.Context, req *proto.GotoRequest) (*proto.GotoResponse, error) {
+	// lookup by shortid
+	g, err := s.Db.GetGotoConfigByShortID(ctx, gotoconfig.ShortID(req.Id))
+	if err != nil {
+		return nil, err
+	}
+
+	if g == nil {
+		return nil, status.Errorf(codes.NotFound, "goto ID not found")
+	}
+
+	configJsonBytes, err := json.Marshal(g.Config)
+	if err != nil {
+		return nil, err
+	}
+
+	params := url.Values{}
+	params.Add("config", string(configJsonBytes))
+	params.Add("ts", fmt.Sprintf("%d", time.Now().Unix()))
+
+	return &proto.GotoResponse{
+		Location: string(s.WebHost) + "/widget/?" + params.Encode(),
+	}, nil
+
+}
+
+func (s *Server) WyreGetTransfers(ctx context.Context, req *proto.WyreGetTransfersRequest) (*proto.WyreTransfers, error) {
 	u, err := RequireUserFromIncomingContext(ctx, s.Db)
 	if err != nil {
 		return nil, err
@@ -1338,7 +1819,7 @@ func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto
 		return &proto.WyreTransfers{}, nil
 	}
 
-	history, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey)
+	history, err := s.Wyre.GetTransferHistory(wyreAccount.SecretKey, req.Page*30, 30)
 	if err != nil {
 		return nil, err
 	}
@@ -1351,4 +1832,282 @@ func (s *Server) WyreGetTransfers(ctx context.Context, _ *emptypb.Empty) (*proto
 	return &proto.WyreTransfers{
 		Transfers: out,
 	}, nil
+}
+
+func (s *Server) WyreGetTransfer(ctx context.Context, req *proto.WyreGetTransferRequest) (*proto.WyreTransferDetail, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	var wyreAccount *account.Account
+	{
+		accounts, err := s.Db.GetWyreAccounts(ctx, nil, u.ID)
+		if err != nil {
+			return nil, err
+		}
+		if len(accounts) > 0 {
+			wyreAccount = accounts[0]
+		}
+	}
+
+	if wyreAccount == nil {
+		return nil, status.Errorf(codes.FailedPrecondition, "wyre account must exist to retrieve a transfer")
+	}
+
+	t, err := s.Wyre.GetTransfer(wyreAccount.SecretKey, req.TransferId)
+	if err != nil {
+		return nil, err
+	}
+
+	return wyre.WyreTransferDetailToProto(t), nil
+}
+
+func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCreateDebitCardQuoteRequest) (*proto.WyreCreateDebitCardQuoteResponse, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	var dest string
+	// Wyre only supports bitcoin or erc20 but expects this prefix
+	if strings.ToLower(req.DestCurrency) == "btc" {
+		dest = "bitcoin:" + req.Dest
+	} else {
+		dest = "ethereum:" + req.Dest
+	}
+
+	reqData := wyre.CreateWalletOrderReservationRequest{
+		Country:            req.Country,
+		PaymentMethod:      "debit-card",
+		SourceCurrency:     req.SourceCurrency,
+		DestCurrency:       req.DestCurrency,
+		SourceAmount:       req.SourceAmount,
+		LockFields:         req.LockFields,
+		Dest:               dest,
+		AmountIncludesFees: &req.AmountIncludesFees,
+	}
+
+	if req.SourceAmount > 0 {
+		reqData.SourceAmount = req.SourceAmount
+		reqData.DestAmount = 0
+	} else {
+		reqData.SourceAmount = 0
+		reqData.DestAmount = req.DestAmount
+	}
+
+	// Create the order reservation
+	createReservationResponse, err := s.Wyre.CreateWalletOrderReservation(reqData)
+
+	if err != nil {
+		return nil, err
+	}
+
+	trx := transaction.Transaction{
+		Kind: transaction.KindDebit,
+	}.WithDefaults().EnrichWithCreateWalletOrderReservationResponse(createReservationResponse)
+	trx.Status = transaction.StatusQuoted
+	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
+	if err != nil {
+		return nil, err
+	}
+
+	// Get the order reservation details because why would they return them in the previous call? :(
+	reservationResponse, err := s.Wyre.GetWalletOrderReservation(wyre.GetWalletOrderReservationRequest{
+		ReservationID: createReservationResponse.Reservation,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreCreateDebitCardQuoteResponse{
+		ReservationId: createReservationResponse.Reservation,
+		Quote: &proto.WyreWalletOrderReservationQuote{
+			// Return non prefixed dest
+			Dest:                    req.Dest,
+			ExchangeRate:            reservationResponse.Quote.ExchangeRate,
+			DestCurrency:            reservationResponse.Quote.DestCurrency,
+			SourceCurrency:          reservationResponse.Quote.SourceCurrency,
+			Fees:                    reservationResponse.Quote.Fees,
+			SourceAmount:            reservationResponse.Quote.SourceAmount,
+			DestAmount:              reservationResponse.Quote.DestAmount,
+			SourceAmountWithoutFees: reservationResponse.Quote.SourceAmountWithoutFees,
+			// Wyre doesn't return this for some reason but 10 minutes is the amount of time
+			// Remove a minute for latency and whatnot
+			ExpiresAt: time.Now().Add(time.Minute * 9).Format(time.RFC3339),
+		},
+	}, nil
+}
+
+func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreConfirmDebitCardQuoteRequest) (*proto.WyreConfirmDebitCardQuoteResponse, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+
+	if err != nil {
+		return nil, err
+	}
+
+	var dest string
+	// Wyre only supports bitcoin or erc20 but expects this prefix
+	if strings.ToLower(req.DestCurrency) == "btc" {
+		dest = "bitcoin:" + req.Dest
+	} else {
+		dest = "ethereum:" + req.Dest
+	}
+
+	card := req.Card
+
+	// Create the order
+	orderResponse, err := s.Wyre.CreateWalletOrder(wyre.CreateWalletOrderRequest{
+		ReservationID:  req.ReservationId,
+		SourceCurrency: req.SourceCurrency,
+		PurchaseAmount: req.SourceAmount,
+		DestCurrency:   req.DestCurrency,
+		SourceAmount:   req.SourceAmount,
+		Dest:           dest,
+		FirstName:      card.FirstName,
+		LastName:       card.LastName,
+		Email:          *u.Email,
+		PhoneNumber:    card.PhoneNumber,
+		ReferenceID:    "crypto_moon_lambo",
+		Address: wyre.WalletOrderAddress{
+			Street1:    card.Address.Street_1,
+			Street2:    card.Address.Street_2,
+			City:       card.Address.City,
+			State:      card.Address.State,
+			PostalCode: card.Address.PostalCode,
+			Country:    card.Address.Country,
+		},
+		DebitCard: wyre.WalletOrderDebitCard{
+			Number:           card.Number,
+			ExpirationMonth:  card.ExpirationMonth,
+			ExpirationYear:   card.ExpirationYear,
+			VerificationCode: card.VerificationCode,
+		},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+		existingTrx, err := s.Db.GetTransactionByExternalId(ctx, tx, u.ID, transaction.ExternalID(req.ReservationId))
+		if err != nil {
+			return err
+		}
+
+		if existingTrx == nil {
+			//return status.Errorf(codes.NotFound, "existing transaction not found")
+			log.Println("existing transaction not found during WyreConfirmDebitCardQuote; cannot update transaction")
+			return nil
+		}
+
+		trx := existingTrx.EnrichWithWalletOrder(orderResponse)
+		trx.Status = transaction.StatusConfirmed
+
+		err = s.Db.SaveTransaction(ctx, tx, u.ID, &trx)
+		if err != nil {
+			return err
+		}
+
+		return nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreConfirmDebitCardQuoteResponse{
+		OrderId:    orderResponse.ID,
+		Status:     orderResponse.Status,
+		TransferId: orderResponse.TransferID,
+	}, nil
+}
+
+func (s *Server) WyreGetDebitCardAuthorizations(ctx context.Context, req *proto.WyreGetDebitCardOrderAuthorizationsRequest) (*proto.WyreGetDebitCardOrderAuthorizationsResponse, error) {
+	res, err := s.Wyre.GetWalletOrderAuthorizations(wyre.GetWalletOrderAuthorizationsRequest{
+		OrderID: req.OrderId,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreGetDebitCardOrderAuthorizationsResponse{
+		WalletOrderId: res.WalletOrderID,
+		SmsNeeded:     res.SMSNeeded,
+		Card2FaNeeded: res.Card2faNeeded,
+	}, nil
+}
+
+func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *proto.WyreSubmitDebitCardOrderAuthorizationsRequest) (*proto.WyreSubmitDebitCardOrderAuthorizationsResponse, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	var verificationType string
+
+	if req.Card_2FaCode != "" && req.Sms_2FaCode == "" {
+		verificationType = "CARD"
+	}
+	if req.Card_2FaCode == "" && req.Sms_2FaCode != "" {
+		verificationType = "SMS"
+	}
+	if req.Card_2FaCode != "" && req.Sms_2FaCode != "" {
+		verificationType = "ALL"
+	}
+
+	res, err := s.Wyre.SubmitWalletOrderAuthorizations(wyre.SubmitWalletOrderAuthorizationsRequest{
+		WalletOrderID: wyre.WalletOrderID(req.OrderId),
+		Type:          verificationType,
+		Reservation:   req.ReservationId,
+		SMS:           req.Sms_2FaCode,
+		Card2fa:       req.Card_2FaCode,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	// Send email
+	msg, err := generateDebitCardTransactionMessage(mail.NewEmail("Customer", *u.Email), &wyre.WalletOrder{ID: req.OrderId})
+	if err != nil {
+		return nil, err
+	}
+
+	_, err = s.Sendgrid.Send(msg)
+	if err != nil {
+		return nil, err
+	}
+
+	return &proto.WyreSubmitDebitCardOrderAuthorizationsResponse{
+		Success: res.Success,
+	}, nil
+}
+
+func (s *Server) Geo(ctx context.Context, _ *emptypb.Empty) (*proto.GeoResponse, error) {
+	md, _ := metadata.FromIncomingContext(ctx)
+	vals := md.Get("cf-ipcountry")
+	val := ""
+	if len(vals) > 0 {
+		val = vals[0]
+	}
+	log.Printf("%#v\n", md)
+	return &proto.GeoResponse{
+		Country: val,
+	}, nil
+}
+
+func (s *Server) GetTransactions(ctx context.Context, req *proto.GetTransactionsRequest) (*proto.Transactions, error) {
+	u, err := RequireUserFromIncomingContext(ctx, s.Db)
+	if err != nil {
+		return nil, err
+	}
+
+	// todo: pagination
+	transactions, err := s.Db.GetTransactions(ctx, u.ID)
+	if err != nil {
+		return nil, err
+	}
+
+	return transactions.AsProto(), nil
 }

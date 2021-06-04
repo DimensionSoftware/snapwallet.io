@@ -1,0 +1,48 @@
+#!/usr/bin/env node
+
+const fs = require('fs')
+
+const usage = 'env2knative <inputFile> <serviceName> <image>'
+const inputFile = process.argv[2]
+const serviceName = process.argv[3]
+const image = process.argv[4]
+
+
+if (!inputFile || !serviceName || !image) {
+  console.log('usage: ' + usage)
+  process.exit(1)
+}
+
+const lines = fs.readFileSync(inputFile).toString().split('\n')
+
+const outyamlenv = []
+
+for (const line of lines) {
+  const [ k, v ] = line.split(/=(.*)/)
+  if (!k) {
+    continue
+  }
+
+  outyamlenv.push(`        - name: ${k} 
+          value: ${JSON.stringify(v)}`)
+}
+
+console.log(`apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ${JSON.stringify(serviceName)}
+spec:
+  template:
+    spec:
+      containerConcurrency: 15
+      timeoutSeconds: 30
+      containers:
+      - image: ${JSON.stringify(image)}
+        ports:
+        - containerPort: 5100
+        resources:
+          limits:
+            cpu: 2000m
+            memory: 512Mi
+        env:
+${outyamlenv.join('\n')}`)

@@ -36,7 +36,7 @@
 
 <ModalContent>
   <ModalHeader hideBackButton>Your ID</ModalHeader>
-  <ModalBody>
+  <ModalBody padded>
     <label label="Upload US Government ID (Front)">
       <strong>Upload US Government ID (Front)</strong><br />
       <input type="file" bind:this={fileEl} />

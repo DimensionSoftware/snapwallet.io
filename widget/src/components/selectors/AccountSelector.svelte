@@ -1,17 +1,18 @@
 <script lang="ts">
   import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
-  import { faUniversity } from '@fortawesome/free-solid-svg-icons'
+  import { faCreditCard, faUniversity } from '@fortawesome/free-solid-svg-icons'
   import { createEventDispatcher } from 'svelte'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../../constants'
   import { transactionStore } from '../../stores/TransactionStore'
   import { userStore } from '../../stores/UserStore'
-  import { TransactionIntents } from '../../types'
+  import { TransactionIntents, TransactionMediums } from '../../types'
   import IconCard from '../cards/IconCard.svelte'
   import PopupSelector from '../inputs/PopupSelector.svelte'
   import { paymentMethodStore } from '../../stores/PaymentMethodStore'
   import { cachePrimaryPaymentMethodID } from '../../util'
+  import { findNextKYCRoute } from '../../util/profiles'
   const dispatch = createEventDispatcher()
 
   export let visible = false
@@ -19,10 +20,16 @@
   $: ({ intent } = $transactionStore)
   $: ({ flags } = $userStore)
   $: isSell = intent === TransactionIntents.SELL
-  $: allPaymentMethods = [...$paymentMethodStore.wyrePaymentMethods]
+  $: allPaymentMethods = [
+    ...$paymentMethodStore.wyrePaymentMethods.sort(pm =>
+      pm.status.toLowerCase() === 'active' ? -1 : 1,
+    ),
+  ]
 
   let isLoadingPaymentMethods = true
   let copy
+  let verificationNextStep = findNextKYCRoute($userStore.profileItems)
+
   $: {
     if (isSell) {
       copy = {
@@ -39,6 +46,8 @@
         unavailable: 'No payment methods available',
       }
     }
+
+    verificationNextStep = findNextKYCRoute($userStore.profileItems)
   }
 
   onMount(() => {
@@ -60,40 +69,68 @@
   headerTitle={copy.headerTitle}
   on:close={() => dispatch('close')}
 >
-  <div class="scroll selector-container">
+  <div class="scroll-y selector-container">
     <h5 style="margin-bottom:1rem;">{copy.sectionOneTitle}</h5>
-    <div class="card-vertical-margin">
+    <div
+      class="card-vertical-margin"
+      in:fly={{ y: 25, duration: 200 + 50 * 1 }}
+    >
       <IconCard
         icon={faUniversity}
-        on:click={() => push(Routes.PLAID_LINK)}
+        on:click={() => {
+          // Route user to next KYC step when they don't have an active Wyre acct
+          const route =
+            !flags?.hasWyreAccount &&
+            verificationNextStep !== Routes.PROFILE_STATUS
+              ? verificationNextStep
+              : Routes.PLAID_LINK
+          push(route)
+        }}
         label="Bank Account"
+        title="Connect Your Bank Account"
       />
     </div>
     <h5 style="margin-top:2rem;margin-bottom:1rem;">{copy.sectionTwoTitle}</h5>
+    <div
+      class="card-vertical-margin"
+      in:fly={{ y: 25, duration: 200 + 50 * 2 }}
+    >
+      <IconCard
+        label="Debit Card"
+        icon={faCreditCard}
+        badgeText="Active"
+        badgeType="success"
+        on:click={() => {
+          transactionStore.update({ inMedium: TransactionMediums.DEBIT_CARD })
+          dispatch('close')
+        }}
+      />
+    </div>
     {#if !allPaymentMethods.length && isLoadingPaymentMethods}
       <p class="help">Retrieving Payment Methods...</p>
-    {:else if !allPaymentMethods.length && !isLoadingPaymentMethods}
-      <p class="help">{copy.unavailable}</p>
     {:else}
-      {#each allPaymentMethods as pm, i (pm.id)}
-        <div class="card-vertical-margin" in:fly={{ y: 25, duration: 50 * i }}>
+      {#each allPaymentMethods as pm, i (i + pm.id)}
+        <div
+          class="card-vertical-margin"
+          in:fly={{ y: 25, duration: 300 + 50 * i }}
+        >
           <IconCard
             label={pm.name}
             icon={faUniversity}
-            badgeText={['OPEN', 'PENDING'].includes(pm.status)
-              ? 'Pending'
-              : 'Active'}
-            badgeType={['OPEN', 'PENDING'].includes(pm.status)
-              ? 'warning'
-              : 'success'}
+            badgeText={pm.status === 'ACTIVE' ? 'Active' : 'Pending'}
+            badgeType={pm.status === 'ACTIVE' ? 'success' : 'warning'}
             on:click={() => {
-              transactionStore.setSelectedSourcePaymentMethod(pm)
+              transactionStore.update({
+                selectedSourcePaymentMethod: pm,
+                inMedium: TransactionMediums.ACH,
+              })
               cachePrimaryPaymentMethodID(pm.id)
               dispatch('close')
             }}
           />
         </div>
       {/each}
+      <div class="spacer" />
     {/if}
   </div>
 </PopupSelector>
@@ -101,6 +138,6 @@
 <style lang="scss">
   @import '../../styles/selectors.scss';
   h5 {
-    margin-bottom: -0.5rem;
+    margin-bottom: 0.5rem !important;
   }
 </style>

@@ -1,13 +1,15 @@
 <script lang="ts">
   export let success: boolean = false
   export let disabled: boolean = false
-  export let onClick: () => {}
+  export let custom: boolean = false
+  export let onClick: () => void
   export let title: string
 </script>
 
 <li
   on:click={onClick}
   {title}
+  class:custom
   class:success
   class:disabled
   style={onClick ? 'cursor: pointer' : ''}
@@ -26,26 +28,32 @@
   @import '../styles/animations.scss';
   li {
     position: relative;
+    z-index: 2;
     padding-left: 1.25rem;
     margin-left: 1rem;
-    margin-top: 0.75rem;
+    margin-top: 0.55rem;
+    &.custom {
+      :global(span):before {
+        display: none;
+      }
+    }
     // icon surround
-    :global(span.default-icon):before {
+    :global(span.default-icon:before) {
       position: absolute;
       content: '';
       background: var(--theme-text-color);
       border-radius: 50%;
-      height: 8px;
-      width: 8px;
-      left: 0;
-      top: 8px;
-      opacity: 1;
+      height: 6px;
+      width: 6px;
+      left: 1px;
+      top: 9px;
+      opacity: 0.7;
       z-index: 1;
     }
     > :global(span > svg) {
       position: absolute;
       left: -4px;
-      z-index: 1;
+      z-index: 4;
       top: 4px;
     }
     div {
@@ -81,7 +89,7 @@
       left: 3px;
       top: -20px;
       opacity: 0.3;
-      height: calc(100% + 12px);
+      height: calc(100% + 9px);
       content: '';
       background-color: var(--theme-text-color);
       background-position: 0 0;
@@ -89,20 +97,28 @@
       border-color: inherit;
       border-width: 0;
       outline: 0;
+      z-index: 0;
     }
     :global(span:before) {
-      background: var(--theme-color);
+      background: var(--theme-modal-background);
       position: absolute;
       content: '';
       border-radius: 50%;
-      opacity: 0.15;
+      opacity: 0.25;
       height: 26px;
       width: 26px;
       left: -9px;
       top: -1px;
+      z-index: 1;
+    }
+    :global(span.glow:before) {
+      box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.5);
+      animation: glow 1.5s linear;
+      animation-iteration-count: infinite;
     }
     &.success {
-      animation: scaleIn 0.3s ease-out;
+      animation: scaleIn 0.25s ease-out;
+      z-index: 1;
       :global(.total-container) {
         font-weight: bold;
       }
@@ -118,17 +134,24 @@
         background-color: var(--theme-success-color);
         background: var(--theme-success-color);
         width: 2px;
+        z-index: 0;
       }
       // hide the dot
       :global(span:before) {
-        opacity: 0.15;
-        background: var(--theme-success-color);
+        z-index: 3;
+        opacity: 1;
+        // background: var(--theme-success-color);
+        background: var(--theme-modal-background);
       }
       & > :global(.icon) {
         margin-left: 0.4rem;
       }
       &:before {
         border: 4px solid var(--theme-success-color) !important;
+      }
+
+      & > :global(span > svg) {
+        color: var(--theme-success-color);
       }
     }
     &.disabled {

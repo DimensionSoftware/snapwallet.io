@@ -14,7 +14,7 @@ import { LifecycleStatus } from './LifecycleStatus';
 import { HttpFile } from '../http/http';
 
 export class WyrePaymentMethod {
-    'lifecyleStatus'?: LifecycleStatus;
+    'lifecycleStatus'?: LifecycleStatus;
     'id'?: string;
     'status'?: string;
     'name'?: string;
@@ -26,8 +26,8 @@ export class WyrePaymentMethod {
 
     static readonly attributeTypeMap: Array<{name: string, baseName: string, type: string, format: string}> = [
         {
-            "name": "lifecyleStatus",
-            "baseName": "lifecyleStatus",
+            "name": "lifecycleStatus",
+            "baseName": "lifecycleStatus",
             "type": "LifecycleStatus",
             "format": ""
         },

@@ -7,6 +7,7 @@
   const dispatch = createEventDispatcher()
 
   export let icon
+  export let title: string
   export let label: string
   export let paddingSmall = false
   export let blend = false
@@ -15,10 +16,10 @@
 </script>
 
 <Card on:click={() => dispatch('click')}>
-  <div class="icon-card-container" class:blend class:paddingSmall>
+  <div {title} class="icon-card-container" class:blend class:paddingSmall>
     <div class="content-container">
       <FaIcon data={icon} />
-      <div class="label">{label}</div>
+      <div alt={label} class="label">{label}</div>
     </div>
     {#if badgeText}
       <Badge
@@ -40,7 +41,7 @@
   @import '../../styles/_vars.scss';
 
   .icon-card-container {
-    flex: 1;
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -50,11 +51,15 @@
     }
     & > .content-container {
       height: 100%;
-      width: 100%;
+      width: 70%;
       display: flex;
       justify-content: flex-start;
       align-items: center;
       & > .label {
+        width: 80%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
         font-weight: 500;
         margin-left: 0.5rem;
       }

@@ -3,7 +3,7 @@ import type {
   ProfileDataItemKind,
   ProfileDataItemRemediation,
 } from 'api-client'
-import { UserProfileFieldTypes } from '../constants'
+import { Routes, UserProfileFieldTypes } from '../constants'
 import type { RemediationGroups } from '../types'
 
 /**
@@ -30,6 +30,16 @@ export const groupRemediations = (
   })
 
   return result
+}
+
+export const remediationsAvailable = (
+  remediations: ProfileDataItemRemediation[],
+) => {
+  const result = groupRemediations(remediations)
+  return Object.values(result).reduce((acc, r) => {
+    if (acc) return acc
+    return r.length > 0
+  }, false)
 }
 
 export const isPersonalInfo = (kind: ProfileDataItemKind): boolean => {
@@ -61,8 +71,8 @@ export const isDocumentInfo = (kind: ProfileDataItemKind): boolean => {
 export const reducePersonalInfoFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  if (!remediations.length) return 'Identity is used for verification.'
-  const message = 'Your personal information requires an update.'
+  if (!remediations.length) return 'Step 1'
+  const message = 'Your identify information requires an update'
   const fields = []
 
   remediations.forEach(r => {
@@ -84,13 +94,13 @@ export const reducePersonalInfoFields = (
   if (fields.length === 2) {
     fieldMsg = `${fields[0]} and ${fields[1]}`
   }
-  return `${message} Fields include ${fieldMsg}.`
+  return `${message}: ${fieldMsg}.`
 }
 
 export const reduceDocumentFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  if (!remediations?.length) return 'Documents verify your person.'
+  if (!remediations?.length) return 'Documents used for verification'
   const message = 'One or more of your documents require an update.'
   const fields = []
 
@@ -121,7 +131,7 @@ export const reduceDocumentFields = (
 export const reduceAddressFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
-  if (!remediations.length) return 'Residence is used for verification.'
+  if (!remediations.length) return 'Residence used for verification'
   return 'An address update is required. Please provide your current residential address.'
 }
 
@@ -129,21 +139,24 @@ export const reduceContactFields = (
   remediations: ProfileDataItemRemediation[],
 ) => {
   if (!remediations.length) return 'Communication and security'
-  return 'One or more contacts is insufficient. Please update your contact information.'
+  return 'Please update your contact information.'
 }
 
 /**
  * Find missing fields and reduce a message for the user.
  */
-export const getMissingFieldMessages = (profileItems: {
-  [k: string]: ProfileDataItemInfo
-}) => {
+export const getMissingFieldMessages = (
+  profileItems: {
+    [k: string]: ProfileDataItemInfo
+  } = {},
+) => {
   const sections = {
     personal: {
       required: new Set(getRequiredPersonalFields()),
       submitted: new Set(),
       missing: new Set(),
       isComplete: false,
+      isValid: false,
       message: '',
     },
     address: {
@@ -151,6 +164,7 @@ export const getMissingFieldMessages = (profileItems: {
       submitted: new Set(),
       missing: new Set(),
       isComplete: false,
+      isValid: false,
       message: '',
     },
     contact: {
@@ -158,6 +172,7 @@ export const getMissingFieldMessages = (profileItems: {
       submitted: new Set(),
       missing: new Set(),
       isComplete: false,
+      isValid: false,
       message: '',
     },
     document: {
@@ -165,9 +180,12 @@ export const getMissingFieldMessages = (profileItems: {
       submitted: new Set(),
       missing: new Set(),
       isComplete: false,
+      isValid: false,
       message: '',
     },
   }
+
+  if (!Object.values(profileItems).length) return sections
 
   Object.values(profileItems).forEach(pi => {
     Object.values(sections).forEach(section => {
@@ -179,11 +197,11 @@ export const getMissingFieldMessages = (profileItems: {
 
   Object.entries(sections).forEach(([sectionName, section]) => {
     section.missing = getDiff(section.required, section.submitted)
-    section.isComplete =
+    section.isComplete = section.submitted.size === section.required.size
+    section.isValid =
       // User hasn't submitted anything for this section
-      section.submitted.size === 0 ||
-      section.submitted.size === section.required.size
-    if (!section.isComplete) {
+      section.submitted.size === 0 || section.isComplete
+    if (!section.isValid) {
       const remediations = [...section.missing].map(m => ({
         kind: m,
       })) as ProfileDataItemInfo[]
@@ -236,4 +254,23 @@ export const getRequiredContactFields = () => {
  */
 export const getRequiredDocumentFields = () => {
   return [UserProfileFieldTypes.US_GOVT_DOCUMENT]
+}
+
+export const findNextKYCRoute = (profileItems: {
+  [k: string]: ProfileDataItemInfo
+}): Routes => {
+  const missingInfo = getMissingFieldMessages(profileItems)
+
+  // NOTE: these should remain in the order of the KYC (non update) flow
+  if (!missingInfo.personal.isComplete) {
+    return Routes.PROFILE
+  } else if (!missingInfo.address.isComplete) {
+    return Routes.ADDRESS
+  } else if (!missingInfo.contact.isComplete) {
+    return Routes.PROFILE_SEND_SMS
+  } else if (!missingInfo.document.isComplete) {
+    return Routes.FILE_UPLOAD
+  } else {
+    return Routes.PROFILE_STATUS
+  }
 }

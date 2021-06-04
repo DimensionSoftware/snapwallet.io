@@ -46,8 +46,15 @@
 
       if (!minFieldFilled) {
         isSaving = false
-        return focus(0)
+        focus(0)
+        throw new Error('Enter and update your details below.')
       }
+
+      const parsedBirthDate =
+          Date.now() - Number(new Date(birthDate.replace(/-/g, '/'))),
+        isEighteen = !isNaN(parsedBirthDate) && parsedBirthDate >= 5.676e11
+
+      if (!isEighteen) throw new Error('You must be 18 years of age or older.')
 
       const [mm, dd, yyyy] = birthDate.split('-')
 
@@ -75,12 +82,10 @@
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent>
-  <ModalHeader>Tell Us About You</ModalHeader>
-  <ModalBody>
+  <ModalHeader>Your Identity</ModalHeader>
+  <ModalBody padded>
     {#if $userStore.isProfileComplete}
-      <h5 in:blur={{ duration: 300 }}>
-        Your profile was received. Update any detail:
-      </h5>
+      <h5 in:blur={{ duration: 300 }}>Identity received and may be updated:</h5>
     {:else}
       <h5>&nbsp;</h5>
     {/if}

@@ -6,10 +6,16 @@
   import { transactionStore } from '../../stores/TransactionStore'
   import { userStore } from '../../stores/UserStore'
   import VStep from '../../components/VStep.svelte'
+  import { TransactionMediums } from '../../types'
 
   export let isBuy: boolean = true
   export let onClick
   export let description
+  export let disabled: boolean | null = null
+
+  $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
+  $: success =
+    Boolean($transactionStore.selectedSourcePaymentMethod) || isDebitCard
 
   $: ({ flags } = $userStore)
 
@@ -29,23 +35,26 @@
 
 <VStep
   title="Select Your Payment Method"
-  disabled={!$userStore.isProfilePending && !flags?.hasWyreAccount}
-  success={$transactionStore.selectedSourcePaymentMethod}
+  disabled={disabled !== null
+    ? disabled
+    : !$userStore.isProfilePending && !flags?.hasWyreAccount}
+  {success}
   {onClick}
 >
-  <span slot="icon">
-    <FaIcon
-      data={!$transactionStore.selectedSourcePaymentMethod
-        ? faUniversity
-        : faCheck}
-    />
+  <span
+    class:glow={!disabled &&
+      !isDebitCard &&
+      !$transactionStore.selectedSourcePaymentMethod}
+    slot="icon"
+  >
+    <FaIcon data={!success ? faUniversity : faCheck} />
   </span>
   <b slot="step">
     <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
-    {#if $transactionStore.selectedSourcePaymentMethod}
+    {#if !isDebitCard && $transactionStore.selectedSourcePaymentMethod}
       {$transactionStore.selectedSourcePaymentMethod.name}
-    {:else if isBuy && !$paymentMethodStore.wyrePaymentMethods?.length}
-      Add Payment Method
+    {:else if isDebitCard}
+      Debit Card
     {:else if isBuy}
       Select Payment Method
     {:else}

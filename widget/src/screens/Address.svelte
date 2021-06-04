@@ -9,16 +9,19 @@
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
-  import { Logger, onEnterPressed } from '../util'
+  import { focusFirstInput, Logger, onEnterPressed } from '../util'
   import { Routes, UserProfileFieldTypes } from '../constants'
   import type { Address } from 'api-client'
   import { transactionStore } from '../stores/TransactionStore'
   import { onMount } from 'svelte'
+  import { getMissingFieldMessages } from '../util/profiles'
 
   export let isUpdateScreen: boolean = false
 
   let isSubmittingProfile = false
   let autocomplete: google.maps.places.Autocomplete
+
+  $: missingInfo = getMissingFieldMessages($userStore.profileItems)
 
   const componentForm = {
     street_number: 'short_name',
@@ -67,6 +70,7 @@
   }
 
   onMount(() => {
+    focusFirstInput()
     const waitForGoogle = () => {
       if (window.google?.maps) {
         initAutoComplete()
@@ -150,11 +154,9 @@
 
 <ModalContent>
   <ModalHeader>Your Address</ModalHeader>
-  <ModalBody>
-    {#if $userStore.isProfileComplete}
-      <h5 in:blur={{ duration: 300 }}>
-        Your address was received. Update any detail:
-      </h5>
+  <ModalBody padded>
+    {#if missingInfo.address.isComplete}
+      <h5 in:blur={{ duration: 300 }}>Address received and may be updated:</h5>
     {:else}
       <h5>&nbsp;</h5>
     {/if}
@@ -202,7 +204,10 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isSubmittingProfile} on:mousedown={handleNextStep}
+    <Button
+      id="address_save"
+      isLoading={isSubmittingProfile}
+      on:mousedown={handleNextStep}
       >{isSubmittingProfile ? 'Saving' : 'Save'}</Button
     >
   </ModalFooter>

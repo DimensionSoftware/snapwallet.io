@@ -12,13 +12,25 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import { userStore } from '../stores/UserStore'
   import { toaster } from '../stores/ToastStore'
-  import { Logger, onEnterPressed, focus, resizeWidget } from '../util'
+  import {
+    Logger,
+    onEnterPressed,
+    focus,
+    resizeWidget,
+    focusFirstInput,
+  } from '../util'
   import { Routes } from '../constants'
   import { Masks } from '../types'
   import { unMaskValue } from '../masks'
+  import { configStore } from '../stores/ConfigStore'
+  import CountrySelector from '../components/selectors/CountrySelector.svelte'
+  import PhoneInput from '../components/inputs/PhoneInput.svelte'
+
+  let countrySelectorVisible = false
+  $: isUSPhoneNumber = $userStore.phoneNumberCountry.code.toUpperCase() === 'US'
 
   onMount(() => {
-    resizeWidget(425)
+    resizeWidget(400, $configStore.appName)
   })
 
   export let phoneVerificationOnly: boolean = false
@@ -29,23 +41,31 @@
   const timeout = 700
 
   const handleNextStep = async () => {
-    try {
-      if (!phoneVerificationOnly && !isUsingPhoneNumber) {
-        let emailIsValid = vld8.isEmail($userStore.emailAddress)
-        if (!emailIsValid)
-          return focus(document.querySelector('input[type="email"]'))
-      } else {
-        const rawPhone = unMaskValue($userStore.phoneNumber, Masks.PHONE)
-        let isPhoneValid = vld8.isMobilePhone(rawPhone)
-        if (!isPhoneValid)
-          return focus(document.querySelector('input[type="tel"]'))
+    if (!phoneVerificationOnly && !isUsingPhoneNumber) {
+      let emailIsValid = vld8.isEmail($userStore.emailAddress)
+      if (!emailIsValid) {
+        focus(document.querySelector('input[type="email"]'))
+        throw new Error('Enter a valid email address.')
       }
+    } else {
+      const rawPhone =
+        $userStore.phoneNumberCountry.dial_code +
+        unMaskValue($userStore.phoneNumber, Masks.PHONE)
+      let isPhoneValid = vld8.isMobilePhone(rawPhone)
+      if (!isPhoneValid) {
+        focus(document.querySelector('input[type="tel"]'))
+        throw new Error('Enter a valid phone number.')
+      }
+    }
 
+    try {
       isMakingRequest = true
       await window.API.fluxOneTimePasscode({
         emailOrPhone:
           phoneVerificationOnly || isUsingPhoneNumber
-            ? `+${unMaskValue($userStore.phoneNumber, Masks.PHONE)}`
+            ? `${
+                $userStore.phoneNumberCountry.dial_code
+              }${$userStore.phoneNumber.replace(/[^0-9]/g, '')}`
             : $userStore.emailAddress,
       })
 
@@ -78,7 +98,7 @@
     {#if phoneVerificationOnly}
       Phone Verification
     {:else}
-      Login or Sign Up
+      Send Access Code
     {/if}
   </ModalHeader>
   <ModalBody>
@@ -112,15 +132,20 @@
     {:else}
       <div class="phone" in:fade={{ duration: 300 }}>
         <Label label="Your Phone Number">
-          <Input
+          <PhoneInput
+            on:select={() => (countrySelectorVisible = true)}
             inputmode="phone"
             autocapitalize="none"
             autocomplete="on"
-            autofocus
+            autofocus={!countrySelectorVisible}
             required
             type="tel"
-            mask={Masks.PHONE}
-            placeholder="1 (222) 333-4444"
+            mask={isUSPhoneNumber ? Masks.PHONE : undefined}
+            placeholder={$userStore.virtual.phone
+              ? $userStore.virtual.phone
+              : isUSPhoneNumber
+              ? '222 333-4444'
+              : '222333444'}
             defaultValue={$userStore.phoneNumber}
             on:change={e => {
               userStore.setPhoneNumber(e.detail)
@@ -142,7 +167,11 @@
     {/if}
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isMakingRequest} on:mousedown={handleNextStep}>
+    <Button
+      glow={$userStore.emailAddress.indexOf('@') > -1}
+      isLoading={isMakingRequest}
+      on:mousedown={handleNextStep}
+    >
       {#if isMakingRequest}
         Sending Code...
       {:else}
@@ -152,11 +181,30 @@
   </ModalFooter>
 </ModalContent>
 
+{#if countrySelectorVisible}
+  <CountrySelector
+    visible
+    selectedCountryCode={$userStore.phoneNumberCountry?.code ||
+      $userStore.address.country ||
+      $userStore.geo.country}
+    on:close={() => {
+      countrySelectorVisible = false
+      focusFirstInput()
+    }}
+    on:select={e => {
+      const { country } = e?.detail
+      country && userStore.setPhoneNumberCountry(country)
+      countrySelectorVisible = false
+      focusFirstInput()
+    }}
+  />
+{/if}
+
 <style lang="scss">
   @import '../styles/_vars.scss';
   .email,
   .phone {
-    margin-top: 10%;
+    margin: 10% 0.5rem 0 0.5rem;
   }
   .link {
     display: flex;

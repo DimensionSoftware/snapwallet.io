@@ -2,15 +2,19 @@ export * from './Address';
 export * from './ChangeViewerEmailRequest';
 export * from './ChangeViewerPhoneRequest';
 export * from './DocumentInput';
+export * from './GeoResponse';
 export * from './GetImageResponse';
+export * from './GotoResponse';
 export * from './ImageProcessingMode';
 export * from './InlineResponse200';
 export * from './LifecycleStatus';
 export * from './OneTimePasscodeRequest';
 export * from './OneTimePasscodeVerifyRequest';
 export * from './OneTimePasscodeVerifyResponse';
+export * from './PlaidAccount';
 export * from './PlaidConnectBankAccountsRequest';
 export * from './PlaidCreateLinkTokenResponse';
+export * from './PlaidInstitution';
 export * from './PricingDataResponse';
 export * from './PricingRate';
 export * from './ProfileDataInfo';
@@ -21,37 +25,58 @@ export * from './ProfileDataItemStatus';
 export * from './ProtobufAny';
 export * from './RpcStatus';
 export * from './SaveProfileDataRequest';
+export * from './SnapWidgetConfig';
+export * from './SnapWidgetProduct';
+export * from './SnapWidgetWallet';
 export * from './ThirdPartyUserAccount';
 export * from './TokenExchangeRequest';
 export * from './TokenExchangeResponse';
 export * from './TokenMaterial';
+export * from './Transaction';
+export * from './Transactions';
 export * from './UploadFileResponse';
 export * from './UsGovernmentIdDocumentInput';
 export * from './UsGovernmentIdDocumentInputKind';
 export * from './User';
 export * from './UserFlags';
 export * from './ViewerDataResponse';
+export * from './WidgetGetShortUrlResponse';
+export * from './WyreConfirmDebitCardQuoteRequest';
+export * from './WyreConfirmDebitCardQuoteResponse';
 export * from './WyreConfirmTransferRequest';
+export * from './WyreConnectBankAccountRequest';
+export * from './WyreCreateDebitCardQuoteRequest';
+export * from './WyreCreateDebitCardQuoteResponse';
 export * from './WyreCreateTransferRequest';
+export * from './WyreDebitCardInfo';
+export * from './WyreGetDebitCardOrderAuthorizationsResponse';
 export * from './WyrePaymentMethod';
 export * from './WyrePaymentMethods';
+export * from './WyreSubmitDebitCardOrderAuthorizationsRequest';
+export * from './WyreSubmitDebitCardOrderAuthorizationsResponse';
 export * from './WyreTransfer';
+export * from './WyreTransferDetail';
 export * from './WyreTransfers';
+export * from './WyreWalletOrderReservationQuote';
 export * from './WyreWebhookRequest';
 
 import { Address } from './Address';
 import { ChangeViewerEmailRequest } from './ChangeViewerEmailRequest';
 import { ChangeViewerPhoneRequest } from './ChangeViewerPhoneRequest';
 import { DocumentInput } from './DocumentInput';
+import { GeoResponse } from './GeoResponse';
 import { GetImageResponse } from './GetImageResponse';
+import { GotoResponse } from './GotoResponse';
 import { ImageProcessingMode } from './ImageProcessingMode';
 import { InlineResponse200 } from './InlineResponse200';
 import { LifecycleStatus } from './LifecycleStatus';
 import { OneTimePasscodeRequest } from './OneTimePasscodeRequest';
 import { OneTimePasscodeVerifyRequest } from './OneTimePasscodeVerifyRequest';
 import { OneTimePasscodeVerifyResponse } from './OneTimePasscodeVerifyResponse';
+import { PlaidAccount } from './PlaidAccount';
 import { PlaidConnectBankAccountsRequest } from './PlaidConnectBankAccountsRequest';
 import { PlaidCreateLinkTokenResponse } from './PlaidCreateLinkTokenResponse';
+import { PlaidInstitution } from './PlaidInstitution';
 import { PricingDataResponse } from './PricingDataResponse';
 import { PricingRate } from './PricingRate';
 import { ProfileDataInfo } from './ProfileDataInfo';
@@ -62,22 +87,39 @@ import { ProfileDataItemStatus } from './ProfileDataItemStatus';
 import { ProtobufAny } from './ProtobufAny';
 import { RpcStatus } from './RpcStatus';
 import { SaveProfileDataRequest } from './SaveProfileDataRequest';
+import { SnapWidgetConfig } from './SnapWidgetConfig';
+import { SnapWidgetProduct } from './SnapWidgetProduct';
+import { SnapWidgetWallet } from './SnapWidgetWallet';
 import { ThirdPartyUserAccount } from './ThirdPartyUserAccount';
 import { TokenExchangeRequest } from './TokenExchangeRequest';
 import { TokenExchangeResponse } from './TokenExchangeResponse';
 import { TokenMaterial } from './TokenMaterial';
+import { Transaction } from './Transaction';
+import { Transactions } from './Transactions';
 import { UploadFileResponse } from './UploadFileResponse';
 import { UsGovernmentIdDocumentInput } from './UsGovernmentIdDocumentInput';
 import { UsGovernmentIdDocumentInputKind } from './UsGovernmentIdDocumentInputKind';
 import { User } from './User';
 import { UserFlags } from './UserFlags';
 import { ViewerDataResponse } from './ViewerDataResponse';
+import { WidgetGetShortUrlResponse } from './WidgetGetShortUrlResponse';
+import { WyreConfirmDebitCardQuoteRequest } from './WyreConfirmDebitCardQuoteRequest';
+import { WyreConfirmDebitCardQuoteResponse } from './WyreConfirmDebitCardQuoteResponse';
 import { WyreConfirmTransferRequest } from './WyreConfirmTransferRequest';
+import { WyreConnectBankAccountRequest } from './WyreConnectBankAccountRequest';
+import { WyreCreateDebitCardQuoteRequest } from './WyreCreateDebitCardQuoteRequest';
+import { WyreCreateDebitCardQuoteResponse } from './WyreCreateDebitCardQuoteResponse';
 import { WyreCreateTransferRequest } from './WyreCreateTransferRequest';
+import { WyreDebitCardInfo } from './WyreDebitCardInfo';
+import { WyreGetDebitCardOrderAuthorizationsResponse } from './WyreGetDebitCardOrderAuthorizationsResponse';
 import { WyrePaymentMethod } from './WyrePaymentMethod';
 import { WyrePaymentMethods } from './WyrePaymentMethods';
+import { WyreSubmitDebitCardOrderAuthorizationsRequest } from './WyreSubmitDebitCardOrderAuthorizationsRequest';
+import { WyreSubmitDebitCardOrderAuthorizationsResponse } from './WyreSubmitDebitCardOrderAuthorizationsResponse';
 import { WyreTransfer } from './WyreTransfer';
+import { WyreTransferDetail } from './WyreTransferDetail';
 import { WyreTransfers } from './WyreTransfers';
+import { WyreWalletOrderReservationQuote } from './WyreWalletOrderReservationQuote';
 import { WyreWebhookRequest } from './WyreWebhookRequest';
 
 /* tslint:disable:no-unused-variable */
@@ -111,13 +153,17 @@ let typeMap: {[index: string]: any} = {
     "ChangeViewerEmailRequest": ChangeViewerEmailRequest,
     "ChangeViewerPhoneRequest": ChangeViewerPhoneRequest,
     "DocumentInput": DocumentInput,
+    "GeoResponse": GeoResponse,
     "GetImageResponse": GetImageResponse,
+    "GotoResponse": GotoResponse,
     "InlineResponse200": InlineResponse200,
     "OneTimePasscodeRequest": OneTimePasscodeRequest,
     "OneTimePasscodeVerifyRequest": OneTimePasscodeVerifyRequest,
     "OneTimePasscodeVerifyResponse": OneTimePasscodeVerifyResponse,
+    "PlaidAccount": PlaidAccount,
     "PlaidConnectBankAccountsRequest": PlaidConnectBankAccountsRequest,
     "PlaidCreateLinkTokenResponse": PlaidCreateLinkTokenResponse,
+    "PlaidInstitution": PlaidInstitution,
     "PricingDataResponse": PricingDataResponse,
     "PricingRate": PricingRate,
     "ProfileDataInfo": ProfileDataInfo,
@@ -126,21 +172,38 @@ let typeMap: {[index: string]: any} = {
     "ProtobufAny": ProtobufAny,
     "RpcStatus": RpcStatus,
     "SaveProfileDataRequest": SaveProfileDataRequest,
+    "SnapWidgetConfig": SnapWidgetConfig,
+    "SnapWidgetProduct": SnapWidgetProduct,
+    "SnapWidgetWallet": SnapWidgetWallet,
     "ThirdPartyUserAccount": ThirdPartyUserAccount,
     "TokenExchangeRequest": TokenExchangeRequest,
     "TokenExchangeResponse": TokenExchangeResponse,
     "TokenMaterial": TokenMaterial,
+    "Transaction": Transaction,
+    "Transactions": Transactions,
     "UploadFileResponse": UploadFileResponse,
     "UsGovernmentIdDocumentInput": UsGovernmentIdDocumentInput,
     "User": User,
     "UserFlags": UserFlags,
     "ViewerDataResponse": ViewerDataResponse,
+    "WidgetGetShortUrlResponse": WidgetGetShortUrlResponse,
+    "WyreConfirmDebitCardQuoteRequest": WyreConfirmDebitCardQuoteRequest,
+    "WyreConfirmDebitCardQuoteResponse": WyreConfirmDebitCardQuoteResponse,
     "WyreConfirmTransferRequest": WyreConfirmTransferRequest,
+    "WyreConnectBankAccountRequest": WyreConnectBankAccountRequest,
+    "WyreCreateDebitCardQuoteRequest": WyreCreateDebitCardQuoteRequest,
+    "WyreCreateDebitCardQuoteResponse": WyreCreateDebitCardQuoteResponse,
     "WyreCreateTransferRequest": WyreCreateTransferRequest,
+    "WyreDebitCardInfo": WyreDebitCardInfo,
+    "WyreGetDebitCardOrderAuthorizationsResponse": WyreGetDebitCardOrderAuthorizationsResponse,
     "WyrePaymentMethod": WyrePaymentMethod,
     "WyrePaymentMethods": WyrePaymentMethods,
+    "WyreSubmitDebitCardOrderAuthorizationsRequest": WyreSubmitDebitCardOrderAuthorizationsRequest,
+    "WyreSubmitDebitCardOrderAuthorizationsResponse": WyreSubmitDebitCardOrderAuthorizationsResponse,
     "WyreTransfer": WyreTransfer,
+    "WyreTransferDetail": WyreTransferDetail,
     "WyreTransfers": WyreTransfers,
+    "WyreWalletOrderReservationQuote": WyreWalletOrderReservationQuote,
     "WyreWebhookRequest": WyreWebhookRequest,
 }
 

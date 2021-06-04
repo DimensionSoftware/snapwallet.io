@@ -1,6 +1,7 @@
 package item
 
 import (
+	"encoding/json"
 	"time"
 
 	"github.com/khoerling/flux/api/lib/db/models/user"
@@ -10,12 +11,19 @@ import (
 // ID ...
 type ID string
 
+// AccountID ...
+type AccountID string
+
+// InstitutionID ...
+type InstitutionID string
+
 // EncryptedItem ...
 type EncryptedItem struct {
 	ID                   ID        `firestore:"id"`
 	DataEncryptionKey    []byte    `firestore:"DEK"`
 	AccessTokenEncrypted []byte    `firestore:"accessTokenEncrypted"`
-	AccountIDs           []string  `firestore:"accountIDs"`
+	InstitutionEncrypted []byte    `firestore:"institutionEncrypted"`
+	AccountsEncrypted    []byte    `firestore:"accountsEncrypted"`
 	CreatedAt            time.Time `firestore:"createdAt"`
 }
 
@@ -24,8 +32,24 @@ type EncryptedItem struct {
 type Item struct {
 	ID          ID
 	AccessToken string
-	AccountIDs  []string
+	Institution Institution
+	Accounts    []Account
 	CreatedAt   time.Time
+}
+
+// Institution ...
+type Institution struct {
+	ID   InstitutionID `json:"id"`
+	Name string        `json:"name"`
+}
+
+// Account ...
+type Account struct {
+	ID      AccountID `json:"id"`
+	Name    string    `json:"name"`
+	Mask    string    `json:"mask"`
+	Type    string    `json:"type"`
+	SubType string    `json:"subType"`
 }
 
 // Decrypt ...
@@ -41,29 +65,72 @@ func (enc *EncryptedItem) Decrypt(m *encryption.Manager, userID user.ID) (*Item,
 		return nil, err
 	}
 
+	institutionBytes, err := dek.Decrypt(enc.InstitutionEncrypted, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	var institution Institution
+	err = json.Unmarshal(institutionBytes, &institution)
+	if err != nil {
+		return nil, err
+	}
+
+	accountsBytes, err := dek.Decrypt(enc.AccountsEncrypted, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	var accounts []Account
+	err = json.Unmarshal(accountsBytes, &accounts)
+	if err != nil {
+		return nil, err
+	}
+
 	return &Item{
 		ID:          enc.ID,
 		AccessToken: *accessToken,
-		AccountIDs:  enc.AccountIDs,
+		Institution: institution,
+		Accounts:    accounts,
 		CreatedAt:   enc.CreatedAt,
 	}, nil
+
 }
 
 // Encrypt ...
-func (u *Item) Encrypt(m *encryption.Manager, userID user.ID) (*EncryptedItem, error) {
+func (item *Item) Encrypt(m *encryption.Manager, userID user.ID) (*EncryptedItem, error) {
 	dekH := encryption.NewDEK()
 	dek := encryption.NewEncryptor(dekH)
 
-	accessTokenEncrypted, err := encryption.EncryptStringIfNonNil(dek, []byte(userID), &u.AccessToken)
+	accessTokenEncrypted, err := encryption.EncryptStringIfNonNil(dek, []byte(userID), &item.AccessToken)
+	if err != nil {
+		return nil, err
+	}
+
+	institutionJSON, err := json.Marshal(&item.Institution)
+	if err != nil {
+		return nil, err
+	}
+	institutionEncrypted, err := dek.Encrypt(institutionJSON, []byte(userID))
+	if err != nil {
+		return nil, err
+	}
+
+	accountsJSON, err := json.Marshal(&item.Accounts)
+	if err != nil {
+		return nil, err
+	}
+	accountsEncrypted, err := dek.Encrypt(accountsJSON, []byte(userID))
 	if err != nil {
 		return nil, err
 	}
 
 	return &EncryptedItem{
-		ID:                   u.ID,
+		ID:                   item.ID,
 		DataEncryptionKey:    *encryption.GetEncryptedKeyBytes(dekH, m.Encryptor),
 		AccessTokenEncrypted: *accessTokenEncrypted,
-		AccountIDs:           u.AccountIDs,
-		CreatedAt:            u.CreatedAt,
+		InstitutionEncrypted: institutionEncrypted,
+		AccountsEncrypted:    accountsEncrypted,
+		CreatedAt:            item.CreatedAt,
 	}, nil
 }

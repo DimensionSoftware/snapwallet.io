@@ -39,8 +39,16 @@ func run() error {
 
 	// Register gRPC server endpint
 	// Note: Make sure the gRPC server is running properly and accessible
-	mux := runtime.NewServeMux()
 	opts := []grpc.DialOption{grpc.WithInsecure()}
+	opts2 := runtime.WithIncomingHeaderMatcher(func(key string) (string, bool) {
+		switch strings.ToLower(key) {
+		case "cf-ipcountry":
+			return key, true
+		default:
+			return key, false
+		}
+	})
+	mux := runtime.NewServeMux(opts2)
 	err := proto.RegisterFluxHandlerFromEndpoint(ctx, mux, *grpcServerEndpoint, opts)
 	if err != nil {
 		return err
@@ -63,8 +71,10 @@ func run() error {
 	mux.HandlePath("POST", "/upload", uploadFileHandler(ctx, client))
 	// GetImage thumbnailer translator for grpc (accept multipart on frontend)
 	mux.HandlePath("GET", "/viewer/images/{fileID}/{mode}/{width}/{height}", getImageHandler(ctx, client))
+	// Goto redirector
+	mux.HandlePath("GET", "/g/{id}", gotoHandler(ctx, client))
 
-	return http.ListenAndServe(apiPort(), allowCORS(mux))
+	return http.ListenAndServe(apiPort(), ipLogger(allowCORS(mux)))
 }
 
 // https://github.com/rephus/grpc-gateway-example/blob/master/main.go
@@ -76,6 +86,7 @@ func preflightHandler(w http.ResponseWriter, r *http.Request) {
 	glog.Infof("preflight request for %s", r.URL.Path)
 	return
 }
+
 func allowCORS(h http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if origin := r.Header.Get("Origin"); origin != "" {
@@ -85,6 +96,20 @@ func allowCORS(h http.Handler) http.Handler {
 				return
 			}
 		}
+		h.ServeHTTP(w, r)
+	})
+}
+
+func ipLogger(h http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		remoteAddr := r.RemoteAddr
+		directIP := remoteAddr[:strings.LastIndex(remoteAddr, ":")]
+
+		headerValue := r.Header.Get("x-forwarded-for")
+		forwardedIPs := strings.Split(headerValue, ",")
+
+		log.Printf("directIP: %s, forwardedIPs: %#v\n", directIP, forwardedIPs)
+
 		h.ServeHTTP(w, r)
 	})
 }
@@ -179,6 +204,46 @@ func uploadFileHandler(ctx context.Context, flux proto.FluxClient) runtime.Handl
 		}
 
 		w.Write(out)
+	}
+}
+
+func gotoHandler(ctx context.Context, flux proto.FluxClient) runtime.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		id := pathParams["id"]
+		if id == "" {
+			http.Error(w, "{\"code\":5,\"message\":\"goto ID not found\"}", http.StatusNotFound)
+			return
+		}
+
+		resp, err := flux.Goto(ctx, &proto.GotoRequest{
+			Id: id,
+		})
+		if err != nil {
+			resp := map[string]interface{}{}
+
+			status, ok := status.FromError(err)
+			if ok {
+				resp["code"] = status.Code()
+				resp["message"] = status.Message()
+			} else {
+				log.Println(err)
+				resp["code"] = codes.Unknown
+				resp["message"] = "An unknown error occurred."
+			}
+
+			out, err := json.Marshal(&resp)
+			if err != nil {
+				log.Println(err)
+				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				return
+			}
+
+			http.Error(w, string(out), runtime.HTTPStatusFromCode(resp["code"].(codes.Code)))
+			return
+		}
+
+		w.Header().Add("location", resp.Location)
+		w.WriteHeader(http.StatusTemporaryRedirect)
 	}
 }
 

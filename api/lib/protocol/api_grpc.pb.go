@@ -12,7 +12,6 @@ import (
 
 // This is a compile-time assertion to ensure that this generated file
 // is compatible with the grpc package it is being compiled against.
-// Requires gRPC-Go v1.32.0 or later.
 const _ = grpc.SupportPackageIsVersion7
 
 // FluxClient is the client API for Flux service.
@@ -48,6 +47,8 @@ type FluxClient interface {
 	//
 	// The passcode received in either email or phone text message should be provided here in order to obtain on access token
 	OneTimePasscodeVerify(ctx context.Context, in *OneTimePasscodeVerifyRequest, opts ...grpc.CallOption) (*OneTimePasscodeVerifyResponse, error)
+	// Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
+	Geo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GeoResponse, error)
 	// Exchange a refresh token for new token material; refresh tokens can only be used once
 	// If refresh tokens are used more than once RTR dictates that any access tokens which were created by it should be immediately revoked
 	// this is because this indicates an attack (something is wrong)
@@ -56,6 +57,9 @@ type FluxClient interface {
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
 	PlaidConnectBankAccounts(ctx context.Context, in *PlaidConnectBankAccountsRequest, opts ...grpc.CallOption) (*PlaidConnectBankAccountsResponse, error)
+	// Create a Wyre payment method using the Wyre <-> Plaid integration
+	//
+	WyreConnectBankAccount(ctx context.Context, in *WyreConnectBankAccountRequest, opts ...grpc.CallOption) (*WyrePaymentMethod, error)
 	// https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(ctx context.Context, in *PlaidCreateLinkTokenRequest, opts ...grpc.CallOption) (*PlaidCreateLinkTokenResponse, error)
 	// SaveProfileData saves profile data items for the user
@@ -64,10 +68,16 @@ type FluxClient interface {
 	SaveProfileData(ctx context.Context, in *SaveProfileDataRequest, opts ...grpc.CallOption) (*ProfileDataInfo, error)
 	WyreWebhook(ctx context.Context, in *WyreWebhookRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	WyreGetPaymentMethods(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyrePaymentMethods, error)
-	WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
-	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
-	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error)
-	WyreGetTransfers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyreTransfers, error)
+	WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
+	WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
+	WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error)
+	WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error)
+	GetTransactions(ctx context.Context, in *GetTransactionsRequest, opts ...grpc.CallOption) (*Transactions, error)
+	WyreCreateDebitCardQuote(ctx context.Context, in *WyreCreateDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardQuoteResponse, error)
+	WyreConfirmDebitCardQuote(ctx context.Context, in *WyreConfirmDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreConfirmDebitCardQuoteResponse, error)
+	WyreGetDebitCardAuthorizations(ctx context.Context, in *WyreGetDebitCardOrderAuthorizationsRequest, opts ...grpc.CallOption) (*WyreGetDebitCardOrderAuthorizationsResponse, error)
+	WyreSubmitDebitCardAuthorizations(ctx context.Context, in *WyreSubmitDebitCardOrderAuthorizationsRequest, opts ...grpc.CallOption) (*WyreSubmitDebitCardOrderAuthorizationsResponse, error)
+	WidgetGetShortUrl(ctx context.Context, in *SnapWidgetConfig, opts ...grpc.CallOption) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -78,6 +88,7 @@ type FluxClient interface {
 	//
 	// If the file is not of an image mime type, you will get an InvalidArguments error
 	GetImage(ctx context.Context, in *GetImageRequest, opts ...grpc.CallOption) (*GetImageResponse, error)
+	Goto(ctx context.Context, in *GotoRequest, opts ...grpc.CallOption) (*GotoResponse, error)
 }
 
 type fluxClient struct {
@@ -151,6 +162,15 @@ func (c *fluxClient) OneTimePasscodeVerify(ctx context.Context, in *OneTimePassc
 	return out, nil
 }
 
+func (c *fluxClient) Geo(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*GeoResponse, error) {
+	out := new(GeoResponse)
+	err := c.cc.Invoke(ctx, "/Flux/Geo", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *fluxClient) TokenExchange(ctx context.Context, in *TokenExchangeRequest, opts ...grpc.CallOption) (*TokenExchangeResponse, error) {
 	out := new(TokenExchangeResponse)
 	err := c.cc.Invoke(ctx, "/Flux/TokenExchange", in, out, opts...)
@@ -163,6 +183,15 @@ func (c *fluxClient) TokenExchange(ctx context.Context, in *TokenExchangeRequest
 func (c *fluxClient) PlaidConnectBankAccounts(ctx context.Context, in *PlaidConnectBankAccountsRequest, opts ...grpc.CallOption) (*PlaidConnectBankAccountsResponse, error) {
 	out := new(PlaidConnectBankAccountsResponse)
 	err := c.cc.Invoke(ctx, "/Flux/PlaidConnectBankAccounts", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreConnectBankAccount(ctx context.Context, in *WyreConnectBankAccountRequest, opts ...grpc.CallOption) (*WyrePaymentMethod, error) {
+	out := new(WyrePaymentMethod)
+	err := c.cc.Invoke(ctx, "/Flux/WyreConnectBankAccount", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -205,8 +234,8 @@ func (c *fluxClient) WyreGetPaymentMethods(ctx context.Context, in *emptypb.Empt
 	return out, nil
 }
 
-func (c *fluxClient) WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
-	out := new(WyreTransfer)
+func (c *fluxClient) WyreCreateTransfer(ctx context.Context, in *WyreCreateTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error) {
+	out := new(WyreTransferDetail)
 	err := c.cc.Invoke(ctx, "/Flux/WyreCreateTransfer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -214,8 +243,8 @@ func (c *fluxClient) WyreCreateTransfer(ctx context.Context, in *WyreCreateTrans
 	return out, nil
 }
 
-func (c *fluxClient) WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
-	out := new(WyreTransfer)
+func (c *fluxClient) WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error) {
+	out := new(WyreTransferDetail)
 	err := c.cc.Invoke(ctx, "/Flux/WyreConfirmTransfer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -223,8 +252,8 @@ func (c *fluxClient) WyreConfirmTransfer(ctx context.Context, in *WyreConfirmTra
 	return out, nil
 }
 
-func (c *fluxClient) WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransfer, error) {
-	out := new(WyreTransfer)
+func (c *fluxClient) WyreGetTransfer(ctx context.Context, in *WyreGetTransferRequest, opts ...grpc.CallOption) (*WyreTransferDetail, error) {
+	out := new(WyreTransferDetail)
 	err := c.cc.Invoke(ctx, "/Flux/WyreGetTransfer", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -232,9 +261,63 @@ func (c *fluxClient) WyreGetTransfer(ctx context.Context, in *WyreGetTransferReq
 	return out, nil
 }
 
-func (c *fluxClient) WyreGetTransfers(ctx context.Context, in *emptypb.Empty, opts ...grpc.CallOption) (*WyreTransfers, error) {
+func (c *fluxClient) WyreGetTransfers(ctx context.Context, in *WyreGetTransfersRequest, opts ...grpc.CallOption) (*WyreTransfers, error) {
 	out := new(WyreTransfers)
 	err := c.cc.Invoke(ctx, "/Flux/WyreGetTransfers", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) GetTransactions(ctx context.Context, in *GetTransactionsRequest, opts ...grpc.CallOption) (*Transactions, error) {
+	out := new(Transactions)
+	err := c.cc.Invoke(ctx, "/Flux/GetTransactions", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreCreateDebitCardQuote(ctx context.Context, in *WyreCreateDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreCreateDebitCardQuoteResponse, error) {
+	out := new(WyreCreateDebitCardQuoteResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreCreateDebitCardQuote", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreConfirmDebitCardQuote(ctx context.Context, in *WyreConfirmDebitCardQuoteRequest, opts ...grpc.CallOption) (*WyreConfirmDebitCardQuoteResponse, error) {
+	out := new(WyreConfirmDebitCardQuoteResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreConfirmDebitCardQuote", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreGetDebitCardAuthorizations(ctx context.Context, in *WyreGetDebitCardOrderAuthorizationsRequest, opts ...grpc.CallOption) (*WyreGetDebitCardOrderAuthorizationsResponse, error) {
+	out := new(WyreGetDebitCardOrderAuthorizationsResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreGetDebitCardAuthorizations", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WyreSubmitDebitCardAuthorizations(ctx context.Context, in *WyreSubmitDebitCardOrderAuthorizationsRequest, opts ...grpc.CallOption) (*WyreSubmitDebitCardOrderAuthorizationsResponse, error) {
+	out := new(WyreSubmitDebitCardOrderAuthorizationsResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WyreSubmitDebitCardAuthorizations", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) WidgetGetShortUrl(ctx context.Context, in *SnapWidgetConfig, opts ...grpc.CallOption) (*WidgetGetShortUrlResponse, error) {
+	out := new(WidgetGetShortUrlResponse)
+	err := c.cc.Invoke(ctx, "/Flux/WidgetGetShortUrl", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -253,6 +336,15 @@ func (c *fluxClient) UploadFile(ctx context.Context, in *UploadFileRequest, opts
 func (c *fluxClient) GetImage(ctx context.Context, in *GetImageRequest, opts ...grpc.CallOption) (*GetImageResponse, error) {
 	out := new(GetImageResponse)
 	err := c.cc.Invoke(ctx, "/Flux/GetImage", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *fluxClient) Goto(ctx context.Context, in *GotoRequest, opts ...grpc.CallOption) (*GotoResponse, error) {
+	out := new(GotoResponse)
+	err := c.cc.Invoke(ctx, "/Flux/Goto", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -292,6 +384,8 @@ type FluxServer interface {
 	//
 	// The passcode received in either email or phone text message should be provided here in order to obtain on access token
 	OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error)
+	// Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
+	Geo(context.Context, *emptypb.Empty) (*GeoResponse, error)
 	// Exchange a refresh token for new token material; refresh tokens can only be used once
 	// If refresh tokens are used more than once RTR dictates that any access tokens which were created by it should be immediately revoked
 	// this is because this indicates an attack (something is wrong)
@@ -300,6 +394,9 @@ type FluxServer interface {
 	//
 	// requires a plaid processor token which in turn requires a plaid widget interaction where the user selects the account id
 	PlaidConnectBankAccounts(context.Context, *PlaidConnectBankAccountsRequest) (*PlaidConnectBankAccountsResponse, error)
+	// Create a Wyre payment method using the Wyre <-> Plaid integration
+	//
+	WyreConnectBankAccount(context.Context, *WyreConnectBankAccountRequest) (*WyrePaymentMethod, error)
 	// https://plaid.com/docs/link/link-token-migration-guide/
 	PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error)
 	// SaveProfileData saves profile data items for the user
@@ -308,10 +405,16 @@ type FluxServer interface {
 	SaveProfileData(context.Context, *SaveProfileDataRequest) (*ProfileDataInfo, error)
 	WyreWebhook(context.Context, *WyreWebhookRequest) (*emptypb.Empty, error)
 	WyreGetPaymentMethods(context.Context, *emptypb.Empty) (*WyrePaymentMethods, error)
-	WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransfer, error)
-	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransfer, error)
-	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error)
-	WyreGetTransfers(context.Context, *emptypb.Empty) (*WyreTransfers, error)
+	WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransferDetail, error)
+	WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransferDetail, error)
+	WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransferDetail, error)
+	WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error)
+	GetTransactions(context.Context, *GetTransactionsRequest) (*Transactions, error)
+	WyreCreateDebitCardQuote(context.Context, *WyreCreateDebitCardQuoteRequest) (*WyreCreateDebitCardQuoteResponse, error)
+	WyreConfirmDebitCardQuote(context.Context, *WyreConfirmDebitCardQuoteRequest) (*WyreConfirmDebitCardQuoteResponse, error)
+	WyreGetDebitCardAuthorizations(context.Context, *WyreGetDebitCardOrderAuthorizationsRequest) (*WyreGetDebitCardOrderAuthorizationsResponse, error)
+	WyreSubmitDebitCardAuthorizations(context.Context, *WyreSubmitDebitCardOrderAuthorizationsRequest) (*WyreSubmitDebitCardOrderAuthorizationsResponse, error)
+	WidgetGetShortUrl(context.Context, *SnapWidgetConfig) (*WidgetGetShortUrlResponse, error)
 	// UploadFile uploads a file and returns a file id
 	//
 	// ...
@@ -322,6 +425,7 @@ type FluxServer interface {
 	//
 	// If the file is not of an image mime type, you will get an InvalidArguments error
 	GetImage(context.Context, *GetImageRequest) (*GetImageResponse, error)
+	Goto(context.Context, *GotoRequest) (*GotoResponse, error)
 	mustEmbedUnimplementedFluxServer()
 }
 
@@ -350,11 +454,17 @@ func (UnimplementedFluxServer) OneTimePasscode(context.Context, *OneTimePasscode
 func (UnimplementedFluxServer) OneTimePasscodeVerify(context.Context, *OneTimePasscodeVerifyRequest) (*OneTimePasscodeVerifyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method OneTimePasscodeVerify not implemented")
 }
+func (UnimplementedFluxServer) Geo(context.Context, *emptypb.Empty) (*GeoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Geo not implemented")
+}
 func (UnimplementedFluxServer) TokenExchange(context.Context, *TokenExchangeRequest) (*TokenExchangeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method TokenExchange not implemented")
 }
 func (UnimplementedFluxServer) PlaidConnectBankAccounts(context.Context, *PlaidConnectBankAccountsRequest) (*PlaidConnectBankAccountsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidConnectBankAccounts not implemented")
+}
+func (UnimplementedFluxServer) WyreConnectBankAccount(context.Context, *WyreConnectBankAccountRequest) (*WyrePaymentMethod, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreConnectBankAccount not implemented")
 }
 func (UnimplementedFluxServer) PlaidCreateLinkToken(context.Context, *PlaidCreateLinkTokenRequest) (*PlaidCreateLinkTokenResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method PlaidCreateLinkToken not implemented")
@@ -368,23 +478,44 @@ func (UnimplementedFluxServer) WyreWebhook(context.Context, *WyreWebhookRequest)
 func (UnimplementedFluxServer) WyreGetPaymentMethods(context.Context, *emptypb.Empty) (*WyrePaymentMethods, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetPaymentMethods not implemented")
 }
-func (UnimplementedFluxServer) WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransfer, error) {
+func (UnimplementedFluxServer) WyreCreateTransfer(context.Context, *WyreCreateTransferRequest) (*WyreTransferDetail, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateTransfer not implemented")
 }
-func (UnimplementedFluxServer) WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransfer, error) {
+func (UnimplementedFluxServer) WyreConfirmTransfer(context.Context, *WyreConfirmTransferRequest) (*WyreTransferDetail, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreConfirmTransfer not implemented")
 }
-func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransfer, error) {
+func (UnimplementedFluxServer) WyreGetTransfer(context.Context, *WyreGetTransferRequest) (*WyreTransferDetail, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfer not implemented")
 }
-func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *emptypb.Empty) (*WyreTransfers, error) {
+func (UnimplementedFluxServer) WyreGetTransfers(context.Context, *WyreGetTransfersRequest) (*WyreTransfers, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method WyreGetTransfers not implemented")
+}
+func (UnimplementedFluxServer) GetTransactions(context.Context, *GetTransactionsRequest) (*Transactions, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTransactions not implemented")
+}
+func (UnimplementedFluxServer) WyreCreateDebitCardQuote(context.Context, *WyreCreateDebitCardQuoteRequest) (*WyreCreateDebitCardQuoteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreCreateDebitCardQuote not implemented")
+}
+func (UnimplementedFluxServer) WyreConfirmDebitCardQuote(context.Context, *WyreConfirmDebitCardQuoteRequest) (*WyreConfirmDebitCardQuoteResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreConfirmDebitCardQuote not implemented")
+}
+func (UnimplementedFluxServer) WyreGetDebitCardAuthorizations(context.Context, *WyreGetDebitCardOrderAuthorizationsRequest) (*WyreGetDebitCardOrderAuthorizationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreGetDebitCardAuthorizations not implemented")
+}
+func (UnimplementedFluxServer) WyreSubmitDebitCardAuthorizations(context.Context, *WyreSubmitDebitCardOrderAuthorizationsRequest) (*WyreSubmitDebitCardOrderAuthorizationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WyreSubmitDebitCardAuthorizations not implemented")
+}
+func (UnimplementedFluxServer) WidgetGetShortUrl(context.Context, *SnapWidgetConfig) (*WidgetGetShortUrlResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method WidgetGetShortUrl not implemented")
 }
 func (UnimplementedFluxServer) UploadFile(context.Context, *UploadFileRequest) (*UploadFileResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UploadFile not implemented")
 }
 func (UnimplementedFluxServer) GetImage(context.Context, *GetImageRequest) (*GetImageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetImage not implemented")
+}
+func (UnimplementedFluxServer) Goto(context.Context, *GotoRequest) (*GotoResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Goto not implemented")
 }
 func (UnimplementedFluxServer) mustEmbedUnimplementedFluxServer() {}
 
@@ -395,8 +526,8 @@ type UnsafeFluxServer interface {
 	mustEmbedUnimplementedFluxServer()
 }
 
-func RegisterFluxServer(s grpc.ServiceRegistrar, srv FluxServer) {
-	s.RegisterService(&Flux_ServiceDesc, srv)
+func RegisterFluxServer(s *grpc.Server, srv FluxServer) {
+	s.RegisterService(&_Flux_serviceDesc, srv)
 }
 
 func _Flux_ViewerData_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -525,6 +656,24 @@ func _Flux_OneTimePasscodeVerify_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _Flux_Geo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(emptypb.Empty)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).Geo(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/Geo",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).Geo(ctx, req.(*emptypb.Empty))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _Flux_TokenExchange_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TokenExchangeRequest)
 	if err := dec(in); err != nil {
@@ -557,6 +706,24 @@ func _Flux_PlaidConnectBankAccounts_Handler(srv interface{}, ctx context.Context
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(FluxServer).PlaidConnectBankAccounts(ctx, req.(*PlaidConnectBankAccountsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreConnectBankAccount_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreConnectBankAccountRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreConnectBankAccount(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreConnectBankAccount",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreConnectBankAccount(ctx, req.(*WyreConnectBankAccountRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -688,7 +855,7 @@ func _Flux_WyreGetTransfer_Handler(srv interface{}, ctx context.Context, dec fun
 }
 
 func _Flux_WyreGetTransfers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(emptypb.Empty)
+	in := new(WyreGetTransfersRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -700,7 +867,115 @@ func _Flux_WyreGetTransfers_Handler(srv interface{}, ctx context.Context, dec fu
 		FullMethod: "/Flux/WyreGetTransfers",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(FluxServer).WyreGetTransfers(ctx, req.(*emptypb.Empty))
+		return srv.(FluxServer).WyreGetTransfers(ctx, req.(*WyreGetTransfersRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_GetTransactions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetTransactionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).GetTransactions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/GetTransactions",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).GetTransactions(ctx, req.(*GetTransactionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreCreateDebitCardQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreCreateDebitCardQuoteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreCreateDebitCardQuote(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreCreateDebitCardQuote",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreCreateDebitCardQuote(ctx, req.(*WyreCreateDebitCardQuoteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreConfirmDebitCardQuote_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreConfirmDebitCardQuoteRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreConfirmDebitCardQuote(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreConfirmDebitCardQuote",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreConfirmDebitCardQuote(ctx, req.(*WyreConfirmDebitCardQuoteRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreGetDebitCardAuthorizations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreGetDebitCardOrderAuthorizationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreGetDebitCardAuthorizations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreGetDebitCardAuthorizations",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreGetDebitCardAuthorizations(ctx, req.(*WyreGetDebitCardOrderAuthorizationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WyreSubmitDebitCardAuthorizations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(WyreSubmitDebitCardOrderAuthorizationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WyreSubmitDebitCardAuthorizations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WyreSubmitDebitCardAuthorizations",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WyreSubmitDebitCardAuthorizations(ctx, req.(*WyreSubmitDebitCardOrderAuthorizationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Flux_WidgetGetShortUrl_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SnapWidgetConfig)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).WidgetGetShortUrl(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/WidgetGetShortUrl",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).WidgetGetShortUrl(ctx, req.(*SnapWidgetConfig))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -741,10 +1016,25 @@ func _Flux_GetImage_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-// Flux_ServiceDesc is the grpc.ServiceDesc for Flux service.
-// It's only intended for direct use with grpc.RegisterService,
-// and not to be introspected or modified (even as a copy)
-var Flux_ServiceDesc = grpc.ServiceDesc{
+func _Flux_Goto_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GotoRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FluxServer).Goto(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/Flux/Goto",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FluxServer).Goto(ctx, req.(*GotoRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+var _Flux_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "Flux",
 	HandlerType: (*FluxServer)(nil),
 	Methods: []grpc.MethodDesc{
@@ -777,12 +1067,20 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Flux_OneTimePasscodeVerify_Handler,
 		},
 		{
+			MethodName: "Geo",
+			Handler:    _Flux_Geo_Handler,
+		},
+		{
 			MethodName: "TokenExchange",
 			Handler:    _Flux_TokenExchange_Handler,
 		},
 		{
 			MethodName: "PlaidConnectBankAccounts",
 			Handler:    _Flux_PlaidConnectBankAccounts_Handler,
+		},
+		{
+			MethodName: "WyreConnectBankAccount",
+			Handler:    _Flux_WyreConnectBankAccount_Handler,
 		},
 		{
 			MethodName: "PlaidCreateLinkToken",
@@ -817,12 +1115,40 @@ var Flux_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Flux_WyreGetTransfers_Handler,
 		},
 		{
+			MethodName: "GetTransactions",
+			Handler:    _Flux_GetTransactions_Handler,
+		},
+		{
+			MethodName: "WyreCreateDebitCardQuote",
+			Handler:    _Flux_WyreCreateDebitCardQuote_Handler,
+		},
+		{
+			MethodName: "WyreConfirmDebitCardQuote",
+			Handler:    _Flux_WyreConfirmDebitCardQuote_Handler,
+		},
+		{
+			MethodName: "WyreGetDebitCardAuthorizations",
+			Handler:    _Flux_WyreGetDebitCardAuthorizations_Handler,
+		},
+		{
+			MethodName: "WyreSubmitDebitCardAuthorizations",
+			Handler:    _Flux_WyreSubmitDebitCardAuthorizations_Handler,
+		},
+		{
+			MethodName: "WidgetGetShortUrl",
+			Handler:    _Flux_WidgetGetShortUrl_Handler,
+		},
+		{
 			MethodName: "UploadFile",
 			Handler:    _Flux_UploadFile_Handler,
 		},
 		{
 			MethodName: "GetImage",
 			Handler:    _Flux_GetImage_Handler,
+		},
+		{
+			MethodName: "Goto",
+			Handler:    _Flux_Goto_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

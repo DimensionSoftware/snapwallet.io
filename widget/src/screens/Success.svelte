@@ -7,12 +7,23 @@
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
-  import { TransactionIntents } from '../types'
+  import { TransactionIntents, TransactionMediums } from '../types'
   import { ParentMessenger } from '../util/parent_messenger'
+  import { configStore } from '../stores/ConfigStore'
+  import { debitCardStore } from '../stores/DebitCardStore'
+  import { onDestroy } from 'svelte'
+
+  let isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
+
+  $: ({ product } = $configStore)
 
   $: ({ intent, wyrePreview } = $transactionStore)
 
-  $: ({ sourceCurrency, destCurrency: destinationCurrency } = wyrePreview)
+  $: ({
+    sourceCurrency,
+    destCurrency: destinationCurrency,
+    destAmount: destinationAmount,
+  } = wyrePreview)
   $: isBuy = intent === TransactionIntents.BUY
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
 
@@ -21,11 +32,18 @@
     // if within a model, let that close first
     setTimeout(() => push(Routes.ROOT), 250)
   }
+
+  onDestroy(() => {
+    // Make sure screens do not read previous data
+    // for other types of future transfers
+    debitCardStore.clear()
+    transactionStore.reset()
+  })
 </script>
 
 <ModalContent>
   <ModalHeader hideBackButton>Success</ModalHeader>
-  <ModalBody>
+  <ModalBody padded>
     <div class="icon-box">
       <svg
         id="successAnimation"
@@ -60,9 +78,25 @@
       </svg>
     </div>
     <div class="text-center">
-      <p>Your <b>{cryptoTicker}</b> checkout is confirmed!</p>
+      {#if product}
+        <p>
+          You have successfully confirmed your transfer of <b
+            >{destinationAmount} {cryptoTicker}</b
+          > for
+        </p>
+        <p>
+          <b>{product.title}</b>
+        </p>
+      {:else}
+        <p>Your <b>{cryptoTicker}</b> checkout is confirmed!</p>
+      {/if}
       <p>
-        Please allow up to five (5) business days for your purchase to complete.
+        {#if isDebitCard}
+          Please allow up to one (1) business day for your purchase to complete.
+        {:else}
+          Please allow up to five (5) business days for your purchase to
+          complete.
+        {/if}
       </p>
     </div>
   </ModalBody>
@@ -155,17 +189,17 @@
     opacity: 0;
   }
   #successAnimation.animated {
-    animation: 0.9s var(--theme-ease-out-expo) 0s 1 both scaleAnimation;
+    animation: 1s ease-out 0s 1 both scaleAnimation;
     #successAnimationCircle {
       animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCircle,
-        0.3s var(--theme-ease-out-expo) 0.9s 1 both fadeOut;
+        0.3s linear 0.9s 1 both fadeOut;
     }
     #successAnimationCheck {
       animation: 1s cubic-bezier(0.77, 0, 0.175, 1) 0s 1 both drawCheck,
-        0.3s var(--theme-ease-out-expo) 0.9s 1 both fadeOut;
+        0.3s linear 0.9s 1 both fadeOut;
     }
     #successAnimationResult {
-      animation: 0.3s var(--theme-ease-out-back) 0.8s both fadeIn;
+      animation: 0.3s linear 0.9s both fadeIn;
     }
   }
 </style>

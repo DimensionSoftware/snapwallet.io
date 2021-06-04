@@ -5,12 +5,14 @@ import (
 
 	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db"
 	"github.com/khoerling/flux/api/lib/filemanager"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
-	"github.com/khoerling/flux/api/lib/interfaces/ijobpublisher"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
+	"github.com/khoerling/flux/api/lib/jobmanager"
 	proto "github.com/khoerling/flux/api/lib/protocol"
 	"github.com/khoerling/flux/api/lib/remedymanager"
 	"github.com/plaid/plaid-go/plaid"
@@ -30,14 +32,16 @@ type Server struct {
 	FileManager                   *filemanager.Manager
 	Db                            db.Db
 	Wyre                          *wyre.Client
-	WyreManager                   *wyre.Manager
+	WyreManager                   *wyremanager.Manager
 	Plaid                         *plaid.Client
 	JwtSigner                     *auth.JwtSigner
 	JwtVerifier                   *auth.JwtVerifier
 	AuthManager                   *auth.Manager
 	Pusher                        *pusher.Manager
-	JobPublisher                  ijobpublisher.JobPublisher
+	JobPublisher                  jobmanager.IJobPublisher
 	RemedyManager                 *remedymanager.Manager
+	config.APIHost
+	config.WebHost
 }
 
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"

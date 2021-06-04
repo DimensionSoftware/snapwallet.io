@@ -25,6 +25,7 @@ COPY --from=0 \
   /tmp/build/grpcgateway \
   ./
 
+COPY lib/server/templates lib/server/templates
 COPY lib/swagger lib/swagger
 COPY public public
 

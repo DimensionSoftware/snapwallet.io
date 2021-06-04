@@ -2,28 +2,32 @@
 // so each import does not redefine the variables
 
 // theme
-$themeColor: #ffc600;
 $themeColor: #485460;
 $themeColorInverse: white;
 $themeColorDarkened: darken($themeColor, 10%);
-$themeColorLightened: lighten($themeColor, 50%);
+$themeColorLightened: lighten($themeColor, 57%);
 $themeFont: 'Helvetica Neue', Arial, sans-serif;
 $headingFont: 'Impact', 'Fira Sans Condensed';
 
 // colors
 $inputTextColor: #333;
 $textColor: #333;
+$badgeTextColor: $textColor;
 $textColor2: rgba($textColor, 0.9);
 $textColor3: rgba($textColor, 0.7);
 $textColor4: rgba($textColor, 0.5);
 $textColorMuted: $textColor2;
+$buttonColor: $themeColor;
+$buttonGlowColor: $themeColor;
+$buttonTextColor: $themeColorInverse;
 // NOTE: avoid linear gradient for react native safeview embedding
 // - solid catch;  let's eventually make a RN theme and/or toggle
 // $modalBackground: #f0f0f0;
-$modalBackground: linear-gradient(#eee, #fff);
+$modalBackgroundColor: #fff;
+$modalBackground: linear-gradient(#eee, $modalBackgroundColor);
 $modalPopupBackground: linear-gradient(
-  rgba(255, 255, 255, 0.85),
-  rgba(255, 255, 255, 0.95)
+  rgba(255, 255, 255, 0.8),
+  rgba(255, 255, 255, 0.92)
 );
 $modalContainerBackgroundColor: radial-gradient(
   circle closest-corner at 50% 40%,
@@ -34,7 +38,7 @@ $modalContainerBackgroundColor: radial-gradient(
 $shadowColor: rgba(0, 0, 0, 0.123);
 $shadowBottomColor: $themeColorInverse;
 
-$success: #2ce5b7;
+$success: #00d395;
 $error: #ff3f34;
 $warning: #ffd32a;
 $info: #0fbcf9;
@@ -59,5 +63,19 @@ $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   right: 0;
   bottom: -1.5rem;
   height: 5px;
-  box-shadow: 0 0 30px 50px var(--theme-shadow-bottom-color);
+  z-index: 10;
+  box-shadow: 0 0 30px 30px var(--theme-shadow-bottom-color);
+}
+
+::-moz-selection {
+  color: $themeColorInverse;
+  background: $themeColor;
+}
+::selection {
+  color: $themeColorInverse;
+  background: $themeColor;
+}
+
+@function toRGB($color) {
+  @return red($color) + ', ' + green($color) + ', ' + blue($color);
 }

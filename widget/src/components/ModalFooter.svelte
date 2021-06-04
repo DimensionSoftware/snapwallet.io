@@ -5,14 +5,14 @@
 <style lang="scss">
   .modal-footer {
     /* height: 10%; */
-    /* flex-grow: 1; */
+    flex-grow: 1;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
     // Match with body and header
-    padding: 0 1rem 2rem 1rem;
+    padding: 0 1.5rem 2rem 1.5rem;
     span {
       cursor: pointer;
       font-size: 0.9rem;

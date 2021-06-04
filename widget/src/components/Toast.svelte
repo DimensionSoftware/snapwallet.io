@@ -9,7 +9,11 @@
   $: error = Boolean($toaster?.error)
 </script>
 
-<div class="toast-wrapper" title="Click to Dismiss" on:click={toaster.dismiss}>
+<div
+  class="toast-wrapper"
+  title="Click to Dismiss"
+  on:mousedown={toaster.dismiss}
+>
   {#if $toaster}
     <div
       class="toast-item"
@@ -45,29 +49,28 @@
     z-index: 9999;
     // Don't overlay top of modal
     height: 0px;
+    padding: 0 0.75rem;
     cursor: pointer;
+    font-size: 1rem;
   }
 
   .toast-item {
     position: relative;
     display: flex;
-    align-items: center;
-    padding: 0 1rem;
+    align-items: flex-start;
+    padding: 1rem 1.25rem;
     width: 100%;
-    min-height: 60px;
-    max-height: 100px;
-    color: white;
+    min-height: 100px;
+    max-height: 250px;
+    color: var(--theme-text-color);
     font-weight: 500;
+    line-height: 1rem;
     z-index: 9999;
     &:before {
-      background: linear-gradient(
-        to right,
-        var(--theme-color),
-        var(--theme-color-darkened)
-      );
+      background: var(--theme-color);
       content: '';
       position: absolute;
-      opacity: 0.98;
+      opacity: 0.05;
       top: 0;
       bottom: 0;
       left: 0;
@@ -75,21 +78,16 @@
       z-index: -1;
     }
     &.error:before {
-      background: linear-gradient(
-        to right,
-        var(--theme-color),
-        var(--theme-color-darkened)
-      );
+      background: var(--theme-error-color);
+      background: var(--theme-modal-background);
     }
     &.warning:before {
-      background: linear-gradient(
-        to right,
-        var(--theme-color),
-        var(--theme-color-darkened)
-      );
+      background: var(--theme-warning-color);
+      background: var(--theme-modal-background);
     }
     &.success:before {
       background-color: var(--theme-success-color);
+      background: var(--theme-modal-background);
     }
   }
 </style>

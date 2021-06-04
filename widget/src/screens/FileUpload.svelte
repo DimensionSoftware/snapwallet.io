@@ -2,6 +2,8 @@
   import { fly, blur } from 'svelte/transition'
   import { push } from 'svelte-spa-router'
   import {
+    faCheck,
+    faExclamationCircle,
     faFileImage,
     faHome,
     faIdCard,
@@ -21,6 +23,8 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { userStore } from '../stores/UserStore'
   import { FileUploadTypes } from '../types'
+  import { getMissingFieldMessages } from '../util/profiles'
+  import FaIcon from 'svelte-awesome'
 
   export let isUpdatingFiles: boolean = false
 
@@ -47,6 +51,8 @@
     }
   }
 
+  $: missingInfo = getMissingFieldMessages($userStore.profileItems)
+
   const handleNextStep = async () => {
     try {
       isUploadingFile = true
@@ -56,6 +62,9 @@
         setTimeout(() => {
           selectedFileURI = ''
           selectedFileName = ''
+          // Clear the element val so chrome doesn't
+          // silently fail to show the preview [ch266]
+          fileEl.value = ''
         }, 800)
       }
       if (fileIds.length >= minimumFiles) {
@@ -75,15 +84,14 @@
             },
           }),
         })
-        setTimeout(() => {
-          Logger.debug(profileResponse.wyre)
-          if (profileResponse.wyre) userStore.setProfilePending()
-          const wyreApproved = profileResponse.wyre?.status === 'APPROVED'
-          if (isUpdatingFiles) push(Routes.PROFILE_STATUS)
-          else if (wyreApproved && $transactionStore.sourceAmount)
-            push(Routes.CHECKOUT_OVERVIEW)
-          else push(Routes.ROOT)
-        }, 800)
+
+        Logger.debug('Profile response', profileResponse)
+        await userStore.fetchUserProfile()
+        const wyreApproved = profileResponse.wyre?.status === 'APPROVED'
+        if (isUpdatingFiles) push(Routes.PROFILE_STATUS)
+        else if (wyreApproved && $transactionStore.sourceAmount)
+          push(Routes.CHECKOUT_OVERVIEW)
+        else push(Routes.ROOT)
       }
     } finally {
       setTimeout(() => (isUploadingFile = false), 800)
@@ -106,14 +114,19 @@
       icon: faIdCard,
       label: 'Drivers License',
     },
-    [FileUploadTypes.ACH_AUTHORIZATION_FORM]: {
+  }
+
+  // Only allow these file types after initial KYC has been done
+  if (isUpdatingFiles) {
+    SELECTOR_OPTIONS[FileUploadTypes.ACH_AUTHORIZATION_FORM] = {
       icon: faUniversity,
       label: 'Bank Authorization Form',
-    },
-    [FileUploadTypes.PROOF_OF_ADDRESS]: {
+    }
+
+    SELECTOR_OPTIONS[FileUploadTypes.PROOF_OF_ADDRESS] = {
       icon: faHome,
       label: 'Proof of Address',
-    },
+    }
   }
 
   const getSelectorProps = fileType => {
@@ -129,22 +142,38 @@
 </script>
 
 <ModalContent>
-  <ModalHeader>Verify Identity</ModalHeader>
-  <ModalBody>
-    {#if $userStore.isProfileComplete}
-      <h5 in:blur={{ duration: 300 }}>
-        Your document was received. Update any:
-      </h5>
+  <ModalHeader>
+    {#if missingInfo.document.isComplete}
+      Identity Received
     {:else}
-      <h5>&nbsp;</h5>
+      Verify Identity
+    {/if}
+  </ModalHeader>
+  <ModalBody padded>
+    {#if missingInfo.document.submitted.size}
+      <div style="display:flex;align-items:center;">
+        <span style="margin-right:0.5rem;">
+          <FaIcon
+            scale={0.75}
+            data={!missingInfo.document.isValid ? faExclamationCircle : faCheck}
+          />
+        </span>
+        <h5 in:blur={{ duration: 300 }}>
+          {missingInfo.document.submitted.size}
+          {missingInfo.document.submitted.size > 1 ? 'Documents' : 'Document'} Uploaded
+        </h5>
+      </div>
+    {:else}
+      <h5 in:blur={{ duration: 300 }}>Upload one of:</h5>
     {/if}
     <div style="margin-top:1rem;margin-bottom:0.75rem;">
       <IconCard
+        title="Select a Document Type"
         blend
         icon={iconCardProps.icon}
         on:click={() => {
           // Can't change this once one doc side is uploaded
-          if (fileIds.length && minimumFiles >= 1) {
+          if (fileIds.length && minimumFiles > 1) {
             return
           }
           isFileTypeSelectorOpen = true
@@ -152,7 +181,11 @@
         label={iconCardProps.label}
       />
     </div>
-    <div on:click={openFileBrowser} class="dropzone">
+    <div
+      on:mousedown={openFileBrowser}
+      title="Click to Upload a Document"
+      class="dropzone"
+    >
       {#if selectedFileURI}
         <img
           class="selected-image"
@@ -186,6 +219,7 @@
   </ModalBody>
   <ModalFooter>
     <Button
+      glow={selectedFileName !== ''}
       isLoading={isUploadingFile}
       disabled={!fileType}
       on:mousedown={handleNextStep}
@@ -201,7 +235,7 @@
     }}
     headerTitle="Select a Document Type"
   >
-    <div class="scroll selector-container">
+    <div class="scroll-y selector-container">
       {#each Object.entries(SELECTOR_OPTIONS) as [optionFileType, options], i}
         <div
           in:fly={{ y: 25, duration: 250 + 50 * (i + 1) }}
@@ -214,6 +248,7 @@
           />
         </div>
       {/each}
+      <div class="spacer" />
     </div>
   </PopupSelector>
 {/if}
@@ -227,10 +262,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 0.5rem;
     height: 60%;
-    width: 100%;
-    border: 1px dashed var(--theme-color);
+    width: auto;
+    border: 1px dashed var(--theme-text-color);
     cursor: pointer;
     font-weight: 600;
   }

@@ -1,35 +1,25 @@
 <script lang="ts">
+  import VirtualList from '../VirtualList.svelte'
   import { createEventDispatcher } from 'svelte'
+  import { SUPPORTED_CRYPTOCURRENCY_ASSETS } from '../../constants'
   import { fly } from 'svelte/transition'
   import CryptoCard from '../cards/CryptoCard.svelte'
   import Label from '../inputs/Label.svelte'
   import PopupSelector from '../inputs/PopupSelector.svelte'
   const dispatch = createEventDispatcher()
 
-  const cryptoCurrencies = [
-    { name: 'Aave', ticker: 'AAVE' },
-    { name: 'Basic Attention Token', ticker: 'BAT' },
-    { name: 'Binance USD', ticker: 'BUSD' },
-    { name: 'Bitcoin', ticker: 'BTC', popular: true },
-    { name: 'Curve', ticker: 'CRV' },
-    { name: 'Compound', ticker: 'COMP' },
-    { name: 'DAI', ticker: 'DAI' },
-    { name: 'Ethereum', ticker: 'ETH', popular: true },
-    { name: 'Gemini Dollar', ticker: 'GUSD' },
-    { name: 'Link', ticker: 'LINK' },
-    { name: 'MakerDAO', ticker: 'MKR' },
-    { name: 'Paxos Standard', ticker: 'PAX' },
-    { name: 'Stably Dollar', ticker: 'USDS' },
-    { name: 'Synthetix', ticker: 'SNX' },
-    { name: 'Tether', ticker: 'USDT', popular: true },
-    { name: 'UMA', ticker: 'UMA' },
-    { name: 'USDC', ticker: 'USDC' },
-    { name: 'Uniswap', ticker: 'UNI', popular: true },
-    { name: 'Wrapped Bitcoin', ticker: 'WBTC' },
-    { name: 'Yearn.Finance', ticker: 'YFI' },
-  ]
-
   export let visible = false
+
+  const items = SUPPORTED_CRYPTOCURRENCY_ASSETS.sort((a, b) => {
+    // float popular to top
+    if (a.popular && b.popular) return 0
+    if (a.popular) return -1
+    if (b.popular) return 1
+    // alpha
+    if (a.name < b.name) return -1
+    if (a.name > b.name) return 1
+    return 0
+  })
 </script>
 
 {#if visible}
@@ -37,39 +27,27 @@
     on:close={() => dispatch('close')}
     headerTitle="Select Currency"
   >
-    <div class="scroll selector-container">
-      <h5>Popular</h5>
-      {#each cryptoCurrencies.filter(c => c.popular) as cryptoCurrency, i (cryptoCurrency.ticker)}
-        <div
-          in:fly={{ y: 25, duration: 250 + 50 * (i + 1) }}
-          style="margin: 0.5rem 0"
-        >
-          <Label fx={false}>
-            <CryptoCard
-              on:mousedown={() => dispatch('close')}
-              crypto={cryptoCurrency}
-            />
-          </Label>
-        </div>
-      {/each}
-      <h5 style="margin-top: 1.25rem">All</h5>
-      {#each cryptoCurrencies.filter(c => !c.popular) as cryptoCurrency, i (cryptoCurrency.ticker)}
-        <div
-          in:fly={{ y: 25, duration: 250 + 50 * (i + 4) }}
-          style="margin: 0.5rem 0"
-        >
-          <Label>
-            <CryptoCard
-              on:mousedown={() => dispatch('close')}
-              crypto={cryptoCurrency}
-            />
-          </Label>
-        </div>
-      {/each}
+    <div class="selector-container">
+      <VirtualList {items} let:item>
+        <Label fx={false}>
+          <CryptoCard on:mousedown={() => dispatch('close')} crypto={item} />
+        </Label>
+      </VirtualList>
+      <div class="spacer" />
     </div>
   </PopupSelector>
 {/if}
 
 <style lang="scss">
   @import '../../styles/selectors.scss';
+  .selector-container {
+    padding-top: 0;
+  }
+  :global(svelte-virtual-list-viewport) {
+    height: 120% !important;
+    padding-bottom: 50% !important;
+  }
+  :global(svelte-virtual-list-row) {
+    padding-left: 7px;
+  }
 </style>

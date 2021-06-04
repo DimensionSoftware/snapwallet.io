@@ -16,14 +16,18 @@
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
-  import { Routes, APIErrors, ParentMessages } from './constants'
+  import {
+    Routes,
+    APIErrors,
+    ParentMessages,
+    SUPPORTED_CRYPTOCURRENCY_ASSETS,
+  } from './constants'
   import {
     authedRouteOptions,
     capitalize,
     isJWTValid,
     Logger,
     onEscPressed,
-    focus as focusElement,
   } from './util'
   import { ParentMessenger } from './util/parent_messenger'
   import { userStore } from './stores/UserStore'
@@ -35,19 +39,18 @@
   import { transactionStore } from './stores/TransactionStore'
   import { paymentMethodStore } from './stores/PaymentMethodStore'
   import ProfileStatus from './screens/ProfileStatus.svelte'
-  import type { ProductType } from './types'
   import Product from './screens/Product.svelte'
-
-  // Querystring provided props, see main.ts.
-  export let appName: string
-  export let intent: 'buy' | 'sell'
-  export let apiKey: string
-  export let theme: object
-  export let focus: boolean
-  export let product: ProductType
+  import { configStore } from './stores/ConfigStore'
+  import DebitCard from './screens/DebitCard.svelte'
+  import DebitCardAddress from './screens/DebitCardAddress.svelte'
+  import DebitCard2fa from './screens/DebitCard2fa.svelte'
+  import { debitCardStore } from './stores/DebitCardStore'
+  import TransactionDetails from './screens/TransactionDetails.svelte'
+  import { transactionDetailsStore } from './stores/TransactionsStore'
 
   $: isPreLogout = false
   $: isBlurred = false
+  $: isHeaderBlurred = false
 
   // auth bits
   window.addEventListener('logout', _ => {
@@ -65,6 +68,13 @@
     isPreLogout = true
   })
 
+  // blurry fx
+  window.addEventListener('blurryHeader', _ => {
+    isHeaderBlurred = true
+  })
+  window.addEventListener('unblurryHeader', _ => {
+    isHeaderBlurred = false
+  })
   window.addEventListener('blurry', _ => {
     isBlurred = true
   })
@@ -79,12 +89,15 @@
   window.addEventListener(ParentMessages.RESIZE, (event: Event) => {
     // respond to custom screen heights
     height = event.detail?.height || HEIGHT
-    ParentMessenger.resize(height)
+    ParentMessenger.resize(height, $configStore.appName)
   })
   $: {
-    // reset screen height at every change
-    if (lastLocation !== $location) height = HEIGHT
-    lastLocation = $location
+    if (lastLocation !== $location) {
+      // reset screen height at every change
+      height = HEIGHT
+      ParentMessenger.resize(height, $configStore.appName) // iframe
+      lastLocation = $location
+    }
   }
 
   // Handler for routing condition failure
@@ -122,20 +135,20 @@
       if (e.target !== document.body) onEscPressed(e, ParentMessenger.exit)
     },
     onMouseDown = (e: MouseEvent) => {
-      if ((e.target as Element).id === 'modal') ParentMessenger.exit()
+      if ((e.target as Element)?.id === 'modal') ParentMessenger.exit()
     }
 
   const routes = {
     [Routes.ROOT]: wrap({
-      component: (product ? Product : Home) as any,
-      props: { appName, intent, apiKey, product },
+      component: ($configStore.product?.destinationTicker
+        ? Product
+        : Home) as any,
     }),
     [Routes.SELECT_PAYMENT]: wrap({
       component: SelectPayment as any,
     }),
     [Routes.SEND_OTP]: wrap({
       component: SendOTP as any,
-      props: { appName, intent, apiKey },
       conditions: [() => !isJWTValid()],
     }),
     [Routes.VERIFY_OTP]: wrap({
@@ -162,15 +175,19 @@
     [Routes.TRANSACTIONS]: wrap({
       ...authedRouteOptions(Transactions),
     }),
+    [Routes.TRANSACTION_DETAILS]: wrap({
+      ...authedRouteOptions(TransactionDetails),
+      conditions: [
+        isJWTValid,
+        () => Boolean($transactionDetailsStore.transaction),
+      ],
+    }),
     [Routes.PLAID_LINK]: wrap({
       ...authedRouteOptions(PlaidWidget),
     }),
     [Routes.CHECKOUT_OVERVIEW]: wrap({
       ...authedRouteOptions(Overview),
       conditions: [isJWTValid, () => Boolean($transactionStore.wyrePreview)],
-      props: {
-        product,
-      },
     }),
     [Routes.ADDRESS]: wrap({
       ...authedRouteOptions(Address),
@@ -202,38 +219,92 @@
         phoneVerificationOnly: true,
       },
     }),
+    [Routes.DEBIT_CARD]: wrap({
+      ...authedRouteOptions(DebitCard),
+      conditions: [
+        isJWTValid,
+        () => {
+          return Boolean(
+            $debitCardStore.address.country &&
+              $transactionStore.wyrePreview &&
+              $transactionStore.sourceAmount,
+          )
+        },
+      ],
+    }),
+    [Routes.DEBIT_CARD_ADDRESS]: wrap({
+      ...authedRouteOptions(DebitCardAddress),
+      conditions: [
+        isJWTValid,
+        () => {
+          return Boolean(
+            $debitCardStore.address.country &&
+              $transactionStore.wyrePreview &&
+              $transactionStore.sourceAmount &&
+              $debitCardStore.reservationId,
+          )
+        },
+      ],
+    }),
+    [Routes.DEBIT_CARD_2FA]: wrap({
+      ...authedRouteOptions(DebitCard2fa),
+      conditions: [
+        isJWTValid,
+        () => {
+          return Boolean(
+            $debitCardStore.address.country &&
+              $debitCardStore.address.street1 &&
+              $transactionStore.wyrePreview &&
+              $transactionStore.sourceAmount &&
+              $debitCardStore.reservationId,
+          )
+        },
+      ],
+    }),
     '*': NotFound as any,
   }
 
   // Set theme context so theme can be used in JS also
   setContext('theme', {
-    ...theme,
+    ...$configStore.theme,
+  })
+
+  userStore.subscribe(state => {
+    // Set this once fetchGeo runs
+    if (!$debitCardStore.address?.country) {
+      debitCardStore.updateAddress({ country: state.geo?.country || '' })
+    }
   })
 
   onMount(() => {
+    const defaultDestinationAsset = SUPPORTED_CRYPTOCURRENCY_ASSETS.find(
+      sca => {
+        return (
+          sca.ticker.toLowerCase() ===
+          $configStore.defaultDestinationAsset?.toLowerCase()
+        )
+      },
+    )
+
+    if (defaultDestinationAsset) {
+      transactionStore.setDestinationCurrency(defaultDestinationAsset)
+    }
+
     // pre-fetch user
+    userStore.fetchGeo()
     if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
       userStore.fetchUserProfile()
       paymentMethodStore.fetchWyrePaymentMethods()
       // set user flags up, non-blocking
-      window.API.fluxViewerData().then(({ flags = {}, user = {} }) => {
-        userStore.setFlags({
-          ...flags,
-          hasEmail: Boolean(user.email),
-          hasPhone: Boolean(user.phone),
-        })
-      })
+      userStore.fetchFlags()
     }
     // Override theme css variables
-    Object.entries(theme).forEach(([k, v]) => {
+    Object.entries($configStore.theme).forEach(([k, v]) => {
       k = k.replace(/[A-Z]/g, (k, i) =>
         i === 0 ? k.toLowerCase() : `-${k.toLowerCase()}`,
       )
       document.documentElement.style.setProperty(`--theme-${k}`, v, 'important')
     })
-
-    // handle viewer focus
-    if (focus) focusElement(document.getElementById('amount'), 350)
 
     // Centralized error handler
     window.onunhandledrejection = e => {
@@ -245,6 +316,7 @@
         reason?.body?.code === APIErrors.UNAUTHORIZED &&
         ($location as Routes) !== Routes.VERIFY_OTP
       ) {
+        Logger.debug('Logout called from onunhandledrejection because of:', e)
         // expired session, so-- automagically logout
         window.AUTH_MANAGER.logout()
         transactionStore.reset()
@@ -271,6 +343,7 @@
     id="modal-body"
     style={`height: ${height}`}
     class:blur={isPreLogout || isBlurred}
+    class:blur-header={isHeaderBlurred}
   >
     <Router on:conditionsFailed={routeConditionsFailed} {routes} />
     <Toast />
@@ -295,7 +368,7 @@
     src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
   <script
     defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDr7FQk1bZV4Zght87YNUgCv5P4cg_1DIs&libraries=places"></script>
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCrIHFoF52WJV5iH4-IyPd1CbBRwXXOymw&libraries=places"></script>
 </svelte:head>
 
 <style lang="scss">
@@ -322,11 +395,16 @@
 
     // colors
     --theme-input-text-color: #{inputTextColor};
+    --theme-badge-text-color: #{$badgeTextColor};
     --theme-text-color: #{$textColor};
     --theme-text-color-2: #{$textColor2};
     --theme-text-color-3: #{$textColor3};
     --theme-text-color-4: #{$textColor4};
     --theme-text-color-muted: #{$textColorMuted};
+    --theme-button-color: #{$buttonColor};
+    // XXX glow color format is "r,g,b", eg. "255,50,15"
+    --theme-button-glow-color: #{toRGB($buttonGlowColor)};
+    --theme-button-text-color: #{$buttonTextColor};
     --theme-modal-background: #{$modalBackground};
     --theme-modal-popup-background: #{$modalPopupBackground};
     --theme-modal-container-background-color: #{$modalContainerBackgroundColor};
@@ -352,7 +430,33 @@
       text-decoration: underline;
     }
   }
-
+  :global(.spacer) {
+    margin-top: 1.5rem;
+  }
+  :global(.scroll-y) {
+    overflow: hidden;
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  :global(.scroll-y::-webkit-scrollbar) {
+    display: none;
+    background: transparent;
+    height: 0;
+    width: 0;
+  }
+  #modal:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    opacity: 0;
+    background: var(--theme-modal-container-background-color);
+    animation: backgroundFadeIn 1s ease-out forwards;
+  }
   #modal,
   :global(#plaid-link-iframe-1) {
     position: absolute;
@@ -364,9 +468,7 @@
     width: 100%;
     height: 100%;
     overflow: hidden !important;
-    background: var(--theme-modal-container-background-color);
-    opacity: 0;
-    animation: backgroundFadeIn 1s ease-out forwards;
+    opacity: 1;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -374,6 +476,8 @@
     font-family: var(--theme-font);
     font-size: 1rem;
     line-height: 1.5rem;
+    opacity: 0;
+    animation: backgroundFadeIn 0.2s ease-out forwards;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -395,11 +499,13 @@
     background: var(--theme-modal-background);
     border-radius: 1rem;
     overflow: hidden;
+    transform: translateZ(0);
+    will-change: transform;
     display: flex;
     flex-direction: column;
-    animation: scaleIn 0.25s var(--theme-ease-out-back);
     // Used by toast
     position: relative;
+    :global(.popup-selector-header),
     :global(.modal-content .modal-body),
     :global(.modal-content .modal-header-title),
     :global(.modal-content .modal-header-back-button),
@@ -411,12 +517,22 @@
       transform: translate3d(0, 0, 0);
       transform: translateZ(0);
     }
+    &.blur-header {
+      :global(.popup-selector-header),
+      :global(.modal-content .modal-header-title),
+      :global(.modal-content .modal-header-title),
+      :global(.modal-content .modal-header-right-action svg),
+      :global(.modal-content .modal-header-back-button) {
+        filter: blur(20px) contrast(150%);
+        transition: none;
+      }
+    }
     &.blur {
       :global(.modal-content .modal-body),
       :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-back-button),
       :global(.modal-content .modal-footer) {
-        filter: blur(12px) contrast(150%);
+        filter: blur(30px) contrast(150%);
         transition: none;
       }
     }

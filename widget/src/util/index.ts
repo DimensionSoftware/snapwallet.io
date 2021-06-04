@@ -1,3 +1,4 @@
+import { getContext } from 'svelte'
 import nodeDebug from 'debug'
 import * as Icons from './icons'
 import { ParentMessages, CACHED_PRIMARY_PAYMENT_METHOD_KEY } from '../constants'
@@ -12,6 +13,18 @@ export const focus = (e: HTMLElement, duration = 150) => {
 
 export const focusFirstInput = (duration = 400) => {
   focus(document.querySelector('input:first-child'), duration)
+}
+
+export const onFocusSelect = node => {
+  const handleFocus = event => {
+    node && typeof node.select === 'function' && node.select()
+  }
+  node.addEventListener('focus', handleFocus)
+  return {
+    destroy() {
+      node.removeEventListener('focus', handleFocus)
+    },
+  }
 }
 
 export const onEnterPressed = (e, cb) => {
@@ -141,10 +154,10 @@ export const getPrimaryPaymentMethodID = (): string => {
   }
 }
 
-export const resizeWidget = (height: number) => {
+export const resizeWidget = (height: number, appName: string) => {
   window.dispatchEvent(
     new CustomEvent(ParentMessages.RESIZE, {
-      detail: { height: `${height}px` },
+      detail: { height: `${height}px`, appName },
     }),
   )
 }

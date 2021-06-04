@@ -32,7 +32,6 @@
     animation: slideInLeft 0.25s var(--theme-ease-out-back) forwards;
   }
   .modal-content {
-    padding: 0 0.5rem;
     display: flex;
     flex-direction: column;
     height: 100%;

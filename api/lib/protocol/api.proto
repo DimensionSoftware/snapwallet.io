@@ -133,9 +133,30 @@ message TokenMaterial {
 // PlaidConnectBankAccountsRequest
 //
 // request
+// mirrors some elements of https://plaid.com/docs/link/web/#onsuccess
 message PlaidConnectBankAccountsRequest {
   string plaid_public_token = 1;
-  repeated string plaid_account_ids = 2;
+  PlaidInstitution institution = 2;
+  repeated PlaidAccount accounts = 3;
+}
+
+// WyreConnectBankAccountRequest
+message WyreConnectBankAccountRequest {
+  string plaid_public_token = 1;
+  string plaid_account_id = 2;
+}
+
+message PlaidInstitution {
+  string id = 1;
+  string name = 2;
+}
+
+message PlaidAccount {
+  string id = 1;
+  string name = 2;
+  string mask = 3;
+  string type = 4;
+  string sub_type = 5;
 }
 
 // PlaidConnectBankAccountsResponse
@@ -200,7 +221,7 @@ enum LifecycleStatus {
 //
 // Represents the wyre user account status (or other tps)
 message ThirdPartyUserAccount {
-  LifecycleStatus lifecyle_status = 1;
+  LifecycleStatus lifecycle_status = 1;
   string status = 2;
 }
 
@@ -300,6 +321,9 @@ message GetImageResponse {
   int32 height = 6;
 }
 
+message GeoResponse {
+  string country = 1;
+}
 
 message WyreWebhookRequest {
   string hook_id = 1;
@@ -316,7 +340,7 @@ message TokenExchangeResponse {
 }
 
 message WyrePaymentMethod {
-  LifecycleStatus lifecyle_status = 1;
+  LifecycleStatus lifecycle_status = 1;
   string id = 2;
   string status = 3;
   string name = 4;
@@ -324,6 +348,31 @@ message WyrePaymentMethod {
   repeated string chargeable_currencies = 6;
   repeated string depositable_currencies = 7;
 }
+
+message WyreWalletOrderReservationQuote {
+  string sourceCurrency = 1;
+  double sourceAmount = 2;
+  double sourceAmountWithoutFees = 3;
+  string destCurrency = 4;
+  double destAmount = 5;
+  double exchangeRate = 6;
+  map<string, double> equivelancies = 7;
+  map<string, double> fees = 8;
+  string dest = 9;
+  string expires_at = 10;
+}
+
+message WyreWalletOrderReservation {
+  int64 amount = 1;
+	bool amountIncludesFees = 2;
+	repeated string lockFields = 3;
+	string paymentMethod = 4;
+	string referenceId = 5;
+	bool quoteLockRequest = 6;
+  WyreWalletOrderReservationQuote quote = 7;
+}
+
+
 
 message WyrePaymentMethods {
   repeated WyrePaymentMethod payment_methods = 1;
@@ -346,6 +395,56 @@ message WyreGetTransferRequest {
   string transfer_id = 1;
 }
 
+message WyreGetTransfersRequest {
+  int64 page = 1;
+}
+
+message GetTransactionsRequest {
+  int64 page = 1;
+}
+
+message WyreGetDebitCardOrderAuthorizationsRequest {
+  string order_id = 1;
+}
+
+message WyreSubmitDebitCardOrderAuthorizationsRequest {
+  string order_id = 1;
+  string reservation_id = 2;
+  string sms_2fa_code = 3;
+  string card_2fa_code = 4;
+}
+
+message WyreCreateDebitCardQuoteRequest {
+  string dest = 1;
+  string source_currency = 2;
+  string dest_currency = 3;
+  double source_amount = 4;
+  bool amount_includes_fees = 6;
+  repeated string lock_fields = 7;
+  string country = 8;
+  double dest_amount = 9;
+}
+
+message WyreConfirmDebitCardQuoteRequest {
+  WyreDebitCardInfo card = 1;
+  string dest = 2;
+  string source_currency = 3;
+  string dest_currency = 4;
+  double source_amount = 5;
+  string reservation_id = 6;
+}
+
+message WyreDebitCardInfo {
+  string first_name = 1;
+  string last_name = 2;
+  string phone_number = 3;
+  string number = 4;
+  string expiration_month = 5;
+  string expiration_year = 6;
+  string verification_code = 7;
+  Address address = 8;
+}
+
 message WyreTransfer {
   string id = 1;
   string source = 2;
@@ -354,18 +453,127 @@ message WyreTransfer {
   string dest_currency = 5;
   double source_amount = 6;
   double dest_amount = 7;
-  double exchange_rate = 8;
-  map<string, double> fees = 9;
-  string blockhash = 10;
-  string network_tx_id = 11;
-  string status = 12;
-  string created_at = 13;
-  string expires_at = 14;
+  string source_name = 8;
+  string dest_name = 9;
+  string message = 10;
+  double exchange_rate = 11;
+  map<string, double> fees = 12;
+  string blockchainTxId = 13;
+  string status = 14;
+  string created_at = 15;
+  string closed_at = 16;
+}
+
+message WyreTransferDetail {
+  string id = 1;
+  string source = 2;
+  string dest = 3;
+  string source_currency = 4;
+  string dest_currency = 5;
+  double source_amount = 6;
+  double dest_amount = 7;
+  string message = 8;
+  double exchange_rate = 9;
+  map<string, double> fees = 10;
+  double total_fees = 11;
+  string blockhash = 12;
+  string network_tx_id = 13;
+  string status = 14;
+  string created_at = 15;
+  string expires_at = 16;
+  string completed_at = 17;
+  string cancelled_at = 18;
 }
 
 message WyreTransfers {
   repeated WyreTransfer transfers = 1;
 }
+
+message Transactions {
+  repeated Transaction transactions = 1;
+}
+
+message SnapWidgetWallet {
+  string asset = 1;
+  string address = 2;
+}
+
+message SnapWidgetProduct {
+  string image_URL = 1;
+  string video_URL = 2;
+  double destination_amount = 3;
+  string destination_ticker = 4;
+  string destination_address = 5;
+  string title = 6;
+  string author = 7;
+}
+
+message SnapWidgetConfig {
+  string app_name = 1;
+  repeated SnapWidgetWallet wallets = 2;
+  string intent = 3;
+  bool focus = 4;
+  map<string,string> theme = 5;
+  SnapWidgetProduct product = 6;
+}
+
+message WidgetGetShortUrlResponse {
+  string url = 1;
+}
+
+message WyreGetDebitCardOrderAuthorizationsResponse {
+  string wallet_order_id = 1;
+  bool sms_needed = 2;
+  bool card2faNeeded = 3;
+  string authorization_3ds_url = 4;
+}
+
+message WyreSubmitDebitCardOrderAuthorizationsResponse {
+  bool success = 1;
+}
+
+message WyreCreateDebitCardQuoteResponse {
+  string reservation_id = 1;
+  WyreWalletOrderReservationQuote quote = 2;
+}
+
+message WyreConfirmDebitCardQuoteResponse {
+  string orderId = 1;
+  string status = 2;
+  string transfer_id = 3;
+}
+
+message GotoRequest {
+  string id = 1;
+}
+
+message GotoResponse {
+  string location = 1;
+}
+
+
+message Transaction {
+  string id = 1;
+  string partner = 2;
+  string kind = 3;
+  string direction = 4;
+  string status = 5;
+  string source = 6;
+  string dest = 7;
+  string source_name = 8;
+  string dest_name = 9;
+  double source_amount = 10;
+  double dest_amount = 11;
+  string source_currency = 12;
+  string dest_currency = 13;
+  string message = 14;
+  double exchange_rate = 15;
+  double total_fees = 16;
+  string created_at = 17;
+  string expires_at = 18;
+  string completed_at = 19;
+  string cancelled_at = 20;
+};
 
 service Flux {
   // Get viewer data
@@ -436,6 +644,13 @@ service Flux {
     };
   }
 
+  // Use CloudFlare to figure origin IP Country for intelligent currency options/defaults
+  rpc Geo(google.protobuf.Empty) returns (GeoResponse) {
+    option (google.api.http) = {
+      get: "/flux/geo"
+    };
+  }
+
   // Exchange a refresh token for new token material; refresh tokens can only be used once
   // If refresh tokens are used more than once RTR dictates that any access tokens which were created by it should be immediately revoked
   // this is because this indicates an attack (something is wrong)
@@ -455,6 +670,16 @@ service Flux {
       body: "*"
     };
   }
+
+  // Create a Wyre payment method using the Wyre <-> Plaid integration
+  //
+  rpc WyreConnectBankAccount(WyreConnectBankAccountRequest) returns (WyrePaymentMethod) {
+    option (google.api.http) = {
+      post: "/wyre/direct-connect-bank-account"
+      body: "*"
+    };
+  }
+
 
   // PlaidCreateLinkToken implements the link flow
  
@@ -489,29 +714,69 @@ service Flux {
     };
   }
 
-  rpc WyreCreateTransfer(WyreCreateTransferRequest) returns (WyreTransfer) {
+  rpc WyreCreateTransfer(WyreCreateTransferRequest) returns (WyreTransferDetail) {
     option (google.api.http) = {
       post: "/wyre/transfers"
       body: "*"
     };
   }
 
-  rpc WyreConfirmTransfer(WyreConfirmTransferRequest) returns (WyreTransfer) {
+  rpc WyreConfirmTransfer(WyreConfirmTransferRequest) returns (WyreTransferDetail) {
     option (google.api.http) = {
       post: "/wyre/transfers/{transfer_id}/confirm"
       body: "*"
     };
   }
 
-  rpc WyreGetTransfer(WyreGetTransferRequest) returns (WyreTransfer) {
+  rpc WyreGetTransfer(WyreGetTransferRequest) returns (WyreTransferDetail) {
     option (google.api.http) = {
       get: "/wyre/transfers/{transfer_id}"
     };
   }
 
-  rpc WyreGetTransfers(google.protobuf.Empty) returns (WyreTransfers) {
+  rpc WyreGetTransfers(WyreGetTransfersRequest) returns (WyreTransfers) {
     option (google.api.http) = {
       get: "/wyre/transfers"
+    };
+  }
+
+  rpc GetTransactions(GetTransactionsRequest) returns (Transactions) {
+    option (google.api.http) = {
+      get: "/viewer/transactions"
+    };
+  }
+
+  rpc WyreCreateDebitCardQuote(WyreCreateDebitCardQuoteRequest) returns (WyreCreateDebitCardQuoteResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/quote"
+      body: "*"
+    };
+  }
+
+  rpc WyreConfirmDebitCardQuote(WyreConfirmDebitCardQuoteRequest) returns (WyreConfirmDebitCardQuoteResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/confirm"
+      body: "*"
+    };
+  }
+
+  rpc WyreGetDebitCardAuthorizations(WyreGetDebitCardOrderAuthorizationsRequest) returns (WyreGetDebitCardOrderAuthorizationsResponse) {
+    option (google.api.http) = {
+      get: "/wyre/transfers/debit-card/auth/{order_id}"
+    };
+  }
+
+  rpc WyreSubmitDebitCardAuthorizations(WyreSubmitDebitCardOrderAuthorizationsRequest) returns (WyreSubmitDebitCardOrderAuthorizationsResponse) {
+    option (google.api.http) = {
+      post: "/wyre/transfers/debit-card/auth"
+      body: "*"
+    };
+  }
+
+  rpc WidgetGetShortUrl(SnapWidgetConfig) returns (WidgetGetShortUrlResponse) {
+    option (google.api.http) = {
+      post: "/widget/short-url"
+      body: "*"
     };
   }
 
@@ -526,4 +791,6 @@ service Flux {
   //
   // If the file is not of an image mime type, you will get an InvalidArguments error
   rpc GetImage(GetImageRequest) returns (GetImageResponse) {}
+
+  rpc Goto(GotoRequest) returns (GotoResponse) {}
 }

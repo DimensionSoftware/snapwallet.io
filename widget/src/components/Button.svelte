@@ -1,13 +1,19 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
+  export let id
   export let disabled: boolean = false
   export let isLoading: boolean = false
   export let title: string = ''
+  export let glow: boolean = false
+
+  $: if (isLoading) glow = true
 </script>
 
 <button
+  {id}
   disabled={disabled || isLoading}
+  class:glow
   class:isLoading
   on:mousedown={() => dispatch('mousedown')}
   {title}
@@ -24,19 +30,20 @@
     position: relative;
     min-height: 50px;
     width: 100%;
-    background: var(--theme-color);
+    background: var(--theme-button-color);
     border-radius: 0.5rem;
     border: none;
     border-top: none;
-    border-bottom: 1px solid var(--theme-color-darkened);
-    color: white;
+    color: var(--theme-button-text-color);
     cursor: pointer;
     text-transform: uppercase;
     box-shadow: 0 0 0 0 var(--theme-color), 0 6px 6px var(--theme-shadow-color);
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
-    transition: background 0.3s ease-in 0.1s, box-shadow 0.3s ease-in 0.123s;
+    transition: none;
+    z-index: 10;
+    overflow: hidden;
     // gloss fix
     &:before {
       position: absolute;
@@ -46,51 +53,70 @@
       right: -1px;
       bottom: -1px;
       left: -1px;
-      opacity: 0.2;
+      opacity: 0.3;
       background: linear-gradient(
         to bottom,
-        rgba(#fff, 0.2) 0%,
-        rgba(#fff, 0.15) 100%
+        rgba(#fff, 0.3) 0%,
+        rgba(#fff, 0.1) 100%
       );
       white-space: nowrap;
       border-radius: 0.5em 0.5em 6em 6em/0.1em 0.1em 1em 1em;
-      transition: opacity 0.3s ease-in 0.1s;
+      border-top-left-radius: 0.5rem;
+      border-top-right-radius: 0.5rem;
+      transform: scale(1);
+      transition: transform 0.1s ease-out, opacity 0.1s ease-in;
     }
     &:hover {
-      box-shadow: 0 0 0 1px var(--theme-color),
-        0 8px 6px var(--theme-shadow-color);
+      box-shadow: 0 0 0 1px var(--theme-button-color),
+        0 6px 6px var(--theme-shadow-color);
       transition: none;
       &:before {
-        opacity: 0.3;
+        transform: scale(1.1);
+        transition: none;
+        opacity: 0.4;
       }
     }
     &:active,
     &:focus {
-      box-shadow: 0 0 0 1px var(--theme-color),
-        0 6px 6px var(--theme-shadow-color);
-      text-shadow: 0 1px 0 --var(--theme-text-color);
+      &.glow {
+        animation: infocus 0.35s !important;
+        animation-timing-function: var(--theme-ease-out-back);
+      }
+      box-shadow: 0 0 0 1px var(--theme-button-color),
+        0 4px 4px var(--theme-shadow-color);
+      text-shadow: 0 1px 0 --var(--theme-button-text-color);
       transition: none;
       animation: infocus 0.35s;
       animation-timing-function: var(--theme-ease-out-back);
       &:before {
-        opacity: 0.08;
+        transform: scale(1.1);
+        opacity: 0.3;
         transition: none;
       }
     }
     &:disabled {
-      animation: none;
-      background: var(--theme-color);
+      animation: infocus 0.75s;
+      background: var(--theme-button-color);
       cursor: not-allowed;
       text-shadow: none;
       opacity: 0.83;
       box-shadow: none;
       &:before {
-        display: none;
+        transform: scale(1);
+        opacity: 0;
       }
+    }
+    &.glow {
+      &:hover {
+        animation: inherit;
+      }
+      box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.55);
+      animation: glow 1.5s linear;
+      animation-iteration-count: infinite;
     }
     &.isLoading {
       .lds-circle {
-        opacity: 1;
+        visibility: visible;
       }
     }
     .lds-circle {
@@ -99,7 +125,7 @@
       top: 0;
       display: inline-block;
       transform: translateZ(1px);
-      opacity: 0;
+      visibility: hidden;
       transition: opacity 0.2s ease-out;
       > div {
         display: inline-block;
@@ -107,8 +133,7 @@
         height: 32px;
         margin: 8px;
         border-radius: 50%;
-        background: rgba(#fff, 0.8);
-        background: radial-gradient(rgba(#fff, 0.5), #fff);
+        background: var(--theme-button-text-color);
         animation: lds-circle 2.4s cubic-bezier(0, 0.2, 0.8, 1) infinite;
       }
     }

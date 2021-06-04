@@ -4,10 +4,12 @@ on:
   push:
     branches:
       - master
+      - dev
     paths:
       - '.github/workflows/web.yml'
       - 'firebase.json'
       - 'widget/**'
+      - 'init/**'
       - 'docs/**'
       - 'web/**'
       - 'api/lib/swagger/swagger-ui.html'
@@ -15,23 +17,64 @@ on:
       - 'bin/build-web'
 
 jobs:
-  deploy-web: 
-    name: Build/Deploy Web
+  deploy-development-web: 
+    name: "[D] Build/Deploy Web"
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
     steps:
+      - uses: dreamcodez/dead-simple-nodejs@1
+        with:
+          NODE_VERSION: 16.1.0
       - uses: actions/checkout@v2
-      - name: Build & Deploy Firebase Hosting Web Tree
-        run: |
-          bin/build-web
-
-          pushd /tmp
-          echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
-          export GOOGLE_APPLICATION_CREDENTIALS="/tmp/gcloud-service-key.json"
-          popd
-
-          npx firebase-tools -c firebase.deploy.json deploy --only hosting
-        env:
+      - uses: ./.github/actions/deploy-web
+        with:
+          GCP_PROJECT_ID: silken-phalanx-305703
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          BUILD_SCRIPT: bin/build-development-web
+          API_BASE_URL: https://dev-api.snapwallet.io
+          # API base url is always required for the widget
+          # This is not the case for the init project due to env URL switching
+          # so we have an additional env var for that here
+          INIT_API_BASE_URL: https://dev-api.snapwallet.io
+          WIDGET_URL: https://dev.snapwallet.io/widget
+          WYRE_BASE_URL: https://api.testwyre.com
+          DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
+  deploy-sandbox-web: 
+    name: "[S] Build/Deploy Web"
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: dreamcodez/dead-simple-nodejs@1
+        with:
+          NODE_VERSION: 16.1.0
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-web
+        with:
+          GCP_PROJECT_ID: ds-snap-sandbox
+          GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY}}
+          BUILD_SCRIPT: bin/build-sandbox-web
+          API_BASE_URL: https://sandbox-api.snapwallet.io
+          WYRE_BASE_URL: https://api.testwyre.com
+          DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
+  deploy-production-web: 
+    name: "[P] Build/Deploy Web"
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: dreamcodez/dead-simple-nodejs@1
+        with:
+          NODE_VERSION: 16.1.0
+      - uses: actions/checkout@v2
+      - run: |
+          set -x
+          cat ~/.profile
+          cat ~/.bash_profile
+          echo $PATH
+      - uses: ./.github/actions/deploy-web
+        with:
+          GCP_PROJECT_ID: ds-snap-production
+          GCP_SA_KEY: ${{ secrets.PRODUCTION_GCP_SA_KEY}}
+          BUILD_SCRIPT: bin/build-web
           API_BASE_URL: https://api.snapwallet.io
-          WIDGET_URL: https://snapwallet.io/widget
+          WYRE_BASE_URL: https://api.testwyre.com
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info'

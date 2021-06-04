@@ -5,6 +5,8 @@ import type {
 } from 'api-client'
 import { writable } from 'svelte/store'
 import { Routes, UserProfileFieldTypes } from '../constants'
+import type { ICountry } from '../types'
+import { countries } from '../util/country'
 
 type ViewerFlags = UserFlags & { hasEmail: boolean; hasPhone: boolean }
 
@@ -12,6 +14,7 @@ type VirtualProfile = {
   fullName?: string
   socialSecurityNumber?: string
   birthDate?: string
+  phone?: string
   address?: {
     street1: string
     street2?: string
@@ -29,8 +32,10 @@ type UserStoreState = {
   socialSecurityNumber: string
   birthDate: string
   phoneNumber: string
+  phoneNumberCountry: ICountry
   lastKnownRoute: Routes
   flags: ViewerFlags
+  geo: { country: string }
   address: {
     street1: string
     street2: string
@@ -63,11 +68,13 @@ function createStore() {
       lastName: '',
       socialSecurityNumber: '',
       birthDate: '',
+      phoneNumberCountry: countries['US'],
       phoneNumber: '',
       // Used for routing to last position
       // when auth kicks in.
       lastKnownRoute: Routes.ROOT,
       flags: {} as ViewerFlags,
+      geo: { country: undefined },
       address: { ...initialAddress },
       isLoggedIn: false,
       virtual: {
@@ -75,6 +82,7 @@ function createStore() {
         birthDate: '',
         socialSecurityNumber: '',
         address: initialAddress,
+        phone: '',
       },
       isProfileComplete: false,
       isProfilePending: false,
@@ -122,13 +130,20 @@ function createStore() {
             postalCode: '*****',
           }
         }
+
+        if (item.kind === UserProfileFieldTypes.PHONE) {
+          virtual.phone = Array(item.length).fill('*').join('')
+        }
       })
 
       const isProfileComplete = Boolean(
         virtual.birthDate && virtual.fullName && virtual.socialSecurityNumber,
       )
 
-      const isProfilePending = wyre?.status === 'OPEN' && !remediations?.length
+      const isProfilePending =
+        (wyre && !wyre?.status && !wyre?.lifecycleStatus) ||
+        wyre?.lifecycleStatus === 'L_PENDING' ||
+        (wyre?.status === 'OPEN' && !remediations?.length)
 
       update(s => ({
         ...s,
@@ -145,6 +160,9 @@ function createStore() {
     setPhoneNumber: (phoneNumber: string) => {
       update(s => ({ ...s, phoneNumber }))
     },
+    setPhoneNumberCountry: (phoneNumberCountry: ICountry) => {
+      update(s => ({ ...s, phoneNumberCountry }))
+    },
     setEmailAddress: (emailAddress: string) =>
       update(s => ({ ...s, emailAddress })),
     setFirstName: (firstName: string) => update(s => ({ ...s, firstName })),
@@ -156,6 +174,20 @@ function createStore() {
       update(s => ({ ...s, lastKnownRoute })),
     setFlags: (flags: ViewerFlags) => {
       update(s => ({ ...s, flags }))
+    },
+    fetchFlags: async () => {
+      const { flags: userFlags, user } = await window.API.fluxViewerData()
+      const flags = {
+        ...userFlags,
+        hasEmail: Boolean(user.email),
+        hasPhone: Boolean(user.phone),
+      }
+      update(s => ({ ...s, flags }))
+    },
+    fetchGeo: async () => {
+      const geo = await window.API.fluxGeo()
+      // fetch and cache
+      update(s => ({ ...s, geo }))
     },
     setFullAddress: (address: any) => {
       update(s => ({

@@ -1,4 +1,7 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
+  const dispatch = createEventDispatcher()
+
   export let hidden: boolean = false
   export let label: string = ''
   export let error: string = ''
@@ -6,7 +9,12 @@
 </script>
 
 {#if !hidden}
-  <label class:fx class={$$props.class} style={$$props.style}>
+  <label
+    on:click={_ => dispatch('click')}
+    class:fx
+    class={$$props.class}
+    style={$$props.style}
+  >
     <span class="input-label">{label}</span>
     <slot />
     <div class="error-help">
@@ -33,7 +41,7 @@
     }
     span {
       position: absolute;
-      top: 12px;
+      top: 6px;
       margin-left: 15px;
       z-index: 99;
     }

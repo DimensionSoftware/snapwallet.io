@@ -1,9 +1,22 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
   import { push } from 'svelte-spa-router'
+  import FaIcon from 'svelte-awesome'
+  import {
+    faLock,
+    faExchangeAlt,
+    faList,
+    faSignOutAlt,
+    faSignInAlt,
+    faUserCircle,
+    faShoppingCart,
+    faEnvelope,
+  } from '@fortawesome/free-solid-svg-icons'
   import { Routes } from '../constants'
   import {
     cachePrimaryPaymentMethodID,
     focusFirstInput,
+    Logger,
     onKeysPressed,
   } from '../util'
   import { userStore } from '../stores/UserStore'
@@ -11,15 +24,23 @@
   import { transactionStore } from '../stores/TransactionStore'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
   import { ParentMessenger } from '../util/parent_messenger'
+  import { configStore } from '../stores/ConfigStore'
 
   export let isExpanded: boolean = false
-  export let isProductCheckout: boolean = false
+  let isProductCheckout: boolean = Boolean($configStore.product)
   let slow: boolean = false
+  let isLoaded: boolean = false
+
+  onMount(() => {
+    // set timeout yields to initial build-in
+    setTimeout(() => (isLoaded = true), 300)
+  })
 
   function logout() {
     close()
     // yield to ui animations
     setTimeout(() => {
+      Logger.debug('Logout called from SideMenu')
       window.AUTH_MANAGER.logout()
       cachePrimaryPaymentMethodID('')
       transactionStore.reset()
@@ -40,11 +61,15 @@
   function close(isSlow = false) {
     slow = isSlow
     isExpanded = false
-    focusFirstInput()
+    focusFirstInput(800)
   }
   function handleClose(e) {
     // close if esc pressed
     if (onKeysPressed(e, ['Escape'])) close(true)
+  }
+
+  const mailToSupport = () => {
+    window.top.location.href = `mailto:support@snapwallet.io?subject=Support Request&body=I am requesting help with the following:`
   }
 
   $: isLoggedIn = $userStore.isLoggedIn
@@ -52,7 +77,7 @@
     // open/close
     setTimeout(
       () => window.dispatchEvent(new Event(isExpanded ? 'blurry' : 'unblurry')),
-      isExpanded ? 0 : slow ? 300 : 150,
+      isExpanded ? 75 : slow ? 300 : 150,
     )
 
     if (isExpanded && window.AUTH_MANAGER.viewerIsLoggedIn()) {
@@ -62,7 +87,7 @@
   }
 </script>
 
-<svelte:window on:keydown={handleClose} />
+<svelte:window on:keydown|stopPropagation={handleClose} />
 
 <div
   class="container"
@@ -122,34 +147,64 @@
     </g>
   </svg>
 </div>
-<aside class:active={isExpanded}>
+<aside class:closed={isLoaded && !isExpanded} class:active={isExpanded}>
   <nav>
-    <a on:mousedown={_ => go(Routes.ROOT)}
-      >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
-    >
-    <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}>My Transactions</a
-    >
-    <a on:mousedown={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
+    <div>
+      <FaIcon data={isProductCheckout ? faShoppingCart : faExchangeAlt} />
+      <a on:mousedown={_ => go(Routes.ROOT)}
+        >{isProductCheckout ? 'View Cart' : 'Buy Crypto Assets'}</a
+      >
+    </div>
+    <hr />
+    <div>
+      <FaIcon data={faList} />
+      <a class="hr" on:mousedown={_ => go(Routes.TRANSACTIONS)}
+        >My Transactions</a
+      >
+    </div>
+    <div>
+      <FaIcon data={faUserCircle} />
+      <a on:mousedown={_ => go(Routes.PROFILE_STATUS)}>My Profile</a>
+    </div>
+    <hr />
     {#if isLoggedIn}
-      <a class="hr" on:mousedown={logout}>Logout</a>
+      <div>
+        <FaIcon data={faSignOutAlt} />
+        <a class="hr" on:mousedown={logout}>Logout</a>
+      </div>
     {:else}
-      <a class="hr" on:mousedown={login}>Login</a>
+      <div>
+        <FaIcon data={faSignInAlt} />
+        <a class="hr" on:mousedown={login}>Login</a>
+      </div>
     {/if}
-    <a
-      on:mousedown={() => {
-        if (isExpanded) {
-          close(true)
-        }
-        ParentMessenger.exit()
-      }}>Exit</a
-    >
+    <div>
+      <FaIcon data={faLock} />
+      <a
+        on:mousedown={() => {
+          if (isExpanded) {
+            close(true)
+          }
+          ParentMessenger.exit()
+        }}>Exit</a
+      >
+    </div>
   </nav>
+  <div
+    on:mousedown={mailToSupport}
+    class="support-container"
+    class:fadeOpacity={isExpanded}
+  >
+    <FaIcon scale="0.8" data={faEnvelope} />
+    <span style="margin-left:0.35rem;">support@snapwallet.io</span>
+  </div>
 </aside>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
   .container {
+    border-radius: 1rem;
     font-size: 1.2rem;
     z-index: 101;
     position: relative;
@@ -212,59 +267,112 @@
   aside {
     position: absolute;
     background: var(--theme-modal-popup-background);
-    top: -1rem;
+    top: 0;
     left: -1rem;
     right: -0.5rem;
-    bottom: -0.5rem;
+    bottom: 0;
     width: 125%;
-    height: 150%;
-    padding: 25% 1rem 0 3rem;
+    height: 100%;
+    padding: 20% 1rem 0 4rem;
     transform: translateX(105%);
-    transition: transform 0.35s var(--theme-ease-in-expo);
+    transition: none;
     z-index: 100;
-    nav a {
-      position: relative;
-      display: block;
-      margin: 1rem 0;
-      color: var(--theme-text-color);
-      font-size: 1.25rem;
-      transform: translateX(50px);
-      transition: transform 0s ease-out 0.5s;
-      &.hr {
-        margin-top: 2.5rem;
-        position: relative;
+    nav {
+      > div {
+        display: flex;
+        align-items: center;
+        margin: 1rem 0 0 0;
+        transform: translateX(50px);
+        transition: transform 0s ease-out 0.5s;
+        :global(svg) {
+          opacity: 0;
+          transform: translateX(-5px);
+          transition: transform 0s ease-in 0.7s, opacity 0.1s ease-in;
+        }
       }
+      div a {
+        position: relative;
+        display: block;
+        margin: -0.1rem 0 0 1.25rem !important;
+        color: var(--theme-text-color);
+        font-size: 1.35rem;
+        font-weight: 500;
+        &.hr {
+          margin-top: 2.5rem;
+          position: relative;
+        }
+      }
+      hr {
+        margin-top: 1.5rem;
+        height: 0;
+        border: none;
+        background: none;
+        background-color: transparent;
+      }
+    }
+    &.closed {
+      transition: transform 0.35s var(--theme-ease-in-expo);
     }
     &.active {
       transition: transform 0.2s var(--theme-ease-out-expo);
       transform: translateX(0);
-      nav a {
+      nav > div :global(svg) {
+        opacity: 0.9;
+        transform: translateX(0);
+        transition: opacity 0.2s ease-out 0.3s;
+      }
+      nav > div {
         transform: translateX(0);
         &:nth-child(0) {
-          transition: transform 0.3s var(--theme-ease-out-expo);
+          transition: transform 0.5s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(1) {
-          transition: transform 0.4s var(--theme-ease-out-expo);
+          transition: transform 0.6s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(2) {
-          transition: transform 0.5s var(--theme-ease-out-expo);
+          transition: transform 0.7s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(3) {
-          transition: transform 0.6s var(--theme-ease-out-expo);
+          transition: transform 0.8s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(4) {
-          transition: transform 0.7s var(--theme-ease-out-expo);
+          transition: transform 0.9s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(5) {
-          transition: transform 0.8s var(--theme-ease-out-expo);
+          transition: transform 1s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(6) {
-          transition: transform 0.9s var(--theme-ease-out-expo);
+          transition: transform 1.1s var(--theme-ease-out-expo) 0.1s;
         }
         &:nth-child(7) {
-          transition: transform 1s var(--theme-ease-out-expo);
+          transition: transform 1.2s var(--theme-ease-out-expo) 0.1s;
         }
       }
+    }
+  }
+
+  .support-container {
+    position: absolute;
+    bottom: 2.5rem;
+    font-size: 0.8rem;
+    opacity: 0;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    &.fadeOpacity {
+      animation: fadeInSupport 0.5s linear 0.5s normal forwards;
+    }
+    :global(svg) {
+      margin: 2px 3px 0 0;
+    }
+  }
+
+  @keyframes fadeInSupport {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 0.75;
     }
   }
 </style>

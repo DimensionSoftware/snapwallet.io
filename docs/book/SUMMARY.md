@@ -1,6 +1,6 @@
 # Summary
 
-* [Checkout](use-cases/checkout.md)
-* [Donate](use-cases/donate.md)
-* [Buy](use-cases/buy.md)
-
+- [NFT](use-cases/nft.md)
+- [Donations](use-cases/donations.md)
+- [Onramp](use-cases/onramp.md)
+- [Offramp](use-cases/offramp.md)

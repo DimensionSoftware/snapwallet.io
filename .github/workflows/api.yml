@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - dev
     paths:
       - '.github/workflows/api.yml'
       - 'api/**'
@@ -24,45 +25,13 @@ jobs:
           . .env.ci
           make test
         working-directory: api
-      # - name: Archive production artifacts
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: dist-without-markdown
-      #     path: |
-      #       dist
-      #       !dist/**/*.md
-  deploy-jobrunner: 
+  build-api:
+    name: "Build/Push Docker Image"
     needs: test
-    name: Build/Deploy JobRunner
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Deploy RunSnapJob Cloud Function
-        run: |
-          pushd /tmp
-
-          echo -n "$GCP_SA_KEY" | base64 --decode > gcloud-service-key.json
-
-          curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
-          tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
-
-          ./google-cloud-sdk/install.sh --usage-reporting false
-          gcloud auth activate-service-account --key-file gcloud-service-key.json
-
-          popd
-
-          bin/deploy-jobrunner --project silken-phalanx-305703
-        working-directory: api
-        env:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-  deploy-api:
-    needs: test
-    name: Build/Deploy API
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Build/Push Docker Image to GCR
-        uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+      - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
         with:
           gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
           registry: gcr.io
@@ -71,9 +40,72 @@ jobs:
           image_tag: ${{ github.sha }}
           context: ./api
           dockerfile: ./api/Dockerfile
-      - name: Deploy Docker Image to CloudRun
-        uses: google-github-actions/deploy-cloudrun@main
+  deploy-development-api:
+    name: "[D] Deploy API"
+    needs: build-api
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-api
         with:
-          image: gcr.io/silken-phalanx-305703/snap-api:${{ github.sha }}
-          service: snap-api
-          credentials: ${{ secrets.GCP_SA_KEY }}
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GCP_PROJECT_ID: silken-phalanx-305703
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
+  deploy-development-jobrunner: 
+    name: "[D] Build/Deploy JobRunner"
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-snap-job
+        with:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }} 
+          GCP_PROJECT_ID: silken-phalanx-305703
+  deploy-sandbox-api:
+    name: "[S] Deploy API"
+    needs: build-api
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-api
+        with:
+          GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY }}
+          GCP_PROJECT_ID: ds-snap-sandbox
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
+  deploy-sandbox-jobrunner: 
+    needs: test
+    name: "[S] Build/Deploy JobRunner"
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-snap-job
+        with:
+          GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY }} 
+          GCP_PROJECT_ID: ds-snap-sandbox
+  deploy-production-api:
+    name: "[P] Deploy API"
+    needs: build-api
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-api
+        with:
+          GCP_SA_KEY: ${{ secrets.PRODUCTION_GCP_SA_KEY }}
+          GCP_PROJECT_ID: ds-snap-production
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
+  deploy-production-jobrunner: 
+    needs: test
+    name: "[P] Build/Deploy JobRunner"
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-snap-job
+        with:
+          GCP_SA_KEY: ${{ secrets.PRODUCTION_GCP_SA_KEY }}
+          GCP_PROJECT_ID: ds-snap-production

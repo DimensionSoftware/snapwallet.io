@@ -4,11 +4,11 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
-  import type { ProductType } from '../types'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import {
     faCheck,
+    faGlobe,
     faIdCard,
     faLock,
     faUniversity,
@@ -18,25 +18,71 @@
   import { priceStore } from '../stores/PriceStore'
   import { formatLocaleCurrency } from '../util'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
+  import CountrySelector from '../components/selectors/CountrySelector.svelte'
   import VStep from '../components/VStep.svelte'
   import { userStore } from '../stores/UserStore'
   import { transactionStore } from '../stores/TransactionStore'
+  import { configStore } from '../stores/ConfigStore'
+  import { toaster } from '../stores/ToastStore'
+  import { TransactionMediums } from '../types'
+  import { countries, WYRE_SUPPORTED_COUNTRIES } from '../util/country'
+  import { debitCardStore } from '../stores/DebitCardStore'
 
-  export let product: ProductType
+  $: ({ product } = $configStore)
+  $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
 
   let isPreviewing = false
   let isPaymentSelectorVisible = false
+  let countrySelectorVisible = false
 
   $: ({ flags } = $userStore)
   $: nextRoute = Routes.PROFILE
-  $: priceMap = $priceStore.prices[`USD_${product.destinationTicker}`]
-  $: exchangeRate = priceMap[product.destinationTicker]
+  $: priceMap = $priceStore.prices[`USD_${product.destinationTicker}`] || {}
+  $: exchangeRate = priceMap[product.destinationTicker] || 0
+
+  let selectedCountryCode
+  $: {
+    if (isDebitCard) {
+      selectedCountryCode =
+        $debitCardStore.address.country || $userStore.geo.country
+    } else {
+      selectedCountryCode = $userStore.address.country || $userStore.geo.country
+    }
+  }
 
   const handleNextStep = async () => {
-    const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore,
+    const { selectedSourcePaymentMethod } = $transactionStore,
       isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
     // if they're not logged in, forward them instead to login
     if (!isLoggedIn) return push(Routes.SEND_OTP)
+
+    if (isDebitCard) {
+      try {
+        isPreviewing = true
+        const dest = // TODO: move srn prefix to server
+          product.destinationTicker.toLowerCase() !== 'btc'
+            ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
+            : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU'
+        const {
+          reservationId,
+          quote,
+        } = await window.API.fluxWyreCreateDebitCardQuote({
+          dest,
+          sourceCurrency: $transactionStore.sourceCurrency.ticker,
+          lockFields: ['destAmount'],
+          amountIncludesFees: false,
+          country: $debitCardStore.address.country,
+          destAmount: product.destinationAmount,
+          destCurrency: product.destinationTicker,
+        })
+
+        debitCardStore.update({ reservationId, dest })
+        transactionStore.setWyrePreview(quote)
+        return push(Routes.CHECKOUT_OVERVIEW)
+      } finally {
+        isPreviewing = false
+      }
+    }
 
     if (
       selectedSourcePaymentMethod &&
@@ -54,7 +100,7 @@
       (flags?.hasWyreAccount || $userStore.isProfilePending) &&
       !$transactionStore.selectedSourcePaymentMethod
     ) {
-      paymentSelectorVisible = true
+      isPaymentSelectorVisible = true
       return
     }
 
@@ -108,12 +154,7 @@
   const getViewer = async () => {
     const isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
     if (isLoggedIn) {
-      const { flags = {}, user = {} } = await window.API.fluxViewerData()
-      userStore.setFlags({
-        ...flags,
-        hasEmail: Boolean(user.email),
-        hasPhone: Boolean(user.phone),
-      })
+      await userStore.fetchFlags()
     }
   }
 
@@ -127,10 +168,10 @@
 </script>
 
 <ModalContent>
-  <ModalHeader isProductCheckout hideBackButton>Buying</ModalHeader>
+  <ModalHeader hideBackButton>{product.title}</ModalHeader>
   <ModalBody>
     <div class="container">
-      <b class="nft-title">{product.title}</b>
+      <h4 class="nft-title">by {product.author}</h4>
       {#if product.videoURL}
         <video loop playsinline autoplay muted class="nft-video">
           <source src={product.videoURL} />
@@ -140,35 +181,39 @@
         <img alt={product.title} class="nft-image" src={product.imageURL} />
       {/if}
       <ul class="vertical-stepper">
-        {#if flags?.hasWyreAccount}
-          <VStep success>
-            <span slot="icon">
-              <FaIcon data={faCheck} />
-            </span>
-            <b slot="step">Verify Identity</b>
-          </VStep>
-        {:else}
-          <VStep
-            onClick={() =>
-              push(
-                $userStore.isProfileComplete ? Routes.ADDRESS : Routes.PROFILE,
-              )}
-          >
-            <span slot="icon">
-              <FaIcon data={faIdCard} />
-            </span>
-            <b slot="step"> Verify Identity </b>
-          </VStep>
+        {#if !isDebitCard && $transactionStore.selectedSourcePaymentMethod}
+          {#if flags?.hasWyreAccount}
+            <VStep success>
+              <span slot="icon">
+                <FaIcon data={faCheck} />
+              </span>
+              <b slot="step">Verify Identity</b>
+            </VStep>
+          {:else}
+            <VStep
+              onClick={() =>
+                push(
+                  $userStore.isProfileComplete
+                    ? Routes.ADDRESS
+                    : Routes.PROFILE,
+                )}
+            >
+              <span slot="icon">
+                <FaIcon data={faIdCard} />
+              </span>
+              <b slot="step"> Verify Identity </b>
+            </VStep>
+          {/if}
         {/if}
         <VStep
-          disabled={!flags?.hasWyreAccount}
-          success={$transactionStore.selectedSourcePaymentMethod}
-          onClick={() =>
-            flags?.hasWyreAccount && (isPaymentSelectorVisible = true)}
+          success={isDebitCard ||
+            Boolean($transactionStore.selectedSourcePaymentMethod)}
+          onClick={() => (isPaymentSelectorVisible = true)}
         >
           <span slot="icon">
             <FaIcon
-              data={!$transactionStore.selectedSourcePaymentMethod
+              data={!isDebitCard &&
+              !$transactionStore.selectedSourcePaymentMethod
                 ? faUniversity
                 : faCheck}
             />
@@ -177,11 +222,32 @@
             <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
             {#if $transactionStore.selectedSourcePaymentMethod}
               {$transactionStore.selectedSourcePaymentMethod.name}
+            {:else if isDebitCard}
+              Pay with Debit Card
             {:else}
               Select Payment Method
             {/if}
           </b>
         </VStep>
+        {#if isDebitCard}
+          <VStep
+            disabled
+            onClick={() => {
+              countrySelectorVisible = true
+            }}
+            success={Boolean($debitCardStore.address.country)}
+          >
+            <span slot="icon">
+              <FaIcon
+                data={$debitCardStore.address.country ? faCheck : faGlobe}
+              />
+            </span>
+            <b slot="step"
+              >{countries[$debitCardStore.address.country]?.name ||
+                'Select Location'}</b
+            >
+          </VStep>
+        {/if}
         <VStep success={!!$transactionStore.sourceAmount}>
           <span
             class:default-icon={!$transactionStore.sourceAmount}
@@ -202,10 +268,9 @@
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button on:mousedown={handleNextStep} isLoading={isPreviewing}>
+    <Button glow on:mousedown={handleNextStep} isLoading={isPreviewing}>
       <div class="btn-content">
-        <span class="btn-text">Preview</span>
-        <FaIcon data={faLock} />
+        <span class="btn-text">Buy</span>
       </div>
     </Button>
   </ModalFooter>
@@ -216,6 +281,19 @@
   <AccountSelector
     visible
     on:close={() => (isPaymentSelectorVisible = false)}
+  />
+{/if}
+
+{#if countrySelectorVisible}
+  <CountrySelector
+    {selectedCountryCode}
+    whiteList={WYRE_SUPPORTED_COUNTRIES}
+    on:close={() => (countrySelectorVisible = false)}
+    on:select={e => {
+      const { country } = e?.detail
+      country && debitCardStore.updateAddress({ country: country.code })
+      countrySelectorVisible = false
+    }}
   />
 {/if}
 
@@ -230,20 +308,28 @@
     justify-content: flex-start;
     align-items: center;
     .nft-title {
-      margin-bottom: 1rem;
+      margin: -1rem 0 1rem;
+      font-weight: 300;
     }
     .nft-video {
+      position: relative;
+      z-index: 1;
       height: 50%;
     }
     .nft-image {
+      position: relative;
+      z-index: 1;
       height: 50%;
     }
   }
 
   .vertical-stepper {
-    margin-top: 0.5rem;
+    margin-top: 2rem;
     list-style: none;
     padding: 0 0.5rem;
+    :global(li) {
+      margin-top: 0.25rem !important;
+    }
   }
 
   .btn-content {

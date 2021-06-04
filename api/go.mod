@@ -14,7 +14,6 @@ require (
 	github.com/go-resty/resty/v2 v2.5.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/mock v1.5.0
-	github.com/golang/protobuf v1.4.3
 	github.com/google/tink/go v1.5.0
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.2.0
@@ -27,11 +26,12 @@ require (
 	github.com/sendgrid/sendgrid-go v3.8.0+incompatible
 	github.com/sfreiberg/gotwilio v0.0.0-20201211181435-c426a3710ab5
 	github.com/stretchr/testify v1.6.1
+	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
 	golang.org/x/crypto v0.0.0-20201002170205-7f63de1d35b0
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
 	google.golang.org/api v0.36.0
 	google.golang.org/genproto v0.0.0-20210207032614-bba0dbe2a9ea
 	google.golang.org/grpc v1.35.0
-	google.golang.org/protobuf v1.25.0
+	google.golang.org/protobuf v1.26.0
 	syreclabs.com/go/faker v1.2.3
 )

@@ -44,8 +44,8 @@ export const supportedCurrencyPairs = {
   ],
 }
 
-export const JWT_REFRESH_TOKEN_KEY = '__SNAP_REFRESH'
-export const JWT_ACCESS_TOKEN_KEY = '__SNAP_ACCESS'
+export const JWT_TOKENS_KEY = '__SNAP_TOKENS'
+export const JWT_TOKENS_LOCK_KEY = '__SNAP_TOKENS_LOCK'
 export const CACHED_PRIMARY_PAYMENT_METHOD_KEY = '__SNAP_PRIMARY_PM_ID'
 
 export enum Routes {
@@ -53,6 +53,7 @@ export enum Routes {
   SEND_PAYMENT = '/send-payment',
   SELECT_PAYMENT = '/select-payment',
   TRANSACTIONS = '/transactions',
+  TRANSACTION_DETAILS = '/transaction-details',
   PROFILE_SEND_SMS = '/profile-send-sms',
   PROFILE_VERIFY_SMS = '/profile-verify-sms',
   PROFILE = '/profile',
@@ -67,21 +68,27 @@ export enum Routes {
   FILE_UPLOAD = '/file-upload',
   FILE_UPLOAD_UPDATE = '/file-upload-update',
   SUCCESS = '/success',
+  DEBIT_CARD = '/debit-card',
+  DEBIT_CARD_ADDRESS = '/debit-card-address',
+  DEBIT_CARD_2FA = '/debit-card-2fa',
 }
 
 export enum APIErrors {
   UNAUTHORIZED = 16,
+  BAD_REQUEST = 3,
 }
 
 export enum ParentMessages {
   EXIT = '__SNAP_EXIT',
   RESIZE = '__SNAP_RESIZE',
   SUCCESS = '__SNAP_SUCCESS',
+  DEMO_CURRENCY_SELECTED = '__SNAP_DEMO_CURRENCY_SELECTED',
 }
 
 export enum PusherServerMessages {
   WYRE_PM_UPDATED = 'WYRE_PAYMENT_METHODS_UPDATED',
   WYRE_ACCOUNT_UPDATED = 'WYRE_ACCOUNT_UPDATED',
+  WYRE_TRANSFER_UPDATED = 'WYRE_TRANSFER_UPDATED',
 }
 
 export enum PusherClientMessages {}
@@ -98,3 +105,28 @@ export enum UserProfileFieldTypes {
   ACH_AUTH_FORM = 'K_ACH_AUTHORIZATION_FORM_DOC',
   UNKNOWN = 'K_UNKNOWN',
 }
+
+export const SUPPORTED_CRYPTOCURRENCY_ASSETS = [
+  { name: 'Aave', ticker: 'AAVE', color: '#EFB914' },
+  { name: 'Basic Attention Token', ticker: 'BAT', color: '#FF5000' },
+  { name: 'Binance USD', ticker: 'BUSD', color: '#EFB914' },
+  { name: 'Bitcoin', ticker: 'BTC', popular: true, color: '#F7931A' },
+  { name: 'Curve', ticker: 'CRV', color: '#EFB914' },
+  { name: 'Compound', ticker: 'COMP', color: '#00D395' },
+  { name: 'DAI', ticker: 'DAI', color: '#F4B731' },
+  { name: 'Ethereum', ticker: 'ETH', popular: true, color: '#627EEA' },
+  { name: 'Gemini Dollar', ticker: 'GUSD', color: '#00DCFA' },
+  { name: 'Link', ticker: 'LINK', color: '#2A5ADA' },
+  { name: 'MakerDAO', ticker: 'MKR', color: '#1AAB9B' },
+  { name: 'Paxos Standard', ticker: 'PAX', color: '#EDE708' },
+  { name: 'Stably Dollar', ticker: 'USDS', color: '#EFB914' },
+  { name: 'Synthetix', ticker: 'SNX', color: '#EFB914' },
+  { name: 'Tether', ticker: 'USDT', color: '#26A17B', popular: true },
+  { name: 'UMA', ticker: 'UMA', color: '#FF4A4A' },
+  { name: 'USDC', ticker: 'USDC', color: '#2775C9', popular: true },
+  { name: 'Uniswap', ticker: 'UNI', color: '#FF007A' },
+  { name: 'Wrapped Bitcoin', ticker: 'WBTC', color: '#323544' },
+  { name: 'Yearn.Finance', ticker: 'YFI', color: '#006AE3' },
+]
+
+export const SVG_FLAG_ICON_PATH = '/widget/flag-icons/svg'

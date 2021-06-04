@@ -7,6 +7,7 @@ package wire
 
 import (
 	"github.com/khoerling/flux/api/lib/auth"
+	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db/firebase_db"
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/filemanager"
@@ -18,6 +19,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
 	"github.com/khoerling/flux/api/lib/jobpublisher"
 	"github.com/khoerling/flux/api/lib/remedymanager"
 	"github.com/khoerling/flux/api/lib/server"
@@ -41,11 +43,11 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	config, err := encryption.ProvideConfig()
+	encryptionConfig, err := encryption.ProvideConfig()
 	if err != nil {
 		return server.Server{}, err
 	}
-	manager, err := encryption.NewManager(config)
+	manager, err := encryption.NewManager(encryptionConfig)
 	if err != nil {
 		return server.Server{}, err
 	}
@@ -82,7 +84,7 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	wyreClient := wyre.NewClient(wyreConfig)
-	apiHost, err := wyre.ProvideAPIHost()
+	apiHost, err := config.ProvideAPIHost()
 	if err != nil {
 		return server.Server{}, err
 	}
@@ -94,7 +96,7 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	wyreManager := &wyre.Manager{
+	wyremanagerManager := &wyremanager.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
 		Db:          db,
@@ -125,10 +127,15 @@ func InitializeServer() (server.Server, error) {
 		PubSub: pubsubClient,
 	}
 	pubSubPublisher := jobpublisher.PubSubPublisher{
+		Db:     db,
 		PubSub: pubsubManager,
 	}
 	remedymanagerManager := &remedymanager.Manager{
 		Db: db,
+	}
+	webHost, err := config.ProvideWebHost()
+	if err != nil {
+		return server.Server{}, err
 	}
 	serverServer := server.Server{
 		GrpcServer:    grpcServer,
@@ -139,7 +146,7 @@ func InitializeServer() (server.Server, error) {
 		FileManager:   filemanagerManager,
 		Db:            db,
 		Wyre:          wyreClient,
-		WyreManager:   wyreManager,
+		WyreManager:   wyremanagerManager,
 		Plaid:         plaidClient,
 		JwtSigner:     jwtSigner,
 		JwtVerifier:   jwtVerifier,
@@ -147,6 +154,8 @@ func InitializeServer() (server.Server, error) {
 		Pusher:        pusherManager,
 		JobPublisher:  pubSubPublisher,
 		RemedyManager: remedymanagerManager,
+		APIHost:       apiHost,
+		WebHost:       webHost,
 	}
 	return serverServer, nil
 }
@@ -165,11 +174,11 @@ func InitializeDevServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	config, err := encryption.ProvideConfig()
+	encryptionConfig, err := encryption.ProvideConfig()
 	if err != nil {
 		return server.Server{}, err
 	}
-	manager, err := encryption.NewManager(config)
+	manager, err := encryption.NewManager(encryptionConfig)
 	if err != nil {
 		return server.Server{}, err
 	}
@@ -206,7 +215,7 @@ func InitializeDevServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	wyreClient := wyre.NewClient(wyreConfig)
-	apiHost, err := wyre.ProvideAPIHost()
+	apiHost, err := config.ProvideAPIHost()
 	if err != nil {
 		return server.Server{}, err
 	}
@@ -218,7 +227,7 @@ func InitializeDevServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	wyreManager := &wyre.Manager{
+	wyremanagerManager := &wyremanager.Manager{
 		APIHost:     apiHost,
 		Wyre:        wyreClient,
 		Db:          db,
@@ -244,10 +253,14 @@ func InitializeDevServer() (server.Server, error) {
 	inProcessPublisher := jobpublisher.InProcessPublisher{
 		Db:          db,
 		Pusher:      pusherManager,
-		WyreManager: wyreManager,
+		WyreManager: wyremanagerManager,
 	}
 	remedymanagerManager := &remedymanager.Manager{
 		Db: db,
+	}
+	webHost, err := config.ProvideWebHost()
+	if err != nil {
+		return server.Server{}, err
 	}
 	serverServer := server.Server{
 		GrpcServer:    grpcServer,
@@ -258,7 +271,7 @@ func InitializeDevServer() (server.Server, error) {
 		FileManager:   filemanagerManager,
 		Db:            db,
 		Wyre:          wyreClient,
-		WyreManager:   wyreManager,
+		WyreManager:   wyremanagerManager,
 		Plaid:         plaidClient,
 		JwtSigner:     jwtSigner,
 		JwtVerifier:   jwtVerifier,
@@ -266,6 +279,8 @@ func InitializeDevServer() (server.Server, error) {
 		Pusher:        pusherManager,
 		JobPublisher:  inProcessPublisher,
 		RemedyManager: remedymanagerManager,
+		APIHost:       apiHost,
+		WebHost:       webHost,
 	}
 	return serverServer, nil
 }

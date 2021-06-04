@@ -25,9 +25,10 @@
     faIdCard,
     faLock,
     faExclamationCircle,
+    faGlobe,
   } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
-  import { TransactionIntents } from '../types'
+  import { TransactionIntents, TransactionMediums } from '../types'
   import ExchangeRate from '../components/ExchangeRate.svelte'
   import PaymentSelector from '../components/selectors/PaymentSelector.svelte'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
@@ -36,22 +37,30 @@
   import VStep from '../components/VStep.svelte'
   import { paymentMethodStore } from '../stores/PaymentMethodStore'
   import { toaster } from '../stores/ToastStore'
+  import { configStore } from '../stores/ConfigStore'
+  import CountrySelector from '../components/selectors/CountrySelector.svelte'
+  import { debitCardStore } from '../stores/DebitCardStore'
+  import { countries, WYRE_SUPPORTED_COUNTRIES } from '../util/country'
+  import {
+    findNextKYCRoute,
+    getMissingFieldMessages,
+    remediationsAvailable,
+  } from '../util/profiles'
 
   let cryptoSelectorVisible = false
   let paymentSelectorVisible = false
+  let countrySelectorVisible = false
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
+  let isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
 
-  $: ({
-    sourceCurrency,
-    destinationCurrency,
-    sourceAmount,
-    intent,
-  } = $transactionStore)
+  $: ({ sourceCurrency, destinationCurrency, sourceAmount, intent } =
+    $transactionStore)
 
   $: ({ flags } = $userStore)
 
   $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
   $: isBuy = intent === TransactionIntents.BUY
+  $: isDonation = $configStore.intent === 'donate'
 
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
   $: selectedDestinationPrice =
@@ -63,6 +72,27 @@
   $: fakePrice = 1_000
   $: isCreatingTxnPreview = false
 
+  $: country = countries[$debitCardStore.address.country]
+  $: missingInfo = getMissingFieldMessages($userStore.profileItems)
+
+  let verificationNextStep
+  let shouldFixRemediations = false
+  let selectedCountryCode
+  $: {
+    verificationNextStep = findNextKYCRoute($userStore.profileItems)
+
+    shouldFixRemediations = remediationsAvailable(
+      $userStore.profileRemediations,
+    )
+
+    if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {
+      selectedCountryCode =
+        $debitCardStore.address.country || $userStore.geo.country
+    } else {
+      selectedCountryCode = $userStore.address.country || $userStore.geo.country
+    }
+  }
+
   const animateRandomPrice = () => {
     window.requestAnimationFrame(_ts => {
       if (isLoadingPrices) {
@@ -72,46 +102,96 @@
     })
   }
 
-  const handleNextStep = async () => {
-    getNextPath()
-    const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore,
-      isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
-    if (
-      selectedSourcePaymentMethod &&
-      selectedSourcePaymentMethod?.status !== 'ACTIVE'
-    ) {
-      paymentSelectorVisible = true
-      return toaster.pop({
-        msg: 'Please select an active payment method.',
-        error: true,
-      })
+  const processDebitTransaction = async (isLoggedIn: boolean) => {
+    if (!isLoggedIn) push(Routes.SEND_OTP)
+    if (!$debitCardStore.address.country) {
+      throw new Error('Please select a country.')
     }
+    try {
+      isCreatingTxnPreview = true
+      const dest = // TODO: move srn prefix to server
+        $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
+          ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
+          : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU'
+      const { reservationId, quote } =
+        await window.API.fluxWyreCreateDebitCardQuote({
+          dest,
+          sourceCurrency: $transactionStore.sourceCurrency.ticker,
+          lockFields: ['sourceAmount'],
+          amountIncludesFees: false,
+          country: $debitCardStore.address.country,
+          sourceAmount: $transactionStore.sourceAmount,
+
+          destCurrency: $transactionStore.destinationCurrency?.ticker,
+        })
+
+      debitCardStore.update({ reservationId, dest })
+      transactionStore.setWyrePreview(quote)
+      return push(Routes.CHECKOUT_OVERVIEW)
+    } finally {
+      isCreatingTxnPreview = false
+    }
+  }
+
+  const handleNextStep = async () => {
+    const { sourceAmount, selectedSourcePaymentMethod } = $transactionStore
+
+    isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
 
     // guards
     if (!sourceAmount || !isValidNumber(sourceAmount)) {
       focus(document.querySelector('input'))
-      throw new Error('Input an amount in USD')
+      throw new Error(`Input an amount to ${isBuy ? 'Buy' : 'Sell'} in USD.`)
     }
-    // Only do this when the user has a Wyre account
-    if (
-      isLoggedIn &&
-      (flags?.hasWyreAccount || $userStore.isProfilePending) &&
-      !$transactionStore.selectedSourcePaymentMethod
-    ) {
-      paymentSelectorVisible = true
-      return
+
+    if (sourceAmount < 0.01) {
+      focus(document.querySelector('input'))
+      throw new Error('The minimum trade amount is $0.01.')
     }
-    // if they're not logged in, forward them instead to login
-    if (!isLoggedIn) return push(Routes.SEND_OTP)
+
+    if ($transactionStore.inMedium === TransactionMediums.DEBIT_CARD) {
+      return await processDebitTransaction(isLoggedIn)
+    }
+
+    if (!isLoggedIn) {
+      return push(Routes.SEND_OTP)
+    }
 
     const nextRoute = getNextPath()
+
     if (nextRoute === Routes.CHECKOUT_OVERVIEW) {
+      if (
+        selectedSourcePaymentMethod &&
+        selectedSourcePaymentMethod?.status !== 'ACTIVE'
+      ) {
+        paymentSelectorVisible = true
+        return toaster.pop({
+          msg: 'Please select an active payment method.',
+          error: true,
+        })
+      }
+
+      // Only do this when the user has a Wyre account
+      if (
+        isLoggedIn &&
+        (flags?.hasWyreAccount || $userStore.isProfilePending) &&
+        !$transactionStore.selectedSourcePaymentMethod
+      ) {
+        paymentSelectorVisible = true
+        return
+      }
+
       try {
         isCreatingTxnPreview = true
         const preview = await window.API.fluxWyreCreateTransfer({
           source: $transactionStore.selectedSourcePaymentMethod?.id,
           sourceAmount: $transactionStore.sourceAmount,
           // TODO: get this from app config wallets
+          // dest: $configStore.wallets.find(
+          //   w =>
+          //     w.asset ===
+          //     $transactionStore.destinationCurrency.ticker.toLowerCase(),
+          // )?.address,
           dest:
             $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
               ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
@@ -124,21 +204,22 @@
         isCreatingTxnPreview = false
       }
     }
+
     push(nextRoute)
   }
 
   // Find the next path based on user data
   const getNextPath = () => {
     if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
-      let nextRoute = Routes.PROFILE
       const { hasWyrePaymentMethods, hasWyreAccount } = flags
-
       if (hasWyrePaymentMethods && hasWyreAccount)
-        nextRoute = Routes.CHECKOUT_OVERVIEW
-      else if ($userStore.isProfileComplete) nextRoute = Routes.ADDRESS
-      else if (flags?.hasWyreAccount && !hasWyrePaymentMethods)
-        nextRoute = Routes.PLAID_LINK
-      return nextRoute
+        return Routes.CHECKOUT_OVERVIEW
+      else if (
+        !hasWyrePaymentMethods &&
+        !$paymentMethodStore.wyrePaymentMethods.length
+      )
+        return Routes.PLAID_LINK
+      else return verificationNextStep
     }
     return Routes.SEND_OTP
   }
@@ -151,57 +232,98 @@
     try {
       setTimeout(animateRandomPrice, 275)
       await priceStore.fetchPrices()
+      // Auto input source amount after awaiting prices
+      if (!$transactionStore.sourceAmount) {
+        transactionStore.setSourceAmount(
+          $configStore.sourceAmount,
+          selectedDestinationPrice,
+        )
+      }
     } finally {
       setTimeout(() => (isLoadingPrices = false), 250)
     }
   }
 
   onMount(() => {
-    resizeWidget(525)
+    resizeWidget(heightForConfig(), $configStore.appName)
     getInitialPrices()
     getNextPath()
     const interval = priceStore.pollPrices()
+    if (window.AUTH_MANAGER.viewerIsLoggedIn()) {
+      // Profile should be updated when user comes back here from any other route
+      userStore.fetchUserProfile()
+      userStore.fetchFlags()
+    }
+    // handle viewer focus
+    if ($configStore.focus) focus(document.getElementById('amount'), 300)
+    // select debit by default when transaction
+    if (isDonation)
+      transactionStore.update({ inMedium: TransactionMediums.DEBIT_CARD })
     return () => clearInterval(interval)
   })
+
+  $: hasCountryIcon = WYRE_SUPPORTED_COUNTRIES.includes(
+    country?.code?.toUpperCase(),
+  )
+
+  function heightForConfig(): number {
+    // start with max and substract when ui is hidden due to config
+    var height = 525
+    if ($configStore.sourceAmount) height -= 110
+    if ($configStore.defaultDestinationAsset) height -= 110
+    return height
+  }
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
 
 <ModalContent animation="right">
-  <ModalHeader hideBackButton
-    >{isBuy ? 'Buy' : 'Sell'} {destinationCurrency.ticker}</ModalHeader
-  >
+  {#if isDonation}
+    <ModalHeader hideBackButton>{$configStore.payee || 'Donation'}</ModalHeader>
+  {:else}
+    <ModalHeader hideBackButton
+      >{isBuy ? 'Buy' : 'Sell'} {destinationCurrency.ticker}</ModalHeader
+    >
+  {/if}
   <ModalBody>
     <div class="cryptocurrencies-container">
-      <div class="dst-container">
-        <Label fx={false}>
-          <CryptoCard
-            on:mousedown={() => (cryptoSelectorVisible = true)}
-            crypto={isBuy ? destinationCurrency : sourceCurrency}
-          />
-        </Label>
-      </div>
-      <div
-        style="display:flex;flex-direction:column;height:5rem;margin-top: -1rem;"
-      >
-        <Label label="Amount">
-          <span class="dst-currency">$</span>
-          <Input
-            id="amount"
-            pattern={`[\\d,\\.]+`}
-            on:change={e => {
-              const val = Number(e.detail)
-              transactionStore.setSourceAmount(val, selectedDestinationPrice)
-            }}
-            defaultValue={sourceAmount}
-            required
-            type="number"
-            inputmode="number"
-            placeholder="0"
-          />
-          <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
-        </Label>
-      </div>
+      {#if !$configStore.defaultDestinationAsset}
+        <div class="dst-container">
+          <Label fx={false}>
+            <CryptoCard
+              on:mousedown={() => (cryptoSelectorVisible = true)}
+              crypto={isBuy ? destinationCurrency : sourceCurrency}
+            />
+          </Label>
+        </div>
+      {/if}
+      {#if isDonation && $configStore.sourceAmount}
+        <span />
+      {:else}
+        <div
+          style="display:flex;flex-direction:column;height:5rem;margin-top: 0rem;"
+        >
+          <Label label="Amount">
+            <span class="dst-currency">$</span>
+            <Input
+              id="amount"
+              pattern={`[\\d,\\.]+`}
+              on:change={e => {
+                const val = Number(e.detail)
+                transactionStore.setSourceAmount(val, selectedDestinationPrice)
+              }}
+              defaultValue={sourceAmount
+                ? sourceAmount
+                : $configStore.sourceAmount}
+              required
+              type="number"
+              inputmode="number"
+              placeholder="0"
+            />
+            <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
+          </Label>
+        </div>
+      {/if}
       <ul class="vertical-stepper">
         <VStep success={!!$transactionStore.sourceAmount}>
           <span
@@ -216,59 +338,99 @@
             <TotalContainer />
           </b>
         </VStep>
-        {#if flags?.hasWyreAccount}
-          <VStep success>
-            <span slot="icon">
-              <FaIcon data={faCheck} />
-            </span>
-            <b slot="step">Verify Identity</b>
-          </VStep>
-        {:else if $userStore.isProfilePending}
-          <VStep>
-            <span slot="icon">
-              <FaIcon data={faExclamationCircle} />
-            </span>
-            <b slot="step">Reviewing Identity</b>
-            <div class="description help" slot="info">
-              We're reviewing your identity.
-              {#if !$paymentMethodStore.wyrePaymentMethods?.length}
-                Please add a payment method below.
-              {/if}
-            </div>
-          </VStep>
-        {:else}
-          <VStep
-            onClick={() =>
-              push(
-                $userStore.isProfileComplete ? Routes.ADDRESS : Routes.PROFILE,
-              )}
-          >
-            <span slot="icon">
-              <FaIcon data={faIdCard} />
-            </span>
-            <b slot="step"> Verify Identity </b>
-          </VStep>
-        {/if}
         <PaymentSelector
           {isBuy}
-          onClick={() => {
-            if ($userStore.isProfilePending || flags?.hasWyreAccount) {
-              paymentSelectorVisible = true
-            } else {
-              push(Routes.PROFILE_STATUS)
-            }
-          }}
+          disabled={shouldFixRemediations}
+          onClick={() => (paymentSelectorVisible = true)}
         />
+        {#if $transactionStore.inMedium === TransactionMediums.ACH}
+          {#if shouldFixRemediations}
+            <VStep onClick={() => push(Routes.PROFILE_STATUS)}>
+              <span class="glow error" slot="icon">
+                <FaIcon data={faExclamationCircle} />
+              </span>
+              <b slot="step">Update Identity</b>
+              <div class="description help" slot="info">
+                Please update your identity information.
+              </div>
+            </VStep>
+          {:else if $userStore.isProfilePending}
+            <VStep disabled>
+              <span class="glow" slot="icon">
+                <FaIcon data={faExclamationCircle} />
+              </span>
+              <b slot="step">
+                {#if !$paymentMethodStore.wyrePaymentMethods?.length}
+                  Action Required
+                {:else}
+                  Reviewing Identity
+                {/if}
+              </b>
+              <div class="description help" slot="info">
+                {#if !$paymentMethodStore.wyrePaymentMethods?.length}
+                  Please add a bank account above.
+                {:else}
+                  We're reviewing your identity. This should only take a few
+                  minutes.
+                {/if}
+              </div>
+            </VStep>
+          {:else if flags?.hasWyreAccount}
+            <VStep success>
+              <span slot="icon">
+                <FaIcon data={faCheck} />
+              </span>
+              <b slot="step">Identity Verified</b>
+            </VStep>
+          {:else}
+            <VStep disabled onClick={() => push(verificationNextStep)}>
+              <span
+                class:glow={$transactionStore.selectedSourcePaymentMethod}
+                slot="icon"
+              >
+                <FaIcon data={faIdCard} />
+              </span>
+              <b slot="step"> Verify Identity </b>
+            </VStep>
+          {/if}
+        {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
+          <VStep
+            custom={!!hasCountryIcon}
+            success={!!country}
+            title="Select Your Payment Country"
+            onClick={() => {
+              countrySelectorVisible = true
+            }}
+          >
+            <span class:glow={!$debitCardStore.address.country} slot="icon">
+              <FaIcon data={country ? faCheck : faGlobe} />
+            </span>
+            <b slot="step">
+              {#if country}
+                {`${country.name}`}
+              {:else}
+                Select Payment Country
+              {/if}
+            </b>
+          </VStep>
+        {/if}
       </ul>
     </div>
   </ModalBody>
   <ModalFooter>
-    <Button isLoading={isCreatingTxnPreview} on:mousedown={handleNextStep}>
+    <Button
+      glow={!!$transactionStore.sourceAmount}
+      isLoading={isCreatingTxnPreview}
+      on:mousedown={handleNextStep}
+    >
       <div style="display:flex;justify-content:center;align-items:center;">
         <span style="margin-right:0.75rem;">
-          {isCreatingTxnPreview ? 'Previewing' : 'Preview'}
+          {isCreatingTxnPreview
+            ? 'Previewing'
+            : isLoggedIn
+            ? 'Preview'
+            : 'Continue'}
         </span>
-        <FaIcon data={faLock} />
       </div>
     </Button>
   </ModalFooter>
@@ -280,7 +442,7 @@
     visible
     on:close={() => {
       cryptoSelectorVisible = false
-      focusFirstInput(150)
+      focusFirstInput(800)
     }}
   />
 {/if}
@@ -290,17 +452,36 @@
   <AccountSelector visible on:close={() => (paymentSelectorVisible = false)} />
 {/if}
 
+{#if countrySelectorVisible}
+  <CountrySelector
+    {selectedCountryCode}
+    whiteList={WYRE_SUPPORTED_COUNTRIES}
+    on:close={() => (countrySelectorVisible = false)}
+    on:select={e => {
+      const { country } = e?.detail
+      if (country) {
+        userStore.setPhoneNumberCountry(country)
+        debitCardStore.updateAddress({ country: country.code })
+      }
+      countrySelectorVisible = false
+    }}
+  />
+{/if}
+
 <style lang="scss">
   @import '../styles/_vars.scss';
   @import '../styles/text.scss';
 
+  .cryptocurrencies-container {
+    padding: 0 0.5rem;
+  }
   .dst-container {
     margin-top: 2rem;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     display: flex;
     flex-direction: column;
-    height: 5rem;
+    height: 4rem;
   }
   .dst-currency {
     position: absolute;
@@ -317,6 +498,11 @@
     margin-top: 2rem;
     list-style: none;
     padding: 0;
+    :global(.flag > svg) {
+      position: absolute;
+      left: -12px;
+      z-index: 2;
+    }
   }
 
   .description {

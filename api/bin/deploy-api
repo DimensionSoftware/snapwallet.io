@@ -1,0 +1,3 @@
+#!/bin/bash -xeu
+
+gcloud beta run services replace --platform managed $@
