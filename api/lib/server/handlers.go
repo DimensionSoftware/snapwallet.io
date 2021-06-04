@@ -11,8 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"crypto/sha256"
-
 	"cloud.google.com/go/firestore"
 	"github.com/plaid/plaid-go/plaid"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
@@ -1717,12 +1715,6 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 }
 
 func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetConfig) (*proto.WidgetGetShortUrlResponse, error) {
-	configJsonBytes, err := json.Marshal(req)
-	if err != nil {
-		return nil, err
-	}
-
-	id := fmt.Sprintf("WIDGET_CONFIG_%x", sha256.Sum256(configJsonBytes))
 	shortID, err := shortid.Generate()
 	if err != nil {
 		return nil, err
@@ -1744,8 +1736,13 @@ func (s *Server) WidgetGetShortUrl(ctx context.Context, req *proto.SnapWidgetCon
 		Theme:   req.Theme,
 	}
 
+	id, err := swc.GetID()
+	if err != nil {
+		return nil, err
+	}
+
 	g := gotoconfig.Config{
-		ID:      gotoconfig.ID(id),
+		ID:      id,
 		ShortID: gotoconfig.ShortID(shortID),
 		Config:  &swc,
 	}
