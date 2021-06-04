@@ -24,6 +24,7 @@ jobs:
 
           . .env.ci
           make coverage
+          bin/upload-coverage
         working-directory: api
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
