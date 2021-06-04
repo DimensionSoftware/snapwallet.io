@@ -1,11 +1,16 @@
 # Flux
 
+<img align="right" src="https://codecov.io/gh/DimensionSoftware/flux/branch/dev/graphs/sunburst.svg?token=vbISJutLsH">
+
+Cryptocurrency identity management, on-ramps, off-ramps, and more.
+
 ## Coverage Status
+
 | Master | [![codecov](https://codecov.io/gh/DimensionSoftware/flux/branch/master/graph/badge.svg?token=vbISJutLsH)](https://codecov.io/gh/DimensionSoftware/flux) |
 | ------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Dev    | [![codecov](https://codecov.io/gh/DimensionSoftware/flux/branch/dev/graph/badge.svg?token=vbISJutLsH)](https://codecov.io/gh/DimensionSoftware/flux) |
 
-Cryptocurrency identity management, on-ramps, off-ramps, and more.
+
 
 ## Getting Started - Widget
 
