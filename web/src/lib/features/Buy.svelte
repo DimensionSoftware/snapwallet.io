@@ -118,7 +118,7 @@
   :global(.fiat article) {
     width: 800px;
     margin-top: 4.55rem !important;
-    background: linear-gradient(#fff, rgba(255, 255, 255, 0.9)) !important;
+    background: linear-gradient(#fff, rgb(255, 254, 232)) !important;
     box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
   }
   :global(.fiat h2) {
