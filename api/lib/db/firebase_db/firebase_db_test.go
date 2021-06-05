@@ -150,5 +150,79 @@ var _ = Describe("FirebaseDb", func() {
 		})
 
 	})
+	Context("CreateOneTimePasscode", func() {
+		Context("with email", func() {
+			var otp *onetimepasscode.OneTimePasscode
+			BeforeEach(func() {
+				var err error
+				otp, err = testManager.Db.CreateOneTimePasscode(context.Background(), "bob@microsoft.com", onetimepasscode.LoginKindEmail)
+				Expect(err).ShouldNot(HaveOccurred())
+			})
+
+			It("returns six digits", func() {
+				Expect(otp.Code).Should(HaveLen(6))
+			})
+
+			It("should return login kind email", func() {
+				Expect(otp.Kind).Should(Equal(onetimepasscode.LoginKindEmail))
+			})
+
+			It("should have a created_at timestamp which is recent", func() {
+				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), time.Second))
+			})
+		})
+		Context("with phone", func() {
+			var otp *onetimepasscode.OneTimePasscode
+			BeforeEach(func() {
+				var err error
+				otp, err = testManager.Db.CreateOneTimePasscode(context.Background(), "818-900-3454", onetimepasscode.LoginKindPhone)
+				Expect(err).ShouldNot(HaveOccurred())
+			})
+
+			It("returns six digits", func() {
+				Expect(otp.Code).Should(HaveLen(6))
+			})
+
+			It("should return login kind phone", func() {
+				Expect(otp.Kind).Should(Equal(onetimepasscode.LoginKindPhone))
+			})
+
+			It("should have a created_at timestamp which is recent", func() {
+				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), time.Second))
+			})
+		})
+
+	})
+
+	Context("AckOneTimePasscode", func() {
+		number := "818-900-3454"
+		var otp *onetimepasscode.OneTimePasscode
+		BeforeEach(func() {
+			var err error
+			otp, err = testManager.Db.CreateOneTimePasscode(context.Background(), number, onetimepasscode.LoginKindPhone)
+			Expect(err).ShouldNot(HaveOccurred())
+		})
+
+		It("returns nil when not found", func() {
+			returnedOTP, err := testManager.Db.AckOneTimePasscode(context.Background(), number, "333")
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(returnedOTP).Should(BeNil())
+		})
+
+		It("returns item when present in the database", func() {
+			returnedOTP, err := testManager.Db.AckOneTimePasscode(context.Background(), number, otp.Code)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(returnedOTP).ShouldNot(BeNil())
+		})
+
+		It("is destroyed in database after ack", func() {
+			_, err := testManager.Db.AckOneTimePasscode(context.Background(), number, otp.Code)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			returnedOTP, err := testManager.Db.AckOneTimePasscode(context.Background(), number, otp.Code)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(returnedOTP).Should(BeNil())
+		})
+	})
 
 })
