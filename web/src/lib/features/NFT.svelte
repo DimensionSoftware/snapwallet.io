@@ -27,6 +27,7 @@
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
   }
   let snap: any = {}
+  let video
 
   onMount(async () => {
     await import('flux-init')
@@ -46,6 +47,9 @@
         }
       },
     })
+
+    window.onSnapWalletOpen = () => video.pause()
+    window.onSnapWalletClose = () => video.play()
 
     // Open using a QR code
     const canvas = document.getElementById('nft-qr-canvas')
@@ -71,7 +75,13 @@
     <div class="qr" on:mousedown={snap.openWeb}>
       <canvas id="nft-qr-canvas" />
     </div>
-    <video loop playsinline autoplay muted on:mousedown={snap.openWeb}
+    <video
+      bind:this={video}
+      loop
+      playsinline
+      autoplay
+      muted
+      on:mousedown={snap.openWeb}
       ><source
         src="https://mkpcdn.com/videos/d3a277f4e6f1212c900a1da4ec915aa9_675573.mp4"
         class="svelte-1pit40i"
