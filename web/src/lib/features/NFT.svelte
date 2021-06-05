@@ -157,7 +157,7 @@
     width: 800px;
     margin-top: 4.55rem !important;
     background: linear-gradient(#fff, rgb(255, 254, 232)) !important;
-    box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
+    // box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
     padding: 1.5rem;
   }
   p {
