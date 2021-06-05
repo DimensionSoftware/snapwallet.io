@@ -15,11 +15,12 @@
 
   let ifr: HTMLIFrameElement
   let liquidVisible = false
-  let sy, isRotated
+  let topBg, sy, isRotated
 
   onMount(async () => {
     await import('flux-init')
     Typewriter = (await import('svelte-typewriter')).default
+    topBg = document.getElementById('top-bg')
 
     const appName = 'Noir Checkout',
       // themeColor = '#E1143D',
@@ -81,17 +82,23 @@
 ▀▀▀▀▀• ▀▀▀▀▀  █▪▀▀▀ ▀▀▀ ▀▀ █▪ ▀▀▀▀ ▀▀▀ ▀█▄▀▪▀▀ █▪
 Hey, you-- join us!  https://dimensionsoftware.com
       `)
-  })
 
-  // init parallax
-  let frame
-  function loop() {
-    frame = requestAnimationFrame(loop)
-    sy = window.scrollY
-    isRotated = sy > 900
+    // init parallax
+    let frame, dyLast
+    function loop() {
+      frame = requestAnimationFrame(loop)
+      const dy = window.pageYOffset
+      if (dyLast == dy) return // guard
+      dyLast = dy
+      isRotated = dy > 900
+      sy = ~~(dy * 0.3) * (isRotated ? -1 : 1)
+      if (topBg)
+        topBg.style = `transform: rotate(${isRotated ? '180deg' : 0}
+        ) translateY(${sy}px)`
+    }
+    loop() // main
     return () => cancelAnimationFrame(frame)
-  }
-  loop()
+  })
 </script>
 
 <main>
@@ -140,12 +147,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
 <Buy />
 <Footer />
 
-<span
-  class="top-bg"
-  style={`transform: rotate(${isRotated ? '180deg' : 0}) translate(0 ,${
-    sy * (isRotated ? -0.3 : 0.3)
-  }px)`}
-/>
+<span id="top-bg" class="top-bg" />
 
 {#if liquidVisible}
   <span
