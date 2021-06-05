@@ -2,6 +2,7 @@ package firebase_db
 
 import (
 	"context"
+	"encoding/json"
 
 	"crypto/rand"
 	"fmt"
@@ -96,6 +97,18 @@ func (db Db) GetGotoConfigByShortID(ctx context.Context, shortID gotoconfig.Shor
 		if err != nil {
 			return nil, err
 		}
+
+		innerConfigJSON, err := json.Marshal(g.Config)
+		if err != nil {
+			return nil, err
+		}
+
+		var innerConfigConcrete gotoconfig.SnapWidgetConfig
+		err = json.Unmarshal(innerConfigJSON, &innerConfigConcrete)
+		if err != nil {
+			return nil, err
+		}
+		g.Config = innerConfigConcrete
 
 		return &g, nil
 	}

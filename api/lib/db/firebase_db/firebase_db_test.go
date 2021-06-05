@@ -2,7 +2,6 @@ package firebase_db_test
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
 	. "github.com/onsi/ginkgo"
@@ -86,12 +85,6 @@ var _ = Describe("FirebaseDb", func() {
 					Title:    "snuggy socks",
 				},
 			}
-			configJSON, err := json.Marshal(config)
-			Expect(err).ShouldNot(HaveOccurred())
-
-			var configGeneric map[string]interface{}
-			err = json.Unmarshal(configJSON, &configGeneric)
-			Expect(err).ShouldNot(HaveOccurred())
 
 			id, err := config.GetID()
 			Expect(err).ShouldNot(HaveOccurred())
@@ -109,9 +102,7 @@ var _ = Describe("FirebaseDb", func() {
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(conf).ShouldNot(BeNil())
 
-			// todo: nasty :(
-			conf.Config = configGeneric
-			Expect(conf).Should(Equal(gotoConfig))
+			Expect(*conf).Should(Equal(gotoConfig))
 		})
 	})
 

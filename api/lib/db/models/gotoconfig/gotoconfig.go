@@ -30,10 +30,10 @@ type Config struct {
 
 type SnapWidgetConfig struct {
 	AppName string             `json:"appName,omitempty" firestore:"appName,omitempty"`
-	Wallets []SnapWidgetWallet `json:"wallets,omitempty" firestore:"wallets,omitempty"`
+	Wallets []SnapWidgetWallet `json:"wallets" firestore:"wallets"`
 	Intent  string             `json:"intent,omitempty" firestore:"intent,omitempty"`
 	Focus   bool               `json:"focus,omitempty" firestore:"focus,omitempty"`
-	Theme   map[string]string  `json:"theme,omitempty" firestore:"theme,omitempty"`
+	Theme   map[string]string  `json:"theme" firestore:"theme"`
 	Product *SnapWidgetProduct `json:"product,omitempty" firestore:"product,omitempty"`
 }
 
