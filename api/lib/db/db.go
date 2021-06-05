@@ -22,6 +22,7 @@ import (
 
 // Db ...
 type Db interface {
+	RunTransaction(context.Context, func(ctx context.Context, tx *firestore.Transaction) error) error
 	// will not save if item is already existing; returns short id of immutable first item
 	SaveGotoConfig(ctx context.Context, g *gotoconfig.Config) (gotoconfig.ShortID, error)
 	GetGotoConfigByShortID(ctx context.Context, shortID gotoconfig.ShortID) (*gotoconfig.Config, error)

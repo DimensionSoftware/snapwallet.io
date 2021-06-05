@@ -41,6 +41,10 @@ type Db struct {
 	EncryptionManager *encryption.Manager
 }
 
+func (db Db) RunTransaction(ctx context.Context, runner func(ctx context.Context, tx *firestore.Transaction) error) error {
+	return db.Firestore.RunTransaction(ctx, runner)
+}
+
 // will not save if item is already existing; returns short id of immutable first item
 func (db Db) SaveGotoConfig(ctx context.Context, g *gotoconfig.Config) (gotoconfig.ShortID, error) {
 	ref := db.Firestore.Collection("goto-configs").Doc(string(g.ID))

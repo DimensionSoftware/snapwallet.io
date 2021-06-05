@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/common"
 	"github.com/khoerling/flux/api/lib/db/models/user/profiledata/legalname"
 	"github.com/khoerling/flux/api/lib/integration_t_manager/wire"
-	"syreclabs.com/go/faker"
 
 	"github.com/lithammer/shortuuid/v3"
 	"github.com/stretchr/testify/assert"
@@ -24,7 +24,7 @@ func Test_Profile_Lifecycle(t *testing.T) {
 		panic(err)
 	}
 
-	email := faker.Internet().SafeEmail()
+	email := faker.Email()
 
 	u, err := s.Db.GetOrCreateUser(ctx, onetimepasscode.LoginKindEmail, email)
 	a.NoError(err)

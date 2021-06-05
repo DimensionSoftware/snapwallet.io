@@ -9,6 +9,7 @@ require (
 	firebase.google.com/go v3.13.0+incompatible
 	github.com/Boostport/address v0.6.2
 	github.com/badoux/checkmail v1.2.1
+	github.com/bxcodec/faker/v3 v3.6.0
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/disintegration/imaging v1.6.2
 	github.com/go-resty/resty/v2 v2.5.0
@@ -35,5 +36,4 @@ require (
 	google.golang.org/genproto v0.0.0-20210207032614-bba0dbe2a9ea
 	google.golang.org/grpc v1.35.0
 	google.golang.org/protobuf v1.26.0
-	syreclabs.com/go/faker v1.2.3
 )
