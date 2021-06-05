@@ -2,6 +2,7 @@ package firebase_db_test
 
 import (
 	"context"
+	"encoding/json"
 
 	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
 	. "github.com/onsi/ginkgo"
@@ -22,13 +23,21 @@ var _ = Describe("FirebaseDb", func() {
 
 			config = gotoconfig.SnapWidgetConfig{
 				AppName: string(shortID),
+				Wallets: []gotoconfig.SnapWidgetWallet{},
+				Intent:  "buy",
+				Focus:   true,
+				Theme:   map[string]string{},
+				Product: &gotoconfig.SnapWidgetProduct{
+					VideoURL: "http://site.com/video.mp4",
+					Title:    "snuggy socks",
+				},
 			}
 
 			id, err = config.GetID()
 			Expect(err).ShouldNot(HaveOccurred())
 		})
 
-		It("New ID returns ShortID", func() {
+		It("new ID returns ShortID", func() {
 			returnedShortID, err := testManager.SaveGotoConfig(context.Background(), &gotoconfig.Config{
 				ID:      id,
 				ShortID: shortID,
@@ -39,7 +48,7 @@ var _ = Describe("FirebaseDb", func() {
 			Expect(returnedShortID).Should(Equal(shortID))
 		})
 
-		It("Existing ID returns same ShortID instead of new one", func() {
+		It("existing ID returns same ShortID instead of new one", func() {
 			_, err := testManager.SaveGotoConfig(context.Background(), &gotoconfig.Config{
 				ID:      id,
 				ShortID: shortID,
@@ -63,6 +72,46 @@ var _ = Describe("FirebaseDb", func() {
 			config, err := testManager.GetGotoConfigByShortID(context.Background(), gotoconfig.NewShortID())
 			Expect(err).ShouldNot(HaveOccurred())
 			Expect(config).Should(BeNil())
+		})
+		It("returns data when present in database", func() {
+			shortID := gotoconfig.NewShortID()
+			config := gotoconfig.SnapWidgetConfig{
+				AppName: string(shortID),
+				Wallets: []gotoconfig.SnapWidgetWallet{},
+				Intent:  "buy",
+				Focus:   true,
+				Theme:   map[string]string{},
+				Product: &gotoconfig.SnapWidgetProduct{
+					VideoURL: "http://site.com/video.mp4",
+					Title:    "snuggy socks",
+				},
+			}
+			configJSON, err := json.Marshal(config)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			var configGeneric map[string]interface{}
+			err = json.Unmarshal(configJSON, &configGeneric)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			id, err := config.GetID()
+			Expect(err).ShouldNot(HaveOccurred())
+
+			gotoConfig := gotoconfig.Config{
+				ID:      id,
+				ShortID: shortID,
+				Config:  config,
+			}
+
+			_, err = testManager.SaveGotoConfig(context.Background(), &gotoConfig)
+			Expect(err).ShouldNot(HaveOccurred())
+
+			conf, err := testManager.GetGotoConfigByShortID(context.Background(), shortID)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(conf).ShouldNot(BeNil())
+
+			// todo: nasty :(
+			conf.Config = configGeneric
+			Expect(conf).Should(Equal(gotoConfig))
 		})
 	})
 
