@@ -54,7 +54,7 @@
     // Open using a QR code
     const canvas = document.getElementById('buy-qr-canvas')
     snap.createQR({
-      foregroundColor: '#F1071C',
+      foregroundColor: '#333',
       backgroundColor: null, // transparent default
       element: canvas,
       pixelSize: 100,
@@ -168,13 +168,11 @@
     position: absolute;
     bottom: -25px;
     right: -25px;
-    background: rgba(0, 0, 0, 1);
     display: block;
-    border-radius: 100%;
     padding: 20px;
     overflow: hidden;
     #buy-qr-canvas {
-      padding: 0;
+      padding: 2px;
       height: 75px;
       width: 75px;
     }

@@ -194,11 +194,13 @@
     position: absolute;
     top: -30px;
     left: -20px;
-    background: rgba(0, 0, 0, 1);
-    border-radius: 100%;
     padding: 20px;
     overflow: hidden;
+    background: #000;
+    border-radius: 100%;
     #nft-qr-canvas {
+      background: white;
+      padding: 2px;
       height: 75px;
       width: 75px;
     }
