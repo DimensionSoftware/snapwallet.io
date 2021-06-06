@@ -47,11 +47,19 @@ html {
     margin: 0;
     opacity: 0;
     animation: backgroundFadeIn 1.25s ease-out 0.01s forwards;
+    &.sw-loaded {
+      overflow-y: hidden;
+      margin-right: 15px;
+      height: 100vh;
+      > .top-bg {
+        right: 0;
+      }
+    }
     > .top-bg {
       content: '';
       position: absolute;
       top: -100vh;
-      right: 0;
+      right: -15px;
       left: 0;
       z-index: -1;
       bottom: -335vh;

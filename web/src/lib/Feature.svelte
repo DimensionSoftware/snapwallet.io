@@ -81,6 +81,7 @@
     display: flex;
     flex-direction: column;
     padding: 12rem 0 7rem 0;
+    margin-right: -15px;
     position: relative;
     z-index: 1;
     &.center {
