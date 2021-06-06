@@ -46,6 +46,20 @@ func (m *MockDb) EXPECT() *MockDbMockRecorder {
 	return m.recorder
 }
 
+// RunTransaction mocks base method
+func (m *MockDb) RunTransaction(arg0 context.Context, arg1 func(context.Context, *firestore.Transaction) error) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "RunTransaction", arg0, arg1)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// RunTransaction indicates an expected call of RunTransaction
+func (mr *MockDbMockRecorder) RunTransaction(arg0, arg1 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "RunTransaction", reflect.TypeOf((*MockDb)(nil).RunTransaction), arg0, arg1)
+}
+
 // SaveGotoConfig mocks base method
 func (m *MockDb) SaveGotoConfig(ctx context.Context, g *gotoconfig.Config) (gotoconfig.ShortID, error) {
 	m.ctrl.T.Helper()
