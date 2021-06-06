@@ -84,6 +84,9 @@
   @import '../../styles/_vars.scss';
   @import '../../styles/animations.scss';
 
+  :global(.phone .input-label) {
+    margin-left: 11px !important;
+  }
   .input-container {
     display: flex;
     padding-bottom: 0;
@@ -102,7 +105,7 @@
       vertical-align: middle;
       color: var(--theme-input-text-color);
       border: none;
-      border-bottom: 1px solid var(--theme-color-lightened);
+      border-bottom: 1px solid transparent;
       transform: scale(1);
       transition-duration: 0.3s;
       transition-property: transform;
@@ -138,17 +141,18 @@
       font-size: 1.8em;
       color: var(--theme-input-text-color);
       border: none;
-      border-bottom: 1px solid var(--theme-color-lightened);
+      border-bottom: 1px solid transparent;
       outline: none;
       transform: scale(1);
       transition-duration: 0.3s;
       transition-property: transform;
       &:valid {
-        border-bottom: 1px solid var(--theme-color-lightened);
+        border-bottom: 1px solid transparent;
       }
       // .bg is the input surround
       ~ .bg {
         position: absolute;
+        display: none;
         content: '';
         top: 0;
         bottom: 0px;
@@ -168,7 +172,7 @@
       &:hover,
       &:focus {
         z-index: 1;
-        border-bottom: 1px solid var(--theme-color);
+        border-bottom: 1px solid transparent;
         transition: none;
       }
       &:invalid {
@@ -186,19 +190,21 @@
       // .fx is the subtle bottom line
       & + .fx {
         position: absolute;
-        left: 0;
-        right: 0;
+        left: 0.5rem;
+        right: 0.5rem;
         bottom: 0;
         height: 1px;
         background: linear-gradient(
           to right,
-          transparent,
+          var(--theme-color),
+          var(--theme-color),
+          var(--theme-color),
           var(--theme-color),
           transparent
         );
         z-index: 11;
         opacity: 0;
-        transform: scale(0);
+        transform: translateY(-100%);
         transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s;
       }
       &:active ~ .bg,
@@ -209,7 +215,7 @@
         bottom: -4px;
         background: var(--theme-color-lightened);
         opacity: 0.5;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
         transition: none;
       }
       &:active + .fx,

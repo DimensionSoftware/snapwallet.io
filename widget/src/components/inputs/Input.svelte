@@ -119,6 +119,7 @@
       // .bg is the input surround
       ~ .bg {
         position: absolute;
+        display: none;
         content: '';
         top: 0;
         bottom: 0px;
@@ -156,19 +157,21 @@
       // .fx is the subtle bottom line
       & + .fx {
         position: absolute;
-        left: 0.5rem;
+        left: 1rem;
         right: 0.5rem;
         bottom: -1px;
         height: 1px;
         background: linear-gradient(
           to right,
-          transparent,
+          var(--theme-color),
+          var(--theme-color),
+          var(--theme-color),
           var(--theme-color),
           transparent
         );
         z-index: 11;
         opacity: 0;
-        transform: scale(0);
+        transform: translateY(-100%);
         transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s;
       }
       &:active ~ .bg,
@@ -179,7 +182,7 @@
         bottom: -4px;
         background: var(--theme-color-lightened);
         opacity: 0.5;
-        transform: scale(1);
+        transform: translateY(0) scale(1);
         transition: none;
       }
       &:active + .fx,
@@ -191,7 +194,6 @@
         background: var(--theme-color);
         background: linear-gradient(
           to right,
-          transparent,
           var(--theme-color),
           var(--theme-color),
           var(--theme-color),

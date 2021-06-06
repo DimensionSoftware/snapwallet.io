@@ -13,9 +13,9 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 1rem 1.25rem 0 1.25rem;
+    padding: 1rem 2.5rem 0 2.5rem;
     &.padded {
-      padding: 1rem 1.75rem 0 1.75rem;
+      padding: 1rem 2.5rem 0 2.5rem;
     }
     &.fullscreen {
       padding: 0;

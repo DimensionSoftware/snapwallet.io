@@ -43,10 +43,10 @@
       content: '';
       background: var(--theme-text-color);
       border-radius: 50%;
-      height: 6px;
-      width: 6px;
-      left: 1px;
-      top: 9px;
+      height: 4px;
+      width: 4px;
+      left: 2px;
+      top: 10px;
       opacity: 0.7;
       z-index: 1;
     }
@@ -88,7 +88,7 @@
       width: 2px;
       left: 3px;
       top: -20px;
-      opacity: 0.3;
+      opacity: 0.08;
       height: calc(100% + 9px);
       content: '';
       background-color: var(--theme-text-color);
@@ -97,10 +97,10 @@
       border-color: inherit;
       border-width: 0;
       outline: 0;
-      z-index: 0;
+      z-index: -1;
     }
     :global(span:before) {
-      background: var(--theme-modal-background);
+      background: transparent;
       position: absolute;
       content: '';
       border-radius: 50%;
@@ -140,8 +140,7 @@
       :global(span:before) {
         z-index: 3;
         opacity: 1;
-        // background: var(--theme-success-color);
-        background: var(--theme-modal-background);
+        background: transparent;
       }
       & > :global(.icon) {
         margin-left: 0.4rem;

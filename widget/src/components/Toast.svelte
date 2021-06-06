@@ -49,7 +49,7 @@
     z-index: 9999;
     // Don't overlay top of modal
     height: 0px;
-    padding: 0 0.75rem;
+    padding: 0 1.25rem;
     cursor: pointer;
     font-size: 1rem;
   }
