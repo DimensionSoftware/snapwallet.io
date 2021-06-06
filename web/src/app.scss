@@ -5,8 +5,14 @@
     'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', sans-serif;
 
   h1,
-  h2 {
-    font-family: Arial, Helvetica, sans-serif;
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  p {
+    font-family: 'Helvetica Neue', 'Helvetica', -apple-system,
+      BlinkMacSystemFont;
   }
 }
 

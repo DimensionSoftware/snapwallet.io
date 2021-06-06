@@ -262,7 +262,7 @@
         }
         &:hover {
           color: #000;
-          box-shadow: 0 0 0 3px rgba(222, 49, 45, 0.5);
+          box-shadow: 0 0 0 1px rgba(222, 49, 45, 0.5);
           font-weight: bold;
           transform: translateX(2px) scale(1.05);
           transition: none;

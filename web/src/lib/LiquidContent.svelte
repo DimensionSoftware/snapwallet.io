@@ -17,7 +17,7 @@
     >
     <div class="content2">
       <h2>Get in Touch</h2>
-      <h3>Snap Wallet Will Customize Your Widget</h3>
+      <h3>Yes, Snap Wallet will customize your widget!</h3>
       <div class="contact">
         <Button id="liquid_contact" on:mousedown={contactUs}>Contact Us</Button>
       </div>
@@ -70,9 +70,9 @@
       margin: 0 0 1rem;
     }
     h3 {
-      font-size: 1.5rem;
+      font-size: 1.25rem;
       opacity: 0.8;
-      margin: -0.75rem 0 5rem 0;
+      margin: -0.5rem 0 5rem 0;
     }
     .contact {
       align-self: flex-start;

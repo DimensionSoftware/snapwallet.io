@@ -86,17 +86,25 @@
       <br />
       <h3>Buy & Sell Crypto</h3>
       <ul>
-        <li>Fiat &rlarr; Crypto</li>
-        <li>Crypto &rlarr; Fiat</li>
-        <li>Crypto &rlarr; Crypto</li>
+        <li>Fiat &rlarr; Crypto Onramp</li>
+        <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
+          Crypto &rlarr; Fiat Offramp
+        </li>
+        <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
+          Crypto &rlarr; Crypto
+        </li>
       </ul>
       <br />
       <h3>Snap Wallet is</h3>
       <ul>
-        <li>&nbsp; Web, iOS & Android</li>
-        <li>&nbsp; Fast & Secure</li>
-        <li>&nbsp; Dependency-free & Embeddable</li>
+        <li>Fast & Secure</li>
+        <li>Supported by all platforms</li>
+        <li>Dependency-free & Embeddable!</li>
       </ul>
+    </div>
+    <div class="flex">
+      <img src="/appstore.svg" />
+      <img src="/playstore.svg" />
     </div>
     <div class="qr" on:mousedown={snap.openWeb}>
       <canvas id="buy-qr-canvas" />
@@ -111,9 +119,11 @@
     position: relative;
     padding: 0 4rem 0 4rem;
     height: 100%;
-    > div {
-      cursor: pointer;
-    }
+  }
+  .flex {
+    display: flex;
+    margin-top: 2rem;
+    justify-content: space-between;
   }
   :global(.fiat article) {
     width: 800px;
@@ -129,11 +139,12 @@
     font-size: 1.5rem;
   }
   ul {
+    list-style: none;
     margin: 0;
     padding: 0;
     li {
       padding: 0;
-      margin: 0.5rem 0 0.75rem 1rem;
+      margin: 0.5rem 0 0.25rem 0;
     }
   }
   .docs-link {
@@ -147,6 +158,9 @@
   }
   h4 {
     margin: 1.5rem 0 2rem 0;
+  }
+  .muted {
+    opacity: 0.5;
   }
   p {
     font-size: 1.25rem;

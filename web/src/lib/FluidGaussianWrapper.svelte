@@ -8,7 +8,7 @@
   export let height = 500
   export let step = 10
   export let position
-  export let triggerValue = 350
+  export let triggerValue = 550
   export let precision = 5
   export let slideDuration = 1000
   export let slideEasing = elasticOut
