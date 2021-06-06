@@ -86,12 +86,12 @@
       <br />
       <h3>Buy & Sell Crypto</h3>
       <ul>
-        <li>Fiat &rlarr; Crypto Onramp</li>
+        <li><span>Fiat</span> › &nbsp; Crypto Onramp</li>
         <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
-          Crypto &rlarr; Fiat Offramp
+          <span>Crypto</span> › &nbsp; Fiat Offramp
         </li>
         <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
-          Crypto &rlarr; Crypto
+          <span>Crypto</span> › &nbsp; Crypto
         </li>
       </ul>
       <br />
@@ -119,6 +119,7 @@
     position: relative;
     padding: 0 4rem 0 4rem;
     height: 100%;
+    min-height: 500px !important;
   }
   .flex {
     display: flex;
@@ -145,6 +146,10 @@
     li {
       padding: 0;
       margin: 0.5rem 0 0.25rem 0;
+      span {
+        display: inline-block;
+        width: 60px;
+      }
     }
   }
   .docs-link {
