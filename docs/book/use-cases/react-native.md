@@ -23,6 +23,7 @@ const snap = new Snap({
 })
 
 // Create a Snap Wallet URI for the WebView component
+// This function also accepts runtime configuration
 const uri = snap.generateURL()
 
 // Create a WebView message listener for incoming Snap Wallet messages
