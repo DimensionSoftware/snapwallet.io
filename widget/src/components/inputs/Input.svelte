@@ -171,7 +171,7 @@
         );
         z-index: 11;
         opacity: 0;
-        transform: translateY(-100%);
+        transform: translateX(-30px) scale(0.75);
         transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s;
       }
       &:active ~ .bg,
@@ -182,7 +182,7 @@
         bottom: -4px;
         background: var(--theme-color-lightened);
         opacity: 0.5;
-        transform: translateY(0) scale(1);
+        transform: translateX(0) scale(1);
         transition: none;
       }
       &:active + .fx,
