@@ -5,7 +5,7 @@ import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
 export type UserIntent = 'buy' | 'sell' | 'donate'
 export type SrcDst = 'source' | 'destination'
-enum WidgetEnvironments {
+export enum WidgetEnvironments {
   // ** development ** is only an option for explicitness
   // Simply provide the environment variable INIT_API_BASE_URL for dev
   DEVELOPMENT = 'development',
@@ -13,12 +13,12 @@ enum WidgetEnvironments {
   PRODUCTION = 'production',
 }
 
-enum WidgetURLs {
+export enum WidgetURLs {
   PRODUCTION = 'https://snapwallet.io/widget',
   SANDBOX = 'https://sandbox.snapwallet.io/widget',
 }
 
-enum APIBaseURLs {
+export enum APIBaseURLs {
   PRODUCTION = 'https://api.snapwallet.io',
   SANDBOX = 'https://sandbox-api.snapwallet.io',
 }
@@ -55,9 +55,9 @@ interface IConfig {
   onMessage?: (e: any) => any
   wallets: IWallet[]
   appName: string
-  payee: string
-  intent: UserIntent
-  focus: boolean
+  payee?: string
+  intent?: UserIntent
+  focus?: boolean
   sourceAmount?: number
   theme?: { [cssProperty: string]: string }
   product?: IProduct
