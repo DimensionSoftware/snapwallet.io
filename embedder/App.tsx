@@ -1,47 +1,62 @@
 import React, {useState} from 'react';
 import {Button, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {WebView} from 'react-native-webview';
+import Snap, {WidgetEnvironments} from 'flux-init';
 
-enum ChildMessages {
-  EXIT = '__SNAP_EXIT',
-}
+// Configure the Snap Wallet instance
+const snap = new Snap({
+  environment: WidgetEnvironments.SANDBOX,
+  appName: 'Some App',
+  wallets: [],
+});
 
-const Flux = (props: {onExit?: (msg?: any) => any}) => (
+// Create a Snap Wallet URI
+const uri = snap.generateURL();
+
+const SnapWallet = (props: {onExit?: (msg?: any) => any}) => (
   <WebView
     style={styles.webView}
-    source={{uri: 'http://localhost:5000/#/'}}
-    onMessage={(event) => {
-      const {data = '{}'} = event.nativeEvent;
-      const fluxMsg = JSON.parse(data);
+    source={{uri}}
+    onMessage={(event: any) => {
+      try {
+        const {data = '{}'} = event.nativeEvent;
+        const snapWalletMsg: {data: any; event: any} = JSON.parse(data);
 
-      switch (fluxMsg.event) {
-        case ChildMessages.EXIT:
-          props.onExit && props.onExit(fluxMsg);
-          break;
-        default:
-          console.warn('Unknown Flux msg', fluxMsg);
-          break;
+        switch (snapWalletMsg.event) {
+          case snap.events.EXIT:
+            props.onExit && props.onExit(snapWalletMsg);
+            break;
+          case snap.events.SUCCESS:
+            console.log('Success', snapWalletMsg);
+            break;
+          default:
+            break;
+        }
+      } catch (e) {
+        console.error('Error processing Snap Wallet message', e);
       }
     }}
   />
 );
 
-const FluxButton = (props: {onPress: (e: any) => void}) => {
+const SnapWalletButton = (props: {onPress: (e: any) => void}) => {
   return <Button onPress={props.onPress} title="Buy Cryptocurrency" />;
 };
 
 const App = () => {
-  const [isFluxVisible, setFluxIsVisible] = useState(false);
+  const [isSnapWalletVisible, setSnapWalletIsVisible] = useState(false);
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={styles.safeView}>
         <View style={styles.container}>
-          {isFluxVisible ? (
-            <Flux onExit={(_msg) => setFluxIsVisible(false)} />
+          {isSnapWalletVisible ? (
+            <SnapWallet onExit={(_msg) => setSnapWalletIsVisible(false)} />
           ) : (
             <View style={styles.buttonContainer}>
-              <FluxButton onPress={(_e: any) => setFluxIsVisible(true)} />
+              <SnapWalletButton
+                onPress={(_e: any) => setSnapWalletIsVisible(true)}
+              />
             </View>
           )}
         </View>
