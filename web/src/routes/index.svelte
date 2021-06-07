@@ -280,8 +280,10 @@ Hey, you-- join us!  https://dimensionsoftware.com
 
   // responsive
   @media (max-width: 375px) {
-    :global(body) {
+    :global(body),
+    :global(html) {
       overflow-y: scroll !important;
+      overflow-x: hidden !important;
       main {
         padding: 0;
         h1 > b {
@@ -294,9 +296,11 @@ Hey, you-- join us!  https://dimensionsoftware.com
     :global(body:before) {
       display: none;
     }
-    :global(body) {
+    :global(body),
+    :global(html) {
       background-color: #fffc00 !important;
       overflow-y: scroll !important;
+      overflow-x: hidden !important;
       main {
         transform: translateY(10%);
         flex-direction: column;
@@ -315,6 +319,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
             font-size: 1rem;
           }
           article {
+            font-size: 1rem;
             max-width: 75%;
             margin: 0 2rem 6rem 0;
           }
