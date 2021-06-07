@@ -13,38 +13,42 @@ import Snap, { WidgetEnvironments } from '@snapwallet/init'
 // Configure the Snap Wallet instance
 const snap = new Snap({
   environment: WidgetEnvironments.SANDBOX,
-  appName: 'Some App',
-  wallets: [],
+  appName: 'My App',
+  wallets: [
+    {
+      asset: 'btc',
+      address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK',
+    },
+  ],
 })
 
 // Create a Snap Wallet URI for the WebView component
 const uri = snap.generateURL()
 
+// Create a WebView message listener for incoming Snap Wallet messages
+const onMessage = async (event: any) => {
+  try {
+    const { data = '{}' } = event.nativeEvent
+    const snapWalletMsg: { data: any; event: any } = JSON.parse(data)
+
+    switch (snapWalletMsg.event) {
+      case snap.events.EXIT:
+        props.onExit && props.onExit(snapWalletMsg)
+        break
+      case snap.events.SUCCESS:
+        console.log('Success', snapWalletMsg)
+        break
+      default:
+        break
+    }
+  } catch (e) {
+    console.error('Error processing Snap Wallet message', e)
+  }
+}
+
 // The Snap Wallet WebView component
 const SnapWallet = (props: { onExit?: (msg?: any) => any }) => (
-  <WebView
-    style={styles.webView}
-    source={{ uri }}
-    onMessage={(event: any) => {
-      try {
-        const { data = '{}' } = event.nativeEvent
-        const snapWalletMsg: { data: any; event: any } = JSON.parse(data)
-
-        switch (snapWalletMsg.event) {
-          case snap.events.EXIT:
-            props.onExit && props.onExit(snapWalletMsg)
-            break
-          case snap.events.SUCCESS:
-            console.log('Success', snapWalletMsg)
-            break
-          default:
-            break
-        }
-      } catch (e) {
-        console.error('Error processing Snap Wallet message', e)
-      }
-    }}
-  />
+  <WebView style={styles.webView} source={{ uri }} onMessage={onMessage} />
 )
 
 // Create a button for opening the Snap Wallet WebView
