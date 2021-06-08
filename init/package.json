@@ -1,7 +1,7 @@
 {
   "name": "@snapwallet/init",
   "version": "0.0.2",
-  "description": "Flux web iframe launcher",
+  "description": "The official Snap Wallet widget initialization tool.",
   "author": "Dimension Software",
   "keywords": [
     "fetch",
