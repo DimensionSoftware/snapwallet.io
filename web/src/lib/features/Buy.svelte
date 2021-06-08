@@ -103,8 +103,18 @@
       </ul>
     </div>
     <div class="flex">
-      <img src="/appstore.svg" />
-      <img src="/playstore.svg" />
+      <a
+        target="_blank"
+        href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
+      >
+        <img src="/appstore.svg" />
+      </a>
+      <a
+        target="_blank"
+        href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
+      >
+        <img src="/playstore.svg" />
+      </a>
     </div>
     <div class="qr" on:mousedown={snap.openWeb}>
       <canvas id="buy-qr-canvas" />
