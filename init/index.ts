@@ -105,12 +105,12 @@ class Snap {
     const baseURL = this.getBaseURL()
     return {
       baseURL,
-      wallets: this.wallets,
+      wallets: this.wallets || [],
       appName: this.appName,
       intent: this.intent,
       payee: this.payee,
       focus: this.focus,
-      theme: this.theme,
+      theme: this.theme || {},
       product: this.product,
       sourceAmount: this.sourceAmount,
       defaultDestinationAsset: this.defaultDestinationAsset,
