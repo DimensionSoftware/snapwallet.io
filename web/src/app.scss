@@ -81,9 +81,9 @@ html {
   }
   @media screen and (max-width: 1000px) {
     body > .top-bg {
-      bottom: -30vh;
+      bottom: 0;
     }
-    .wrapper {
+    #liquid {
       display: none !important;
     }
   }

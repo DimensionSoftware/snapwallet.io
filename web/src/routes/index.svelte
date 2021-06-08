@@ -67,7 +67,8 @@
     )
 
     ifr.onload = () => {
-      setTimeout(() => (liquidVisible = true), 3000)
+      if (window.screen.width > 1000)
+        setTimeout(() => (liquidVisible = true), 3000)
       ifr.classList.add('loaded')
     }
     ifr.src = SnapWallet.generateURL()
@@ -151,6 +152,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
 
 {#if liquidVisible}
   <span
+    id="liquid"
     in:fly={{ duration: 1000 }}
     out:fly={{ duration: 5000, x: -100, y: 25, opacity: 0.1 }}
   >
@@ -327,7 +329,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
         .wallet {
           position: relative;
           max-width: inherit;
-          padding-bottom: 5rem;
+          padding-bottom: 15rem;
           iframe {
             top: inherit;
             right: inherit;
