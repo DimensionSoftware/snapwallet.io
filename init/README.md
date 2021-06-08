@@ -1,33 +1,22 @@
-# Widget Init Script and Demo
+# Snap Wallet Init
 
-This directory contains the initialization script `index.ts` which constructs an iframe for web.
-The `index.html` file is a working demo of the widget being launched using the `Snap` class from `index.ts`
+The Snap Wallet fiat to cryptocurrency widget init script.
 
 ## Up and Running
 
-### Environment
+```typescript
+import SnapWallet, { WidgetEnvironments } from '@snapwallet/init'
 
-Make sure that you have a `.env` file in the `init/` directory. Environment variable examples can be found in `.env.example`.
+// Base configuration
+const snap = new SnapWallet({
+  environment: WidgetEnvironments.SANDBOX,
+  appName: 'Some App',
+  wallets: [],
+})
 
-### Build
+// Create a Snap Wallet URI for a React Native WebView
+const uri = snap.generateURL()
 
-Run the build script in order to output `dist/`. This is where the script will live locally.
-
-```bash
-  npm run build
+// or open the iframe for web
+snap.openWeb()
 ```
-
-### Serve
-
-Serve the init project directory
-
-- Python 2
-  ```bash
-  python -m SimpleHTTPServer
-  ```
-- Python 3
-  ```bash
-  python3 -m http.server
-  ```
-
-and finally browse to [server](http://localhost:8000)
