@@ -1,5 +1,5 @@
 {
-  "name": "flux-init",
+  "name": "@snapwallet/init",
   "version": "0.0.1",
   "description": "Flux web iframe launcher",
   "author": "Dimension Software",
@@ -34,5 +34,6 @@
   "dependencies": {
     "nanoid": "^3.1.22",
     "qr-creator": "^1.0.0"
-  }
+  },
+  "license": "ISC"
 }
