@@ -20,4 +20,4 @@ rollup.config.js
 tsconfig.json
 index.ts
 .env.example
-package.json
+DEV_README.md
