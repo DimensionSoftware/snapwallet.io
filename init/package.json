@@ -23,6 +23,12 @@
     "wyre",
     "coinify",
     "snap wallet",
+    "snapwallet",
+    "wallet",
+    "celsius",
+    "bread",
+    "opensea",
+    "nft",
     "axios"
   ],
   "main": "./dist/index.js",
