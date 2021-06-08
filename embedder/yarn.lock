@@ -1170,10 +1170,10 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
-"@snapwallet/init@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@snapwallet/init/-/init-0.0.2.tgz#9647f6c5bdb80d53321d6e3c94a324f23544ec74"
-  integrity sha512-ntVxJ6OnINS6rp9uJz3E1oU8J7dBw2l95WZUvgnQP98WTcP4n+McV9nLtTDgxOXV4L4G9tzrtJb4ZeD+925uVg==
+"@snapwallet/init@0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@snapwallet/init/-/init-0.0.4.tgz#b0c49c4b1cc07d5e9e9174cd7140af7f0b23067e"
+  integrity sha512-NpLXyWI8ovN3U2h0SNlotAB2KkOUXMRIRF77xdYazFtvyYpbmEQZePq+5YsPhiRK5/juRkG4NcicvgaBDBMH3A==
   dependencies:
     nanoid "^3.1.22"
     qr-creator "^1.0.0"
