@@ -1170,6 +1170,14 @@
   dependencies:
     "@sinonjs/commons" "^1.7.0"
 
+"@snapwallet/init@0.0.1":
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/@snapwallet/init/-/init-0.0.1.tgz#6c89a9e71de8908f4c05eb886776e6ff78f36a3b"
+  integrity sha512-gobrqu5NPBskf2/mVCmDwgIHhguGTID1wY6+dKsv6VABRSvj6yFpRC7K0MIgvCr4Rw0gvvTew73UBv7+K95Iog==
+  dependencies:
+    nanoid "^3.1.22"
+    qr-creator "^1.0.0"
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
@@ -3169,12 +3177,6 @@ flatted@^2.0.0:
   version "2.0.2"
   resolved "https://registry.yarnpkg.com/flatted/-/flatted-2.0.2.tgz#4575b21e2bcee7434aa9be662f4b7b5f9c2b5138"
   integrity sha512-r5wGx7YeOwNWNlCA0wQ86zKyDLMQr+/RB8xy74M4hTphfmjlijTSSXGuH8rnvKZnfT9i+75zmd8jcKdMR4O6jA==
-
-flux-init@../init:
-  version "0.0.1"
-  dependencies:
-    nanoid "^3.1.22"
-    qr-creator "^1.0.0"
 
 for-in@^1.0.2:
   version "1.0.2"

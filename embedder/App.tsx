@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Button, SafeAreaView, StatusBar, StyleSheet, View} from 'react-native';
 import {WebView} from 'react-native-webview';
-import Snap, {WidgetEnvironments} from 'flux-init';
+import Snap, {WidgetEnvironments} from '@snapwallet/init';
 
 // Configure the Snap Wallet instance
 const snap = new Snap({
