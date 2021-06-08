@@ -1,6 +1,6 @@
 {
   "name": "@snapwallet/init",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The official Snap Wallet widget initialization tool.",
   "author": "Dimension Software",
   "keywords": [
