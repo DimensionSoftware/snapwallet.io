@@ -1,6 +1,6 @@
 # Offramp
 
-Offramp is a common use case where the Snap Wallet widget is configured for selling cryptocurrencies from a bank account to a destination wallet. Once the user has confirmed their transaction the Snap Wallet widget will send a callback message prompting the initiation of the wallet transfer.
+Offramp is a common use case where the Snap Wallet widget is configured to sell cryptocurrencies from a wallet, back into fiat (credit cards, debit cards, bank accounts, etc...). Once your customer has confirmed their transaction, the Snap Wallet widget will send a callback message prompting the initiation of the wallet transfer.
 
 ```html
 <!DOCTYPE html5>

@@ -1,6 +1,6 @@
-# Donations
+# Donations and Tips
 
-This use case can be used to accept fiat to cryptocurrency donations for your open source project, non profit organization, small business, school or anywhere else you would like to accept donations. Simply provide a destination wallet address for each crypto currency you'd like to accept donations for and optionally a source asset and/or source amount.
+Accept cryptocurrency from fiat (debit accounts, checking accounts, credit cards, etc...) as donations and tips. This flow is useful for your open source project, non-profit organization, small business, school or anywhere else you would like to accept donations. Simply provide a destination wallet address for each crypto currency you'd like to accept donations for and optionally a source asset and/or source amount:
 
 ```html
 <!DOCTYPE html5>

@@ -1,6 +1,6 @@
-# NFT Checkouts
+# NFT and Product Checkouts
 
-Configure Snap Wallet for NFT checkouts in a snap! Simply provide a `product` configuration parameter to get started. A user can purchase an NFT using a debit card or a bank account.
+Configure Snap Wallet for NFT checkouts, and any other product or service, in a snap! Simply provide a `product` configuration parameter to get started. A user can purchase an NFT using a debit card or a bank account:
 
 ```html
 <!DOCTYPE html5>
