@@ -141,7 +141,11 @@
     small {
       font-weight: 300;
       margin-left: 0.25rem;
-      text-transform: lowercase;
+      text-transform: capitalize;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      max-width: 105px;
     }
   }
   .crypto-arrow {
