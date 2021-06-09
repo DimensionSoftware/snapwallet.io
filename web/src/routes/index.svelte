@@ -67,8 +67,8 @@
     )
 
     ifr.onload = () => {
-      if (window.screen.width > 1000)
-        setTimeout(() => (liquidVisible = true), 3000)
+      // if (window.screen.width > 1000)
+      //   setTimeout(() => (liquidVisible = true), 3000)
       ifr.classList.add('loaded')
     }
     ifr.src = SnapWallet.generateURL()
