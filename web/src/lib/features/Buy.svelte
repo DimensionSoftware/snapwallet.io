@@ -86,7 +86,13 @@
       <br />
       <h3>Buy & Sell Crypto</h3>
       <ul>
-        <li><span>Fiat</span> › &nbsp; Crypto Onramp</li>
+        <li>
+          <span>Fiat</span> › &nbsp;
+          <a
+            href="https://snapwallet.io/docs/guide/use-cases/onramp.html"
+            target="_blank">Crypto Onramp</a
+          >
+        </li>
         <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
           <span>Crypto</span> › &nbsp; Fiat Offramp
         </li>

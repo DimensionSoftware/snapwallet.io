@@ -78,6 +78,10 @@ html {
       width: 100%;
       max-width: 960px;
     }
+    a {
+      color: #000;
+      text-decoration: none;
+    }
   }
   @media screen and (max-width: 1000px) {
     body > .top-bg {

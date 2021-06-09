@@ -72,7 +72,7 @@
     <Button id="footer_contact" on:mousedown={contactUs}>Contact Us</Button>
   </div>
   <Visibility steps={100} let:percent>
-    {#if percent > 50}
+    {#if percent > 30}
       <ol
         in:fly={{ easing: backOut, duration: 350, opacity: 0, x: -50 }}
         out:fly={{ easing: expoOut, duration: 500, y: 0 }}
