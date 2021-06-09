@@ -20,10 +20,10 @@
 
 <style lang="scss">
   .exchange-rate-container {
-    position: absolute;
-    bottom: -1.5rem;
-    right: 0.5rem;
-    font-size: 0.85rem;
+    position: relative;
+    top: -1.25rem;
+    left: 2.5rem;
+    font-size: 0.8rem;
     z-index: 2;
     color: var(--theme-text-color);
     font-weight: normal;

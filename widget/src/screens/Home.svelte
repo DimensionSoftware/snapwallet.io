@@ -5,6 +5,7 @@
   import ModalFooter from '../components/ModalFooter.svelte'
   import Button from '../components/Button.svelte'
   import CryptoCard from '../components/cards/CryptoCard.svelte'
+  import Surround from '../components/cards/Surround.svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { userStore } from '../stores/UserStore'
   import { priceStore } from '../stores/PriceStore'
@@ -287,43 +288,51 @@
   {/if}
   <ModalBody>
     <div class="cryptocurrencies-container">
-      {#if !$configStore.defaultDestinationAsset}
-        <div class="dst-container">
-          <Label fx={false}>
-            <CryptoCard
-              on:mousedown={() => (cryptoSelectorVisible = true)}
-              crypto={isBuy ? destinationCurrency : sourceCurrency}
-            />
-          </Label>
-        </div>
-      {/if}
-      {#if isDonation && $configStore.sourceAmount}
-        <span />
-      {:else}
-        <div
-          style="display:flex;flex-direction:column;height:5rem;margin-top: 0rem;"
-        >
-          <Label label="Amount">
-            <span class="dst-currency">$</span>
-            <Input
-              id="amount"
-              pattern={`[\\d,\\.]+`}
-              on:change={e => {
-                const val = Number(e.detail)
-                transactionStore.setSourceAmount(val, selectedDestinationPrice)
-              }}
-              defaultValue={sourceAmount
-                ? sourceAmount
-                : $configStore.sourceAmount}
-              required
-              type="number"
-              inputmode="number"
-              placeholder="0"
-            />
+      <Surround>
+        {#if isDonation && $configStore.sourceAmount}
+          <span />
+        {:else}
+          <div
+            style="display:flex;flex-direction:column;height:4.25rem;margin-top: 0rem;"
+          >
+            <Label>
+              <span class="dst-currency">$</span>
+              <Input
+                id="amount"
+                pattern={`[\\d,\\.]+`}
+                on:change={e => {
+                  const val = Number(e.detail)
+                  transactionStore.setSourceAmount(
+                    val,
+                    selectedDestinationPrice,
+                  )
+                }}
+                defaultValue={sourceAmount
+                  ? sourceAmount
+                  : $configStore.sourceAmount}
+                required
+                type="number"
+                inputmode="number"
+                placeholder="0"
+                isTranslucent
+              />
+              <span class="dst-amount">Amount</span>
+            </Label>
+          </div>
+        {/if}
+        {#if !$configStore.defaultDestinationAsset}
+          <div class="dst-container">
+            <Label fx={false}>
+              <CryptoCard
+                on:mousedown={() => (cryptoSelectorVisible = true)}
+                crypto={isBuy ? destinationCurrency : sourceCurrency}
+                isDown
+              />
+            </Label>
             <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
-          </Label>
-        </div>
-      {/if}
+          </div>
+        {/if}
+      </Surround>
       <ul class="vertical-stepper">
         <VStep success={!!$transactionStore.sourceAmount}>
           <span
@@ -476,22 +485,32 @@
     padding: 0 0.5rem;
   }
   .dst-container {
-    margin-top: 2rem;
     margin-left: 0.5rem;
     margin-right: 0.5rem;
     display: flex;
     flex-direction: column;
     height: 4rem;
+    :global(> label) {
+      margin-bottom: 0 !important;
+    }
   }
   .dst-currency {
     position: absolute;
-    left: 1rem;
-    bottom: 1.35rem;
+    left: 0;
+    top: 1.15rem;
     z-index: 5;
-    font-size: 0.8rem;
+    font-weight: 400;
+    font-size: 1.25rem;
+  }
+  .dst-amount {
+    position: absolute;
+    left: 1rem;
+    font-weight: 400;
   }
   :global(#amount) {
-    text-indent: 1.55rem;
+    font-size: 1.5rem;
+    padding-top: 1rem !important;
+    padding-bottom: 0 !important;
   }
 
   .vertical-stepper {

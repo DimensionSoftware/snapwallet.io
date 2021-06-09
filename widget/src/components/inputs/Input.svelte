@@ -18,6 +18,7 @@
   export let pattern: string = ''
   export let mask: Masks
   export let id: string
+  export let isTranslucent: boolean
 
   let isActive: boolean = Boolean(defaultValue)
 
@@ -28,7 +29,7 @@
   })
 </script>
 
-<div class:active={isActive} class="input-container">
+<div class:active={isActive} class:isTranslucent class="input-container">
   <input
     {id}
     {type}
@@ -83,6 +84,9 @@
     position: relative;
     input[type='number'] {
       padding-right: 0.75em;
+    }
+    &.isTranslucent input {
+      background: transparent;
     }
     input {
       overflow: hidden;

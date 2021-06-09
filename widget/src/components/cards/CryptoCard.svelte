@@ -133,14 +133,14 @@
     flex-direction: row;
     height: 100%;
     margin-left: 0.4rem;
-    font-size: 1.5em;
+    font-size: 2em;
     color: var(--theme-text-color);
     span {
       font-size: 1.25rem;
     }
     small {
-      font-weight: 500;
-      margin-left: 0.75rem;
+      font-weight: 300;
+      margin-left: 0.25rem;
       text-transform: lowercase;
     }
   }
