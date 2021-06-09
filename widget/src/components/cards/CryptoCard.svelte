@@ -2,12 +2,16 @@
   import { transactionStore } from '../../stores/TransactionStore'
   import { createEventDispatcher } from 'svelte'
   import FaIcon from 'svelte-awesome'
-  import { faChevronRight } from '@fortawesome/free-solid-svg-icons'
+  import {
+    faChevronDown,
+    faChevronRight,
+  } from '@fortawesome/free-solid-svg-icons'
   import { TransactionIntents } from '../../types'
   import { CryptoIcons } from '../../util'
   import { ParentMessenger } from '../../util/parent_messenger'
 
   export let crypto
+  export let isDown
 
   const dispatch = createEventDispatcher()
 </script>
@@ -38,7 +42,9 @@
     <span>{crypto.ticker}</span>
     <small style="text-transform:capitalize;">{crypto.name}</small>
   </div>
-  <div class="crypto-arrow"><FaIcon data={faChevronRight} /></div>
+  <div class="crypto-arrow">
+    <FaIcon data={isDown ? faChevronDown : faChevronRight} />
+  </div>
 </div>
 
 <style lang="scss">
