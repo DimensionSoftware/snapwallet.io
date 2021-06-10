@@ -161,9 +161,9 @@
       // .fx is the subtle bottom line
       & + .fx {
         position: absolute;
-        left: 0.25rem;
-        right: 0.25rem;
-        bottom: -1px;
+        left: 0.35rem;
+        right: 0.35rem;
+        bottom: 0;
         height: 1px;
         background: linear-gradient(
           to right,

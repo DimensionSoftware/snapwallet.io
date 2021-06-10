@@ -526,6 +526,7 @@
       var(--theme-button-color),
       transparent
     ) !important;
+    margin-left: 0.5rem;
   }
   .cryptocurrencies-container {
     :global(.crypto-card) {
