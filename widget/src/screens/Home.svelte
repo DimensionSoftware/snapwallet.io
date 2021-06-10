@@ -515,6 +515,25 @@
     padding-bottom: 0 !important;
     color: var(--theme-text-color-no-background);
   }
+  :global(#amount + .fx) {
+    background: linear-gradient(
+      to right,
+      var(--theme-button-color),
+      var(--theme-button-color),
+      var(--theme-button-color),
+      var(--theme-button-color),
+      var(--theme-button-color),
+      var(--theme-button-color),
+      transparent
+    ) !important;
+  }
+  .cryptocurrencies-container {
+    :global(.crypto-card:before) {
+      bottom: -1.5rem !important;
+    }
+    :global(.crypto-name) {
+      max-width: 115px;
+    }
   }
 
   .vertical-stepper {
