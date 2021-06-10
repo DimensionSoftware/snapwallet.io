@@ -19,7 +19,7 @@
         theme: {
           modalBackground: 'rgba(0,0,0,.8)',
           modalPopupBackground: 'rgba(10,10,10,.85)',
-          color: 'rgba(0,0,0,.9)',
+          color: 'rgba(255,252,0,.9)',
           badgeTextColor: '#333',
           colorLightened: 'rgba(255,252,0,.3)',
           shadowBottomColor: 'rgba(0,0,0,.25)',
@@ -29,6 +29,7 @@
           buttonGlowColor: '255, 255, 255',
           successColor: themeColor,
           textColor: '#fff',
+          textColorNoBackground: '#fff',
           inputTextColor: '#333',
         },
       })
