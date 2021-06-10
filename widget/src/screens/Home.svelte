@@ -528,6 +528,9 @@
     ) !important;
   }
   .cryptocurrencies-container {
+    :global(.crypto-card) {
+      border: none !important;
+    }
     :global(.crypto-card:before) {
       bottom: -1.5rem !important;
     }

@@ -55,7 +55,7 @@
     position: relative;
     padding: 0;
     width: 100%;
-    height: 3rem;
+    height: 3.5rem;
     display: flex;
     align-items: center;
     cursor: pointer;
@@ -74,12 +74,16 @@
         to right,
         transparent,
         var(--theme-color-lightened),
+        var(--theme-color-lightened),
+        var(--theme-color-lightened),
         transparent
       );
       transform: scale(0);
       transition: transform 0.2s $easeOutExpo;
     }
     &:hover {
+      border-top: 1px solid var(--theme-color-lightened);
+      border-bottom: 1px solid var(--theme-color-lightened);
       &:before {
         transform: scale(1);
         transition: none;
@@ -87,15 +91,6 @@
       .crypto-icon {
         transform: scale(1.05);
         transition: none;
-        &:before {
-          background: var(--theme-color);
-          animation: currency 0.3s var(--theme-ease-out-back),
-            background 0s ease-out 0.3s;
-          top: -1px;
-          right: -1px;
-          left: -1px;
-          bottom: 0;
-        }
       }
     }
   }

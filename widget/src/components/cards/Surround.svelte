@@ -11,6 +11,7 @@
 
   .surround {
     position: relative;
+    overflow: hidden;
     padding: 0;
     margin-top: 1rem;
     width: 100%;

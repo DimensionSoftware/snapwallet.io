@@ -46,6 +46,9 @@
   :global(svelte-virtual-list-viewport) {
     height: 120% !important;
     padding-bottom: 50% !important;
+    :global(label) {
+      margin-bottom: 0.25rem !important;
+    }
   }
   :global(svelte-virtual-list-row) {
     padding-left: 7px;
