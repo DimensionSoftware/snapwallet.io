@@ -501,16 +501,20 @@
     z-index: 5;
     font-weight: 400;
     font-size: 1.25rem;
+    color: var(--theme-text-color-no-background);
   }
   .dst-amount {
     position: absolute;
     left: 1rem;
     font-weight: 400;
+    color: var(--theme-text-color-no-background);
   }
   :global(#amount) {
     font-size: 1.5rem;
     padding-top: 1rem !important;
     padding-bottom: 0 !important;
+    color: var(--theme-text-color-no-background);
+  }
   }
 
   .vertical-stepper {

@@ -401,6 +401,7 @@
     --theme-text-color-3: #{$textColor3};
     --theme-text-color-4: #{$textColor4};
     --theme-text-color-muted: #{$textColorMuted};
+    --theme-text-color-no-background: #{$textColorNoBackground};
     --theme-button-color: #{$buttonColor};
     // XXX glow color format is "r,g,b", eg. "255,50,15"
     --theme-button-glow-color: #{toRGB($buttonGlowColor)};

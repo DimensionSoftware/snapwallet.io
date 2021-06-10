@@ -45,6 +45,7 @@
           buttonGlowColor: '255, 255, 255',
           successColor: themeColor,
           textColor: '#fff',
+          textColorNoBackground: '#fff',
           inputTextColor: '#333',
         },
       })
