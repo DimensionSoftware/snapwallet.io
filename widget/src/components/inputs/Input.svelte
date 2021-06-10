@@ -161,12 +161,15 @@
       // .fx is the subtle bottom line
       & + .fx {
         position: absolute;
-        left: 1rem;
-        right: 0.5rem;
+        left: 0.25rem;
+        right: 0.25rem;
         bottom: -1px;
         height: 1px;
         background: linear-gradient(
           to right,
+          transparent,
+          var(--theme-color),
+          var(--theme-color),
           var(--theme-color),
           var(--theme-color),
           var(--theme-color),
@@ -175,7 +178,7 @@
         );
         z-index: 11;
         opacity: 0;
-        transform: translateX(-30px) scale(0.75);
+        transform: translateX(-20px) scale(0.75);
         transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s;
       }
       &:active ~ .bg,
@@ -198,6 +201,9 @@
         background: var(--theme-color);
         background: linear-gradient(
           to right,
+          transparent,
+          var(--theme-color),
+          var(--theme-color),
           var(--theme-color),
           var(--theme-color),
           var(--theme-color),
