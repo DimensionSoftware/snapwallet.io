@@ -496,7 +496,7 @@
   }
   .dst-currency {
     position: absolute;
-    left: 0;
+    left: 1rem;
     top: 1.15rem;
     z-index: 5;
     font-weight: 400;
@@ -505,7 +505,7 @@
   }
   .dst-amount {
     position: absolute;
-    left: 1rem;
+    left: 3rem;
     font-weight: 400;
     color: var(--theme-text-color-no-background);
   }
@@ -513,20 +513,21 @@
     font-size: 1.5rem;
     padding-top: 1rem !important;
     padding-bottom: 0 !important;
+    left: 2rem;
+    width: 195px;
     color: var(--theme-text-color-no-background);
   }
   :global(#amount + .fx) {
-    background: linear-gradient(
-      to right,
-      var(--theme-button-color),
-      var(--theme-button-color),
-      var(--theme-button-color),
-      var(--theme-button-color),
-      var(--theme-button-color),
-      var(--theme-button-color),
-      transparent
-    ) !important;
+    opacity: 0.5;
+    transform: translateX(0.5rem) scale(0.75);
+    background: var(--theme-button-color);
     margin-left: 0.5rem;
+  }
+  :global(#amount:hover + .fx),
+  :global(#amount:active + .fx),
+  :global(#amount:focus + .fx) {
+    transform: scale(1) translateX(0) !important;
+    opacity: 1;
   }
   .cryptocurrencies-container {
     :global(.crypto-card) {
@@ -541,6 +542,7 @@
   }
 
   .vertical-stepper {
+    margin-left: 1rem;
     margin-top: 2rem;
     list-style: none;
     padding: 0;

@@ -160,7 +160,7 @@
     }
     .step {
       white-space: nowrap;
-      margin-left: 0.5rem;
+      margin-left: 0.75rem;
       top: -1px;
       position: relative;
     }
