@@ -1,7 +1,6 @@
 export const supportedCurrencyPairs = {
   wyre: [
     'AAVE_USD',
-    'BAT_USD',
     'BTC_USD',
     'BUSD_USD',
     'COMP_USD',
@@ -20,7 +19,6 @@ export const supportedCurrencyPairs = {
     'USDS_USD',
     'USDT_USD',
     'USD_AAVE',
-    'USD_BAT',
     'USD_BTC',
     'USD_BUSD',
     'USD_COMP',
@@ -108,7 +106,6 @@ export enum UserProfileFieldTypes {
 
 export const SUPPORTED_CRYPTOCURRENCY_ASSETS = [
   { name: 'Aave', ticker: 'AAVE', color: '#EFB914' },
-  { name: 'Basic Attention Token', ticker: 'BAT', color: '#FF5000' },
   { name: 'Binance USD', ticker: 'BUSD', color: '#EFB914' },
   { name: 'Bitcoin', ticker: 'BTC', popular: true, color: '#F7931A' },
   { name: 'Curve', ticker: 'CRV', color: '#EFB914' },
