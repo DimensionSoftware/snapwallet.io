@@ -74,7 +74,19 @@
   $: isCreatingTxnPreview = false
 
   $: country = countries[$debitCardStore.address.country]
-  $: missingInfo = getMissingFieldMessages($userStore.profileItems)
+
+  $: onStep =
+    // user must set an amount
+    $transactionStore.sourceAmount === 0
+      ? 1
+      : // last step?
+      $transactionStore.selectedSourcePaymentMethod ||
+        $transactionStore.inMedium === 'debit_card'
+      ? $transactionStore.inMedium === 'debit_card'
+        ? 0
+        : 3
+      : // ...must set a payment method
+        2
 
   let verificationNextStep
   let shouldFixRemediations = false
@@ -334,7 +346,7 @@
         {/if}
       </Surround>
       <ul class="vertical-stepper">
-        <VStep success={!!$transactionStore.sourceAmount}>
+        <VStep active={onStep === 1} success={!!$transactionStore.sourceAmount}>
           <span
             class:default-icon={!$transactionStore.sourceAmount}
             slot="icon"
@@ -348,6 +360,7 @@
           </b>
         </VStep>
         <PaymentSelector
+          active={onStep === 2}
           {isBuy}
           disabled={shouldFixRemediations}
           onClick={() => (paymentSelectorVisible = true)}
@@ -355,7 +368,7 @@
         {#if $transactionStore.inMedium === TransactionMediums.ACH}
           {#if shouldFixRemediations}
             <VStep onClick={() => push(Routes.PROFILE_STATUS)}>
-              <span class="glow error" slot="icon">
+              <span class="error" slot="icon">
                 <FaIcon data={faExclamationCircle} />
               </span>
               <b slot="step">Update Identity</b>
@@ -365,7 +378,7 @@
             </VStep>
           {:else if $userStore.isProfilePending}
             <VStep disabled>
-              <span class="glow" slot="icon">
+              <span slot="icon">
                 <FaIcon data={faExclamationCircle} />
               </span>
               <b slot="step">
@@ -392,11 +405,12 @@
               <b slot="step">Identity Verified</b>
             </VStep>
           {:else}
-            <VStep disabled onClick={() => push(verificationNextStep)}>
-              <span
-                class:glow={$transactionStore.selectedSourcePaymentMethod}
-                slot="icon"
-              >
+            <VStep
+              active={onStep === 3}
+              disabled
+              onClick={() => push(verificationNextStep)}
+            >
+              <span slot="icon">
                 <FaIcon data={faIdCard} />
               </span>
               <b slot="step"> Verify Identity </b>
@@ -406,12 +420,13 @@
           <VStep
             custom={!!hasCountryIcon}
             success={!!country}
+            active={onStep === 3}
             title="Select Your Payment Country"
             onClick={() => {
               countrySelectorVisible = true
             }}
           >
-            <span class:glow={!$debitCardStore.address.country} slot="icon">
+            <span slot="icon">
               <FaIcon data={country ? faCheck : faGlobe} />
             </span>
             <b slot="step">
@@ -518,7 +533,7 @@
     color: var(--theme-text-color-no-background);
   }
   :global(#amount + .fx) {
-    opacity: 0.5;
+    opacity: 0.8;
     transform: translateX(0.5rem) scale(0.75);
     background: var(--theme-button-color);
     margin-left: 0.5rem;

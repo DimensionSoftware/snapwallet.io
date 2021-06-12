@@ -9,6 +9,7 @@
   import { TransactionMediums } from '../../types'
 
   export let isBuy: boolean = true
+  export let active: boolean = false
   export let onClick
   export let description
   export let disabled: boolean | null = null
@@ -38,18 +39,14 @@
   disabled={disabled !== null
     ? disabled
     : !$userStore.isProfilePending && !flags?.hasWyreAccount}
+  {active}
   {success}
   {onClick}
 >
-  <span
-    class:glow={!disabled &&
-      !isDebitCard &&
-      !$transactionStore.selectedSourcePaymentMethod}
-    slot="icon"
-  >
+  <span slot="icon">
     <FaIcon data={!success ? faUniversity : faCheck} />
   </span>
-  <b slot="step">
+  <span slot="step">
     <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
     {#if !isDebitCard && $transactionStore.selectedSourcePaymentMethod}
       {$transactionStore.selectedSourcePaymentMethod.name}
@@ -60,7 +57,7 @@
     {:else}
       Select Bank Account
     {/if}
-  </b>
+  </span>
   <div class:hidden={!description} class="description help" slot="info">
     {description}
   </div>

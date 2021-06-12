@@ -22,6 +22,5 @@
 <style lang="scss">
   .total-container {
     color: var(--theme-text-color);
-    font-weight: normal;
   }
 </style>

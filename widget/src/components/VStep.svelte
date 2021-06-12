@@ -1,5 +1,6 @@
 <script lang="ts">
   export let success: boolean = false
+  export let active: boolean = false
   export let disabled: boolean = false
   export let custom: boolean = false
   export let onClick: () => void
@@ -11,6 +12,7 @@
   {title}
   class:custom
   class:success
+  class:active
   class:disabled
   style={onClick ? 'cursor: pointer' : ''}
 >
@@ -116,12 +118,20 @@
       animation: glow 1.5s linear;
       animation-iteration-count: infinite;
     }
+    &.active {
+      > :global(span:before),
+      > :global(.default-icon:before) {
+        box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.5);
+        animation: glow 1.5s linear;
+        animation-iteration-count: infinite;
+      }
+      :global(b) {
+        font-weight: bold;
+      }
+    }
     &.success {
       animation: scaleIn 0.25s ease-out;
       z-index: 1;
-      :global(.total-container) {
-        font-weight: bold;
-      }
       // connecting line
       &:first-child:after {
         background: linear-gradient(transparent, var(--theme-success-color));
@@ -142,7 +152,10 @@
         opacity: 1;
         background: transparent;
       }
-      & > :global(.icon) {
+      :global(&.active span.default-icon:before) {
+        box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.5);
+        animation: glow 1.5s linear;
+        animation-iteration-count: infinite;
         margin-left: 0.4rem;
       }
       &:before {
@@ -153,7 +166,8 @@
         color: var(--theme-success-color);
       }
     }
-    &.disabled {
+    &.disabled,
+    &.success {
       :global(b) {
         font-weight: normal;
       }
