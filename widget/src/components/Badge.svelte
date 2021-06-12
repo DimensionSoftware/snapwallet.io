@@ -2,6 +2,7 @@
   export let error: boolean = false
   export let success: boolean = false
   export let warning: boolean = false
+  export let info: boolean = false
 </script>
 
 <div
@@ -9,6 +10,7 @@
   class:success
   class:warning
   class:error
+  class:info
 >
   <slot />
 </div>
@@ -33,6 +35,11 @@
     &.error {
       /* border: 1px solid var(--theme-error-color); */
       background-color: var(--theme-error-color);
+    }
+
+    &.info {
+      /* border: 1px solid var(--theme-info-color); */
+      background-color: var(--theme-info-color);
     }
   }
 </style>
