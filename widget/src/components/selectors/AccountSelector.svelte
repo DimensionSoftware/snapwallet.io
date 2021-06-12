@@ -2,6 +2,7 @@
   import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
   import {
+    faClock,
     faCreditCard,
     faPlusCircle,
     faUniversity,
@@ -109,8 +110,18 @@
           <div
             style="display:flex;flex-direction:column;opacity:0.5;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
           >
+            <div>Identity verification required</div>
             <div>
               <strong>U.S.</strong> - 0.75% or mid-market rate
+            </div>
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;"
+            >
+              <strong>Delivery time</strong>
+              <div style="display:flex;align-items:center;">
+                <span style="margin-right:0.25rem">5 business days</span>
+                <FaIcon scale="0.75" data={faClock} />
+              </div>
             </div>
           </div>
         </PaymentMethodCard>
@@ -137,6 +148,15 @@
             </div>
             <div>
               <strong>International</strong> - 3.9% + 30¢ or $5
+            </div>
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;"
+            >
+              <strong>Delivery time</strong>
+              <div style="display:flex;align-items:center;">
+                <span style="margin-right:0.25rem">1-2 hours</span>
+                <FaIcon scale="0.75" data={faClock} />
+              </div>
             </div>
           </div>
         </PaymentMethodCard>
