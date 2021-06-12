@@ -8,7 +8,7 @@
   import { transactionStore } from '../../stores/TransactionStore'
   import { userStore } from '../../stores/UserStore'
   import { TransactionIntents, TransactionMediums } from '../../types'
-  import IconCard from '../cards/IconCard.svelte'
+  import PaymentMethodCard from '../cards/PaymentMethodCard.svelte'
   import PopupSelector from '../inputs/PopupSelector.svelte'
   import { paymentMethodStore } from '../../stores/PaymentMethodStore'
   import { cachePrimaryPaymentMethodID } from '../../util'
@@ -42,7 +42,7 @@
       copy = {
         headerTitle: 'Payment Methods',
         sectionOneTitle: 'Add a Payment Method',
-        sectionTwoTitle: 'Select a Payment Method',
+        sectionTwoTitle: 'Available',
         unavailable: 'No payment methods available',
       }
     }
@@ -75,8 +75,10 @@
       class="card-vertical-margin"
       in:fly={{ y: 25, duration: 200 + 50 * 1 }}
     >
-      <IconCard
+      <PaymentMethodCard
         icon={faUniversity}
+        badgeText="Lowest Fee"
+        badgeType="info"
         on:click={() => {
           // Route user to next KYC step when they don't have an active Wyre acct
           const route =
@@ -88,23 +90,42 @@
         }}
         label="Bank Account"
         title="Connect Your Bank Account"
-      />
+      >
+        <div
+          style="display:flex;flex-direction:column;opacity:0.5;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
+        >
+          <div>
+            <strong>U.S.</strong> - 0.75% or mid-market rate
+          </div>
+        </div>
+      </PaymentMethodCard>
     </div>
     <h5 style="margin-top:2rem;margin-bottom:1rem;">{copy.sectionTwoTitle}</h5>
     <div
       class="card-vertical-margin"
       in:fly={{ y: 25, duration: 200 + 50 * 2 }}
     >
-      <IconCard
+      <PaymentMethodCard
         label="Debit Card"
         icon={faCreditCard}
-        badgeText="Active"
+        badgeText="Quick Checkout"
         badgeType="success"
         on:click={() => {
           transactionStore.update({ inMedium: TransactionMediums.DEBIT_CARD })
           dispatch('close')
         }}
-      />
+      >
+        <div
+          style="display:flex;flex-direction:column;opacity:0.5;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
+        >
+          <div>
+            <strong>U.S.</strong> - 2.9% + 30¢ or $5
+          </div>
+          <div>
+            <strong>International</strong> - 3.9% + 30¢ or $5
+          </div>
+        </div>
+      </PaymentMethodCard>
     </div>
     {#if !allPaymentMethods.length && isLoadingPaymentMethods}
       <p class="help">Retrieving Payment Methods...</p>
@@ -114,11 +135,11 @@
           class="card-vertical-margin"
           in:fly={{ y: 25, duration: 300 + 50 * i }}
         >
-          <IconCard
+          <PaymentMethodCard
             label={pm.name}
             icon={faUniversity}
-            badgeText={pm.status === 'ACTIVE' ? 'Active' : 'Pending'}
-            badgeType={pm.status === 'ACTIVE' ? 'success' : 'warning'}
+            badgeText={pm.status === 'ACTIVE' ? undefined : 'Pending'}
+            badgeType={pm.status === 'ACTIVE' ? undefined : 'warning'}
             on:click={() => {
               transactionStore.update({
                 selectedSourcePaymentMethod: pm,
