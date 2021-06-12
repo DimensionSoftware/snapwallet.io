@@ -75,6 +75,7 @@
     align-items: center;
     justify-content: space-between;
     width: 100%;
+    margin-bottom: 0.25rem;
   }
 
   .header-title {
