@@ -147,17 +147,17 @@
         <p class="help">Retrieving Payment Methods...</p>
       {:else}
         <div
-          style="display:flex;justify-content:space-between;align-items:center;"
+          style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.75rem;"
           in:fly={{ y: 25, duration: 300 + 50 }}
         >
           <div
-            style="display:flex;justify-content:flex-end;text-decoration:underline;cursor:pointer;margin-bottom:1.75rem;font-size:0.75rem;opacity:0.5;align-items:center"
+            style="display:flex;justify-content:flex-end;text-decoration:underline;cursor:pointer;font-size:0.75rem;opacity:0.5;align-items:center"
             on:mousedown={() => (showAvailablePms = false)}
           >
             Back
           </div>
           <div
-            style="margin-bottom:1rem;display:flex;justify-content:flex-start;cursor:pointer;align-items:center;"
+            style="display:flex;justify-content:flex-start;cursor:pointer;align-items:center;"
             on:mousedown={() => push(Routes.PLAID_LINK)}
           >
             <FaIcon data={faPlusCircle} />
