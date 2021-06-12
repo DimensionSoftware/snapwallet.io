@@ -110,9 +110,9 @@
           <div
             style="display:flex;flex-direction:column;opacity:0.5;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
           >
-            <div>Identity verification required</div>
+            <div style="opacity:0.45">Identity verification required</div>
             <div>
-              <strong>U.S.</strong> - 0.75% or mid-market rate
+              <strong>U.S. Fee</strong> - 0.75% or mid-market rate
             </div>
             <div
               style="display:flex;align-items:center;justify-content:space-between;"
@@ -144,10 +144,10 @@
             style="display:flex;flex-direction:column;opacity:0.5;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
           >
             <div>
-              <strong>U.S.</strong> - 2.9% + 30¢ or $5
+              <strong>U.S. Fee</strong> - 2.9% + 30¢ or $5
             </div>
             <div>
-              <strong>International</strong> - 3.9% + 30¢ or $5
+              <strong>International Fee</strong> - 3.9% + 30¢ or $5
             </div>
             <div
               style="display:flex;align-items:center;justify-content:space-between;"
