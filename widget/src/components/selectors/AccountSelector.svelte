@@ -178,7 +178,15 @@
           </div>
           <div
             style="display:flex;justify-content:flex-start;cursor:pointer;align-items:center;"
-            on:mousedown={() => push(Routes.PLAID_LINK)}
+            on:mousedown={() => {
+              // Route user to next KYC step when they don't have an active Wyre acct
+              const route =
+                !flags?.hasWyreAccount &&
+                verificationNextStep !== Routes.PROFILE_STATUS
+                  ? verificationNextStep
+                  : Routes.PLAID_LINK
+              push(route)
+            }}
           >
             <FaIcon data={faPlusCircle} />
             <span style="margin-left:0.5rem">Add Account</span>
