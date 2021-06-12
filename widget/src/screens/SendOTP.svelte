@@ -173,7 +173,7 @@
       on:mousedown={handleNextStep}
     >
       {#if isMakingRequest}
-        Sending Code...
+        Sending...
       {:else}
         Get Code
       {/if}
