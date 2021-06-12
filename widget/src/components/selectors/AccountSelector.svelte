@@ -133,7 +133,7 @@
         <PaymentMethodCard
           label="Debit Card"
           icon={faCreditCard}
-          badgeText="Quick Checkout"
+          badgeText="Fastest Delivery"
           badgeType="success"
           on:click={() => {
             transactionStore.update({ inMedium: TransactionMediums.DEBIT_CARD })
