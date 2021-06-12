@@ -54,7 +54,7 @@
     justify-content: space-between;
     flex-direction: column;
     align-items: center;
-    border: 1px solid var(--theme-text-color-4);
+    border: 1px solid var(--theme-color-lightened);
     border-radius: 0.5rem;
     &.paddingSmall {
       padding: 0.5rem;
