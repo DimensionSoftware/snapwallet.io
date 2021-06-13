@@ -558,7 +558,7 @@
       bottom: -1.5rem !important;
     }
     :global(.crypto-name) {
-      max-width: 115px;
+      max-width: 150px;
     }
   }
 
