@@ -407,6 +407,7 @@
     --theme-button-glow-color: #{toRGB($buttonGlowColor)};
     --theme-button-text-color: #{$buttonTextColor};
     --theme-modal-background: #{$modalBackground};
+    --theme-modal-background-color: #{$modalBackgroundColor};
     --theme-modal-popup-background: #{$modalPopupBackground};
     --theme-modal-container-background-color: #{$modalContainerBackgroundColor};
     --theme-shadow-color: #{$shadowColor};
