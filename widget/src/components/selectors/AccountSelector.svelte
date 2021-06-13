@@ -108,9 +108,9 @@
           title="Connect Your Bank Account"
         >
           <div
-            style="display:flex;flex-direction:column;opacity:0.5;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
+            style="display:flex;flex-direction:column;opacity:0.85;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
           >
-            <div style="opacity:0.45">Identity verification required</div>
+            <div style="opacity:0.85">Identity verification required</div>
             <div>
               <strong>U.S. Fee</strong> - 0.75% or mid-market rate
             </div>
@@ -133,7 +133,7 @@
         <PaymentMethodCard
           label="Debit Card"
           icon={faCreditCard}
-          badgeText="Fastest Delivery"
+          badgeText="Instant Buy"
           badgeType="success"
           on:click={() => {
             transactionStore.update({ inMedium: TransactionMediums.DEBIT_CARD })
@@ -141,7 +141,7 @@
           }}
         >
           <div
-            style="display:flex;flex-direction:column;opacity:0.5;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
+            style="display:flex;flex-direction:column;opacity:0.85;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
           >
             <div>
               <strong>U.S. Fee</strong> - 2.9% + 30¢ or $5
@@ -171,7 +171,7 @@
           in:fly={{ y: 25, duration: 300 + 50 }}
         >
           <div
-            style="display:flex;justify-content:flex-end;text-decoration:underline;cursor:pointer;font-size:0.75rem;opacity:0.5;align-items:center"
+            style="display:flex;justify-content:flex-end;text-decoration:underline;cursor:pointer;font-size:0.75rem;opacity:0.85;align-items:center"
             on:mousedown={() => (showAvailablePms = false)}
           >
             Back

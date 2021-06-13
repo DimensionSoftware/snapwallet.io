@@ -131,7 +131,7 @@
     border-bottom: 1px solid var(--theme-text-color);
     color: var(--theme-text-color);
     margin-bottom: 0.75rem;
-    padding-left: 0;
+    padding: 1rem 0.5rem;
     background: var(--theme-modal-popup-background);
     border-radius: none;
   }

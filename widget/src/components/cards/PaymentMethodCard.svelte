@@ -48,18 +48,52 @@
   @import '../../styles/_vars.scss';
 
   .icon-card-container {
+    position: relative;
     height: 8rem;
     width: 100%;
     display: flex;
     justify-content: space-between;
     flex-direction: column;
     align-items: center;
-    border: 1px solid var(--theme-color-lightened);
+    border: 1px solid var(--theme-color);
+    box-shadow: none;
     border-radius: 0.5rem;
+    &:before {
+      content: '';
+      position: absolute;
+      border-radius: 0.5rem;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      top: -2px;
+      background-color: var(--theme-modal-background-color);
+      border: 2px solid transparent;
+      opacity: 0;
+      transform: scale(0);
+      transition: transform 0.2s ease-in 0.2s, border 0.2s ease-in,
+        opacity 0.2s ease-in;
+    }
+    .header-title {
+      transition: color 0.4s ease-in 0.1s;
+    }
+    &:hover {
+      transition: none;
+      &:before {
+        transform: scale(1);
+        opacity: 1;
+        border: 2px solid var(--theme-color);
+        transition: border 0s ease-out 0.0125s, opacity 0.05s ease-in;
+      }
+      .header-title {
+        color: var(--theme-color);
+        transition: none;
+      }
+    }
     &.paddingSmall {
       padding: 0.5rem;
     }
     & > .content-container {
+      position: relative;
       height: 100%;
       width: 100%;
       display: flex;
@@ -71,6 +105,7 @@
   }
 
   .header-container {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -79,6 +114,7 @@
   }
 
   .header-title {
+    position: relative;
     display: flex;
     align-items: center;
     & > .label {
