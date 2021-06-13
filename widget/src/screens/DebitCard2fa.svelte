@@ -173,7 +173,7 @@
       </Label>
     {/if}
     {#if !isOneCodeRequired}
-      <p style="padding: 1.5rem">
+      <p style="padding: 0 1.5rem 1.5rem 1.5rem">
         Please wait while we authorize your card. This will only take a minute.
       </p>
       <div class="flip-card">
