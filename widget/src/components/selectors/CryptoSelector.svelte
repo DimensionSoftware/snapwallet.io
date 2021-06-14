@@ -42,10 +42,12 @@
   @import '../../styles/selectors.scss';
   .selector-container {
     padding-top: 0;
+    padding-right: 1.25rem;
   }
   :global(svelte-virtual-list-viewport) {
     height: 120% !important;
     padding-bottom: 50% !important;
+    left: -7px;
     :global(label) {
       margin-bottom: 0.25rem !important;
     }

@@ -11,12 +11,8 @@
   export let paddingSmall = false
   export let blend = false
   export let badgeText = ''
-  export let badgeType:
-    | 'error'
-    | 'warning'
-    | 'success'
-    | 'info'
-    | undefined = undefined
+  export let badgeType: 'error' | 'warning' | 'success' | 'info' | undefined =
+    undefined
 </script>
 
 <Card on:click={() => dispatch('click')}>
@@ -49,7 +45,6 @@
 
   .icon-card-container {
     position: relative;
-    height: 8rem;
     width: 100%;
     display: flex;
     justify-content: space-between;
@@ -61,17 +56,15 @@
     &:before {
       content: '';
       position: absolute;
-      border-radius: 0.5rem;
-      left: -2px;
-      right: -2px;
-      bottom: -2px;
-      top: -2px;
+      border-radius: 0.75rem;
+      left: -3px;
+      right: -3px;
+      bottom: -3px;
+      top: -3px;
       background-color: var(--theme-modal-background-color);
       border: 2px solid transparent;
       opacity: 0;
-      transform: scale(0);
-      transition: transform 0.2s ease-in 0.2s, border 0.2s ease-in,
-        opacity 0.2s ease-in;
+      transition: opacity 0.4s ease-in, border 0s ease-out 0.524s;
     }
     .header-title {
       transition: color 0.4s ease-in 0.1s;
@@ -82,7 +75,7 @@
         transform: scale(1);
         opacity: 1;
         border: 2px solid var(--theme-color);
-        transition: border 0s ease-out 0.0125s, opacity 0.05s ease-in;
+        transition: none;
       }
       .header-title {
         color: var(--theme-color);

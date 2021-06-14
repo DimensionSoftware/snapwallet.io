@@ -82,8 +82,8 @@
       transition: transform 0.2s $easeOutExpo;
     }
     &:hover {
-      border-top: 1px solid var(--theme-color-lightened);
-      border-bottom: 1px solid var(--theme-color-lightened);
+      border-top: 1px solid var(--theme-color);
+      border-bottom: 1px solid var(--theme-color);
       &:before {
         transform: scale(1);
         transition: none;
@@ -98,7 +98,7 @@
   .crypto-icon {
     position: relative;
     height: 33px;
-    left: -4px;
+    left: -2px;
     transition: 0.15s var(--theme-ease-out-back) 0.05s;
     :global(svg) {
       position: relative;

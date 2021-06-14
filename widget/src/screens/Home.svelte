@@ -54,12 +54,8 @@
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
   let isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
 
-  $: ({
-    sourceCurrency,
-    destinationCurrency,
-    sourceAmount,
-    intent,
-  } = $transactionStore)
+  $: ({ sourceCurrency, destinationCurrency, sourceAmount, intent } =
+    $transactionStore)
 
   $: ({ flags } = $userStore)
 
@@ -130,19 +126,17 @@
         $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
           ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
           : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU'
-      const {
-        reservationId,
-        quote,
-      } = await window.API.fluxWyreCreateDebitCardQuote({
-        dest,
-        sourceCurrency: $transactionStore.sourceCurrency.ticker,
-        lockFields: ['sourceAmount'],
-        amountIncludesFees: false,
-        country: $debitCardStore.address.country,
-        sourceAmount: $transactionStore.sourceAmount,
+      const { reservationId, quote } =
+        await window.API.fluxWyreCreateDebitCardQuote({
+          dest,
+          sourceCurrency: $transactionStore.sourceCurrency.ticker,
+          lockFields: ['sourceAmount'],
+          amountIncludesFees: false,
+          country: $debitCardStore.address.country,
+          sourceAmount: $transactionStore.sourceAmount,
 
-        destCurrency: $transactionStore.destinationCurrency?.ticker,
-      })
+          destCurrency: $transactionStore.destinationCurrency?.ticker,
+        })
 
       debitCardStore.update({ reservationId, dest })
       transactionStore.setWyrePreview(quote)
@@ -563,7 +557,7 @@
   }
 
   .vertical-stepper {
-    margin-left: 1rem;
+    margin-left: 1.25rem;
     margin-top: 2rem;
     list-style: none;
     padding: 0;
