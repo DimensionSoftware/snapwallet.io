@@ -305,7 +305,7 @@
           <span />
         {:else}
           <div
-            style="display:flex;flex-direction:column;height:4.25rem;margin-top: 0rem;"
+            style="display:flex;flex-direction:column;height:4.25rem;margin-top:0rem;margin-left:-0.75rem"
           >
             <Label>
               <span class="dst-currency">$</span>
@@ -500,7 +500,7 @@
     padding: 0 0.5rem;
   }
   .dst-container {
-    margin-left: 0.5rem;
+    margin-left: 2rem;
     margin-right: 0.5rem;
     display: flex;
     flex-direction: column;
@@ -511,12 +511,15 @@
   }
   .dst-currency {
     position: absolute;
-    left: 1rem;
+    left: 1.75rem;
     top: 1.15rem;
     z-index: 5;
     font-weight: 400;
     font-size: 1.25rem;
     color: var(--theme-text-color-no-background);
+  }
+  :global(.input-container) {
+    margin-right: -1.5rem;
   }
   .dst-amount {
     position: absolute;
@@ -529,19 +532,19 @@
     padding-top: 1rem !important;
     padding-bottom: 0 !important;
     left: 2rem;
-    width: 195px;
+    width: 208px;
     color: var(--theme-text-color-no-background);
   }
   :global(#amount + .fx) {
-    opacity: 0.8;
-    transform: translateX(0.5rem) scale(0.75);
+    opacity: 0.75;
     background: var(--theme-button-color);
-    margin-left: 0.5rem;
+    // transform: translateX(1.75rem);
+    transform: scale(1) translateX(2.25rem);
+    margin-right: 3.5rem;
   }
   :global(#amount:hover + .fx),
   :global(#amount:active + .fx),
   :global(#amount:focus + .fx) {
-    transform: scale(1) translateX(0) !important;
     opacity: 1;
   }
   .cryptocurrencies-container {
@@ -550,6 +553,7 @@
     }
     :global(.crypto-card:before) {
       bottom: -1.5rem !important;
+      opacity: 0 !important;
     }
     :global(.crypto-name) {
       max-width: 150px;
@@ -557,7 +561,7 @@
   }
 
   .vertical-stepper {
-    margin-left: 1.25rem;
+    margin-left: 0.25rem;
     margin-top: 2rem;
     list-style: none;
     padding: 0;

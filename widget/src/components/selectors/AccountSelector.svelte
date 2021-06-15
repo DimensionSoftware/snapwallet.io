@@ -229,7 +229,7 @@
     margin-bottom: 0.5rem !important;
   }
   .flex > div:first-child {
-    margin-top: 0.75rem;
+    margin-top: 0.5rem;
   }
   .flex > div {
     margin-bottom: -0.15rem;

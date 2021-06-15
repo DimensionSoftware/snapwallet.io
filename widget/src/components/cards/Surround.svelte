@@ -19,6 +19,6 @@
     flex-direction: column;
     padding: 0 1rem 0.5rem;
     border: 2px solid var(--theme-button-color);
-    border-radius: 0.75rem;
+    border-radius: 1.25rem;
   }
 </style>

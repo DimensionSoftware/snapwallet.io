@@ -161,25 +161,16 @@
       // .fx is the subtle bottom line
       & + .fx {
         position: absolute;
-        left: 0.35rem;
-        right: 0.35rem;
-        bottom: 0;
+        left: 0.75rem;
+        right: 0.75rem;
+        bottom: -1px;
         height: 1px;
-        background: linear-gradient(
-          to right,
-          transparent,
-          var(--theme-color),
-          var(--theme-color),
-          var(--theme-color),
-          var(--theme-color),
-          var(--theme-color),
-          var(--theme-color),
-          transparent
-        );
         z-index: 11;
+        background: var(--theme-color);
         opacity: 0;
-        transform: translateX(-20px) scale(0.75);
-        transition: opacity 0.5s ease-out 0.1s, transform 0.5s ease-out 0.1s;
+        transform: translateX(0px) scale(0.25);
+        transition: opacity 0.2s var(--theme-ease-out-expo) 0.5s,
+          transform 0.5s var(--theme-ease-out-back) 0.1s;
       }
       &:active ~ .bg,
       &:focus ~ .bg {
@@ -199,17 +190,6 @@
         transform: scale(1) translateX(0);
         transition: none;
         background: var(--theme-color);
-        background: linear-gradient(
-          to right,
-          transparent,
-          var(--theme-color),
-          var(--theme-color),
-          var(--theme-color),
-          var(--theme-color),
-          var(--theme-color),
-          var(--theme-color),
-          transparent
-        );
       }
     }
     // HACK: remove yellow autofill background

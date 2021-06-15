@@ -52,11 +52,11 @@
     align-items: center;
     border: 1px solid var(--theme-color);
     box-shadow: none;
-    border-radius: 0.5rem;
+    border-radius: 1.25rem;
     &:before {
       content: '';
       position: absolute;
-      border-radius: 0.75rem;
+      border-radius: 1.5rem;
       left: -2px;
       right: -2px;
       bottom: -2px;
