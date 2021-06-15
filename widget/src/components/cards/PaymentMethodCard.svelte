@@ -57,28 +57,28 @@
       content: '';
       position: absolute;
       border-radius: 0.75rem;
-      left: -3px;
-      right: -3px;
-      bottom: -3px;
-      top: -3px;
+      left: -2px;
+      right: -2px;
+      bottom: -2px;
+      top: -2px;
       background-color: var(--theme-modal-background-color);
       border: 2px solid transparent;
       opacity: 0;
-      transition: opacity 0.4s ease-in, border 0s ease-out 0.524s;
-    }
-    .header-title {
-      transition: color 0.4s ease-in 0.1s;
+      transition: opacity 0.2s ease-in, border 0s ease-out 0.524s;
     }
     &:hover {
       transition: none;
       &:before {
+        left: -3px;
+        right: -3px;
+        bottom: -3px;
+        top: -3px;
         transform: scale(1);
         opacity: 1;
         border: 2px solid var(--theme-color);
         transition: none;
       }
       .header-title {
-        color: var(--theme-color);
         transition: none;
       }
     }
