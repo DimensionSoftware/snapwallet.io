@@ -76,31 +76,6 @@
       top: 8px;
       z-index: 1;
     }
-    // line
-    &:first-child:after {
-      background: linear-gradient(transparent, var(--theme-text-color));
-      top: -40px;
-      height: calc(100% + 32px);
-    }
-    &:last-child:after {
-      background: linear-gradient(var(--theme-text-color), transparent);
-    }
-    &:after {
-      position: absolute;
-      width: 2px;
-      left: 3px;
-      top: -20px;
-      opacity: 0.08;
-      height: calc(100% + 9px);
-      content: '';
-      background-color: var(--theme-text-color);
-      background-position: 0 0;
-      background-size: 200% 200%;
-      border-color: inherit;
-      border-width: 0;
-      outline: 0;
-      z-index: -1;
-    }
     :global(span:before) {
       background: transparent;
       position: absolute;
@@ -132,20 +107,6 @@
     &.success {
       animation: scaleIn 0.25s ease-out;
       z-index: 1;
-      // connecting line
-      &:first-child:after {
-        background: linear-gradient(transparent, var(--theme-success-color));
-      }
-      &:last-child:after {
-        background: var(--theme-success-color);
-        background: linear-gradient(var(--theme-success-color), transparent);
-      }
-      &:after {
-        background-color: var(--theme-success-color);
-        background: var(--theme-success-color);
-        width: 2px;
-        z-index: 0;
-      }
       // hide the dot
       :global(span:before) {
         z-index: 3;
