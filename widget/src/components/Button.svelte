@@ -15,7 +15,7 @@
   disabled={disabled || isLoading}
   class:glow
   class:isLoading
-  on:mousedown={() => dispatch('mousedown')}
+  on:click={() => dispatch('mousedown')}
   {title}
 >
   <div class="lds-circle"><div /></div>
