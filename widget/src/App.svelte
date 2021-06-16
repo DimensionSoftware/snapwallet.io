@@ -513,7 +513,7 @@
     :global(.modal-content .modal-header-back-button),
     :global(.modal-content .modal-footer) {
       will-change: filter;
-      transition: filter 0.3s;
+      transition: filter 0.5s var(--theme-ease-out-expo);
       backface-visibility: hidden;
       perspective: 1000;
       transform: translate3d(0, 0, 0);

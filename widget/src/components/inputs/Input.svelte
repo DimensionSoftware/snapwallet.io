@@ -99,7 +99,7 @@
       appearance: none;
       backface-visibility: hidden;
       transform: translateZ(0);
-      border-radius: 0.5em;
+      border-radius: 0.25em;
       text-indent: 10px;
       text-transform: lowercase;
       overflow: hidden;
@@ -123,13 +123,12 @@
       // .bg is the input surround
       ~ .bg {
         position: absolute;
-        display: none;
         content: '';
         top: 0;
         bottom: 0px;
         left: -1px;
         right: -1px;
-        border-radius: 0.9em;
+        border-radius: 1em;
         opacity: 0;
         transform: scale(0);
         transition: opacity 0.5s ease-out, left 0s ease-out 0.51s,
@@ -179,7 +178,7 @@
         right: -5px;
         bottom: -4px;
         background: var(--theme-color-lightened);
-        opacity: 0.5;
+        opacity: 0.3;
         transform: translateX(0) scale(1);
         transition: none;
       }

@@ -120,11 +120,11 @@
         margin-left: 0.4rem;
       }
       &:before {
-        border: 4px solid var(--theme-success-color) !important;
+        border: 4px solid var(--theme-color) !important;
       }
 
       & > :global(span > svg) {
-        color: var(--theme-success-color);
+        color: var(--theme-color);
       }
     }
     &.disabled,

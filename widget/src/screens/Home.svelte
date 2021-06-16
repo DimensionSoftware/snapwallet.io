@@ -521,6 +521,9 @@
   :global(.input-container) {
     margin-right: -1.5rem;
   }
+  :global(#amount ~ .bg) {
+    display: none !important;
+  }
   .dst-amount {
     position: absolute;
     left: 3rem;
