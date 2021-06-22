@@ -63,12 +63,13 @@ html {
     }
     > .top-bg {
       content: '';
-      position: absolute;
+      position: fixed;
       top: -100vh;
       right: -15px;
       left: 0;
+      bottom:0;
       z-index: -1;
-      bottom: -335vh;
+      // bottom: -335vh;
       background-image: url('/static/bg.png');
       background-repeat: repeat;
       will-change: transform;

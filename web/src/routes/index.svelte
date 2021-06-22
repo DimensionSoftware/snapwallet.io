@@ -86,20 +86,20 @@ Hey, you-- join us!  https://dimensionsoftware.com
       `)
 
     // init parallax
-    let frame, dyLast
-    function loop() {
-      frame = requestAnimationFrame(loop)
-      const dy = window.pageYOffset
-      if (dyLast == dy) return // guard
-      dyLast = dy
-      isRotated = dy > 900
-      sy = ~~(dy * 0.3) * (isRotated ? -1 : 1)
-      if (topBg)
-        topBg.style = `transform: rotate(${isRotated ? '180deg' : 0}
-        ) translateY(${sy}px)`
-    }
-    loop() // main
-    return () => cancelAnimationFrame(frame)
+    // let frame, dyLast
+    // function loop() {
+    //   frame = requestAnimationFrame(loop)
+    //   const dy = window.pageYOffset
+    //   if (dyLast == dy) return // guard
+    //   dyLast = dy
+    //   isRotated = dy > 900
+    //   sy = ~~(dy * 0.3) * (isRotated ? -1 : 1)
+    //   if (topBg)
+    //     topBg.style = `transform: rotate(${isRotated ? '180deg' : 0}
+    //     ) translateY(${sy}px)`
+    // }
+    // loop() // main
+    // return () => cancelAnimationFrame(frame)
   })
 </script>
 
