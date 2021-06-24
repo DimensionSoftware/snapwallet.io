@@ -137,7 +137,7 @@
     position: relative;
     padding: 0 4rem 0 4rem;
     height: 100%;
-    min-height: 500px !important;
+    height: 550px !important;
   }
   .flex {
     display: flex;
