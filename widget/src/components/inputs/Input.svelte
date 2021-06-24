@@ -162,7 +162,7 @@
         position: absolute;
         left: 0.75rem;
         right: 0.75rem;
-        bottom: -1px;
+        bottom: 0;
         height: 1px;
         z-index: 11;
         background: var(--theme-color);

@@ -477,7 +477,7 @@
     color: var(--theme-text-color);
     font-family: var(--theme-font);
     font-size: 1rem;
-    line-height: 1.5rem;
+    line-height: 1.1rem;
     opacity: 0;
     animation: backgroundFadeIn 0.2s ease-out forwards;
     text-rendering: optimizeLegibility;

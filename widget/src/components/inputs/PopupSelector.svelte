@@ -93,6 +93,9 @@
     font-weight: 400;
     font-size: 1.25em;
     margin-left: 0.5rem;
+    width: 100%;
+    text-align: center;
+    font-weight: bold;
   }
 
   .close-icon {

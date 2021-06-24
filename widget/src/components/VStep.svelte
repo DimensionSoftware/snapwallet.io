@@ -34,6 +34,7 @@
     padding-left: 1.25rem;
     margin-left: 1rem;
     margin-top: 0.55rem;
+    line-height: 1.5rem;
     &.custom {
       :global(span):before {
         display: none;

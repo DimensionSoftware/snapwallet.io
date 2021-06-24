@@ -50,32 +50,34 @@
     justify-content: space-between;
     flex-direction: column;
     align-items: center;
-    border: 1px solid var(--theme-color);
     box-shadow: none;
-    border-radius: 1.25rem;
+    &:after {
+      content: '';
+      position: absolute;
+      left: 15%;
+      right: 15%;
+      bottom: -2px;
+      background-color: var(--theme-modal-background-color);
+      height: 1px;
+    }
     &:before {
       content: '';
       position: absolute;
-      border-radius: 1.5rem;
       left: -2px;
       right: -2px;
       bottom: -2px;
       top: -2px;
+      border-radius: 0.5rem;
       background-color: var(--theme-modal-background-color);
-      border: 2px solid transparent;
       opacity: 0;
-      transition: opacity 0.2s ease-in, border 0s ease-out 0.524s;
+      transform: scale(0.9);
+      transition: opacity 0.2s ease-in, transform 0.1s ease-out;
     }
     &:hover {
       transition: none;
       &:before {
-        left: -3px;
-        right: -3px;
-        bottom: -3px;
-        top: -3px;
         transform: scale(1);
         opacity: 1;
-        border: 2px solid var(--theme-color);
         transition: none;
       }
       .header-title {

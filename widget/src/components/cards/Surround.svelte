@@ -18,7 +18,7 @@
     display: flex;
     flex-direction: column;
     padding: 0 1rem 0.5rem;
-    border: 2px solid var(--theme-button-color);
-    border-radius: 1.25rem;
+    border: 3px solid var(--theme-button-color);
+    border-radius: 1rem;
   }
 </style>
