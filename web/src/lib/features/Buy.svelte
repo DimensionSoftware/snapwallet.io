@@ -17,7 +17,7 @@
         wallets: [],
         focus: false,
         theme: {
-          modalBackground: 'rgba(0,0,0,.8)',
+          modalBackground: 'rgba(0,0,0,1)',
           modalPopupBackground: 'rgba(10,10,10,.85)',
           modalBackgroundColor: '#222',
           color: 'rgba(255,252,0,.9)',
