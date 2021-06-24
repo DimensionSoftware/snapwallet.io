@@ -32,18 +32,14 @@
 
   @mixin flex-align-center {
     display: flex;
-    align-items: center;
     flex: 1;
-    height: 100%;
   }
 
   .modal-header {
     margin-bottom: 0.5rem;
-    height: 2.75rem;
+    // height: 2.75rem;
     width: 100%;
     display: flex;
-    justify-content: space-evenly;
-    align-items: center;
     color: var(--theme-text-color);
     // Match this with body and footer
     padding: 2rem 1.5rem 0 1.5rem;
