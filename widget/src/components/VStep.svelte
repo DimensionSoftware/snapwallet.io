@@ -65,16 +65,15 @@
     // marker dot
     .default-icon:before {
       content: '';
-      border: 4px solid $textColor4;
       border-radius: 100%;
       position: absolute;
-      height: 0;
-      width: 0;
-      left: 0;
+      height: 4px;
+      width: 4px;
+      left: 2px;
       right: 0;
       bottom: 0;
-      opacity: 1;
-      top: 8px;
+      opacity: 0.7;
+      top: 10px;
       z-index: 1;
     }
     :global(span:before) {
@@ -82,7 +81,7 @@
       position: absolute;
       content: '';
       border-radius: 50%;
-      opacity: 0.25;
+      opacity: 0.75;
       height: 26px;
       width: 26px;
       left: -9px;
@@ -101,8 +100,16 @@
         animation: glow 1.5s linear;
         animation-iteration-count: infinite;
       }
+      :global(span.default-icon:before) {
+        background: var(--theme-color);
+      }
+      :global(.step),
+      :global(.total-container),
+      :global(.step > span),
       :global(b) {
+        opacity: 1 !important;
         font-weight: bold;
+        color: var(--theme-color);
       }
     }
     &.success {
@@ -121,7 +128,7 @@
         margin-left: 0.4rem;
       }
       &:before {
-        border: 4px solid var(--theme-color) !important;
+        border: 2px solid var(--theme-color) !important;
       }
 
       & > :global(span > svg) {
@@ -139,6 +146,10 @@
       margin-left: 1rem;
       top: -1px;
       position: relative;
+      :global(> span),
+      :global(b) {
+        opacity: 0.75;
+      }
     }
   }
 </style>

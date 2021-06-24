@@ -44,7 +44,11 @@
   {onClick}
 >
   <span slot="icon">
-    <FaIcon data={!success ? faUniversity : faCheck} />
+    {#if success}
+      <FaIcon data={!success ? faUniversity : faCheck} />
+    {:else}
+      <span class="default-icon" />
+    {/if}
   </span>
   <span slot="step">
     <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->

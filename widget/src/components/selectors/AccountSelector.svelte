@@ -110,7 +110,6 @@
             class="flex"
             style="display:flex;flex-direction:column;opacity:0.85;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
           >
-            <div style="opacity:0.85">Identity verification required</div>
             <div
               style="display:flex;align-items:center;justify-content:space-between;"
             >
@@ -131,6 +130,7 @@
                 <FaIcon scale="0.75" data={faClock} />
               </div>
             </div>
+            <div style="opacity:0.85">Identity verification required</div>
           </div>
         </PaymentMethodCard>
       </div>

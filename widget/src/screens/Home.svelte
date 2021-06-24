@@ -410,9 +410,6 @@
               disabled
               onClick={() => push(verificationNextStep)}
             >
-              <span slot="icon">
-                <FaIcon data={faIdCard} />
-              </span>
               <b slot="step"> Verify Identity </b>
             </VStep>
           {/if}
