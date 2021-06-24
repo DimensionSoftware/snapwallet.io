@@ -15,7 +15,7 @@
 
   let ifr: HTMLIFrameElement
   let liquidVisible = false
-  let topBg, sy, isRotated
+  let topBg
 
   onMount(async () => {
     await import('flux-init')
@@ -86,20 +86,22 @@ Hey, you-- join us!  https://dimensionsoftware.com
       `)
 
     // init parallax
-    // let frame, dyLast
-    // function loop() {
-    //   frame = requestAnimationFrame(loop)
-    //   const dy = window.pageYOffset
-    //   if (dyLast == dy) return // guard
-    //   dyLast = dy
-    //   isRotated = dy > 900
-    //   sy = ~~(dy * 0.3) * (isRotated ? -1 : 1)
-    //   if (topBg)
-    //     topBg.style = `transform: rotate(${isRotated ? '180deg' : 0}
-    //     ) translateY(${sy}px)`
-    // }
-    // loop() // main
-    // return () => cancelAnimationFrame(frame)
+    let frame, dyLast, isRotated, lastIsRotated, dy, sy
+    function loop() {
+      frame = requestAnimationFrame(loop)
+      dy = window.pageYOffset
+      if (dyLast === dy) return // guard
+      dyLast = dy
+      isRotated = dy > 900
+      if (lastIsRotated === isRotated) return // guard
+      lastIsRotated = isRotated
+      // sy = ~~(dy * 0.3) * (isRotated ? -1 : 1)
+      topBg.style = `transform: translateZ(0) rotate(${
+        isRotated ? '180deg' : 0
+      })`
+    }
+    loop() // main
+    return () => cancelAnimationFrame(frame)
   })
 </script>
 
