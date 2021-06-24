@@ -151,11 +151,6 @@
             class="flex"
             style="display:flex; flex-direction:column;opacity:0.85;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
           >
-            <div style="margin-top: .2rem;">
-              <img height="14" src="/widget/card_mastercard.png" />
-              <img height="16" src="/widget/card_visa.png" />
-              <img height="16" src="/widget/card_discover.png" />
-            </div>
             <div
               style="display:flex;align-items:center;justify-content:space-between;"
             >
@@ -173,6 +168,11 @@
                 <span style="margin-right:0.35rem">1-2 hours</span>
                 <FaIcon scale="0.75" data={faClock} />
               </div>
+            </div>
+            <div style="margin-top: .2rem;">
+              <img height="16" src="/widget/card_visa.png" />
+              <img height="14" src="/widget/card_mastercard.png" />
+              <img height="16" src="/widget/card_discover.png" />
             </div>
           </div>
         </PaymentMethodCard>
