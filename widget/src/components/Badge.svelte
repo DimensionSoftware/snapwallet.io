@@ -17,29 +17,48 @@
 
 <style lang="scss">
   .badge {
+    position: relative;
     border-radius: 0.5rem;
     padding: 0 0.5rem;
     font-size: 0.75rem;
     float: left;
     color: var(--theme-badge-text-color);
+    overflow: hidden;
+    &:before {
+      position: absolute;
+      content: '';
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      opacity: 0.15;
+    }
     &.success {
-      /* border: 1px solid var(--theme-success-color); */
-      background-color: var(--theme-success-color);
+      color: var(--theme-success-color);
+      &:before {
+        background-color: var(--theme-success-color);
+      }
     }
 
     &.warning {
-      /* border: 1px solid var(--theme-warning-color); */
-      background-color: var(--theme-warning-color);
+      color: var(--theme-warning-color);
+      &:before {
+        background-color: var(--theme-warning-color);
+      }
     }
 
     &.error {
-      /* border: 1px solid var(--theme-error-color); */
-      background-color: var(--theme-error-color);
+      color: var(--theme-error-color);
+      &:before {
+        background-color: var(--theme-error-color);
+      }
     }
 
     &.info {
-      /* border: 1px solid var(--theme-info-color); */
-      background-color: var(--theme-info-color);
+      color: var(--theme-info-color);
+      &:before {
+        background-color: var(--theme-info-color);
+      }
     }
   }
 </style>
