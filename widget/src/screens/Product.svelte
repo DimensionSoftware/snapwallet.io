@@ -171,7 +171,9 @@
   <ModalHeader hideBackButton>{product.title}</ModalHeader>
   <ModalBody>
     <div class="container">
-      <h4 class="nft-title">by {product.author}</h4>
+      {#if product.author}
+        <h4 class="nft-title">by {product.author}</h4>
+      {/if}
       {#if product.videoURL}
         <video loop playsinline autoplay muted class="nft-video">
           <source src={product.videoURL} />
