@@ -2,10 +2,11 @@
 // so each import does not redefine the variables
 
 // theme
-$themeColor: #485460;
+// $themeColor: #485460;
+$themeColor: red;
 $themeColorInverse: white;
 $themeColorDarkened: darken($themeColor, 10%);
-$themeColorLightened: lighten($themeColor, 55%);
+$themeColorLightened: lighten($themeColor, 42%);
 $themeFont: 'Helvetica Neue', Arial, sans-serif;
 $headingFont: 'Impact', 'Fira Sans Condensed';
 
@@ -27,8 +28,8 @@ $buttonTextColor: $themeColorInverse;
 $modalBackgroundColor: #fff;
 $modalBackground: linear-gradient(#eee, $modalBackgroundColor);
 $modalPopupBackground: linear-gradient(
-  rgba(255, 255, 255, 0.8),
-  rgba(255, 255, 255, 0.92)
+  rgba(255, 255, 255, 0.9),
+  rgba(255, 255, 255, 0.95)
 );
 $modalContainerBackgroundColor: radial-gradient(
   circle closest-corner at 50% 40%,

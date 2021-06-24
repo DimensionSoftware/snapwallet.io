@@ -576,7 +576,9 @@
   }
 
   .description {
-    margin-left: 0.55rem;
+    margin-left: 1rem;
+    line-height: 1rem;
+    opacity: 0.9;
     color: var(--theme-text-color);
   }
 </style>

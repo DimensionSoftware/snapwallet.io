@@ -128,13 +128,13 @@
         bottom: 0px;
         left: -1px;
         right: -1px;
+        background-color: var(--theme-color-lightened);
         border-radius: 1em;
         opacity: 0;
         transform: scale(0);
         transition: opacity 0.5s ease-out, left 0s ease-out 0.51s,
           right 0s ease-out 0.51s, top 0.4s ease-out 0.01s,
-          bottom 0.4s ease-out 0.11s, background 0s ease-out 0.51s,
-          transform 0s ease-out 0.51s;
+          bottom 0.4s ease-out 0.11s, transform 0s ease-out 0.51s;
       }
       &:valid ~ .bg {
         transform: scale(1);
@@ -177,7 +177,6 @@
         top: -4px;
         right: -5px;
         bottom: -4px;
-        background: var(--theme-color-lightened);
         opacity: 0.3;
         transform: translateX(0) scale(1);
         transition: none;

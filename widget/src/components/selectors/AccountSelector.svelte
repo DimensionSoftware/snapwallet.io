@@ -83,7 +83,6 @@
         in:fly={{ y: 25, duration: 200 + 50 * 1 }}
       >
         <PaymentMethodCard
-          icon={faUniversity}
           badgeText="Lowest Fee"
           badgeType="info"
           on:click={() => {
@@ -112,15 +111,23 @@
             style="display:flex;flex-direction:column;opacity:0.85;font-size:0.75rem;justify-content:center;width:100%;height:100%;"
           >
             <div style="opacity:0.85">Identity verification required</div>
-            <div>
-              <strong>U.S. Fee</strong> - 0.75% or mid-market rate
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;"
+            >
+              <strong>U.S. Fee</strong>
+              <div style="display:flex;align-items:center;">
+                <span style="margin-right:0.35rem"
+                  >0.75% or mid-market rate</span
+                >
+                <FaIcon scale="0.75" data={faUniversity} />
+              </div>
             </div>
             <div
               style="display:flex;align-items:center;justify-content:space-between;"
             >
               <strong>Delivery time</strong>
               <div style="display:flex;align-items:center;">
-                <span style="margin-right:0.25rem">5 business days</span>
+                <span style="margin-right:0.35rem">5 business days</span>
                 <FaIcon scale="0.75" data={faClock} />
               </div>
             </div>
@@ -133,7 +140,6 @@
       >
         <PaymentMethodCard
           label="Debit Card"
-          icon={faCreditCard}
           badgeText="Instant Buy"
           badgeType="success"
           on:click={() => {
@@ -150,15 +156,21 @@
               <img height="16" src="/widget/card_visa.png" />
               <img height="16" src="/widget/card_discover.png" />
             </div>
-            <div>
-              <strong>U.S. Fee</strong> - 2.9% + 30¢ or $5
+            <div
+              style="display:flex;align-items:center;justify-content:space-between;"
+            >
+              <strong>U.S. Fee</strong>
+              <div style="display:flex;align-items:center">
+                <span style="margin-right:0.35rem">2.9% + 30¢ or $5</span>
+                <FaIcon scale="0.75" data={faCreditCard} />
+              </div>
             </div>
             <div
               style="display:flex;align-items:center;justify-content:space-between;"
             >
               <strong>Delivery time</strong>
               <div style="display:flex;align-items:center;">
-                <span style="margin-right:0.25rem">1-2 hours</span>
+                <span style="margin-right:0.35rem">1-2 hours</span>
                 <FaIcon scale="0.75" data={faClock} />
               </div>
             </div>

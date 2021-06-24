@@ -76,14 +76,17 @@
         var(--theme-color-lightened),
         var(--theme-color-lightened),
         var(--theme-color-lightened),
+        var(--theme-color-lightened),
+        var(--theme-color-lightened),
+        var(--theme-color-lightened),
         transparent
       );
       transform: scale(0);
       transition: transform 0.2s $easeOutExpo;
     }
     &:hover {
-      border-top: 1px solid var(--theme-color);
-      border-bottom: 1px solid var(--theme-color);
+      border-top: 1px solid var(--theme-color-lightened);
+      border-bottom: 1px solid var(--theme-color-lightened);
       &:before {
         transform: scale(1);
         transition: none;

@@ -282,20 +282,22 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
   .code {
+    :global(.input-container) {
+      margin-right: 2px;
+    }
     :global(label) {
       display: flex;
       flex-direction: row;
       margin-bottom: 0 !important;
     }
     :global(label > span.input-label) {
-      top: -2rem !important;
+      top: -1rem !important;
       margin-left: 0 !important;
     }
     :global(#code-0, #code-1, #code-2, #code-3, #code-4, #code-5) {
       text-align: center !important;
       padding: 25px 0 25px 0 !important;
       border-radius: 0;
-      border-right: 1px solid rgba(0, 0, 0, 0.1);
       text-indent: 0;
       &:focus,
       &:hover {
@@ -309,7 +311,6 @@
     :global(#code-5) {
       border-top-right-radius: 0.5rem;
       border-bottom-right-radius: 0.5rem;
-      border-right: 0 solid transparent;
     }
   }
 
@@ -318,14 +319,14 @@
     flex-direction: row;
   }
   .code {
-    margin: 10% 0.5rem 0 0.5rem;
+    margin: 15% 0.5rem 0 0.5rem;
   }
   .resend {
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 0.95rem;
-    margin-top: 0.75rem;
+    margin-top: 1.25rem;
     & > a {
       color: var(--theme-text-color);
       margin-left: 0.25em;

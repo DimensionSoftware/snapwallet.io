@@ -56,8 +56,9 @@
       position: absolute;
       left: 15%;
       right: 15%;
-      bottom: -2px;
-      background-color: var(--theme-modal-background-color);
+      bottom: -3px;
+      background-color: var(--theme-text-color);
+      opacity: 0.3;
       height: 1px;
     }
     &:before {
@@ -68,13 +69,16 @@
       bottom: -2px;
       top: -2px;
       border-radius: 0.5rem;
-      background-color: var(--theme-modal-background-color);
+      background-color: var(--theme-color-lightened);
       opacity: 0;
-      transform: scale(0.9);
+      transform: scale(0.975);
       transition: opacity 0.2s ease-in, transform 0.1s ease-out;
     }
     &:hover {
       transition: none;
+      &:after {
+        opacity: 0;
+      }
       &:before {
         transform: scale(1);
         opacity: 1;
@@ -117,7 +121,6 @@
       text-overflow: ellipsis;
       white-space: nowrap;
       font-weight: 500;
-      margin-left: 0.5rem;
     }
   }
 </style>
