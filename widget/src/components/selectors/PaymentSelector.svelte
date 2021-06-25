@@ -43,7 +43,7 @@
   {success}
   {onClick}
 >
-  <span slot="icon">
+  <span slot="icon" class="payment-icon">
     {#if success}
       <FaIcon data={!success ? faUniversity : faCheck} />
     {:else}
@@ -73,8 +73,13 @@
   .description {
     min-height: 2.5rem;
     margin-left: 1rem;
-    color: var(--theme-text-color) !important;
     opacity: 0.85;
+  }
+  .payment-icon:before {
+    height: 2px;
+    width: 2px;
+    left: 3px;
+    top: 11px;
   }
   .hidden {
     display: none;

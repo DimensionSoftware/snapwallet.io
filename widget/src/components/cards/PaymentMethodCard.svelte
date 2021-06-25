@@ -81,7 +81,7 @@
       }
       &:before {
         transform: scale(1);
-        opacity: 1;
+        opacity: 0.3;
         transition: none;
       }
       .header-title {

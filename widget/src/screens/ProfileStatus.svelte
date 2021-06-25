@@ -207,7 +207,6 @@
   .description {
     min-height: 2.5rem;
     margin-left: 1rem;
-    color: var(--theme-text-color) !important;
     opacity: 0.85;
   }
   :global(span.info) {
