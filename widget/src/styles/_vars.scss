@@ -2,8 +2,7 @@
 // so each import does not redefine the variables
 
 // theme
-// $themeColor: #485460;
-$themeColor: red;
+$themeColor: #485460;
 $themeColorInverse: white;
 $themeColorDarkened: darken($themeColor, 10%);
 $themeColorLightened: lighten($themeColor, 42%);
