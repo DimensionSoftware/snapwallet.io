@@ -1,0 +1,115 @@
+input[type='number'] {
+  padding-right: 0.75em;
+}
+input {
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  background-color: var(--theme-color-inverse);
+  outline: none;
+  width: 100%;
+  appearance: none;
+  backface-visibility: hidden;
+  transform: translateZ(0);
+  border-radius: 0.25em;
+  text-indent: 10px;
+  text-transform: lowercase;
+  overflow: hidden;
+  cursor: pointer;
+  text-overflow: ellipsis;
+  outline: none;
+  padding: 1.6em 5px 15px 5px !important;
+  vertical-align: middle;
+  font-size: 1.8em;
+  color: var(--theme-input-text-color);
+  border: none;
+  border-bottom: 1px solid transparent;
+  outline: none;
+  width: 100%;
+  transform: scale(1);
+  transition-duration: 0.3s;
+  transition-property: transform;
+  &:valid {
+    border-bottom: 1px solid transparent;
+  }
+  // .bg is the input surround
+  ~ .bg {
+    position: absolute;
+    content: '';
+    top: 0;
+    bottom: 0px;
+    left: -1px;
+    right: -1px;
+    background-color: var(--theme-color-lightened);
+    border-radius: 1em;
+    opacity: 0;
+    transform: scale(0);
+    transition: opacity 0.5s ease-out, left 0s ease-out 0.51s,
+      right 0s ease-out 0.51s, top 0.4s ease-out 0.01s,
+      bottom 0.4s ease-out 0.11s, transform 0s ease-out 0.51s;
+  }
+  &:valid ~ .bg {
+    transform: scale(1);
+  }
+  &:hover,
+  &:focus {
+    z-index: 1;
+    border-bottom: 1px solid transparent;
+    transition: none;
+  }
+  &:invalid {
+    box-shadow: none;
+  }
+  &:focus {
+    cursor: text;
+    color: var(--theme-input-text-color);
+    transition: none;
+  }
+
+  &:required {
+    box-shadow: none;
+  }
+  // .fx is the subtle bottom line
+  & + .fx {
+    position: absolute;
+    left: 0.75rem;
+    right: 0.75rem;
+    bottom: 0;
+    height: 1px;
+    z-index: 11;
+    background: var(--theme-color);
+    opacity: 0;
+    transform: translateX(0px) scale(0.25);
+    transition: opacity 0.2s var(--theme-ease-out-expo) 0.5s,
+      transform 0.5s var(--theme-ease-out-back) 0.1s;
+  }
+  &:active ~ .bg,
+  &:focus ~ .bg {
+    left: -5px;
+    top: -4px;
+    right: -5px;
+    bottom: -4px;
+    opacity: 0.3;
+    transform: translateX(0) scale(1);
+    transition: none;
+  }
+  &:active + .fx,
+  &:hover + .fx,
+  &:focus + .fx {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+    transition: none;
+    background: var(--theme-color);
+  }
+  // HACK: remove yellow autofill background
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    box-shadow: none !important;
+    background-color: transparent !important;
+    background-clip: content-box !important;
+    -webkit-text-fill-color: var(--theme-text-color) !important;
+  }
+}
