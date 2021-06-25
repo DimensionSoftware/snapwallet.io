@@ -515,7 +515,7 @@
     font-size: 1.25rem;
     color: var(--theme-text-color-no-background);
   }
-  :global(.input-container) {
+  :global(.cryptocurrencies-container .input-container) {
     margin-right: -1.5rem;
   }
   :global(#amount ~ .bg) {
