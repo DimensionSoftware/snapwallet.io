@@ -157,6 +157,8 @@
   }
 
   onMount(() => {
+    // select debit by default
+    transactionStore.update({ inMedium: TransactionMediums.DEBIT_CARD })
     getViewer()
     getPrices()
     const interval = priceStore.pollPrices()
@@ -206,6 +208,7 @@
           {/if}
         {/if}
         <VStep
+          title="Click to Change Payment Method"
           success={isDebitCard ||
             Boolean($transactionStore.selectedSourcePaymentMethod)}
           onClick={() => (isPaymentSelectorVisible = true)}
