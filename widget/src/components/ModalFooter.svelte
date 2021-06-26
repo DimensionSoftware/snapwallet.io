@@ -4,9 +4,6 @@
 
 <div class="modal-footer">
   <slot />
-  {#if configStore.environment === 'sandbox'}
-    <small title="Testing in Sandbox Mode">Test Mode</small>
-  {/if}
 </div>
 
 <style lang="scss">

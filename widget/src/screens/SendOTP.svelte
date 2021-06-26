@@ -102,8 +102,12 @@
     {/if}
   </ModalHeader>
   <ModalBody>
+    {#if configStore.environment === 'sandbox'}
+      <small title="Testing in Sandbox Mode">Test Mode</small>
+    {/if}
     {#if !phoneVerificationOnly && (!$userStore.flags?.hasEmail || !isUsingPhoneNumber)}
       <div class="email" in:fade={{ duration: 300 }}>
+        <h3>We'll email a 6-digit code to secure you.</h3>
         <Label label="Your Email">
           <Input
             inputmode="email"
@@ -131,6 +135,7 @@
       </div>
     {:else}
       <div class="phone" in:fade={{ duration: 300 }}>
+        <h3>We'll send a 6-digit code to secure you.</h3>
         <Label label="Your Phone Number">
           <PhoneInput
             on:select={() => (countrySelectorVisible = true)}
@@ -211,5 +216,12 @@
     align-items: center;
     justify-content: center;
     font-size: 0.8rem;
+  }
+  h3 {
+    color: var(--theme-text-color);
+    opacity: 0.8;
+    font-size: 0.85rem;
+    font-weight: 400;
+    margin: 0 0 1rem 0;
   }
 </style>

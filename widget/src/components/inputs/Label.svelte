@@ -43,6 +43,7 @@
       position: absolute;
       top: 6px;
       margin-left: 15px;
+      margin-top: 8px;
       z-index: 99;
     }
   }
