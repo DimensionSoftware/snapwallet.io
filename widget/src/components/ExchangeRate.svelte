@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { createEventDispatcher } from 'svelte'
   import { transactionStore } from '../stores/TransactionStore'
   import { TransactionIntents } from '../types'
   import { formatLocaleCurrency } from '../util'
@@ -7,6 +8,8 @@
   export let fakePrice: number = 0
   export let isLoadingPrices: boolean = false
 
+  const dispatch = createEventDispatcher()
+
   $: ({ intent, destinationCurrency, sourceCurrency } = $transactionStore)
   $: isBuy = intent === TransactionIntents.BUY
   $: price = isLoadingPrices ? fakePrice : exchangeRate
@@ -14,7 +17,11 @@
   $: cryptoTicker = isBuy ? destinationCurrency.ticker : sourceCurrency.ticker
 </script>
 
-<div class="exchange-rate-container">
+<div
+  title="Best Exchange Rate"
+  class="exchange-rate-container"
+  on:mousedown={() => dispatch('mousedown')}
+>
   1 {cryptoTicker} ≈ {formatLocaleCurrency(fiatTicker, price)}
 </div>
 

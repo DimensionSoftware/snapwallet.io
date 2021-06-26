@@ -279,6 +279,8 @@
     country?.code?.toUpperCase(),
   )
 
+  const showCryptoSelector = () => (cryptoSelectorVisible = true)
+
   function heightForConfig(): number {
     // start with max and substract when ui is hidden due to config
     var height = 525
@@ -336,12 +338,17 @@
           <div class="dst-container">
             <Label fx={false}>
               <CryptoCard
-                on:mousedown={() => (cryptoSelectorVisible = true)}
+                on:mousedown={showCryptoSelector}
                 crypto={isBuy ? destinationCurrency : sourceCurrency}
                 isDown
               />
             </Label>
-            <ExchangeRate {fakePrice} {isLoadingPrices} {exchangeRate} />
+            <ExchangeRate
+              on:mousedown={showCryptoSelector}
+              {fakePrice}
+              {isLoadingPrices}
+              {exchangeRate}
+            />
           </div>
         {/if}
       </Surround>
@@ -494,6 +501,7 @@
   @import '../styles/text.scss';
 
   .cryptocurrencies-container {
+    cursor: pointer;
     padding: 0 0.5rem;
   }
   .dst-container {

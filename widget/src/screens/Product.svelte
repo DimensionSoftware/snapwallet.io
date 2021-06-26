@@ -63,18 +63,16 @@
           product.destinationTicker.toLowerCase() !== 'btc'
             ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
             : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU'
-        const {
-          reservationId,
-          quote,
-        } = await window.API.fluxWyreCreateDebitCardQuote({
-          dest,
-          sourceCurrency: $transactionStore.sourceCurrency.ticker,
-          lockFields: ['destAmount'],
-          amountIncludesFees: false,
-          country: $debitCardStore.address.country,
-          destAmount: product.destinationAmount,
-          destCurrency: product.destinationTicker,
-        })
+        const { reservationId, quote } =
+          await window.API.fluxWyreCreateDebitCardQuote({
+            dest,
+            sourceCurrency: $transactionStore.sourceCurrency.ticker,
+            lockFields: ['destAmount'],
+            amountIncludesFees: false,
+            country: $debitCardStore.address.country,
+            destAmount: product.destinationAmount,
+            destCurrency: product.destinationTicker,
+          })
 
         debitCardStore.update({ reservationId, dest })
         transactionStore.setWyrePreview(quote)
