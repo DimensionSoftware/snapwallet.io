@@ -87,6 +87,11 @@
     <div on:mousedown={snap.openWeb}>
       <br />
       <h3>Buy & Sell Crypto</h3>
+      <div style="margin-top: .5rem;">
+        <img height="14" src="/images/card_mastercard.png" />
+        <img height="16" src="/images/card_visa.png" />
+        <img height="16" src="/images/card_discover.png" />
+      </div>
       <ul>
         <li>
           <span>Fiat</span> › &nbsp;
@@ -96,10 +101,17 @@
           >
         </li>
         <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
-          <span>Crypto</span> › &nbsp; Fiat Offramp
+          <span>Crypto</span> › &nbsp;
+
+          <a
+            href="https://snapwallet.io/docs/guide/use-cases/offramp.html"
+            target="_blank">Fiat Offramp</a
+          >
+          <span class="tag">SOON</span>
         </li>
         <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
           <span>Crypto</span> › &nbsp; Crypto
+          <span class="tag">SOON</span>
         </li>
       </ul>
       <br />
@@ -163,10 +175,11 @@
     padding: 0;
     li {
       padding: 0;
+      line-height: 1.1rem;
       margin: 0.5rem 0 0.25rem 0;
       span {
         display: inline-block;
-        width: 60px;
+        width: 57px;
       }
     }
   }
@@ -182,12 +195,28 @@
   h4 {
     margin: 1.5rem 0 2rem 0;
   }
-  .muted {
-    opacity: 0.5;
+  .tag {
+    position: absolute;
+    z-index: 1;
+    font-size: 0.8rem;
+    background: rgba(#fffc00, 0.7);
+    border: 1px solid rgba(#fffc00, 0.2);
+    width: inherit;
+    padding: 0.1rem 0.75rem;
+    margin-left: 0.5rem;
+    border-radius: 5rem;
+    transform: rotate(2deg);
+    transition: box-shadow 0.2s ease-out, border 0.3s ease-out;
+    &:hover {
+      background: #fffc00;
+      border: 1px solid #fffc00;
+      box-shadow: 0 0 0 2px #fffc00;
+      transition: none;
+    }
   }
   p {
     font-size: 1.25rem;
-    line-height: 1.75rem;
+    line-height: 1.5rem;
     padding: 0;
     margin: -0.25rem 0 1.5rem;
   }
