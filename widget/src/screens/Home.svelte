@@ -540,7 +540,7 @@
     padding-top: 1rem !important;
     padding-bottom: 0 !important;
     left: 2rem;
-    width: 208px;
+    width: 203px;
     color: var(--theme-text-color-no-background);
   }
   :global(#amount + .fx) {

@@ -18,7 +18,7 @@
         focus: false,
         theme: {
           modalBackground: 'rgba(0,0,0,1)',
-          modalPopupBackground: 'rgba(10,10,10,.85)',
+          modalPopupBackground: 'rgba(10,10,10,.75)',
           modalBackgroundColor: '#222',
           color: 'rgba(255,252,0,.9)',
           badgeTextColor: '#333',

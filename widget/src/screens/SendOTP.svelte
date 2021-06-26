@@ -204,7 +204,7 @@
   @import '../styles/_vars.scss';
   .email,
   .phone {
-    margin: 10% 0.5rem 0 0.5rem;
+    margin: 7% 0.5rem 0 0.5rem;
   }
   .link {
     display: flex;

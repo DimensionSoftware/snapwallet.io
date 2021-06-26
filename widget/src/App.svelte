@@ -510,6 +510,7 @@
     :global(.popup-selector-header),
     :global(.modal-content .modal-body),
     :global(.modal-content .modal-header-title),
+    :global(.modal-content .modal-header-back-button),
     :global(.modal-content .modal-footer) {
       will-change: filter;
       transition: filter 0.5s var(--theme-ease-out-expo);
