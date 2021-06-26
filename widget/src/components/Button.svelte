@@ -41,7 +41,8 @@
     letter-spacing: 2px;
     margin: 0;
     font-weight: bold;
-    transition: none;
+    transition: transform 0.1s var(--theme-ease-out-expo),
+      box-shadow 0.3s var(--theme-ease-out-expo);
     z-index: 10;
     overflow: hidden;
     // gloss fix
@@ -64,11 +65,12 @@
       border-top-left-radius: 0.5rem;
       border-top-right-radius: 0.5rem;
       transform: scale(1);
-      transition: transform 0.1s ease-out, opacity 0.1s ease-in;
+      transition: transform 0.2s ease-out, opacity 0.1s ease-in;
     }
     &:hover {
       box-shadow: 0 0 0 1px var(--theme-button-color),
-        0 6px 6px var(--theme-shadow-color);
+        0 6px 6px var(--theme-shadow-color) !important;
+      transform: scale(1.003);
       transition: none;
       &:before {
         transform: scale(1.1);

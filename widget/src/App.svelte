@@ -510,7 +510,6 @@
     :global(.popup-selector-header),
     :global(.modal-content .modal-body),
     :global(.modal-content .modal-header-title),
-    :global(.modal-content .modal-header-back-button),
     :global(.modal-content .modal-footer) {
       will-change: filter;
       transition: filter 0.5s var(--theme-ease-out-expo);
@@ -521,7 +520,6 @@
     }
     &.blur-header {
       :global(.popup-selector-header),
-      :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-right-action svg),
       :global(.modal-content .modal-header-back-button) {
@@ -534,7 +532,7 @@
       :global(.modal-content .modal-header-title),
       :global(.modal-content .modal-header-back-button),
       :global(.modal-content .modal-footer) {
-        filter: blur(30px) contrast(150%);
+        filter: blur(50px) contrast(175%);
         transition: none;
       }
     }

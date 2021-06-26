@@ -54,10 +54,12 @@
   .crypto-card {
     position: relative;
     padding: 0;
-    width: 100%;
+    width: 99%;
     height: 3.5rem;
     display: flex;
     align-items: center;
+    transition: transform 0.4s var(--theme-ease-out-expo);
+    transform: scale(1);
     cursor: pointer;
     &:before {
       // background fx
@@ -87,6 +89,8 @@
     &:hover {
       border-top: 1px solid var(--theme-color-lightened);
       border-bottom: 1px solid var(--theme-color-lightened);
+      transition: none;
+      transform: scale(1.02);
       &:before {
         transform: scale(1);
         transition: none;
