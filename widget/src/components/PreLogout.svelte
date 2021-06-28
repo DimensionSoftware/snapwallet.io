@@ -107,7 +107,7 @@
     padding: 5rem 3rem;
     font-size: 1.2rem;
     z-index: 101;
-    background: rgba(200, 200, 200, 0.7);
+    background: var(--theme-modal-popup-background);
     :global(.surround) {
       padding: 0.5rem 2rem;
     }

@@ -200,7 +200,7 @@
   @import '../styles/text.scss';
 
   .vertical-stepper {
-    margin-top: 0.5rem;
+    margin-top: 2rem;
     list-style: none;
     padding: 0 0.5rem;
   }

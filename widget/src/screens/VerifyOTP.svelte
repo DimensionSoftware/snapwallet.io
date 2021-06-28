@@ -283,15 +283,15 @@
   @import '../styles/_vars.scss';
   .code {
     :global(.input-container) {
-      margin-right: 2px;
+      margin-right: 1px;
     }
     :global(label) {
       display: flex;
       flex-direction: row;
       margin-bottom: 0 !important;
     }
-    :global(label > span.input-label) {
-      top: -1rem !important;
+    :global(.code label > span.input-label) {
+      top: -1.75rem !important;
       margin-left: 0 !important;
     }
     :global(#code-0, #code-1, #code-2, #code-3, #code-4, #code-5) {
