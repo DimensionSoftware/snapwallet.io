@@ -98,7 +98,7 @@
     {#if phoneVerificationOnly}
       Phone Verification
     {:else}
-      Send Access Code
+      Verify Identity
     {/if}
   </ModalHeader>
   <ModalBody>
