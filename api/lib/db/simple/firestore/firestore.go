@@ -42,7 +42,7 @@ func (c collection) FetchInTx(ctx context.Context, tx *firestore.Transaction, id
 		return err
 	}
 	if snap == nil {
-		return fmt.Errorf("Fetch: id %s was not found", id)
+		return fmt.Errorf("Fetch (Not Found): %s", ref.Path)
 	}
 
 	snap.DataTo(out)
