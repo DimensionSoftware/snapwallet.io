@@ -34,12 +34,12 @@ type collection struct {
 	tx        *firestore.Transaction
 }
 
-func (c collection) Fetch(ctx context.Context, out *i.Record, path []string) error {
-	if len(path) == 0 {
-		return fmt.Errorf("Fetch: path was empty")
+func (c collection) Fetch(ctx context.Context, out *i.Record, id string) error {
+	if id == "" {
+		return fmt.Errorf("Fetch: id was blank")
 	}
 
-	fullpath := append(c.path, path...)
+	fullpath := append(c.path, id)
 	ref := c.firestore.Doc(strings.Join(fullpath, "/"))
 
 	var (
@@ -66,9 +66,9 @@ func (c collection) Fetch(ctx context.Context, out *i.Record, path []string) err
 	return nil
 }
 
-func (c collection) Scan(*[]i.Record) error {
-
+func (c collection) Scan(context.Context, *[]i.Record) error {
+	return nil
 }
-func (c collection) Save(*[]i.Record) {
-
+func (c collection) Save(*[]i.Record) error {
+	return nil
 }
