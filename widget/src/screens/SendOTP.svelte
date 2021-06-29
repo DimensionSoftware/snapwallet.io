@@ -222,6 +222,7 @@
     opacity: 0.8;
     font-size: 0.85rem;
     font-weight: 400;
-    margin: 0 0 1rem 0.25rem;
+    margin: 0 0 1rem 0;
+    text-align: center;
   }
 </style>
