@@ -99,8 +99,10 @@
       background-color: var(--theme-color-inverse);
       border-top-left-radius: 0.5em;
       border-bottom-left-radius: 0.5em;
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
       text-transform: uppercase;
-      width: 40%;
+      width: 75%;
       padding: 1.6em 0px 15px 12px !important;
       vertical-align: middle;
       color: var(--theme-input-text-color);
@@ -113,6 +115,10 @@
       font-weight: initial;
       align-items: center;
       justify-content: space-between;
+    }
+    :global(input) {
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
     }
     @import '../../styles/input.scss';
   }

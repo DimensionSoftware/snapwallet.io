@@ -36,12 +36,13 @@
     font-size: 0.7rem;
     font-weight: 600;
     margin-bottom: 1.25em;
+    z-index: 25;
     &.fx:active {
       animation: focus 0.16s;
     }
     span {
       position: absolute;
-      top: 6px;
+      top: 4px;
       margin-left: 15px;
       margin-top: 8px;
       z-index: 99;

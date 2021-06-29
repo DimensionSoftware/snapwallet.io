@@ -107,7 +107,6 @@
     {/if}
     {#if !phoneVerificationOnly && (!$userStore.flags?.hasEmail || !isUsingPhoneNumber)}
       <div class="email" in:fade={{ duration: 300 }}>
-        <h3>We'll email a 6-digit code to secure you.</h3>
         <Label label="Your Email">
           <Input
             inputmode="email"
@@ -121,6 +120,7 @@
             on:change={e => userStore.setEmailAddress(e.detail)}
           />
         </Label>
+        <h3>We'll email a 6-digit code to secure you.</h3>
         {#if $userStore.flags?.hasEmail}
           <div class="link">
             <a
@@ -135,7 +135,6 @@
       </div>
     {:else}
       <div class="phone" in:fade={{ duration: 300 }}>
-        <h3>We'll send a 6-digit code to secure you.</h3>
         <Label label="Your Phone Number">
           <PhoneInput
             on:select={() => (countrySelectorVisible = true)}
@@ -157,6 +156,7 @@
             }}
           />
         </Label>
+        <h3>We'll send a 6-digit code to secure you.</h3>
         {#if $userStore.flags?.hasPhone && !$userStore.flags?.hasEmail}
           <div class="link">
             <a
@@ -222,6 +222,6 @@
     opacity: 0.8;
     font-size: 0.85rem;
     font-weight: 400;
-    margin: 0 0 1rem 0;
+    margin: 0 0 1rem 0.25rem;
   }
 </style>

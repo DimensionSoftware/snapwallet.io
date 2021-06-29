@@ -85,6 +85,7 @@
         onClick={() => push(Routes.PROFILE_UPDATE)}
         success={missingInfo.personal.isComplete && !isPersonalInfoError}
         disabled={step !== 'personal' && !missingInfo.personal.isComplete}
+        line
       >
         <span
           class:info={!missingInfo.personal.isValid}
@@ -105,16 +106,17 @@
           {missingInfo.personal.message || personalInfoMessage}
         </div>
       </VStep>
-      <PaymentSelector
+      <!-- <PaymentSelector
         disabled={step !== 'payment'}
         onClick={() => (paymentSelectorVisible = true)}
         description="Payment to buy and sell"
-      />
+      /> -->
       <VStep
         title="Edit Your Contact"
         onClick={() => push(Routes.PROFILE_SEND_SMS)}
         success={missingInfo.contact.isComplete && !isContactError}
         disabled={step !== 'contact' && !missingInfo.contact.isComplete}
+        line
       >
         <span
           class:info={missingInfo.contact.isComplete &&
@@ -141,6 +143,7 @@
         onClick={() => push(Routes.ADDRESS_UPDATE)}
         success={missingInfo.address.isComplete && !isAddressError}
         disabled={step !== 'address' && !missingInfo.address.isComplete}
+        line
       >
         <span
           class:info={!missingInfo.address.isValid}
@@ -166,6 +169,7 @@
         onClick={() => push(Routes.FILE_UPLOAD_UPDATE)}
         success={missingInfo.document.isComplete && !isDocumentError}
         disabled={step !== 'document' && !missingInfo.document.isComplete}
+        line
       >
         <span
           class:info={!missingInfo.document.isValid}

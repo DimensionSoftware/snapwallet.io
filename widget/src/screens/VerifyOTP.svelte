@@ -319,7 +319,7 @@
     flex-direction: row;
   }
   .code {
-    margin: 15% 0.5rem 0 0.5rem;
+    margin: 10% 0.5rem 0 0.5rem;
   }
   .resend {
     display: flex;
