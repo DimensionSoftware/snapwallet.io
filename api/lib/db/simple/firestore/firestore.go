@@ -11,16 +11,8 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// create new collection bound to client
-func CollectionInTx(path []string, f *firestore.Client, tx *firestore.Transaction) collection {
-	return collection{
-		path:      path,
-		firestore: f,
-		tx:        tx,
-	}
-}
-
-func Collection(path []string, f *firestore.Client) collection {
+// Collection create new collection bound to client
+func Collection(f *firestore.Client, path []string) collection {
 	return collection{
 		path:      path,
 		firestore: f,
@@ -31,10 +23,13 @@ func Collection(path []string, f *firestore.Client) collection {
 type collection struct {
 	path      []string
 	firestore *firestore.Client
-	tx        *firestore.Transaction
 }
 
-func (c collection) Fetch(ctx context.Context, out *i.Record, id string) error {
+func (c collection) Fetch(ctx context.Context, id string, out *i.Record) error {
+	return c.FetchInTx(ctx, nil, id, out)
+}
+
+func (c collection) FetchInTx(ctx context.Context, tx *firestore.Transaction, id string, out *i.Record) error {
 	if id == "" {
 		return fmt.Errorf("Fetch: id was blank")
 	}
@@ -42,28 +37,39 @@ func (c collection) Fetch(ctx context.Context, out *i.Record, id string) error {
 	fullpath := append(c.path, id)
 	ref := c.firestore.Doc(strings.Join(fullpath, "/"))
 
-	var (
-		snap *firestore.DocumentSnapshot
-		err  error
-	)
-
-	if c.tx == nil {
-		snap, err = ref.Get(ctx)
-	} else {
-		snap, err = c.tx.Get(ref)
-	}
-
-	if status.Code(err) == codes.NotFound {
-		//return fmt.Errorf("Fetch: doc not found")
-		return err
-	}
+	snap, err := fetchRef(ctx, ref, tx)
 	if err != nil {
 		return err
+	}
+	if snap == nil {
+		return fmt.Errorf("Fetch: id %s was not found", id)
 	}
 
 	snap.DataTo(out)
 
 	return nil
+}
+
+func fetchRef(ctx context.Context, ref *firestore.DocumentRef, tx *firestore.Transaction) (*firestore.DocumentSnapshot, error) {
+	var (
+		snap *firestore.DocumentSnapshot
+		err  error
+	)
+
+	if tx == nil {
+		snap, err = ref.Get(ctx)
+	} else {
+		snap, err = tx.Get(ref)
+	}
+
+	if status.Code(err) == codes.NotFound {
+		return nil, nil
+	}
+	if err != nil {
+		return nil, err
+	}
+
+	return snap, nil
 }
 
 func (c collection) Scan(context.Context, *[]i.Record) error {
