@@ -75,6 +75,60 @@ func fetchRef(ctx context.Context, ref *firestore.DocumentRef, tx *firestore.Tra
 func (c collection) Scan(context.Context, []i.Record) error {
 	return nil
 }
-func (c collection) Save([]i.Record) error {
+func (c collection) Save(ctx context.Context, records []i.Record) error {
+	return c.SaveWithTx(ctx, nil, records)
+}
+
+func (c collection) SaveWithTx(ctx context.Context, tx *firestore.Transaction, records []i.Record) error {
+
+	if len(records) == 0 {
+		return nil
+	}
+
+	if len(records) == 1 {
+		rec := records[0]
+		fullpath := append(c.path, rec.ID())
+		ref := c.firestore.Doc(strings.Join(fullpath, "/"))
+
+		var (
+			err error
+		)
+		if tx == nil {
+			_, err = ref.Set(ctx, &rec)
+		} else {
+			err = tx.Set(ref, &rec)
+		}
+		if err != nil {
+			return err
+		}
+	}
+
+	// > 1
+	if tx == nil {
+		batch := c.firestore.Batch()
+
+		for _, rec := range records {
+			fullpath := append(c.path, rec.ID())
+			ref := c.firestore.Doc(strings.Join(fullpath, "/"))
+
+			batch.Set(ref, &rec)
+		}
+
+		_, err := batch.Commit(ctx)
+		if err != nil {
+			return err
+		}
+	} else {
+		for _, rec := range records {
+			fullpath := append(c.path, rec.ID())
+			ref := c.firestore.Doc(strings.Join(fullpath, "/"))
+
+			err := tx.Set(ref, &rec)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
 	return nil
 }
