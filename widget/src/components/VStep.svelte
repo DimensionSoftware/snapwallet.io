@@ -5,6 +5,7 @@
   export let custom: boolean = false
   export let onClick: () => void
   export let title: string
+  export let line: boolean = false
 </script>
 
 <li
@@ -14,6 +15,7 @@
   class:success
   class:active
   class:disabled
+  class:line
   style={onClick ? 'cursor: pointer' : ''}
 >
   <slot name="icon">
@@ -46,12 +48,38 @@
       content: '';
       background: var(--theme-text-color);
       border-radius: 50%;
-      height: 4px;
-      width: 4px;
+      height: 3px;
+      width: 3px;
       left: 2px;
       top: 10px;
       opacity: 0.7;
       z-index: 1;
+    }
+
+    // line
+    &.line:first-child:after {
+      background: linear-gradient(transparent, var(--theme-text-color));
+      top: -32px;
+      height: calc(100% + 37px);
+    }
+    &.line:last-child:after {
+      background: linear-gradient(var(--theme-text-color), transparent);
+    }
+    &.line:after {
+      position: absolute;
+      width: 1px;
+      left: 3px;
+      top: 0;
+      opacity: 0.2;
+      height: calc(100% + 4px);
+      content: '';
+      background-color: var(--theme-text-color);
+      background-position: 0 0;
+      background-size: 200% 200%;
+      border-color: inherit;
+      border-width: 0;
+      outline: 0;
+      z-index: -1;
     }
     > :global(span > svg) {
       position: absolute;
@@ -125,7 +153,7 @@
         box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.5);
         animation: glow 1.5s linear;
         animation-iteration-count: infinite;
-        margin-left: 0.4rem;
+        margin-left: 0.1rem;
       }
       &:before {
         border: 2px solid var(--theme-color) !important;
