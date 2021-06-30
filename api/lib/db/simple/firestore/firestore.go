@@ -115,12 +115,10 @@ func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, in 
 	case reflect.Struct:
 		records = append(records, v.Interface().(i.Record))
 	case reflect.Slice:
-		for _, inn := range in.([]i.Record) {
-			records = append(records, inn)
-
+		for ii := 0; ii < v.Len(); ii++ {
+			r := v.Index(ii).Interface().(i.Record)
+			records = append(records, r)
 		}
-	//case i.Record:
-	//	records = append(records, v)
 	default:
 		return fmt.Errorf("SaveInTx: must be []interfaces.Record or interfaces.Record")
 	}
