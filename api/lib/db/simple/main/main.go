@@ -7,6 +7,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	f "github.com/khoerling/flux/api/lib/db/simple/firestore"
+	"github.com/lithammer/shortuuid"
 )
 
 type Rec struct {
@@ -36,9 +37,19 @@ func main() {
 		"pancakes",
 	})
 
-	err = c.Save(ctx, Rec{ID: "foobar"})
+	err = c.Save(ctx, Rec{ID: shortuuid.New()})
 	if err != nil {
-		log.Println(err)
+		panic(err)
+	}
+
+	err = c.Save(ctx,
+		[]Rec{
+			{ID: shortuuid.New()},
+			{ID: shortuuid.New()},
+		},
+	)
+	if err != nil {
+		panic(err)
 	}
 
 	var record Rec

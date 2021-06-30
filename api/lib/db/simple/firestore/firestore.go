@@ -110,11 +110,17 @@ func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, in 
 
 	var records []i.Record
 
-	switch r := in.(type) {
-	case i.Record:
-		records = []i.Record{r}
-	case []i.Record:
-		records = r
+	v := reflect.ValueOf(in)
+	switch v.Kind() {
+	case reflect.Struct:
+		records = append(records, v.Interface().(i.Record))
+	case reflect.Slice:
+		for _, inn := range in.([]i.Record) {
+			records = append(records, inn)
+
+		}
+	//case i.Record:
+	//	records = append(records, v)
 	default:
 		return fmt.Errorf("SaveInTx: must be []interfaces.Record or interfaces.Record")
 	}
@@ -124,6 +130,7 @@ func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, in 
 	}
 
 	if len(records) == 1 {
+		log.Println("bam1")
 		rec := records[0]
 
 		id := rec.GetID()
@@ -165,6 +172,7 @@ func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, in 
 			batch.Set(ref, rec.GetData())
 		}
 
+		log.Println("bam2")
 		_, err := batch.Commit(ctx)
 		if err != nil {
 			return err
