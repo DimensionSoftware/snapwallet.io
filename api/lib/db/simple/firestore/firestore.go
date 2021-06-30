@@ -84,19 +84,20 @@ func (c collection) Scan(ctx context.Context, out interface{}) error {
 
 	log.Printf("docs: %#v\n", docs)
 	t := reflect.TypeOf(out).Elem()
-	records := reflect.Zero(t)
+	records := reflect.Zero(reflect.SliceOf(t))
 
 	for _, doc := range docs {
-		rec := reflect.Zero(t.Elem())
+		rec := reflect.Zero(t)
 		err := doc.DataTo(&rec)
 		if err != nil {
 			return err
 		}
+		log.Println("foo")
 		records = reflect.Append(records, rec)
 	}
 	log.Printf("recordss: %#v\n", records)
 
-	out = &records
+	reflect.ValueOf(out).Elem().Set(records)
 
 	return nil
 }
