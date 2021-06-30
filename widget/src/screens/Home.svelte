@@ -325,7 +325,7 @@
                   ? sourceAmount
                   : $configStore.sourceAmount}
                 required
-                type="number"
+                type="text"
                 inputmode="number"
                 placeholder="0"
                 isTranslucent
