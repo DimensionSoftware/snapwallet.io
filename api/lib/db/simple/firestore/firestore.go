@@ -29,7 +29,7 @@ func (c collection) Fetch(ctx context.Context, id string, out *i.Record) error {
 	return c.FetchInTx(ctx, nil, id, out)
 }
 
-func (c collection) FetchInTx(ctx context.Context, tx *firestore.Transaction, id string, out *i.Record) error {
+func (c collection) FetchInTx(ctx context.Context, tx *firestore.Transaction, id string, out interface{}) error {
 	if id == "" {
 		return fmt.Errorf("Fetch: id was blank")
 	}
@@ -72,7 +72,7 @@ func fetchRef(ctx context.Context, ref *firestore.DocumentRef, tx *firestore.Tra
 	return snap, nil
 }
 
-func (c collection) Scan(ctx context.Context, out []i.Record) error {
+func (c collection) Scan(ctx context.Context, out interface{}) error {
 	ref := c.firestore.Collection(strings.Join(c.path, "/"))
 
 	docs, err := ref.Documents(ctx).GetAll()
@@ -80,7 +80,7 @@ func (c collection) Scan(ctx context.Context, out []i.Record) error {
 		return err
 	}
 
-	var records []i.Record
+	var records []interface{}
 	for _, doc := range docs {
 		var rec i.Record
 		err := doc.DataTo(&rec)
@@ -90,7 +90,7 @@ func (c collection) Scan(ctx context.Context, out []i.Record) error {
 		records = append(records, rec)
 	}
 
-	out = records
+	*out.(*interface{}) = records
 
 	return nil
 }

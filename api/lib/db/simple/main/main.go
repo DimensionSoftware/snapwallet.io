@@ -6,6 +6,7 @@ import (
 
 	"cloud.google.com/go/firestore"
 	f "github.com/khoerling/flux/api/lib/db/simple/firestore"
+	"github.com/khoerling/flux/api/lib/db/simple/interfaces"
 )
 
 type Rec struct {
@@ -27,17 +28,19 @@ func main() {
 		"pancakes",
 	})
 
-	var record Rec
+	var record interfaces.Record
 	err = c.Fetch(ctx, "foobar", &record)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
-	var records []Rec
+	log.Printf("record: %#v\n", record)
+
+	var records []interfaces.Record
 	err = c.Scan(ctx, &records)
 	if err != nil {
-		panic(err)
+		log.Println(err)
 	}
 
-	log.Printf("%#v\n", record)
+	log.Printf("records: %#v\n", records)
 }
