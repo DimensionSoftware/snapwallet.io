@@ -76,10 +76,10 @@ func (c collection) Scan(context.Context, []i.Record) error {
 	return nil
 }
 func (c collection) Save(ctx context.Context, records []i.Record) error {
-	return c.SaveWithTx(ctx, nil, records)
+	return c.SaveInTx(ctx, nil, records)
 }
 
-func (c collection) SaveWithTx(ctx context.Context, tx *firestore.Transaction, records []i.Record) error {
+func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, records []i.Record) error {
 
 	if len(records) == 0 {
 		return nil
