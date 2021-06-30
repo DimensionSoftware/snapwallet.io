@@ -31,7 +31,7 @@
       bottom: 0;
       left: 0;
       right: 0;
-      opacity: 0.15;
+      opacity: 0.1;
     }
     &.success {
       color: var(--theme-success-color);

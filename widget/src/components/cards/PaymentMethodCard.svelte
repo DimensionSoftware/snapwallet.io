@@ -54,11 +54,11 @@
     &:after {
       content: '';
       position: absolute;
-      left: 15%;
-      right: 15%;
+      left: 30%;
+      right: 30%;
       bottom: -3px;
       background-color: var(--theme-text-color);
-      opacity: 0.3;
+      opacity: 0.2;
       height: 1px;
     }
     &:before {
