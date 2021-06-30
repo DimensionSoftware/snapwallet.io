@@ -81,6 +81,7 @@ func (c collection) Scan(ctx context.Context, out interface{}) error {
 	if err != nil {
 		return err
 	}
+	log.Printf("inner docs: %#v", docs)
 
 	outType := reflect.TypeOf(out)
 	sliceType := outType.Elem()
