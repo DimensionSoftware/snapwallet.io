@@ -25,11 +25,11 @@ type collection struct {
 	firestore *firestore.Client
 }
 
-func (c collection) Fetch(ctx context.Context, id string, out i.Record) error {
+func (c collection) Fetch(ctx context.Context, id string, out *i.Record) error {
 	return c.FetchInTx(ctx, nil, id, out)
 }
 
-func (c collection) FetchInTx(ctx context.Context, tx *firestore.Transaction, id string, out i.Record) error {
+func (c collection) FetchInTx(ctx context.Context, tx *firestore.Transaction, id string, out *i.Record) error {
 	if id == "" {
 		return fmt.Errorf("Fetch: id was blank")
 	}
@@ -72,9 +72,29 @@ func fetchRef(ctx context.Context, ref *firestore.DocumentRef, tx *firestore.Tra
 	return snap, nil
 }
 
-func (c collection) Scan(context.Context, []i.Record) error {
+func (c collection) Scan(ctx context.Context, out []i.Record) error {
+	ref := c.firestore.Collection(strings.Join(c.path, "/"))
+
+	docs, err := ref.Documents(ctx).GetAll()
+	if err != nil {
+		return err
+	}
+
+	var records []i.Record
+	for _, doc := range docs {
+		var rec i.Record
+		err := doc.DataTo(&rec)
+		if err != nil {
+			return err
+		}
+		records = append(records, rec)
+	}
+
+	out = records
+
 	return nil
 }
+
 func (c collection) Save(ctx context.Context, records []i.Record) error {
 	return c.SaveInTx(ctx, nil, records)
 }

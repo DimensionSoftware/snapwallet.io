@@ -11,7 +11,7 @@ import (
 type Rec struct {
 }
 
-func (Rec) ID() string {
+func (*Rec) ID() string {
 	return "foo"
 }
 
@@ -29,6 +29,12 @@ func main() {
 
 	var record Rec
 	err = c.Fetch(ctx, "foobar", &record)
+	if err != nil {
+		panic(err)
+	}
+
+	var records []Rec
+	err = c.Scan(ctx, &records)
 	if err != nil {
 		panic(err)
 	}
