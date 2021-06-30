@@ -81,26 +81,29 @@ func (c collection) Scan(ctx context.Context, out interface{}) error {
 	if err != nil {
 		return err
 	}
-	log.Printf("inner docs: %#v", docs)
+	log.Printf("inner docs: %#v\n", docs)
 
 	outType := reflect.TypeOf(out)
 	sliceType := outType.Elem()
-	records := reflect.Zero(sliceType)
+	records := reflect.New(sliceType)
 
 	for _, doc := range docs {
-		rec := reflect.Zero(sliceType.Elem())
-		err := doc.DataTo(&rec)
+		rec := reflect.New(reflect.PtrTo(sliceType.Elem()))
+		log.Printf("rec type: %s", rec.Kind())
+		log.Printf("inner doc: %#v\n", doc.Data())
+		err := doc.DataTo(rec)
 		if err != nil {
 			return err
 		}
-		records = reflect.Append(records, rec)
+		records = reflect.Append(records, reflect.Indirect(rec))
 	}
 
+	log.Println("made it this far")
 	//out_ := reflect.NewAt(reflect.TypeOf(out))
 	//out_ := reflect.PtrTo(outType)
 	reflect.Indirect(reflect.ValueOf(out)).Set(records)
 
-	log.Printf("inner records: %#v", records)
+	log.Printf("inner records: %#v\n", records)
 	return nil
 }
 
