@@ -18,6 +18,8 @@
     onEnterPressed,
     focus,
     resizeWidget,
+    onKeysPressed,
+    closestNumber,
   } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
@@ -288,6 +290,21 @@
     if ($configStore.defaultDestinationAsset) height -= 110
     return height
   }
+
+  function handleKeyDown(e) {
+    const val = Number(e.target.value)
+    if (onKeysPressed(e, ['ArrowUp'])) {
+      if (val < 0) return // guard
+      transactionStore.setSourceAmount(
+        closestNumber(val + 5, 5),
+        selectedDestinationPrice,
+      )
+    }
+    if (onKeysPressed(e, ['ArrowDown'])) {
+      if (Math.round(val) <= 0) return // guard
+      transactionStore.setSourceAmount(val - 1, selectedDestinationPrice)
+    }
+  }
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -314,6 +331,7 @@
               <Input
                 id="amount"
                 pattern={`[\\d,\\.]+`}
+                on:keydown={handleKeyDown}
                 on:change={e => {
                   const val = Number(e.detail)
                   transactionStore.setSourceAmount(

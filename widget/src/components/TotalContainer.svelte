@@ -15,8 +15,10 @@
   {:else}
     You Get ≈
   {/if}
-  {dropEndingZeros(destinationAmount.toFixed(precision))}
-  {destinationCurrency.ticker}
+  <strong>
+    {dropEndingZeros(destinationAmount.toFixed(precision))}
+    {destinationCurrency.ticker}
+  </strong>
 </div>
 
 <style lang="scss">
