@@ -3,6 +3,8 @@ package firestore
 import (
 	"context"
 	"fmt"
+	"log"
+	"reflect"
 	"strings"
 
 	"cloud.google.com/go/firestore"
@@ -25,7 +27,7 @@ type collection struct {
 	firestore *firestore.Client
 }
 
-func (c collection) Fetch(ctx context.Context, id string, out *i.Record) error {
+func (c collection) Fetch(ctx context.Context, id string, out interface{}) error {
 	return c.FetchInTx(ctx, nil, id, out)
 }
 
@@ -80,26 +82,41 @@ func (c collection) Scan(ctx context.Context, out interface{}) error {
 		return err
 	}
 
-	var records []interface{}
+	log.Printf("docs: %#v\n", docs)
+	t := reflect.TypeOf(out).Elem()
+	records := reflect.Zero(t)
+
 	for _, doc := range docs {
-		var rec i.Record
+		rec := reflect.Zero(t.Elem())
 		err := doc.DataTo(&rec)
 		if err != nil {
 			return err
 		}
-		records = append(records, rec)
+		records = reflect.Append(records, rec)
 	}
+	log.Printf("recordss: %#v\n", records)
 
-	*out.(*interface{}) = records
+	out = &records
 
 	return nil
 }
 
-func (c collection) Save(ctx context.Context, records []i.Record) error {
-	return c.SaveInTx(ctx, nil, records)
+func (c collection) Save(ctx context.Context, in interface{}) error {
+	return c.SaveInTx(ctx, nil, in)
 }
 
-func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, records []i.Record) error {
+func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, in interface{}) error {
+
+	var records []i.Record
+
+	switch r := in.(type) {
+	case i.Record:
+		records = []i.Record{r}
+	case []i.Record:
+		records = r
+	default:
+		return fmt.Errorf("SaveInTx: must be []interfaces.Record or interfaces.Record")
+	}
 
 	if len(records) == 0 {
 		return nil
@@ -107,20 +124,28 @@ func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, rec
 
 	if len(records) == 1 {
 		rec := records[0]
-		fullpath := append(c.path, rec.ID())
+
+		id := rec.GetID()
+		if id == "" {
+			return fmt.Errorf("SaveInTx: id was blank")
+		}
+
+		fullpath := append(c.path, id)
 		ref := c.firestore.Doc(strings.Join(fullpath, "/"))
 
 		var (
 			err error
 		)
 		if tx == nil {
-			_, err = ref.Set(ctx, &rec)
+			_, err = ref.Set(ctx, rec.GetData())
 		} else {
-			err = tx.Set(ref, &rec)
+			err = tx.Set(ref, rec.GetData())
 		}
 		if err != nil {
 			return err
 		}
+
+		return nil
 	}
 
 	// > 1
@@ -128,10 +153,15 @@ func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, rec
 		batch := c.firestore.Batch()
 
 		for _, rec := range records {
-			fullpath := append(c.path, rec.ID())
+			id := rec.GetID()
+			if id == "" {
+				return fmt.Errorf("SaveInTx: id was blank")
+			}
+
+			fullpath := append(c.path, id)
 			ref := c.firestore.Doc(strings.Join(fullpath, "/"))
 
-			batch.Set(ref, &rec)
+			batch.Set(ref, rec.GetData())
 		}
 
 		_, err := batch.Commit(ctx)
@@ -140,10 +170,15 @@ func (c collection) SaveInTx(ctx context.Context, tx *firestore.Transaction, rec
 		}
 	} else {
 		for _, rec := range records {
-			fullpath := append(c.path, rec.ID())
+			id := rec.GetID()
+			if id == "" {
+				return fmt.Errorf("SaveInTx: id was blank")
+			}
+
+			fullpath := append(c.path, id)
 			ref := c.firestore.Doc(strings.Join(fullpath, "/"))
 
-			err := tx.Set(ref, &rec)
+			err := tx.Set(ref, rec.GetData())
 			if err != nil {
 				return err
 			}

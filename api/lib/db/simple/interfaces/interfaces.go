@@ -13,7 +13,8 @@ type Collection interface {
 
 // Record is a record in the database
 type Record interface {
-	ID() string
+	GetID() string
+	GetData() map[string]interface{}
 }
 
 type Tx interface {

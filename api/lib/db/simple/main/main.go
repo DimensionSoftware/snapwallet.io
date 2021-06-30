@@ -3,17 +3,25 @@ package main
 import (
 	"context"
 	"log"
+	"time"
 
 	"cloud.google.com/go/firestore"
 	f "github.com/khoerling/flux/api/lib/db/simple/firestore"
-	"github.com/khoerling/flux/api/lib/db/simple/interfaces"
 )
 
 type Rec struct {
+	ID string `firestore:"id"`
 }
 
-func (*Rec) ID() string {
-	return "foo"
+func (r Rec) GetID() string {
+	return r.ID
+}
+
+func (r Rec) GetData() map[string]interface{} {
+	return map[string]interface{}{
+		"id":        r.ID,
+		"createdAt": time.Now(),
+	}
 }
 
 func main() {
@@ -28,7 +36,12 @@ func main() {
 		"pancakes",
 	})
 
-	var record interfaces.Record
+	err = c.Save(ctx, Rec{ID: "foobar"})
+	if err != nil {
+		log.Println(err)
+	}
+
+	var record Rec
 	err = c.Fetch(ctx, "foobar", &record)
 	if err != nil {
 		log.Println(err)
@@ -36,7 +49,7 @@ func main() {
 
 	log.Printf("record: %#v\n", record)
 
-	var records []interfaces.Record
+	var records []Rec
 	err = c.Scan(ctx, &records)
 	if err != nil {
 		log.Println(err)
