@@ -3,6 +3,7 @@ package firestore
 import (
 	"context"
 	"fmt"
+	"log"
 	"reflect"
 	"strings"
 
@@ -81,7 +82,8 @@ func (c collection) Scan(ctx context.Context, out interface{}) error {
 		return err
 	}
 
-	sliceType := reflect.TypeOf(out).Elem()
+	outType := reflect.TypeOf(out)
+	sliceType := outType.Elem()
 	records := reflect.Zero(sliceType)
 
 	for _, doc := range docs {
@@ -93,8 +95,11 @@ func (c collection) Scan(ctx context.Context, out interface{}) error {
 		records = reflect.Append(records, rec)
 	}
 
+	//out_ := reflect.NewAt(reflect.TypeOf(out))
+	//out_ := reflect.PtrTo(outType)
 	reflect.Indirect(reflect.ValueOf(out)).Set(records)
 
+	log.Printf("inner records: %#v", records)
 	return nil
 }
 
