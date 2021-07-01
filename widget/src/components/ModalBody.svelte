@@ -13,7 +13,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    padding: 1rem 3rem 0 3rem;
+    padding: 1rem 2.5rem 0 2.5rem;
     &.padded {
       padding: 1rem 3rem 0 3rem;
     }
