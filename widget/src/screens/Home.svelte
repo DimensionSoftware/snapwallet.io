@@ -295,14 +295,28 @@
     const val = Number(e.target.value)
     if (onKeysPressed(e, ['ArrowUp'])) {
       if (val < 0) return // guard
+      // set to closest number + 5, as a multiple of 5
       transactionStore.setSourceAmount(
         closestNumber(val + 5, 5),
         selectedDestinationPrice,
       )
     }
     if (onKeysPressed(e, ['ArrowDown'])) {
+      // preserve decimal place and dec 1
       if (Math.round(val) <= 0) return // guard
       transactionStore.setSourceAmount(val - 1, selectedDestinationPrice)
+    }
+    // whitelist these chars
+    if (!e.key.match(/[\d\.,]+/)) {
+      if (
+        ['Backspace', 'Meta', 'ArrowRight', 'ArrowLeft', 'Shift'].includes(
+          e.key,
+        )
+      )
+        return true
+      // ...otherwise, block keystroke
+      e.preventDefault()
+      return false
     }
   }
 </script>
