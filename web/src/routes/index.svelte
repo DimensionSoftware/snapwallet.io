@@ -124,7 +124,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
       {/if}
     </h2>
     <article class="blur">
-      The fastest wallet connecting crypto currency to everything— in a snap!
+      Snap Wallet is the best crypto wallet that you don't need to download.
+      It's a secure, easy-to-use, zero-dependency, and an embedable wallet that
+      connects crypto currency to everything in a snap!
     </article>
   </div>
   <div class="col wallet" style="margin: 0 auto;">
