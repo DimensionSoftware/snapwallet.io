@@ -282,8 +282,17 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
   .code {
-    :global(.input-container) {
-      margin-right: 1px;
+    :global(.input-container:after) {
+      content: '';
+      position: absolute;
+      right: -0.05rem;
+      top: 45%;
+      bottom: 20px;
+      z-index: 10;
+      width: 1px;
+      height: 20px;
+      opacity: 0.25;
+      background: var(--theme-text-color-3);
     }
     :global(label) {
       display: flex;
