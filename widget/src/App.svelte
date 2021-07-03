@@ -469,6 +469,7 @@
     bottom: 0;
     width: 100%;
     height: 100%;
+    background: var(--theme-modal-background);
     overflow: hidden !important;
     opacity: 1;
     display: flex;
