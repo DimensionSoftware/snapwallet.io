@@ -36,12 +36,31 @@
         {/if}
       </Visibility>
     {/if}
-    <h2 class:right class:blur={hasImage}>
-      {title}
-    </h2>
-    {#if description}
-      <h3 class:blur={hasImage}>{description}</h3>
-    {/if}
+    <Visibility steps={100} let:percent>
+      {#if percent > 80}
+        <h2
+          in:fly={{ opacity: 0.5, y: 50, easing: expoOut, duration: 500 }}
+          out:fly={{ opacity: 0, easing: expoOut, duration: 350, y: -25 }}
+          class:right
+          class:blur={hasImage}
+        >
+          {title}
+        </h2>
+      {/if}
+    </Visibility>
+    <Visibility steps={100} let:percent>
+      {#if percent > 80}
+        {#if description}
+          <h3
+            in:fly={{ opacity: 0.5, y: 75, easing: expoOut, duration: 750 }}
+            out:fly={{ opacity: 0, easing: expoOut, duration: 450, y: -15 }}
+            class:blur={hasImage}
+          >
+            {description}
+          </h3>
+        {/if}
+      {/if}
+    </Visibility>
     <div class="flex">
       <slot name="left" />
       <div class="relative">

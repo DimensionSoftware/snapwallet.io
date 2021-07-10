@@ -78,6 +78,20 @@
         out:fly={{ easing: expoOut, duration: 500, y: 0 }}
       >
         <li><h2>Snap Wallet</h2></li>
+        <div class="flex">
+          <a
+            target="_blank"
+            href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
+          >
+            <img src="/appstore.svg" />
+          </a>
+          <a
+            target="_blank"
+            href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
+          >
+            <img src="/playstore.svg" />
+          </a>
+        </div>
         <li>
           <h4>
             <a
@@ -164,12 +178,17 @@
       }
     }
   }
+  .flex {
+    margin: 1rem 0 1.25rem;
+  }
   hr {
     height: 5rem;
     background: #fff;
     margin: 0;
     border: none;
-    box-shadow: 0 50px 30px 0 rgba(0, 0, 0, 0.5);
+    border-bottom: 1px solid red;
+    box-shadow: 0 0 60px 0 rgba(0, 0, 0, 1);
+    position: relative;
   }
   :global(.started article) {
     position: relative;
@@ -190,12 +209,11 @@
       rgb(241, 7, 28) 75%
     ) !important;
     border-color: rgb(222, 49, 45) !important;
-    top: 3.25rem;
     position: absolute;
     z-index: 4;
     padding: 1rem 4rem;
     left: auto;
-    top: -3rem;
+    top: -3.25rem;
     right: auto;
     margin: 0 auto;
     text-align: center;
@@ -207,9 +225,10 @@
     box-shadow: 0 0 0 3px #fffc00 !important;
   }
   footer {
-    margin-top: 0.05rem;
+    margin-top: 0;
     padding: 1.5rem 0 1rem;
     background: #000;
+    background: #141233;
     border-bottom: 1px solid rgba(#fffc00, 0.25);
     color: rgba(255, 255, 255, 0.8);
     ol {
