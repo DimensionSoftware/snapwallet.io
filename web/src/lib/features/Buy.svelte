@@ -100,7 +100,7 @@
             target="_blank">Crypto Onramp</a
           >
         </li>
-        <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
+        <!-- <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
           <span>Crypto</span> › &nbsp;
 
           <a
@@ -112,7 +112,7 @@
         <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
           <span>Crypto</span> › &nbsp; Crypto
           <span class="tag">SOON</span>
-        </li>
+        </li> -->
       </ul>
       <br />
       <h3>Snap Wallet is</h3>
@@ -179,7 +179,7 @@
       margin: 0.5rem 0 0.25rem 0;
       span {
         display: inline-block;
-        width: 57px;
+        width: 37px;
       }
     }
   }

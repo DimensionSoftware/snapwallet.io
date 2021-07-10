@@ -95,8 +95,8 @@
       content: '';
       border-radius: 100%;
       position: absolute;
-      height: 4px;
-      width: 4px;
+      height: 3px;
+      width: 3px;
       left: 2px;
       right: 0;
       bottom: 0;

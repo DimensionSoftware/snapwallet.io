@@ -170,8 +170,8 @@
               </div>
             </div>
             <div style="margin-top: .2rem;">
-              <img height="16" src="/widget/card_visa.png" />
               <img height="14" src="/widget/card_mastercard.png" />
+              <img height="16" src="/widget/card_visa.png" />
               <img height="16" src="/widget/card_discover.png" />
             </div>
           </div>

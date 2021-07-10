@@ -90,7 +90,7 @@
       border-top: 1px solid var(--theme-color-lightened);
       border-bottom: 1px solid var(--theme-color-lightened);
       transition: none;
-      transform: scale(1.02);
+      transform: scale(1.01);
       &:before {
         transform: scale(1);
         transition: none;

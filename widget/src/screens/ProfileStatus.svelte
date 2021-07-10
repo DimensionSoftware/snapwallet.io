@@ -211,7 +211,7 @@
   .description {
     min-height: 2.5rem;
     margin-left: 1rem;
-    opacity: 0.85;
+    opacity: 0.65;
   }
   :global(span.info) {
     &:before {
