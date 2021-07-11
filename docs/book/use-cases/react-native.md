@@ -2,6 +2,8 @@
 
 Below is a minimal React Native example demonstrating how to simply launch Snap Wallet within your own app! Swap our bare config out for your custom settings. Both Apple iOS and Google Android platforms share exactly the same API.
 
+Would you like to see Swift or Kotlin? [Let us know!](mailto:support@snapwallet.io)
+
 ```tsx
 import React, { useState } from 'react'
 import { Button, SafeAreaView, StatusBar, StyleSheet, View } from 'react-native'

@@ -486,9 +486,9 @@
       <div style="display:flex;justify-content:center;align-items:center;">
         <span style="margin-right:0.75rem;">
           {isCreatingTxnPreview
-            ? 'Reviewing'
+            ? 'Previewing'
             : isLoggedIn
-            ? 'Review'
+            ? 'Preview'
             : 'Continue'}
         </span>
       </div>

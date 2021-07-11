@@ -459,6 +459,9 @@
     background: var(--theme-modal-container-background-color);
     animation: backgroundFadeIn 1s ease-out forwards;
   }
+  :global(#plaid-link-iframe-1) {
+    background: var(--theme-modal-background);
+  }
   #modal,
   :global(#plaid-link-iframe-1) {
     position: absolute;

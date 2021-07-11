@@ -87,32 +87,12 @@
     <div on:mousedown={snap.openWeb}>
       <br />
       <h3>Buy & Sell Crypto</h3>
-      <div style="margin-top: .5rem;">
-        <img height="14" src="/images/card_mastercard.png" />
-        <img height="16" src="/images/card_visa.png" />
-        <img height="16" src="/images/card_discover.png" />
-      </div>
       <ul>
-        <li>
-          <span>Fiat</span> › &nbsp;
-          <a
-            href="https://snapwallet.io/docs/guide/use-cases/onramp.html"
-            target="_blank">Crypto Onramp</a
-          >
-        </li>
-        <!-- <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
-          <span>Crypto</span> › &nbsp;
-
-          <a
-            href="https://snapwallet.io/docs/guide/use-cases/offramp.html"
-            target="_blank">Fiat Offramp</a
-          >
-          <span class="tag">SOON</span>
-        </li>
-        <li class="muted" title="Crypto to Fiat Offramp Coming Soon!">
-          <span>Crypto</span> › &nbsp; Crypto
-          <span class="tag">SOON</span>
-        </li> -->
+        <div style="margin-top: .5rem;">
+          <img height="14" src="/images/card_mastercard.png" />
+          <img height="16" src="/images/card_visa.png" />
+          <img height="16" src="/images/card_discover.png" />
+        </div>
       </ul>
       <br />
       <h3>Snap Wallet is</h3>
@@ -122,6 +102,8 @@
         <li>Dependency-free & Embeddable!</li>
       </ul>
     </div>
+    <br />
+    <h3>Building Your Own App?</h3>
     <div class="flex">
       <a
         target="_blank"
@@ -153,7 +135,7 @@
   }
   .flex {
     display: flex;
-    margin-top: 2rem;
+    margin-top: 0.5rem;
     justify-content: space-between;
   }
   :global(.fiat article) {
@@ -166,6 +148,7 @@
     margin-top: -4rem;
   }
   :global(.fiat h3) {
+    white-space: nowrap;
     margin-top: -4rem;
     font-size: 1.5rem;
   }
@@ -187,7 +170,7 @@
     margin: 1rem auto 0;
   }
   h3 {
-    margin: 0.5rem 0 1rem 0;
+    margin: 0.5rem 0 0 0;
   }
   small {
     margin: 0 0 0 0.1rem;

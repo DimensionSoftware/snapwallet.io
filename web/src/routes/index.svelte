@@ -125,7 +125,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
     </h2>
     <article class="blur">
       Snap Wallet is the best crypto wallet that you don't need to download.
-      It's a secure, easy-to-use, zero-dependency, and an embedable wallet that
+      It's a secure, easy-to-use, zero-dependency, embedable wallet that
       connects crypto currency to everything in a snap!
     </article>
   </div>

@@ -1,6 +1,6 @@
-# Snap Wallet Documentation
+# Snap Wallet API Documentation
 
-## Crypto Currency Made Simple
+### Crypto Currency Made Simple
 
 Snap Wallet may be emdedded inline, directly within your website or app, as a modal overlay, as a link and even a QRCode.
 
@@ -12,4 +12,5 @@ Snap Wallet may be emdedded inline, directly within your website or app, as a mo
 - [Donations and Tips](use-cases/donations.md)
 - [React Native](use-cases/react-native.md)
 
-[Get help with a specific example or customizing Snap Wallet for your own app!](mailto:support@snapwallet.io)
+[Get help](mailto:support@snapwallet.io) with a specific example or customizing Snap Wallet for your own app.
+Would you like to see a different integration or example? [Let us know!](mailto:support@snapwallet.io)
