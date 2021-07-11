@@ -102,9 +102,6 @@
     {/if}
   </ModalHeader>
   <ModalBody>
-    {#if configStore.environment === 'sandbox'}
-      <small title="Testing in Sandbox Mode">Test Mode</small>
-    {/if}
     {#if !phoneVerificationOnly && (!$userStore.flags?.hasEmail || !isUsingPhoneNumber)}
       <div class="email" in:fade={{ duration: 300 }}>
         <Label label="Your Email">
@@ -132,6 +129,13 @@
             >
           </div>
         {/if}
+        <h3 class="test">
+          {#if $configStore.environment === 'sandbox'}
+            This widget is in Test Mode.
+            <br />
+            Transactions are fake.
+          {/if}
+        </h3>
       </div>
     {:else}
       <div class="phone" in:fade={{ duration: 300 }}>
@@ -224,5 +228,10 @@
     font-weight: 400;
     margin: 0 0 1rem 0;
     text-align: center;
+    &.test {
+      color: var(--theme-color);
+      font-weight: bold;
+      opacity: 1;
+    }
   }
 </style>
