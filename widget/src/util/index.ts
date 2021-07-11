@@ -2,6 +2,7 @@ import { getContext } from 'svelte'
 import nodeDebug from 'debug'
 import * as Icons from './icons'
 import { ParentMessages, CACHED_PRIMARY_PAYMENT_METHOD_KEY } from '../constants'
+import { isValidMaskInput } from '../masks'
 
 export const CryptoIcons = Icons
 
@@ -42,6 +43,23 @@ export function onKeysPressed(e: Event, keys: Array<string>) {
 
 export const isValidNumber = (num: any) => {
   return isFinite(num) && !isNaN(num) && Number(num)
+}
+
+export const isValidKeyForMask = (e, mask, defaultValue) => {
+  const newVal = defaultValue + String.fromCharCode(e.keyCode)
+  const isValLongerThanMask = newVal.length > mask.length
+  // Uses codes from the following table https://keycode.info/
+  const isAltering =
+    [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(e.keyCode) ||
+    e.metaKey ||
+    ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)
+
+  const isInputValid = isValidMaskInput(newVal, mask) && !isValLongerThanMask
+
+  if (!isInputValid && !isAltering) {
+    e.preventDefault()
+    return false
+  }
 }
 
 // closest to n and divisible by m

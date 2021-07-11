@@ -2,7 +2,7 @@
   import { onMount, createEventDispatcher } from 'svelte'
   import type { Masks } from '../../types'
   import { withMaskOnInput, isValidMaskInput } from '../../masks'
-  import { focus } from '../../util'
+  import { focus, isValidKeyForMask } from '../../util'
   import FaIcon from 'svelte-awesome'
   import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
   import { userStore } from '../../stores/UserStore'
@@ -52,22 +52,7 @@
     {pattern}
     {required}
     on:keydown={e => {
-      if (mask) {
-        const newVal = defaultValue + String.fromCharCode(e.keyCode)
-        const isValLongerThanMask = newVal.length > mask.length
-        // Uses codes from the following table https://keycode.info/
-        const isAltering =
-          [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(e.keyCode) ||
-          e.metaKey
-
-        const isInputValid =
-          isValidMaskInput(newVal, mask) && !isValLongerThanMask
-
-        if (!isInputValid && !isAltering) {
-          e.preventDefault()
-          return false
-        }
-      }
+      if (mask) return isValidKeyForMask(e, mask, defaultValue)
     }}
     on:input={e => {
       isActive = Boolean(e.currentTarget?.value)

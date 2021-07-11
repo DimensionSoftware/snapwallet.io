@@ -2,7 +2,7 @@
   import { onMount, createEventDispatcher } from 'svelte'
   import type { Masks } from '../../types'
   import { withMaskOnInput, isValidMaskInput } from '../../masks'
-  import { focus, onFocusSelect } from '../../util'
+  import { focus, isValidKeyForMask, onFocusSelect } from '../../util'
 
   const dispatch = createEventDispatcher()
   export let type: string = 'text'
@@ -43,23 +43,7 @@
     {required}
     use:selectOnFocus
     on:keydown={e => {
-      if (mask) {
-        const newVal = defaultValue + String.fromCharCode(e.keyCode)
-        const isValLongerThanMask = newVal.length > mask.length
-        // Uses codes from the following table https://keycode.info/
-        const isAltering =
-          [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(e.keyCode) ||
-          e.metaKey ||
-          ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)
-
-        const isInputValid =
-          isValidMaskInput(newVal, mask) && !isValLongerThanMask
-
-        if (!isInputValid && !isAltering) {
-          e.preventDefault()
-          return false
-        }
-      }
+      if (mask) return isValidKeyForMask(e, mask, defaultValue)
     }}
     on:keydown
     on:click
