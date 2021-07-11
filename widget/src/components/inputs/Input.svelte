@@ -49,7 +49,8 @@
         // Uses codes from the following table https://keycode.info/
         const isAltering =
           [8, 9, 12, 13, 16, 17, 18, 20, 41, 46].includes(e.keyCode) ||
-          e.metaKey
+          e.metaKey ||
+          ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)
 
         const isInputValid =
           isValidMaskInput(newVal, mask) && !isValLongerThanMask
