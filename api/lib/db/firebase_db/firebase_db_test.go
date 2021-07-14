@@ -130,7 +130,7 @@ var _ = Describe("FirebaseDb", func() {
 			})
 
 			It("should have a created_at timestamp which is recent", func() {
-				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), time.Second))
+				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), 5*time.Second))
 			})
 		})
 		Context("with phone", func() {
@@ -150,7 +150,7 @@ var _ = Describe("FirebaseDb", func() {
 			})
 
 			It("should have a created_at timestamp which is recent", func() {
-				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), time.Second))
+				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), 5*time.Second))
 			})
 		})
 
@@ -173,7 +173,7 @@ var _ = Describe("FirebaseDb", func() {
 			})
 
 			It("should have a created_at timestamp which is recent", func() {
-				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), time.Second))
+				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), 5*time.Second))
 			})
 		})
 		Context("with phone", func() {
@@ -193,7 +193,7 @@ var _ = Describe("FirebaseDb", func() {
 			})
 
 			It("should have a created_at timestamp which is recent", func() {
-				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), time.Second))
+				Expect(otp.CreatedAt).Should(BeTemporally("~", time.Now(), 5*time.Second))
 			})
 		})
 
