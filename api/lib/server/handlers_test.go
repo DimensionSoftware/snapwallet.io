@@ -20,11 +20,12 @@ var _ = Describe("Handlers", func() {
 	})
 
 	Context("WyreCreateTransfer", func() {
-		req := &protocol.WyreCreateTransferRequest{}
-
-		resp, err := s.WyreCreateTransfer(ctx, req)
-		Expect(err).ShouldNot(HaveOccurred())
-		Expect(resp).To(Equal(&protocol.WyreTransferDetail{}))
+		It("happy path", func() {
+			req := &protocol.WyreCreateTransferRequest{}
+			resp, err := s.WyreCreateTransfer(ctx, req)
+			Expect(err).ShouldNot(HaveOccurred())
+			Expect(resp).To(Equal(&protocol.WyreTransferDetail{}))
+		})
 
 	})
 })
