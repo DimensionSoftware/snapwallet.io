@@ -1,4 +1,4 @@
 #!/bin/bash -xeu
 
-bin/test --nodes=2 -cover -coverprofile coverage.txt $@
+bin/test --compilers=1 --nodes=1 --race -cover -coverprofile coverage.txt $@
 #go tool cover -html coverage.txt -o coverage.html
