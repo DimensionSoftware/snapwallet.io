@@ -2,9 +2,6 @@ name: API Build & Deploy
 
 on:
   push:
-    branches:
-      - master
-      - dev
     paths:
       - '.github/workflows/api.yml'
       - 'api/**'
@@ -32,6 +29,7 @@ jobs:
     name: "Build/Push Docker Image"
     needs: test
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
     steps:
       - uses: actions/checkout@v2
       - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
