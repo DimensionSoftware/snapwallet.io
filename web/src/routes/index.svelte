@@ -16,6 +16,7 @@
   let ifr: HTMLIFrameElement
   let liquidVisible = false
   let topBg
+  let dy
 
   onMount(async () => {
     await import('flux-init')
@@ -85,25 +86,32 @@
 Hey, you-- join us!  https://dimensionsoftware.com
       `)
 
-    // init parallax
-    let frame, dyLast, isRotated, lastIsRotated, dy, sy
+    // init scroll fx
+    let frame, dyLast, isRotated, lastIsRotated, isTicking
+    const nextFrame = () => (frame = requestAnimationFrame(loop)),
+      tick = () => setTimeout(nextFrame, 100)
     function loop() {
-      frame = requestAnimationFrame(loop)
-      dy = window.pageYOffset
-      if (dyLast === dy) return // guard
+      if (isTicking || dyLast === dy) return tick() // guard
+      isTicking = true
       dyLast = dy
       isRotated = dy > 900
-      if (lastIsRotated === isRotated) return // guard
+      if (lastIsRotated === isRotated) {
+        isTicking = false
+        return tick()
+      } // guard
       lastIsRotated = isRotated
-      // sy = ~~(dy * 0.3) * (isRotated ? -1 : 1)
       topBg.style = `transform: translateZ(0) rotate(${
         isRotated ? '180deg' : 0
       })`
+      isTicking = false
+      tick()
     }
-    loop() // main
+    requestAnimationFrame(loop) // main
     return () => cancelAnimationFrame(frame)
   })
 </script>
+
+<svelte:window bind:scrollY={dy} />
 
 <main>
   <div class="intro col">
