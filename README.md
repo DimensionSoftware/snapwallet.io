@@ -30,4 +30,3 @@ Cryptocurrency identity management, on-ramps, off-ramps, and more.
 cd widget && npm i && npm run dev
 ```
 
-..
