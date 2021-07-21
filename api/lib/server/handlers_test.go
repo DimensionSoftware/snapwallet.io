@@ -21,6 +21,7 @@ var _ = Describe("Handlers", func() {
 
 	Context("WyreCreateTransfer", func() {
 		It("happy path", func() {
+			Skip("WIP")
 			req := &protocol.WyreCreateTransferRequest{}
 			resp, err := s.WyreCreateTransfer(ctx, req)
 			Expect(err).ShouldNot(HaveOccurred())
