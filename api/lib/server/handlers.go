@@ -175,7 +175,7 @@ func (s *Server) OneTimePasscode(ctx context.Context, req *proto.OneTimePasscode
 		return nil, err
 	}
 
-	_, err = s.Sendgrid.Send(msg)
+	_, err = s.SendEmail.Send(msg)
 	if err != nil {
 		return nil, err
 	}
@@ -1450,7 +1450,7 @@ func (s *Server) WyreWebhook(ctx context.Context, req *proto.WyreWebhookRequest)
 			return nil, err
 		}
 
-		_, err = s.Sendgrid.Send(emailMsg)
+		_, err = s.SendEmail.Send(emailMsg)
 		if err != nil {
 			log.Printf("Error sending email")
 			return nil, err
@@ -1703,7 +1703,7 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 		return nil, err
 	}
 
-	_, err = s.Sendgrid.Send(msg)
+	_, err = s.SendEmail.Send(msg)
 	if err != nil {
 		return nil, err
 	}
@@ -2076,7 +2076,7 @@ func (s *Server) WyreSubmitDebitCardAuthorizations(ctx context.Context, req *pro
 		return nil, err
 	}
 
-	_, err = s.Sendgrid.Send(msg)
+	_, err = s.SendEmail.Send(msg)
 	if err != nil {
 		return nil, err
 	}

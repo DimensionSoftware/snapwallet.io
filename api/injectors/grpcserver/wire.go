@@ -13,7 +13,8 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/pubsub"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
-	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
+	"github.com/khoerling/flux/api/lib/integrations/sendemail"
+	"github.com/khoerling/flux/api/lib/integrations/sendemail/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
@@ -35,6 +36,7 @@ func InitializeServer() (server.Server, error) {
 		wire.Bind(new(jobmanager.IJobPublisher), new(jobpublisher.PubSubPublisher)),
 		wire.Struct(new(jobpublisher.PubSubPublisher), "*"),
 		wire.Struct(new(remedymanager.Manager), "*"),
+		wire.Bind(new(sendemail.SendEmail), new(sendgrid.Client)),
 		sendgrid.ProvideSendClientAPIKey,
 		sendgrid.ProvideSendClient,
 		twilio.ProvideTwilioConfig,
@@ -75,6 +77,7 @@ func InitializeDevServer() (server.Server, error) {
 		wire.Bind(new(jobmanager.IJobPublisher), new(jobpublisher.InProcessPublisher)),
 		wire.Struct(new(jobpublisher.InProcessPublisher), "*"),
 		wire.Struct(new(remedymanager.Manager), "*"),
+		wire.Bind(new(sendemail.SendEmail), new(sendgrid.Client)),
 		sendgrid.ProvideSendClientAPIKey,
 		sendgrid.ProvideSendClient,
 		twilio.ProvideTwilioConfig,

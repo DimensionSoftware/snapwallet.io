@@ -16,7 +16,7 @@ import (
 	"github.com/khoerling/flux/api/lib/integrations/plaid"
 	"github.com/khoerling/flux/api/lib/integrations/pubsub"
 	"github.com/khoerling/flux/api/lib/integrations/pusher"
-	"github.com/khoerling/flux/api/lib/integrations/sendgrid"
+	"github.com/khoerling/flux/api/lib/integrations/sendemail/sendgrid"
 	"github.com/khoerling/flux/api/lib/integrations/twilio"
 	"github.com/khoerling/flux/api/lib/integrations/wyre"
 	"github.com/khoerling/flux/api/lib/integrations/wyremanager"
@@ -30,6 +30,11 @@ import (
 
 // InitializeServer creates the main server container
 func InitializeServer() (server.Server, error) {
+	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
+	if err != nil {
+		return server.Server{}, err
+	}
+	client := sendgrid.ProvideSendClient(sendAPIKey)
 	privateKey, err := auth.ProvideJwtPrivateKey()
 	if err != nil {
 		return server.Server{}, err
@@ -39,7 +44,7 @@ func InitializeServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	client, err := firestore.ProvideFirestore(fireProjectID)
+	firestoreClient, err := firestore.ProvideFirestore(fireProjectID)
 	if err != nil {
 		return server.Server{}, err
 	}
@@ -52,7 +57,7 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	db := firebase_db.Db{
-		Firestore:         client,
+		Firestore:         firestoreClient,
 		EncryptionManager: manager,
 	}
 	jwtVerifier := &auth.JwtVerifier{
@@ -60,11 +65,6 @@ func InitializeServer() (server.Server, error) {
 		Db:        db,
 	}
 	grpcServer := server.ProvideGrpcServer(jwtVerifier)
-	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
-	if err != nil {
-		return server.Server{}, err
-	}
-	sendgridClient := sendgrid.ProvideSendClient(sendAPIKey)
 	twilioConfig, err := twilio.ProvideTwilioConfig()
 	if err != nil {
 		return server.Server{}, err
@@ -138,8 +138,8 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	serverServer := server.Server{
+		SendEmail:     client,
 		GrpcServer:    grpcServer,
-		Sendgrid:      sendgridClient,
 		Twilio:        gotwilioTwilio,
 		TwilioConfig:  twilioConfig,
 		FileManager:   filemanagerManager,
@@ -160,6 +160,11 @@ func InitializeServer() (server.Server, error) {
 }
 
 func InitializeDevServer() (server.Server, error) {
+	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
+	if err != nil {
+		return server.Server{}, err
+	}
+	client := sendgrid.ProvideSendClient(sendAPIKey)
 	privateKey, err := auth.ProvideJwtPrivateKey()
 	if err != nil {
 		return server.Server{}, err
@@ -169,7 +174,7 @@ func InitializeDevServer() (server.Server, error) {
 	if err != nil {
 		return server.Server{}, err
 	}
-	client, err := firestore.ProvideFirestore(fireProjectID)
+	firestoreClient, err := firestore.ProvideFirestore(fireProjectID)
 	if err != nil {
 		return server.Server{}, err
 	}
@@ -182,7 +187,7 @@ func InitializeDevServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	db := firebase_db.Db{
-		Firestore:         client,
+		Firestore:         firestoreClient,
 		EncryptionManager: manager,
 	}
 	jwtVerifier := &auth.JwtVerifier{
@@ -190,11 +195,6 @@ func InitializeDevServer() (server.Server, error) {
 		Db:        db,
 	}
 	grpcServer := server.ProvideGrpcServer(jwtVerifier)
-	sendAPIKey, err := sendgrid.ProvideSendClientAPIKey()
-	if err != nil {
-		return server.Server{}, err
-	}
-	sendgridClient := sendgrid.ProvideSendClient(sendAPIKey)
 	twilioConfig, err := twilio.ProvideTwilioConfig()
 	if err != nil {
 		return server.Server{}, err
@@ -262,8 +262,8 @@ func InitializeDevServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	serverServer := server.Server{
+		SendEmail:     client,
 		GrpcServer:    grpcServer,
-		Sendgrid:      sendgridClient,
 		Twilio:        gotwilioTwilio,
 		TwilioConfig:  twilioConfig,
 		FileManager:   filemanagerManager,
