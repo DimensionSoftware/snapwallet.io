@@ -625,7 +625,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 
 		switch kind {
 		case common.KindLegalName:
-			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+			err = s.Db.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var legalNameData *legalname.ProfileDataLegalName
 
 				if req.LegalName != "" {
@@ -655,7 +655,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				return nil
 			})
 		case common.KindDateOfBirth:
-			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+			err = s.Db.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var dobData *dateofbirth.ProfileDataDateOfBirth
 
 				if req.DateOfBirth != "" {
@@ -685,7 +685,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				return nil
 			})
 		case common.KindUSSSN:
-			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+			err = s.Db.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var ssnData *ssn.ProfileDataSSN
 
 				if req.Ssn != "" {
@@ -715,7 +715,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				return nil
 			})
 		case common.KindAddress:
-			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+			err = s.Db.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var addressData *address.ProfileDataAddress
 
 				if req.Address != nil {
@@ -756,7 +756,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				return nil
 			})
 		case common.KindProofOfAddressDoc:
-			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+			err = s.Db.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var proofOfAddressData *proofofaddress.ProfileDataProofOfAddressDoc
 
 				if req.ProofOfAddressDoc != nil {
@@ -801,7 +801,7 @@ func (s *Server) SaveProfileData(ctx context.Context, req *proto.SaveProfileData
 				return nil
 			})
 		case common.KindUSGovernmentIDDoc:
-			err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+			err = s.Db.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 				var governmentIDData *usgovernmentid.ProfileDataUSGovernmentIDDoc
 
 				if req.UsGovernmentIdDoc != nil {
@@ -1665,7 +1665,7 @@ func (s *Server) WyreConfirmTransfer(ctx context.Context, req *proto.WyreConfirm
 		return nil, err
 	}
 
-	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+	err = s.Db.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		existingTrx, err := s.Db.GetTransactionByExternalId(ctx, tx, u.ID, transaction.ExternalID(req.TransferId))
 		if err != nil {
 			return err
@@ -1988,7 +1988,7 @@ func (s *Server) WyreConfirmDebitCardQuote(ctx context.Context, req *proto.WyreC
 		return nil, err
 	}
 
-	err = s.Firestore.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
+	err = s.Db.RunTransaction(ctx, func(ctx context.Context, tx *firestore.Transaction) error {
 		existingTrx, err := s.Db.GetTransactionByExternalId(ctx, tx, u.ID, transaction.ExternalID(req.ReservationId))
 		if err != nil {
 			return err

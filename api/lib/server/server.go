@@ -3,7 +3,6 @@ package server
 import (
 	"net"
 
-	"cloud.google.com/go/firestore"
 	"github.com/khoerling/flux/api/lib/auth"
 	"github.com/khoerling/flux/api/lib/config"
 	"github.com/khoerling/flux/api/lib/db"
@@ -28,7 +27,6 @@ type Server struct {
 	Sendgrid                      *sendgrid.Client
 	Twilio                        *gotwilio.Twilio
 	TwilioConfig                  *twilio.Config
-	Firestore                     *firestore.Client
 	FileManager                   *filemanager.Manager
 	Db                            db.Db
 	Wyre                          *wyre.Client
@@ -43,8 +41,6 @@ type Server struct {
 	config.APIHost
 	config.WebHost
 }
-
-const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
 
 // Maximum upload of 25 MB
 const maxMsgSizeBytes = 1024 * 1024 * 25

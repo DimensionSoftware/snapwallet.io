@@ -12,6 +12,7 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integration_t_manager"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
+	"github.com/khoerling/flux/api/lib/server"
 )
 
 func InitializeTestManager() (integration_t_manager.Manager, error) {
@@ -51,4 +52,18 @@ func InitializeMockDBJwtVerifier(t *testing.T) auth.JwtVerifier {
 		auth.ProvideTestJwtPrivateKey,
 	)
 	return auth.JwtVerifier{}
+}
+
+func InitializeMockDBServer(t *testing.T) server.Server {
+	wire.Build(
+		wire.Struct(new(server.Server), "*"),
+		wire.Struct(new(auth.JwtVerifier), "*"),
+		wire.Bind(new(db.Db), new(*mock_db.MockDb)),
+		mock_db.NewMockDb,
+		gomock.NewController,
+		wire.Bind(new(gomock.TestReporter), new(*testing.T)),
+		auth.ProvideJwtPublicKey,
+		auth.ProvideTestJwtPrivateKey,
+	)
+	return server.Server{}
 }
