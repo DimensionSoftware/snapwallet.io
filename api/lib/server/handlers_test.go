@@ -91,17 +91,17 @@ var _ = Describe("Handlers", func() {
 				SourceAmount:   500,
 				DestCurrency:   req.DestCurrency,
 				// TODO: proves we need more validation
-				Dest:    req.Dest,
+				Dest:    req.Dest, // todo we don't pass prefix (e.g. ethereum, but probably should)
 				Message: "TODO",
 			}.WithDefaults()
 			wyreTransferDetail := &wyre.TransferDetail{
 				ID:             wyre.TransferID("TF_" + shortuuid.New()),
 				Source:         expectedWyreReq.Source,
 				SourceCurrency: "USD",
-				Dest:           expectedWyreReq.Dest,
+				Dest:           "ethereum:" + req.Dest,
 				DestCurrency:   expectedWyreReq.DestCurrency,
-				DestAmount:     1,
 				SourceAmount:   expectedWyreReq.SourceAmount,
+				DestAmount:     1,
 				// TODO: need message functionality
 				Message: "TODO",
 			}
@@ -124,7 +124,7 @@ var _ = Describe("Handlers", func() {
 			}
 			mockDb.EXPECT().SaveTransaction(ctx, gomock.Any(), u.ID, gomock.Any()).DoAndReturn(
 				func(ctx context.Context, tx *firestore.Transaction, userID user.ID, txn *transaction.Transaction) error {
-					ExpectSame(expectedTxn, txn, cmpopts.IgnoreFields(transaction.Transaction{},
+					ExpectSame(txn, expectedTxn, cmpopts.IgnoreFields(transaction.Transaction{},
 						"ID",
 					))
 					Expect(txn.ID).ToNot(BeEmpty())
@@ -135,12 +135,26 @@ var _ = Describe("Handlers", func() {
 
 			resp, err := s.WyreCreateTransfer(ctx, req)
 			Expect(err).ShouldNot(HaveOccurred())
-			Expect(resp).To(Equal(&protocol.WyreTransferDetail{}))
+
+			expectedResp := &protocol.WyreTransferDetail{
+				Source:         req.Source,
+				Dest:           req.Dest,
+				SourceCurrency: "USD",
+				DestCurrency:   "ETH",
+				SourceAmount:   500,
+				DestAmount:     1,
+				Message:        "TODO",
+			}
+			ExpectSame(resp, expectedResp,
+				cmpopts.IgnoreUnexported(protocol.WyreTransferDetail{}),
+				cmpopts.IgnoreFields(protocol.WyreTransferDetail{}, "Id"),
+			)
+			Expect(resp.Id).ToNot(BeEmpty())
 		})
 	})
 })
 
-func ExpectSame(expected interface{}, actual interface{}, opts ...cmp.Option) {
+func ExpectSame(actual interface{}, expected interface{}, opts ...cmp.Option) {
 	diff := cmp.Diff(expected, actual, opts...)
 	if diff != "" {
 		Fail(fmt.Sprintf("%T did not match %T:\n%s", actual, expected, diff))

@@ -1628,9 +1628,6 @@ func (s *Server) WyreCreateTransfer(ctx context.Context, req *proto.WyreCreateTr
 		return nil, err
 	}
 
-	// TODO: store info in db about xfer
-	fmt.Printf("WYRE TRANSFER RESP: %#v", t)
-
 	return wyre.WyreTransferDetailToProto(t), nil
 }
 
