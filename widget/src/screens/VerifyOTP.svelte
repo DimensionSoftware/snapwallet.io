@@ -294,6 +294,9 @@
       opacity: 0.25;
       background: var(--theme-text-color-3);
     }
+    :global(.input-container:last-child:after) {
+      display: none;
+    }
     :global(label) {
       display: flex;
       flex-direction: row;
