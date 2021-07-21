@@ -298,6 +298,10 @@ type PaymentMethodID string
 // TransferID ...
 type TransferID string
 
+func (id TransferID) String() string {
+	return string(id)
+}
+
 // WalletOrderID
 type WalletOrderID string
 

@@ -61,12 +61,12 @@ func InitializeMockDBJwtVerifier(t *testing.T) auth.JwtVerifier {
 	return jwtVerifier
 }
 
-func InitializeMockServer(t ginkgo.GinkgoTInterface) (server.Server, error) {
+func InitializeMockServer(t ginkgo.GinkgoTInterface) (*server.Server, error) {
 	controller := gomock.NewController(t)
 	mockDb := mock_db.NewMockDb(controller)
 	mockSendEmail := mock_sendemail.NewMockSendEmail(controller)
 	mockClientInterface := mock_wyre.NewMockClientInterface(controller)
-	serverServer := server.Server{
+	serverServer := &server.Server{
 		Db:        mockDb,
 		SendEmail: mockSendEmail,
 		Wyre:      mockClientInterface,

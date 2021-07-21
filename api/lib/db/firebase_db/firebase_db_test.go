@@ -5,12 +5,9 @@ import (
 	"time"
 
 	"cloud.google.com/go/firestore"
-	"github.com/bxcodec/faker/v3"
 	"github.com/khoerling/flux/api/lib/db/models/gotoconfig"
-	"github.com/khoerling/flux/api/lib/db/models/job"
 	"github.com/khoerling/flux/api/lib/db/models/onetimepasscode"
-	"github.com/khoerling/flux/api/lib/db/models/user"
-	"github.com/lithammer/shortuuid/v3"
+	"github.com/khoerling/flux/api/lib/db/test_utils"
 	. "github.com/onsi/ginkgo"
 	. "github.com/onsi/gomega"
 )
@@ -233,14 +230,14 @@ var _ = Describe("FirebaseDb", func() {
 	Context("SaveUser", func() {
 		Context("without transaction", func() {
 			It("can save", func() {
-				err := testManager.Db.SaveUser(context.Background(), nil, genFakeUser())
+				err := testManager.Db.SaveUser(context.Background(), nil, test_utils.GenFakeUser())
 				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})
 		Context("with transaction", func() {
 			It("can save", func() {
 				err := testManager.Db.RunTransaction(context.Background(), func(ctx context.Context, tx *firestore.Transaction) error {
-					return testManager.Db.SaveUser(ctx, tx, genFakeUser())
+					return testManager.Db.SaveUser(ctx, tx, test_utils.GenFakeUser())
 				})
 				Expect(err).ShouldNot(HaveOccurred())
 			})
@@ -250,14 +247,14 @@ var _ = Describe("FirebaseDb", func() {
 	Context("SaveJob", func() {
 		Context("without transaction", func() {
 			It("can save", func() {
-				err := testManager.Db.SaveJob(context.Background(), nil, genFakeJob())
+				err := testManager.Db.SaveJob(context.Background(), nil, test_utils.GenFakeJob())
 				Expect(err).ShouldNot(HaveOccurred())
 			})
 		})
 		Context("with transaction", func() {
 			It("can save", func() {
 				err := testManager.Db.RunTransaction(context.Background(), func(ctx context.Context, tx *firestore.Transaction) error {
-					return testManager.Db.SaveJob(ctx, tx, genFakeJob())
+					return testManager.Db.SaveJob(ctx, tx, test_utils.GenFakeJob())
 				})
 				Expect(err).ShouldNot(HaveOccurred())
 			})
@@ -265,27 +262,3 @@ var _ = Describe("FirebaseDb", func() {
 	})
 
 })
-
-func genFakeUser() *user.User {
-	email := faker.Email()
-	phone := faker.E164PhoneNumber()
-
-	return &user.User{
-		ID:    user.ID(shortuuid.New()),
-		Email: &email,
-		Phone: &phone,
-	}
-}
-
-func genFakeJob() *job.Job {
-	now := time.Now()
-
-	return &job.Job{
-		ID:         shortuuid.New(),
-		Kind:       job.KindUpdateWyreAccountForUser,
-		Status:     job.StatusQueued,
-		RelatedIDs: []string{"1", "2", "3"},
-		CreatedAt:  now.Unix(),
-		UpdatedAt:  now.Unix(),
-	}
-}

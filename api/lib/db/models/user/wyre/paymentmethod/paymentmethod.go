@@ -9,6 +9,10 @@ import (
 // ID ...
 type ID string
 
+func (id ID) String() string {
+	return string(id)
+}
+
 // PaymentMethod ...
 type PaymentMethod struct {
 	ID                    ID             `firestore:"id"`
