@@ -15,6 +15,7 @@ require (
 	github.com/go-resty/resty/v2 v2.5.0
 	github.com/golang/glog v0.0.0-20160126235308-23def4e6c14b
 	github.com/golang/mock v1.5.0
+	github.com/google/go-cmp v0.5.5
 	github.com/google/tink/go v1.5.0
 	github.com/google/wire v0.5.0
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.2.0
@@ -25,13 +26,14 @@ require (
 	github.com/onsi/gomega v1.10.1
 	github.com/plaid/plaid-go v0.0.0-20210216195344-700b8cfc627d
 	github.com/pusher/pusher-http-go v4.0.1+incompatible
-	github.com/sendgrid/rest v2.6.2+incompatible // indirect
+	github.com/sendgrid/rest v2.6.2+incompatible
 	github.com/sendgrid/sendgrid-go v3.8.0+incompatible
 	github.com/sfreiberg/gotwilio v0.0.0-20201211181435-c426a3710ab5
 	github.com/stretchr/testify v1.6.1
 	github.com/teris-io/shortid v0.0.0-20201117134242-e59966efd125
 	golang.org/x/crypto v0.0.0-20201002170205-7f63de1d35b0
 	golang.org/x/image v0.0.0-20210220032944-ac19c3e999fb // indirect
+	golang.org/x/sys v0.0.0-20210630005230-0f9fa26af87c // indirect
 	google.golang.org/api v0.36.0
 	google.golang.org/genproto v0.0.0-20210207032614-bba0dbe2a9ea
 	google.golang.org/grpc v1.35.0

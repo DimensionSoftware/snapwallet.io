@@ -8,6 +8,8 @@ import (
 	"github.com/sendgrid/sendgrid-go"
 )
 
+type Client = *sendgrid.Client
+
 const sendgridKeyEnvVarName = "SENDGRID_API_KEY"
 
 // SendAPIKey represents the secret key for sendgrid
