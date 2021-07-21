@@ -59,7 +59,7 @@ func InitializeMockDBJwtVerifier(t *testing.T) auth.JwtVerifier {
 	return auth.JwtVerifier{}
 }
 
-func InitializeMockServer(t ginkgo.GinkgoTInterface) (server.Server, error) {
+func InitializeMockServer(t ginkgo.GinkgoTInterface) (*server.Server, error) {
 	wire.Build(
 		wire.Struct(new(server.Server), "Db", "SendEmail", "Wyre"),
 		wire.Bind(new(db.Db), new(*mock_db.MockDb)),
@@ -71,5 +71,5 @@ func InitializeMockServer(t ginkgo.GinkgoTInterface) (server.Server, error) {
 		gomock.NewController,
 		wire.Bind(new(gomock.TestReporter), new(ginkgo.GinkgoTInterface)),
 	)
-	return server.Server{}, nil
+	return &server.Server{}, nil
 }

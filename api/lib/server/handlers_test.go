@@ -3,6 +3,7 @@ package server_test
 import (
 	"context"
 
+	"github.com/khoerling/flux/api/lib/integration_t_manager/wire"
 	"github.com/khoerling/flux/api/lib/protocol"
 	"github.com/khoerling/flux/api/lib/server"
 	. "github.com/onsi/ginkgo"
@@ -15,8 +16,10 @@ var _ = Describe("Handlers", func() {
 		s   *server.Server
 	)
 	BeforeEach(func() {
+		var err error
 		ctx = context.Background()
-		s = &server.Server{}
+		s, err = wire.InitializeMockServer(GinkgoT())
+		Expect(err).ShouldNot(HaveOccurred())
 	})
 
 	Context("WyreCreateTransfer", func() {
