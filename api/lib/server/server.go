@@ -24,12 +24,12 @@ import (
 type Server struct {
 	proto.UnimplementedFluxServer `wire:"-"`
 	sendemail.SendEmail
+	Db            db.Db
+	Wyre          wyre.ClientInterface
 	GrpcServer    *grpc.Server
 	Twilio        *gotwilio.Twilio
 	TwilioConfig  *twilio.Config
 	FileManager   *filemanager.Manager
-	Db            db.Db
-	Wyre          *wyre.Client
 	WyreManager   *wyremanager.Manager
 	Plaid         *plaid.Client
 	JwtSigner     *auth.JwtSigner

@@ -12,6 +12,12 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integration_t_manager"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
+	"github.com/khoerling/flux/api/lib/integrations/sendemail"
+	"github.com/khoerling/flux/api/lib/integrations/sendemail/mock_sendemail"
+	"github.com/khoerling/flux/api/lib/integrations/wyre"
+	"github.com/khoerling/flux/api/lib/integrations/wyre/mock_wyre"
+	"github.com/khoerling/flux/api/lib/server"
+	"github.com/onsi/ginkgo"
 )
 
 func InitializeTestManager() (integration_t_manager.Manager, error) {
@@ -53,18 +59,17 @@ func InitializeMockDBJwtVerifier(t *testing.T) auth.JwtVerifier {
 	return auth.JwtVerifier{}
 }
 
-/*
-func InitializeMockDBServer(t *testing.T) server.Server {
+func InitializeMockServer(t ginkgo.GinkgoTInterface) (server.Server, error) {
 	wire.Build(
-		wire.Struct(new(server.Server), "*"),
-		wire.Struct(new(auth.JwtVerifier), "*"),
+		wire.Struct(new(server.Server), "Db", "SendEmail", "Wyre"),
 		wire.Bind(new(db.Db), new(*mock_db.MockDb)),
 		mock_db.NewMockDb,
+		wire.Bind(new(sendemail.SendEmail), new(*mock_sendemail.MockSendEmail)),
+		mock_sendemail.NewMockSendEmail,
+		wire.Bind(new(wyre.ClientInterface), new(*mock_wyre.MockClientInterface)),
+		mock_wyre.NewMockClientInterface,
 		gomock.NewController,
-		wire.Bind(new(gomock.TestReporter), new(*testing.T)),
-		auth.ProvideJwtPublicKey,
-		auth.ProvideTestJwtPrivateKey,
+		wire.Bind(new(gomock.TestReporter), new(ginkgo.GinkgoTInterface)),
 	)
-	return server.Server{}
+	return server.Server{}, nil
 }
-*/

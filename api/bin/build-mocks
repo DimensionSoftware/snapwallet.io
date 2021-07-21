@@ -1,3 +1,4 @@
 #!/bin/bash -xeu
 mkdir -p lib/db/mock_db && mockgen -source lib/db/db.go > lib/db/mock_db/mock_db.go
 mkdir -p lib/integrations/sendemail/mock_sendemail && mockgen -source lib/integrations/sendemail/sendemail.go > lib/integrations/sendemail/mock_sendemail/mock_sendemail.go
+mkdir -p lib/integrations/wyre/mock_wyre && mockgen -source lib/integrations/wyre/interface.go > lib/integrations/wyre/mock_wyre/mock_wyre.go

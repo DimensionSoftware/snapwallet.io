@@ -35,11 +35,6 @@ func InitializeServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	client := sendgrid.ProvideSendClient(sendAPIKey)
-	privateKey, err := auth.ProvideJwtPrivateKey()
-	if err != nil {
-		return server.Server{}, err
-	}
-	publicKey := auth.ProvideJwtPublicKey(privateKey)
 	fireProjectID, err := firestore.ProvideFirestoreProjectID()
 	if err != nil {
 		return server.Server{}, err
@@ -60,6 +55,16 @@ func InitializeServer() (server.Server, error) {
 		Firestore:         firestoreClient,
 		EncryptionManager: manager,
 	}
+	wyreConfig, err := wyre.ProvideWyreConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	wyreClient := wyre.NewClient(wyreConfig)
+	privateKey, err := auth.ProvideJwtPrivateKey()
+	if err != nil {
+		return server.Server{}, err
+	}
+	publicKey := auth.ProvideJwtPublicKey(privateKey)
 	jwtVerifier := &auth.JwtVerifier{
 		PublicKey: publicKey,
 		Db:        db,
@@ -79,11 +84,6 @@ func InitializeServer() (server.Server, error) {
 		Db:                db,
 		EncryptionManager: manager,
 	}
-	wyreConfig, err := wyre.ProvideWyreConfig()
-	if err != nil {
-		return server.Server{}, err
-	}
-	wyreClient := wyre.NewClient(wyreConfig)
 	apiHost, err := config.ProvideAPIHost()
 	if err != nil {
 		return server.Server{}, err
@@ -139,12 +139,12 @@ func InitializeServer() (server.Server, error) {
 	}
 	serverServer := server.Server{
 		SendEmail:     client,
+		Db:            db,
+		Wyre:          wyreClient,
 		GrpcServer:    grpcServer,
 		Twilio:        gotwilioTwilio,
 		TwilioConfig:  twilioConfig,
 		FileManager:   filemanagerManager,
-		Db:            db,
-		Wyre:          wyreClient,
 		WyreManager:   wyremanagerManager,
 		Plaid:         plaidClient,
 		JwtSigner:     jwtSigner,
@@ -165,11 +165,6 @@ func InitializeDevServer() (server.Server, error) {
 		return server.Server{}, err
 	}
 	client := sendgrid.ProvideSendClient(sendAPIKey)
-	privateKey, err := auth.ProvideJwtPrivateKey()
-	if err != nil {
-		return server.Server{}, err
-	}
-	publicKey := auth.ProvideJwtPublicKey(privateKey)
 	fireProjectID, err := firestore.ProvideFirestoreProjectID()
 	if err != nil {
 		return server.Server{}, err
@@ -190,6 +185,16 @@ func InitializeDevServer() (server.Server, error) {
 		Firestore:         firestoreClient,
 		EncryptionManager: manager,
 	}
+	wyreConfig, err := wyre.ProvideWyreConfig()
+	if err != nil {
+		return server.Server{}, err
+	}
+	wyreClient := wyre.NewClient(wyreConfig)
+	privateKey, err := auth.ProvideJwtPrivateKey()
+	if err != nil {
+		return server.Server{}, err
+	}
+	publicKey := auth.ProvideJwtPublicKey(privateKey)
 	jwtVerifier := &auth.JwtVerifier{
 		PublicKey: publicKey,
 		Db:        db,
@@ -209,11 +214,6 @@ func InitializeDevServer() (server.Server, error) {
 		Db:                db,
 		EncryptionManager: manager,
 	}
-	wyreConfig, err := wyre.ProvideWyreConfig()
-	if err != nil {
-		return server.Server{}, err
-	}
-	wyreClient := wyre.NewClient(wyreConfig)
 	apiHost, err := config.ProvideAPIHost()
 	if err != nil {
 		return server.Server{}, err
@@ -263,12 +263,12 @@ func InitializeDevServer() (server.Server, error) {
 	}
 	serverServer := server.Server{
 		SendEmail:     client,
+		Db:            db,
+		Wyre:          wyreClient,
 		GrpcServer:    grpcServer,
 		Twilio:        gotwilioTwilio,
 		TwilioConfig:  twilioConfig,
 		FileManager:   filemanagerManager,
-		Db:            db,
-		Wyre:          wyreClient,
 		WyreManager:   wyremanagerManager,
 		Plaid:         plaidClient,
 		JwtSigner:     jwtSigner,

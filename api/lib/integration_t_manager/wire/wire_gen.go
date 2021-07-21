@@ -13,6 +13,10 @@ import (
 	"github.com/khoerling/flux/api/lib/encryption"
 	"github.com/khoerling/flux/api/lib/integration_t_manager"
 	"github.com/khoerling/flux/api/lib/integrations/firestore"
+	"github.com/khoerling/flux/api/lib/integrations/sendemail/mock_sendemail"
+	"github.com/khoerling/flux/api/lib/integrations/wyre/mock_wyre"
+	"github.com/khoerling/flux/api/lib/server"
+	"github.com/onsi/ginkgo"
 	"testing"
 )
 
@@ -55,4 +59,17 @@ func InitializeMockDBJwtVerifier(t *testing.T) auth.JwtVerifier {
 		Db:        mockDb,
 	}
 	return jwtVerifier
+}
+
+func InitializeMockServer(t ginkgo.GinkgoTInterface) (server.Server, error) {
+	controller := gomock.NewController(t)
+	mockDb := mock_db.NewMockDb(controller)
+	mockSendEmail := mock_sendemail.NewMockSendEmail(controller)
+	mockClientInterface := mock_wyre.NewMockClientInterface(controller)
+	serverServer := server.Server{
+		Db:        mockDb,
+		SendEmail: mockSendEmail,
+		Wyre:      mockClientInterface,
+	}
+	return serverServer, nil
 }
