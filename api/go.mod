@@ -25,7 +25,7 @@ require (
 	github.com/onsi/gomega v1.10.1
 	github.com/plaid/plaid-go v0.0.0-20210216195344-700b8cfc627d
 	github.com/pusher/pusher-http-go v4.0.1+incompatible
-	github.com/sendgrid/rest v2.6.2+incompatible // indirect
+	github.com/sendgrid/rest v2.6.2+incompatible
 	github.com/sendgrid/sendgrid-go v3.8.0+incompatible
 	github.com/sfreiberg/gotwilio v0.0.0-20201211181435-c426a3710ab5
 	github.com/stretchr/testify v1.6.1
