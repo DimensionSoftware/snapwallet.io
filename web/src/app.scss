@@ -16,6 +16,24 @@
   }
 }
 
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+}
+
+/* hide scrollbar for ie, edge and firefox */
+html,
+body {
+  -ms-overflow-style: none; /* ie and edge */
+  scrollbar-width: none; /* firefox */
+}
+
+body.scrolled {
+  .gg-chevron-double-down {
+    transition: opacity 0.2s ease-in;
+    opacity: 0 !important;
+  }
+}
 ::-moz-selection {
   color: #000;
   background: rgba(#fffc00, 0.75);
