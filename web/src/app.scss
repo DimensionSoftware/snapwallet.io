@@ -30,7 +30,8 @@ body {
 
 body.scrolled {
   .gg-chevron-double-down {
-    transition: opacity 0.2s ease-in;
+    transform: translateY(20px) rotate(0) scale(1);
+    transition: opacity 0.2s ease-out, transform 0.2s ease-out;
     opacity: 0 !important;
   }
 }
