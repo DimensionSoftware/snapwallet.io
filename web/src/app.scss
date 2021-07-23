@@ -80,13 +80,14 @@ html {
       content: '';
       position: fixed;
       top: -100vh;
-      right: -15px;
+      right: 0;
       left: 0;
       bottom: 0;
       z-index: -1;
       // bottom: -335vh;
       background-image: url('/static/bg.png');
-      background-repeat: repeat;
+      background-repeat: repeat-y;
+      background-size: 100%;
       will-change: transform;
     }
 
