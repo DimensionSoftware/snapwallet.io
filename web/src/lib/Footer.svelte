@@ -75,23 +75,9 @@
     {#if percent > 30}
       <ol
         in:fly={{ easing: backOut, duration: 350, opacity: 0, x: -50 }}
-        out:fly={{ easing: expoOut, duration: 500, y: 0 }}
+        out:fly={{ easing: expoOut, duration: 500, y: -15 }}
       >
         <li><h2>Snap Wallet</h2></li>
-        <div class="flex">
-          <a
-            target="_blank"
-            href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
-          >
-            <img src="/appstore.svg" />
-          </a>
-          <a
-            target="_blank"
-            href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
-          >
-            <img src="/playstore.svg" />
-          </a>
-        </div>
         <li>
           <h4>
             <a
@@ -129,6 +115,29 @@
       </ol>
     {:else}
       <ol style="height: 300px;" />
+    {/if}
+  </Visibility>
+  <Visibility steps={100} let:percent>
+    {#if percent > 80}
+      <div
+        in:fly={{ easing: backOut, duration: 400, opacity: 0, x: -30 }}
+        out:fly={{ easing: expoOut, duration: 600, y: -15 }}
+        class="apps flex"
+      >
+        <h3>Building Your Own App?</h3>
+        <a
+          target="_blank"
+          href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
+        >
+          <img src="/appstore.svg" />
+        </a>
+        <a
+          target="_blank"
+          href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
+        >
+          <img src="/playstore.svg" />
+        </a>
+      </div>
     {/if}
   </Visibility>
   <p title="Scroll to Top!" on:mousedown={scrollToTop}>
@@ -225,6 +234,7 @@
     box-shadow: 0 0 0 3px #fffc00 !important;
   }
   footer {
+    position: relative;
     margin-top: 0;
     padding: 1.5rem 0 1rem;
     background: #000;
@@ -291,6 +301,14 @@
             transition: none;
           }
         }
+      }
+    }
+    .apps {
+      position: absolute;
+      left: 25rem;
+      top: 9rem;
+      h3 {
+        margin: 0.75rem 0 1rem 0;
       }
     }
     p {
