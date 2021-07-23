@@ -305,6 +305,7 @@
     }
     .apps {
       position: absolute;
+      z-index: 1;
       left: 25rem;
       top: 9rem;
       h3 {
