@@ -176,6 +176,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
 <Buy />
 <Footer />
 
+<span class="gg-chevron-double-down" />
 <span id="top-bg" class="top-bg" />
 
 {#if liquidVisible}

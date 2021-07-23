@@ -88,6 +88,45 @@ html {
       background-repeat: repeat;
       will-change: transform;
     }
+
+    .gg-chevron-double-down {
+      box-sizing: border-box;
+      position: fixed;
+      display: block;
+      left: calc(50% - 25px);
+      bottom: 50px;
+      z-index: 9;
+      transform: scale(2);
+      width: 22px;
+      height: 22px;
+    }
+
+    .gg-chevron-double-down::after,
+    .gg-chevron-double-down::before {
+      content: '';
+      display: block;
+      box-sizing: border-box;
+      position: absolute;
+      width: 8px;
+      height: 8px;
+      border-bottom: 1px solid;
+      border-right: 1px solid;
+      left: 7px;
+      top: 3px;
+      animation: pulseUpDown 1.3s ease-in forwards;
+      animation-iteration-count: infinite;
+    }
+
+    .gg-chevron-double-down::after {
+      top: 6px;
+      left: 6px;
+      border-bottom: 1px solid;
+      border-right: 1px solid;
+      height: 10px;
+      width: 10px;
+      animation: pulseUpDown 1.3s ease-out forwards;
+      animation-iteration-count: infinite;
+    }
     main {
       height: 100%;
       width: 100%;
