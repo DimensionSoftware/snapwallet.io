@@ -255,7 +255,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
     :global(iframe) {
       position: relative;
-      border-radius: 20px;
+      border-radius: 20px !important;
+      border-top-left-radius: 20px !important;
       top: -5%;
       right: -20%;
       opacity: 0;
