@@ -87,7 +87,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
       `)
 
     // init scroll fx
-    let frame, dyLast, isRotated, lastIsRotated, isTicking
+    let frame, dyLast, isRotated, lastIsRotated, isTicking, isScrolled
     const nextFrame = () => (frame = requestAnimationFrame(loop)),
       tick = () => setTimeout(nextFrame, 100)
     function loop() {
@@ -95,6 +95,21 @@ Hey, you-- join us!  https://dimensionsoftware.com
       isTicking = true
       dyLast = dy
       isRotated = dy > 900
+
+      // trigger scrolled css events
+      if (dy > 20) {
+        // don't touch the DOM unless we must
+        if (!isScrolled) {
+          document.body.classList.add('scrolled')
+          isScrolled = true
+        }
+      } else {
+        if (isScrolled) {
+          document.body.classList.remove('scrolled')
+          isScrolled = false
+        }
+      }
+
       if (lastIsRotated === isRotated) {
         isTicking = false
         return tick()
