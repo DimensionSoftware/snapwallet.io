@@ -49,6 +49,7 @@
           {#if percent > 50}
             <img
               in:fly={{ easing: expoOut, duration: 900 + i * 600, y: 50 }}
+              out:fly={{ easing: expoOut, duration: 500, y: -25 }}
               title={card.alt}
               width="100"
               src={`/images/${card.icon}`}
@@ -140,21 +141,37 @@
       </div>
     {/if}
   </Visibility>
-  <p title="Scroll to Top!" on:mousedown={scrollToTop}>
-    <big
-      >Snap Wallet
-      <img height="24px" width="24px" title="Love" alt="Love" src="/love.svg" />
-      Silicon Beach, CA
-    </big>
-    <small
-      ><a
-        title="Dimension Software on Silicon Beach, Los Angeles!"
-        href="https://dimensionsoftware.com"
-        on:mousedown|stopPropagation
-        target="_blank">Dimension Software since 1998</a
-      ></small
-    >
-  </p>
+  <Visibility steps={100} let:percent>
+    {#if percent > 90}
+      <div
+        in:fly={{ easing: expoOut, duration: 800, opacity: 0, x: -50 }}
+        out:fly={{ easing: expoOut, duration: 600, y: -15 }}
+        class="dimension flex"
+      >
+        <p title="Scroll to Top!" on:mousedown={scrollToTop}>
+          <big
+            >Snap Wallet
+            <img
+              height="24px"
+              width="24px"
+              title="Love"
+              alt="Love"
+              src="/love.svg"
+            />
+            Silicon Beach, CA
+          </big>
+          <small
+            ><a
+              title="Dimension Software on Silicon Beach, Los Angeles!"
+              href="https://dimensionsoftware.com"
+              on:mousedown|stopPropagation
+              target="_blank">Dimension Software since 1998</a
+            ></small
+          >
+        </p>
+      </div>
+    {/if}
+  </Visibility>
 </footer>
 
 <style lang="scss">
@@ -236,7 +253,7 @@
   footer {
     position: relative;
     margin-top: 0;
-    padding: 1.5rem 0 1rem;
+    padding: 1.5rem 0 5rem;
     background: #000;
     background: #141233;
     border-bottom: 1px solid rgba(#fffc00, 0.25);
@@ -312,36 +329,42 @@
         margin: 0.75rem 0 1rem 0;
       }
     }
-    p {
-      position: relative;
-      z-index: 1;
-      font-size: 0.85rem;
-      margin: 0;
-      padding: 0;
-      text-align: center;
-      vertical-align: middle;
-      cursor: pointer;
-      small {
-        display: block;
-      }
-      big {
-        display: block;
-        margin-bottom: 0.75rem;
-        font-size: 0.9rem;
-        color: rgba(255, 255, 255, 0.8);
-      }
-      img {
+    .dimension {
+      position: absolute;
+      width: 100%;
+      margin: 0 auto;
+      bottom: 2rem;
+      p {
         position: relative;
-        top: 8px;
-        margin: 0 0.25rem;
-      }
-      br {
-        display: block;
-        margin-top: 0.5rem;
-      }
-      a {
-        text-decoration: none;
-        color: rgba(255, 255, 255, 0.8);
+        z-index: 1;
+        font-size: 0.85rem;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        vertical-align: middle;
+        cursor: pointer;
+        small {
+          display: block;
+        }
+        big {
+          display: block;
+          margin-bottom: 0.75rem;
+          font-size: 0.9rem;
+          color: rgba(255, 255, 255, 0.8);
+        }
+        img {
+          position: relative;
+          top: 8px;
+          margin: 0 0.25rem;
+        }
+        br {
+          display: block;
+          margin-top: 0.5rem;
+        }
+        a {
+          text-decoration: none;
+          color: rgba(255, 255, 255, 0.8);
+        }
       }
     }
   }

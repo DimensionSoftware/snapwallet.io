@@ -40,7 +40,7 @@
       {#if percent > 80}
         <h2
           in:fly={{ opacity: 0.5, y: 50, easing: expoOut, duration: 500 }}
-          out:fly={{ opacity: 0, easing: expoOut, duration: 350, y: -25 }}
+          out:fly={{ opacity: 0, easing: expoOut, duration: 550, y: -25 }}
           class:right
           class:blur={hasImage}
         >
@@ -53,7 +53,7 @@
         {#if description}
           <h3
             in:fly={{ opacity: 0.5, y: 75, easing: expoOut, duration: 750 }}
-            out:fly={{ opacity: 0, easing: expoOut, duration: 450, y: -15 }}
+            out:fly={{ opacity: 0, easing: expoOut, duration: 350, y: -15 }}
             class:blur={hasImage}
           >
             {description}
@@ -195,13 +195,16 @@
       font-weight: 200;
       margin: 1.5rem 0 0 0;
       color: #222;
-      transition: background 0.3s ease-out, box-shadow 0.2s ease-in;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      transition: background 0.3s ease-out, box-shadow 0.2s ease-in,
+        border 0s ease-in 0.1s;
       overflow: hidden;
       // background: rgba(255, 255, 255, 0.4);
       &:hover {
         transition: none;
         background-color: rgba(255, 255, 255, 0.85);
         box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+        border: 1px solid transparent;
       }
       &:active {
         animation: scaleIn 0.25s ease-out;
