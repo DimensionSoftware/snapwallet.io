@@ -18,19 +18,19 @@
     {
       title: 'Enter Amount',
       name: 'nft',
-      icon: 'SW Crypto Coin.png',
+      icon: 'sw_coin.png',
       alt: 'Simply Checkout with Anything',
     },
     {
       title: 'Select a Payment Method',
       name: 'donations',
-      icon: 'Dr Crypto clean shaven.png',
+      icon: 'drcrypto.png',
       alt: 'Accepts Credit Cards and Debit Accounts',
     },
     {
       title: 'Transaction Completed!',
       name: 'fiat',
-      icon: 'Coin Checkmark.png',
+      icon: 'coin_checkmark.png',
       alt: 'On and Off-Ramp Crypto Currencies',
     },
   ]
