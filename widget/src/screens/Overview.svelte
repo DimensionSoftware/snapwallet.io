@@ -216,7 +216,6 @@
         <span style="margin-right:0.75rem;">
           {buttonText}
         </span>
-        <FaIcon data={faLock} />
       </div>
     </Button>
   </ModalFooter>
