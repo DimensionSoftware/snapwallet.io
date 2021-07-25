@@ -46,13 +46,15 @@
       if (mask) return isValidKeyForMask(e, mask, defaultValue)
     }}
     on:input={e => {
-      // last chance to fix inputs
-      const val = e.target.value,
-        isValLongerThanMask = val.length > mask.length
-      // truncate if necessary
-      if (isValLongerThanMask) e.target.value = val.substr(0, val.length - 1)
-      // force correct format
-      e.target.value = withMaskOnInput(e.target.value, mask)
+      if (mask) {
+        // last chance to fix inputs
+        const val = e.target.value,
+          isValLongerThanMask = val.length > mask.length
+        // truncate if necessary
+        if (isValLongerThanMask) e.target.value = val.substr(0, val.length - 1)
+        // force correct format
+        e.target.value = withMaskOnInput(e.target.value, mask)
+      }
     }}
     on:keydown
     on:click
