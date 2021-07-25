@@ -18,11 +18,25 @@
   import { debitCardValidationRules, validateForm } from '../util/validation'
   import { formatExpiration } from '../util/transactions'
   import { transactionStore } from '../stores/TransactionStore'
+  import { configStore } from '../stores/ConfigStore'
   import TimeTicker from '../components/TimeTicker.svelte'
 
   let countrySelectorVisible = false
   $: isUSPhoneNumber =
     $debitCardStore.phoneNumberCountry.code.toUpperCase() === 'US'
+
+  const fillTestInfo = e => {
+    e.preventDefault()
+    debitCardStore.update({
+      phoneNumber: '202 555-0123',
+      firstName: 'John',
+      lastName: 'Smith',
+      number: '4111111111111111',
+      expirationDate: '10/23',
+      verificationCode: '123',
+    })
+    return false
+  }
 
   const handleNextStep = async () => {
     const phoneNumber =
@@ -58,6 +72,11 @@
 <ModalContent>
   <ModalHeader>Card Information</ModalHeader>
   <ModalBody>
+    <h3 class="test">
+      {#if $configStore.environment === 'sandbox'}
+        <a on:click={fillTestInfo} href="">Fill With Test Info</a>
+      {/if}
+    </h3>
     <TimeTicker
       time={formatExpiration($transactionStore.transactionExpirationSeconds)}
     />
@@ -167,5 +186,9 @@
   }
   h5 {
     margin-top: 0;
+  }
+  h3 {
+    position: absolute;
+    z-index: 1;
   }
 </style>

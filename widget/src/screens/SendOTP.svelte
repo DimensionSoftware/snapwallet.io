@@ -221,17 +221,4 @@
     justify-content: center;
     font-size: 0.8rem;
   }
-  h3 {
-    color: var(--theme-text-color);
-    opacity: 0.8;
-    font-size: 0.85rem;
-    font-weight: 400;
-    margin: 0 0 1rem 0;
-    text-align: center;
-    &.test {
-      color: var(--theme-color);
-      font-weight: bold;
-      opacity: 1;
-    }
-  }
 </style>

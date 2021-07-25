@@ -18,9 +18,23 @@
   } from '../util/validation'
   import TimeTicker from '../components/TimeTicker.svelte'
   import { formatExpiration } from '../util/transactions'
+  import { configStore } from '../stores/ConfigStore'
   import { transactionStore } from '../stores/TransactionStore'
 
   let autocomplete: google.maps.places.Autocomplete
+
+  const fillTestInfo = e => {
+    e.preventDefault()
+    debitCardStore.updateAddress({
+      street1: '1 Crypto St.',
+      street2: '',
+      city: 'Beverly Hills',
+      state: 'CA',
+      postalCode: '90210',
+      country: 'US',
+    })
+    return false
+  }
 
   const componentForm = {
     street_number: 'short_name',
@@ -145,6 +159,11 @@
 <ModalContent>
   <ModalHeader>Card Address</ModalHeader>
   <ModalBody>
+    <h3 class="test">
+      {#if $configStore.environment === 'sandbox'}
+        <a on:click={fillTestInfo} href="">Fill With Test Info</a>
+      {/if}
+    </h3>
     <TimeTicker
       time={formatExpiration($transactionStore.transactionExpirationSeconds)}
     />
@@ -217,5 +236,9 @@
   }
   h5 {
     margin-top: 0;
+  }
+  h3 {
+    position: absolute;
+    z-index: 1;
   }
 </style>

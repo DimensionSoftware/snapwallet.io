@@ -195,7 +195,7 @@
       font-weight: 200;
       margin: 1.5rem 0 0 0;
       color: #222;
-      border: 1px solid rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.2);
       transition: background 0.3s ease-out, box-shadow 0.2s ease-in,
         border 0s ease-in 0.1s;
       overflow: hidden;
