@@ -148,9 +148,11 @@
     margin-top: -4rem;
   }
   :global(.fiat h3) {
-    white-space: nowrap;
     margin-top: -4rem;
     font-size: 1.5rem;
+  }
+  :global(.fiat .relative > h3) {
+    white-space: nowrap;
   }
   ul {
     list-style: none;

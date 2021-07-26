@@ -114,6 +114,7 @@
     font-size: 1.5rem;
   }
   :global(.donations > article) {
+    border: 1px solid #eee;
     position: relative;
     width: 800px;
     padding: 2rem 3rem 3rem 3rem !important;
@@ -189,8 +190,9 @@
     &:focus,
     &:active {
       transition: none;
-      // box-shadow: 1px 0 0 3px #fff600;
-      box-shadow: 0 0 0 2px #fff600, 1px 3px 5px rgba(0, 0, 0, 0.18);
+      box-shadow: 0 1px 1px 0 #555, 0 0 0 2px #fff600,
+        1px 3px 5px rgba(0, 0, 0, 0.18);
+      animation: focus 0.16s;
     }
   }
   input[type='text'] {

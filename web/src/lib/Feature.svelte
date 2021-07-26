@@ -37,10 +37,10 @@
       </Visibility>
     {/if}
     <Visibility steps={100} let:percent>
-      {#if percent > 80}
+      {#if percent > 90}
         <h2
-          in:fly={{ opacity: 0.5, y: 50, easing: expoOut, duration: 500 }}
-          out:fly={{ opacity: 0, easing: expoOut, duration: 550, y: -25 }}
+          in:fly={{ opacity: 0.5, y: 50, easing: expoOut, duration: 1000 }}
+          out:fly={{ opacity: 0, easing: expoOut, duration: 650, y: -25 }}
           class:right
           class:blur={hasImage}
         >
@@ -195,7 +195,7 @@
       font-weight: 200;
       margin: 1.5rem 0 0 0;
       color: #222;
-      border: 1px solid rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(0, 0, 0, 0.1);
       transition: background 0.3s ease-out, box-shadow 0.2s ease-in,
         border 0s ease-in 0.1s;
       overflow: hidden;
