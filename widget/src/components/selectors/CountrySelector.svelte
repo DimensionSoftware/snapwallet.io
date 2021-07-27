@@ -124,16 +124,16 @@
 <style lang="scss">
   @import '../../styles/selectors.scss';
   .search-input {
-    appearance: none;
+    appearance: none !important;
     width: 100%;
-    outline: none;
+    outline: none !important;
     border: none;
     border-bottom: 1px solid var(--theme-text-color);
     color: var(--theme-text-color);
     margin-bottom: 0.75rem;
     padding: 1rem 0.5rem;
-    background: var(--theme-modal-popup-background);
-    border-radius: none;
+    background: transparent;
+    border-radius: none !important;
   }
   :global(.country-select > .fa-icon) {
     position: relative;
