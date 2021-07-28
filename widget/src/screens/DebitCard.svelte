@@ -31,7 +31,7 @@
       phoneNumber: '202 555-0123',
       firstName: 'John',
       lastName: 'Smith',
-      number: '4111111111111111',
+      number: '4111 1111 1111 1111',
       expirationDate: '10/23',
       verificationCode: '123',
     })
