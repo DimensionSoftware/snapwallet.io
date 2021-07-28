@@ -131,7 +131,7 @@
   @keyframes scaleAnimation {
     0% {
       opacity: 0;
-      transform: scale(3);
+      transform: scale(1.5);
     }
     100% {
       opacity: 1;
@@ -164,16 +164,10 @@
   }
   @keyframes fadeIn {
     0% {
-      transform: scale(1);
       opacity: 0;
-    }
-    75% {
-      opacity: 1;
-      transform: scale(2);
     }
     100% {
       opacity: 1;
-      transform: scale(1);
     }
   }
   #successAnimationCircle {
