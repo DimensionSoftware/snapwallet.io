@@ -30,10 +30,8 @@
 
   const confirmQuote = async () => {
     try {
-      const [
-        expirationMonth,
-        expirationYear,
-      ] = $debitCardStore.expirationDate.split('/')
+      const [expirationMonth, expirationYear] =
+        $debitCardStore.expirationDate.split('/')
 
       const result = await window.API.fluxWyreConfirmDebitCardQuote({
         reservationId: $debitCardStore.reservationId,
@@ -106,12 +104,10 @@
    * Both SMS and Card (micro deposit) codes may be required.
    */
   const fetchAuthorizations = async () => {
-    const {
-      card2faNeeded,
-      smsNeeded,
-    } = await window.API.fluxWyreGetDebitCardAuthorizations(
-      $debitCardStore.orderId,
-    )
+    const { card2faNeeded, smsNeeded } =
+      await window.API.fluxWyreGetDebitCardAuthorizations(
+        $debitCardStore.orderId,
+      )
     smsCodeRequired = smsNeeded
     cardCodeRequired = card2faNeeded
   }
@@ -136,6 +132,12 @@
     return t
   }
 
+  const fillTestInfo = (e?: MouseEvent) => {
+    if (e) e.preventDefault()
+    smsCode = cardCode = '000000'
+    return false
+  }
+
   onMount(() => {
     confirmQuote()
   })
@@ -153,6 +155,11 @@
       time={formatExpiration($transactionStore.transactionExpirationSeconds)}
     />
     {#if smsCodeRequired}
+      <h3 class="test">
+        {#if $configStore.environment === 'sandbox'}
+          <a on:click={fillTestInfo} href="">Fill With Test Info</a>
+        {/if}
+      </h3>
       <Label label="SMS Code">
         <Input
           id="autocomplete"
@@ -161,19 +168,23 @@
           on:change={e => (smsCode = e?.detail)}
         />
       </Label>
+      <p class="note">Please see your phone for the code.</p>
     {/if}
     {#if cardCodeRequired}
       <Label label="Card Code">
         <Input
           id="autocomplete"
           defaultValue={cardCode}
-          placeholder="123456"
+          placeholder="000000"
           on:change={e => (cardCode = e?.detail)}
         />
       </Label>
+      <p class="note">
+        Check your current credit card transactions to see your Card Code.
+      </p>
     {/if}
     {#if !isOneCodeRequired}
-      <p style="padding: 0 1.5rem 1.5rem 1.5rem">
+      <p style="padding: 0 .05rem 1.5rem .05rem">
         Please wait while we authorize your card. This will only take a minute.
       </p>
       <div class="flip-card">
@@ -210,6 +221,13 @@
 </ModalContent>
 
 <style lang="scss">
+  h3 {
+    position: absolute;
+    z-index: 1;
+  }
+  p.note {
+    margin: -0.5rem 0 2rem 0;
+  }
   .flip-card {
     height: 10rem;
     width: 17.5rem;
