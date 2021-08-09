@@ -18,15 +18,17 @@ const pagesize = 30
 async function rFetchUserTransfers(
   startingAtPage = 0,
 ): Promise<WyreTransfer[]> {
-  const { transfers } = await window.API.fluxWyreGetTransfers(
+  let { transactions } = await window.API.fluxGetTransactions(
     startingAtPage.toString(),
   )
 
-  if (transfers.length === pagesize) {
-    return transfers.concat(await rFetchUserTransfers(startingAtPage + 1))
+  transactions = transactions.filter(t => t.status.toUpperCase() !== 'QUOTED')
+
+  if (transactions.length === pagesize) {
+    return transactions.concat(await rFetchUserTransfers(startingAtPage + 1))
   }
 
-  return transfers
+  return transactions
 }
 
 export const transactionsStore = createStore()
