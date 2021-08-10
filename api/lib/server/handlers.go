@@ -1901,20 +1901,21 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 		Kind: transaction.KindDebit,
 	}.WithDefaults().EnrichWithCreateWalletOrderReservationResponse(createReservationResponse)
 	trx.Status = transaction.StatusQuoted
-	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
-	if err != nil {
-		return nil, err
-	}
 
 	// Get the order reservation details because why would they return them in the previous call? :(
 	reservationResponse, err := s.Wyre.GetWalletOrderReservation(wyre.GetWalletOrderReservationRequest{
 		ReservationID: createReservationResponse.Reservation,
 	})
+	trx = trx.EnrichWithWalletOrderReservation(reservationResponse)
 
 	if err != nil {
 		return nil, err
 	}
 
+	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
+	if err != nil {
+		return nil, err
+	}
 	return &proto.WyreCreateDebitCardQuoteResponse{
 		ReservationId: createReservationResponse.Reservation,
 		Quote: &proto.WyreWalletOrderReservationQuote{

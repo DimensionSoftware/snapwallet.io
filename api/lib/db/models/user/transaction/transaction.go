@@ -228,6 +228,18 @@ func (trx Transaction) EnrichWithCreateWalletOrderRequest(in *wyre.CreateWalletO
 	return out
 }
 
+func (trx Transaction) EnrichWithWalletOrderReservation(in *wyre.WalletOrderReservation) Transaction {
+	out := trx
+
+	out.Partner = PartnerWyre
+
+	if out.DestAmount == 0 {
+		out.DestAmount = in.DestAmount
+	}
+
+	return out
+}
+
 func (trx Transaction) EnrichWithWalletOrder(in *wyre.WalletOrder) Transaction {
 	out := trx
 
@@ -244,7 +256,6 @@ func (trx Transaction) EnrichWithWalletOrder(in *wyre.WalletOrder) Transaction {
 	//out.Source = ""
 	out.Dest = stripWyreObjectPrefix(in.Dest)
 	out.SourceAmount = in.SourceAmount
-	out.DestAmount = in.DestAmount
 	out.SourceCurrency = in.SourceCurrency
 	out.DestCurrency = in.DestCurrency
 

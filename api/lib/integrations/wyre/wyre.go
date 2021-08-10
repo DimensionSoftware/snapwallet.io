@@ -813,15 +813,16 @@ type WalletOrder struct {
 	Dest           string  `json:"dest"`
 	AccountID      string  `json:"accountId"`
 	SourceAmount   float64 `json:"sourceAmount"`
-	DestAmount     float64 `json:"destAmount"`
-	Email          string  `json:"email"`
-	PaymentMethod  string  `json:"paymentMethodName"`
-	WalletType     string  `json:"walletType"`
-	TransferID     string  `json:"transferId"`
-	ErrorMessage   string  `json:"errorMessage"`
-	CreatedAt      int64   `json:"createdAt"`
-	Owner          string  `json:"owner"`
-	Status         string  `json:"status"`
+	//DEFUNCT?
+	//DestAmount     float64 `json:"destAmount"`
+	Email         string `json:"email"`
+	PaymentMethod string `json:"paymentMethodName"`
+	WalletType    string `json:"walletType"`
+	TransferID    string `json:"transferId"`
+	ErrorMessage  string `json:"errorMessage"`
+	CreatedAt     int64  `json:"createdAt"`
+	Owner         string `json:"owner"`
+	Status        string `json:"status"`
 }
 
 // WalletOrderAuthorizations represents the response object for https://api.sendwyre.com/v3/debitcard/authorization/:orderId
