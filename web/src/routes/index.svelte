@@ -39,10 +39,16 @@
       }
       if (lastIsRotated !== isRotated) {
         // don't touch the DOM unless we must
-        topBg.style = `transform: translateZ(0) rotate(${
-          isRotated ? '180deg' : 0
-        })`
-        lastIsRotated = isRotated
+        requestAnimationFrame(() => {
+          // transform background
+          //   let sy = ~~(dy * 0.3) * (isRotated ? 1 : -1)
+          //   topBg.style = `transform: rotate(${isRotated ? '180deg' : 0}
+          // ) translateY(${sy}px)`
+          topBg.style = `transform: translateZ(0) rotate(${
+            isRotated ? '180deg' : 0
+          })`
+          lastIsRotated = isRotated
+        })
       }
     }
   }
