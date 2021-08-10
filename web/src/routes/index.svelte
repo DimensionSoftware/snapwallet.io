@@ -16,12 +16,40 @@
   let ifr: HTMLIFrameElement
   let liquidVisible = false
   let topBg
-  let dy
+
+  let dy, dyLast, isRotated, lastIsRotated, isScrolled
+  $: {
+    // init scroll fx
+    if (dyLast !== dy) {
+      // scrolled, so--
+      dyLast = dy
+      isRotated = dy > 900
+      // trigger scrolled css events
+      if (dy > 20) {
+        // don't touch the DOM unless we must
+        if (!isScrolled) {
+          document.body.classList.add('scrolled')
+          isScrolled = true
+        }
+      } else {
+        if (isScrolled) {
+          document.body.classList.remove('scrolled')
+          isScrolled = false
+        }
+      }
+      if (lastIsRotated !== isRotated) {
+        // don't touch the DOM unless we must
+        topBg.style = `transform: translateZ(0) rotate(${
+          isRotated ? '180deg' : 0
+        })`
+        lastIsRotated = isRotated
+      }
+    }
+  }
 
   onMount(async () => {
     await import('flux-init')
     Typewriter = (await import('svelte-typewriter')).default
-    topBg = document.getElementById('top-bg')
 
     const appName = 'Noir Checkout',
       // themeColor = '#E1143D',
@@ -85,44 +113,6 @@
 ▀▀▀▀▀• ▀▀▀▀▀  █▪▀▀▀ ▀▀▀ ▀▀ █▪ ▀▀▀▀ ▀▀▀ ▀█▄▀▪▀▀ █▪
 Hey, you-- join us!  https://dimensionsoftware.com
       `)
-
-    // init scroll fx
-    let frame, dyLast, isRotated, lastIsRotated, isTicking, isScrolled
-    const nextFrame = () => (frame = requestAnimationFrame(loop)),
-      tick = () => setTimeout(nextFrame, 100)
-    function loop() {
-      if (isTicking || dyLast === dy) return tick() // guard
-      isTicking = true
-      dyLast = dy
-      isRotated = dy > 900
-
-      // trigger scrolled css events
-      if (dy > 20) {
-        // don't touch the DOM unless we must
-        if (!isScrolled) {
-          document.body.classList.add('scrolled')
-          isScrolled = true
-        }
-      } else {
-        if (isScrolled) {
-          document.body.classList.remove('scrolled')
-          isScrolled = false
-        }
-      }
-
-      if (lastIsRotated === isRotated) {
-        isTicking = false
-        return tick()
-      } // guard
-      lastIsRotated = isRotated
-      topBg.style = `transform: translateZ(0) rotate(${
-        isRotated ? '180deg' : 0
-      })`
-      isTicking = false
-      tick()
-    }
-    requestAnimationFrame(loop) // main
-    return () => cancelAnimationFrame(frame)
   })
 </script>
 
@@ -177,7 +167,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
 <Footer />
 
 <span class="gg-chevron-double-down" />
-<span id="top-bg" class="top-bg" />
+<span id="top-bg" bind:this={topBg} class="top-bg" />
 
 {#if liquidVisible}
   <span
