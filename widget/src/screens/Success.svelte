@@ -122,7 +122,14 @@
     margin-bottom: 0.5rem;
   }
   .text-center {
-    margin: 0 1rem;
+    text-align: center;
+    line-height: 1.25rem;
+    p:first-child {
+      font-size: 1.1rem;
+    }
+    p:last-child {
+      opacity: 0.85;
+    }
   }
   b {
     text-transform: uppercase;
