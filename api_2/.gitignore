@@ -114,3 +114,4 @@ dist
 
 .svelte-kit/
 playground.js
+*.pem
