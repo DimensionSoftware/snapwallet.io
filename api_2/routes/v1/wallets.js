@@ -4,7 +4,7 @@ const router = new Router()
 
 router.post('/', async (ctx, _next) => {
   const wyre = new Wyre()
-  const { data } = await wyre.createWallet()
+  const { data } = await wyre.createWallet({ type: 'SAVINGS' })
   ctx.body = { data }
 })
 
