@@ -1495,6 +1495,13 @@
         },
         "cancelledAt": {
           "type": "string"
+        },
+        "fees": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "format": "double"
+          }
         }
       }
     },

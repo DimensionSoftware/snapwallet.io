@@ -33,6 +33,7 @@ export class Transaction {
     'expiresAt'?: string;
     'completedAt'?: string;
     'cancelledAt'?: string;
+    'fees'?: { [key: string]: number; };
 
     static readonly discriminator: string | undefined = undefined;
 
@@ -156,6 +157,12 @@ export class Transaction {
             "baseName": "cancelledAt",
             "type": "string",
             "format": ""
+        },
+        {
+            "name": "fees",
+            "baseName": "fees",
+            "type": "{ [key: string]: number; }",
+            "format": "double"
         }    ];
 
     static getAttributeTypeMap() {
