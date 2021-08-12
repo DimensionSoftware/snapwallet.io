@@ -573,6 +573,7 @@ message Transaction {
   string expires_at = 18;
   string completed_at = 19;
   string cancelled_at = 20;
+  map<string,double> fees = 21;
 };
 
 service Flux {

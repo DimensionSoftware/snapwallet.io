@@ -75,28 +75,29 @@ const (
 )
 
 type Transaction struct {
-	ID             ID             `json:"id"`
-	Partner        Partner        `json:"partner"`
-	Kind           Kind           `json:"kind"`
-	Direction      Direction      `json:"direction"`
-	Status         Status         `json:"status"`
-	ExternalIDs    ExternalIDs    `json:"externalIDs"`
-	ExternalStatus ExternalStatus `json:"externalStatus"`
-	Source         string         `json:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
-	Dest           string         `json:"dest"`           // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
-	SourceName     string         `json:"sourceName"`     // i.e. "account:AC-WYUR7ZZ6UMU"
-	DestName       string         `json:"destName"`       // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
-	SourceAmount   float64        `json:"sourceAmount"`   // i.e. 5
-	DestAmount     float64        `json:"destAmount"`     // i.e. 0.01
-	SourceCurrency string         `json:"sourceCurrency"` // i.e. "USD"
-	DestCurrency   string         `json:"destCurrency"`   // i.e. "BTC"
-	Message        string         `json:"message"`        // i.e. "Payment for DorianNakamoto@sendwyre.com"
-	ExchangeRate   float64        `json:"exchangeRate"`   // i.e. 499.00
-	TotalFees      float64        `json:"totalFees"`
-	CreatedAt      time.Time      `json:"createdAt"`
-	ExpiresAt      time.Time      `json:"expiresAt,omitempty"`
-	CompletedAt    time.Time      `json:"completedAt,omitempty"`
-	CancelledAt    time.Time      `json:"cancelledAt,omitempty"`
+	ID             ID                 `json:"id"`
+	Partner        Partner            `json:"partner"`
+	Kind           Kind               `json:"kind"`
+	Direction      Direction          `json:"direction"`
+	Status         Status             `json:"status"`
+	ExternalIDs    ExternalIDs        `json:"externalIDs"`
+	ExternalStatus ExternalStatus     `json:"externalStatus"`
+	Source         string             `json:"source"`         // i.e. "account:AC-WYUR7ZZ6UMU"
+	Dest           string             `json:"dest"`           // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
+	SourceName     string             `json:"sourceName"`     // i.e. "account:AC-WYUR7ZZ6UMU"
+	DestName       string             `json:"destName"`       // i.e. "bitcoin:14CriXWTRoJmQdBzdikw6tEmSuwxMozWWq"
+	SourceAmount   float64            `json:"sourceAmount"`   // i.e. 5
+	DestAmount     float64            `json:"destAmount"`     // i.e. 0.01
+	SourceCurrency string             `json:"sourceCurrency"` // i.e. "USD"
+	DestCurrency   string             `json:"destCurrency"`   // i.e. "BTC"
+	Message        string             `json:"message"`        // i.e. "Payment for DorianNakamoto@sendwyre.com"
+	ExchangeRate   float64            `json:"exchangeRate"`   // i.e. 499.00
+	TotalFees      float64            `json:"totalFees"`
+	Fees           map[string]float64 `json:"fees"`
+	CreatedAt      time.Time          `json:"createdAt"`
+	ExpiresAt      time.Time          `json:"expiresAt,omitempty"`
+	CompletedAt    time.Time          `json:"completedAt,omitempty"`
+	CancelledAt    time.Time          `json:"cancelledAt,omitempty"`
 }
 
 // WithDefaults provides defaults for User
@@ -170,6 +171,7 @@ func (trx Transaction) EnrichWithWyreTransferDetail(in *wyre.TransferDetail) Tra
 	out.Message = in.Message
 	out.ExchangeRate = in.ExchangeRate
 	out.TotalFees = in.TotalFees
+	out.Fees = in.Fees
 	out.CreatedAt = fromEpochMS(in.CreatedAt)
 	out.ExpiresAt = fromEpochMS(in.ExpiresAt)
 	out.CompletedAt = fromEpochMS(in.CompletedAt)
@@ -236,6 +238,13 @@ func (trx Transaction) EnrichWithWalletOrderReservation(in *wyre.WalletOrderRese
 	if out.DestAmount == 0 {
 		out.DestAmount = in.DestAmount
 	}
+	out.Fees = in.Quote.Fees
+
+	total := 0.0
+	for _, fee := range out.Fees {
+		total += fee
+	}
+	out.TotalFees = total
 
 	return out
 }

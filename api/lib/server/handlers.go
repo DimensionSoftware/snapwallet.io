@@ -1906,11 +1906,11 @@ func (s *Server) WyreCreateDebitCardQuote(ctx context.Context, req *proto.WyreCr
 	reservationResponse, err := s.Wyre.GetWalletOrderReservation(wyre.GetWalletOrderReservationRequest{
 		ReservationID: createReservationResponse.Reservation,
 	})
-	trx = trx.EnrichWithWalletOrderReservation(reservationResponse)
-
 	if err != nil {
 		return nil, err
 	}
+
+	trx = trx.EnrichWithWalletOrderReservation(reservationResponse)
 
 	err = s.Db.SaveTransaction(ctx, nil, u.ID, &trx)
 	if err != nil {
