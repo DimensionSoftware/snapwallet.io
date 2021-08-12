@@ -301,6 +301,7 @@ func (trx Transaction) AsProto() *proto.Transaction {
 		DestCurrency:   trx.DestCurrency,
 		Message:        trx.Message,
 		ExchangeRate:   trx.ExchangeRate,
+		Fees:           trx.Fees,
 		TotalFees:      trx.TotalFees,
 		CreatedAt:      formatAsRFC3339(trx.CreatedAt),
 		ExpiresAt:      formatAsRFC3339(trx.ExpiresAt),
