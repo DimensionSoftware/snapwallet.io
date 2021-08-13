@@ -1,5 +1,6 @@
 const JwtDecode = require('jsonwebtoken')
 const { UnauthenticatedError, UnauthorizedError } = require('../error')
+const { createHmac, timingSafeEqual } = require('crypto')
 
 const verifyJWTPlug = async (ctx, next) => {
   try {
@@ -21,4 +22,18 @@ const verifyJWTPlug = async (ctx, next) => {
   }
 }
 
-module.exports = { verifyJWTPlug }
+const verifyWyreWebhookHmac = async (ctx, next) => {
+  const headerSignature = ctx.request.headers['x-api-signature']
+  if (!headerSignature)
+    throw new UnauthorizedError('Please provide a valid signature.')
+  const payload = JSON.stringify(ctx.request.body)
+  const signature = createHmac('sha256', process.env.WYRE_API_SECRET)
+    .update(Buffer.from(payload))
+    .digest('hex')
+  if (!timingSafeEqual(Buffer.from(headerSignature), Buffer.from(signature))) {
+    throw new UnauthorizedError('Please provide a valid signature')
+  }
+  await next()
+}
+
+module.exports = { verifyJWTPlug, verifyWyreWebhookHmac }
