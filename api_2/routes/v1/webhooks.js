@@ -39,21 +39,26 @@ router.all(
       destCurrency: meta.destCurrency,
     }
 
-    ctx.log.info({ msg: 'Transferring to SW...' })
-    await wyre.createTransfer({
-      ...baseParams,
-      source: `wallet:${meta.source}`,
-      sourceAmount: swAmount,
-      dest: `wallet:${process.env.SNAP_WALLET_WYRE_SAVINGS_WALLET}`,
-    })
-
-    ctx.log.info({ msg: 'Transferring to non SW business wallet...' })
-    await wyre.createTransfer({
-      ...baseParams,
-      source: `wallet:${meta.source}`,
-      sourceAmount: remainingAmount,
-      dest: `wallet:${meta.destination}`,
-    })
+    await Promise.all([
+      async () => {
+        ctx.log.info({ msg: 'Transferring to SW...' })
+        await wyre.createTransfer({
+          ...baseParams,
+          source: `wallet:${meta.source}`,
+          sourceAmount: swAmount,
+          dest: `wallet:${process.env.SNAP_WALLET_WYRE_SAVINGS_WALLET}`,
+        })
+      },
+      async () => {
+        ctx.log.info({ msg: 'Transferring to non SW business wallet...' })
+        await wyre.createTransfer({
+          ...baseParams,
+          source: `wallet:${meta.source}`,
+          sourceAmount: remainingAmount,
+          dest: `wallet:${meta.destination}`,
+        })
+      },
+    ])
 
     ctx.status = 200
     ctx.body = {}
