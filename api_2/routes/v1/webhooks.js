@@ -7,7 +7,7 @@ const router = new KoaRouter()
 router.all(
   '/wyre',
   // TODO: use verifyWyreWebhookHmac
-  async (ctx, next) => {
+  async (ctx, _next) => {
     ctx.body = {}
 
     const wyre = new Wyre()
@@ -18,6 +18,9 @@ router.all(
     // Business wallets will land here too
     // Ignore the hook if there's no event in storage.
     if (!event) {
+      ctx.log.info({
+        msg: 'No event found. Webhook unrelated to wallet_wallet.',
+      })
       ctx.status = 200
       return
     }
@@ -25,6 +28,9 @@ router.all(
     const { type, meta } = event
 
     if (type !== 'transaction') {
+      ctx.log.info({
+        msg: 'Event is unrelated to transactions',
+      })
       ctx.status = 200
       return
     }
@@ -40,24 +46,18 @@ router.all(
     }
 
     await Promise.all([
-      async () => {
-        ctx.log.info({ msg: 'Transferring to SW...' })
-        await wyre.createTransfer({
-          ...baseParams,
-          source: `wallet:${meta.source}`,
-          sourceAmount: swAmount,
-          dest: `wallet:${process.env.SNAP_WALLET_WYRE_SAVINGS_WALLET}`,
-        })
-      },
-      async () => {
-        ctx.log.info({ msg: 'Transferring to non SW business wallet...' })
-        await wyre.createTransfer({
-          ...baseParams,
-          source: `wallet:${meta.source}`,
-          sourceAmount: remainingAmount,
-          dest: `wallet:${meta.destination}`,
-        })
-      },
+      wyre.createTransfer({
+        ...baseParams,
+        source: `wallet:${meta.source}`,
+        sourceAmount: swAmount,
+        dest: `wallet:${process.env.SNAP_WALLET_WYRE_SAVINGS_WALLET}`,
+      }),
+      wyre.createTransfer({
+        ...baseParams,
+        source: `wallet:${meta.source}`,
+        sourceAmount: remainingAmount,
+        dest: `wallet:${meta.destination}`,
+      }),
     ])
 
     ctx.status = 200
