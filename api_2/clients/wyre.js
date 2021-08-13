@@ -4,7 +4,7 @@ const { WYRE_API_URL, WYRE_API_SECRET, WYRE_API_KEY, WYRE_WEBHOOK_URL } =
   process.env
 const ClientBase = require('./base')
 const { v4 } = require('uuid')
-const { UnprocessableEntityError } = require('../error')
+const { WyreError } = require('../error/wyre')
 
 class Wyre extends ClientBase {
   client = axios.create({ baseURL: WYRE_API_URL })
@@ -54,17 +54,7 @@ class Wyre extends ClientBase {
     }
   }
 
-  errorSwitch = (e) => {
-    if (e.response.data) {
-      const klass = e.response.data
-      if (klass.type === 'InsufficientFundsException')
-        return new UnprocessableEntityError(
-          'You have insufficient funds for this transaction'
-        )
-    }
-    // TODO: handle Wyre errors here
-    return e
-  }
+  errorSwitch = (e) => new WyreError(e)
 }
 
 module.exports = Wyre
