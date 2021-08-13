@@ -12,7 +12,7 @@ const centralizedErrorPlug = async (ctx, next) => {
     ctx.log.error({
       stack: e.stack,
       error: e,
-      meta: e.response ? e.response.data : undefined,
+      meta: e.originalError,
     })
     if (e instanceof BaseAPIError) {
       ctx.status = e.status
