@@ -2,6 +2,8 @@ class BaseAPIError extends Error {
   status = 500
   error = 'internal_server'
   message = 'Oops, an unexpected error occurred.'
+  originalError = undefined
+
   constructor(msg) {
     super()
     this.message = msg || this.message
