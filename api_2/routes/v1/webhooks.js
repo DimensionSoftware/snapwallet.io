@@ -11,7 +11,7 @@ router.all(
     ctx.body = {}
 
     const wyre = new Wyre()
-    let { dest } = ctx.request.body
+    const { dest } = ctx.request.body
     const source = dest.replace('wallet:', '')
     const event = await getEvent(source)
 
