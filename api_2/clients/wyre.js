@@ -18,13 +18,17 @@ class Wyre extends ClientBase {
     return this.get({ url: '/v2/wallets', params: { limit, offset } })
   }
 
-  createWallet = (params) => {
-    const { type = 'SAVINGS', id = `snap_wallet_${v4()}`, notes = '' } = params
+  createWallet = (params = {}) => {
+    const {
+      type = 'SAVINGS',
+      name = `snap_wallet_${v4()}`,
+      notes = '',
+    } = params
     return this.post({
       url: '/v2/wallets',
       data: {
-        name: id,
-        callbackUrl: `${WYRE_WEBHOOK_URL}/webhooks/wyre?wallet_id=${id}`,
+        name,
+        callbackUrl: `${WYRE_WEBHOOK_URL}/v1/webhooks/wyre?wallet_name=${name}`,
         type,
         notes,
       },
