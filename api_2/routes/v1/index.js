@@ -30,5 +30,4 @@ router.use(
   transferRouter.allowedMethods()
 )
 
-console.log(EventSchema.validate({ kind: "foobar", data: {}}))
 module.exports = router
