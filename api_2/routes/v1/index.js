@@ -5,8 +5,7 @@ const Router = require('koa-router'),
   transferRouter = require('./transfer'),
   adminRouter = require('./admin'),
   webhooksRouter = require('./webhooks'),
-  { verifyJWTPlug } = require('../../middleware/auth'),
-  { EventSchema} = require('../../schemas/event')
+  { verifyJWTPlug } = require('../../middleware/auth')
 
 router.use(
   '/webhooks',

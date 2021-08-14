@@ -15,7 +15,6 @@
     "argon2": "^0.28.2",
     "axios": "^0.21.1",
     "base-58": "0.0.1",
-    "bases": "^0.2.1",
     "dotenv": "^10.0.0",
     "firebase-admin": "^9.11.0",
     "flake-idgen": "^1.4.0",

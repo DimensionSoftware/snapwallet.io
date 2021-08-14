@@ -8,7 +8,8 @@ const bodyParser = require('koa-bodyparser')
 const v1Router = require('./routes/v1')
 const { centralizedErrorPlug } = require('./middleware/error')
 const { loggerPlug } = require('./middleware/logging')
-const cors = require('@koa/cors')
+const cors = require('@koa/cors'),
+  { EventSchema} = require('./schemas/event')
 
 /**
  * Common Middleware
