@@ -46,6 +46,8 @@
         >
           {title}
         </h2>
+      {:else}
+        <h2 class:right class:blur={hasImage} />
       {/if}
     </Visibility>
     <Visibility steps={100} let:percent>
@@ -58,6 +60,8 @@
           >
             {description}
           </h3>
+        {:else}
+          <h3 class:blur={hasImage} />
         {/if}
       {/if}
     </Visibility>
@@ -107,6 +111,7 @@
       article {
         h2,
         h3 {
+          position: absolute;
           left: inherit;
           text-align: center;
           margin: 0 auto;

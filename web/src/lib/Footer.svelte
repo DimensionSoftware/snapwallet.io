@@ -178,8 +178,10 @@
   @import '../../../widget/src/styles/animations.scss';
   @import '../../../widget/src/styles/_vars.scss';
   .cards {
+    height: 220px;
     display: flex;
-    position: relative;
+    top: 75px;
+    position: absolute;
     flex-direction: row;
     article {
       margin: 0 7rem;
@@ -190,7 +192,7 @@
       h4 {
         font-weight: 300;
         text-align: center;
-        margin-top: 1rem;
+        margin-top: 0.75rem;
         font-size: 1.5rem;
         white-space: nowrap;
       }
@@ -200,7 +202,7 @@
         right: -100%;
         background: #ccc;
         width: 100px;
-        top: 35%;
+        top: 18%;
       }
     }
   }
@@ -218,6 +220,7 @@
   }
   :global(.started article) {
     position: relative;
+    height: 200px;
     width: 100%;
   }
   .contact {
@@ -262,6 +265,7 @@
       position: relative;
       z-index: 1;
       list-style: none;
+      min-height: 200px;
       margin: 9rem 0 5rem 10rem;
       li {
         font-size: 0.9rem;
