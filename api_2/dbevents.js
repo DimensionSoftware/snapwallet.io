@@ -1,11 +1,10 @@
+const { collections: dbCollections } = require('./db')
 const { EventSchema } = require('./schemas/event')
-
-const collectionName = 'events'
 
 class DatabaseEventsManager {
   constructor(db) {
     this.db = db
-    this.collection = this.db.collection(collectionName)
+    this.collection = this.db.collection(dbCollections.events)
   }
 
   async record(...rawEvents) {
