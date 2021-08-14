@@ -36,6 +36,7 @@ router.all(
     }
 
     // TODO: figure out what fee should be and take from environment.
+    // TODO: handle case where there's an amount left over (user sent too much)
     const swAmount = 0.0025 * meta.sourceAmount
     const remainingAmount = meta.sourceAmount - swAmount
     const baseParams = {
