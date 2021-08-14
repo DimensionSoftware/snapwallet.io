@@ -1,4 +1,3 @@
-
 const Router = require('koa-router'),
   router = new Router(),
   walletsRouter = require('./wallets'),
