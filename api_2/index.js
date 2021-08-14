@@ -8,8 +8,7 @@ const bodyParser = require('koa-bodyparser')
 const v1Router = require('./routes/v1')
 const { centralizedErrorPlug } = require('./middleware/error')
 const { loggerPlug } = require('./middleware/logging')
-const cors = require('@koa/cors'),
-  { EventSchema} = require('./schemas/event')
+const cors = require('@koa/cors')
 
 /**
  * Common Middleware
@@ -24,8 +23,5 @@ app.use(cors())
  */
 router.use('/v1', v1Router.routes(), v1Router.allowedMethods())
 app.use(router.routes(), router.allowedMethods())
-
-// test
-console.log(EventSchema.validate({ kind: "foobar", data: {}}))
 
 app.listen(process.env.PORT || 3000)

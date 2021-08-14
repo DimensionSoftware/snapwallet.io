@@ -1,7 +1,8 @@
 // Required for using module directly
 require('dotenv').config()
 
-const admin = require('firebase-admin')
+const admin = require('firebase-admin'),
+  { DatabaseEventsManager } = require('./dbevents')
 
 admin.initializeApp({
   projectId: process.env.FIRESTORE_PROJECT,
@@ -14,6 +15,11 @@ const collections = {
 }
 
 const db = admin.firestore()
+
+// test
+const events = new DatabaseEventsManager(db)
+events.record({ kind: "TEST_KIND", data: 123 }).then(console.log.bind(0, "events recorded"))
+events.record({ kind: "SPOOKY_KIND", data: [1,2,3] }, { kind: "GOOFY_KIND", data: "sick" }).then(console.log.bind(0, "events recorded"))
 
 const listUsers = () =>
   db

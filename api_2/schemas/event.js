@@ -8,7 +8,7 @@ const EventSchema = Joi.object({
   action: Joi.string(),
   data: Joi.any().required(),
   entity: {
-    kind: Joi.string().valid('business', 'user').required(),
+    kind: Joi.string().valid('BUSINESS', 'USER').required(),
     id: Joi.string().required(),
   },
   recorded_at: Joi.date().iso().default(new Date().toISOString()),
