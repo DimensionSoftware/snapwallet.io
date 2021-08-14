@@ -18,8 +18,15 @@ const db = admin.firestore()
 
 // test
 const events = new DatabaseEventsManager(db)
-events.record({ kind: "TEST_KIND", data: 123 }).then(console.log.bind(0, "events recorded"))
-events.record({ kind: "SPOOKY_KIND", data: [1,2,3] }, { kind: "GOOFY_KIND", data: "sick" }).then(console.log.bind(0, "events recorded"))
+events
+  .record({ kind: 'TEST_KIND', data: 123 })
+  .then(console.log.bind(0, 'events recorded'))
+events
+  .record(
+    { kind: 'SPOOKY_KIND', data: [1, 2, 3] },
+    { kind: 'GOOFY_KIND', data: 'sick' }
+  )
+  .then(console.log.bind(0, 'events recorded'))
 
 const listUsers = () =>
   db
@@ -41,12 +48,12 @@ const createBusiness = async ({ name, apiKey, wallet }) => {
 }
 
 const createEvent = async ({ type, meta }) => {
-  const ref = await db.collection(collections.events).add({
-    type,
-    meta,
+  const [event] = await events.record({
+    kind: type,
+    data: meta,
   })
-  const doc = await ref.get()
-  return { ...doc.data(), id: ref.id }
+
+  return event
 }
 
 const getBusinessByAPIKey = async (apiKey) => {
