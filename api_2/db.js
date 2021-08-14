@@ -84,4 +84,5 @@ module.exports = {
   createEvent,
   getBusinessByAPIKey,
   getEvent,
+  collections,
 }
