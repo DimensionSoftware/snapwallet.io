@@ -1,10 +1,12 @@
+
 const Router = require('koa-router'),
   router = new Router(),
   walletsRouter = require('./wallets'),
   transferRouter = require('./transfer'),
   adminRouter = require('./admin'),
   webhooksRouter = require('./webhooks'),
-  { verifyJWTPlug } = require('../../middleware/auth')
+  { verifyJWTPlug } = require('../../middleware/auth'),
+  { EventSchema} = require('../../schemas/event')
 
 router.use(
   '/webhooks',
@@ -28,4 +30,5 @@ router.use(
   transferRouter.allowedMethods()
 )
 
+console.log(EventSchema.validate({ kind: "foobar", data: {}}))
 module.exports = router
