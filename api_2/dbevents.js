@@ -9,7 +9,10 @@ class DatabaseEventsManager {
   }
 
   async record(...rawEvents) {
-    if (!rawEvents.length) return []
+    if (rawEvents.length === 0) return []
+
+    // handle first argument as array also
+    if (rawEvents.length === 1 && Array.isArray(rawEvents[0])) rawEvents = rawEvents[0]
 
     const events = [],
       batch = this.db.batch()
