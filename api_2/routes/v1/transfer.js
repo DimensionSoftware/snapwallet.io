@@ -25,7 +25,6 @@ router.post('/', async (ctx, _next) => {
   // address is going to be an ERC20 address.
   if (!depositAddress) depositAddress = txnAddresses['ETH']
 
-  // TODO: handle Snap Wallet fee
   const params = {
     source: `wallet:${txnWallet.id}`,
     sourceCurrency,
