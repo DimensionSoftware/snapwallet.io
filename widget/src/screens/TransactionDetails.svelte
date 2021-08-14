@@ -11,12 +11,14 @@
   let status = transaction.status.toLowerCase()
   let createdAt = new Date(transaction.createdAt)
 
-  const cryptoFee =
-    transaction.fees[transaction.destCurrency] / transaction.exchangeRate
-  const trueSourceAmount =
-    transaction.sourceAmount -
-    cryptoFee -
-    transaction.fees[transaction.sourceCurrency]
+  const cryptoFee = transaction.fees
+    ? transaction.fees[transaction.destCurrency] / transaction.exchangeRate
+    : 0
+  const trueSourceAmount = transaction.fees
+    ? transaction.sourceAmount -
+      cryptoFee -
+      transaction.fees[transaction.sourceCurrency]
+    : 0
 
   const Icon = CryptoIcons[transaction.destCurrency]
 </script>
@@ -95,7 +97,7 @@
         <div>
           {formatLocaleCurrency(
             transaction.sourceCurrency,
-            transaction.fees[transaction.sourceCurrency],
+            transaction.fees ? transaction.fees[transaction.sourceCurrency] : 0,
           )}
         </div>
       </div>
