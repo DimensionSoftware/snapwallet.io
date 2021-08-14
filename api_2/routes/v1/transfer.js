@@ -39,7 +39,7 @@ router.post('/', async (ctx, _next) => {
   const { data: txn } = await wyre.createTransfer(params)
 
   await createEvent({
-    type: 'transaction',
+    type: 'TRANSACTION',
     meta: {
       transaction_direction: 'wallet_wallet',
       source: txnWallet.id,
