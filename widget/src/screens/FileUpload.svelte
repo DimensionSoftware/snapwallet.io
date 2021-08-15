@@ -21,6 +21,7 @@
   import Button from '../components/Button.svelte'
   import { Routes } from '../constants'
   import { transactionStore } from '../stores/TransactionStore'
+  import { configStore } from '../stores/ConfigStore'
   import { userStore } from '../stores/UserStore'
   import { FileUploadTypes } from '../types'
   import { getMissingFieldMessages } from '../util/profiles'
@@ -163,6 +164,8 @@
           {missingInfo.document.submitted.size > 1 ? 'Documents' : 'Document'} Uploaded
         </h5>
       </div>
+    {:else if $configStore.environment === 'sandbox'}
+      <h3 class="test">Upload any image in Test Mode</h3>
     {:else}
       <h5 in:blur={{ duration: 300 }}>Upload one of:</h5>
     {/if}
@@ -223,7 +226,16 @@
       isLoading={isUploadingFile}
       disabled={!fileType}
       on:mousedown={handleNextStep}
-      >{isUploadingFile ? 'Uploading' : 'Upload'}</Button
+      >{isUploadingFile
+        ? // uploading file
+          'Uploading'
+        : minimumFiles <= 1
+        ? // only need 1 document, so--
+          'Upload'
+        : // otherwise; guide customer Front/Back
+        fileIds.length < 1
+        ? 'Upload Front'
+        : 'Upload Back'}</Button
     >
   </ModalFooter>
 </ModalContent>

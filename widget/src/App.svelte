@@ -549,6 +549,7 @@
       color: var(--theme-color);
       font-weight: bold;
       opacity: 1;
+      text-align: left;
     }
   }
 
