@@ -26,11 +26,11 @@
   const fillTestInfo = e => {
     e.preventDefault()
     debitCardStore.updateAddress({
-      street1: '1 Crypto St.',
+      street1: '1 Crypto',
       street2: '',
-      city: 'Beverly Hills',
+      city: 'Metasphere',
       state: 'CA',
-      postalCode: '90210',
+      postalCode: '90123',
       country: 'US',
     })
     return false

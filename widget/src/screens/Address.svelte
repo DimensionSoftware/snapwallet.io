@@ -8,6 +8,7 @@
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
+  import { configStore } from '../stores/ConfigStore'
   import { userStore } from '../stores/UserStore'
   import { focusFirstInput, Logger, onEnterPressed } from '../util'
   import { Routes, UserProfileFieldTypes } from '../constants'
@@ -148,6 +149,18 @@
     const addressVal = Object.values($userStore.address).join('')
     if (addressVal.length) onEnterPressed(e, handleNextStep)
   }
+
+  const fillTestInfo = e => {
+    e.preventDefault()
+    userStore.setFullAddress({
+      street1: '1 Crypto',
+      street2: '',
+      city: 'Metasphere',
+      state: 'CA',
+      postalCode: '90123',
+      country: 'US',
+    })
+  }
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -157,6 +170,10 @@
   <ModalBody padded>
     {#if missingInfo.address.isComplete}
       <h5 in:blur={{ duration: 300 }}>Address received and may be updated:</h5>
+    {:else if $configStore.environment === 'sandbox'}
+      <h3 class="test">
+        <a on:click={fillTestInfo} href="">Fill With Test Info</a>
+      </h3>
     {:else}
       <h5>&nbsp;</h5>
     {/if}

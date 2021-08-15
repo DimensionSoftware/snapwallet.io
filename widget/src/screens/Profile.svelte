@@ -9,6 +9,7 @@
   import Label from '../components/inputs/Label.svelte'
   import Input from '../components/inputs/Input.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
+  import { configStore } from '../stores/ConfigStore'
   import { userStore } from '../stores/UserStore'
   import { onEnterPressed, focus as focusElement } from '../util'
   import { Routes } from '../constants'
@@ -24,12 +25,8 @@
   const handleNextStep = async () => {
     try {
       isSaving = true
-      const {
-          firstName,
-          lastName,
-          birthDate,
-          socialSecurityNumber,
-        } = $userStore,
+      const { firstName, lastName, birthDate, socialSecurityNumber } =
+          $userStore,
         focus = (ndx: number) => {
           const thingie = document.querySelectorAll('input[type="text"]')[
             ndx
@@ -77,6 +74,14 @@
   const onKeyDown = (e: Event) => {
     onEnterPressed(e, handleNextStep)
   }
+
+  const fillTestInfo = e => {
+    e.preventDefault()
+    userStore.setBirthDate('01/01/1980')
+    userStore.setFirstName('John')
+    userStore.setLastName('Smith')
+    userStore.setSocialSecurityNumber('12312312345')
+  }
 </script>
 
 <svelte:window on:keydown={onKeyDown} />
@@ -86,6 +91,10 @@
   <ModalBody padded>
     {#if $userStore.isProfileComplete}
       <h5 in:blur={{ duration: 300 }}>Identity received and may be updated:</h5>
+    {:else if $configStore.environment === 'sandbox'}
+      <h3 class="test">
+        <a on:click={fillTestInfo} href="">Fill With Test Info</a>
+      </h3>
     {:else}
       <h5>&nbsp;</h5>
     {/if}
