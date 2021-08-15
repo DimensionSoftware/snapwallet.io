@@ -77,10 +77,10 @@
 
   const fillTestInfo = e => {
     e.preventDefault()
-    userStore.setBirthDate('01/01/1980')
+    userStore.setBirthDate('01-01-1980')
     userStore.setFirstName('John')
     userStore.setLastName('Smith')
-    userStore.setSocialSecurityNumber('12312312345')
+    userStore.setSocialSecurityNumber('123-12-1234')
   }
 </script>
 
