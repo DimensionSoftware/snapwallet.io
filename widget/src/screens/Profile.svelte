@@ -164,4 +164,7 @@
     margin-top: 0;
     margin-left: 0.25rem;
   }
+  .test {
+    text-align: left;
+  }
 </style>
