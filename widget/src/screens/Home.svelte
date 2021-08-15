@@ -229,11 +229,6 @@
       const { hasWyrePaymentMethods, hasWyreAccount } = flags
       if (hasWyrePaymentMethods && hasWyreAccount)
         return Routes.CHECKOUT_OVERVIEW
-      else if (
-        !hasWyrePaymentMethods &&
-        !$paymentMethodStore.wyrePaymentMethods.length
-      )
-        return Routes.PLAID_LINK
       else return verificationNextStep
     }
     return Routes.SEND_OTP
