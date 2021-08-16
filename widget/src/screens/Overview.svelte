@@ -147,17 +147,17 @@
             <div>From</div>
             <div>{$transactionStore.selectedSourcePaymentMethod?.name}</div>
           </div>
-          <div class="line-item muted">
+          <div class="line-item muted" title={dest}>
             <div>To</div>
             <div>
-              {dest.substring(0, 6)}...{dest.substring(dest.length - 4)}
+              {dest.substring(0, 6)}...{dest.substring(dest.length - 6)}
             </div>
           </div>
         {:else}
-          <div class="line-item muted">
+          <div class="line-item muted" title={dest}>
             <div>From</div>
             <div>
-              {dest.substring(0, 6)}...{dest.substring(dest.length - 4)}
+              {dest.substring(0, 6)}...{dest.substring(dest.length - 6)}
             </div>
           </div>
           <div class="line-item muted">
@@ -173,10 +173,10 @@
           <div>From</div>
           <div>Debit Card</div>
         </div>
-        <div class="line-item muted">
+        <div class="line-item muted" title={dest}>
           <div>To</div>
           <div>
-            {dest.substring(0, 6)}...{dest.substring(dest.length - 4)}
+            {dest.substring(0, 6)}...{dest.substring(dest.length - 6)}
           </div>
         </div>
         <div class="line dashed" />
@@ -243,18 +243,36 @@
   }
 
   .line {
+    position: relative;
     height: 1px;
     max-height: 1px;
     width: 100%;
-    border-bottom: 0.5px solid var(--theme-text-color);
+    // border-bottom: 0.5px solid var(--theme-text-color);
     margin: 0.5rem 0 0.5rem 0;
+    position: relative;
     &.dashed {
-      border-bottom: 0.7px dashed var(--theme-text-color);
+      &:after {
+        content: '';
+        position: absolute;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--theme-text-color),
+          var(--theme-text-color),
+          transparent
+        );
+        opacity: 0.35;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
     }
   }
 
   .line-items {
     width: 100%;
+    line-height: 1.5rem;
     align-self: center;
     margin-top: 2.5rem;
     padding: 0 0.7rem;
