@@ -21,6 +21,7 @@ class DatabaseEventsManager {
     this.collection = this.db.collection('events')
   }
 
+  // record n number of events
   async record(...rawEvents) {
     if (rawEvents.length === 0) return []
 
@@ -49,6 +50,25 @@ class DatabaseEventsManager {
 
     return events
   }
+
+  // get by id
+  async get(id) {
+    const ref = db.collection('events').doc(id)
+
+    const doc = await ref.get()
+    if (doc.exists) {
+      return doc.data()
+    } else {
+      return null
+    }
+  }
+
+  // TODO:
+
+  // scan by date
+  async scan(from, to) {
+  }
 }
+
 
 module.exports = { DatabaseEventsManager }
