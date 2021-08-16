@@ -19,12 +19,12 @@ const db = admin.firestore()
 // test
 const events = new DatabaseEventsManager(db)
 events
-  .record({ kind: 'TEST_KIND', data: 123 })
+  .record({ entity: { kind: 'BUSINESS', id: 'biz123' },  kind: 'TEST_KIND', data: 123 })
   .then(console.log.bind(0, 'events recorded'))
 events
   .record(
-    { kind: 'SPOOKY_KIND', data: [1, 2, 3] },
-    { kind: 'GOOFY_KIND', data: 'sick' }
+    { entity: { kind: 'USER', id: '123' }, kind: 'SPOOKY_KIND', data: [1, 2, 3] },
+    { entity: { kind: 'USER', id: '321' }, kind: 'GOOFY_KIND', data: 'sick' }
   )
   .then(console.log.bind(0, 'events recorded'))
 
