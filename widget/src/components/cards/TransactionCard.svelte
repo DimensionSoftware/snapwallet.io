@@ -35,7 +35,9 @@
 {#if badgeText}
   <Badge
     error={badgeType === 'error'}
-    success={badgeType === 'success'}
+    success={['success', 'confirmed', 'completed'].includes(
+      status.toLocaleLowerCase(),
+    )}
     warning={badgeType === 'pending'}
   >
     {badgeText}

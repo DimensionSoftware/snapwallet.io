@@ -27,7 +27,9 @@
           <Badge
             class="account-card-badge"
             error={badgeType === 'error'}
-            success={badgeType === 'success'}
+            success={['success', 'confirmed', 'completed'].includes(
+              badgeType.toLocaleLowerCase(),
+            )}
             warning={badgeType === 'warning'}
             info={badgeType === 'info'}
           >

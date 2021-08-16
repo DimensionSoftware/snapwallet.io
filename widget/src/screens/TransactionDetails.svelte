@@ -41,7 +41,9 @@
         <div>Status</div>
         <div style="text-transform:capitalize;">
           <Badge
-            success={status === 'completed'}
+            success={['confirmed', 'completed'].includes(
+              status.toLocaleLowerCase(),
+            )}
             warning={status === 'pending'}
             error={status === 'failed'}
           >
