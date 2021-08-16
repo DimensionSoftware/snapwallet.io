@@ -142,17 +142,33 @@
   }
 
   .line {
+    position: relative;
     height: 1px;
     max-height: 1px;
     width: 100%;
-    border-bottom: 0.5px solid var(--theme-text-color);
     margin: 0.5rem 0 0.5rem 0;
     &.dashed {
-      border-bottom: 0.7px dashed var(--theme-text-color);
+      &:after {
+        content: '';
+        position: absolute;
+        background: linear-gradient(
+          to right,
+          transparent,
+          var(--theme-text-color),
+          var(--theme-text-color),
+          transparent
+        );
+        opacity: 0.35;
+        height: 1px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+      }
     }
   }
 
   .line-items {
+    line-height: 1.5rem;
     width: 100%;
     align-self: center;
     margin-top: 2.5rem;

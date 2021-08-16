@@ -184,7 +184,7 @@
       </p>
     {/if}
     {#if !isOneCodeRequired}
-      <p style="padding: 0 .05rem 1.5rem .05rem">
+      <p style="line-height: 1.5rem; padding: 0 .05rem 1.5rem .05rem">
         Please wait while we authorize your card. This will only take a minute.
       </p>
       <div class="flip-card">
@@ -226,6 +226,7 @@
     z-index: 1;
   }
   p.note {
+    line-height: 1.5rem;
     margin: -0.5rem 0 2rem 0;
   }
   .flip-card {

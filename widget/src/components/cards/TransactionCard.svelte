@@ -52,7 +52,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.25rem 0;
+    padding: 0.25rem 0 0 0;
     margin-left: 0.2rem;
     & > .content-container {
       height: 100%;
@@ -62,7 +62,7 @@
         margin: 0;
       }
       h4 {
-        line-height: 1.15rem;
+        line-height: 1.5rem;
       }
       h5 {
         font-weight: 500;
