@@ -13,6 +13,7 @@
 //     at Object.<anonymous> (/Users/dreamcodez/sd/flux/api_2/routes/v1/transfer.js:3:46)
 //     at Module._compile (internal/modules/cjs/loader.js:1063:30)
 
+const { ref } = require('joi')
 const { EventSchema } = require('./schemas/event')
 
 class DatabaseEventsManager {
@@ -63,10 +64,18 @@ class DatabaseEventsManager {
     }
   }
 
-  // TODO:
+  // list by entity id / no guarantee of ordering to avoid complex index ; can be done by app server
+  async listByEntityID(entityID) {
+    const ref = db.collection('events')
 
-  // scan by date
-  async scan(from, to) {
+    const snapshot = await ref.where('entity.id', '==', entityID).get()
+
+    const events = []
+    snapshot.forEach(doc => {
+      events.push(doc.data())
+    });
+
+    return events
   }
 }
 
