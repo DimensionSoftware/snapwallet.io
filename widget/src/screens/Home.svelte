@@ -286,8 +286,8 @@
   function heightForConfig(): number {
     // start with max and substract when ui is hidden due to config
     var height = 525
-    if ($configStore.sourceAmount) height -= 110
-    if ($configStore.defaultDestinationAsset) height -= 110
+    if ($configStore.sourceAmount) height -= 100
+    if ($configStore.defaultDestinationAsset) height -= 100
     return height
   }
 

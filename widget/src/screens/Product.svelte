@@ -16,7 +16,7 @@
   import FaIcon from 'svelte-awesome'
   import { onMount } from 'svelte'
   import { priceStore } from '../stores/PriceStore'
-  import { formatLocaleCurrency } from '../util'
+  import { formatLocaleCurrency, resizeWidget } from '../util'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import CountrySelector from '../components/selectors/CountrySelector.svelte'
   import VStep from '../components/VStep.svelte'
@@ -159,6 +159,7 @@
   onMount(() => {
     // select debit by default
     transactionStore.update({ inMedium: TransactionMediums.DEBIT_CARD })
+    resizeWidget(525, $configStore.appName)
     getViewer()
     getPrices()
     const interval = priceStore.pollPrices()
@@ -173,6 +174,8 @@
     <div class="container">
       {#if product.author}
         <h4 class="nft-title">by {product.author}</h4>
+      {:else if product.subtitle}
+        <h4 class="nft-title">by {product.subtitle}</h4>
       {/if}
       {#if product.videoURL}
         <video loop playsinline autoplay muted class="nft-video">
@@ -327,7 +330,7 @@
   }
 
   .vertical-stepper {
-    margin-top: 2rem;
+    margin-top: 1.5rem;
     list-style: none;
     padding: 0 0.5rem;
     :global(li) {
