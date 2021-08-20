@@ -19,11 +19,19 @@ const db = admin.firestore()
 // test
 const events = new DatabaseEventsManager(db)
 events
-  .record({ entity: { kind: 'BUSINESS', id: 'biz123' },  kind: 'TEST_KIND', data: 123 })
+  .record({
+    entity: { kind: 'BUSINESS', id: 'biz123' },
+    kind: 'TEST_KIND',
+    data: 123,
+  })
   .then(console.log.bind(0, 'events recorded'))
 events
   .record(
-    { entity: { kind: 'USER', id: '123' }, kind: 'SPOOKY_KIND', data: [1, 2, 3] },
+    {
+      entity: { kind: 'USER', id: '123' },
+      kind: 'SPOOKY_KIND',
+      data: [1, 2, 3],
+    },
     { entity: { kind: 'USER', id: '321' }, kind: 'GOOFY_KIND', data: 'sick' }
   )
   .then(console.log.bind(0, 'events recorded'))
@@ -47,10 +55,11 @@ const createBusiness = async ({ name, apiKey, wallet }) => {
   return { ...doc.data(), id: ref.id }
 }
 
-const createEvent = async ({ type, meta }) => {
+const createEvent = async ({ type, meta, entity }) => {
   const [event] = await events.record({
     kind: type,
     data: meta,
+    entity,
   })
 
   return event
@@ -71,11 +80,32 @@ const getBusinessByAPIKey = async (apiKey) => {
 const getEvent = async (source) => {
   const result = await db
     .collection(collections.events)
-    .where('meta.source', '==', source)
+    .where('data.source', '==', source)
     .limit(1)
     .get()
   if (!result.docs[0]) return
   return result.docs[0].data()
+}
+
+const insertTask = async (config = {}) => {
+  const { worker, options } = config
+  const now = new Date().toISOString()
+  return db.collection('tasks').add({
+    perform_at: now,
+    status: 'pending',
+    worker,
+    options,
+  })
+}
+
+const getPendingTasks = async (limit = 25) => {
+  const now = new Date().toISOString()
+  return db
+    .collection('tasks')
+    .where('perform_at', '<=', now)
+    .where('status', '==', 'pending')
+    .limit(limit)
+    .get()
 }
 
 module.exports = {
@@ -85,4 +115,6 @@ module.exports = {
   getBusinessByAPIKey,
   getEvent,
   collections,
+  insertTask,
+  getPendingTasks,
 }
