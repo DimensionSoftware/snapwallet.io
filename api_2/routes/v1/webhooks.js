@@ -1,7 +1,7 @@
 const KoaRouter = require('koa-router')
-const Wyre = require('../../clients/wyre')
-const { getEvent } = require('../../db')
+const { getEvent, insertTask } = require('../../db')
 const { verifyWyreWebhookHmac } = require('../../middleware/auth')
+const { payoutTask } = require('../../util/get_paid')
 const router = new KoaRouter()
 
 router.all(
@@ -10,7 +10,6 @@ router.all(
   async (ctx, _next) => {
     ctx.body = {}
 
-    const wyre = new Wyre()
     const { dest } = ctx.request.body
     const source = dest.replace('wallet:', '')
     const event = await getEvent(source)
@@ -25,9 +24,9 @@ router.all(
       return
     }
 
-    const { type, meta } = event
+    const { kind, data } = event
 
-    if (type !== 'transaction') {
+    if (kind.toLowerCase() !== 'transaction') {
       ctx.log.info({
         msg: 'Event is unrelated to transactions',
       })
@@ -35,31 +34,16 @@ router.all(
       return
     }
 
-    // TODO: figure out what fee should be and take from environment.
-    // TODO: handle case where there's an amount left over (user sent too much)
-    const swAmount = 0.0025 * meta.sourceAmount
-    const remainingAmount = meta.sourceAmount - swAmount
-    const baseParams = {
-      preview: false,
-      autoConfirm: true,
-      sourceCurrency: meta.sourceCurrency,
-      destCurrency: meta.destCurrency,
+    try {
+      await payoutTask(data)
+    } catch (e) {
+      ctx.log.error({
+        msg: 'Failed to execute payout task. Inserting for retry...',
+      })
+      // Write future task to db/queue
+      await insertTask({ worker: 'payoutTask', options: data })
+      throw e
     }
-
-    await Promise.all([
-      wyre.createTransfer({
-        ...baseParams,
-        source: `wallet:${meta.source}`,
-        sourceAmount: swAmount,
-        dest: `wallet:${process.env.SNAP_WALLET_WYRE_SAVINGS_WALLET}`,
-      }),
-      wyre.createTransfer({
-        ...baseParams,
-        source: `wallet:${meta.source}`,
-        sourceAmount: remainingAmount,
-        dest: `wallet:${meta.destination}`,
-      }),
-    ])
 
     ctx.status = 200
     ctx.body = {}
