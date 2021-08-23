@@ -4,6 +4,7 @@ const Router = require('koa-router'),
   transferRouter = require('./transfer'),
   adminRouter = require('./admin'),
   webhooksRouter = require('./webhooks'),
+  jobsRouter = require('./jobs'),
   { verifyJWTPlug } = require('../../middleware/auth')
 
 router.use(
@@ -11,6 +12,8 @@ router.use(
   webhooksRouter.routes(),
   webhooksRouter.allowedMethods()
 )
+
+router.use('/jobs', jobsRouter.routes(), jobsRouter.allowedMethods())
 
 /**
  * Authenticate client
