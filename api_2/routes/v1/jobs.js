@@ -1,19 +1,19 @@
 const Router = require('koa-router')
 const router = new Router()
 const util = require('util')
+const { BadRequestError } = require('../../error')
 
 router.post('/run', async (ctx, _next) => {
   if (!ctx.request.body) {
-    const msg = 'no Pub/Sub message received'
-    console.error(`error: ${msg}`)
-    res.status(400).send(`Bad Request: ${msg}`)
-    return;
+    const msg = 'No Pub/Sub message received'
+    ctx.log.error({ msg })
+    throw new BadRequestError(msg)
   }
+
   if (!ctx.request.body.message) {
     const msg = 'invalid Pub/Sub message format'
-    console.error(`error: ${msg}`)
-    res.status(400).send(`Bad Request: ${msg}`)
-    return
+    ctx.log.error({ msg })
+    throw new BadRequestError(msg)
   }
 
   const pubSubMessage = ctx.request.body.message
@@ -21,9 +21,11 @@ router.post('/run', async (ctx, _next) => {
 
   // TODO stuff here
 
-  console.log('ACKING JOB:', util.inspect(job, {showHidden: false, depth: null}))
+  ctx.log.info({
+    msg: `ACKING JOB: ${util.inspect(job, { showHidden: false, depth: null })}`,
+  })
 
-  res.status(200).send()
+  ctx.status = 200
 })
 
 module.exports = router
