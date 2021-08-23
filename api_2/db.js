@@ -16,25 +16,7 @@ const collections = {
 
 const db = admin.firestore()
 
-// test
-const events = new DatabaseEventsManager(db)
-events
-  .record({
-    entity: { kind: 'BUSINESS', id: 'biz123' },
-    kind: 'TEST_KIND',
-    data: 123,
-  })
-  .then(console.log.bind(0, 'events recorded'))
-events
-  .record(
-    {
-      entity: { kind: 'USER', id: '123' },
-      kind: 'SPOOKY_KIND',
-      data: [1, 2, 3],
-    },
-    { entity: { kind: 'USER', id: '321' }, kind: 'GOOFY_KIND', data: 'sick' }
-  )
-  .then(console.log.bind(0, 'events recorded'))
+const EVENTS = new DatabaseEventsManager(db)
 
 const listUsers = () =>
   db
@@ -56,7 +38,7 @@ const createBusiness = async ({ name, apiKey, wallet }) => {
 }
 
 const createEvent = async ({ type, meta, entity }) => {
-  const [event] = await events.record({
+  const [event] = await EVENTS.record({
     kind: type,
     data: meta,
     entity,
