@@ -2,16 +2,12 @@ const Router = require('koa-router')
 const router = new Router()
 const util = require('util')
 const { BadRequestError } = require('../../error')
+const { JobRunSchema } = require('../../schemas/jobs')
 
 router.post('/run', async (ctx, _next) => {
-  if (!ctx.request.body) {
-    const msg = 'No Pub/Sub message received'
-    ctx.log.error({ msg })
-    throw new BadRequestError(msg)
-  }
-
-  if (!ctx.request.body.message) {
-    const msg = 'invalid Pub/Sub message format'
+  const vld8n = JobRunSchema.validate(ctx.request.body)
+  if (vld8n.error) {
+    const msg = 'Invalid Pub/Sub message format'
     ctx.log.error({ msg })
     throw new BadRequestError(msg)
   }
