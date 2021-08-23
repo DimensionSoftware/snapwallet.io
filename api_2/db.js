@@ -2,7 +2,9 @@
 require('dotenv').config()
 
 const admin = require('firebase-admin'),
-  { DatabaseEventsManager } = require('./dbevents')
+  { PubSub } = require('@google-cloud/pubsub'),
+  { DatabaseEventsManager } = require('./dbevents'),
+  { JobPublisher } = require('./jobpublisher')
 
 admin.initializeApp({
   projectId: process.env.FIRESTORE_PROJECT,
@@ -15,8 +17,11 @@ const collections = {
 }
 
 const db = admin.firestore()
+const pubsub = new PubSub({ projectId: process.env.FIRESTORE_PROJECT })
 
 const EVENTS = new DatabaseEventsManager(db)
+
+const JOB_PUBLISHER = new JobPublisher(EVENTS, pubsub.topic('snap-jobs2'))
 
 const listUsers = () =>
   db
@@ -99,4 +104,6 @@ module.exports = {
   collections,
   insertTask,
   getPendingTasks,
+  EVENTS,
+  JOB_PUBLISHER,
 }
