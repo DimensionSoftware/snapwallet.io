@@ -19,16 +19,16 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GCP_PROJECT_ID: silken-phalanx-305703
           CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
-  deploy-development-api2:
-    name: "[D] Deploy API2"
-    needs: build-api
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/dev'
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ./.github/actions/deploy-api
-        with:
-          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
-          GCP_PROJECT_ID: silken-phalanx-305703
-          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api2
-          DOCKER_CONTEXT: api_2
+  # deploy-development-api2:
+  #   name: "[D] Deploy API2"
+  #   needs: build-api2
+  #   runs-on: ubuntu-latest
+  #   if: github.ref == 'refs/heads/dev'
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: ./.github/actions/deploy-api
+  #       with:
+  #         GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+  #         GCP_PROJECT_ID: silken-phalanx-305703
+  #         CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api2
+  #         DOCKER_CONTEXT: api_2
