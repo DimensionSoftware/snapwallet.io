@@ -71,13 +71,12 @@ class DatabaseEventsManager {
     const snapshot = await ref.where('entity.id', '==', entityID).get()
 
     const events = []
-    snapshot.forEach(doc => {
+    snapshot.forEach((doc) => {
       events.push(doc.data())
-    });
+    })
 
     return events
   }
 }
-
 
 module.exports = { DatabaseEventsManager }
