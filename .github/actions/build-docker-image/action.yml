@@ -20,6 +20,18 @@ runs:
       shell: bash
       run: |
         docker build . -t ${{inputs.CONTAINER_REPO}}:${{ github.sha }}
+
+        pushd /tmp
+        echo -n ${{ inputs.GCP_SA_KEY }} | base64 --decode > gcloud-service-key.json
+
+        curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+        tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+
+        ./google-cloud-sdk/install.sh --usage-reporting false
+        gcloud auth activate-service-account --key-file gcloud-service-key.json
+        gcloud auth configure-docker
+        popd
+
         docker push ${{inputs.CONTAINER_REPO}}:${{ github.sha }}
       working-directory: ${{inputs.DOCKER_CONTEXT}}
 
