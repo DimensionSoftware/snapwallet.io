@@ -5,6 +5,7 @@ const loggerPlug = logger({
   redact: ['req.headers.authorization'],
   genReqId: uuid,
   prettyPrint: process.env.NODE_ENV === 'local',
+  level: process.env.LOG_LEVEL || 'info',
 })
 
 module.exports = { loggerPlug }

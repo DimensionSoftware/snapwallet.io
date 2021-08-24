@@ -4,10 +4,11 @@ require('dotenv').config()
 const admin = require('firebase-admin'),
   { PubSub } = require('@google-cloud/pubsub'),
   { DatabaseEventsManager } = require('./dbevents'),
-  { JobPublisher } = require('./jobpublisher')
+  { JobPublisher } = require('./jobpublisher'),
+  { JOBS_TOPIC, FIRESTORE_PROJECT } = process.env
 
 admin.initializeApp({
-  projectId: process.env.FIRESTORE_PROJECT,
+  projectId: FIRESTORE_PROJECT,
 })
 
 const collections = {
@@ -17,11 +18,14 @@ const collections = {
 }
 
 const db = admin.firestore()
-const pubsub = new PubSub({ projectId: process.env.FIRESTORE_PROJECT })
+const pubsub = new PubSub({ projectId: FIRESTORE_PROJECT })
 
 const EVENTS = new DatabaseEventsManager(db)
 
-const JOB_PUBLISHER = new JobPublisher(EVENTS, pubsub.topic('snap-jobs2'))
+const JOB_PUBLISHER = new JobPublisher(
+  EVENTS,
+  pubsub.topic(JOBS_TOPIC || 'snap-jobs2')
+)
 
 const listUsers = () =>
   db

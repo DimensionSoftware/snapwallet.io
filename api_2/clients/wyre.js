@@ -1,7 +1,6 @@
 const axios = require('axios').default
 const { createHmac } = require('crypto')
-const { WYRE_API_URL, WYRE_API_SECRET, WYRE_API_KEY, WYRE_WEBHOOK_URL } =
-  process.env
+const { WYRE_API_URL, WYRE_SECRET_KEY, WYRE_API_KEY, API_2_HOST } = process.env
 const ClientBase = require('./base')
 const { v4 } = require('uuid')
 const { WyreError } = require('../error/wyre')
@@ -28,7 +27,7 @@ class Wyre extends ClientBase {
       url: '/v2/wallets',
       data: {
         name,
-        callbackUrl: `${WYRE_WEBHOOK_URL}/v1/webhooks/wyre?wallet_name=${name}`,
+        callbackUrl: `${API_2_HOST}/v1/webhooks/wyre?wallet_name=${name}`,
         type,
         notes,
       },
@@ -43,7 +42,7 @@ class Wyre extends ClientBase {
     const uri = `${WYRE_API_URL}${opts.url}${qs ? '?' + qs : ''}`
     const body = opts.data ? JSON.stringify(opts.data) : ''
 
-    const signature = createHmac('sha256', WYRE_API_SECRET)
+    const signature = createHmac('sha256', WYRE_SECRET_KEY)
       .update(uri + body)
       .digest('hex')
 
