@@ -1,0 +1,35 @@
+name: BuildDockerImage
+description: Build a docker image
+inputs:
+  GCP_SA_KEY:
+    description: service account key
+    required: true
+  GCP_PROJECT_ID:
+    description: gcp project id
+    required: true
+  CONTAINER_REPO:
+    description: image repository location
+    required: true
+  DOCKER_CONTEXT:
+    description: folder where Dockerfile is
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Build Docker Image & Push to Registry
+      shell: bash
+      run: |
+        docker build . -t ${{CONTAINER_REPO}}:${{ github.sha }}
+        docker push ${{CONTAINER_REPO}}:${{ github.sha }}
+      working-directory: ${{inputs.DOCKER_CONTEXT}}
+
+  
+  # - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+#   with:
+#     gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
+#     registry: gcr.io
+#     project_id: silken-phalanx-305703
+#     image_name: snap-api
+#     image_tag: ${{ github.sha }}
+#     context: ./api
+#     dockerfile: ./api/Dockerfil

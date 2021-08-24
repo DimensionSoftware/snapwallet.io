@@ -1,0 +1,34 @@
+name: API2 Build & Deploy
+
+on:
+  push:
+    paths:
+      - '.github/workflows/api2.yml'
+      - 'api_2/**'
+      - '!api_2/README.md'
+
+jobs:
+  build-api2:
+    name: "Build/Push Docker Image (API2)"
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev' || github.ref == 'refs/heads/master'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/build-docker-image 
+        with:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GCP_PROJECT_ID: silken-phalanx-305703
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
+  deploy-development-api2:
+    name: "[D] Deploy API2"
+    needs: build-api
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    steps:
+      - uses: actions/checkout@v2
+      - uses: ./.github/actions/deploy-api
+        with:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GCP_PROJECT_ID: silken-phalanx-305703
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api2
+          DOCKER_CONTEXT: api_2
