@@ -5,7 +5,9 @@ class JobPublisher {
   }
 
   async publish(job) {
-    const payload = Buffer.from(JSON.stringify(job))
+    const payload = Buffer.from(
+      JSON.stringify({ config: job.config, worker: job.worker })
+    )
     this.topic.publish(payload)
     // todo: this.events.record({ /* some event related to job starting */ })
   }
