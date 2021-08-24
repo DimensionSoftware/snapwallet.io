@@ -27,7 +27,7 @@ const verifyWyreWebhookHmac = async (ctx, next) => {
   if (!headerSignature)
     throw new UnauthorizedError('Please provide a valid signature.')
   const payload = JSON.stringify(ctx.request.body)
-  const signature = createHmac('sha256', process.env.WYRE_API_SECRET)
+  const signature = createHmac('sha256', process.env.WYRE_SECRET_KEY)
     .update(Buffer.from(payload))
     .digest('hex')
   if (!timingSafeEqual(Buffer.from(headerSignature), Buffer.from(signature))) {
