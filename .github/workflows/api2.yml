@@ -18,7 +18,7 @@ jobs:
         with:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GCP_PROJECT_ID: silken-phalanx-305703
-          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api
+          CONTAINER_REPO: gcr.io/silken-phalanx-305703/snap-api2
           DOCKER_CONTEXT: api_2
 
 
