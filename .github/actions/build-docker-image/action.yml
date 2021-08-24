@@ -19,8 +19,8 @@ runs:
     - name: Build Docker Image & Push to Registry
       shell: bash
       run: |
-        docker build . -t ${{CONTAINER_REPO}}:${{ github.sha }}
-        docker push ${{CONTAINER_REPO}}:${{ github.sha }}
+        docker build . -t ${{inputs.CONTAINER_REPO}}:${{ github.sha }}
+        docker push ${{inputs.CONTAINER_REPO}}:${{ github.sha }}
       working-directory: ${{inputs.DOCKER_CONTEXT}}
 
   
