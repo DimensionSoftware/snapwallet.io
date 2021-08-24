@@ -31,5 +31,5 @@ runs:
         ../api/bin/get-snap-env-secret --project ${{inputs.GCP_PROJECT_ID}} > snap-env
         ../api/bin/env2knative snap-env snap-api2 ${{inputs.CONTAINER_REPO}}:${{ github.sha }} > snap-knative
 
-        bin/deploy-api --project ${{inputs.GCP_PROJECT_ID}} --region us-central1	snap-knative
+        ../api/bin/deploy-api --project ${{inputs.GCP_PROJECT_ID}} --region us-central1	snap-knative
       working-directory: api_2
