@@ -14,6 +14,8 @@ router.post('/run', async (ctx, _next) => {
 
   const pubSubMessage = ctx.request.body.message
   const job = JSON.parse(Buffer.from(pubSubMessage.data, 'base64'))
+  // Turn on debug logging in .env
+  ctx.log.debug({ msg: job })
 
   // TODO stuff here
 
