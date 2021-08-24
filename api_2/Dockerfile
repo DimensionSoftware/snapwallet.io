@@ -14,6 +14,6 @@ COPY util/ util/
 COPY db.js dbevents.js index.js jobpublisher.js ./
 
 
-ENV PORT 8080
-EXPOSE 8080
+ENV PORT 5100
+EXPOSE 5100
 ENTRYPOINT [ "node", "index.js" ]
