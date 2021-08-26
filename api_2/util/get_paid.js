@@ -1,6 +1,6 @@
 const Wyre = require('../clients/wyre')
 const { UnprocessableEntityError } = require('../error'),
-  { createEvent } = require('../db')
+  { createEvent, JOB_PUBLISHER } = require('../db')
 
 const payoutTask = async (data) => {
   try {
@@ -58,6 +58,7 @@ const payoutTask = async (data) => {
       entity: { id: userId, kind: 'USER' },
     })
   } catch (e) {
+    await JOB_PUBLISHER.publish({ worker: 'payoutTask', config: data })
     throw e
   }
 }
