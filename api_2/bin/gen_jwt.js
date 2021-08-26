@@ -1,3 +1,5 @@
+#!/usr/local/bin/node
+
 require('dotenv').config()
 const JwtSigner = require('jsonwebtoken')
 
