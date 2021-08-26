@@ -1,5 +1,5 @@
 const KoaRouter = require('koa-router')
-const { getEvent, JOB_PUBLISHER } = require('../../db')
+const { getEvent } = require('../../db')
 const { verifyWyreWebhookHmac } = require('../../middleware/auth')
 const { payoutTask } = require('../../util/get_paid')
 const router = new KoaRouter()
