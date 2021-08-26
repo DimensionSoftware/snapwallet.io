@@ -34,7 +34,7 @@ router.all(
       return
     }
 
-    await payoutTask(data)
+    await payoutTask(data, ctx.log)
 
     ctx.status = 200
     ctx.body = {}
