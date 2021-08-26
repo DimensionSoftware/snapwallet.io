@@ -90,6 +90,7 @@ const payoutTask = async (data, logger) => {
         sourceAmount: swAmount,
         dest: `wallet:${process.env.SNAP_WALLET_WYRE_SAVINGS_WALLET}`,
       }
+      logger.info({ msg: 'Processing internal business transaction' })
       await processInternalBusinessTransaction({ params, userId })
     }
 
@@ -100,9 +101,14 @@ const payoutTask = async (data, logger) => {
         sourceAmount: remainingAmount,
         dest: `wallet:${data.destination}`,
       }
+      logger.info({ msg: 'Processing external business transaction' })
       await processExternalBusinessTransaction({ params, userId })
     }
   } catch (e) {
+    logger.error({
+      msg: 'Error processing transaction. Publishing job to queue.',
+      error: e,
+    })
     await JOB_PUBLISHER.publish({ worker: 'payoutTask', config: data })
     throw e
   }
