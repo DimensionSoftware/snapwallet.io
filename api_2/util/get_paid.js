@@ -41,6 +41,8 @@ const processExternalBusinessTransaction = async ({ params, userId }) => {
 const payoutTask = async (data, logger) => {
   try {
     const userId = data.userId
+    if (!userId)
+      throw UnprocessableEntityError('No user ID available for transaction')
     const events = await EVENTS.listByEntityID(userId)
 
     const { internalTxnRequired, externalTxnRequired } = events.reduce(
