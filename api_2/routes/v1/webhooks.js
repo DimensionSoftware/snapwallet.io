@@ -1,5 +1,5 @@
 const KoaRouter = require('koa-router')
-const { getEvent, insertTask } = require('../../db')
+const { getEvent, JOB_PUBLISHER } = require('../../db')
 const { verifyWyreWebhookHmac } = require('../../middleware/auth')
 const { payoutTask } = require('../../util/get_paid')
 const router = new KoaRouter()
@@ -34,16 +34,7 @@ router.all(
       return
     }
 
-    try {
-      await payoutTask(data)
-    } catch (e) {
-      ctx.log.error({
-        msg: 'Failed to execute payout task. Inserting for retry...',
-      })
-      // Write future task to db/queue
-      await insertTask({ worker: 'payoutTask', options: data })
-      throw e
-    }
+    await payoutTask(data)
 
     ctx.status = 200
     ctx.body = {}
