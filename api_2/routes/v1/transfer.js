@@ -51,6 +51,7 @@ router.post('/', async (ctx, _next) => {
       sourceAmount,
       destAmount: txn.destAmount,
       destCurrency: txn.destCurrency,
+      userId: ctx.user_id,
     },
   })
 
