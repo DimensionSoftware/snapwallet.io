@@ -1,19 +1,3 @@
-// i think this might cause a cycle?
-//const { collections: dbCollections } = require('./db')
-
-// TypeError: Cannot read property 'events' of undefined
-//     at new DatabaseEventsManager (/Users/dreamcodez/sd/flux/api_2/dbevents.js:8:56)
-//     at Object.<anonymous> (/Users/dreamcodez/sd/flux/api_2/db.js:20:16)
-//     at Module._compile (internal/modules/cjs/loader.js:1063:30)
-//     at Object.Module._extensions..js (internal/modules/cjs/loader.js:1092:10)
-//     at Module.load (internal/modules/cjs/loader.js:928:32)
-//     at Function.Module._load (internal/modules/cjs/loader.js:769:14)
-//     at Module.require (internal/modules/cjs/loader.js:952:19)
-//     at require (internal/modules/cjs/helpers.js:88:18)
-//     at Object.<anonymous> (/Users/dreamcodez/sd/flux/api_2/routes/v1/transfer.js:3:46)
-//     at Module._compile (internal/modules/cjs/loader.js:1063:30)
-
-const { ref } = require('joi')
 const { EventSchema } = require('./schemas/event')
 
 class DatabaseEventsManager {
