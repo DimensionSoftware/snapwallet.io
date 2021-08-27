@@ -13,6 +13,7 @@
   import Address from './screens/Address.svelte'
   import VerifyOTP from './screens/VerifyOTP.svelte'
   import Overview from './screens/Overview.svelte'
+  import AwaitPayment from './screens/AwaitPayment.svelte'
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
@@ -143,6 +144,9 @@
       component: ($configStore.product?.destinationTicker
         ? Product
         : Home) as any,
+    }),
+    [Routes.SEND_PAYMENT]: wrap({
+      component: AwaitPayment as any,
     }),
     [Routes.SELECT_PAYMENT]: wrap({
       component: SelectPayment as any,

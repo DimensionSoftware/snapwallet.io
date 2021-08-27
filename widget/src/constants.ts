@@ -49,6 +49,7 @@ export const CACHED_PRIMARY_PAYMENT_METHOD_KEY = '__SNAP_PRIMARY_PM_ID'
 export enum Routes {
   ROOT = '/',
   SEND_PAYMENT = '/send-payment',
+  AWAIT_PAYMENT = '/await-payment',
   SELECT_PAYMENT = '/select-payment',
   TRANSACTIONS = '/transactions',
   TRANSACTION_DETAILS = '/transaction-details',
