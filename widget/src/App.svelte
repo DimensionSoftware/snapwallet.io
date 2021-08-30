@@ -145,7 +145,7 @@
         ? Product
         : Home) as any,
     }),
-    [Routes.SEND_PAYMENT]: wrap({
+    [Routes.AWAIT_PAYMENT]: wrap({
       component: AwaitPayment as any,
     }),
     [Routes.SELECT_PAYMENT]: wrap({
