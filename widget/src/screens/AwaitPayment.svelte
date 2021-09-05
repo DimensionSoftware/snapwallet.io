@@ -76,10 +76,12 @@
     align-self: center;
   }
   .glow {
+    position: relative;
     box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.5);
     animation: glow 1.5s linear;
     animation-iteration-count: infinite;
     border-radius: 100%;
+    top: -5px;
     height: 4px;
     width: 4px;
     background: transparent;
@@ -106,7 +108,7 @@
     align-items: center;
     font-size: 1.1rem;
     grid-gap: 0.5rem;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.05rem;
     .crypto-icon {
       margin-top: 7px;
     }

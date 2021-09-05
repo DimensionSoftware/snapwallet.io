@@ -571,7 +571,7 @@
     font-size: 1.5rem;
     padding-top: 1rem !important;
     padding-bottom: 0 !important;
-    left: 2rem;
+    left: 0.2rem;
     width: 203px;
     color: var(--theme-text-color-no-background);
   }
