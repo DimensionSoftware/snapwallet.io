@@ -14,6 +14,7 @@ type ConfigStoreState = {
   intent: UserIntent
   payee: string
   product?: ProductType
+  products?: ProductType[]
   theme: { [cssProp: string]: string }
 }
 
