@@ -6,22 +6,22 @@
 
   const cards = [
     {
-      title: 'NFT Checkout',
-      name: 'nft',
-      desc: "Need a safe and reliable wallet to handle your NFT purchases?  Snap Wallet's got you.",
+      title: 'Cart Checkout',
+      name: 'fiat',
+      desc: 'Simple Shopify-style cart checkout for all products & services',
       icon: 'Crypto_Checkout_final.png',
     },
     {
       title: 'Donations & Tips',
       name: 'donations',
-      desc: 'Accept crypto donations and tips for your services!  Snap Wallet makes that simple.',
+      desc: 'Accept crypto donations and tips!  Snap Wallet makes that simple.',
       icon: 'Crypto_Tip_Jar_final.png',
     },
     {
-      title: 'Fiat On & Off Ramp',
-      name: 'fiat',
-      desc: 'Buy and Sell your fiat, like USD, into Bitcoin & Ethereum:  Single KYC Verification, ACH & Debit Card',
-      icon: 'Crypto_Fiat_final.png',
+      title: 'NFT Checkout',
+      name: 'nft',
+      desc: "Need a safe and reliable wallet to handle NFTs?  Snap Wallet's got you.",
+      icon: 'Crypto_Checkout_final.png',
     },
   ]
 

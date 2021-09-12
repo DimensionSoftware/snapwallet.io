@@ -50,6 +50,7 @@ export enum Routes {
   ROOT = '/',
   SEND_PAYMENT = '/send-payment',
   AWAIT_PAYMENT = '/await-payment',
+  CART_CHECKOUT = '/cart-checkout',
   SELECT_PAYMENT = '/select-payment',
   TRANSACTIONS = '/transactions',
   TRANSACTION_DETAILS = '/transaction-details',

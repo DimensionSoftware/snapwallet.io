@@ -14,6 +14,7 @@
   import VerifyOTP from './screens/VerifyOTP.svelte'
   import Overview from './screens/Overview.svelte'
   import AwaitPayment from './screens/AwaitPayment.svelte'
+  import CartCheckout from './screens/CartCheckout.svelte'
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
@@ -143,7 +144,12 @@
     [Routes.ROOT]: wrap({
       component: ($configStore.product?.destinationTicker
         ? Product
+        : $configStore.intent === 'cart'
+        ? CartCheckout
         : Home) as any,
+    }),
+    [Routes.CART_CHECKOUT]: wrap({
+      component: CartCheckout as any,
     }),
     [Routes.AWAIT_PAYMENT]: wrap({
       component: AwaitPayment as any,

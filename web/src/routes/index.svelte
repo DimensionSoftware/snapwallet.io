@@ -10,6 +10,7 @@
   import NFT from '$lib/features/NFT.svelte'
   import Donation from '$lib/features/Donation.svelte'
   import Buy from '$lib/features/Buy.svelte'
+  import CartCheckout from '$lib/features/CartCheckout.svelte'
   import Footer from '$lib/Footer.svelte'
   import LiquidContent from '$lib/LiquidContent.svelte'
 
@@ -134,8 +135,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
           <span>Idea</span>
           <span>NFT</span>
           <span>App</span>
+          <span>Exchange</span>
           <span>Company</span>
-          <span>Site</span>
           <span>Donations</span>
         </Typewriter>
       {:else}
@@ -167,9 +168,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
 >
 
 <Overview />
-<NFT />
+<CartCheckout />
 <Donation />
-<Buy />
+<NFT />
 <Footer />
 
 <span class="gg-chevron-double-down" />

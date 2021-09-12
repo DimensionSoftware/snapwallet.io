@@ -31,7 +31,7 @@ export enum WidgetEnvironments {
   PRODUCTION = 'production',
 }
 
-export type UserIntent = 'buy' | 'sell' | 'donate'
+export type UserIntent = 'buy' | 'sell' | 'donate' | 'cart'
 
 export type SrcDst = 'source' | 'destination'
 

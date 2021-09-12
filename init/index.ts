@@ -3,7 +3,7 @@ import QR from 'qr-creator'
 // @ts-ignore
 import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
-export type UserIntent = 'buy' | 'sell' | 'donate'
+export type UserIntent = 'buy' | 'sell' | 'donate' | 'cart'
 export type SrcDst = 'source' | 'destination'
 export enum WidgetEnvironments {
   // ** development ** is only an option for explicitness
