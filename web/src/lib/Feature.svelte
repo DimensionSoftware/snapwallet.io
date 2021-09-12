@@ -154,7 +154,7 @@
       }
       h2 {
         position: absolute;
-        top: -5.5rem;
+        top: -6.75rem;
         left: -5%;
         margin-left: -5rem;
         color: #000;
@@ -167,7 +167,7 @@
       }
       h3 {
         position: absolute;
-        top: -2.5rem;
+        top: -3.75rem;
         left: -5%;
         max-width: 75%;
         opacity: 0.8;

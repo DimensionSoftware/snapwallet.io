@@ -69,7 +69,7 @@
   docLink="https://snapwallet.io/docs/guide/use-cases/nft.html"
   hasImage={true}
   hasBackground={true}
-  icon="/images/coin1.png"
+  icon="/images/coin3.png"
 >
   <div class="relative" slot="left">
     <div class="qr" on:mousedown={snap.openWeb}>
