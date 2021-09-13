@@ -142,8 +142,10 @@
         <div class="nft-title">
           {product.title}
         </div>
-      {:else}
-        TODO line items
+      {:else if hasManyProducts}
+        {#each products as product}
+          <div>{product.title}</div>
+        {/each}
       {/if}
     </div>
     <div class="line-items" class:is-product={Boolean(product)}>

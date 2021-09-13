@@ -1348,6 +1348,12 @@
         },
         "product": {
           "$ref": "#/definitions/SnapWidgetProduct"
+        },
+        "products": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/SnapWidgetProduct"
+          }
         }
       }
     },

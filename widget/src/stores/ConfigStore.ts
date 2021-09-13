@@ -31,6 +31,7 @@ function createStore() {
     intent: 'buy',
     payee: '',
     product: undefined,
+    products: [],
     theme: {},
   })
 

@@ -61,6 +61,7 @@ interface IConfig {
   sourceAmount?: number
   theme?: { [cssProperty: string]: string }
   product?: IProduct
+  products?: IProduct[]
   defaultDestinationAsset?: string
   displayAmount?: SrcDst
   environment: WidgetEnvironments
@@ -87,11 +88,13 @@ class Snap {
   theme?: { [cssProperty: string]: string }
   sourceAmount?: number
   product?: IProduct
+  products?: IProduct[]
   defaultDestinationAsset?: string
   displayAmount?: SrcDst
   private API: FluxApi
 
   constructor(args: IConfig) {
+    console.error('args', args)
     this.setConfig(args)
     this.originalConfig = this.getConfig()
     this.API = this.genAPIClient()
@@ -112,6 +115,7 @@ class Snap {
       focus: this.focus,
       theme: this.theme || {},
       product: this.product,
+      products: this.products || [],
       sourceAmount: this.sourceAmount,
       defaultDestinationAsset: this.defaultDestinationAsset,
       displayAmount: this.displayAmount,
