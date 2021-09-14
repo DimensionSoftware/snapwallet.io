@@ -45,12 +45,10 @@
   $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
   $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
-  $: cryptoAmount = isBuy ? destinationAmount : sourceAmount
   $: Icon = CryptoIcons[cryptoTicker]
   // $: exchangeRate = isBuy ? 1 / txnExchangeRate : txnExchangeRate
   $: total = isBuy ? sourceAmount : destinationAmount
 
-  $: cryptoPrecision = cryptoAmount % 1 === 0 ? 1 : 8
   $: isConfirmingTxn = false
   $: isPreviewing = false
   $: cryptoFee = isBuy
@@ -75,10 +73,10 @@
     $transactionStore.transactionExpirationSeconds,
   )
 
-  const hasManyProducts = products?.length > 0,
-    destinationTicker = hasManyProducts
-      ? products[0].destinationTicker
-      : product?.destinationTicker
+  $: hasManyProducts = products?.length > 0
+  $: destinationTicker = hasManyProducts
+    ? products[0].destinationTicker
+    : product?.destinationTicker
 
   const handleConfirmation = async () => {
     try {
@@ -144,7 +142,21 @@
         </div>
       {:else if hasManyProducts}
         {#each products as product}
-          <div>{product.title}</div>
+          <div class="product">
+            <img height="50" width="50" src={product.img || false} />
+            <div>
+              {product.title}
+              <small>
+                {product.author}
+              </small>
+            </div>
+            <b>
+              {formatLocaleCurrency(
+                product.destinationTicker,
+                product.destinationAmount,
+              )}
+            </b>
+          </div>
         {/each}
       {/if}
     </div>
@@ -291,7 +303,7 @@
     width: 100%;
     line-height: 1.5rem;
     align-self: center;
-    margin-top: 2.5rem;
+    margin-top: 0.5rem;
     padding: 0 0.7rem;
     display: flex;
     flex-direction: column;
@@ -334,6 +346,32 @@
     }
     .nft-image {
       height: 100%;
+    }
+  }
+
+  .product {
+    display: flex;
+    width: 100%;
+    padding: 0 0.5rem;
+    margin-bottom: 0.5rem;
+    justify-content: space-between;
+    img {
+      background: var(--theme-color-muted);
+      height: 50px;
+      width: 50px;
+      border-radius: 8px;
+      overflow: hidden;
+      background-size: cover;
+      margin-right: 1rem;
+    }
+    > div {
+      flex: 2;
+    }
+
+    small {
+      display: block;
+    }
+    b {
     }
   }
 </style>

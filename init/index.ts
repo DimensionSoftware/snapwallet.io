@@ -49,6 +49,9 @@ interface IProduct {
   destinationTicker: string
   destinationAddress: string
   title: string
+  subtitle: string
+  author: string
+  img: string
 }
 
 interface IConfig {

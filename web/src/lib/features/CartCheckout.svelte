@@ -19,26 +19,29 @@
         products: [
           {
             title: 'Headband OG',
-            subtitle: '0% THC, 0% CBD, 100% PHP',
-            author: 'sMURF0r',
+            // subtitle: '0% THC, 0% CBD, 100% PHP',
+            img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
+            author: 'phpchris',
             destinationAmount: '.00000420',
-            destinationTicker: 'BTC',
+            destinationTicker: 'ETH',
             destinationAddress: '0xCAFEBABE',
           },
           {
             title: 'Fire OG',
-            subtitle: '69% THC, 42% CBD, 100% PHP',
+            // subtitle: '69% THC, 42% CBD, 100% PHP',
+            img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
             author: 'dreamc0dez',
             destinationAmount: '.00000420',
-            destinationTicker: 'BTC',
+            destinationTicker: 'ETH',
             destinationAddress: '0xBEEFBABE',
           },
           {
             title: 'Blueberry Dream',
-            subtitle: '42% THC, 69% CBD, 100% PHP',
+            // subtitle: '42% THC, 69% CBD, 100% PHP',
+            img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
             author: 'sMURF0r',
             destinationAmount: '.00000420',
-            destinationTicker: 'BTC',
+            destinationTicker: 'ETH',
             destinationAddress: '0xDEADBEEF',
           },
         ],
@@ -112,7 +115,7 @@
   <div class="relative" slot="right">
     <div on:mousedown={snap.openWeb}>
       <br />
-      <h3>Buy & Sell Crypto</h3>
+      <h3>Buy & Sell</h3>
       <ul>
         <div style="margin-top: .5rem;">
           <img height="14" src="/images/card_mastercard.png" />
@@ -120,8 +123,6 @@
           <img height="16" src="/images/card_discover.png" />
         </div>
       </ul>
-      <br />
-      <h3>Snap Wallet is</h3>
       <ul>
         <li>Fast & Secure</li>
         <li>Supported by all platforms</li>
