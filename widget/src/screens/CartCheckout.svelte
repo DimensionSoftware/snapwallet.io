@@ -143,7 +143,7 @@
       {:else if hasManyProducts}
         {#each products as product}
           <div class="product">
-            <img height="50" width="50" src={product.img || false} />
+            <img height="50" width="50" src={product.img} />
             <div>
               {product.title}
               <small>
@@ -161,15 +161,6 @@
       {/if}
     </div>
     <div class="line-items" class:is-product={Boolean(product)}>
-      <div class="line-item muted warning">
-        <div>Price Expires</div>
-        <div style="display:flex;justify-content:center;align-items:center;">
-          <FaIcon data={faClock} />
-          <div style="margin-right:0.35rem;" />
-          <b>{formattedExpiration}</b>
-        </div>
-      </div>
-      <div class="line dashed" />
       <!-- ACH -->
       {#if !isDebitCard && $transactionStore.selectedSourcePaymentMethod}
         {#if isBuy}
@@ -211,6 +202,23 @@
         </div>
         <div class="line dashed" />
       {/if}
+    </div>
+  </ModalBody>
+  <ModalFooter>
+    <div
+      class="line-items"
+      style="margin: 1rem -1rem 0 -1rem;"
+      class:is-product={Boolean(product)}
+    >
+      <div class="line-item muted warning">
+        <div>Price Expires</div>
+        <div style="display:flex;justify-content:center;align-items:center;">
+          <FaIcon data={faClock} />
+          <div style="margin-right:0.35rem;" />
+          <b>{formattedExpiration}</b>
+        </div>
+      </div>
+      <div class="line dashed" />
       <div class="line-item muted">
         <div>Subtotal</div>
         <div>
@@ -232,22 +240,24 @@
         </div>
       {/if}
       <div class="line dashed" />
-      <div class="line-item">
+      <div class="line-item" style="margin-bottom: 1.15rem;">
         <div><b>Total</b></div>
         <div>
           <b class="total">{formatLocaleCurrency(fiatTicker, total)}</b>
         </div>
       </div>
+      <Button
+        glow
+        isLoading={isConfirmingTxn}
+        on:mousedown={handleConfirmation}
+      >
+        <div style="display:flex;justify-content:center;align-items:center;">
+          <span style="margin-right:0.75rem;">
+            {buttonText}
+          </span>
+        </div>
+      </Button>
     </div>
-  </ModalBody>
-  <ModalFooter>
-    <Button glow isLoading={isConfirmingTxn} on:mousedown={handleConfirmation}>
-      <div style="display:flex;justify-content:center;align-items:center;">
-        <span style="margin-right:0.75rem;">
-          {buttonText}
-        </span>
-      </div>
-    </Button>
   </ModalFooter>
 </ModalContent>
 
@@ -259,8 +269,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
     .checkout-item-name {
       margin-top: 1rem;
       height: 100%;
@@ -301,10 +310,10 @@
 
   .line-items {
     width: 100%;
-    line-height: 1.5rem;
+    line-height: 1.15rem;
     align-self: center;
-    margin-top: 0.5rem;
-    padding: 0 0.7rem;
+    margin-top: 2.5rem;
+    padding: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
