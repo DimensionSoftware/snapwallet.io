@@ -122,7 +122,7 @@
 </script>
 
 <ModalContent>
-  <ModalHeader>Checkout</ModalHeader>
+  <ModalHeader hideBackButton>Checkout</ModalHeader>
   <ModalBody>
     {#if product}
       <div class="nft-container">
