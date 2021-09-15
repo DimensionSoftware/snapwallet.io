@@ -1,9 +1,15 @@
 <script lang="ts">
   export let fullscreen: boolean = false
   export let padded: boolean = false
+  export let scrollable: boolean = true
 </script>
 
-<div class="modal-body scroll-y" class:fullscreen class:padded>
+<div
+  class="modal-body"
+  class:scroll-y={scrollable}
+  class:fullscreen
+  class:padded
+>
   <slot />
 </div>
 
