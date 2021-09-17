@@ -489,6 +489,8 @@
             ? 'Previewing'
             : isLoggedIn
             ? 'Preview'
+            : $configStore.environment === 'sandbox'
+            ? 'Try Me!'
             : 'Continue'}
         </span>
       </div>

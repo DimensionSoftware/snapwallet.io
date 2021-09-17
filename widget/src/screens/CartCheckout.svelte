@@ -207,10 +207,10 @@
   <ModalFooter>
     <div
       class="line-items"
-      style="margin: 1rem -1rem 0 -1rem;"
+      style="margin: 1rem -1rem 0 -1rem"
       class:is-product={Boolean(product)}
     >
-      <div class="line-item muted warning">
+      <div class="line-item muted warning" style="padding-top: 1rem;">
         <div>Price Expires</div>
         <div style="display:flex;justify-content:center;align-items:center;">
           <FaIcon data={faClock} />
@@ -240,7 +240,7 @@
         </div>
       {/if}
       <div class="line dashed" />
-      <div class="line-item" style="margin-bottom: 1.15rem;">
+      <div class="line-item" style="margin-bottom: 2.15rem;">
         <div><b>Total</b></div>
         <div>
           <b class="total">{formatLocaleCurrency(fiatTicker, total)}</b>

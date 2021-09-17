@@ -8,7 +8,7 @@
     {
       title: 'Cart Checkout',
       name: 'fiat',
-      desc: 'Simple Shopify-style cart checkout for all products & services',
+      desc: 'All-in-One cart checkout for all products & services',
       icon: 'Crypto_Checkout_final.png',
     },
     {

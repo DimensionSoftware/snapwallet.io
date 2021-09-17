@@ -123,7 +123,7 @@
 <Feature
   name="fiat"
   title="Cart Checkout"
-  description="Crypto Currency Checkout with a Shopping Cart"
+  description="Expand Your Checkout with Crypto Currency Checkout"
   docLink="https://snapwallet.io/docs/guide/use-cases/onramp.html"
   hasImage={true}
   hasBackground={true}
@@ -142,36 +142,27 @@
   <div class="relative" slot="right">
     <div on:mousedown={snap.openWeb}>
       <br />
-      <h3>Buy & Sell</h3>
+      <h3>Dispensary Example</h3>
+      <p class="story">
+        Give your customers full flexibility to checkout with their crypto
+        currency, debit accounts and credit cards.
+      </p>
+      <h4 style="margin: 0 0 0.5rem;">Why Customers Choose Us</h4>
+      <ul style="margin: .75rem 0 0 1rem;">
+        <li>Fast & Secure</li>
+        <li>Supported by all platforms</li>
+        <li>Dependency-free & Embeddable!</li>
+      </ul>
       <ul>
-        <div style="margin-top: .5rem;">
+        <div style="margin-top: 2rem;">
+          <h4 style="margin: 0 0 0.5rem;">Also Supports</h4>
           <img height="14" src="/images/card_mastercard.png" />
           <img height="16" src="/images/card_visa.png" />
           <img height="16" src="/images/card_discover.png" />
         </div>
       </ul>
-      <ul>
-        <li>Fast & Secure</li>
-        <li>Supported by all platforms</li>
-        <li>Dependency-free & Embeddable!</li>
-      </ul>
     </div>
     <br />
-    <h3>Building Your Own App?</h3>
-    <div class="flex">
-      <a
-        target="_blank"
-        href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
-      >
-        <img src="/appstore.svg" />
-      </a>
-      <a
-        target="_blank"
-        href="https://snapwallet.io/docs/guide/use-cases/react-native.html"
-      >
-        <img src="/playstore.svg" />
-      </a>
-    </div>
     <div class="qr" on:mousedown={snap.openWeb}>
       <canvas id="buy-qr-canvas" />
     </div>
@@ -252,6 +243,10 @@
       box-shadow: 0 0 0 2px #fffc00;
       transition: none;
     }
+  }
+  .story {
+    margin: 0.5rem 0 1.5rem 0;
+    font-size: 1rem;
   }
   p {
     font-size: 1.25rem;
