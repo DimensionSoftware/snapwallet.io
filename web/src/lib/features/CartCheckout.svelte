@@ -19,7 +19,8 @@
         products: [
           {
             title: 'Headband OG',
-            // subtitle: '0% THC, 0% CBD, 100% PHP',
+            subtitle:
+              'Headband OG is a combination of OG Kush, Master Kush, and Sour Diesel',
             img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
             author: 'phpchris',
             destinationAmount: '.00000420',
@@ -28,16 +29,19 @@
           },
           {
             title: 'Fire OG',
-            // subtitle: '69% THC, 42% CBD, 100% PHP',
+            subtitle:
+              'With its high THC content and strong cerebral effects, Fire OG is generally recommended for more experienced users',
             img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
             author: 'dreamc0dez',
+
             destinationAmount: '.00000420',
             destinationTicker: 'ETH',
             destinationAddress: '0xBEEFBABE',
           },
           {
             title: 'Blueberry Dream',
-            // subtitle: '42% THC, 69% CBD, 100% PHP',
+            subtitle:
+              'Blueberry Dream is a Sativa-dominant bud that powers up the mind with an energizing high.',
             img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
             author: 'sMURF0r',
             destinationAmount: '.00000420',
@@ -45,26 +49,9 @@
             destinationAddress: '0xDEADBEEF',
           },
           {
-            title: 'Headband OG',
-            // subtitle: '0% THC, 0% CBD, 100% PHP',
-            img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
-            author: 'phpchris',
-            destinationAmount: '.00000420',
-            destinationTicker: 'ETH',
-            destinationAddress: '0xCAFEBABE',
-          },
-          {
-            title: 'Fire OG',
-            // subtitle: '69% THC, 42% CBD, 100% PHP',
-            img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
-            author: 'dreamc0dez',
-            destinationAmount: '.00000420',
-            destinationTicker: 'ETH',
-            destinationAddress: '0xBEEFBABE',
-          },
-          {
-            title: 'Blueberry Dream',
-            // subtitle: '42% THC, 69% CBD, 100% PHP',
+            title: 'Snap OG Dream',
+            subtitle:
+              'The absolute best, full-flavor, dreamy and high in the leather palette...',
             img: 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%3Fid%3DOIP.UVKFWQKmlDNfkSpzeIHf-gHaFj%26pid%3DApi&f=1',
             author: 'sMURF0r',
             destinationAmount: '.00000420',

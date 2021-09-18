@@ -147,7 +147,7 @@
             <div>
               {product.title}
               <small>
-                {product.author}
+                {product.subtitle || product.author}
               </small>
             </div>
             <b>
@@ -379,6 +379,10 @@
 
     small {
       display: block;
+      margin: 0.15rem 0 0.2rem 0;
+      width: 150%;
+      font-size: 0.75rem;
+      opacity: 0.8;
     }
     b {
     }
