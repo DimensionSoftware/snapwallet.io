@@ -100,8 +100,10 @@
   }
 
   onMount(async () => {
+    // afford more space to lists of product
+    if (hasManyProducts)
+      resizeWidget({ height: 650, width: 500 }, $configStore.appName)
     // TODO generate wyrePreview
-    resizeWidget({ height: 650, width: 500 }, $configStore.appName)
     try {
       isPreviewing = true
       const preview = await window.API.fluxWyreCreateTransfer({
