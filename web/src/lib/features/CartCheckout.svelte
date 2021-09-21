@@ -285,10 +285,13 @@
   $easeOutExpo: cubic-bezier(0.16, 1, 0.3, 1);
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
   iframe {
+    display: flex;
+    align-self: center;
+    margin: 0 auto;
     border-radius: 2rem;
     overflow: hidden;
-    // box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
-    transition: box-shadow 0.8s $easeOutExpo 0.1s, height 0.3s $easeOutBack;
-    will-change: box-shadow, height;
+    transition: box-shadow 0.8s $easeOutExpo 0.1s, height 0.3s $easeOutBack,
+      width 0.4s $easeOutBack 0.301s;
+    will-change: box-shadow, height, width;
   }
 </style>
