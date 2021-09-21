@@ -90,7 +90,7 @@
     window.addEventListener(
       'message',
       ({ data: msg }) => {
-        if (!msg || typeof msg !== 'string') return
+        if (!msg || typeof msg !== 'string') return // guard
         try {
           const { event, data } = JSON.parse(msg)
           if (event === SnapWallet.events.RESIZE && data && ifr) {

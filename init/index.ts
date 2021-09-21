@@ -97,7 +97,6 @@ class Snap {
   private API: FluxApi
 
   constructor(args: IConfig) {
-    console.error('args', args)
     this.setConfig(args)
     this.originalConfig = this.getConfig()
     this.API = this.genAPIClient()
@@ -200,6 +199,7 @@ class Snap {
   private handleMessage = (event: any) => {
     try {
       const { data = '{}' } = event
+      if (typeof data !== 'string') return // guard
       const msg = JSON.parse(data)
       this.onMessage && this.onMessage(msg)
     } catch (e) {
