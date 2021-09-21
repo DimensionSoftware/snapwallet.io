@@ -143,7 +143,7 @@
     article {
       position: relative;
       padding: 3rem 0;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       .icon {
         position: absolute;

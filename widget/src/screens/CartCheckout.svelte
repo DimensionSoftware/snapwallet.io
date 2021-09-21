@@ -5,7 +5,12 @@
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
-  import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
+  import {
+    CryptoIcons,
+    formatLocaleCurrency,
+    dropEndingZeros,
+    resizeWidget,
+  } from '../util'
   import { TransactionIntents, TransactionMediums } from '../types'
   import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
@@ -96,6 +101,7 @@
 
   onMount(async () => {
     // TODO generate wyrePreview
+    resizeWidget({ height: 650, width: 500 }, $configStore.appName)
     try {
       isPreviewing = true
       const preview = await window.API.fluxWyreCreateTransfer({
@@ -380,7 +386,7 @@
     small {
       display: block;
       margin: 0.15rem 0 0.2rem 0;
-      width: 150%;
+      width: 100%;
       font-size: 0.75rem;
       opacity: 0.8;
     }
