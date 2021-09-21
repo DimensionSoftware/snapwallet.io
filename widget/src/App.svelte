@@ -355,7 +355,7 @@
 <div id="modal">
   <div
     id="modal-body"
-    style={`height: ${height}, width: ${width}`}
+    style={`height: ${height}; width: ${width}`}
     class:blur={isPreLogout || isBlurred}
     class:blur-header={isHeaderBlurred}
   >
