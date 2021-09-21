@@ -261,8 +261,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
     :global(iframe.loaded) {
       opacity: 1;
       // box-shadow: 5px 5px 18px 5px rgba(0, 0, 0, 0.4);
+      will-change: width, transform, height;
       transition: opacity 1s $easeOutExpo, box-shadow 0.3s $easeOutExpo,
-        height 0.3s $easeOutBack;
+        height 0.3s $easeOutBack, width 0.3s $easeOutBack;
       will-change: opacity, box-shadow, height;
     }
   }

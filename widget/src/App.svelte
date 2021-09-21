@@ -85,19 +85,23 @@
   })
 
   // screen height events
-  const HEIGHT = '608px' // default screen height
+  const HEIGHT = '608px', // default screen height
+    WIDTH = '360px' // " width
   let height: string = HEIGHT,
+    width: string = WIDTH,
     lastLocation: string = null
   window.addEventListener(ParentMessages.RESIZE, (event: Event) => {
     // respond to custom screen heights
     height = event.detail?.height || HEIGHT
-    ParentMessenger.resize(height, $configStore.appName)
+    width = event.detail?.width || WIDTH
+    ParentMessenger.resize({ height, width }, $configStore.appName)
   })
   $: {
     if (lastLocation !== $location) {
-      // reset screen height at every change
+      // reset screen height & width at every change
       height = HEIGHT
-      ParentMessenger.resize(height, $configStore.appName) // iframe
+      width = WIDTH
+      ParentMessenger.resize({ height, width }, $configStore.appName) // iframe
       lastLocation = $location
     }
   }
@@ -351,7 +355,7 @@
 <div id="modal">
   <div
     id="modal-body"
-    style={`height: ${height}`}
+    style={`height: ${height}, width: ${width}`}
     class:blur={isPreLogout || isBlurred}
     class:blur-header={isHeaderBlurred}
   >
@@ -505,14 +509,12 @@
   }
 
   #modal-body {
-    width: 360px;
     transition: height 0.3s var(--theme-ease-out-back);
-    will-change: height;
+    will-change: height, transform;
     background: var(--theme-modal-background);
     border-radius: 1rem;
     overflow: hidden;
     transform: translateZ(0);
-    will-change: transform;
     display: flex;
     flex-direction: column;
     // Used by toast
@@ -563,7 +565,7 @@
     }
   }
 
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 550px) {
     #modal-body {
       border-radius: 0;
       height: 100% !important;
