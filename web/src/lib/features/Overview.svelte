@@ -7,7 +7,7 @@
   const cards = [
     {
       title: 'Cart Checkout',
-      name: 'fiat',
+      name: 'cartcheckout',
       desc: 'All-in-One cart checkout for all products & services',
       icon: 'Crypto_Checkout_final.png',
     },

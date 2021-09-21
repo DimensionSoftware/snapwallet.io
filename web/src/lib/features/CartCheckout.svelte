@@ -108,7 +108,7 @@
 </script>
 
 <Feature
-  name="fiat"
+  name="cartcheckout"
   title="Cart Checkout"
   description="Expand Your Checkout with Crypto Currency Checkout"
   docLink="https://snapwallet.io/docs/guide/use-cases/onramp.html"
@@ -170,20 +170,21 @@
     margin-top: 0.5rem;
     justify-content: space-between;
   }
-  :global(.fiat article) {
-    width: 800px;
+  :global(.cartcheckout article) {
+    width: 1000px;
+    height: 700px;
     margin-top: 4.55rem !important;
     background: linear-gradient(#fff, rgb(255, 254, 232)) !important;
     // box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
   }
-  :global(.fiat h2) {
+  :global(.cartcheckout h2) {
     margin-top: -4rem;
   }
-  :global(.fiat h3) {
+  :global(.cartcheckout h3) {
     margin-top: -4rem;
     font-size: 1.5rem;
   }
-  :global(.fiat .relative > h3) {
+  :global(.cartcheckout .relative > h3) {
     white-space: nowrap;
   }
   ul {
