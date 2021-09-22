@@ -139,7 +139,7 @@
       bind:this={ifr}
     />
   </div>
-  <div class="relative" slot="right">
+  <div class="example relative" slot="right">
     <div on:mousedown={snap.openWeb}>
       <br />
       <h3>Example<small>:</small> Dispensary</h3>
@@ -224,8 +224,11 @@
   h3 {
     margin: 0.5rem 0 0 0;
   }
-  small {
-    margin: 0 0 0 0.1rem;
+  .example {
+    small {
+      opacity: 0.8;
+      margin: 0 0 0 0.1rem;
+    }
   }
   h4 {
     margin: 1.5rem 0 2rem 0;

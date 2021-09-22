@@ -1,4 +1,10 @@
 <script lang="ts">
+  import { onMount } from 'svelte'
+  import { fly } from 'svelte/transition'
+  import { push } from 'svelte-spa-router'
+  import { faClock, faLock } from '@fortawesome/free-solid-svg-icons'
+  import FaIcon from 'svelte-awesome'
+
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
@@ -12,12 +18,8 @@
     resizeWidget,
   } from '../util'
   import { TransactionIntents, TransactionMediums } from '../types'
-  import { push } from 'svelte-spa-router'
   import { Routes } from '../constants'
   import { ParentMessenger } from '../util/parent_messenger'
-  import { faClock, faLock } from '@fortawesome/free-solid-svg-icons'
-  import FaIcon from 'svelte-awesome'
-  import { onMount } from 'svelte'
   import { toaster } from '../stores/ToastStore'
   import { formatExpiration } from '../util/transactions'
   import { configStore } from '../stores/ConfigStore'
@@ -129,7 +131,7 @@
   })
 </script>
 
-<ModalContent>
+<ModalContent animation="none">
   <ModalHeader hideBackButton>Checkout</ModalHeader>
   <ModalBody>
     {#if product}
@@ -149,8 +151,8 @@
           {product.title}
         </div>
       {:else if hasManyProducts}
-        {#each products as product}
-          <div class="product">
+        {#each products as product, i}
+          <div class="product" in:fly={{ y: 25, duration: 200 * (i + 1) }}>
             <img height="50" width="50" src={product.img} />
             <div>
               {product.title}
