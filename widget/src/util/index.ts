@@ -82,9 +82,9 @@ export const closestNumber = (n: number, m: number) => {
 // Application logger module
 export const Logger = (() => {
   try {
-    window.localStorage.setItem('debug', __ENV.DEBUG)
+    window.localStorage.setItem('debug', __ENV['DEBUG'])
     // These are needed for chrome
-    window.localStorage.debug = __ENV.DEBUG
+    window.localStorage.debug = __ENV['DEBUG']
     nodeDebug.log = console.log.bind(console)
   } catch {
     console.warn('Unable to enable logger. Incognito?')
