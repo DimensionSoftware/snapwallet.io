@@ -572,7 +572,8 @@
       margin: 0 0 1rem 0;
       text-align: center;
     }
-    :global(h3.test, h3.test a) {
+    :global(h3.test),
+    :global(h3.test a) {
       color: var(--theme-color);
       font-weight: bold;
       opacity: 1;

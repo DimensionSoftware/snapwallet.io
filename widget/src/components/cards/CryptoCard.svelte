@@ -105,6 +105,7 @@
   .crypto-icon {
     position: relative;
     height: 33px;
+    width: 33px;
     left: -2px;
     transition: 0.15s var(--theme-ease-out-back) 0.05s;
     :global(svg) {
