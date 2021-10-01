@@ -132,7 +132,7 @@
       //   left: 0;
       //   bottom: 0;
       //   transform: rotate(180deg);
-      //   background-image: url('/static/bg.png');
+      //   background-image: url('/bg.png');
       // }
     }
     &.hasBackground article {
