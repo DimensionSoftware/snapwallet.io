@@ -21,7 +21,7 @@
       title: 'NFT Checkout',
       name: 'nft',
       desc: "Need a safe and reliable wallet to handle NFTs?  Snap Wallet's got you.",
-      icon: 'Crypto_Checkout_final.png',
+      icon: 'nft_checkout_icon.png',
     },
   ]
 
