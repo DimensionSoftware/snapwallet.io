@@ -18,6 +18,26 @@
         focus: false,
         products: [
           {
+            title: "Bao's Vegan Chocolate",
+            subtitle:
+              'Rich dark chocolate, laced with toasted hazelnuts, pecans and dried currants, rounded off with cinnamon & salt.',
+            img: 'https://images.dutchie.com/edibles-stock-chocolate-v1.jpg?auto=format&fit=fill&fill=solid&fillColor=%23fff&__typename=ImgixSettings&ixlib=react-9.0.2&h=100&w=100&q=50&dpr=2',
+            author: 'bao',
+            destinationAmount: '.00000420',
+            destinationTicker: 'ETH',
+            destinationAddress: '0xCAFEBEEF',
+          },
+          {
+            title: 'Snap OG Dream',
+            subtitle:
+              'The absolute best, full-flavor, dreamy and high in the leather palette...',
+            img: 'https://images.dutchie.com/flower-stock-10-v1.jpg?auto=format&fit=fill&fill=solid&fillColor=%23fff&__typename=ImgixSettings&ixlib=react-9.0.2&h=100&w=100&q=50&dpr=2',
+            author: 'sMURF0r',
+            destinationAmount: '.00000420',
+            destinationTicker: 'ETH',
+            destinationAddress: '0xDEADBEEF',
+          },
+          {
             title: 'Headband OG',
             subtitle:
               'Headband OG is a combination of OG Kush, Master Kush, and Sour Diesel',
@@ -42,26 +62,6 @@
             title: 'Blueberry Dream',
             subtitle:
               'Blueberry Dream is a Sativa-dominant bud that powers up the mind with an energizing high.',
-            img: 'https://images.dutchie.com/flower-stock-10-v1.jpg?auto=format&fit=fill&fill=solid&fillColor=%23fff&__typename=ImgixSettings&ixlib=react-9.0.2&h=100&w=100&q=50&dpr=2',
-            author: 'sMURF0r',
-            destinationAmount: '.00000420',
-            destinationTicker: 'ETH',
-            destinationAddress: '0xDEADBEEF',
-          },
-          {
-            title: "Bao's Vegan Chocolate",
-            subtitle:
-              'Rich dark chocolate, laced with toasted hazelnuts, pecans and dried currants, rounded off with cinnamon & salt.',
-            img: 'https://images.dutchie.com/edibles-stock-chocolate-v1.jpg?auto=format&fit=fill&fill=solid&fillColor=%23fff&__typename=ImgixSettings&ixlib=react-9.0.2&h=100&w=100&q=50&dpr=2',
-            author: 'bao',
-            destinationAmount: '.00000420',
-            destinationTicker: 'ETH',
-            destinationAddress: '0xCAFEBEEF',
-          },
-          {
-            title: 'Snap OG Dream',
-            subtitle:
-              'The absolute best, full-flavor, dreamy and high in the leather palette...',
             img: 'https://images.dutchie.com/flower-stock-10-v1.jpg?auto=format&fit=fill&fill=solid&fillColor=%23fff&__typename=ImgixSettings&ixlib=react-9.0.2&h=100&w=100&q=50&dpr=2',
             author: 'sMURF0r',
             destinationAmount: '.00000420',
