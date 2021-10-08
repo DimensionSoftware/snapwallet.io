@@ -111,14 +111,14 @@
       article {
         h2,
         h3 {
-          position: absolute;
           left: inherit;
           text-align: center;
           margin: 0 auto;
-          position: relative;
+          width: 100%;
         }
         h3 {
-          margin-top: -3rem;
+          // margin-top: 2rem;
+          margin-left: 7rem;
         }
       }
     }

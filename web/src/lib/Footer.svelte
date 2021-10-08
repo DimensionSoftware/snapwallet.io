@@ -202,7 +202,7 @@
         right: -100%;
         background: #ccc;
         width: 100px;
-        top: 18%;
+        top: 24%;
       }
     }
   }
