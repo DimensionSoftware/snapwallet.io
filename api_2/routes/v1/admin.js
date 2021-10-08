@@ -19,7 +19,7 @@ router.post('/business', async (ctx, _next) => {
     },
     apiKey: v4(),
   })
-  ctx.body = { data: business }
+  ctx.body = business
 })
 
 module.exports = router
