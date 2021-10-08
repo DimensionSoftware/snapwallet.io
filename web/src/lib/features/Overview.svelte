@@ -8,7 +8,7 @@
     {
       title: 'Cart Checkout',
       name: 'cartcheckout',
-      desc: 'All-in-One cart checkout for all products & services',
+      desc: 'All-in-One cart checkout for multiple products & services!',
       icon: 'Crypto_Checkout_final.png',
     },
     {
@@ -99,6 +99,7 @@
   }
   p {
     font-size: 1rem;
+    text-align: center;
     line-height: 1.4rem;
     padding: 0 1.5rem;
     font-weight: 200;
