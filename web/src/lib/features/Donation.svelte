@@ -7,7 +7,7 @@
     appName: 'Donation',
     environment: 'sandbox',
     intent: 'donate',
-    payee: 'Snap Wallet',
+    payee: 'Donate to Snap',
     focus: true,
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
     theme: {

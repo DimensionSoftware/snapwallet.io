@@ -304,7 +304,7 @@ export class FluxBearerAuthentication implements SecurityAuthentication {
 
 export function genAPIClient(authManager?: AuthManager): FluxApi {
   const config = createConfiguration({
-    baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
+    baseServer: new ServerConfiguration(__ENV['API_BASE_URL'], {}),
   })
   if (authManager) {
     config.authMethods.Bearer = new FluxBearerAuthentication(authManager)

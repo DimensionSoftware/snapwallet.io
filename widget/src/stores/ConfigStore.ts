@@ -8,12 +8,14 @@ type ConfigStoreState = {
   environment: WidgetEnvironments
   sourceAmount: number
   defaultDestinationAsset?: string
+  destinationAddress?: string
   displayAmount?: SrcDst
   wallets: WalletType[]
   focus: boolean
   intent: UserIntent
   payee: string
   product?: ProductType
+  products?: ProductType[]
   theme: { [cssProp: string]: string }
 }
 
@@ -24,12 +26,14 @@ function createStore() {
     environment: WidgetEnvironments.PRODUCTION,
     sourceAmount: 0,
     defaultDestinationAsset: undefined,
+    destinationAddress: '',
     displayAmount: 'destination',
     wallets: [],
     focus: false,
     intent: 'buy',
     payee: '',
     product: undefined,
+    products: [],
     theme: {},
   })
 

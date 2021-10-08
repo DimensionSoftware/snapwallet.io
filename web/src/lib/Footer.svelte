@@ -202,7 +202,7 @@
         right: -100%;
         background: #ccc;
         width: 100px;
-        top: 18%;
+        top: 24%;
       }
     }
   }
@@ -327,8 +327,8 @@
     .apps {
       position: absolute;
       z-index: 1;
-      left: 25rem;
-      top: 9rem;
+      left: 30rem;
+      top: 9.15rem;
       h3 {
         margin: 0.75rem 0 1rem 0;
       }

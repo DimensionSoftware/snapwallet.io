@@ -69,11 +69,8 @@
       }
     } catch (e) {
       let msg = "We're unable to complete this order. Please try again."
-      if (e?.body?.code === APIErrors.BAD_REQUEST) {
-        msg = e?.body?.message
-      }
       toaster.pop({
-        msg,
+        msg: e?.body?.message || msg,
         error: true,
       })
       // Clear any refs to failed txn/order

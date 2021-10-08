@@ -39,7 +39,7 @@
     window.addEventListener(
       'message',
       ({ data: msg }) => {
-        if (!msg) return
+        if (!msg || typeof msg !== 'string') return // guard
         try {
           const { event, data } = JSON.parse(msg)
           if (event === snap.events.RESIZE && data && ifr) {

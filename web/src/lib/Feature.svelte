@@ -111,14 +111,14 @@
       article {
         h2,
         h3 {
-          position: absolute;
           left: inherit;
           text-align: center;
           margin: 0 auto;
-          position: relative;
+          width: 100%;
         }
         h3 {
-          margin-top: -3rem;
+          // margin-top: 2rem;
+          margin-left: 7rem;
         }
       }
     }
@@ -132,7 +132,7 @@
       //   left: 0;
       //   bottom: 0;
       //   transform: rotate(180deg);
-      //   background-image: url('/static/bg.png');
+      //   background-image: url('/bg.png');
       // }
     }
     &.hasBackground article {
@@ -143,7 +143,7 @@
     article {
       position: relative;
       padding: 3rem 0;
-      max-width: 800px;
+      max-width: 1000px;
       margin: 0 auto;
       .icon {
         position: absolute;
@@ -154,7 +154,7 @@
       }
       h2 {
         position: absolute;
-        top: -5.5rem;
+        top: -6.75rem;
         left: -5%;
         margin-left: -5rem;
         color: #000;
@@ -167,7 +167,7 @@
       }
       h3 {
         position: absolute;
-        top: -2.5rem;
+        top: -3.75rem;
         left: -5%;
         max-width: 75%;
         opacity: 0.8;

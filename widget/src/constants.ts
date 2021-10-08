@@ -49,6 +49,8 @@ export const CACHED_PRIMARY_PAYMENT_METHOD_KEY = '__SNAP_PRIMARY_PM_ID'
 export enum Routes {
   ROOT = '/',
   SEND_PAYMENT = '/send-payment',
+  AWAIT_PAYMENT = '/await-payment',
+  CART_CHECKOUT = '/cart-checkout',
   SELECT_PAYMENT = '/select-payment',
   TRANSACTIONS = '/transactions',
   TRANSACTION_DETAILS = '/transaction-details',
@@ -74,6 +76,7 @@ export enum Routes {
 export enum APIErrors {
   UNAUTHORIZED = 16,
   BAD_REQUEST = 3,
+  LIMIT_EXCEEDED = 8,
 }
 
 export enum ParentMessages {

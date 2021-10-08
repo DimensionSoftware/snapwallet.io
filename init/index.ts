@@ -3,7 +3,7 @@ import QR from 'qr-creator'
 // @ts-ignore
 import { createConfiguration, FluxApi, ServerConfiguration } from 'api-client'
 
-export type UserIntent = 'buy' | 'sell' | 'donate'
+export type UserIntent = 'buy' | 'sell' | 'donate' | 'cart'
 export type SrcDst = 'source' | 'destination'
 export enum WidgetEnvironments {
   // ** development ** is only an option for explicitness
@@ -49,6 +49,9 @@ interface IProduct {
   destinationTicker: string
   destinationAddress: string
   title: string
+  subtitle: string
+  author: string
+  img: string
 }
 
 interface IConfig {
@@ -61,6 +64,7 @@ interface IConfig {
   sourceAmount?: number
   theme?: { [cssProperty: string]: string }
   product?: IProduct
+  products?: IProduct[]
   defaultDestinationAsset?: string
   displayAmount?: SrcDst
   environment: WidgetEnvironments
@@ -87,6 +91,7 @@ class Snap {
   theme?: { [cssProperty: string]: string }
   sourceAmount?: number
   product?: IProduct
+  products?: IProduct[]
   defaultDestinationAsset?: string
   displayAmount?: SrcDst
   private API: FluxApi
@@ -112,6 +117,7 @@ class Snap {
       focus: this.focus,
       theme: this.theme || {},
       product: this.product,
+      products: this.products || [],
       sourceAmount: this.sourceAmount,
       defaultDestinationAsset: this.defaultDestinationAsset,
       displayAmount: this.displayAmount,
@@ -193,6 +199,7 @@ class Snap {
   private handleMessage = (event: any) => {
     try {
       const { data = '{}' } = event
+      if (typeof data !== 'string') return // guard
       const msg = JSON.parse(data)
       this.onMessage && this.onMessage(msg)
     } catch (e) {

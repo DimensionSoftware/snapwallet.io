@@ -28,6 +28,7 @@
 <style lang="scss">
   .exchange-rate-container {
     position: relative;
+    text-align: left;
     top: -1.5rem;
     left: 2.5rem;
     font-size: 0.75rem;

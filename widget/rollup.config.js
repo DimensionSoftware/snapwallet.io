@@ -67,7 +67,6 @@ export default {
     entryFileNames: jsBundleName,
   },
   plugins: [
-    svelteSVG(),
     replace({
       preventAssignment: true,
       __ENV: JSON.stringify({
@@ -76,6 +75,7 @@ export default {
         WYRE_BASE_URL: process.env.WYRE_BASE_URL,
       }),
     }),
+    svelteSVG(),
     svelte({
       preprocess: sveltePreprocess({ sourceMap: !production, sass: true }),
       compilerOptions: {

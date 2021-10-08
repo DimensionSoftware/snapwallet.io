@@ -306,7 +306,12 @@
       top: -1.75rem !important;
       margin-left: 0 !important;
     }
-    :global(#code-0, #code-1, #code-2, #code-3, #code-4, #code-5) {
+    :global(#code-0),
+    :global(#code-1),
+    :global(#code-2),
+    :global(#code-3),
+    :global(#code-4),
+    :global(#code-5) {
       text-align: center !important;
       padding: 25px 0 25px 0 !important;
       border-radius: 0;

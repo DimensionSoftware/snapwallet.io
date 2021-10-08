@@ -33,6 +33,11 @@ body.scrolled {
     transform: translateY(20px) rotate(0) scale(1);
     transition: opacity 0.2s ease-out, transform 0.2s ease-out;
     opacity: 0 !important;
+    &::before,
+    &::after {
+      animation-play-state: paused;
+      animation-iteration-count: 0;
+    }
   }
 }
 ::-moz-selection {
@@ -85,7 +90,7 @@ html {
       bottom: 0;
       z-index: -1;
       // bottom: -335vh;
-      background-image: url('/static/bg.png');
+      background-image: url('/bg.png');
       background-repeat: repeat-y;
       background-size: 100%;
       will-change: transform;
@@ -117,6 +122,7 @@ html {
       top: 3px;
       animation: pulseUpDown 1.3s ease-in forwards;
       animation-iteration-count: infinite;
+      animation-play-state: running;
     }
 
     .gg-chevron-double-down::after {

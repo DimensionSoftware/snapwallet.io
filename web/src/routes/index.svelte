@@ -10,6 +10,7 @@
   import NFT from '$lib/features/NFT.svelte'
   import Donation from '$lib/features/Donation.svelte'
   import Buy from '$lib/features/Buy.svelte'
+  import CartCheckout from '$lib/features/CartCheckout.svelte'
   import Footer from '$lib/Footer.svelte'
   import LiquidContent from '$lib/LiquidContent.svelte'
 
@@ -28,13 +29,17 @@
       if (dy > 20) {
         // don't touch the DOM unless we must
         if (!isScrolled) {
-          document.body.classList.add('scrolled')
-          isScrolled = true
+          requestAnimationFrame(() => {
+            document.body.classList.add('scrolled')
+            isScrolled = true
+          })
         }
       } else {
         if (isScrolled) {
-          document.body.classList.remove('scrolled')
-          isScrolled = false
+          requestAnimationFrame(() => {
+            document.body.classList.remove('scrolled')
+            isScrolled = false
+          })
         }
       }
       if (lastIsRotated !== isRotated) {
@@ -89,7 +94,7 @@
     window.addEventListener(
       'message',
       ({ data: msg }) => {
-        if (!msg) return
+        if (!msg || typeof msg !== 'string') return // guard
         try {
           const { event, data } = JSON.parse(msg)
           if (event === SnapWallet.events.RESIZE && data && ifr) {
@@ -134,8 +139,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
           <span>Idea</span>
           <span>NFT</span>
           <span>App</span>
+          <span>Exchange</span>
           <span>Company</span>
-          <span>Site</span>
           <span>Donations</span>
         </Typewriter>
       {:else}
@@ -167,9 +172,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
 >
 
 <Overview />
-<NFT />
+<CartCheckout />
 <Donation />
-<Buy />
+<NFT />
 <Footer />
 
 <span class="gg-chevron-double-down" />
@@ -259,10 +264,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
     :global(iframe.loaded) {
       opacity: 1;
-      // box-shadow: 5px 5px 18px 5px rgba(0, 0, 0, 0.4);
-      transition: opacity 1s $easeOutExpo, box-shadow 0.3s $easeOutExpo,
-        height 0.3s $easeOutBack;
-      will-change: opacity, box-shadow, height;
+      transition: height 0.3s $easeOutBack, width 0.4s $easeOutBack 0.301s;
+      will-change: opacity, height, width;
     }
   }
 

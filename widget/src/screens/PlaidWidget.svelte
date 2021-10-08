@@ -25,7 +25,7 @@
     plaidWebhook: string
   }
 
-  const WYRE_CONFIG_URL = `${__ENV.WYRE_BASE_URL}/v2/client/config/plaid`
+  const WYRE_CONFIG_URL = `${__ENV['WYRE_BASE_URL']}/v2/client/config/plaid`
 
   const fetchWyreConfig = async () => {
     try {

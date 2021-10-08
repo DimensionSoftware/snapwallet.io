@@ -82,9 +82,9 @@ export const closestNumber = (n: number, m: number) => {
 // Application logger module
 export const Logger = (() => {
   try {
-    window.localStorage.setItem('debug', __ENV.DEBUG)
+    window.localStorage.setItem('debug', __ENV['DEBUG'])
     // These are needed for chrome
-    window.localStorage.debug = __ENV.DEBUG
+    window.localStorage.debug = __ENV['DEBUG']
     nodeDebug.log = console.log.bind(console)
   } catch {
     console.warn('Unable to enable logger. Incognito?')
@@ -189,10 +189,18 @@ export const getPrimaryPaymentMethodID = (): string => {
   }
 }
 
-export const resizeWidget = (height: number, appName: string) => {
+export const isNumber = a => typeof a === 'number'
+
+type ResizeParams = { height: number; width?: number } | number
+export const resizeWidget = (params: ResizeParams, appName: string) => {
+  const height = isNumber(params) ? params : params.height,
+    width = isNumber(params) ? undefined : params.width,
+    detail = { height: `${height}px` }
+  if (width) detail.width = `${width}px`
   window.dispatchEvent(
     new CustomEvent(ParentMessages.RESIZE, {
-      detail: { height: `${height}px`, appName },
+      detail,
+      appName,
     }),
   )
 }
