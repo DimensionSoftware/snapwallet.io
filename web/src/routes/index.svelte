@@ -29,13 +29,17 @@
       if (dy > 20) {
         // don't touch the DOM unless we must
         if (!isScrolled) {
-          document.body.classList.add('scrolled')
-          isScrolled = true
+          requestAnimationFrame(() => {
+            document.body.classList.add('scrolled')
+            isScrolled = true
+          })
         }
       } else {
         if (isScrolled) {
-          document.body.classList.remove('scrolled')
-          isScrolled = false
+          requestAnimationFrame(() => {
+            document.body.classList.remove('scrolled')
+            isScrolled = false
+          })
         }
       }
       if (lastIsRotated !== isRotated) {
