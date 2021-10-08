@@ -26,6 +26,7 @@
             destinationAmount: '.042',
             destinationTicker: 'ETH',
             destinationAddress: '0xCAFEBEEF',
+            qty: 2,
           },
           {
             title: 'Snap OG Dream',
@@ -36,6 +37,7 @@
             destinationAmount: '.069',
             destinationTicker: 'ETH',
             destinationAddress: '0xDEADBEEF',
+            qty: 5,
           },
           {
             title: 'Headband OG',

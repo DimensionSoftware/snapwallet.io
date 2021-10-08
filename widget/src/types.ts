@@ -63,6 +63,7 @@ export type ProductType = {
   destinationAmount: number
   destinationTicker: string
   destinationAddress: string
+  qty?: number
 }
 
 export type WalletType = {

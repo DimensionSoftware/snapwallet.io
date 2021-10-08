@@ -160,12 +160,19 @@
                 {product.subtitle || product.author}
               </small>
             </div>
-            <b>
-              {formatLocaleCurrency(
-                product.destinationTicker,
-                product.destinationAmount,
-              )}
-            </b>
+            <div class="right">
+              <b>
+                {formatLocaleCurrency(
+                  product.destinationTicker,
+                  product.destinationAmount,
+                )}
+              </b>
+              <br />
+              x
+              <b>
+                {product.qty || 1}
+              </b>
+            </div>
           </div>
         {/each}
       {/if}
@@ -385,6 +392,11 @@
     }
     > div {
       flex: 2;
+    }
+    > div.right {
+      text-align: right;
+      margin-left: 0.5rem;
+      flex: 0.75;
     }
 
     small {
