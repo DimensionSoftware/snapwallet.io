@@ -3,8 +3,8 @@
   export let active: boolean = false
   export let disabled: boolean = false
   export let custom: boolean = false
-  export let onClick: () => void
-  export let title: string
+  export let onClick: () => void = () => {}
+  export let title: string = ''
   export let line: boolean = false
 </script>
 
