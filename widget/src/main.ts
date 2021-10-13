@@ -5,8 +5,6 @@ import { userStore } from './stores/UserStore'
 import { Logger } from './util'
 import { configStore } from './stores/ConfigStore'
 
-Logger.debug('PHP eval executed... ;P')
-
 // Auth
 window.AUTH_MANAGER = new AuthManager()
 window.AUTH_MANAGER.watch()
