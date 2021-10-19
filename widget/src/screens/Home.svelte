@@ -537,6 +537,9 @@
   .cryptocurrencies-container {
     cursor: pointer;
     padding: 0 0.5rem;
+    :global(.crypto-icon) {
+      top: 6px;
+    }
   }
   .dst-container {
     margin-left: 2rem;
@@ -564,6 +567,7 @@
     display: none !important;
   }
   .dst-amount {
+    text-transform: none !important;
     position: absolute;
     left: 3rem;
     font-weight: 400;
@@ -573,6 +577,7 @@
     font-size: 1.5rem;
     padding-top: 1rem !important;
     padding-bottom: 0 !important;
+    text-indent: 2px;
     left: 0.2rem;
     width: 203px;
     color: var(--theme-text-color-no-background);
@@ -592,6 +597,7 @@
   .cryptocurrencies-container {
     :global(.crypto-card) {
       border: none !important;
+      top: -10px;
     }
     :global(.crypto-card:before) {
       bottom: -1.5rem !important;

@@ -29,7 +29,7 @@
   .exchange-rate-container {
     position: relative;
     text-align: left;
-    top: -1.5rem;
+    top: -30px;
     left: 2.5rem;
     font-size: 0.75rem;
     z-index: 2;

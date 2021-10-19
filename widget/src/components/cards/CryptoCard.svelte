@@ -107,6 +107,7 @@
     height: 33px;
     width: 33px;
     left: -2px;
+    filter: grayscale(100%);
     transition: 0.15s var(--theme-ease-out-back) 0.05s;
     :global(svg) {
       position: relative;
@@ -143,6 +144,7 @@
     }
     small {
       font-weight: 300;
+      line-height: 1.7prem;
       margin-left: 0.25rem;
       text-transform: capitalize;
       white-space: nowrap;

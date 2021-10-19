@@ -2,7 +2,7 @@
   import { onMount } from 'svelte'
   import { fly } from 'svelte/transition'
   import { push } from 'svelte-spa-router'
-  import { faClock, faLock } from '@fortawesome/free-solid-svg-icons'
+  import { faClock } from '@fortawesome/free-solid-svg-icons'
   import FaIcon from 'svelte-awesome'
 
   import ModalContent from '../components/ModalContent.svelte'
@@ -11,16 +11,17 @@
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
+  import { priceStore } from '../stores/PriceStore'
   import {
     CryptoIcons,
     formatLocaleCurrency,
     dropEndingZeros,
     resizeWidget,
   } from '../util'
+  import { post } from '../util/api_2'
   import { TransactionIntents, TransactionMediums } from '../types'
   import { Routes } from '../constants'
   import { ParentMessenger } from '../util/parent_messenger'
-  import { toaster } from '../stores/ToastStore'
   import { formatExpiration } from '../util/transactions'
   import { configStore } from '../stores/ConfigStore'
 

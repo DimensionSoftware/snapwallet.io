@@ -23,6 +23,7 @@
 
 <style lang="scss">
   .total-container {
-    color: var(--theme-text-color);
+    // inherit surround color for success/disabled/etc...
+    // color: var(--theme-text-color);
   }
 </style>
