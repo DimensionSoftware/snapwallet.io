@@ -223,10 +223,11 @@
     color: #fff !important;
     font-size: 1.15rem !important;
     background: rgb(241, 7, 28) !important;
+    // background: linear-gradient(63.26deg, #ff6b00, #f1071c 75%) !important;
     background: linear-gradient(
       63.26deg,
-      #ff6b00 75%,
-      rgb(241, 7, 28)
+      #ff6b00,
+      rgb(241, 7, 28) 75%
     ) !important;
     border-color: rgb(222, 49, 45) !important;
     z-index: 4;
@@ -236,5 +237,10 @@
   }
   :global(.donations aside > button:hover) {
     box-shadow: 0 0 0 1px red, 0 0 0 2px #ff6b00 !important;
+    background: linear-gradient(
+      63.26deg,
+      #ff6b00,
+      rgb(241, 7, 28) 75%
+    ) !important;
   }
 </style>
