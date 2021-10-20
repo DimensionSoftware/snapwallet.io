@@ -137,7 +137,7 @@
       :global(b) {
         opacity: 1 !important;
         font-weight: bold;
-        color: var(--theme-color);
+        color: var(--text-color);
       }
     }
     &.success {
