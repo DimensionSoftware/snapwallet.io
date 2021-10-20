@@ -335,7 +335,7 @@
     <div class="cryptocurrencies-container">
       <Surround>
         {#if isDonation && $configStore.sourceAmount}
-          <span />
+          <span class="break" />
         {:else}
           <div
             style="display:flex;flex-direction:column;height:4.25rem;margin-top:0rem;margin-left:-0.75rem"
@@ -540,6 +540,9 @@
     :global(.crypto-icon) {
       top: 6px;
     }
+  }
+  .break + .dst-container {
+    margin-top: 1rem;
   }
   .dst-container {
     margin-left: 2rem;
