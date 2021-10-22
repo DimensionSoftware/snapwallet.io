@@ -1,6 +1,6 @@
 const KoaRouter = require('koa-router')
 const { getEvent } = require('../../db')
-const { verifyWyreWebhookHmac } = require('../../middleware/auth')
+// const { verifyWyreWebhookHmac } = require('../../middleware/auth')
 const { payoutTask } = require('../../util/get_paid')
 const router = new KoaRouter()
 
@@ -24,7 +24,7 @@ router.all(
       return
     }
 
-    const { kind, data } = event
+    const { kind, data, entity } = event
 
     if (kind.toLowerCase() !== 'transaction') {
       ctx.log.info({
@@ -34,7 +34,7 @@ router.all(
       return
     }
 
-    await payoutTask(data, ctx.log)
+    await payoutTask(data, entity.id, ctx.log)
 
     ctx.status = 200
     ctx.body = {}
