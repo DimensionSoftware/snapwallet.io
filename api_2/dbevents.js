@@ -38,7 +38,7 @@ class DatabaseEventsManager {
 
   // get by id
   async get(id) {
-    const ref = db.collection('events').doc(id)
+    const ref = this.db.collection('events').doc(id)
 
     const doc = await ref.get()
     if (doc.exists) {
@@ -50,9 +50,22 @@ class DatabaseEventsManager {
 
   // list by entity id / no guarantee of ordering to avoid complex index ; can be done by app server
   async listByEntityID(entityID) {
-    const ref = db.collection('events')
+    const ref = this.db.collection('events')
 
     const snapshot = await ref.where('entity.id', '==', entityID).get()
+
+    const events = []
+    snapshot.forEach((doc) => {
+      events.push(doc.data())
+    })
+
+    return events
+  }
+
+  async listEventsBySource(source) {
+    const ref = this.db.collection('events')
+
+    const snapshot = await ref.where('source', '==', source).get()
 
     const events = []
     snapshot.forEach((doc) => {
