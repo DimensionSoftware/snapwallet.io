@@ -11,13 +11,13 @@
   export let autocapitalize: string = ''
   export let defaultValue: string | number = ''
   export let autocomplete: string = 'on'
-  export let autofocus: boolean
-  export let autoselect: boolean
-  export let required: boolean
-  export let maxlength: number
+  export let autofocus: boolean = false
+  export let autoselect: boolean = false
+  export let required: boolean = false
+  export let maxlength: number = undefined
   export let pattern: string = ''
-  export let mask: Masks
-  export let id: string
+  export let mask: Masks = undefined
+  export let id: string = ''
   export let isTranslucent: boolean
 
   let isActive: boolean = Boolean(defaultValue)

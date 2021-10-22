@@ -54,7 +54,7 @@
     }
     & > .modal-header-right-action {
       @include flex-align-center();
-      margin-right: 0.2em;
+      margin-right: 0;
       justify-content: flex-end;
       @include backface;
     }

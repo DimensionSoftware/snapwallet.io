@@ -180,6 +180,11 @@
     font-size: 1.15rem !important;
     background: rgb(241, 7, 28) !important;
     border-color: rgb(241, 7, 28) !important;
+    background: linear-gradient(
+      63.26deg,
+      rgb(241, 7, 28) 79%,
+      rgb(206, 0, 11)
+    ) !important;
     top: -3.5rem;
     width: 100%;
     border-radius: 0.25rem;

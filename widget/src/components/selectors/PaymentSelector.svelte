@@ -11,7 +11,7 @@
   export let isBuy: boolean = true
   export let active: boolean = false
   export let onClick
-  export let description
+  export let description: string = ''
   export let disabled: boolean | null = null
 
   $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD

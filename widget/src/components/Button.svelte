@@ -1,7 +1,7 @@
 <script lang="ts">
   import { createEventDispatcher } from 'svelte'
   const dispatch = createEventDispatcher()
-  export let id
+  export let id = undefined
   export let disabled: boolean = false
   export let isLoading: boolean = false
   export let title: string = ''
@@ -113,8 +113,7 @@
         animation: inherit;
       }
       box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.55);
-      animation: glow 1.5s linear;
-      animation-iteration-count: infinite;
+      animation: glow 1.5s 0.5s infinite linear;
     }
     &.isLoading {
       .lds-circle {

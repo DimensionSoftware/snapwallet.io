@@ -1,4 +1,8 @@
 @import '../../widget/src/styles/animations.scss';
+@font-face {
+  font-family: 'FutureTechnoBounce';
+  src: url('/fonts/FutureTechnosBounce.otf');
+}
 
 :root {
   font-family: 'Helvetica Neue', 'Helvetica', -apple-system, BlinkMacSystemFont,
@@ -13,6 +17,19 @@
   p {
     font-family: 'Helvetica Neue', 'Helvetica', -apple-system,
       BlinkMacSystemFont;
+  }
+  h1 > b,
+  article h2 {
+    font-family: 'FutureTechnoBounce';
+    font-size: 3rem !important;
+    margin-top: -7rem !important;
+    text-transform: lowercase;
+  }
+  .started h2 {
+    margin-top: -2.8rem !important;
+  }
+  .overview h2 {
+    margin-top: -1.35rem !important;
   }
 }
 

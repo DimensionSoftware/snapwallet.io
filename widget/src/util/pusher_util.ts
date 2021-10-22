@@ -49,7 +49,6 @@ const tryInitializePusher = () => {
       PusherServerMessages.WYRE_TRANSFER_UPDATED,
       handleWyreTransferUpdate,
     )
-    Logger.debug('PUSHER LOADED')
   }
 }
 

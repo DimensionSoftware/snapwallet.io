@@ -206,8 +206,6 @@ export class AuthManager {
   }
 
   public viewerIsLoggedIn(): boolean {
-    Logger.debug('viewerIsLoggedIn called')
-
     const [_, refresh] = this.getCurrentTokens()
 
     return !this.tokenIsExpired(refresh)
