@@ -13,6 +13,12 @@ router.use(
   webhooksRouter.allowedMethods()
 )
 
+router.use(
+  '/transfers',
+  transferRouter.routes(),
+  transferRouter.allowedMethods()
+)
+
 router.use('/jobs', jobsRouter.routes(), jobsRouter.allowedMethods())
 
 /**
@@ -24,11 +30,5 @@ router.use(verifyJWTPlug)
 router.use('/admin', adminRouter.routes(), adminRouter.allowedMethods())
 
 router.use('/wallets', walletsRouter.routes(), walletsRouter.allowedMethods())
-
-router.use(
-  '/transfers',
-  transferRouter.routes(),
-  transferRouter.allowedMethods()
-)
 
 module.exports = router
