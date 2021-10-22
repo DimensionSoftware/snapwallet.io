@@ -7,14 +7,17 @@ const { UnprocessableEntityError } = require('../error'),
  * Transfer a percentage of the transaction funds
  * to our internal business wallet.
  */
-const processInternalBusinessTransaction = async ({ params, userId }) => {
+const processInternalBusinessTransaction = async ({
+  params,
+  businessApiKey,
+}) => {
   try {
     const wyre = new Wyre()
     await wyre.createTransfer(params)
     await createEvent({
       type: EVENT_KINDS.transferred_to_internal_wallet,
       meta: params,
-      entity: { id: userId, kind: 'USER' },
+      entity: { id: businessApiKey, kind: 'BUSINESS' },
     })
   } catch (e) {
     throw e
@@ -24,26 +27,26 @@ const processInternalBusinessTransaction = async ({ params, userId }) => {
 /**
  * Transfer transaction funds to our business customer.
  */
-const processExternalBusinessTransaction = async ({ params, userId }) => {
+const processExternalBusinessTransaction = async ({
+  params,
+  businessApiKey,
+}) => {
   try {
     const wyre = new Wyre()
     await wyre.createTransfer(params)
     await createEvent({
       type: EVENT_KINDS.transferred_to_internal_wallet,
       meta: params,
-      entity: { id: userId, kind: 'USER' },
+      entity: { id: businessApiKey, kind: 'BUSINESS' },
     })
   } catch (e) {
     throw e
   }
 }
 
-const payoutTask = async (data, logger) => {
+const payoutTask = async (data, businessApiKey, logger) => {
   try {
-    const userId = data.userId
-    if (!userId)
-      throw UnprocessableEntityError('No user ID available for transaction')
-    const events = await EVENTS.listByEntityID(userId)
+    const events = await EVENTS.listEventsBySource(data.source)
 
     const { internalTxnRequired, externalTxnRequired } = events.reduce(
       (acc, e) => {
@@ -62,7 +65,7 @@ const payoutTask = async (data, logger) => {
     }
 
     const wyre = new Wyre()
-    const wallet = await wyre.getWallet({ id: data.source })
+    const { data: wallet } = await wyre.getWallet({ id: data.source })
     const walletBalances = wallet.availableBalances
     // Any currency not in the map will fall under ERC20 so fallback to eth address
     const walletBalance =
@@ -93,7 +96,7 @@ const payoutTask = async (data, logger) => {
         dest: `wallet:${process.env.SNAP_WALLET_WYRE_SAVINGS_WALLET}`,
       }
       logger.info({ msg: 'Processing internal business transaction' })
-      await processInternalBusinessTransaction({ params, userId })
+      await processInternalBusinessTransaction({ params, businessApiKey })
     }
 
     // Transfer remaining to our business customer
@@ -104,7 +107,7 @@ const payoutTask = async (data, logger) => {
         dest: `wallet:${data.destination}`,
       }
       logger.info({ msg: 'Processing external business transaction' })
-      await processExternalBusinessTransaction({ params, userId })
+      await processExternalBusinessTransaction({ params, businessApiKey })
     }
   } catch (e) {
     logger.error({
