@@ -98,6 +98,32 @@ html {
       overflow-y: hidden;
       height: 100vh;
     }
+    > .coin {
+      position: absolute;
+      top: -50px;
+      height: 242px;
+      width: 250px;
+      left: 4vw;
+      z-index: 0;
+      transform: scale(0.7);
+      opacity: 0.65;
+      background-image: url('/images/bitcoin.png');
+      &.eth {
+        left: -50px;
+        top: 70vh;
+        height: 194px;
+        width: 200px;
+        background-image: url('/images/eth.png');
+      }
+      &.dog {
+        width: 175px;
+        height: 167px;
+        left: inherit;
+        top: 10vh;
+        right: -50px;
+        background-image: url('/images/dog.png');
+      }
+    }
     > .top-bg {
       content: '';
       position: fixed;

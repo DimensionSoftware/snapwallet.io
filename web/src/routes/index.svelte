@@ -163,6 +163,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
     />
   </div>
 </main>
+<span class="btc coin" />
+<span class="eth coin" />
+<span class="dog coin" />
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"
   ><path
     fill="#ffffff"
