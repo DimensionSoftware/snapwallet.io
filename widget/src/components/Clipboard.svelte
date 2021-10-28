@@ -30,7 +30,7 @@
   </svg>
 </span>
 
-<style>
+<style lang="scss">
   textarea {
     position: absolute;
     top: 0;
@@ -50,10 +50,13 @@
     opacity: 0.8;
     transform: scale(1);
     transition: transform 0.2s ease-out;
-  }
-  svg:hover {
-    transform: scale(1.05);
-    opacity: 1;
-    transition: none;
+    &:hover {
+      transform: scale(1.05);
+      opacity: 1;
+      transition: none;
+    }
+    path {
+      fill: var(--theme-text-color);
+    }
   }
 </style>
