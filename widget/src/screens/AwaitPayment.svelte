@@ -21,7 +21,7 @@
   // TODO remove demo defaults and use real values
   const dstCurrency = 'BTC', //$transactionStore.destinationCurrency.name ?? 'BTC',
     dstAmount = $transactionStore.destinationAmount ?? 69420,
-    dstAddress = '0xDEADBEEF',
+    dstAddress = '0xCAFEBABE',
     Icon = CryptoIcons[dstCurrency]
 
   onMount(() => {
@@ -42,8 +42,7 @@
 <ModalContent>
   <ModalHeader>Awaiting Payment</ModalHeader>
   <ModalBody>
-    <div class="glow" />
-    <Surround>
+    <Surround glow>
       <h2>Send</h2>
       <div class="row">
         <div class="crypto-icon">
@@ -117,6 +116,10 @@
     }
   }
   .qrcode {
+    background: var(--theme-color);
+    padding: 3px;
+    padding-bottom: 1px;
+    border-radius: 3px;
     margin: 1rem auto;
   }
   small {
