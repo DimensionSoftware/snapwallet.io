@@ -62,6 +62,7 @@
   $: cryptoFee = isBuy
     ? fees[destinationCurrency] / txnExchangeRate
     : fees[sourceCurrency]
+  // since sendwyre's amount has fees baked in, subtract out
   $: trueSourceAmount = isBuy
     ? sourceAmount - cryptoFee - fees[sourceCurrency]
     : sourceAmount
@@ -89,14 +90,15 @@
   const handleConfirmation = async () => {
     try {
       isConfirmingTxn = true
-      if (isDebitCard) {
-        return push(Routes.DEBIT_CARD)
-      }
-      const txn = await window.API.fluxWyreConfirmTransfer(txnId, {
-        transferId: txnId,
-      })
-      ParentMessenger.success(txn.id)
-      push(Routes.SUCCESS)
+      // if (isDebitCard) {
+      //   return push(Routes.DEBIT_CARD)
+      // }
+      // const txn = await window.API.fluxWyreConfirmTransfer(txnId, {
+      //   transferId: txnId,
+      // })
+      // ParentMessenger.success(txn.id)
+      // push(Routes.SUCCESS)
+      push(Routes.AWAIT_PAYMENT)
     } finally {
       isConfirmingTxn = false
     }
@@ -109,26 +111,21 @@
     // TODO generate wyrePreview
     try {
       isPreviewing = true
-      const preview = await window.API.fluxWyreCreateTransfer({
-        source: $transactionStore.selectedSourcePaymentMethod?.id,
-        destAmount: destinationAmount,
-        dest: $configStore.destinationAddress,
-        destCurrency: destinationTicker,
-      })
-      transactionStore.setWyrePreview(preview)
+      console.error(await post('transfers'))
+      // transactionStore.setWyrePreview(await fetch())
+      // const preview = await window.API.fluxWyreCreateTransfer({
+      //   source: $transactionStore.selectedSourcePaymentMethod?.id,
+      //   destAmount: hasManyProducts
+      //     ? products.reduce((prev, cur) => cur.destinationAmount + prev, 0)
+      //     : destinationAmount,
+      //   dest: $configStore.destinationAddress,
+      //   destCurrency: destinationTicker,
+      // })
+      // console.log('preview', preview)
+      // transactionStore.setWyrePreview(preview)
     } finally {
       isPreviewing = false
     }
-    const interval = setInterval(() => {
-      if ($transactionStore.transactionExpirationSeconds <= 0) {
-        toaster.pop({
-          msg: 'Your preview has expired. Please create a new preview.',
-          error: true,
-        })
-        push(Routes.ROOT)
-      }
-    }, 1000)
-    return () => clearInterval(interval)
   })
 </script>
 
@@ -155,11 +152,12 @@
         {#each products as product, i}
           <div class="product" in:fly={{ y: 25, duration: 200 * (i + 1) }}>
             <img height="50" width="50" src={product.img} />
-            <div>
+            <div class="title" title={product.subtitle || product.author}>
               {product.title}
-              <small>
-                {product.subtitle || product.author}
-              </small>
+              <small>x</small>
+              <b>
+                {product.qty || 1}
+              </b>
             </div>
             <div class="right">
               <b>
@@ -167,11 +165,6 @@
                   product.destinationTicker,
                   product.destinationAmount,
                 )}
-              </b>
-              <br />
-              x
-              <b>
-                {product.qty || 1}
               </b>
             </div>
           </div>
@@ -391,23 +384,20 @@
       background-size: cover;
       margin-right: 1rem;
     }
-    > div {
+    .title {
       flex: 2;
+      margin: auto;
     }
     > div.right {
       text-align: right;
-      margin-left: 0.5rem;
+      margin: auto 0.5rem auto auto;
       flex: 0.75;
     }
 
     small {
-      display: block;
       margin: 0.15rem 0 0.2rem 0;
-      width: 100%;
       font-size: 0.75rem;
       opacity: 0.8;
-    }
-    b {
     }
   }
 </style>

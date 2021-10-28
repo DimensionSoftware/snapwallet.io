@@ -338,7 +338,7 @@
           <span class="break" />
         {:else}
           <div
-            style="display:flex;flex-direction:column;height:4.25rem;margin-top:0rem;margin-left:-0.75rem"
+            style="display:flex;flex-direction:column;height:4.25rem;margin-top:0rem;margin-left:-0.75rem;margin-right:1rem;"
           >
             <Label>
               <span class="dst-currency">$</span>
@@ -367,7 +367,7 @@
           </div>
         {/if}
         {#if !$configStore.defaultDestinationAsset}
-          <div class="dst-container">
+          <div class="dst-container" style="margin-right: 1.5rem;">
             <Label fx={false}>
               <CryptoCard
                 on:mousedown={showCryptoSelector}
