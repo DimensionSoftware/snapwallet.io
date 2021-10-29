@@ -2,10 +2,12 @@
   export let fullscreen: boolean = false
   export let padded: boolean = false
   export let scrollable: boolean = true
+  export let klass: string = ''
 </script>
 
 <div
-  class="modal-body"
+  class={`modal-body
+  ${klass}`}
   class:scroll-y={scrollable}
   class:fullscreen
   class:padded

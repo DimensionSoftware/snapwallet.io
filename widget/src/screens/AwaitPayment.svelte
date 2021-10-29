@@ -41,9 +41,9 @@
 
 <ModalContent>
   <ModalHeader>Awaiting Payment</ModalHeader>
-  <ModalBody>
+  <ModalBody klass="awaiting-payment">
     <Surround glow>
-      <h2>Send</h2>
+      <h2>Scan to Send</h2>
       <div class="row">
         <div class="crypto-icon">
           <Icon size="30" height="30" width="30" viewBox="-4 0 40 40" />
@@ -53,11 +53,9 @@
         </h4>
         <Clipboard value={dstAmount} />
       </div>
-      <FaIcon class="down-arrow" data={faArrowDown} />
       <div id="qrcode" class="qrcode" title="Scan to Send Payment" />
-      <small>Or, Copy & Paste</small>
       <div class="row">
-        <p>{dstAddress}</p>
+        <h4 class="address">{dstAddress}</h4>
         <Clipboard value={dstAddress} />
       </div>
     </Surround>
@@ -67,9 +65,14 @@
 <style lang="scss">
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
+  :global(.modal-body.awaiting-payment) {
+    padding: 0.75rem 3.25rem !important;
+  }
   :global(.surround) {
     display: flex;
     text-align: center;
+    border-width: 4px !important;
+    padding-bottom: 3rem !important;
   }
   :global(.down-arrow) {
     align-self: center;
@@ -109,10 +112,11 @@
     grid-gap: 0.5rem;
     margin-bottom: 0.05rem;
     .crypto-icon {
+      filter: grayscale(100%);
       margin-top: 7px;
     }
     h4 {
-      margin: 0;
+      margin: 0 0.75rem 0 0;
     }
   }
   .qrcode {
@@ -120,7 +124,7 @@
     padding: 3px;
     padding-bottom: 1px;
     border-radius: 3px;
-    margin: 1rem auto;
+    margin: 0.2rem auto 0.75rem;
   }
   small {
     margin: 1.5rem 0 0.5rem 0;
@@ -151,6 +155,10 @@
         var(--theme-color)
       );
     }
+  }
+  h2 {
+    font-size: 1.1rem;
+    margin: 2rem;
   }
   p {
     margin: 0;
