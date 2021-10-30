@@ -522,7 +522,6 @@
   }
 
   #modal-body {
-    // transition: height 0.3s var(--theme-ease-out-back);
     transition: height 0.3s var(--theme-ease-out-back),
       width 0.4s var(--theme-ease-out-back) 0.301s;
     will-change: height, width, transform;

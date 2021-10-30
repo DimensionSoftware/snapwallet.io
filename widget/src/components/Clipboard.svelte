@@ -27,8 +27,8 @@
     on:click={copy}
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 22.5 22.5"
-    height="15"
-    width="15"
+    height="16"
+    width="16"
     ><defs
       ><style>
         .cls-1 {
@@ -69,6 +69,8 @@
   svg {
     position: relative;
     cursor: pointer;
+    top: 2px;
+    opacity: 1;
     transform: scale(1);
     transition: transform 0.2s ease-out;
     &:hover {
