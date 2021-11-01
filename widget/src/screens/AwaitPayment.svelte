@@ -20,8 +20,8 @@
 
   // TODO remove demo defaults and use real values
   const dstCurrency = 'BTC', //$transactionStore.destinationCurrency.name ?? 'BTC',
-    dstAmount = $transactionStore.destinationAmount ?? 69420,
-    dstAddress = '0xCAFEBABE',
+    dstAmount = $transactionStore.destinationAmount || 6942069420,
+    dstAddress = '0xCAFEBABE00069BEEF420',
     Icon = CryptoIcons[dstCurrency]
 
   onMount(() => {
@@ -32,7 +32,7 @@
         radius: 0.0, // 0.0 to 0.5
         ecLevel: 'H', // L, M, Q, H
         fill: '#111',
-        size: 128, // in pixels
+        size: 155, // in pixels
       },
       document.getElementById('qrcode'),
     )
@@ -44,10 +44,10 @@
   <ModalBody klass="awaiting-payment">
     <Surround glow>
       <h2>Scan to Send</h2>
+      <div class="crypto-icon">
+        <Icon size="50" height="50" width="50" viewBox="-4 0 40 40" />
+      </div>
       <div class="row">
-        <div class="crypto-icon">
-          <Icon size="30" height="30" width="30" viewBox="-4 0 40 40" />
-        </div>
         <h4>
           {formatLocaleCurrency(dstCurrency, dstAmount)}
         </h4>
@@ -68,11 +68,16 @@
   :global(.modal-body.awaiting-payment) {
     padding: 0.75rem 3.25rem !important;
   }
-  :global(.surround) {
+  :global(.modal-body.awaiting-payment .clipboard-copy) {
+    position: absolute;
+    top: 3px;
+    right: 0.5rem;
+  }
+  :global(.modal-body.awaiting-payment .surround) {
     display: flex;
     text-align: center;
     border-width: 4px !important;
-    padding-bottom: 3rem !important;
+    padding-bottom: 1.25rem !important;
   }
   :global(.down-arrow) {
     align-self: center;
@@ -103,20 +108,28 @@
   h2 {
     font-size: 1.2rem;
   }
+  .crypto-icon {
+    filter: grayscale(100%);
+    margin-bottom: 1rem;
+  }
   .row {
     display: flex;
+    position: relative;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     font-size: 1.1rem;
     grid-gap: 0.5rem;
     margin-bottom: 0.05rem;
-    .crypto-icon {
-      filter: grayscale(100%);
-      margin-top: 7px;
-    }
     h4 {
-      margin: 0 0.75rem 0 0;
+      margin: 0 0 0.5rem;
+      max-width: 153px;
+      white-space: pre-wrap;
+      line-height: 1.5rem;
+      text-align: left;
+      word-break: break-word;
+      text-overflow: ellipsis;
+      overflow: hidden;
     }
   }
   .qrcode {

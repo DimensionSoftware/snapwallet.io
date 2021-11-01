@@ -22,7 +22,7 @@
 {#if value != null}
   <textarea bind:this={hiddenInput}>{value}</textarea>
 {/if}
-<span title={`Copy ${value}`}>
+<span class="clipboard-copy" title={`Copy ${value}`}>
   <svg
     on:click={copy}
     xmlns="http://www.w3.org/2000/svg"
