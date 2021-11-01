@@ -123,7 +123,7 @@
     margin-bottom: 0.05rem;
     h4 {
       margin: 0 0 0.5rem;
-      max-width: 153px;
+      max-width: 160px;
       white-space: pre-wrap;
       line-height: 1.5rem;
       text-align: left;

@@ -17,6 +17,7 @@
     margin-top: 1rem;
     width: 100%;
     display: flex;
+    text-align: center;
     flex-direction: column;
     padding: 0 0.5rem 0.5rem 0.5rem;
     border: 3px solid var(--theme-button-color);
