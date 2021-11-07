@@ -113,7 +113,7 @@
         animation: inherit;
       }
       box-shadow: 0 0 0 0 rgba(var(--theme-button-glow-color), 0.55);
-      animation: glow 1.5s 0.5s infinite linear;
+      animation: glow 1.5s 0.15s infinite linear;
     }
     &.isLoading {
       .lds-circle {

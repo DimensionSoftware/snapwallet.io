@@ -10,6 +10,18 @@
   }
 }
 
+@keyframes scaleUp {
+  0% {
+    transform: scale(1.5);
+  }
+  50% {
+    transform: scale(0.97);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
 @keyframes focus {
   0% {
     transform: scale(1);
