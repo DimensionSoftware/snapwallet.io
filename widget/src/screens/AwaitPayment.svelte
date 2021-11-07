@@ -20,7 +20,7 @@
 
   // TODO remove demo defaults and use real values
   const dstCurrency = 'BTC', //$transactionStore.destinationCurrency.name ?? 'BTC',
-    dstAmount = $transactionStore.destinationAmount || 6942069420,
+    dstAmount = $transactionStore.destinationAmount ?? 0,
     dstAddress = '0xCAFEBABE00069BEEF420',
     Icon = CryptoIcons[dstCurrency]
 
@@ -32,7 +32,7 @@
         radius: 0.0, // 0.0 to 0.5
         ecLevel: 'H', // L, M, Q, H
         fill: '#111',
-        size: 155, // in pixels
+        size: 115, // in pixels
       },
       document.getElementById('qrcode'),
     )
@@ -44,11 +44,11 @@
   <ModalBody klass="awaiting-payment">
     <Surround glow>
       <h2>Scan to Send</h2>
-      <div class="crypto-icon">
-        <Icon size="50" height="50" width="50" viewBox="-4 0 40 40" />
-      </div>
       <div class="row">
-        <h4>
+        <div class="crypto-icon">
+          <Icon size="25" height="25" width="25" viewBox="-4 0 40 40" />
+        </div>
+        <h4 class="amount">
           {formatLocaleCurrency(dstCurrency, dstAmount)}
         </h4>
         <Clipboard value={dstAmount} />
@@ -109,8 +109,10 @@
     font-size: 1.2rem;
   }
   .crypto-icon {
+    position: relative;
     filter: grayscale(100%);
     margin-bottom: 1rem;
+    top: 3px;
   }
   .row {
     display: flex;
@@ -130,6 +132,12 @@
       word-break: break-word;
       text-overflow: ellipsis;
       overflow: hidden;
+      &.amount {
+        max-width: 130px;
+      }
+      &.address {
+        font-size: 0.9rem;
+      }
     }
   }
   .qrcode {
