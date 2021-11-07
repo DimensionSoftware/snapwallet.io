@@ -11,18 +11,15 @@
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
-  import { priceStore } from '../stores/PriceStore'
   import {
     CryptoIcons,
     formatLocaleCurrency,
-    dropEndingZeros,
     resizeWidget,
     totalProducts,
   } from '../util'
   import { post } from '../util/api_2'
   import { TransactionIntents, TransactionMediums } from '../types'
   import { Routes } from '../constants'
-  import { ParentMessenger } from '../util/parent_messenger'
   import { formatExpiration } from '../util/transactions'
   import { configStore } from '../stores/ConfigStore'
 
@@ -56,11 +53,9 @@
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
   $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
   $: Icon = CryptoIcons[cryptoTicker]
-  // $: exchangeRate = isBuy ? 1 / txnExchangeRate : txnExchangeRate
   $: total = isBuy ? sourceAmount : destinationAmount
 
-  $: isConfirmingTxn = false
-  $: isPreviewing = false
+  $: isPreviewing = true
   $: cryptoFee = isBuy
     ? fees[destinationCurrency] / txnExchangeRate || 0
     : fees[sourceCurrency] || 0
@@ -69,59 +64,33 @@
     ? Math.abs(sourceAmount - cryptoFee - fees[sourceCurrency])
     : sourceAmount
 
-  let buttonText
-  $: {
-    console.log(sourceAmount, cryptoFee, fees[sourceCurrency])
-    if (isBuy && !isDebitCard) {
-      buttonText = isConfirmingTxn ? 'Buying' : 'Buy Now'
-    } else if (isBuy && isDebitCard) {
-      buttonText = 'Continue'
-    } else {
-      buttonText = isConfirmingTxn ? 'Selling' : 'Sell Now'
-    }
-  }
-
   $: formattedExpiration = formatExpiration(
     $transactionStore.transactionExpirationSeconds,
   )
 
   $: hasManyProducts = products?.length > 0
-  $: destinationTicker = hasManyProducts
-    ? products[0].destinationTicker
-    : product?.destinationTicker
 
   const handleConfirmation = async () => {
-    try {
-      isConfirmingTxn = true
-      // if (isDebitCard) {
-      //   return push(Routes.DEBIT_CARD)
-      // }
-      // const txn = await window.API.fluxWyreConfirmTransfer(txnId, {
-      //   transferId: txnId,
-      // })
-      // ParentMessenger.success(txn.id)
-      // push(Routes.SUCCESS)
-      // push(Routes.AWAIT_PAYMENT)
-    } finally {
-      isConfirmingTxn = false
-    }
+    // navigate to await payment, where customers can change payment method
+    push(Routes.AWAIT_PAYMENT)
   }
 
   onMount(async () => {
     // afford more space to lists of product
     if (hasManyProducts)
       resizeWidget({ height: 650, width: 500 }, $configStore.appName)
-    // TODO generate wyrePreview
     try {
+      // generate wyrePreview
       isPreviewing = true
-      // FIXME set total?
+      // total becomes the amount to send to the destination
       total = hasManyProducts ? totalProducts(products) : destinationAmount
       const { preview, depositAddress } = await post('transfers', {
         sourceCurrency,
         sourceAmount: total,
         destCurrency: destinationCurrency,
       })
-      console.log('preview', preview)
+      // augment preview with deposit address
+      preview.destAddress = depositAddress
       transactionStore.setWyrePreview(preview)
     } finally {
       isPreviewing = false
@@ -251,21 +220,25 @@
         </div>
       {/if}
       <div class="line dashed" />
-      <div class="line-item" style="margin-bottom: 2.15rem;">
-        <div><b>Total</b></div>
-        <div>
-          <b class="total">{formatLocaleCurrency(fiatTicker, sourceAmount)}</b>
+      {#if isPreviewing}
+        <div class="line-item" style="margin-bottom: 2.15rem;">
+          <div><b>&nbsp;</b></div>
+          <div>
+            <b class="total">&nbsp;</b>
+          </div>
         </div>
-      </div>
-      <Button
-        glow
-        isLoading={isConfirmingTxn}
-        on:mousedown={handleConfirmation}
-      >
+      {:else}
+        <div class="scale-up line-item" style="margin-bottom: 2.15rem;">
+          <div><b>Total</b></div>
+          <div>
+            <b class="total">{formatLocaleCurrency(fiatTicker, sourceAmount)}</b
+            >
+          </div>
+        </div>
+      {/if}
+      <Button glow isLoading={isPreviewing} on:mousedown={handleConfirmation}>
         <div style="display:flex;justify-content:center;align-items:center;">
-          <span style="margin-right:0.75rem;">
-            {buttonText}
-          </span>
+          <span style="margin-right:0.75rem;"> BUY NOW </span>
         </div>
       </Button>
     </div>
@@ -276,6 +249,9 @@
   @import '../styles/_vars.scss';
   @import '../styles/animations.scss';
 
+  .scale-up {
+    animation: focus 0.3s ease-in-out;
+  }
   .checkout-item-box {
     width: 100%;
     display: flex;
