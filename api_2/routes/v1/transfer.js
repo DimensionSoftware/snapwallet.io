@@ -63,6 +63,7 @@ router.post('/', async (ctx, _next) => {
       sourceCurrency: txn.sourceCurrency,
       destAmount: txn.destAmount,
       destCurrency: txn.destCurrency,
+      expiresAt: txn.expiresAt,
     },
   }
 })
