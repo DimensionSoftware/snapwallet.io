@@ -1,34 +1,27 @@
 <script lang="ts">
   import { onMount } from 'svelte'
-  import { faArrowDown } from '@fortawesome/free-solid-svg-icons'
-  import FaIcon from 'svelte-awesome'
   // @ts-ignore
   import QR from 'qr-creator'
   import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
-  import { TransactionIntents, TransactionMediums } from '../types'
-  import { push } from 'svelte-spa-router'
-  import { Routes } from '../constants'
-  import { ParentMessenger } from '../util/parent_messenger'
-  import { configStore } from '../stores/ConfigStore'
   import { transactionStore } from '../stores/TransactionStore'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import Surround from '../components/cards/Surround.svelte'
-  import Button from '../components/Button.svelte'
   import Clipboard from '../components/Clipboard.svelte'
 
-  // TODO remove demo defaults and use real values
-  const dstCurrency = 'BTC', //$transactionStore.destinationCurrency.name ?? 'BTC',
-    dstAmount = $transactionStore.destinationAmount ?? 0,
-    dstAddress = '0xCAFEBABE00069BEEF420',
-    Icon = CryptoIcons[dstCurrency]
+  const { destinationCurrency } = $transactionStore,
+    { destAddress, destAmount } = $transactionStore.wyrePreview || {
+      destAddress: '0xCAFEBABE',
+      destAmount: 0,
+    },
+    Icon = CryptoIcons[destinationCurrency.ticker ?? 'BTC']
 
   onMount(() => {
-    // TODO build-in
+    // render qrcode
     QR.render(
       {
-        dstAddress,
+        text: destAddress ?? '',
         radius: 0.0, // 0.0 to 0.5
         ecLevel: 'H', // L, M, Q, H
         fill: '#111',
@@ -49,14 +42,14 @@
           <Icon size="25" height="25" width="25" viewBox="-4 0 40 40" />
         </div>
         <h4 class="amount">
-          {formatLocaleCurrency(dstCurrency, dstAmount)}
+          {formatLocaleCurrency(destinationCurrency.ticker, destAmount)}
         </h4>
-        <Clipboard value={dstAmount} />
+        <Clipboard value={destAmount} />
       </div>
       <div id="qrcode" class="qrcode" title="Scan to Send Payment" />
       <div class="row">
-        <h4 class="address">{dstAddress}</h4>
-        <Clipboard value={dstAddress} />
+        <h4 class="address">{destAddress}</h4>
+        <Clipboard value={destAddress} />
       </div>
     </Surround>
   </ModalBody>
@@ -111,7 +104,7 @@
   .crypto-icon {
     position: relative;
     filter: grayscale(100%);
-    margin-bottom: 1rem;
+    margin-bottom: 0.5rem;
     top: 3px;
   }
   .row {
@@ -127,7 +120,7 @@
       margin: 0 0 0.5rem;
       max-width: 160px;
       white-space: pre-wrap;
-      line-height: 1.5rem;
+      line-height: 1.25rem;
       text-align: left;
       word-break: break-word;
       text-overflow: ellipsis;
@@ -136,7 +129,7 @@
         max-width: 130px;
       }
       &.address {
-        font-size: 0.9rem;
+        font-size: 0.8rem;
       }
     }
   }
