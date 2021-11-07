@@ -3,6 +3,7 @@ import nodeDebug from 'debug'
 import * as Icons from './icons'
 import { ParentMessages, CACHED_PRIMARY_PAYMENT_METHOD_KEY } from '../constants'
 import { isValidMaskInput } from '../masks'
+import type { ProductType } from '../types'
 
 export const CryptoIcons = Icons
 
@@ -97,6 +98,14 @@ export const Logger = (() => {
     info,
   }
 })()
+
+export const totalProducts = (products: Array<ProductType>) =>
+  products.reduce(
+    (prev, cur) =>
+      parseFloat(cur.destinationAmount.toString()) * (cur.qty || 1) +
+      (prev || 0),
+    0,
+  )
 
 export const numberWithCommas = (s: string) =>
   s.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')

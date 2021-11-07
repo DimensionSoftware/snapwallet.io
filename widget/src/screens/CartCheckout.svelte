@@ -17,6 +17,7 @@
     formatLocaleCurrency,
     dropEndingZeros,
     resizeWidget,
+    totalProducts,
   } from '../util'
   import { post } from '../util/api_2'
   import { TransactionIntents, TransactionMediums } from '../types'
@@ -49,7 +50,8 @@
     txnExchangeRate: 1,
   })
 
-  $: isBuy = intent === TransactionIntents.BUY
+  // TODO: move vars that can be consolidated into a single reactive block
+  $: isBuy = intent !== TransactionIntents.SELL
   $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
   $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
   $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
@@ -60,15 +62,16 @@
   $: isConfirmingTxn = false
   $: isPreviewing = false
   $: cryptoFee = isBuy
-    ? fees[destinationCurrency] / txnExchangeRate
-    : fees[sourceCurrency]
-  // since sendwyre's amount has fees baked in, subtract out
+    ? fees[destinationCurrency] / txnExchangeRate || 0
+    : fees[sourceCurrency] || 0
+  // since sendwyre's amount has fees baked in, subtract out using absolute value
   $: trueSourceAmount = isBuy
-    ? sourceAmount - cryptoFee - fees[sourceCurrency]
+    ? Math.abs(sourceAmount - cryptoFee - fees[sourceCurrency])
     : sourceAmount
 
   let buttonText
   $: {
+    console.log(sourceAmount, cryptoFee, fees[sourceCurrency])
     if (isBuy && !isDebitCard) {
       buttonText = isConfirmingTxn ? 'Buying' : 'Buy Now'
     } else if (isBuy && isDebitCard) {
@@ -98,7 +101,7 @@
       // })
       // ParentMessenger.success(txn.id)
       // push(Routes.SUCCESS)
-      push(Routes.AWAIT_PAYMENT)
+      // push(Routes.AWAIT_PAYMENT)
     } finally {
       isConfirmingTxn = false
     }
@@ -111,18 +114,15 @@
     // TODO generate wyrePreview
     try {
       isPreviewing = true
-      console.error(await post('transfers'))
-      // transactionStore.setWyrePreview(await fetch())
-      // const preview = await window.API.fluxWyreCreateTransfer({
-      //   source: $transactionStore.selectedSourcePaymentMethod?.id,
-      //   destAmount: hasManyProducts
-      //     ? products.reduce((prev, cur) => cur.destinationAmount + prev, 0)
-      //     : destinationAmount,
-      //   dest: $configStore.destinationAddress,
-      //   destCurrency: destinationTicker,
-      // })
-      // console.log('preview', preview)
-      // transactionStore.setWyrePreview(preview)
+      // FIXME set total?
+      total = hasManyProducts ? totalProducts(products) : destinationAmount
+      const { preview, depositAddress } = await post('transfers', {
+        sourceCurrency,
+        sourceAmount: total,
+        destCurrency: destinationCurrency,
+      })
+      console.log('preview', preview)
+      transactionStore.setWyrePreview(preview)
     } finally {
       isPreviewing = false
     }
@@ -254,7 +254,7 @@
       <div class="line-item" style="margin-bottom: 2.15rem;">
         <div><b>Total</b></div>
         <div>
-          <b class="total">{formatLocaleCurrency(fiatTicker, total)}</b>
+          <b class="total">{formatLocaleCurrency(fiatTicker, sourceAmount)}</b>
         </div>
       </div>
       <Button
