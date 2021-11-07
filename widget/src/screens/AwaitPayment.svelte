@@ -2,6 +2,8 @@
   import { onMount } from 'svelte'
   // @ts-ignore
   import QR from 'qr-creator'
+  import { faClock } from '@fortawesome/free-solid-svg-icons'
+  import FaIcon from 'svelte-awesome'
   import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
   import { transactionStore } from '../stores/TransactionStore'
   import ModalContent from '../components/ModalContent.svelte'
@@ -9,6 +11,16 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import Surround from '../components/cards/Surround.svelte'
   import Clipboard from '../components/Clipboard.svelte'
+  import { TransactionMediums } from '../types'
+  import AccountSelector from '../components/selectors/AccountSelector.svelte'
+  import { formatExpiration } from '../util/transactions'
+
+  let isPaymentSelectorVisible = false
+
+  $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
+  $: formattedExpiration = formatExpiration(
+    $transactionStore.transactionExpirationSeconds,
+  )
 
   const { destinationCurrency } = $transactionStore,
     { destAddress, destAmount } = $transactionStore.wyrePreview || {
@@ -52,7 +64,34 @@
         <Clipboard value={destAddress} />
       </div>
     </Surround>
+    <div
+      class="payment"
+      title="Click to Change Payment Method"
+      on:click={() => (isPaymentSelectorVisible = true)}
+    >
+      <b>
+        <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
+        {#if $transactionStore.selectedSourcePaymentMethod}
+          {$transactionStore.selectedSourcePaymentMethod.name}
+        {:else if isDebitCard}
+          Pay with Debit Card
+        {:else}
+          Change Payment Method
+        {/if}
+      </b>
+    </div>
   </ModalBody>
+  {#if isPaymentSelectorVisible}
+    <AccountSelector
+      visible
+      on:close={() => (isPaymentSelectorVisible = false)}
+    />
+  {/if}
+  <div class="expires">
+    <FaIcon data={faClock} />
+    <div style="margin-right:0.35rem;" />
+    <b>{formattedExpiration}</b>
+  </div>
 </ModalContent>
 
 <style lang="scss">
@@ -177,5 +216,24 @@
   p {
     margin: 0;
     font-size: 0.8rem;
+  }
+
+  .payment {
+    display: flex;
+    display: none;
+    cursor: pointer;
+    opacity: 0.8;
+    font-size: 0.8rem;
+    margin: 3rem auto;
+    gap: 0.5rem;
+  }
+
+  .expires {
+    display: flex;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 2rem;
+    opacity: 0.8;
   }
 </style>
