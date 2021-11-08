@@ -12,6 +12,7 @@ declare global {
 
   declare var __ENV: {
     API_BASE_URL: string
+    API2_BASE_URL: string
     DEBUG: string
     WYRE_BASE_URL: string
     [k: string]: string

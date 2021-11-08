@@ -32,6 +32,7 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           BUILD_SCRIPT: bin/build-development-web
           API_BASE_URL: https://dev-api.snapwallet.io
+          API2_BASE_URL: https://snap-api2-4eumnbid2a-uc.a.run.app
           # API base url is always required for the widget
           # This is not the case for the init project due to env URL switching
           # so we have an additional env var for that here
@@ -54,6 +55,7 @@ jobs:
           GCP_SA_KEY: ${{ secrets.SANDBOX_GCP_SA_KEY}}
           BUILD_SCRIPT: bin/build-sandbox-web
           API_BASE_URL: https://sandbox-api.snapwallet.io
+          API2_BASE_URL: https://snap-api2-4eumnbid2a-uc.a.run.app
           WYRE_BASE_URL: https://api.testwyre.com
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info,SnapWallet:debug'
   deploy-production-web: 
@@ -76,5 +78,6 @@ jobs:
           GCP_SA_KEY: ${{ secrets.PRODUCTION_GCP_SA_KEY}}
           BUILD_SCRIPT: bin/build-web
           API_BASE_URL: https://api.snapwallet.io
+          API2_BASE_URL: https://snap-api2-4eumnbid2a-uc.a.run.app
           WYRE_BASE_URL: https://api.testwyre.com
           DEBUG: 'SnapWallet:error,SnapWallet:warn,SnapWallet:info'
