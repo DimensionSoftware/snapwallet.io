@@ -97,7 +97,7 @@
       }
     }
     &:disabled {
-      animation: infocus 0.75s;
+      animation: infocus 0.75s !important;
       background: var(--theme-button-color);
       cursor: not-allowed;
       text-shadow: none;
