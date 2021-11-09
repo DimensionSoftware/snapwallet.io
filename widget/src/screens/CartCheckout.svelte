@@ -50,9 +50,7 @@
   // TODO: move vars that can be consolidated into a single reactive block
   $: isBuy = intent !== TransactionIntents.SELL
   $: isDebitCard = $transactionStore.inMedium === TransactionMediums.DEBIT_CARD
-  $: cryptoTicker = isBuy ? destinationCurrency : sourceCurrency
   $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
-  $: Icon = CryptoIcons[cryptoTicker]
   $: total = isBuy ? sourceAmount : destinationAmount
 
   $: isPreviewing = true

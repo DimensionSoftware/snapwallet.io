@@ -3,9 +3,12 @@
   // @ts-ignore
   import QR from 'qr-creator'
   import { faClock } from '@fortawesome/free-solid-svg-icons'
+  import { push } from 'svelte-spa-router'
   import FaIcon from 'svelte-awesome'
   import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
+  import { Routes } from '../constants'
   import { transactionStore } from '../stores/TransactionStore'
+  import { configStore } from '../stores/ConfigStore'
   import ModalContent from '../components/ModalContent.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
@@ -22,12 +25,16 @@
     $transactionStore.transactionExpirationSeconds,
   )
 
-  const { destinationCurrency } = $transactionStore,
-    { destAddress, destAmount } = $transactionStore.wyrePreview || {
-      destAddress: '0xCAFEBABE',
-      destAmount: 0,
-    },
-    Icon = CryptoIcons[destinationCurrency.ticker ?? 'BTC']
+  console.log('wp', $transactionStore.wyrePreview)
+
+  const //{ destinationCurrency } = $transactionStore,
+    { destCurrency, destAddress, destAmount } =
+      $transactionStore.wyrePreview || {
+        destCurrency: 'BTC',
+        destAddress: '0xCAFEBABE',
+        destAmount: 0,
+      },
+    Icon = CryptoIcons[destCurrency ?? 'BTC']
 
   onMount(() => {
     // render qrcode
@@ -42,6 +49,12 @@
       document.getElementById('qrcode'),
     )
   })
+
+  const doSuccess = e => {
+    e.preventDefault()
+    push(Routes.CART_SUCCESS)
+    return false
+  }
 </script>
 
 <ModalContent>
@@ -54,7 +67,7 @@
           <Icon size="25" height="25" width="25" viewBox="-4 0 40 40" />
         </div>
         <h4 class="amount">
-          {formatLocaleCurrency(destinationCurrency.ticker, destAmount)}
+          {formatLocaleCurrency(destCurrency, destAmount)}
         </h4>
         <Clipboard value={destAmount} />
       </div>
@@ -92,6 +105,11 @@
     <div style="margin-right:0.35rem;" />
     <b>{formattedExpiration}</b>
   </div>
+  <h3 class="test">
+    {#if $configStore.environment === 'sandbox'}
+      <a on:click={doSuccess}>Test Success</a>
+    {/if}
+  </h3>
 </ModalContent>
 
 <style lang="scss">

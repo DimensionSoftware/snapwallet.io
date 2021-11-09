@@ -68,6 +68,7 @@ export enum Routes {
   FILE_UPLOAD = '/file-upload',
   FILE_UPLOAD_UPDATE = '/file-upload-update',
   SUCCESS = '/success',
+  CART_SUCCESS = '/cart-success',
   DEBIT_CARD = '/debit-card',
   DEBIT_CARD_ADDRESS = '/debit-card-address',
   DEBIT_CARD_2FA = '/debit-card-2fa',

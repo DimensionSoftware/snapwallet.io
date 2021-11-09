@@ -38,6 +38,7 @@
   import SendOtp from './screens/SendOTP.svelte'
   import VerifyOtp from './screens/VerifyOTP.svelte'
   import Success from './screens/Success.svelte'
+  import CartSuccess from './screens/CartSuccess.svelte'
   import { transactionStore } from './stores/TransactionStore'
   import { paymentMethodStore } from './stores/PaymentMethodStore'
   import ProfileStatus from './screens/ProfileStatus.svelte'
@@ -168,6 +169,9 @@
     [Routes.VERIFY_OTP]: wrap({
       component: VerifyOTP as any,
       conditions: [() => !isJWTValid()],
+    }),
+    [Routes.CART_SUCCESS]: wrap({
+      component: CartSuccess as any,
     }),
     // Authenticated
     [Routes.SUCCESS]: wrap({
