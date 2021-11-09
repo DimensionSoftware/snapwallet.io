@@ -25,8 +25,6 @@
     $transactionStore.transactionExpirationSeconds,
   )
 
-  console.log('wp', $transactionStore.wyrePreview)
-
   const //{ destinationCurrency } = $transactionStore,
     { destCurrency, destAddress, destAmount } =
       $transactionStore.wyrePreview || {
