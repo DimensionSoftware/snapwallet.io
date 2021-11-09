@@ -46,6 +46,9 @@ body {
 }
 
 body.scrolled {
+  .bottom {
+    display: none;
+  }
   .gg-chevron-double-down {
     transform: translateY(20px) rotate(0) scale(1);
     transition: opacity 0.2s ease-out, transform 0.2s ease-out;
@@ -139,9 +142,19 @@ html {
       will-change: transform;
     }
 
+    .bottom {
+      position: absolute;
+      cursor: pointer;
+      z-index: 8;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+    }
     .gg-chevron-double-down {
+      cursor: pointer;
       box-sizing: border-box;
-      position: fixed;
+      position: absolute;
       display: block;
       left: calc(50% - 25px);
       bottom: 50px;

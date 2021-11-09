@@ -125,6 +125,13 @@
 Hey, you-- join us!  https://dimensionsoftware.com
       `)
   })
+
+  function scrollFirst() {
+    // scroll to top
+    requestAnimationFrame(() => {
+      document.getElementById('overview').scrollIntoView()
+    })
+  }
 </script>
 
 <svelte:window bind:scrollY={dy} />
@@ -180,7 +187,12 @@ Hey, you-- join us!  https://dimensionsoftware.com
 <NFT />
 <Footer />
 
-<span class="gg-chevron-double-down" />
+<span
+  on:click={scrollFirst}
+  class="gg-chevron-double-down"
+  title="Experience Snap Wallet!"
+/>
+<span on:click={scrollFirst} class="bottom" title="Experience Snap Wallet!" />
 <span id="top-bg" bind:this={topBg} class="top-bg" />
 
 {#if liquidVisible}
