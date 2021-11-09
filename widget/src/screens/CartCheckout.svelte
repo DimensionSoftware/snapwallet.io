@@ -83,6 +83,7 @@
       // total becomes the amount to send to the destination
       total = hasManyProducts ? totalProducts(products) : destinationAmount
       const { preview, depositAddress } = await post('transfers', {
+        apiKey: $configStore.apiKey,
         sourceCurrency,
         sourceAmount: total,
         destCurrency: destinationCurrency,

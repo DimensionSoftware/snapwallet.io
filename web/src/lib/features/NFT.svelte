@@ -7,6 +7,7 @@
 
   const config = {
     appName: 'NFT Checkout',
+    appKey: 'b31e0ded-ee1a-41a8-8860-13737acff8a7',
     environment: 'sandbox',
     focus: true,
     product: {
