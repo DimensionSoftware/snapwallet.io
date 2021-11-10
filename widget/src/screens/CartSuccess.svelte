@@ -95,9 +95,9 @@
         </p>
       {:else}
         <h2>{formatLocaleCurrency(cryptoTicker, total)}</h2>
-        <p>
+        <p style="text-align: left; line-height: 1.35rem;">
           Your <b class="upper">{cryptoTicker}</b> checkout is confirmed to
-          <b>{destAddress || '0xCAFEBABE'}</b>
+          <b class="address">{destAddress || '0xCAFEBABE'}</b>
         </p>
       {/if}
     </div>
@@ -139,6 +139,16 @@
   p {
     position: relative;
     animation: fadeUp 2.5s var(--theme-ease-out-expo);
+    .address {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      // Addition lines for 2 line or multiline ellipsis
+      display: -webkit-box !important;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      white-space: normal;
+      word-wrap: break-word;
+    }
   }
   h2 {
     animation: fadeUp 1.5s var(--theme-ease-out-expo);
