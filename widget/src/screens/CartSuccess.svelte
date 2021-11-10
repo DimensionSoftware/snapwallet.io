@@ -95,7 +95,10 @@
         </p>
       {:else}
         <h2>{formatLocaleCurrency(cryptoTicker, total)}</h2>
-        <p>Your <b>{cryptoTicker}</b> checkout is confirmed!</p>
+        <p>
+          Your <b class="upper">{cryptoTicker}</b> checkout is confirmed to
+          <b>{destAddress || '0xCAFEBABE'}</b>
+        </p>
       {/if}
     </div>
   </ModalBody>
@@ -130,8 +133,15 @@
       opacity: 0.85;
     }
   }
-  b {
+  .upper {
     text-transform: uppercase;
+  }
+  p {
+    position: relative;
+    animation: fadeUp 2.5s var(--theme-ease-out-expo);
+  }
+  h2 {
+    animation: fadeUp 1.5s var(--theme-ease-out-expo);
   }
 
   @keyframes scaleAnimation {

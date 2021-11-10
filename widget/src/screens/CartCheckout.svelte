@@ -88,7 +88,8 @@
         sourceAmount: total,
         destCurrency: destinationCurrency,
       })
-      if (!preview) throw new Error('Invalid API Key')
+      if (!preview)
+        throw new Error('Invalid API Key:  Please check with our support.')
       // augment preview with deposit address
       preview.destAddress = depositAddress
       transactionStore.setWyrePreview(preview)
