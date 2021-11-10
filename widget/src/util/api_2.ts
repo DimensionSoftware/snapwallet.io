@@ -9,7 +9,7 @@ export const req = async (method, path, body) => {
       'Bearer ' + (await window.AUTH_MANAGER.getAccessToken()),
     res = await fetch(`${__ENV['API2_BASE_URL']}/v1/${path}`, {
       method,
-      // mode: 'cors',
+      mode: 'cors',
       headers: {
         accept: '*/*',
         'accept-encoding': 'gzip, deflate, br',
