@@ -11,6 +11,13 @@ admin.initializeApp({
   projectId: FIRESTORE_PROJECT,
 })
 
+const EVENT_KINDS = {
+  // Funds were transferred to an internal business wallet
+  transferred_to_internal_wallet: 'transferred_to_internal_wallet',
+  // Funds were transferred to one of our business customers
+  transferred_to_business_customer: 'transferred_to_business_customer',
+}
+
 const collections = {
   users: 'users',
   businesses: 'businesses',
@@ -110,4 +117,5 @@ module.exports = {
   getPendingTasks,
   EVENTS,
   JOB_PUBLISHER,
+  EVENT_KINDS,
 }

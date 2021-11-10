@@ -1,7 +1,6 @@
 const Wyre = require('../clients/wyre')
 const { UnprocessableEntityError } = require('../error'),
-  { createEvent, JOB_PUBLISHER, EVENTS } = require('../db'),
-  { EVENT_KINDS } = require('../constants')
+  { createEvent, JOB_PUBLISHER, EVENTS, EVENT_KINDS } = require('../db')
 
 /**
  * Transfer a percentage of the transaction funds
