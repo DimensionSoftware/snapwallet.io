@@ -5,7 +5,7 @@
 
   const config = {
     appName: 'Donation',
-    appKey: 'b31e0ded-ee1a-41a8-8860-13737acff8a7',
+    apiKey: 'b31e0ded-ee1a-41a8-8860-13737acff8a7',
     environment: 'sandbox',
     intent: 'donate',
     payee: 'Donate to Snap',

@@ -58,6 +58,7 @@ interface IConfig {
   onMessage?: (e: any) => any
   wallets: IWallet[]
   appName: string
+  apiKey?: string
   payee?: string
   intent?: UserIntent
   focus?: boolean
@@ -83,6 +84,7 @@ class Snap {
   private originalConfig: IConfig
   wallets: IWallet[] = []
   appName: string = 'Snap Wallet'
+  apiKey: string = ''
   payee: string = ''
   intent: UserIntent = 'buy'
   baseURL?: WidgetURLs
@@ -112,6 +114,7 @@ class Snap {
       baseURL,
       wallets: this.wallets || [],
       appName: this.appName,
+      apiKey: this.apiKey,
       intent: this.intent,
       payee: this.payee,
       focus: this.focus,
