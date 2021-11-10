@@ -12,7 +12,7 @@
       themeColor = '#fffc00',
       snap = new (window as any).Snap({
         appName,
-        apiKey: 'b31e0ded-ee1a-41a8-8860-13737acff8a7',
+        apiKey: 'eacaa046-3b2a-4961-a47d-7125b4f09a2b',
         environment: 'sandbox',
         intent: 'buy',
         wallets: [],
