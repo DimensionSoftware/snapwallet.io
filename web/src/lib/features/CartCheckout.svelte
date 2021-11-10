@@ -194,14 +194,20 @@
     width: 1000px;
     height: 700px;
     margin-top: 4.55rem !important;
+    padding: 2rem 3rem 3rem !important;
     background: linear-gradient(#fff, rgb(255, 254, 232)) !important;
     // box-shadow: 5px 3px 10px 0 rgba(0, 0, 0, 0.2);
   }
+  :global(.cartcheckout img) {
+    left: -150px !important;
+  }
   :global(.cartcheckout h2) {
     margin-top: -4rem;
+    left: 55px !important;
   }
   :global(.cartcheckout h3) {
     margin-top: -4rem;
+    left: 55px !important;
     font-size: 1.5rem;
   }
   :global(.cartcheckout .relative > h3) {
