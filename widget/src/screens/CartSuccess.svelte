@@ -139,6 +139,7 @@
   p {
     position: relative;
     animation: fadeUp 2.5s var(--theme-ease-out-expo);
+    margin-top: 0;
     .address {
       text-overflow: ellipsis;
       overflow: hidden;
@@ -152,6 +153,7 @@
   }
   h2 {
     animation: fadeUp 1.5s var(--theme-ease-out-expo);
+    margin-bottom: 0.75rem;
   }
 
   @keyframes scaleAnimation {

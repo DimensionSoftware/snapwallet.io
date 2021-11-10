@@ -80,6 +80,7 @@
     }
     &:active,
     &:focus {
+      filter: contrast(85%);
       &.glow {
         animation: infocus 0.35s !important;
         animation-timing-function: var(--theme-ease-out-back);
