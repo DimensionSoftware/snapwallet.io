@@ -194,7 +194,7 @@
       position: relative;
       margin: 1rem auto 0;
       border-radius: 2rem;
-      padding: 0.25rem 2rem;
+      padding: 0.5rem 3rem 0rem;
       text-align: center;
       font-size: 1.1rem;
       font-weight: 200;
@@ -230,7 +230,7 @@
       }
     }
   }
-  @media (max-width: 1400px) {
+  @media (max-width: 1450px) {
     .icon {
       display: none;
     }

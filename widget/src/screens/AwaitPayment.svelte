@@ -160,7 +160,6 @@
     position: relative;
     filter: grayscale(100%);
     margin-bottom: 0.5rem;
-    top: 3px;
   }
   .row {
     display: flex;

@@ -138,7 +138,7 @@
   }
   p {
     position: relative;
-    animation: fadeUp 2.5s var(--theme-ease-out-expo);
+    animation: fadeUp 3s var(--theme-ease-out-expo);
     margin-top: 0;
     .address {
       text-overflow: ellipsis;
