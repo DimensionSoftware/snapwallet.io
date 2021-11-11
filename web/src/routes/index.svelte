@@ -139,7 +139,7 @@ Hey, you-- join us!  https://dimensionsoftware.com
 
 <main>
   <div class="intro col">
-    <h1 class="blur">Welcome to <b>Snap Wallet</b></h1>
+    <h1 class="blur"><span>Welcome to</span> <b>Snap Wallet</b></h1>
     <h2 class="blur">
       Connect Crypto to Your
       {#if Typewriter}
@@ -299,10 +299,6 @@ Hey, you-- join us!  https://dimensionsoftware.com
   }
   svg {
     position: absolute;
-    // transform: translateY(0);
-    // bottom: -500px;
-    // bottom: 0;
-    // margin-top: -210px;
     bottom: -5px;
     right: 0;
     left: 0;
@@ -315,6 +311,19 @@ Hey, you-- join us!  https://dimensionsoftware.com
     flex: 1;
     background: #fff;
   }
+  // responsive
+  @media (max-width: 375px) {
+    :global(body),
+    :global(html) {
+      overflow-y: scroll !important;
+      overflow-x: hidden !important;
+    }
+  }
+  @media (max-width: 480px) {
+    :global(.intro) {
+      padding-left: 0 !important;
+    }
+  }
   @media (min-width: 480px) {
     h1,
     h2 {
@@ -325,18 +334,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
   }
 
-  // responsive
-  @media (max-width: 375px) {
-    :global(body),
-    :global(html) {
-      overflow-y: scroll !important;
-      overflow-x: hidden !important;
-      main {
-        padding: 0;
-        h1 > b {
-          display: block;
-        }
-      }
+  @media (max-width: 550px) {
+    h1 > span {
+      display: none;
     }
   }
   @media (max-width: 1000px) {
@@ -383,6 +383,37 @@ Hey, you-- join us!  https://dimensionsoftware.com
       }
       svg {
         position: fixed;
+      }
+    }
+  }
+  @media (max-width: 1450px) {
+    :global(section.overview > article) {
+      :global(h2) {
+        left: 5.5rem !important;
+      }
+      :global(div + div > h3) {
+        left: 0% !important;
+        margin-left: 0.5rem !important;
+      }
+    }
+    :global(section.nft > article),
+    :global(section.donations > article) {
+      :global(div + div > h2),
+      :global(div + div > h3) {
+        left: 0% !important;
+        margin-left: 0.5rem !important;
+      }
+    }
+    :global(.intro) {
+      font-size: 0.8rem;
+      margin-left: 5rem;
+    }
+    :global(section.cartcheckout > article) {
+      left: 0 !important;
+      :global(div + div > h2),
+      :global(div + div > h3) {
+        left: 0% !important;
+        margin-left: 0.5rem !important;
       }
     }
   }
