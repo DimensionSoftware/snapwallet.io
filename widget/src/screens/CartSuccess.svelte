@@ -138,7 +138,7 @@
   }
   p {
     position: relative;
-    animation: fadeUp 3s var(--theme-ease-out-expo);
+    animation: fadeUp 3s var(--theme-ease-out-expo) forwards;
     margin-top: 0;
     .address {
       text-overflow: ellipsis;
@@ -152,7 +152,7 @@
     }
   }
   h2 {
-    animation: fadeUp 1.5s var(--theme-ease-out-expo);
+    animation: fadeUp 1.5s var(--theme-ease-out-expo) forwards;
     margin-bottom: 0.75rem;
   }
 
