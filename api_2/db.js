@@ -2,11 +2,21 @@
 require('dotenv').config()
 
 const admin = require('firebase-admin'),
-  { DatabaseEventsManager } = require('./dbevents')
+  { PubSub } = require('@google-cloud/pubsub'),
+  { DatabaseEventsManager } = require('./dbevents'),
+  { JobPublisher } = require('./jobpublisher'),
+  { JOBS_TOPIC, FIRESTORE_PROJECT } = process.env
 
 admin.initializeApp({
-  projectId: process.env.FIRESTORE_PROJECT,
+  projectId: FIRESTORE_PROJECT,
 })
+
+const EVENT_KINDS = {
+  // Funds were transferred to an internal business wallet
+  transferred_to_internal_wallet: 'transferred_to_internal_wallet',
+  // Funds were transferred to one of our business customers
+  transferred_to_business_customer: 'transferred_to_business_customer',
+}
 
 const collections = {
   users: 'users',
@@ -15,18 +25,14 @@ const collections = {
 }
 
 const db = admin.firestore()
+const pubsub = new PubSub({ projectId: FIRESTORE_PROJECT })
 
-// test
-const events = new DatabaseEventsManager(db)
-events
-  .record({ kind: 'TEST_KIND', data: 123 })
-  .then(console.log.bind(0, 'events recorded'))
-events
-  .record(
-    { kind: 'SPOOKY_KIND', data: [1, 2, 3] },
-    { kind: 'GOOFY_KIND', data: 'sick' }
-  )
-  .then(console.log.bind(0, 'events recorded'))
+const EVENTS = new DatabaseEventsManager(db)
+
+const JOB_PUBLISHER = new JobPublisher(
+  EVENTS,
+  pubsub.topic(JOBS_TOPIC || 'snap-jobs2')
+)
 
 const listUsers = () =>
   db
@@ -47,10 +53,11 @@ const createBusiness = async ({ name, apiKey, wallet }) => {
   return { ...doc.data(), id: ref.id }
 }
 
-const createEvent = async ({ type, meta }) => {
-  const [event] = await events.record({
+const createEvent = async ({ type, meta, entity }) => {
+  const [event] = await EVENTS.record({
     kind: type,
     data: meta,
+    entity,
   })
 
   return event
@@ -71,11 +78,32 @@ const getBusinessByAPIKey = async (apiKey) => {
 const getEvent = async (source) => {
   const result = await db
     .collection(collections.events)
-    .where('meta.source', '==', source)
+    .where('data.source', '==', source)
     .limit(1)
     .get()
   if (!result.docs[0]) return
   return result.docs[0].data()
+}
+
+const insertTask = async (config = {}) => {
+  const { worker, options } = config
+  const now = new Date().toISOString()
+  return db.collection('tasks').add({
+    perform_at: now,
+    status: 'pending',
+    worker,
+    options,
+  })
+}
+
+const getPendingTasks = async (limit = 25) => {
+  const now = new Date().toISOString()
+  return db
+    .collection('tasks')
+    .where('perform_at', '<=', now)
+    .where('status', '==', 'pending')
+    .limit(limit)
+    .get()
 }
 
 module.exports = {
@@ -85,4 +113,9 @@ module.exports = {
   getBusinessByAPIKey,
   getEvent,
   collections,
+  insertTask,
+  getPendingTasks,
+  EVENTS,
+  JOB_PUBLISHER,
+  EVENT_KINDS,
 }

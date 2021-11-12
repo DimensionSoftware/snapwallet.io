@@ -10,6 +10,7 @@
   import NFT from '$lib/features/NFT.svelte'
   import Donation from '$lib/features/Donation.svelte'
   import Buy from '$lib/features/Buy.svelte'
+  import CartCheckout from '$lib/features/CartCheckout.svelte'
   import Footer from '$lib/Footer.svelte'
   import LiquidContent from '$lib/LiquidContent.svelte'
 
@@ -28,13 +29,17 @@
       if (dy > 20) {
         // don't touch the DOM unless we must
         if (!isScrolled) {
-          document.body.classList.add('scrolled')
-          isScrolled = true
+          requestAnimationFrame(() => {
+            document.body.classList.add('scrolled')
+            isScrolled = true
+          })
         }
       } else {
         if (isScrolled) {
-          document.body.classList.remove('scrolled')
-          isScrolled = false
+          requestAnimationFrame(() => {
+            document.body.classList.remove('scrolled')
+            isScrolled = false
+          })
         }
       }
       if (lastIsRotated !== isRotated) {
@@ -63,6 +68,7 @@
       themeColor = '#fffc00',
       SnapWallet = new (window as any).Snap({
         appName,
+        apiKey: 'eacaa046-3b2a-4961-a47d-7125b4f09a2b',
         environment: 'sandbox',
         intent: 'buy',
         wallets: [],
@@ -89,7 +95,7 @@
     window.addEventListener(
       'message',
       ({ data: msg }) => {
-        if (!msg) return
+        if (!msg || typeof msg !== 'string') return // guard
         try {
           const { event, data } = JSON.parse(msg)
           if (event === SnapWallet.events.RESIZE && data && ifr) {
@@ -120,13 +126,20 @@
 Hey, you-- join us!  https://dimensionsoftware.com
       `)
   })
+
+  function scrollFirst() {
+    // scroll to top
+    requestAnimationFrame(() => {
+      document.getElementById('overview').scrollIntoView()
+    })
+  }
 </script>
 
 <svelte:window bind:scrollY={dy} />
 
 <main>
   <div class="intro col">
-    <h1 class="blur">Welcome to <b>Snap Wallet</b></h1>
+    <h1 class="blur"><span>Welcome to</span> <b>Snap Wallet</b></h1>
     <h2 class="blur">
       Connect Crypto to Your
       {#if Typewriter}
@@ -134,8 +147,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
           <span>Idea</span>
           <span>NFT</span>
           <span>App</span>
+          <span>Exchange</span>
           <span>Company</span>
-          <span>Site</span>
           <span>Donations</span>
         </Typewriter>
       {:else}
@@ -158,6 +171,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
     />
   </div>
 </main>
+<span class="btc coin" />
+<span class="eth coin" />
+<span class="dog coin" />
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320"
   ><path
     fill="#ffffff"
@@ -167,12 +183,17 @@ Hey, you-- join us!  https://dimensionsoftware.com
 >
 
 <Overview />
-<NFT />
+<CartCheckout />
 <Donation />
-<Buy />
+<NFT />
 <Footer />
 
-<span class="gg-chevron-double-down" />
+<span
+  on:click={scrollFirst}
+  class="gg-chevron-double-down"
+  title="Experience Snap Wallet!"
+/>
+<span on:click={scrollFirst} class="bottom" title="Experience Snap Wallet!" />
 <span id="top-bg" bind:this={topBg} class="top-bg" />
 
 {#if liquidVisible}
@@ -259,10 +280,8 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
     :global(iframe.loaded) {
       opacity: 1;
-      // box-shadow: 5px 5px 18px 5px rgba(0, 0, 0, 0.4);
-      transition: opacity 1s $easeOutExpo, box-shadow 0.3s $easeOutExpo,
-        height 0.3s $easeOutBack;
-      will-change: opacity, box-shadow, height;
+      transition: height 0.3s $easeOutBack, width 0.4s $easeOutBack 0.301s;
+      will-change: opacity, height, width;
     }
   }
 
@@ -280,10 +299,6 @@ Hey, you-- join us!  https://dimensionsoftware.com
   }
   svg {
     position: absolute;
-    // transform: translateY(0);
-    // bottom: -500px;
-    // bottom: 0;
-    // margin-top: -210px;
     bottom: -5px;
     right: 0;
     left: 0;
@@ -296,6 +311,19 @@ Hey, you-- join us!  https://dimensionsoftware.com
     flex: 1;
     background: #fff;
   }
+  // responsive
+  @media (max-width: 375px) {
+    :global(body),
+    :global(html) {
+      overflow-y: scroll !important;
+      overflow-x: hidden !important;
+    }
+  }
+  @media (max-width: 480px) {
+    :global(.intro) {
+      padding-left: 0 !important;
+    }
+  }
   @media (min-width: 480px) {
     h1,
     h2 {
@@ -306,18 +334,9 @@ Hey, you-- join us!  https://dimensionsoftware.com
     }
   }
 
-  // responsive
-  @media (max-width: 375px) {
-    :global(body),
-    :global(html) {
-      overflow-y: scroll !important;
-      overflow-x: hidden !important;
-      main {
-        padding: 0;
-        h1 > b {
-          display: block;
-        }
-      }
+  @media (max-width: 550px) {
+    h1 > span {
+      display: none;
     }
   }
   @media (max-width: 1000px) {
@@ -364,6 +383,37 @@ Hey, you-- join us!  https://dimensionsoftware.com
       }
       svg {
         position: fixed;
+      }
+    }
+  }
+  @media (max-width: 1450px) {
+    :global(section.overview > article) {
+      :global(h2) {
+        left: 5.5rem !important;
+      }
+      :global(div + div > h3) {
+        left: 0% !important;
+        margin-left: 0.5rem !important;
+      }
+    }
+    :global(section.nft > article),
+    :global(section.donations > article) {
+      :global(div + div > h2),
+      :global(div + div > h3) {
+        left: 0% !important;
+        margin-left: 0.5rem !important;
+      }
+    }
+    :global(.intro) {
+      font-size: 0.8rem;
+      margin-left: 5rem;
+    }
+    :global(section.cartcheckout > article) {
+      left: 0 !important;
+      :global(div + div > h2),
+      :global(div + div > h3) {
+        left: 0% !important;
+        margin-left: 0.5rem !important;
       }
     }
   }

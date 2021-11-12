@@ -1,4 +1,8 @@
 @import '../../widget/src/styles/animations.scss';
+@font-face {
+  font-family: 'FutureTechnoBounce';
+  src: url('/fonts/FutureTechnosBounce.otf');
+}
 
 :root {
   font-family: 'Helvetica Neue', 'Helvetica', -apple-system, BlinkMacSystemFont,
@@ -13,6 +17,19 @@
   p {
     font-family: 'Helvetica Neue', 'Helvetica', -apple-system,
       BlinkMacSystemFont;
+  }
+  h1 > b,
+  article h2 {
+    font-family: 'FutureTechnoBounce';
+    font-size: 3rem !important;
+    margin-top: -7rem !important;
+    text-transform: lowercase;
+  }
+  .started h2 {
+    margin-top: -2.8rem !important;
+  }
+  .overview h2 {
+    margin-top: -1.35rem !important;
   }
 }
 
@@ -29,10 +46,18 @@ body {
 }
 
 body.scrolled {
+  .bottom {
+    display: none;
+  }
   .gg-chevron-double-down {
     transform: translateY(20px) rotate(0) scale(1);
     transition: opacity 0.2s ease-out, transform 0.2s ease-out;
     opacity: 0 !important;
+    &::before,
+    &::after {
+      animation-play-state: paused;
+      animation-iteration-count: 0;
+    }
   }
 }
 ::-moz-selection {
@@ -76,6 +101,32 @@ html {
       overflow-y: hidden;
       height: 100vh;
     }
+    > .coin {
+      position: absolute;
+      top: -50px;
+      height: 242px;
+      width: 250px;
+      left: 4vw;
+      z-index: 0;
+      transform: scale(0.7);
+      opacity: 0.65;
+      background-image: url('/images/bitcoin.png');
+      &.eth {
+        left: -50px;
+        top: 70vh;
+        height: 194px;
+        width: 200px;
+        background-image: url('/images/eth.png');
+      }
+      &.dog {
+        width: 175px;
+        height: 167px;
+        left: inherit;
+        top: 10vh;
+        right: -50px;
+        background-image: url('/images/dog.png');
+      }
+    }
     > .top-bg {
       content: '';
       position: fixed;
@@ -85,15 +136,25 @@ html {
       bottom: 0;
       z-index: -1;
       // bottom: -335vh;
-      background-image: url('/static/bg.png');
+      background-image: url('/bg.png');
       background-repeat: repeat-y;
       background-size: 100%;
       will-change: transform;
     }
 
+    .bottom {
+      position: absolute;
+      cursor: pointer;
+      z-index: 8;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 50px;
+    }
     .gg-chevron-double-down {
+      cursor: pointer;
       box-sizing: border-box;
-      position: fixed;
+      position: absolute;
       display: block;
       left: calc(50% - 25px);
       bottom: 50px;
@@ -117,6 +178,7 @@ html {
       top: 3px;
       animation: pulseUpDown 1.3s ease-in forwards;
       animation-iteration-count: infinite;
+      animation-play-state: running;
     }
 
     .gg-chevron-double-down::after {

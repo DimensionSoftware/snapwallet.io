@@ -30,7 +30,6 @@ runs:
 
         bin/get-snap-env-secret --project ${{inputs.GCP_PROJECT_ID}} > snap-env
         bin/env2knative snap-env snap-api ${{inputs.CONTAINER_REPO}}:${{ github.sha }} > snap-knative
-        cat snap-knative
 
         bin/deploy-api --project ${{inputs.GCP_PROJECT_ID}} --region us-central1	snap-knative
       working-directory: api

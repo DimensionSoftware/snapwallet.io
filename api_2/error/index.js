@@ -55,10 +55,19 @@ class NotFoundError extends BaseAPIError {
   }
 }
 
+class BadRequestError extends BaseAPIError {
+  status = 400
+  error = 'bad_request'
+  constructor(msg) {
+    super(msg || 'A bad request was made to the API.')
+  }
+}
+
 module.exports = {
   BaseAPIError,
   UnauthorizedError,
   UnauthenticatedError,
   UnprocessableEntityError,
   NotFoundError,
+  BadRequestError,
 }

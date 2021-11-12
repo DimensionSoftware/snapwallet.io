@@ -150,7 +150,7 @@
           var(--theme-text-color),
           transparent
         );
-        opacity: 0.35;
+        opacity: 0.15;
         height: 1px;
         bottom: 0;
         left: 0;
@@ -172,7 +172,11 @@
     & > .line-item {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      & > div:first-child {
+        margin-right: 1rem;
+        font-weight: 400;
+      }
       &.muted {
         color: $textColor4;
         font-weight: 300;

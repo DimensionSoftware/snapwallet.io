@@ -1,0 +1,47 @@
+name: BuildDockerImage
+description: Build a docker image
+inputs:
+  GCP_SA_KEY:
+    description: service account key
+    required: true
+  GCP_PROJECT_ID:
+    description: gcp project id
+    required: true
+  CONTAINER_REPO:
+    description: image repository location
+    required: true
+  DOCKER_CONTEXT:
+    description: folder where Dockerfile is
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Build Docker Image & Push to Registry
+      shell: bash
+      run: |
+        docker build . -t ${{inputs.CONTAINER_REPO}}:${{ github.sha }}
+
+        pushd /tmp
+        echo -n ${{ inputs.GCP_SA_KEY }} | base64 --decode > gcloud-service-key.json
+
+        curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+        tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+
+        ./google-cloud-sdk/install.sh --usage-reporting false
+        gcloud auth activate-service-account --key-file gcloud-service-key.json
+        gcloud auth configure-docker
+        popd
+
+        docker push ${{inputs.CONTAINER_REPO}}:${{ github.sha }}
+      working-directory: ${{inputs.DOCKER_CONTEXT}}
+
+  
+  # - uses: RafikFarhad/push-to-gcr-github-action@v3.0.2
+#   with:
+#     gcloud_service_key: ${{ secrets.GCP_SA_KEY }}
+#     registry: gcr.io
+#     project_id: silken-phalanx-305703
+#     image_name: snap-api
+#     image_tag: ${{ github.sha }}
+#     context: ./api
+#     dockerfile: ./api/Dockerfil

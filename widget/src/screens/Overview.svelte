@@ -149,7 +149,7 @@
           </div>
           <div class="line-item muted" title={dest}>
             <div>To</div>
-            <div>
+            <div title={dest}>
               {dest.substring(0, 6)}...{dest.substring(dest.length - 6)}
             </div>
           </div>
@@ -260,7 +260,7 @@
           var(--theme-text-color),
           transparent
         );
-        opacity: 0.35;
+        opacity: 0.15;
         height: 1px;
         bottom: 0;
         left: 0;
@@ -284,7 +284,11 @@
     & > .line-item {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+      & > div:first-child {
+        margin-right: 1rem;
+        font-weight: 400;
+      }
       &.muted {
         color: var(--theme-color-muted);
         font-weight: 300;

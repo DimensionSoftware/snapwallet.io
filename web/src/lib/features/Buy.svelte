@@ -12,6 +12,7 @@
       themeColor = '#fffc00',
       snap = new (window as any).Snap({
         appName,
+        apiKey: 'eacaa046-3b2a-4961-a47d-7125b4f09a2b',
         environment: 'sandbox',
         intent: 'buy',
         wallets: [],
@@ -39,7 +40,7 @@
     window.addEventListener(
       'message',
       ({ data: msg }) => {
-        if (!msg) return
+        if (!msg || typeof msg !== 'string') return // guard
         try {
           const { event, data } = JSON.parse(msg)
           if (event === snap.events.RESIZE && data && ifr) {

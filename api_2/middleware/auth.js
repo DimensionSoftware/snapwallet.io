@@ -10,8 +10,9 @@ const verifyJWTPlug = async (ctx, next) => {
     const decodedPubKey = Buffer.from(process.env.JWT_PUBLIC_KEY, 'base64')
     const { aud, sub } = JwtDecode.verify(jwt, decodedPubKey, {
       algorithms: ['RS256'],
+      audience: 'ACCESS',
+      maxAge: '1 day',
     })
-    if (aud !== 'ACCESS') throw new UnauthorizedError()
     ctx.user_id = sub
     await next()
   } catch (e) {
@@ -27,7 +28,7 @@ const verifyWyreWebhookHmac = async (ctx, next) => {
   if (!headerSignature)
     throw new UnauthorizedError('Please provide a valid signature.')
   const payload = JSON.stringify(ctx.request.body)
-  const signature = createHmac('sha256', process.env.WYRE_API_SECRET)
+  const signature = createHmac('sha256', process.env.WYRE_SECRET_KEY)
     .update(Buffer.from(payload))
     .digest('hex')
   if (!timingSafeEqual(Buffer.from(headerSignature), Buffer.from(signature))) {

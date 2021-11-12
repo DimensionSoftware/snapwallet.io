@@ -206,8 +206,6 @@ export class AuthManager {
   }
 
   public viewerIsLoggedIn(): boolean {
-    Logger.debug('viewerIsLoggedIn called')
-
     const [_, refresh] = this.getCurrentTokens()
 
     return !this.tokenIsExpired(refresh)
@@ -304,7 +302,7 @@ export class FluxBearerAuthentication implements SecurityAuthentication {
 
 export function genAPIClient(authManager?: AuthManager): FluxApi {
   const config = createConfiguration({
-    baseServer: new ServerConfiguration(__ENV.API_BASE_URL, {}),
+    baseServer: new ServerConfiguration(__ENV['API_BASE_URL'], {}),
   })
   if (authManager) {
     config.authMethods.Bearer = new FluxBearerAuthentication(authManager)

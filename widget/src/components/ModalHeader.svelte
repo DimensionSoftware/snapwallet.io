@@ -38,6 +38,7 @@
   .modal-header {
     margin-bottom: 0.5rem;
     // height: 2.75rem;
+    line-height: 1.25rem;
     width: 100%;
     display: flex;
     color: var(--theme-text-color);
@@ -53,7 +54,7 @@
     }
     & > .modal-header-right-action {
       @include flex-align-center();
-      margin-right: 0.2em;
+      margin-right: 0;
       justify-content: flex-end;
       @include backface;
     }

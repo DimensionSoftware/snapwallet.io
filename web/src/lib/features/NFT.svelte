@@ -7,6 +7,7 @@
 
   const config = {
     appName: 'NFT Checkout',
+    apiKey: 'eacaa046-3b2a-4961-a47d-7125b4f09a2b',
     environment: 'sandbox',
     focus: true,
     product: {
@@ -69,7 +70,7 @@
   docLink="https://snapwallet.io/docs/guide/use-cases/nft.html"
   hasImage={true}
   hasBackground={true}
-  icon="/images/coin1.png"
+  icon="/images/coin3.png"
 >
   <div class="relative" slot="left">
     <div class="qr" on:mousedown={snap.openWeb}>
@@ -180,6 +181,11 @@
     font-size: 1.15rem !important;
     background: rgb(241, 7, 28) !important;
     border-color: rgb(241, 7, 28) !important;
+    background: linear-gradient(
+      63.26deg,
+      rgb(241, 7, 28) 79%,
+      rgb(206, 0, 11)
+    ) !important;
     top: -3.5rem;
     width: 100%;
     border-radius: 0.25rem;

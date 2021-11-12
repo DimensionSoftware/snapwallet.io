@@ -31,7 +31,7 @@ export enum WidgetEnvironments {
   PRODUCTION = 'production',
 }
 
-export type UserIntent = 'buy' | 'sell' | 'donate'
+export type UserIntent = 'buy' | 'sell' | 'donate' | 'cart'
 
 export type SrcDst = 'source' | 'destination'
 
@@ -59,9 +59,11 @@ export type ProductType = {
   videoURL?: string
   title: string
   author?: string
+  subtitle?: string
   destinationAmount: number
   destinationTicker: string
   destinationAddress: string
+  qty?: number
 }
 
 export type WalletType = {

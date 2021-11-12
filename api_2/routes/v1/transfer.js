@@ -6,10 +6,9 @@ const router = new Router()
 
 router.post('/', async (ctx, _next) => {
   const { sourceCurrency, sourceAmount, destCurrency } = ctx.request.body
+  const apiKey = ctx.request.headers['x-snap-wallet-api-key']
 
-  const business = await getBusinessByAPIKey(
-    ctx.request.headers['x-snap-wallet-api-key']
-  )
+  const business = await getBusinessByAPIKey(apiKey)
 
   if (!business)
     throw new UnprocessableEntityError(
@@ -40,6 +39,7 @@ router.post('/', async (ctx, _next) => {
 
   await createEvent({
     type: 'TRANSACTION',
+    entity: { kind: 'BUSINESS', id: apiKey },
     meta: {
       transaction_direction: 'wallet_wallet',
       source: txnWallet.id,
@@ -63,6 +63,7 @@ router.post('/', async (ctx, _next) => {
       sourceCurrency: txn.sourceCurrency,
       destAmount: txn.destAmount,
       destCurrency: txn.destCurrency,
+      expiresAt: txn.expiresAt,
     },
   }
 })

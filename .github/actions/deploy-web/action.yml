@@ -13,6 +13,9 @@ inputs:
   API_BASE_URL:
     description: api base url to use
     required: true
+  API2_BASE_URL:
+    description: api v2 base url to use
+    required: true
   WIDGET_URL:
     description: widget url to use
     required: true
@@ -23,7 +26,7 @@ inputs:
     description: the wyre base URL for retrieving Plaid config
     required: true  
   INIT_API_BASE_URL:
-    description: todo
+    description: api base URL for creating short codes
     required: true
 runs:
   using: composite
@@ -45,6 +48,7 @@ runs:
         # Init API base URL is typically only needed for the dev env
         INIT_API_BASE_URL: ${{ inputs.INIT_API_BASE_URL }} 
         API_BASE_URL: ${{ inputs.API_BASE_URL }}
+        API2_BASE_URL: ${{ inputs.API2_BASE_URL }}
         WIDGET_URL: ${{ inputs.WIDGET_URL }}
         WYRE_BASE_URL: ${{ inputs.WYRE_BASE_URL }}
         DEBUG: ${{ inputs.DEBUG }}

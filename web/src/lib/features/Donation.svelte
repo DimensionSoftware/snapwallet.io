@@ -5,9 +5,10 @@
 
   const config = {
     appName: 'Donation',
+    apiKey: 'eacaa046-3b2a-4961-a47d-7125b4f09a2b',
     environment: 'sandbox',
     intent: 'donate',
-    payee: 'Snap Wallet',
+    payee: 'Donate to Snap',
     focus: true,
     wallets: [{ asset: 'btc', address: 'ms6k9Mdsbq5ZkoXakJexxjGjpH2PbSQdWK' }],
     theme: {
@@ -124,7 +125,7 @@
     transition: box-shadow 0.3s ease-out, transform 0.04s ease-in !important;
   }
   :global(.donations > article:hover) {
-    box-shadow: 0 0 0 1px #fff600, 4px 6px 9px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 0 0 1px rgba(#ff6b00, 0.25), 4px 6px 9px rgba(0, 0, 0, 0.15) !important;
     transition: none !important;
   }
   .docs-link {
@@ -190,7 +191,7 @@
     &:focus,
     &:active {
       transition: none;
-      box-shadow: 0 1px 1px 0 #555, 0 0 0 2px #fff600,
+      box-shadow: 0 1px 1px 0 #555, 0 0 0 2px #ff6b00,
         1px 3px 5px rgba(0, 0, 0, 0.18);
       animation: focus 0.16s;
     }
@@ -217,5 +218,30 @@
       height: 75px;
       width: 75px;
     }
+  }
+
+  :global(.donations aside > button) {
+    color: #fff !important;
+    font-size: 1.15rem !important;
+    background: rgb(241, 7, 28) !important;
+    // background: linear-gradient(63.26deg, #ff6b00, #f1071c 75%) !important;
+    background: linear-gradient(
+      63.26deg,
+      #ff6b00,
+      rgb(241, 7, 28) 75%
+    ) !important;
+    border-color: rgb(222, 49, 45) !important;
+    z-index: 4;
+    text-align: center;
+    border-radius: 4.25rem;
+    transition: box-shadow 0.3s ease-out;
+  }
+  :global(.donations aside > button:hover) {
+    box-shadow: 0 0 0 1px red, 0 0 0 2px #ff6b00 !important;
+    background: linear-gradient(
+      63.26deg,
+      #ff6b00,
+      rgb(241, 7, 28) 75%
+    ) !important;
   }
 </style>

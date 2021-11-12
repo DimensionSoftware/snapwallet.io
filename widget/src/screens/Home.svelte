@@ -286,8 +286,8 @@
   function heightForConfig(): number {
     // start with max and substract when ui is hidden due to config
     var height = 525
-    if ($configStore.sourceAmount) height -= 110
-    if ($configStore.defaultDestinationAsset) height -= 110
+    if ($configStore.sourceAmount) height -= 100
+    if ($configStore.defaultDestinationAsset) height -= 100
     return height
   }
 
@@ -335,10 +335,10 @@
     <div class="cryptocurrencies-container">
       <Surround>
         {#if isDonation && $configStore.sourceAmount}
-          <span />
+          <span class="break" />
         {:else}
           <div
-            style="display:flex;flex-direction:column;height:4.25rem;margin-top:0rem;margin-left:-0.75rem"
+            style="display:flex;flex-direction:column;height:4.25rem;margin-top:0rem;margin-left:-0.75rem;margin-right:1rem;"
           >
             <Label>
               <span class="dst-currency">$</span>
@@ -367,7 +367,7 @@
           </div>
         {/if}
         {#if !$configStore.defaultDestinationAsset}
-          <div class="dst-container">
+          <div class="dst-container" style="margin-right: 1.5rem;">
             <Label fx={false}>
               <CryptoCard
                 on:mousedown={showCryptoSelector}
@@ -489,6 +489,8 @@
             ? 'Previewing'
             : isLoggedIn
             ? 'Preview'
+            : $configStore.environment === 'sandbox'
+            ? 'Try Me!'
             : 'Continue'}
         </span>
       </div>
@@ -535,6 +537,12 @@
   .cryptocurrencies-container {
     cursor: pointer;
     padding: 0 0.5rem;
+    :global(.crypto-icon) {
+      top: 6px;
+    }
+  }
+  .break + .dst-container {
+    margin-top: 1rem;
   }
   .dst-container {
     margin-left: 2rem;
@@ -562,6 +570,7 @@
     display: none !important;
   }
   .dst-amount {
+    text-transform: none !important;
     position: absolute;
     left: 3rem;
     font-weight: 400;
@@ -571,7 +580,8 @@
     font-size: 1.5rem;
     padding-top: 1rem !important;
     padding-bottom: 0 !important;
-    left: 2rem;
+    text-indent: 2px;
+    left: 0.2rem;
     width: 203px;
     color: var(--theme-text-color-no-background);
   }
@@ -590,6 +600,7 @@
   .cryptocurrencies-container {
     :global(.crypto-card) {
       border: none !important;
+      top: -10px;
     }
     :global(.crypto-card:before) {
       bottom: -1.5rem !important;

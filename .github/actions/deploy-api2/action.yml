@@ -1,0 +1,35 @@
+name: DeployAPI
+description: Deploy the api
+inputs:
+  GCP_SA_KEY:
+    description: service account key
+    required: true
+  GCP_PROJECT_ID:
+    description: gcp project id
+    required: true
+  CONTAINER_REPO:
+    description: image repository location
+    required: true
+runs:
+  using: composite
+  steps:
+    - name: Deploy API Image to CloudRun
+      shell: bash
+      run: |
+        pushd /tmp
+
+        echo -n ${{ inputs.GCP_SA_KEY }} | base64 --decode > gcloud-service-key.json
+
+        curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+        tar -xzf google-cloud-sdk-332.0.0-linux-x86_64.tar.gz
+
+        ./google-cloud-sdk/install.sh --usage-reporting false
+        gcloud auth activate-service-account --key-file gcloud-service-key.json
+
+        popd
+
+        ../api/bin/get-snap-env-secret --project ${{inputs.GCP_PROJECT_ID}} > snap-env
+        ../api/bin/env2knative snap-env snap-api2 ${{inputs.CONTAINER_REPO}}:${{ github.sha }} > snap-knative
+
+        ../api/bin/deploy-api --project ${{inputs.GCP_PROJECT_ID}} --region us-central1	snap-knative
+      working-directory: api_2

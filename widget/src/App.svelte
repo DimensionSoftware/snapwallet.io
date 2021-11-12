@@ -13,6 +13,8 @@
   import Address from './screens/Address.svelte'
   import VerifyOTP from './screens/VerifyOTP.svelte'
   import Overview from './screens/Overview.svelte'
+  import AwaitPayment from './screens/AwaitPayment.svelte'
+  import CartCheckout from './screens/CartCheckout.svelte'
   import { onMount, setContext } from 'svelte'
   import PlaidWidget from './screens/PlaidWidget.svelte'
   import SelectPayment from './screens/SelectPayment.svelte'
@@ -36,6 +38,7 @@
   import SendOtp from './screens/SendOTP.svelte'
   import VerifyOtp from './screens/VerifyOTP.svelte'
   import Success from './screens/Success.svelte'
+  import CartSuccess from './screens/CartSuccess.svelte'
   import { transactionStore } from './stores/TransactionStore'
   import { paymentMethodStore } from './stores/PaymentMethodStore'
   import ProfileStatus from './screens/ProfileStatus.svelte'
@@ -83,19 +86,23 @@
   })
 
   // screen height events
-  const HEIGHT = '608px' // default screen height
+  const HEIGHT = '608px', // default screen height
+    WIDTH = '360px' // " width
   let height: string = HEIGHT,
+    width: string = WIDTH,
     lastLocation: string = null
   window.addEventListener(ParentMessages.RESIZE, (event: Event) => {
     // respond to custom screen heights
     height = event.detail?.height || HEIGHT
-    ParentMessenger.resize(height, $configStore.appName)
+    width = event.detail?.width || WIDTH
+    ParentMessenger.resize({ height, width }, $configStore.appName)
   })
   $: {
     if (lastLocation !== $location) {
-      // reset screen height at every change
+      // reset screen height & width at every change
       height = HEIGHT
-      ParentMessenger.resize(height, $configStore.appName) // iframe
+      width = WIDTH
+      ParentMessenger.resize({ height, width }, $configStore.appName) // iframe
       lastLocation = $location
     }
   }
@@ -142,7 +149,15 @@
     [Routes.ROOT]: wrap({
       component: ($configStore.product?.destinationTicker
         ? Product
+        : $configStore.intent === 'cart'
+        ? CartCheckout
         : Home) as any,
+    }),
+    [Routes.CART_CHECKOUT]: wrap({
+      component: CartCheckout as any,
+    }),
+    [Routes.AWAIT_PAYMENT]: wrap({
+      component: AwaitPayment as any,
     }),
     [Routes.SELECT_PAYMENT]: wrap({
       component: SelectPayment as any,
@@ -154,6 +169,9 @@
     [Routes.VERIFY_OTP]: wrap({
       component: VerifyOTP as any,
       conditions: [() => !isJWTValid()],
+    }),
+    [Routes.CART_SUCCESS]: wrap({
+      component: CartSuccess as any,
     }),
     // Authenticated
     [Routes.SUCCESS]: wrap({
@@ -341,7 +359,7 @@
 <div id="modal">
   <div
     id="modal-body"
-    style={`height: ${height}`}
+    style={`height: ${height}; width: ${width}`}
     class:blur={isPreLogout || isBlurred}
     class:blur-header={isHeaderBlurred}
   >
@@ -448,6 +466,13 @@
     height: 0;
     width: 0;
   }
+  :global(iframe.modal #modal:before) {
+    // modal overlay bg
+    opacity: 0 !important;
+    animation: backgroundFadeIn 1s ease-out forwards !important;
+    background: var(--theme-modal-container-background-color) !important;
+    background-color: transparent;
+  }
   #modal:before {
     content: '';
     position: absolute;
@@ -456,8 +481,14 @@
     bottom: 0;
     top: 0;
     opacity: 0;
-    background: var(--theme-modal-container-background-color);
     animation: backgroundFadeIn 1s ease-out forwards;
+    background: var(--theme-modal-container-background-color);
+    background-color: transparent;
+    // solid "inline" bg
+    // opacity: 1;
+    // background: var(--theme-modal-background-color);
+    // background-color: var(--theme-modal-background-color);
+    // animation: none;
   }
   #modal,
   :global(#plaid-link-iframe-1) {
@@ -495,14 +526,13 @@
   }
 
   #modal-body {
-    width: 360px;
-    transition: height 0.3s var(--theme-ease-out-back);
-    will-change: height;
+    transition: height 0.3s var(--theme-ease-out-back),
+      width 0.4s var(--theme-ease-out-back) 0.301s;
+    will-change: height, width, transform;
     background: var(--theme-modal-background);
     border-radius: 1rem;
     overflow: hidden;
     transform: translateZ(0);
-    will-change: transform;
     display: flex;
     flex-direction: column;
     // Used by toast
@@ -545,7 +575,8 @@
       margin: 0 0 1rem 0;
       text-align: center;
     }
-    :global(h3.test, h3.test a) {
+    :global(h3.test),
+    :global(h3.test a) {
       color: var(--theme-color);
       font-weight: bold;
       opacity: 1;
@@ -553,7 +584,7 @@
     }
   }
 
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 550px) {
     #modal-body {
       border-radius: 0;
       height: 100% !important;

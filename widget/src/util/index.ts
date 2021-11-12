@@ -3,6 +3,7 @@ import nodeDebug from 'debug'
 import * as Icons from './icons'
 import { ParentMessages, CACHED_PRIMARY_PAYMENT_METHOD_KEY } from '../constants'
 import { isValidMaskInput } from '../masks'
+import type { ProductType } from '../types'
 
 export const CryptoIcons = Icons
 
@@ -63,17 +64,13 @@ export const isValidKeyForMask = (e, mask, defaultValue) => {
 export const closestNumber = (n: number, m: number) => {
   // find the quotient
   let q = parseInt('' + n / m)
-
   // 1st possible closest number
   let n1 = m * q
-
   // 2nd possible closest number
   let n2 = n * m > 0 ? m * (q + 1) : m * (q - 1)
-
   // if true, then n1 is the
   // required closest number
   if (Math.abs(n - n1) < Math.abs(n - n2)) return n1
-
   // else n2 is the required
   // closest number
   return n2
@@ -82,9 +79,9 @@ export const closestNumber = (n: number, m: number) => {
 // Application logger module
 export const Logger = (() => {
   try {
-    window.localStorage.setItem('debug', __ENV.DEBUG)
+    window.localStorage.setItem('debug', __ENV['DEBUG'])
     // These are needed for chrome
-    window.localStorage.debug = __ENV.DEBUG
+    window.localStorage.debug = __ENV['DEBUG']
     nodeDebug.log = console.log.bind(console)
   } catch {
     console.warn('Unable to enable logger. Incognito?')
@@ -101,6 +98,14 @@ export const Logger = (() => {
     info,
   }
 })()
+
+export const totalProducts = (products: Array<ProductType>) =>
+  products.reduce(
+    (prev, cur) =>
+      parseFloat(cur.destinationAmount.toString()) * (cur.qty || 1) +
+      (prev || 0),
+    0,
+  )
 
 export const numberWithCommas = (s: string) =>
   s.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')
@@ -189,10 +194,18 @@ export const getPrimaryPaymentMethodID = (): string => {
   }
 }
 
-export const resizeWidget = (height: number, appName: string) => {
+export const isNumber = a => typeof a === 'number'
+
+type ResizeParams = { height: number; width?: number } | number
+export const resizeWidget = (params: ResizeParams, appName: string) => {
+  const height = isNumber(params) ? params : params.height,
+    width = isNumber(params) ? undefined : params.width,
+    detail = { height: `${height}px` }
+  if (width) detail.width = `${width}px`
   window.dispatchEvent(
     new CustomEvent(ParentMessages.RESIZE, {
-      detail: { height: `${height}px`, appName },
+      detail,
+      appName,
     }),
   )
 }

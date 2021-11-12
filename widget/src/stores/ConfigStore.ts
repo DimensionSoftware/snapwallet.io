@@ -14,6 +14,7 @@ type ConfigStoreState = {
   intent: UserIntent
   payee: string
   product?: ProductType
+  products?: ProductType[]
   theme: { [cssProp: string]: string }
 }
 
@@ -30,6 +31,7 @@ function createStore() {
     intent: 'buy',
     payee: '',
     product: undefined,
+    products: [],
     theme: {},
   })
 

@@ -1,12 +1,12 @@
-const { collections: dbCollections } = require('./db')
 const { EventSchema } = require('./schemas/event')
 
 class DatabaseEventsManager {
   constructor(db) {
     this.db = db
-    this.collection = this.db.collection(dbCollections.events)
+    this.collection = this.db.collection('events')
   }
 
+  // record n number of events
   async record(...rawEvents) {
     if (rawEvents.length === 0) return []
 
@@ -32,6 +32,45 @@ class DatabaseEventsManager {
     }
 
     await batch.commit()
+
+    return events
+  }
+
+  // get by id
+  async get(id) {
+    const ref = this.db.collection('events').doc(id)
+
+    const doc = await ref.get()
+    if (doc.exists) {
+      return doc.data()
+    } else {
+      return null
+    }
+  }
+
+  // list by entity id / no guarantee of ordering to avoid complex index ; can be done by app server
+  async listByEntityID(entityID) {
+    const ref = this.db.collection('events')
+
+    const snapshot = await ref.where('entity.id', '==', entityID).get()
+
+    const events = []
+    snapshot.forEach((doc) => {
+      events.push(doc.data())
+    })
+
+    return events
+  }
+
+  async listEventsBySource(source) {
+    const ref = this.db.collection('events')
+
+    const snapshot = await ref.where('source', '==', source).get()
+
+    const events = []
+    snapshot.forEach((doc) => {
+      events.push(doc.data())
+    })
 
     return events
   }
