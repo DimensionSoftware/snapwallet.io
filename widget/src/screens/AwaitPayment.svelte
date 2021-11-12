@@ -58,18 +58,24 @@
 <ModalContent>
   <ModalHeader>Awaiting Payment</ModalHeader>
   <ModalBody klass="awaiting-payment">
+    <div class="expires">
+      <FaIcon data={faClock} />
+      <div style="margin-right:0.35rem;" />
+      <b>{formattedExpiration}</b>
+    </div>
     <Surround glow>
       <h2>Scan to Send</h2>
       <div class="row">
-        <div class="crypto-icon">
-          <Icon size="25" height="25" width="25" viewBox="-4 0 40 40" />
-        </div>
         <h4 class="amount">
           {formatLocaleCurrency(destCurrency, destAmount)}
         </h4>
         <Clipboard value={destAmount} />
       </div>
-      <div id="qrcode" class="qrcode" title="Scan to Send Payment" />
+      <div id="qrcode" class="qrcode" title="Scan to Send Payment">
+        <div class="crypto-icon">
+          <Icon size="50" height="50" width="50" viewBox="-4 0 40 40" />
+        </div>
+      </div>
       <div class="row">
         <h4 class="address">{destAddress}</h4>
         <Clipboard value={destAddress} />
@@ -98,11 +104,6 @@
       on:close={() => (isPaymentSelectorVisible = false)}
     />
   {/if}
-  <div class="expires">
-    <FaIcon data={faClock} />
-    <div style="margin-right:0.35rem;" />
-    <b>{formattedExpiration}</b>
-  </div>
   <h3 class="test">
     {#if $configStore.environment === 'sandbox'}
       <a on:click={doSuccess}>Test Success</a>
@@ -125,6 +126,7 @@
     display: flex;
     text-align: center;
     border-width: 4px !important;
+    margin-top: 25%;
     padding-bottom: 1.25rem !important;
   }
   :global(.down-arrow) {
@@ -156,8 +158,13 @@
   h2 {
     font-size: 1.2rem;
   }
+  h3.test {
+    margin-bottom: 2rem !important;
+  }
   .crypto-icon {
-    position: relative;
+    position: absolute;
+    top: 40px;
+    left: 35px;
     filter: grayscale(100%);
     margin-bottom: 0.5rem;
   }
@@ -188,6 +195,7 @@
     }
   }
   .qrcode {
+    position: relative;
     background: var(--theme-color);
     padding: 3px;
     padding-bottom: 1px;
@@ -245,10 +253,8 @@
 
   .expires {
     display: flex;
-    display: none;
     justify-content: center;
     align-items: center;
-    margin-bottom: 2rem;
     opacity: 0.8;
   }
 </style>
