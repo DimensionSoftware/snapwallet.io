@@ -13,7 +13,18 @@ type StoreState = {
   sourceAmount: number
   destinationAmount: number
   selectedSourcePaymentMethod: WyrePaymentMethod | null
-  wyrePreview: object
+  wyrePreview: {
+    sourceAmount: number
+    id: string
+    dest: string
+    sourceCurrency: string
+    destAmount: number
+    destCurrency: string
+    exchangeRate: number
+    fees: {
+      [ticker: string]: number
+    }
+  }
   transactionExpirationTimer?: number
   transactionExpirationSeconds: number
 }
