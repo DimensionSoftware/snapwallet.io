@@ -11,12 +11,7 @@
   import Button from '../components/Button.svelte'
   import ModalFooter from '../components/ModalFooter.svelte'
   import { transactionStore } from '../stores/TransactionStore'
-  import {
-    CryptoIcons,
-    formatLocaleCurrency,
-    resizeWidget,
-    totalProducts,
-  } from '../util'
+  import { resizeWidget, totalProducts } from '../util'
   import { post } from '../util/api_2'
   import { TransactionIntents, TransactionMediums } from '../types'
   import { Routes } from '../constants'
@@ -73,6 +68,12 @@
     push(Routes.AWAIT_PAYMENT)
   }
 
+  let trailingZeros = 0
+  $: {
+    const [_h, t] = sourceAmount.toString().split('.')
+    if (t && t.length) trailingZeros = t.length
+  }
+
   onMount(async () => {
     // afford more space to lists of product
     if (hasManyProducts)
@@ -121,7 +122,7 @@
       {:else if hasManyProducts}
         {#each products as product, i}
           <div class="product" in:fly={{ y: 25, duration: 200 * (i + 1) }}>
-            <img height="50" width="50" src={product.img} />
+            <img alt={product.title} height="50" width="50" src={product.img} />
             <div class="title" title={product.subtitle || product.author}>
               {product.title}
               <small>x</small>
@@ -131,10 +132,8 @@
             </div>
             <div class="right">
               <b>
-                {formatLocaleCurrency(
-                  product.destinationTicker,
-                  product.destinationAmount,
-                )}
+                {product.destinationTicker}
+                {Number(product?.destinationAmount)?.toFixed(trailingZeros)}
               </b>
             </div>
           </div>
@@ -202,21 +201,24 @@
       <div class="line dashed" />
       <div class="line-item muted">
         <div>Subtotal</div>
-        <div>
-          {formatLocaleCurrency(sourceCurrency, trueSourceAmount)}
+        <div class="align-right">
+          {sourceCurrency}
+          {trueSourceAmount.toFixed(trailingZeros)}
         </div>
       </div>
       <div class="line-item muted">
         <div>Crypto Fee</div>
-        <div>
-          {formatLocaleCurrency(sourceCurrency, cryptoFee)}
+        <div class="align-right">
+          {sourceCurrency}
+          {cryptoFee.toFixed(trailingZeros)}
         </div>
       </div>
       {#if isBuy}
         <div class="line-item muted">
           <div>Service Fee</div>
-          <div>
-            {formatLocaleCurrency(sourceCurrency, fees[sourceCurrency])}
+          <div class="align-right">
+            {sourceCurrency}
+            {fees[sourceCurrency].toFixed(trailingZeros)}
           </div>
         </div>
       {/if}
@@ -232,7 +234,8 @@
         <div class="scale-up line-item" style="margin-bottom: 2.15rem;">
           <div><b>Total</b></div>
           <div>
-            <b class="total">{formatLocaleCurrency(fiatTicker, sourceAmount)}</b
+            <b class="total"
+              >{fiatTicker} {sourceAmount.toFixed(trailingZeros)}</b
             >
           </div>
         </div>
@@ -376,5 +379,9 @@
       font-size: 0.75rem;
       opacity: 0.8;
     }
+  }
+  .align-right {
+    display: flex;
+    align-items: flex-end;
   }
 </style>
