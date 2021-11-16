@@ -94,7 +94,6 @@
   svg {
     position: relative;
     cursor: pointer;
-    top: 2px;
     transform: scale(1);
     z-index: 10;
     transition: transform 0.2s ease-out;
