@@ -14,7 +14,7 @@
     transition: height ${
       isExpanded ? '0.2s' : '0.4s'
     } var(--theme-ease-out-expo);
-  height: ${isExpanded ? 4 : 1}rem`}
+  height: ${isExpanded ? 4 : 2}rem`}
 >
   {isExpanded ? address : trunc(address)}
 </h4>
