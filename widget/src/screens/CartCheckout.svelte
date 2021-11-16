@@ -78,6 +78,7 @@
     // afford more space to lists of product
     if (hasManyProducts)
       resizeWidget({ height: 650, width: 500 }, $configStore.appName)
+    if ($transactionStore.transactionExpirationSeconds > 60) return // guard
     try {
       // generate wyrePreview
       isPreviewing = true
