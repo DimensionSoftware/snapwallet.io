@@ -83,6 +83,7 @@
     padding: 0;
     border: none;
     resize: none;
+    opacity: 0;
     outline: none;
     box-shadow: none;
     background: transparent;
