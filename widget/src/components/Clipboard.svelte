@@ -84,6 +84,8 @@
     border: none;
     resize: none;
     opacity: 0;
+    overflow: hidden;
+    z-index: -1;
     outline: none;
     box-shadow: none;
     background: transparent;
