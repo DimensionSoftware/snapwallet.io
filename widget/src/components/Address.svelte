@@ -10,7 +10,11 @@
 <h4
   on:click={toggleExpanded}
   title={address}
-  style={`max-height: ${isExpanded ? 4 : 1}rem`}
+  style={`
+    transition: height ${
+      isExpanded ? '0.2s' : '0.4s'
+    } var(--theme-ease-out-expo);
+  height: ${isExpanded ? 4 : 1}rem`}
 >
   {isExpanded ? address : trunc(address)}
 </h4>
@@ -23,7 +27,6 @@
     margin: 0 0 0.5rem;
     max-width: 160px;
     white-space: pre-wrap;
-    transition: max-height 0.5s var(--theme-ease-out-expo);
     line-height: 1.25rem;
     text-align: left;
     word-break: break-word;
