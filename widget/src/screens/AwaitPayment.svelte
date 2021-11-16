@@ -14,6 +14,7 @@
   import ModalHeader from '../components/ModalHeader.svelte'
   import Surround from '../components/cards/Surround.svelte'
   import Clipboard from '../components/Clipboard.svelte'
+  import Address from '../components/Address.svelte'
   import { TransactionMediums } from '../types'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import { formatExpiration } from '../util/transactions'
@@ -29,7 +30,7 @@
     { destCurrency, destAddress, destAmount } =
       $transactionStore.wyrePreview || {
         destCurrency: 'BTC',
-        destAddress: '0xCAFEBABE',
+        destAddress: '0xCAFEBABECAFEBABECAFEBABECAFEBABECAFEBABE',
         destAmount: 0,
       },
     Icon = CryptoIcons[destCurrency ?? 'BTC']
@@ -77,7 +78,7 @@
         </div>
       </div>
       <div class="row">
-        <h4 class="address">{destAddress}</h4>
+        <Address address={destAddress} />
         <Clipboard value={destAddress} />
       </div>
     </Surround>
@@ -188,9 +189,6 @@
       overflow: hidden;
       &.amount {
         max-width: 130px;
-      }
-      &.address {
-        font-size: 0.8rem;
       }
     }
   }
