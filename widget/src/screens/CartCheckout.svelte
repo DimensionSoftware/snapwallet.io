@@ -48,7 +48,7 @@
   $: fiatTicker = isBuy ? sourceCurrency : destinationCurrency
   $: total = isBuy ? sourceAmount : destinationAmount
 
-  $: isPreviewing = true
+  $: isPreviewing = false
   $: cryptoFee = isBuy
     ? fees[destinationCurrency] / txnExchangeRate || 0
     : fees[sourceCurrency] || 0
