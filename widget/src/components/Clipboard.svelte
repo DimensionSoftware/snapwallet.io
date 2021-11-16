@@ -82,6 +82,7 @@
     height: 0;
     padding: 0;
     border: none;
+    resize: none;
     outline: none;
     box-shadow: none;
     background: transparent;
