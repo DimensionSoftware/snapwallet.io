@@ -186,6 +186,7 @@
       rgb(241, 7, 28) 79%,
       rgb(206, 0, 11)
     ) !important;
+    background: linear-gradient(84deg, #ff6b00, rgb(241, 7, 28)) !important;
     top: -3.5rem;
     width: 100%;
     border-radius: 0.25rem;

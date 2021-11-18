@@ -78,8 +78,11 @@
     border-radius: 1rem;
     padding: 0 1.5rem;
     cursor: pointer;
+    filter: grayscale(50%);
     &:hover {
-      box-shadow: 0 0 0 3px #fff600, 5px 7px 15px rgba(0, 0, 0, 0.18);
+      filter: grayscale(0%);
+      box-shadow: 0 0 0 3px #fff600, 5px 7px 15px rgba(0, 0, 0, 0.18),
+        0 0 75px 5px rgba(#fff600, 0.2);
       transform: scale(0.995);
       transition: none;
     }

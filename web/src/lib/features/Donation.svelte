@@ -225,11 +225,12 @@
     font-size: 1.15rem !important;
     background: rgb(241, 7, 28) !important;
     // background: linear-gradient(63.26deg, #ff6b00, #f1071c 75%) !important;
-    background: linear-gradient(
-      63.26deg,
-      #ff6b00,
-      rgb(241, 7, 28) 75%
-    ) !important;
+    // background: linear-gradient(
+    //   63.26deg,
+    //   #ff6b00,
+    //   rgb(241, 7, 28) 75%
+    // ) !important;
+    background: linear-gradient(84deg, #ff6b00, rgb(241, 7, 28)) !important;
     border-color: rgb(222, 49, 45) !important;
     z-index: 4;
     text-align: center;

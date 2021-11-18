@@ -208,7 +208,9 @@
       &:hover {
         transition: none;
         background-color: rgba(255, 255, 255, 0.85);
-        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2);
+        box-shadow: 1px 2px 3px rgba(0, 0, 0, 0.2),
+          0 0 12px 2px var(--theme-button-color);
+
         border: 1px solid transparent;
       }
       &:active {
