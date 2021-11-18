@@ -80,8 +80,7 @@
         var(--theme-color-lightened),
         var(--theme-color-lightened),
         var(--theme-color-lightened),
-        var(--theme-color-lightened),
-        transparent
+        transparent 99%
       );
       transform: scale(0);
       transition: transform 0.2s $easeOutExpo;
@@ -91,6 +90,9 @@
       border-bottom: 1px solid var(--theme-color-lightened);
       transition: none;
       transform: scale(1.01);
+      .crypto-icon {
+        filter: grayscale(0);
+      }
       &:before {
         transform: scale(1);
         transition: none;
