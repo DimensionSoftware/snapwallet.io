@@ -213,8 +213,10 @@ Hey, you-- join us!  https://dimensionsoftware.com
   $easeOutBack: cubic-bezier(0.34, 1.25, 0.64, 1);
 
   :global(iframe.snapWallet) {
+    position: relative;
     backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
     -webkit-backdrop-filter: blur(2px) brightness(75%) grayscale(25%) !important;
+    z-index: 9999999;
   }
   :global(.blur) {
     // backdrop-filter: blur(4px) !important;

@@ -174,9 +174,8 @@
     &.success .step :global(b) {
       opacity: 1 !important;
       font-weight: bold !important;
-      color: var(--theme-color) !important;
     }
-    .step {
+    p {
       white-space: nowrap;
       margin-left: 1rem;
       font-weight: 300;
@@ -187,5 +186,9 @@
         font-weight: 300;
       }
     }
+  }
+  // custom success color for crypto buy/sell process
+  :global(.cryptocurrencies-container .vertical-stepper li.success) {
+    color: var(--theme-color) !important;
   }
 </style>
