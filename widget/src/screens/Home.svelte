@@ -56,8 +56,13 @@
   let isLoadingPrices = !Boolean($transactionStore.sourceAmount)
   let isLoggedIn = window.AUTH_MANAGER.viewerIsLoggedIn()
 
-  $: ({ sourceCurrency, destinationCurrency, sourceAmount, intent } =
-    $transactionStore)
+  $: ({
+    sourceCurrency,
+    destinationCurrency,
+    sourceAmount,
+    destinationAmount,
+    intent,
+  } = $transactionStore)
 
   $: ({ flags } = $userStore)
 
@@ -67,7 +72,11 @@
 
   $: selectedPriceMap = $priceStore.prices[selectedDirection]
   $: selectedDestinationPrice =
-    selectedPriceMap[$transactionStore.destinationCurrency.ticker]
+    selectedPriceMap[
+      isBuy
+        ? $transactionStore.destinationCurrency.ticker
+        : $transactionStore.sourceCurrency.ticker
+    ]
   $: exchangeRate = isBuy
     ? 1 / selectedDestinationPrice
     : selectedDestinationPrice
@@ -342,7 +351,9 @@
             style="display:flex;flex-direction:column;height:4.25rem;margin-top:0rem;margin-left:-0.75rem;margin-right:1rem;"
           >
             <Label>
-              <span class="dst-currency">$</span>
+              {#if isBuy}
+                <span class="dst-currency">$</span>
+              {/if}
               <Input
                 id="amount"
                 pattern={`[\\d,\\.]+`}
@@ -372,7 +383,7 @@
             <Label fx={false}>
               <CryptoCard
                 on:mousedown={showCryptoSelector}
-                crypto={isBuy ? destinationCurrency : sourceCurrency}
+                crypto={isBuy ? destinationCurrency : destinationCurrency}
                 isDown
               />
             </Label>
@@ -396,7 +407,7 @@
             {/if}
           </span>
           <b slot="step">
-            <TotalContainer />
+            <TotalContainer {isBuy} />
           </b>
         </VStep>
         <PaymentSelector

@@ -4,8 +4,16 @@
   import { dropEndingZeros } from '../util'
   import { configStore } from '../stores/ConfigStore'
 
+  export let isBuy = true
+
   $: isDonation = $configStore.intent === 'donate'
-  $: ({ destinationCurrency, intent, destinationAmount } = $transactionStore)
+  $: ({
+    destinationCurrency,
+    intent,
+    destinationAmount,
+    sourceAmount,
+    sourceCurrency,
+  } = $transactionStore)
   $: precision = intent === TransactionIntents.BUY ? 8 : 2
 </script>
 
@@ -15,10 +23,17 @@
   {:else}
     You Get ≈
   {/if}
-  <strong>
-    {dropEndingZeros(destinationAmount.toFixed(precision))}
-    {destinationCurrency.ticker}
-  </strong>
+  {#if isBuy}
+    <strong>
+      {dropEndingZeros(destinationAmount.toFixed(precision))}
+      {destinationCurrency.ticker}
+    </strong>
+  {:else}
+    <strong>
+      {dropEndingZeros(destinationAmount.toFixed(2))}
+      {sourceCurrency.ticker}
+    </strong>
+  {/if}
 </div>
 
 <style lang="scss">
