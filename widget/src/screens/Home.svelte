@@ -308,6 +308,7 @@
     }
     // whitelist these chars
     if (!e.key.match(/[\d\.,]+/)) {
+      if (e.metaKey) return true
       if (
         ['Backspace', 'Meta', 'ArrowRight', 'ArrowLeft', 'Shift'].includes(
           e.key,
