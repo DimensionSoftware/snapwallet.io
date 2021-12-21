@@ -18,7 +18,8 @@
 
 <div
   on:click={() => {
-    const { destinationCurrency, sourceCurrency } = $transactionStore
+    const { destinationCurrency, sourceCurrency, sourceAmount } =
+      $transactionStore
     if ($transactionStore.intent === TransactionIntents.BUY) {
       transactionStore.setCurrencies({
         destinationCurrency: crypto,
@@ -32,6 +33,10 @@
     }
     ParentMessenger.currencySelected(crypto)
     dispatch('mousedown')
+    dispatch('select', {
+      destinationCurrency,
+      sourceCurrency: crypto,
+    })
   }}
   class="crypto-card"
 >

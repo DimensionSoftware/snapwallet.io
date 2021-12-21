@@ -383,6 +383,15 @@
             <Label fx={false}>
               <CryptoCard
                 on:mousedown={showCryptoSelector}
+                on:select={() => {
+                  // FIXME force "You Get" to update selected currency
+                  setTimeout(() => {
+                    transactionStore.setSourceAmount(
+                      sourceAmount,
+                      selectedDestinationPrice,
+                    )
+                  }, 1500)
+                }}
                 crypto={isBuy ? destinationCurrency : destinationCurrency}
                 isDown
               />
