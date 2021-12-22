@@ -60,6 +60,7 @@
     "sirv-cli": "^1.0.14",
     "svelte-awesome": "^2.4.2",
     "svelte-spa-router": "^3.2.0",
+    "svelte-web3": "^2.3.1",
     "uuid": "^8.3.2",
     "validator": "^13.6.0"
   }
