@@ -7,9 +7,14 @@
   export let onBack: () => any = undefined
   export let hideRightAction = false
   export let hideBackButton = false
+  export let onClick: () => any = undefined
 </script>
 
-<div class="modal-header">
+<div
+  class="modal-header"
+  style={`cursor: ${onClick ? 'pointer' : 'auto'}`}
+  on:click={onClick}
+>
   <div
     on:mousedown={onBack ? onBack : pop}
     class:hidden={hideBackButton}

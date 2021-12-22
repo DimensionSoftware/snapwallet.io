@@ -337,8 +337,11 @@
   {#if isDonation}
     <ModalHeader hideBackButton>{$configStore.payee || 'Donation'}</ModalHeader>
   {:else}
-    <ModalHeader hideBackButton
-      >{isBuy ? 'Buy' : 'Sell'} {destinationCurrency.ticker}</ModalHeader
+    <ModalHeader
+      hideBackButton
+      onClick={() => {
+        transactionStore.toggleIntent()
+      }}>{isBuy ? 'Buy' : 'Sell'} {destinationCurrency.ticker}</ModalHeader
     >
   {/if}
   <ModalBody>
