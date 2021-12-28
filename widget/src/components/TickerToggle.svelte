@@ -9,15 +9,15 @@
 
 <div class="left" title={`Buy ${ticker}`}>
   {#if isBuy}
-    Buy
-    <small in:blur={{ opacity: 0.5, easing: expoOut, duration: 2000 }}
+    <span>Buy</span>
+    <small in:blur={{ opacity: 0.6, easing: expoOut, duration: 2000 }}
       >Sell</small
     >
   {:else}
-    Sell
-    <small in:blur={{ opacity: 0.5, easing: expoOut, duration: 2000 }}
+    <small in:blur={{ opacity: 0.6, easing: expoOut, duration: 2000 }}
       >Buy</small
     >
+    <span>Sell</span>
   {/if}
 </div>
 
@@ -26,8 +26,15 @@
   .left {
     text-align: left;
   }
+  span,
   small {
-    margin: 0 0 0 0.7rem;
+    display: inline-block;
+    text-align: center;
+    width: 60px;
+  }
+  small {
+    font-size: 1rem;
+    margin: 0;
     opacity: 0.75;
   }
 </style>
