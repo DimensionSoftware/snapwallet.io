@@ -480,7 +480,7 @@
               disabled
               onClick={() => push(verificationNextStep)}
             >
-              <b slot="step"> Verify Identity </b>
+              <div slot="step">Verify Identity</div>
             </VStep>
           {/if}
         {:else if $transactionStore.inMedium === TransactionMediums.DEBIT_CARD}
