@@ -20,7 +20,9 @@
     <div class="content-container">
       <div class="header-container" style="">
         <div class="header-title">
-          <FaIcon data={icon} />
+          {#if icon}
+            <FaIcon data={icon} />
+          {/if}
           <div alt={label} class="label">{label}</div>
         </div>
         {#if badgeText}
@@ -118,6 +120,9 @@
     position: relative;
     display: flex;
     align-items: center;
+    :global(svg) {
+      margin-right: 0.5rem;
+    }
     & > .label {
       overflow: hidden;
       text-overflow: ellipsis;

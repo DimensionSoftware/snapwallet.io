@@ -31,7 +31,7 @@
   {:else}
     <strong>
       {dropEndingZeros(destinationAmount.toFixed(2))}
-      {sourceCurrency.ticker}
+      {destinationCurrency.ticker}
     </strong>
   {/if}
 </div>

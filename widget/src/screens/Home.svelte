@@ -11,6 +11,7 @@
   import { priceStore } from '../stores/PriceStore'
   import Input from '../components/inputs/Input.svelte'
   import Label from '../components/inputs/Label.svelte'
+  import TickerToggle from '../components/TickerToggle.svelte'
   import { onMount } from 'svelte'
   import {
     focusFirstInput,
@@ -66,17 +67,13 @@
 
   $: ({ flags } = $userStore)
 
-  $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
   $: isBuy = intent === TransactionIntents.BUY
+  $: selectedDirection = `${$transactionStore.sourceCurrency.ticker}_${$transactionStore.destinationCurrency.ticker}`
   $: isDonation = $configStore.intent === 'donate'
 
-  $: selectedPriceMap = $priceStore.prices[selectedDirection]
+  $: selectedPriceMap = $priceStore.prices[selectedDirection] || {}
   $: selectedDestinationPrice =
-    selectedPriceMap[
-      isBuy
-        ? $transactionStore.destinationCurrency.ticker
-        : $transactionStore.sourceCurrency.ticker
-    ]
+    selectedPriceMap[$transactionStore.destinationCurrency.ticker]
   $: exchangeRate = isBuy
     ? 1 / selectedDestinationPrice
     : selectedDestinationPrice
@@ -340,9 +337,19 @@
     <ModalHeader
       hideBackButton
       onClick={() => {
+        let nextIntent =
+          intent === TransactionIntents.BUY
+            ? TransactionIntents.SELL
+            : TransactionIntents.BUY
+        // transactionStore.reset({ intent: nextIntent })
         transactionStore.toggleIntent()
-      }}>{isBuy ? 'Buy' : 'Sell'} {destinationCurrency.ticker}</ModalHeader
+      }}
     >
+      <TickerToggle
+        {isBuy}
+        ticker={isBuy ? destinationCurrency.ticker : sourceCurrency.ticker}
+      />
+    </ModalHeader>
   {/if}
   <ModalBody>
     <div class="cryptocurrencies-container">
@@ -395,7 +402,7 @@
                     )
                   }, 1500)
                 }}
-                crypto={isBuy ? destinationCurrency : destinationCurrency}
+                crypto={isBuy ? destinationCurrency : sourceCurrency}
                 isDown
               />
             </Label>

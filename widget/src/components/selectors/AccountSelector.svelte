@@ -58,10 +58,10 @@
   }
 
   onMount(() => {
-    if (flags && !flags.hasWyreAccount) {
-      isLoadingPaymentMethods = false
-      return
-    }
+    // debit-cards are not supported by sendwyre for offramp/selling
+    if (intent === TransactionIntents.SELL) showAvailablePms = true
+    // guard
+    if (flags && !flags.hasWyreAccount) return (isLoadingPaymentMethods = false)
     try {
       // Load latest payment methods on open
       paymentMethodStore.fetchWyrePaymentMethods()
@@ -187,13 +187,7 @@
           in:fly={{ y: 25, duration: 300 + 50 }}
         >
           <div
-            style="display:flex;justify-content:flex-end;text-decoration:underline;cursor:pointer;font-size:0.75rem;opacity:0.85;align-items:center"
-            on:mousedown={() => (showAvailablePms = false)}
-          >
-            Back
-          </div>
-          <div
-            style="display:flex;justify-content:flex-start;cursor:pointer;align-items:center;"
+            style="margin-top:-.75rem;display:flex;justify-content:center;cursor:pointer;align-items:center;width:100%;"
             on:mousedown={() => {
               // Route user to next KYC step when they don't have an active Wyre acct
               const route =

@@ -2,7 +2,6 @@
   import VirtualList from '../VirtualList.svelte'
   import { createEventDispatcher } from 'svelte'
   import { SUPPORTED_CRYPTOCURRENCY_ASSETS } from '../../constants'
-  import { fly } from 'svelte/transition'
   import CryptoCard from '../cards/CryptoCard.svelte'
   import Label from '../inputs/Label.svelte'
   import PopupSelector from '../inputs/PopupSelector.svelte'
