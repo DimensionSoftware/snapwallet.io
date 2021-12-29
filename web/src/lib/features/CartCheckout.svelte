@@ -26,7 +26,7 @@
             author: 'bao',
             destinationAmount: '.042',
             destinationTicker: 'ETH',
-            destinationAddress: '0xCAFEBEEF',
+            destinationAddress: '0xYOUR_WALLET',
             qty: 2,
           },
           {
@@ -37,7 +37,7 @@
             author: 'sMURF0r',
             destinationAmount: '.069',
             destinationTicker: 'ETH',
-            destinationAddress: '0xDEADBEEF',
+            destinationAddress: '0xYOUR_WALLET',
             qty: 5,
           },
           {
@@ -48,7 +48,7 @@
             author: 'phpchris',
             destinationAmount: '.0420',
             destinationTicker: 'ETH',
-            destinationAddress: '0xCAFEBABE',
+            destinationAddress: '0xYOUR_WALLET',
           },
           {
             title: 'Fire OG',
@@ -59,7 +59,7 @@
 
             destinationAmount: '.069420',
             destinationTicker: 'ETH',
-            destinationAddress: '0xBEEFBABE',
+            destinationAddress: '0xYOUR_WALLET',
           },
           {
             title: 'Blueberry Dream',
@@ -69,7 +69,7 @@
             author: 'sMURF0r',
             destinationAmount: '.04269',
             destinationTicker: 'ETH',
-            destinationAddress: '0xDEADBEAA',
+            destinationAddress: '0xYOUR_WALLET',
           },
         ],
         theme: {

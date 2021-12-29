@@ -97,7 +97,7 @@
         <h2>{formatLocaleCurrency(cryptoTicker, total)}</h2>
         <p style="text-align: left; line-height: 1.35rem;">
           Your <b class="upper">{cryptoTicker}</b> checkout is confirmed to
-          <b class="address">{destAddress || '0xCAFEBABE'}</b>
+          <b class="address">{destAddress || '0xYOUR_WALLET'}</b>
         </p>
       {/if}
     </div>

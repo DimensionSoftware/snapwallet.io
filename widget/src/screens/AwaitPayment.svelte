@@ -30,7 +30,7 @@
     { destCurrency, destAddress, destAmount } =
       $transactionStore.wyrePreview || {
         destCurrency: 'BTC',
-        destAddress: '0xCAFEBABECAFEBABECAFEBABECAFEBABECAFEBABE',
+        destAddress: '0xYOUR_WALLET',
         destAmount: 0,
       },
     Icon = CryptoIcons[destCurrency ?? 'BTC']
