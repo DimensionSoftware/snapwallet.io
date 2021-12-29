@@ -337,12 +337,16 @@
     <ModalHeader
       hideBackButton
       onClick={() => {
-        let nextIntent =
-          intent === TransactionIntents.BUY
-            ? TransactionIntents.SELL
-            : TransactionIntents.BUY
-        // transactionStore.reset({ intent: nextIntent })
         transactionStore.toggleIntent()
+        setTimeout(() => {
+          // FIXME this is an approximation
+          // - wyre preview should confirm actual number
+          if (intent === TransactionIntents.BUY)
+            transactionStore.setSourceAmount(
+              Number($transactionStore.sourceAmount.toFixed(2)),
+              selectedDestinationPrice,
+            )
+        }, 100)
       }}
     >
       <TickerToggle
@@ -376,13 +380,13 @@
                 }}
                 defaultValue={sourceAmount
                   ? intent === TransactionIntents.BUY
-                    ? Number(sourceAmount).toFixed(2)
+                    ? Number(sourceAmount)
                     : sourceAmount
                   : Number($configStore.sourceAmount).toFixed(2)}
                 required
                 type="text"
                 inputmode="number"
-                placeholder="0"
+                placeholder="0.00"
                 isTranslucent
               />
               <span class="dst-amount">Amount</span>
