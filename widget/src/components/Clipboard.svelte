@@ -19,6 +19,7 @@
     } catch (err) {
       console.warn(`Error copying "${value}": ${err}`)
     }
+    throw new Error('Copied!')
   }
 </script>
 
