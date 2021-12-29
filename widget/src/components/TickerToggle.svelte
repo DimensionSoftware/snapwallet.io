@@ -7,16 +7,13 @@
   export let isBuy: boolean = true
 </script>
 
-<div class="left" title={`Buy ${ticker}`}>
+<div class="left" title={`Buy & Sell ${ticker}`}>
   {#if isBuy}
     <span>Buy</span>
-    <small in:blur={{ opacity: 0.6, easing: expoOut, duration: 2000 }}
-      >Sell</small
+    <small in:blur={{ opacity: 1, easing: expoOut, duration: 2500 }}>Sell</small
     >
   {:else}
-    <small in:blur={{ opacity: 0.6, easing: expoOut, duration: 2000 }}
-      >Buy</small
-    >
+    <small in:blur={{ opacity: 1, easing: expoOut, duration: 2500 }}>Buy</small>
     <span>Sell</span>
   {/if}
 </div>

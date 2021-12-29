@@ -13,7 +13,7 @@
 <div
   class="modal-header"
   style={`cursor: ${onClick ? 'pointer' : 'auto'}`}
-  on:click={onClick}
+  on:mousedown={onClick}
 >
   <div
     on:mousedown={onBack ? onBack : pop}
