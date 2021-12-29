@@ -151,7 +151,7 @@
     }
     small {
       font-weight: 300;
-      line-height: 1.7prem;
+      line-height: 1.7rem;
       margin-left: 0.25rem;
       text-transform: capitalize;
       white-space: nowrap;
