@@ -368,16 +368,17 @@
                 id="amount"
                 pattern={`[\\d,\\.]+`}
                 on:keydown={handleKeyDown}
-                on:change={e => {
-                  const val = Number(e.detail)
+                on:change={({ detail }) => {
                   transactionStore.setSourceAmount(
-                    val,
+                    Number(detail),
                     selectedDestinationPrice,
                   )
                 }}
                 defaultValue={sourceAmount
-                  ? sourceAmount
-                  : $configStore.sourceAmount}
+                  ? intent === TransactionIntents.BUY
+                    ? Number(sourceAmount).toFixed(2)
+                    : sourceAmount
+                  : Number($configStore.sourceAmount).toFixed(2)}
                 required
                 type="text"
                 inputmode="number"
