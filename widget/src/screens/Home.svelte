@@ -346,7 +346,7 @@
               Number($transactionStore.sourceAmount.toFixed(2)),
               selectedDestinationPrice,
             )
-        }, 100)
+        }, 1)
       }}
     >
       <TickerToggle
@@ -383,6 +383,7 @@
                     ? Number(sourceAmount)
                     : sourceAmount
                   : Number($configStore.sourceAmount).toFixed(2)}
+                autoselect
                 required
                 type="text"
                 inputmode="number"
