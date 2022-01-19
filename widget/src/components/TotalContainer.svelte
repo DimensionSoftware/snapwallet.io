@@ -15,6 +15,7 @@
     sourceCurrency,
   } = $transactionStore)
   $: precision = intent === TransactionIntents.BUY ? 8 : 2
+  $: dst = dropEndingZeros(destinationAmount.toFixed(precision))
 </script>
 
 <div class="total-container">
@@ -25,12 +26,12 @@
   {/if}
   {#if isBuy}
     <strong>
-      {dropEndingZeros(destinationAmount.toFixed(precision))}
+      {dst === 'NaN' ? '0' : dst}
       {destinationCurrency.ticker}
     </strong>
   {:else}
     <strong>
-      {dropEndingZeros(destinationAmount.toFixed(2))}
+      {dst === 'NaN' ? '0' : dst}
       {destinationCurrency.ticker}
     </strong>
   {/if}
