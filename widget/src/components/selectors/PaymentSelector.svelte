@@ -35,7 +35,7 @@
 </script>
 
 <VStep
-  title="Select Your Payment Method"
+  title={isBuy ? 'Select Your Payment Method' : 'Select Your Destination Bank'}
   disabled={disabled !== null
     ? disabled
     : !$userStore.isProfilePending && !flags?.hasWyreAccount}

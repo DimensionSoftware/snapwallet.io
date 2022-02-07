@@ -166,7 +166,7 @@
     position: absolute;
     top: 40px;
     left: 35px;
-    filter: grayscale(100%);
+    filter: grayscale(100%) contrast(150%);
     margin-bottom: 0.5rem;
   }
   .row {
