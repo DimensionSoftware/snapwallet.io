@@ -257,8 +257,7 @@ export class AuthManager {
       const [_, refresh] = this.getCurrentTokens()
 
       if (refresh === '') {
-        Logger.warn('refresh token was empty string, returning early...')
-
+        // Logger.warn('refresh token was empty string, returning early...')
         return
       }
 
