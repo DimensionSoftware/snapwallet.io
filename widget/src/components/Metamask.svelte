@@ -11,7 +11,7 @@
     selectedAccount,
     chainId,
     chainData,
-    defaultEvmStores,
+    // defaultEvmStores,
   } from 'svelte-web3'
   import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
   import { Routes } from '../constants'
@@ -19,7 +19,6 @@
   import { configStore } from '../stores/ConfigStore'
   import Balance from '../components/Balance.svelte'
   import ModalContent from '../components/ModalContent.svelte'
-  import Metamask from '../components/Metamask.svelte'
   import ModalBody from '../components/ModalBody.svelte'
   import ModalHeader from '../components/ModalHeader.svelte'
   import Surround from '../components/cards/Surround.svelte'
@@ -28,6 +27,8 @@
   import { TransactionMediums } from '../types'
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import { formatExpiration } from '../util/transactions'
+  import Button from './Button.svelte'
+  // import Web3Modal from './Web3Modal.svelte'
 
   let isPaymentSelectorVisible = false
 
@@ -36,7 +37,6 @@
   $: formattedExpiration = formatExpiration(
     $transactionStore.transactionExpirationSeconds,
   )
-  $: isMetamask = false
 
   const //{ destinationCurrency } = $transactionStore,
     { destCurrency, destAddress, destAmount } =
@@ -47,27 +47,57 @@
       },
     Icon = CryptoIcons[destCurrency ?? 'BTC']
 
-  onMount(() => {
+  onMount(async () => {
     // render qrcode
-    QR.render(
-      {
-        text: destAddress ?? '',
-        radius: 0.0, // 0.0 to 0.5
-        ecLevel: 'H', // L, M, Q, H
-        fill: '#111',
-        size: 115, // in pixels
-      },
-      document.getElementById('qrcode'),
-    )
-    // enable web3
-    isMetamask = typeof web3 !== 'undefined'
-    // // TODO use metamask.svelte
-    // try {
-    //   defaultEvmStores.setProvider()
-    // } catch (e) {
-    //   console.log(e)
-    // }
+    // QR.render(
+    //   {
+    //     text: destAddress ?? '',
+    //     radius: 0.0, // 0.0 to 0.5
+    //     ecLevel: 'H', // L, M, Q, H
+    //     fill: '#111',
+    //     size: 115, // in pixels
+    //   },
+    //   document.getElementById('qrcode'),
+    // )
+    // automagically connect web3
+    if (typeof web3 !== 'undefined')
+      // defaultEvmStores.disconnect()
+      // defaultEvmStores.setProvider()
+      connect()
   })
+
+  let pending = false,
+    type = 'Browser'
+  const connect = async () => {
+    pending = true
+    try {
+      // const handler = {
+      //   Browser: () => defaultEvmStores.setProvider(),
+      //   Localhost: () => () =>
+      //     defaultEvmStores.setProvider('http://127.0.0.1:7545'),
+      //   DAI: () => defaultEvmStores.setProvider('https://rpc.xdaichain.com/'),
+      //   Sokol: () => defaultEvmStores.setProvider('https://sokol.poa.network'),
+      // }
+      console.log(type)
+      // await handler[type]()
+      // await defaultEvmStores.setProvider('http://127.0.0.1:7545')
+      await defaultEvmStores.setProvider()
+      // console.log('$connected', defaultEvmStores.$connected)
+      // console.log('$selectedAccount', defaultEvmStores.$selectedAccount)
+      // console.log('$web3', defaultEvmStores.$web3)
+      pending = false
+    } catch (e) {
+      console.log(e)
+      pending = false
+      throw new Error(e)
+    }
+  }
+
+  const disconnect = async () => {
+    // console.log( await $DAI.methods.totalSupply().call() )
+    // await defaultEvmStores.disconnect()
+    pending = false
+  }
 
   const doSuccess = e => {
     e.preventDefault()
@@ -76,65 +106,33 @@
   }
 </script>
 
-<ModalContent>
-  <ModalHeader>Awaiting Payment</ModalHeader>
-  <ModalBody klass="awaiting-payment">
-    <div class="expires">
-      <FaIcon data={faClock} />
-      <div style="margin-right:0.35rem;" />
-      <b>{formattedExpiration}</b>
-    </div>
-    <Surround glow>
-      {#if isMetamask}
-        <Metamask />
-      {:else}
-        <h2>Scan to Send</h2>
-        <div class="row">
-          <h4 class="amount">
-            {formatLocaleCurrency(destCurrency, destAmount)}
-          </h4>
-          <Clipboard value={destAmount} />
-        </div>
-        <div id="qrcode" class="qrcode" title="Scan to Send Payment">
-          <div class="crypto-icon">
-            <Icon size="50" height="50" width="50" viewBox="-4 0 40 40" />
-          </div>
-        </div>
-        <div class="row">
-          <Address address={destAddress} />
-          <Clipboard value={destAddress} />
-        </div>
-      {/if}
-    </Surround>
-    <div
-      class="payment"
-      title="Click to Change Payment Method"
-      on:click={() => (isPaymentSelectorVisible = true)}
-    >
-      <b>
-        <!-- Multiple PMs will be possible for buy and bank account is only option for sell atm -->
-        {#if $transactionStore.selectedSourcePaymentMethod}
-          {$transactionStore.selectedSourcePaymentMethod.name}
-        {:else if isDebitCard}
-          Pay with Debit Card
-        {:else}
-          Change Payment Method
-        {/if}
-      </b>
-    </div>
-  </ModalBody>
-  {#if isPaymentSelectorVisible}
-    <AccountSelector
-      visible
-      on:close={() => (isPaymentSelectorVisible = false)}
-    />
+<h2>{$connected ? 'Wallet Connected' : 'Connect a Wallet'}</h2>
+<div class="col">
+  {#if !$connected}
+    <Button title="Connect Button" on:mousedown={connect}>Connect</Button>
+  {:else}
+    <button class="button is-link is-warn" on:click={disconnect}>
+      Disconnect
+    </button>
+    <h4 class="amount">
+      Total {formatLocaleCurrency(destCurrency, destAmount)}
+    </h4>
+    <p>
+      <Balance address={checkAccount} amount={destAmount} />
+      accounts: {$web3.accounts}
+      chainid: {JSON.stringify($chainId)}
+      symbol: {$chainData.nativeCurrency?.symbol}
+      account: {checkAccount}
+    </p>
+    <p>
+      Selected account: {$selectedAccount || 'no account'}
+    </p>
+
+    <p>
+      {JSON.stringify($chainData)}}
+    </p>
   {/if}
-  <h3 class="test">
-    {#if $configStore.environment === 'sandbox'}
-      <a on:click={doSuccess}>Test Success</a>
-    {/if}
-  </h3>
-</ModalContent>
+</div>
 
 <style lang="scss">
   @import '../styles/_vars.scss';
@@ -193,6 +191,14 @@
     filter: grayscale(100%) contrast(150%);
     margin-bottom: 0.5rem;
   }
+  .col {
+    display: flex;
+    flex-direction: column;
+    padding: 0 1rem;
+  }
+  :global(.surround .amount) {
+    margin: 0;
+  }
   .row {
     display: flex;
     position: relative;
@@ -213,6 +219,7 @@
       overflow: hidden;
       &.amount {
         max-width: 130px;
+        margin: 0;
       }
     }
   }
