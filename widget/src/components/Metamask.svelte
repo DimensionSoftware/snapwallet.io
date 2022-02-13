@@ -11,9 +11,14 @@
     selectedAccount,
     chainId,
     chainData,
-    // defaultEvmStores,
+    defaultEvmStores,
   } from 'svelte-web3'
-  import { CryptoIcons, formatLocaleCurrency, dropEndingZeros } from '../util'
+  import {
+    CryptoIcons,
+    formatLocaleCurrency,
+    dropEndingZeros,
+    walletForTicker,
+  } from '../util'
   import { Routes } from '../constants'
   import { transactionStore } from '../stores/TransactionStore'
   import { configStore } from '../stores/ConfigStore'
@@ -28,7 +33,6 @@
   import AccountSelector from '../components/selectors/AccountSelector.svelte'
   import { formatExpiration } from '../util/transactions'
   import Button from './Button.svelte'
-  // import Web3Modal from './Web3Modal.svelte'
 
   let isPaymentSelectorVisible = false
 
@@ -41,11 +45,11 @@
   const //{ destinationCurrency } = $transactionStore,
     { destCurrency, destAddress, destAmount } =
       $transactionStore.wyrePreview || {
-        destCurrency: 'BTC',
+        destCurrency: 'ETH',
         destAddress: '0xYOUR_WALLET',
         destAmount: 0,
       },
-    Icon = CryptoIcons[destCurrency ?? 'BTC']
+    Icon = CryptoIcons[destCurrency ?? 'ETH']
 
   onMount(async () => {
     // render qrcode
@@ -60,31 +64,32 @@
     //   document.getElementById('qrcode'),
     // )
     // automagically connect web3
-    if (typeof web3 !== 'undefined')
-      // defaultEvmStores.disconnect()
-      // defaultEvmStores.setProvider()
-      connect()
+    if (typeof web3 !== 'undefined') connect()
   })
+
+  const transact = async e => {
+    console.log($configStore.wallets)
+    const tx = await $web3.eth.sendTransaction({
+      // gasPrice: $web3.utils.toHex($web3.utils.toWei('30', 'gwei')),
+      gasLimit: $web3.utils.toHex('21000'),
+      from: $selectedAccount,
+      to: walletForTicker($configStore.wallets, destCurrency, {
+        isTest: $configStore.environment !== 'production',
+      }),
+      value: $web3.utils.toHex(destAmount * 1000000000000000000), // eth to wei
+    })
+    console.log('receipt from transaction', tx)
+    doSuccess(e)
+  }
 
   let pending = false,
     type = 'Browser'
   const connect = async () => {
     pending = true
     try {
-      // const handler = {
-      //   Browser: () => defaultEvmStores.setProvider(),
-      //   Localhost: () => () =>
-      //     defaultEvmStores.setProvider('http://127.0.0.1:7545'),
-      //   DAI: () => defaultEvmStores.setProvider('https://rpc.xdaichain.com/'),
-      //   Sokol: () => defaultEvmStores.setProvider('https://sokol.poa.network'),
-      // }
-      console.log(type)
-      // await handler[type]()
-      // await defaultEvmStores.setProvider('http://127.0.0.1:7545')
       await defaultEvmStores.setProvider()
-      // console.log('$connected', defaultEvmStores.$connected)
-      // console.log('$selectedAccount', defaultEvmStores.$selectedAccount)
-      // console.log('$web3', defaultEvmStores.$web3)
+      console.log('$selectedAccount', defaultEvmStores.$selectedAccount)
+      console.log(web3.$accounts, defaultEvmStores.web3.$accounts, web3.$signer)
       pending = false
     } catch (e) {
       console.log(e)
@@ -94,8 +99,7 @@
   }
 
   const disconnect = async () => {
-    // console.log( await $DAI.methods.totalSupply().call() )
-    // await defaultEvmStores.disconnect()
+    await defaultEvmStores.disconnect()
     pending = false
   }
 
@@ -106,31 +110,18 @@
   }
 </script>
 
-<h2>{$connected ? 'Wallet Connected' : 'Connect a Wallet'}</h2>
+<h2>
+  {$connected
+    ? `${formatLocaleCurrency(destCurrency, destAmount)}`
+    : 'Connect a Wallet'}
+</h2>
 <div class="col">
   {#if !$connected}
     <Button title="Connect Button" on:mousedown={connect}>Connect</Button>
   {:else}
-    <button class="button is-link is-warn" on:click={disconnect}>
-      Disconnect
-    </button>
-    <h4 class="amount">
-      Total {formatLocaleCurrency(destCurrency, destAmount)}
-    </h4>
-    <p>
-      <Balance address={checkAccount} amount={destAmount} />
-      accounts: {$web3.accounts}
-      chainid: {JSON.stringify($chainId)}
-      symbol: {$chainData.nativeCurrency?.symbol}
-      account: {checkAccount}
-    </p>
-    <p>
-      Selected account: {$selectedAccount || 'no account'}
-    </p>
-
-    <p>
-      {JSON.stringify($chainData)}}
-    </p>
+    <Balance address={checkAccount} amount={destAmount} />
+    <div style="height: 2.5rem;" />
+    <Button title="Pay" on:mousedown={connect}>Pay</Button>
   {/if}
 </div>
 

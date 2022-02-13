@@ -209,3 +209,10 @@ export const resizeWidget = (params: ResizeParams, appName: string) => {
     }),
   )
 }
+
+export const walletForTicker = (wallets = [], ticker, { isTest }) =>
+  isTest
+    ? ticker.toLowerCase() !== 'btc'
+      ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
+      : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU'
+    : wallets.find(w => w.asset === ticker.toLowerCase())?.address

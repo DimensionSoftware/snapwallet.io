@@ -21,6 +21,7 @@
     resizeWidget,
     onKeysPressed,
     closestNumber,
+    walletForTicker,
   } from '../util'
   import TotalContainer from '../components/TotalContainer.svelte'
   import { Routes } from '../constants'
@@ -207,16 +208,11 @@
         const preview = await window.API.fluxWyreCreateTransfer({
           source: $transactionStore.selectedSourcePaymentMethod?.id,
           sourceAmount: $transactionStore.sourceAmount,
-          // TODO: get this from app config wallets
-          // dest: $configStore.wallets.find(
-          //   w =>
-          //     w.asset ===
-          //     $transactionStore.destinationCurrency.ticker.toLowerCase(),
-          // )?.address,
-          dest:
-            $transactionStore.destinationCurrency.ticker.toLowerCase() !== 'btc'
-              ? '0xf636B6aA45C554139763Ad926407C02719bc22f7'
-              : 'n1F9wb29WVFxEZZVDE7idJjpts7qdS8cWU',
+          dest: walletForTicker(
+            $configStore.wallets,
+            $transactionStore.destinationCurrency.ticker,
+            { isTest: $configStore.environment !== 'production' },
+          ).address,
           destCurrency: $transactionStore.destinationCurrency?.ticker,
         })
 
