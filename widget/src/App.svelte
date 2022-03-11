@@ -466,9 +466,6 @@
     height: 0;
     width: 0;
   }
-  :global(.sw-open #modal:before) {
-    background: var(--theme-modal-container-background-color) !important;
-  }
   :global(iframe.modal #modal:before) {
     // modal overlay bg
     opacity: 0 !important;
@@ -486,14 +483,12 @@
     top: 0;
     opacity: 0;
     animation: backgroundFadeIn 1s ease-out forwards;
+    background-color: transparent;
     // background: var(--thme-modal-container-background-color);
     background: transparent;
-    background-color: transparent;
-    // solid "inline" bg
-    // opacity: 1;
-    // background: var(--theme-modal-background-color);
-    // background-color: var(--theme-modal-background-color);
-    // animation: none;
+  }
+  :global(iframe.sw-open #modal:before) {
+    background: var(--theme-modal-container-background-color) !important;
   }
   #modal,
   :global(#plaid-link-iframe-1) {
