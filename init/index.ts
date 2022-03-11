@@ -158,6 +158,7 @@ class Snap {
     document.body.appendChild(iframe)
     document.body.classList.add('sw-loaded') // css triggers
     iframe.classList.add('sw-open')
+    window.dispatchEvent(new Event('isOpen'))
     if (window.onSnapWalletOpen) window.onSnapWalletOpen(this.IFRAME_ID, config) // cb
   }
 
@@ -167,6 +168,7 @@ class Snap {
     iframe?.remove()
     document.body.classList.remove('sw-loaded') // css triggers
     iframe.classList.remove('sw-open')
+    window.dispatchEvent(new Event('isClosed'))
     if (window.onSnapWalletClose) window.onSnapWalletClose(this.IFRAME_ID) // cb
   }
 

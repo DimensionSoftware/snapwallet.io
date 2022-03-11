@@ -75,6 +75,12 @@
   })
 
   // blurry fx
+  window.addEventListener('isOpen', _ => {
+    isOpen = true
+  })
+  window.addEventListener('isClosed', _ => {
+    isOpen = false
+  })
   window.addEventListener('blurryHeader', _ => {
     isHeaderBlurred = true
   })
