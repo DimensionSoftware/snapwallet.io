@@ -54,6 +54,7 @@
   $: isPreLogout = false
   $: isBlurred = false
   $: isHeaderBlurred = false
+
   $: isFramed = window != window.top
   $: isOpen =
     document.getElementsByTagName('iframe').length > 0
