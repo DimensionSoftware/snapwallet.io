@@ -56,10 +56,7 @@
   $: isHeaderBlurred = false
 
   $: isFramed = window != window.top
-  $: isOpen =
-    document.getElementsByTagName('iframe').length > 0
-      ? document.getElementsByTagName('iframe')[0].classList.contains('sw-open')
-      : false
+  $: isOpen = document.querySelectorAll('iframe.sw-open').length > 0
 
   // auth bits
   window.addEventListener('logout', _ => {
