@@ -466,11 +466,15 @@
     height: 0;
     width: 0;
   }
+  :global(.sw-open #modal:before) {
+    background: var(--theme-modal-container-background-color) !important;
+  }
   :global(iframe.modal #modal:before) {
     // modal overlay bg
     opacity: 0 !important;
     animation: backgroundFadeIn 1s ease-out forwards !important;
-    background: var(--theme-modal-container-background-color) !important;
+    // background: var(--theme-modal-container-background-color) !important;
+    background: transparent;
     background-color: transparent;
   }
   #modal:before {
@@ -482,7 +486,8 @@
     top: 0;
     opacity: 0;
     animation: backgroundFadeIn 1s ease-out forwards;
-    background: var(--theme-modal-container-background-color);
+    // background: var(--thme-modal-container-background-color);
+    background: transparent;
     background-color: transparent;
     // solid "inline" bg
     // opacity: 1;

@@ -112,7 +112,7 @@
 
 <h2>
   {$connected
-    ? `${formatLocaleCurrency(destCurrency, destAmount)}`
+    ? `Total  ${formatLocaleCurrency(destCurrency, destAmount)}`
     : 'Connect a Wallet'}
 </h2>
 <div class="col">
