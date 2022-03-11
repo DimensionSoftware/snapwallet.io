@@ -54,6 +54,11 @@
   $: isPreLogout = false
   $: isBlurred = false
   $: isHeaderBlurred = false
+  $: isFramed = window != window.top
+  $: isOpen =
+    document.getElementsByTagName('iframe').length > 0
+      ? document.getElementsByTagName('iframe')[0].classList.contains('sw-open')
+      : false
 
   // auth bits
   window.addEventListener('logout', _ => {
@@ -356,7 +361,7 @@
 
 <svelte:window on:keydown={onKeyDown} on:mousedown={onMouseDown} />
 
-<div id="modal">
+<div id="modal" class:isFramed class:isOpen>
   <div
     id="modal-body"
     style={`height: ${height}; width: ${width}`}
@@ -487,7 +492,8 @@
     // background: var(--thme-modal-container-background-color);
     background: transparent;
   }
-  :global(iframe.sw-open) #modal:before {
+  #modal.isOpen.isFramed:before,
+  :global(iframe.sw-open #modal:before) {
     background: var(--theme-modal-container-background-color) !important;
   }
   #modal,
