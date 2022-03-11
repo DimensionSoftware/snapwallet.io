@@ -487,7 +487,7 @@
     // background: var(--thme-modal-container-background-color);
     background: transparent;
   }
-  :global(.sw-open #modal:before) {
+  :global(iframe.sw-open) #modal:before {
     background: var(--theme-modal-container-background-color) !important;
   }
   #modal,
