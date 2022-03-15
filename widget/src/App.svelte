@@ -51,15 +51,12 @@
   import TransactionDetails from './screens/TransactionDetails.svelte'
   import { transactionDetailsStore } from './stores/TransactionsStore'
 
-  const isModalOpen = () =>
-    document.querySelectorAll('iframe.sw-open').length > 0
-
   $: isPreLogout = false
   $: isBlurred = false
   $: isHeaderBlurred = false
 
   $: isFramed = window != window.top
-  $: isOpen = isModalOpen()
+  $: isOpen = false // was modal opened via openWeb()?
 
   // auth bits
   window.addEventListener('logout', _ => {
@@ -78,14 +75,6 @@
   })
 
   // blurry fx
-  window.addEventListener('isOpen', _ => {
-    console.log('is open')
-    isOpen = true
-  })
-  window.addEventListener('isClosed', _ => {
-    console.log('is closed')
-    isOpen = false
-  })
   window.addEventListener('blurryHeader', _ => {
     isHeaderBlurred = true
   })
@@ -365,7 +354,10 @@
         error: true,
       })
     }
-    isOpen = isModalOpen()
+
+    // init ui triggers
+    isOpen = $configStore.isOpen
+    isFramed = window != window.top
   })
 </script>
 

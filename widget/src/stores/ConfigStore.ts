@@ -6,6 +6,7 @@ type ConfigStoreState = {
   apiKey: string
   appName: string
   environment: WidgetEnvironments
+  isOpen: boolean
   sourceAmount: number
   defaultDestinationAsset?: string
   displayAmount?: SrcDst
@@ -23,6 +24,7 @@ function createStore() {
     apiKey: '',
     appName: '',
     environment: WidgetEnvironments.PRODUCTION,
+    isOpen: false,
     sourceAmount: 0,
     defaultDestinationAsset: undefined,
     displayAmount: 'destination',

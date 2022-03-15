@@ -69,6 +69,7 @@ interface IConfig {
   defaultDestinationAsset?: string
   displayAmount?: SrcDst
   environment: WidgetEnvironments
+  isOpen?: boolean
   baseURL?: WidgetURLs
 }
 
@@ -89,6 +90,7 @@ class Snap {
   intent: UserIntent = 'buy'
   baseURL?: WidgetURLs
   environment: WidgetEnvironments = WidgetEnvironments.PRODUCTION
+  isOpen: boolean = false
   focus: boolean = true
   theme?: { [cssProperty: string]: string }
   sourceAmount?: number
@@ -125,6 +127,7 @@ class Snap {
       defaultDestinationAsset: this.defaultDestinationAsset,
       displayAmount: this.displayAmount,
       environment: this.environment,
+      isOpen: this.isOpen,
     }
   }
 
@@ -133,7 +136,11 @@ class Snap {
   }
 
   openWeb = (config?: IConfig) => {
-    config && this.setConfig(config)
+    if (config) {
+      config.isOpen = true
+      this.setConfig(config)
+    }
+    // config && this.setConfig(config)
 
     const iframe = document.createElement('iframe')
     iframe.id = this.IFRAME_ID
@@ -158,7 +165,6 @@ class Snap {
     document.body.appendChild(iframe)
     document.body.classList.add('sw-loaded') // css triggers
     iframe.classList.add('sw-open')
-    window.dispatchEvent(new Event('isOpen'))
     if (window.onSnapWalletOpen) window.onSnapWalletOpen(this.IFRAME_ID, config) // cb
   }
 
@@ -168,7 +174,6 @@ class Snap {
     iframe?.remove()
     document.body.classList.remove('sw-loaded') // css triggers
     iframe.classList.remove('sw-open')
-    window.dispatchEvent(new Event('isClosed'))
     if (window.onSnapWalletClose) window.onSnapWalletClose(this.IFRAME_ID) // cb
   }
 
