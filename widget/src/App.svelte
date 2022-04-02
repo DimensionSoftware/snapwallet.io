@@ -494,6 +494,9 @@
     // background: var(--thme-modal-container-background-color);
     background: transparent;
   }
+  #modal.isOpen.isFramed :global(.lock) {
+    display: none;
+  }
   #modal.isOpen.isFramed:before,
   :global(iframe.sw-open #modal:before) {
     background: var(--theme-modal-container-background-color) !important;
