@@ -494,7 +494,7 @@
     // background: var(--thme-modal-container-background-color);
     background: transparent;
   }
-  #modal.isOpen.isFramed :global(.lock) {
+  #modal.isFramed :global(.lock) {
     display: none;
   }
   #modal.isOpen.isFramed:before,
