@@ -1,6 +1,13 @@
-# Flux
+# SnapWallet.IO -- Flux
 
 Cryptocurrency identity management, on-ramps, off-ramps, and more.
+
+## Synopsis
+
+[Wyre](https://www.sendwyre.com/), our payment processor, went out of business.  Here's everything, and we mean EVERYTHING, with love!
+
+- Ben, Chris, Keith &  Matthew
+
 
 ## Coverage Status
 
@@ -30,3 +37,9 @@ Cryptocurrency identity management, on-ramps, off-ramps, and more.
 cd widget && npm i && npm run dev
 ```
 
+### Authors
+
+- Ben Gordon <bgordon@github>
+- Chris Almeida <chrisalmeida@github>
+- Keith Hoerling <khoerling@github>
+- Matthew Elder <dreamcodez@github>
