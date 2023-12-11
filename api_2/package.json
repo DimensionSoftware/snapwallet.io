@@ -12,7 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@google-cloud/pubsub": "^2.16.6",
-    "@koa/cors": "^3.1.0",
+    "@koa/cors": "^5.0.0",
     "argon2": "^0.28.2",
     "axios": "^0.21.1",
     "dotenv": "^10.0.0",
